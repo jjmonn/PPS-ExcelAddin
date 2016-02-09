@@ -112,5 +112,7 @@ namespace FBI.MVC.Model.CRUD
       else
         return 1;
     }
+
+    public string S { get; set; }
   }
 }

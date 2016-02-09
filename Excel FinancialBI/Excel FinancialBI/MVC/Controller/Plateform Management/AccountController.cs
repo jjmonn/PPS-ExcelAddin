@@ -18,8 +18,6 @@ namespace FBI.MVC.Controller
   {
     public override IView View { get { return (m_view); } }
 
-    private const string ACCOUNTS_FORBIDDEN_CHARACTERS = "+-*=<>^?:;![]";
-
     public AccountController()
     {
       m_view = new AccountsView();
@@ -32,17 +30,55 @@ namespace FBI.MVC.Controller
       m_view.InitView();
     }
 
+    public void CreateNewUI(vTreeNode p_node)
+    {
+      NewAccountUI l_newUi = new NewAccountUI();
+      l_newUi.SetController(this);
+      l_newUi.LoadView(this.m_view, p_node);
+      l_newUi.ShowDialog();
+    }
+
     public void UpdateAccount(Account p_account)
     {
       if (p_account != null)
         AccountModel.Instance.Update(p_account);
     }
 
+    public void DeleteAccount(vTreeNode p_node)
+    {
+      List<String> l_dependantAccounts = this.ExistingDependantAccounts(p_node);
+      if (l_dependantAccounts.Count > 0)
+      {
+        string l_msg = "";
+        foreach (string l_account in l_dependantAccounts)
+          l_msg += " - " + l_account + "\n\r";
+        MessageBox.Show(Local.GetValue("accounts_edition.msg_dependant_accounts") + "\n\r" +
+                     l_msg + "\n\r" +
+                     Local.GetValue("accounts_edition.msg_formula_to_be_changed"), Local.GetValue("general.warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+      }
+      else
+      {
+        string l_result = PasswordBox.Open(Local.GetValue("accounts_edition.msg_account_deletion1") + "\n\r" + "\n"
+          + Local.GetValue("accounts_edition.msg_account_deletion4")
+          , Local.GetValue("accounts_edition.msg_account_deletion_confirmation"));
+
+        if (l_result != PasswordBox.Canceled && l_result == Addin.Password)
+        {
+          if (MessageBox.Show(Local.GetValue("accounts_edition.msg_account_deletion3") + "\n\r" + "\n"
+          + Local.GetValue("accounts_edition.msg_account_deletion2"),
+            Local.GetValue("accounts_edition.msg_account_deletion_confirmation"), MessageBoxButtons.YesNo) == DialogResult.Yes)
+            this.DeleteAccount((UInt32)p_node.Value);
+        }
+        else
+          MessageBox.Show(Local.GetValue("accounts_edition.msg_incorrect_password"), Local.GetValue("general.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
     public void DeleteAccount(UInt32 p_id)
     {
       if (AccountModel.Instance.GetValue(p_id) != null)
       {
-        //AccountModel.Instance.Delete(p_id);
+        AccountModel.Instance.Delete(p_id);
       }
       else
         Error = Local.GetValue("general.error.system");
@@ -54,22 +90,33 @@ namespace FBI.MVC.Controller
         AccountModel.Instance.Create(p_account);
     }
 
+    public void CreateAccount(UInt32 p_parentId, string p_name, Account.AccountProcess p_process, Account.FormulaTypes p_formulaType, string p_formula,
+      Account.AccountType p_type, Account.ConsolidationOptions p_consolidationOptionId, Account.PeriodAggregationOptions p_periodAggregationOptionId,
+      string p_formatId, UInt32 p_image, Int32 p_itemPosition)
+    {
+      Account l_new = new Account();
+      l_new.ParentId = p_parentId;
+      l_new.Name = p_name;
+      l_new.Process = p_process;
+      l_new.FormulaType = p_formulaType;
+      l_new.Formula = p_formula;
+      l_new.Type = p_type;
+      l_new.ConsolidationOptionId = p_consolidationOptionId;
+      l_new.PeriodAggregationOptionId = p_periodAggregationOptionId;
+      l_new.FormatId = p_formatId;
+      l_new.Image = p_image;
+      l_new.ItemPosition = p_itemPosition;
+      AccountModel.Instance.Create(l_new);
+    }
+
     public bool AccountNameCheck(string p_accountName)
     {
-      //TODO : maybe string len + error
-      if (p_accountName == null)
+      //TODO : error
+      if (p_accountName == "" || !this.IsNameValid(p_accountName) || AccountModel.Instance.GetValue(p_accountName) != null)
       {
         return (false);
       }
-      if (AccountModel.Instance.GetValue(p_accountName) != null)
-      {
-        return (false);
-      }
-      if (!CheckAccountNameForForbiddenCharacters(p_accountName))
-      {
-        return (false);
-      }
-      return (true);
+     return (true);
     }
 
     public List<string> ExistingDependantAccounts(vTreeNode p_node)
@@ -117,16 +164,6 @@ namespace FBI.MVC.Controller
               p_dependenciesList.Add(l_accountId);
         }
       }
-    }
-
-    private bool CheckAccountNameForForbiddenCharacters(string p_accountName)
-    {
-      foreach (char l_char in ACCOUNTS_FORBIDDEN_CHARACTERS)
-      {
-        if (p_accountName.Contains(p_accountName))
-          return (false);
-      }
-      return (true);
     }
 
   }

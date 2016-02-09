@@ -39,7 +39,7 @@ namespace FBI.MVC.View
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VersionsView));
       this.ButtonsImageList = new System.Windows.Forms.ImageList(this.components);
-      this.RCM_TV = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.m_versionsRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_new_VersionRCMButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_copyVersionRCMButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_newFolderRCMButton = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +63,7 @@ namespace FBI.MVC.View
       this.LockedDateT = new System.Windows.Forms.TextBox();
       this.m_nameTextbox = new System.Windows.Forms.TextBox();
       this.m_creationDateLabel = new System.Windows.Forms.Label();
-      this.lockedCB = new System.Windows.Forms.CheckBox();
+      this.m_lockCombobox = new System.Windows.Forms.CheckBox();
       this.m_timeConfigTB = new System.Windows.Forms.TextBox();
       this.m_startPeriodTextbox = new System.Windows.Forms.ComboBox();
       this.m_nbPeriodsTextbox = new System.Windows.Forms.TextBox();
@@ -79,7 +79,7 @@ namespace FBI.MVC.View
       this.m_deleteVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
       this.BackgroundWorker1 = new System.ComponentModel.BackgroundWorker();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
-      this.RCM_TV.SuspendLayout();
+      this.m_versionsRightClickMenu.SuspendLayout();
       this.TableLayoutPanel3.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
       this.SplitContainer1.Panel1.SuspendLayout();
@@ -99,9 +99,9 @@ namespace FBI.MVC.View
       this.ButtonsImageList.Images.SetKeyName(3, "imageres_89.ico");
       this.ButtonsImageList.Images.SetKeyName(4, "favicon(2).ico");
       // 
-      // RCM_TV
+      // m_versionsRightClickMenu
       // 
-      this.RCM_TV.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+      this.m_versionsRightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_new_VersionRCMButton,
             this.m_copyVersionRCMButton,
             this.m_newFolderRCMButton,
@@ -109,8 +109,8 @@ namespace FBI.MVC.View
             this.m_renameRCMButton,
             this.ToolStripSeparator1,
             this.m_deleteRCMButton});
-      this.RCM_TV.Name = "RCM_TV";
-      this.RCM_TV.Size = new System.Drawing.Size(159, 136);
+      this.m_versionsRightClickMenu.Name = "RCM_TV";
+      this.m_versionsRightClickMenu.Size = new System.Drawing.Size(159, 136);
       // 
       // m_new_VersionRCMButton
       // 
@@ -212,7 +212,7 @@ namespace FBI.MVC.View
       this.TableLayoutPanel2.Controls.Add(this.LockedDateT, 1, 3);
       this.TableLayoutPanel2.Controls.Add(this.m_nameTextbox, 1, 0);
       this.TableLayoutPanel2.Controls.Add(this.m_creationDateLabel, 0, 1);
-      this.TableLayoutPanel2.Controls.Add(this.lockedCB, 1, 2);
+      this.TableLayoutPanel2.Controls.Add(this.m_lockCombobox, 1, 2);
       this.TableLayoutPanel2.Controls.Add(this.m_timeConfigTB, 1, 4);
       this.TableLayoutPanel2.Controls.Add(this.m_startPeriodTextbox, 1, 5);
       this.TableLayoutPanel2.Controls.Add(this.m_nbPeriodsTextbox, 1, 6);
@@ -360,16 +360,16 @@ namespace FBI.MVC.View
       this.m_creationDateLabel.TabIndex = 6;
       this.m_creationDateLabel.Text = "Creation date";
       // 
-      // lockedCB
+      // m_lockCombobox
       // 
-      this.lockedCB.AutoSize = true;
-      this.lockedCB.Location = new System.Drawing.Point(290, 98);
-      this.lockedCB.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
-      this.lockedCB.Name = "lockedCB";
-      this.lockedCB.Size = new System.Drawing.Size(15, 14);
-      this.lockedCB.TabIndex = 14;
-      this.lockedCB.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-      this.lockedCB.UseVisualStyleBackColor = true;
+      this.m_lockCombobox.AutoSize = true;
+      this.m_lockCombobox.Location = new System.Drawing.Point(290, 98);
+      this.m_lockCombobox.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+      this.m_lockCombobox.Name = "m_lockCombobox";
+      this.m_lockCombobox.Size = new System.Drawing.Size(15, 14);
+      this.m_lockCombobox.TabIndex = 14;
+      this.m_lockCombobox.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+      this.m_lockCombobox.UseVisualStyleBackColor = true;
       // 
       // m_timeConfigTB
       // 
@@ -454,37 +454,37 @@ namespace FBI.MVC.View
       // 
       this.m_newVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_add;
       this.m_newVersionMenuBT.Name = "m_newVersionMenuBT";
-      this.m_newVersionMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_newVersionMenuBT.Size = new System.Drawing.Size(152, 24);
       this.m_newVersionMenuBT.Text = "Add version";
       // 
       // m_newFolderMenuBT
       // 
       this.m_newFolderMenuBT.Image = global::FBI.Properties.Resources.favicon_81_;
       this.m_newFolderMenuBT.Name = "m_newFolderMenuBT";
-      this.m_newFolderMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_newFolderMenuBT.Size = new System.Drawing.Size(152, 24);
       this.m_newFolderMenuBT.Text = "Add folder";
       // 
       // toolStripSeparator3
       // 
       this.toolStripSeparator3.Name = "toolStripSeparator3";
-      this.toolStripSeparator3.Size = new System.Drawing.Size(148, 6);
+      this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
       // 
       // m_renameMenuBT
       // 
       this.m_renameMenuBT.Name = "m_renameMenuBT";
-      this.m_renameMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_renameMenuBT.Size = new System.Drawing.Size(152, 24);
       this.m_renameMenuBT.Text = "Rename";
       // 
       // toolStripSeparator4
       // 
       this.toolStripSeparator4.Name = "toolStripSeparator4";
-      this.toolStripSeparator4.Size = new System.Drawing.Size(148, 6);
+      this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
       // 
       // m_deleteVersionMenuBT
       // 
       this.m_deleteVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_delete;
       this.m_deleteVersionMenuBT.Name = "m_deleteVersionMenuBT";
-      this.m_deleteVersionMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_deleteVersionMenuBT.Size = new System.Drawing.Size(152, 24);
       this.m_deleteVersionMenuBT.Text = "Delete";
       // 
       // m_versionsTreeviewImageList
@@ -501,7 +501,7 @@ namespace FBI.MVC.View
       this.Controls.Add(this.TableLayoutPanel3);
       this.Name = "VersionsView";
       this.Size = new System.Drawing.Size(1049, 635);
-      this.RCM_TV.ResumeLayout(false);
+      this.m_versionsRightClickMenu.ResumeLayout(false);
       this.TableLayoutPanel3.ResumeLayout(false);
       this.TableLayoutPanel3.PerformLayout();
       this.SplitContainer1.Panel1.ResumeLayout(false);
@@ -516,7 +516,7 @@ namespace FBI.MVC.View
 
     }
     internal System.Windows.Forms.ImageList ButtonsImageList;
-    internal System.Windows.Forms.ContextMenuStrip RCM_TV;
+    internal System.Windows.Forms.ContextMenuStrip m_versionsRightClickMenu;
     internal System.Windows.Forms.ToolStripMenuItem m_new_VersionRCMButton;
     internal System.Windows.Forms.ToolStripMenuItem m_newFolderRCMButton;
     internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
@@ -543,7 +543,7 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.TextBox LockedDateT;
     internal System.Windows.Forms.TextBox m_nameTextbox;
     internal System.Windows.Forms.Label m_creationDateLabel;
-    internal System.Windows.Forms.CheckBox lockedCB;
+    internal System.Windows.Forms.CheckBox m_lockCombobox;
     internal System.Windows.Forms.TextBox m_timeConfigTB;
     internal System.Windows.Forms.ComboBox m_startPeriodTextbox;
     internal System.Windows.Forms.TextBox m_nbPeriodsTextbox;
