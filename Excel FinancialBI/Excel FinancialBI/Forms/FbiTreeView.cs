@@ -49,20 +49,32 @@ namespace FBI.Forms
 
     public void FindAndAdd(NamedHierarchyCRUDEntity p_value)
     {
+      vTreeNode l_newNode = FindNode(p_value.Id);
       vTreeNode l_parentNode = FindNode(p_value.ParentId);
-      vTreeNode l_newNode = new vTreeNode();
 
+      if (l_newNode == null)
+      {
+        l_newNode = new vTreeNode();
+        l_newNode.Value = p_value.Id;
+        if (l_parentNode != null)
+          l_parentNode.Nodes.Add(l_newNode);
+        else
+          Nodes.Add(l_newNode);
+      }
       l_newNode.Text = p_value.Name;
-      l_newNode.Value = p_value.Id;
-      if (l_parentNode != null)
-        l_parentNode.Nodes.Add(l_newNode);
-      else
-        Nodes.Add(l_newNode);
+    }
+
+    public void FindAndRemove(UInt32 p_value)
+    {
+      vTreeNode l_node = FindNode(p_value);
+
+      if (l_node != null)
+        Remove(l_node);
     }
 
     public bool Remove(vTreeNode p_node)
     {
-      if (p_node == null || this.GetNodes().Exists(x => x != p_node))
+      if (p_node == null)
         return (false);
       if (p_node.Parent != null)
       {

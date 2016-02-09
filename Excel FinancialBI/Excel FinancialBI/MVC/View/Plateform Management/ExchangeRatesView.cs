@@ -45,9 +45,12 @@ namespace FBI.MVC.View
     {
       base.SuscribeEvents();
       m_versionTV.NodeMouseDown += OnNodeSelect;
+      m_renameBT.Click += OnRenameVersionClick;
+      m_addFolderRCM.Click += OnCreateFolderClick;
       m_dgv.CellChangedAndValidated += OnCellChanged;
       CopyRateDownToolStripMenuItem.Click += CopyValueDown;
       m_addRatesVersionRCM.Click += OnCreateVersionClick;
+      m_deleteVersionRCM.Click += OnDeleteVersionClick;
       ExchangeRateModel.Instance.ReadEvent += OnModelReadRate;
       ExchangeRateModel.Instance.UpdateEvent += OnModelUpdateRate;
       ExchangeRateModel.Instance.CreationEvent += OnModelUpdateRate;
@@ -146,18 +149,48 @@ namespace FBI.MVC.View
 
       l_version.ParentId = m_controller.SelectedVersion;
       l_version.IsFolder = true;
+      l_version.Name = l_result;
       if (m_controller.CreateVersion(l_version) == false)
         MessageBox.Show(m_controller.Error);
+    }
+
+    void OnRenameVersionClick(object p_sender, EventArgs p_args)
+    {
+      string l_result = Interaction.InputBox(Local.GetValue("rate_version.rename"));
+
+      if (l_result == "")
+        return;
+      ExchangeRateVersion l_version = RatesVersionModel.Instance.GetValue(m_controller.SelectedVersion);
+      if (l_version == null)
+        return;
+      l_version = l_version.Clone();
+      l_version.Name = l_result;
+      if (m_controller.UpdateVersion(l_version) == false)
+        MessageBox.Show(m_controller.Error);
+    }
+
+    void OnDeleteVersionClick(object p_sender, EventArgs p_args)
+    {
+      m_controller.DeleteVersion(m_controller.SelectedVersion);
     }
 
     #endregion
 
     #region Model Callback
 
+    delegate void OnModelReadRate_delegate(ErrorMessage p_status, ExchangeRate p_rate);
     void OnModelReadRate(ErrorMessage p_status, ExchangeRate p_rate)
     {
-      if (p_rate.RateVersionId == m_controller.SelectedVersion)
-        m_dgv.FillField(p_rate.Period, p_rate.DestCurrencyId, p_rate.Value, new TextBoxEditor());
+      if (m_dgv.InvokeRequired)
+      {
+        OnModelReadRate_delegate func = new OnModelReadRate_delegate(OnModelReadRate);
+        Invoke(func, p_status, p_rate);
+      }
+      else
+      {
+        if (p_rate.RateVersionId == m_controller.SelectedVersion)
+          m_dgv.FillField(p_rate.Period, p_rate.DestCurrencyId, p_rate.Value, new TextBoxEditor());
+      }
     }
 
     void OnModelUpdateRate(ErrorMessage p_status, UInt32 p_id)
@@ -189,10 +222,24 @@ namespace FBI.MVC.View
         MessageBox.Show(Error.GetMessage(p_status));
     }
 
+    delegate void OnModelDeleteVersion_delegate(ErrorMessage p_status, UInt32 p_id);
     void OnModelDeleteVersion(ErrorMessage p_status, UInt32 p_id)
     {
-      if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+      if (m_dgv.InvokeRequired)
+      {
+        OnModelDeleteVersion_delegate func = new OnModelDeleteVersion_delegate(OnModelDeleteVersion);
+        Invoke(func, p_status, p_id);
+      }
+      else
+      {
+        if (p_status != ErrorMessage.SUCCESS)
+          MessageBox.Show(Error.GetMessage(p_status));
+        else
+        {
+          m_versionTV.FindAndRemove(p_id);
+          m_versionTV.Refresh();
+        }
+      }
     }
 
     #endregion
@@ -224,13 +271,13 @@ namespace FBI.MVC.View
         l_rate.DestCurrencyId = p_currencyId;
         l_rate.RateVersionId = p_versionId;
         l_rate.Value = p_value;
-        return (m_controller.Create(l_rate));
+        return (m_controller.CreateRate(l_rate));
       }
       else
       {
         l_rate = l_rate.Clone();
         l_rate.Value = p_value;
-        return (m_controller.Update(l_rate));
+        return (m_controller.UpdateRate(l_rate));
       }
     }
 
