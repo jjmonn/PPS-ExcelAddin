@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
@@ -67,7 +68,8 @@ namespace FBI.MVC.View
       }
       catch (Exception e)
       {
-        //TODO : aff error
+        MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        Debug.WriteLine(e.Message + e.StackTrace);
       }
 
       this.AccountsTVInit();
@@ -77,7 +79,7 @@ namespace FBI.MVC.View
       this.InitGeneralEvent();
 
       this.DefineUIPermissions();
-      //this.DesactivateUnallowed();
+      this.DesactivateUnallowed();
       this.SetAccountUIState(false);
 
       this.MultilangueSetup();
@@ -91,6 +93,11 @@ namespace FBI.MVC.View
       AccountModel.Instance.CreationEvent += OnModelCreation;
       AccountModel.Instance.DeleteEvent += OnModelDelete;
 
+      GlobalFactModel.Instance.UpdateEvent += OnGlobalFactModelUpdate;
+      GlobalFactModel.Instance.ReadEvent += OnGlobalFactModelRead;
+      GlobalFactModel.Instance.CreationEvent += OnGlobalFactModelCreation;
+      GlobalFactModel.Instance.DeleteEvent += OnGlobalFactModelDelete;
+
       this.AddCategoryToolStripMenuItem.Click += OnAddCategoryClick;
       this.CreateANewCategoryToolStripMenuItem.Click += OnAddCategoryClick;
       this.SaveDescriptionBT.Click += OnSaveDescriptionBTClick;
@@ -102,10 +109,111 @@ namespace FBI.MVC.View
       this.m_formulaEditionButton.Click += OnFormulaEditionButtonClick;
       this.m_cancelFormulaEditionButton.Click += OnCancelFormulaEditionButtonClick;
       this.m_validateFormulaButton.Click += OnValidateFormulaButtonClick;
+      this.m_allocationKeyButton.Click += OnAllocationKeyButtonClick;
+    }
+
+    private void OnAllocationKeyButtonClick(object p_sender, EventArgs p_e)
+    {
+      if (this.m_accountTV.SelectedNode != null)
+      {
+
+      }
+    }
+
+    delegate void OnGlobalFactModelDelete_delegate(ErrorMessage p_status, uint p_id);
+    private void OnGlobalFactModelDelete(ErrorMessage p_status, uint p_id)
+    {
+      if (InvokeRequired)
+      {
+        OnGlobalFactModelDelete_delegate func = new OnGlobalFactModelDelete_delegate(OnGlobalFactModelDelete);
+        Invoke(func, p_status, p_id);
+      }
+      else
+      {
+        if (p_status != Network.ErrorMessage.SUCCESS)
+        {
+          //TODO : check every error
+        }
+        vTreeNode l_toDelete = this.m_globalFactsTV.FindNode(p_id);
+        if (l_toDelete == this.m_globalFactsTV.SelectedNode)
+          this.m_globalFactsTV.SelectedNode = null;
+        if (l_toDelete != null)
+          if (l_toDelete.Parent == null)
+            this.m_globalFactsTV.Nodes.Remove(l_toDelete);
+      }
+    }
+
+    delegate void OnGlobalFactModelCreation_delegate(ErrorMessage p_status, uint p_id);
+    private void OnGlobalFactModelCreation(ErrorMessage p_status, uint p_id)
+    {
+      if (InvokeRequired)
+      {
+        OnGlobalFactModelCreation_delegate func = new OnGlobalFactModelCreation_delegate(OnGlobalFactModelCreation);
+        Invoke(func, p_status, p_id);
+      }
+      else
+      {
+        if (p_status != Network.ErrorMessage.SUCCESS)
+        {
+          //TODO : check every error
+        }
+      }
+    }
+
+    delegate void OnGlobalFactModelRead_delegate(ErrorMessage p_status, GlobalFact p_attributes);
+    private void OnGlobalFactModelRead(ErrorMessage p_status, GlobalFact p_attributes)
+    {
+      if (InvokeRequired)
+      {
+        OnGlobalFactModelRead_delegate func = new OnGlobalFactModelRead_delegate(OnGlobalFactModelRead);
+        Invoke(func, p_status, p_attributes);
+      }
+      else
+      {
+        if (this.m_globalFactsTV.FindNode(p_attributes.Id) != null)
+        {
+          vTreeNode l_oldNode = this.m_globalFactsTV.FindNode(p_attributes.Id);
+          l_oldNode.Text = p_attributes.Name;
+          l_oldNode.ImageIndex = (Int32)p_attributes.Image;
+        }
+        else
+        {
+          vTreeNode l_node = new vTreeNode();
+          l_node.Value = p_attributes.Id;
+          l_node.Text = p_attributes.Name;
+          l_node.ImageIndex = (Int32)p_attributes.Image;
+          this.m_globalFactsTV.Nodes.Add(l_node);
+        }
+      }
+    }
+
+    delegate void OnGlobalFactModelUpdate_delegate(ErrorMessage p_status, uint p_id);
+    private void OnGlobalFactModelUpdate(ErrorMessage p_status, uint p_id)
+    {
+      if (InvokeRequired)
+      {
+        OnGlobalFactModelUpdate_delegate func = new OnGlobalFactModelUpdate_delegate(OnGlobalFactModelUpdate);
+        Invoke(func, p_status, p_id);
+      }
+      else
+      {
+        if (p_status != Network.ErrorMessage.SUCCESS)
+        {
+          //TODO : check every error
+        }
+      }
     }
 
     private void OnValidateFormulaButtonClick(object p_sender, EventArgs p_e)
     {
+      if (this.m_formulaTextBox.Text == "")
+      {
+        if (MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_empty"), Local.GetValue("general.accounts"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+          return;
+      }
+      else
+        if (MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), Local.GetValue("general.accounts"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+          return;
       this.OnCancelFormulaEditionButtonClick(p_sender, p_e);
       return; //TODO : do check
       if (m_currentNode != null)
@@ -223,61 +331,108 @@ namespace FBI.MVC.View
       }
     }
 
+    delegate void OnModelCreation_delegate(ErrorMessage p_status, uint p_id);
     private void OnModelCreation(ErrorMessage p_status, uint p_id)
     {
-      if (p_status != ErrorMessage.SUCCESS)
+      if (InvokeRequired)
       {
-        throw new NotImplementedException();
-      }
-    }
-
-    private void OnModelRead(ErrorMessage p_status, Account p_attributes)
-    {
-      if (this.m_accountTV.FindNode(p_attributes.Id) != null)
-      {
-        vTreeNode l_oldNode = this.m_accountTV.FindNode(p_attributes.Id);
-        l_oldNode.Text = p_attributes.Name;
-        l_oldNode.ImageIndex = (Int32)p_attributes.Image;
-        /*if (this.m_currentNode == l_oldNode)
-        {
-          this.DisplayAttributes();
-          //this.DesactivateUnallowed(); //TODO : watch out
-        }*/
+        OnModelCreation_delegate func = new OnModelCreation_delegate(OnModelCreation);
+        Invoke(func, p_status, p_id);
       }
       else
       {
-        if (p_attributes.ParentId == 0)
+        if (p_status != ErrorMessage.SUCCESS)
+        {
+          throw new NotImplementedException();
+        }
+      }
+    }
+
+    delegate void OnModelRead_delegate(ErrorMessage p_status, Account p_attributes);
+    private void OnModelRead(ErrorMessage p_status, Account p_attributes)
+    {
+      if (InvokeRequired)
+      {
+        OnModelRead_delegate func = new OnModelRead_delegate(OnModelRead);
+        Invoke(func, p_status, p_attributes);
+      }
+      else
+      {
+        if (this.m_accountTV.FindNode(p_attributes.Id) != null)
+        {
+          vTreeNode l_oldNode = this.m_accountTV.FindNode(p_attributes.Id);
+          l_oldNode.Text = p_attributes.Name;
+          l_oldNode.ImageIndex = (Int32)p_attributes.Image;
+          if (this.m_currentNode == l_oldNode)
+          {
+            this.DisplayAttributes();
+            this.DesactivateUnallowed();
+          }
+        }
+        else
         {
           vTreeNode l_node = new vTreeNode();
           l_node.Value = p_attributes.Id;
           l_node.Text = p_attributes.Name;
           l_node.ImageIndex = (Int32)p_attributes.Image;
-          this.m_accountTV.Add(l_node);
-          this.m_accountTV.Refresh();
+          if (p_attributes.ParentId == 0)
+            this.m_accountTV.Add(l_node);
+          else
+          {
+            vTreeNode l_parent = this.m_accountTV.FindNode(p_attributes.ParentId);
+            if (l_parent != null)
+              l_parent.Nodes.Add(l_node);
+          }
         }
       }
     }
 
+    delegate void OnModelUpdate_delegate(ErrorMessage p_status, uint p_id);
     private void OnModelUpdate(ErrorMessage p_status, uint p_id)
     {
-      if (p_status != Network.ErrorMessage.SUCCESS)
+      if (InvokeRequired)
       {
-        //TODO : check every error
+        OnModelUpdate_delegate func = new OnModelUpdate_delegate(OnModelUpdate);
+        Invoke(func, p_status, p_id);
+      }
+      else
+      {
+        if (p_status != Network.ErrorMessage.SUCCESS)
+        {
+          //TODO : check every error
+        }
       }
     }
 
+    delegate void OnModelDelete_delegate(ErrorMessage p_status, uint p_id);
     private void OnModelDelete(ErrorMessage p_status, uint p_id)
     {
-      if (p_status != ErrorMessage.SUCCESS)
+      if (InvokeRequired)
       {
-        throw new NotImplementedException();
+        OnModelDelete_delegate func = new OnModelDelete_delegate(OnModelDelete);
+        Invoke(func, p_status, p_id);
       }
-      /*vTreeNode l_toDelete = this.m_accountTV.FindNode(p_id);
-      if (l_toDelete != null)
+      else
       {
-        //this.m_accountTV.Remove(l_toDelete);
-        this.Refresh();
-      }*/
+        if (p_status != Network.ErrorMessage.SUCCESS)
+        {
+          //TODO : check every error
+        }
+        vTreeNode l_toDelete = this.m_accountTV.FindNode(p_id);
+        if (l_toDelete == this.m_currentNode)
+        {
+          this.m_currentNode = null;
+          this.m_accountTV.SelectedNode = null;
+          this.SetEnableStatusEdition(false, true, null);
+        }
+        if (l_toDelete != null)
+        {
+          if (l_toDelete.Parent == null)
+            this.m_accountTV.Nodes.Remove(l_toDelete);
+          else
+            l_toDelete.Parent.Nodes.Remove(l_toDelete);
+        }
+      }
     }
 
     private void MultilangueSetup()
@@ -345,13 +500,13 @@ namespace FBI.MVC.View
       this.m_accountTV.MouseDoubleClick += OnAccountTVMouseDoubleClick;
     }
 
-    void OnAccountTVMouseDoubleClick(object p_sender, EventArgs p_e)
+    private void OnAccountTVMouseDoubleClick(object p_sender, EventArgs p_e)
     {
       if (this.m_isEditingFormulaFlag == true)
       {
-        /*vTreeNode l_node = this.m_accountTV.FindAtPosition(p_e.Location);
+        vTreeNode l_node = this.m_accountTV.FindAtPosition(((MouseEventArgs)p_e).Location);
         if (l_node != null)
-          this.m_formulaTextBox.Text += l_node.Text;*/
+          this.m_formulaTextBox.Text += l_node.Text;
       }
     }
 
@@ -361,11 +516,17 @@ namespace FBI.MVC.View
       {
         case Keys.Down:
           if (p_e.Control == true)
+          {
             this.m_accountTV.moveNodeDown(this.m_accountTV.SelectedNode);
-          break;
+            this.m_currentNode = this.m_accountTV.SelectedNode;
+          }
+            break;
         case Keys.Up:
           if (p_e.Control == true)
+          {
             this.m_accountTV.moveNodeUp(this.m_accountTV.SelectedNode);
+            this.m_currentNode = this.m_accountTV.SelectedNode;
+          }
           break;
         case Keys.Delete:
           OnCheckDeleteAccount(p_sender, p_e);
@@ -392,10 +553,6 @@ namespace FBI.MVC.View
         TVRCM.Show(p_e.Location);
         TVRCM.Visible = true;
       }
-      /*if (p_e.Button == MouseButtons.Left)
-      {
-
-      }*/
     }
 
     private void OnAccountTVDragOver(object p_sender, DragEventArgs p_e)
@@ -418,7 +575,7 @@ namespace FBI.MVC.View
         if (this.m_currentNode != null)
         {
           this.DisplayAttributes();
-          //this.DesactivateUnallowed(); //TODO : watch out
+          this.DesactivateUnallowed();
         }
         else
           this.m_accountTV.Capture = false;
@@ -437,8 +594,18 @@ namespace FBI.MVC.View
       this.m_globalFactsTV.ImageList = m_globalFactsImageList;
       this.GlobalFactsPanel.Controls.Add(m_globalFactsTV);
 
-      this.m_globalFactsTV.MouseDown += OnGlobalFactsTVMouseDown;
       this.m_globalFactsTV.DragEnter += OnGlobalFactsTVDragEnter;
+      this.m_globalFactsTV.MouseDoubleClick += OnGlobalFactsTVMouseDoubleClick;
+    }
+
+    private void OnGlobalFactsTVMouseDoubleClick(object p_sender, MouseEventArgs p_e)
+    {
+      if (this.m_isEditingFormulaFlag == true)
+      {
+        vTreeNode l_node = this.m_accountTV.FindAtPosition(((MouseEventArgs)p_e).Location);
+        if (l_node != null)
+          this.m_formulaTextBox.Text += l_node.Text;
+      }
     }
 
     private void OnGlobalFactsTVDragEnter(object p_sender, DragEventArgs p_e)
@@ -450,16 +617,6 @@ namespace FBI.MVC.View
       }
       else
         p_e.Effect = DragDropEffects.None;
-    }
-
-    private void OnGlobalFactsTVMouseDown(object p_sender, MouseEventArgs p_e)
-    {
-      if (p_e.Button == MouseButtons.Left)
-      {
-        vTreeNode l_node = this.m_globalFactsTV.FindAtPosition(p_e.Location);
-        if (l_node != null)
-          this.m_globalFactsTV.DoDragDrop(l_node, DragDropEffects.Move);
-      }
     }
 
     private void ComboBoxesInit() //TODO : maybe put hardcoded strings away
@@ -657,7 +814,26 @@ namespace FBI.MVC.View
         if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
-          l_currentAccount.FormulaType = (Account.FormulaTypes)((vComboBox)p_sender).SelectedItem.Value;
+          Account.FormulaTypes l_value = (Account.FormulaTypes)((vComboBox)p_sender).SelectedItem.Value;
+
+          if (l_currentAccount.FormulaType == Account.FormulaTypes.FORMULA || l_currentAccount.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
+          {
+            if (l_value != Account.FormulaTypes.FORMULA || l_value != Account.FormulaTypes.FIRST_PERIOD_INPUT)
+            {
+              string l_result = PasswordBox.Open(Local.GetValue("accounts_edition.msg_password_required"), 
+                Local.GetValue("accounts_edition.title_formula_validation_confirmation"));
+
+              if (l_result == PasswordBox.Canceled || l_result != Addin.Password)
+              {
+                if (l_result != PasswordBox.Canceled)
+                  MessageBox.Show(Local.GetValue("accounts_edition.msg_incorrect_password"), Local.GetValue("general.accounts"), 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.m_controller.UpdateAccount(l_currentAccount);
+                return;
+              }
+            }
+          }
+          l_currentAccount.FormulaType = l_value;
           this.m_controller.UpdateAccount(l_currentAccount);
         }
       }
@@ -751,12 +927,15 @@ namespace FBI.MVC.View
 
     private void SetEnableStatusEdition(Boolean p_status, Boolean p_isRootAccount, Account p_account)
     {
-      if (p_account == null)
-        return;
       if (p_isRootAccount == true)
         this.FormulaTypeComboBox.Enabled = p_status;
-      if (p_account.FormulaType == Account.FormulaTypes.FORMULA || p_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
-        this.m_formulaEditionButton.Visible = true;
+      if (p_account != null)
+      {
+        if (p_account.FormulaType == Account.FormulaTypes.FORMULA || p_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
+          this.m_formulaEditionButton.Visible = true;
+        else
+          this.m_formulaEditionButton.Visible = false;
+      }
       else
         this.m_formulaEditionButton.Visible = false;
       this.Name_TB.Enabled = p_status;
@@ -765,11 +944,8 @@ namespace FBI.MVC.View
       this.CurrencyConversionComboBox.Enabled = p_status;
       this.SaveDescriptionBT.Enabled = p_status;
       this.m_descriptionTextBox.Enabled = p_status;
-      if (p_status == true)
-        this.m_descriptionTextBox.BackColor = Color.White;
-      else
-        this.m_descriptionTextBox.BackColor = Color.LightGray;
       this.ConsolidationOptionComboBox.Enabled = p_status;
+      this.m_descriptionTextBox.BackColor = Color.White;
     }
 
   }

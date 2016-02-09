@@ -63,6 +63,7 @@ namespace FBI
       SuscribeModel<UserAllowedEntity>(UserAllowedEntityModel.Instance);
       SuscribeModel<User>(UserModel.Instance);
       SuscribeModel<Version>(VersionModel.Instance);
+      SuscribeModel<ExchangeRate>(ExchangeRateModel.Instance);
     }
 
     static void SuscribeModel<T>(ICRUDModel<T> p_model) where T : class, CRUDEntity
@@ -125,10 +126,11 @@ namespace FBI
       while (failed && nbTry > 0)
       {
         System.Threading.Thread.Sleep(3000);
-        Connect(UserName, Password);
+        failed = !Connect(UserName, Password);
+        nbTry--;
       }
       if (ConnectionStateEvent != null)
-        ConnectionStateEvent(false);
+        ConnectionStateEvent(!failed);
     }
   }
 }

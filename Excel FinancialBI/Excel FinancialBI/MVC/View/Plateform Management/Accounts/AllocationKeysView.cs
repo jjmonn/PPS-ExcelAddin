@@ -14,12 +14,19 @@ namespace FBI.MVC.View
 
   public partial class AllocationKeysView : Form, IView
   {
+
+
     public AllocationKeysView()
     {
       InitializeComponent();
     }
 
     public void SetController(IController p_controller)
+    {
+
+    }
+
+    public void LoadView()
     {
 
     }

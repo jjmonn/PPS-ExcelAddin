@@ -38,6 +38,20 @@ namespace FBI.MVC.Controller
       l_newUi.ShowDialog();
     }
 
+    public void CreateAllocationKeysView(vTreeNode p_node)
+    {
+      Account l_account = AccountModel.Instance.GetValue(p_node.Text);
+
+      if (l_account != null)
+        if (l_account.FormulaType == Account.FormulaTypes.HARD_VALUE_INPUT || l_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
+        {
+          AllocationKeysView l_allocationKeyView = new AllocationKeysView();
+          l_allocationKeyView.SetController(null);
+          //l_allocationKeyView.LoadView(l_account);
+          l_allocationKeyView.ShowDialog();
+        }
+    }
+
     public void UpdateAccount(Account p_account)
     {
       if (p_account != null)
@@ -54,7 +68,7 @@ namespace FBI.MVC.Controller
           l_msg += " - " + l_account + "\n\r";
         MessageBox.Show(Local.GetValue("accounts_edition.msg_dependant_accounts") + "\n\r" +
                      l_msg + "\n\r" +
-                     Local.GetValue("accounts_edition.msg_formula_to_be_changed"), Local.GetValue("general.warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                     Local.GetValue("accounts_edition.msg_formula_to_be_changed"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
       }
       else
       {
@@ -69,8 +83,8 @@ namespace FBI.MVC.Controller
             Local.GetValue("accounts_edition.msg_account_deletion_confirmation"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             this.DeleteAccount((UInt32)p_node.Value);
         }
-        else
-          MessageBox.Show(Local.GetValue("accounts_edition.msg_incorrect_password"), Local.GetValue("general.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        else if (l_result != PasswordBox.Canceled)
+          MessageBox.Show(Local.GetValue("accounts_edition.msg_incorrect_password"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 

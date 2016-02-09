@@ -33,8 +33,17 @@ namespace FBI.MVC.View
     {
       m_dgv = new FbiDataGridView();
       m_versionTV = new FbiTreeView<TCrudType>(m_versionModel.GetDictionary());
+      m_dgv.Dock = DockStyle.Fill;
+      m_versionTV.Dock = DockStyle.Fill;
       m_mainContainer.Panel1.Controls.Add(m_versionTV);
       m_mainContainer.Panel2.Controls.Add(m_dgv);
+      SuscribeEvents();
+    }
+
+    protected virtual void SuscribeEvents()
+    {
+      m_versionTV.ContextMenuStrip = m_versionMenu;
+      m_versionTopMenu.SetContextMenuStrip(m_versionMenu, this);
     }
 
     public abstract void SetController(IController p_controller);

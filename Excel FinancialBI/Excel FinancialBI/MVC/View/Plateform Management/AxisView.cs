@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VIBlend.WinForms.DataGridView;
+using System.Threading;
 
 namespace FBI.MVC.View
 {
@@ -23,19 +24,16 @@ namespace FBI.MVC.View
     FbiDataGridView m_dgv = new FbiDataGridView();
     AxisController m_controller;
     bool m_cellModif = false;
-    NewAxisUI m_newAxisUI;
 
     public AxisView()
     {
       InitializeComponent();
       m_dgv.ContextMenuStrip = m_axisRightClickMenu;
-      m_newAxisUI = new NewAxisUI();
     }
 
     public void SetController(IController p_controller)
     {
       m_controller = p_controller as AxisController;
-      m_newAxisUI.SetController(m_controller);
     }
 
     #region "Load"
@@ -56,7 +54,6 @@ namespace FBI.MVC.View
         m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, l_filter.Id, l_filter.Name);
       FillDGV();
       SuscribeEvents();
-      m_newAxisUI.LoadView();
     }
 
     void SuscribeEvents()
@@ -64,6 +61,7 @@ namespace FBI.MVC.View
       AxisElemModel.Instance.ReadEvent   += OnModelRead;
       AxisElemModel.Instance.DeleteEvent += OnModelDelete;
       AxisFilterModel.Instance.ReadEvent += OnModelReadAxisFilter;
+      m_dgv.CellMouseClick += OnClickCell;
     }
 
     #endregion
@@ -76,27 +74,30 @@ namespace FBI.MVC.View
 
       if (l_axisFilterDic == null)
         return;
-      foreach (AxisFilter l_axisFilter in l_axisFilterDic.Values)
-      {
-        FilterValue l_filterValue = FilterValueModel.Instance.GetValue(l_axisFilter.FilterValueId);
-        MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = null;
-        ComboBoxEditor l_cbEditor = null;
 
-        if (l_filterValue.ParentId == 0)
-          l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_axisFilter.FilterId);
-        else
-          l_filterValueDic = FilterValueModel.Instance.GetChildrenDictionary(l_filterValue.ParentId);
-        if (AxisElemModel.Instance.IsParent(l_axisFilter.AxisElemId))
-          continue;
-        if (l_filterValueDic != null)
-          l_cbEditor = BuildComboBoxEditor(l_filterValueDic);
-        if (l_filterValue != null && l_cbEditor != null)
-        {
-          m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
-          this.FillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter);
-        }
-      }
+      foreach (AxisFilter l_axisFilter in l_axisFilterDic.Values)
+        LoadAxisFilter(l_axisFilter);
       m_dgv.CellValueChanged += OnDGVCellValueChanged;
+      m_dgv.Refresh();
+    }
+
+    void LoadAxisFilter(AxisFilter p_axisFilter)
+    {
+      FilterValue l_filterValue = FilterValueModel.Instance.GetValue(p_axisFilter.FilterValueId);
+      MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = null;
+      ComboBoxEditor l_cbEditor = null;
+
+      if (l_filterValue.ParentId == 0)
+        l_filterValueDic = FilterValueModel.Instance.GetDictionary(p_axisFilter.FilterId);
+      else
+        l_filterValueDic = FilterValueModel.Instance.GetChildrenDictionary(l_filterValue.ParentId);
+      if (AxisElemModel.Instance.IsParent(p_axisFilter.AxisElemId))
+        return;
+      if (l_filterValue != null)
+      {
+        m_dgv.FillField(p_axisFilter.AxisElemId, p_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
+        this.FillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, p_axisFilter);
+      }
     }
 
     void FillParentsColumn(uint p_filterValueId, uint p_parentId, AxisFilter p_axisFilter)
@@ -137,6 +138,16 @@ namespace FBI.MVC.View
 
     #region User Callback
 
+    private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
+    {
+     if (p_e.Cell.Editor != null)
+        return;
+      UInt32 l_filterId = (UInt32)p_e.Cell.ColumnItem.ItemValue;
+
+      ComboBoxEditor l_cb = BuildComboBoxEditor(FilterValueModel.Instance.GetDictionary(l_filterId));
+      m_dgv.CellsArea.SetCellEditor(p_e.Cell.RowItem, p_e.Cell.ColumnItem, l_cb);
+    }
+
     private void OnClickDelete(object p_sender, EventArgs p_e)
     {
       HierarchyItem l_row = m_dgv.HoveredRow;
@@ -156,7 +167,7 @@ namespace FBI.MVC.View
       {
         MessageBox.Show(Local.GetValue("general.invalid_password"));
         return;
-      }
+      } 
       if (m_controller.Delete(l_axisItem) == false)
         MessageBox.Show(m_controller.Error);
     }
@@ -166,8 +177,9 @@ namespace FBI.MVC.View
       HierarchyItem row = m_dgv.HoveredRow;
 
       if (row != null)
-        m_newAxisUI.ParentAxisElemId = (UInt32)row.ItemValue;
-      m_newAxisUI.ShowDialog();
+        m_controller.ShowNewAxisUI((UInt32)row.ItemValue);
+      else
+        m_controller.ShowNewAxisUI();
     }
 
     private void OnDGVCellValueChanged(object sender, CellEventArgs args)
@@ -246,10 +258,9 @@ namespace FBI.MVC.View
       {
         FilterValue l_filterValueParent = FilterValueModel.Instance.GetValue(p_filterValue.ParentId);
         MultiIndexDictionary<UInt32, string, FilterValue> l_filterValuesDic = FilterValueModel.Instance.GetChildrenDictionary(l_filterValueParent.Id);
-        ComboBoxEditor l_cbEditor = BuildComboBoxEditor(l_filterValuesDic);
-        if (l_cbEditor != null && l_filterValuesDic != null && l_filterValueParent != null)
+        if (l_filterValuesDic != null && l_filterValueParent != null)
         {
-          m_dgv.FillField(p_axisElemId, p_filterId, p_filterValue.Name, l_cbEditor);
+          m_dgv.FillField(p_axisElemId, p_filterId, p_filterValue.Name);
           Filter l_filter = FilterModel.Instance.GetValue(m_controller.AxisType, p_filterId);
           if (l_filter != null)
             setParentsCells(p_axisElemId, l_filter.ParentId, l_filterValueParent);

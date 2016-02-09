@@ -26,9 +26,8 @@ namespace FBI.MVC.View
     public PlatformMGTGeneralUI()
     {
       InitializeComponent();
+      SubscribeEvents();
       MultilanguageSetup();
-      Load += PlatformMGTGeneralUI_Load;
-      FormClosing += PlatformMGTGeneralUI_FormClosing;
     }
 
     public void SetController(IController p_controller)
@@ -70,7 +69,26 @@ namespace FBI.MVC.View
 
     }
 
-
+    private void SubscribeEvents()
+    {
+      this.Load += PlatformMGTGeneralUI_Load;
+      this.FormClosing += PlatformMGTGeneralUI_FormClosing;
+      this.AccountsBT.Click += new System.EventHandler(this.AccountsBT_Click);
+      this.m_entitiesBT.Click += new System.EventHandler(this.m_entitiesBT_Click);
+      this.m_employeesButton.Click += new System.EventHandler(this.m_employeesButton_Click);
+      this.ClientsBT.Click += new System.EventHandler(this.ClientsBT_Click);
+      this.ProductsBT.Click += new System.EventHandler(this.ProductsBT_Click);
+      this.AdjustmentsBT.Click += new System.EventHandler(this.AdjustmentsBT_Click);
+      this.m_entitiesFiltersBT.Click += new System.EventHandler(this.m_entitiesFiltersBT_Click);
+      this.m_employeesFiltersBT.Click += new System.EventHandler(this.m_employeesFiltersBT_Click);
+      this.m_clientsFiltersBT.Click += new System.EventHandler(this.m_clientsFiltersBT_Click);
+      this.m_productsFiltersBT.Click += new System.EventHandler(this.m_productsFiltersBT_Click);
+      this.m_adjustmentsFiltersBT.Click += new System.EventHandler(this.m_adjustmentsFiltersBT_Click);
+      this.VersionsBT.Click += new System.EventHandler(this.VersionsBT_Click);
+      this.CurrenciesBT.Click += new System.EventHandler(this.CurrenciesBT_Click);
+      this.ExchangeRatesButton.Click += new System.EventHandler(this.ExchangeRatesButton_Click);
+      this.GroupsBT.Click += new System.EventHandler(this.GroupsBT_Click);
+    }
 
     private void PlatformMGTGeneralUI_FormClosing(object sender, FormClosingEventArgs e)
     {

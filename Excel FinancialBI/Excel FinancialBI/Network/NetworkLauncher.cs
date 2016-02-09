@@ -18,6 +18,7 @@ namespace FBI.Network
 
     public bool Relaunch()
     {
+      Stop();
       if (NetworkManager.Connect(m_ip, m_port) == true)
       {
         m_state = ClientState.running;
@@ -65,8 +66,6 @@ namespace FBI.Network
         {
           System.Diagnostics.Debug.WriteLine(e.Message);
         }
-
-        Thread.Sleep(2);
       }
     }
 

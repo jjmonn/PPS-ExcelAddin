@@ -68,6 +68,7 @@
     <string name="connection">Connection</string>
 	<string name="msg_version_mismatch">Your version of Financial BI is not up-to-date. Please restart Excel.</string>
 	<string name="msg_auth_request_default">The server refused your authentication request.</string>
+    <string name="msg_wrong_credentials">Your ID or password is incorrect.</string>
   </category>
     
   <category name="accounts_edition">
@@ -96,6 +97,7 @@
     <string name="msg_account_deletion1">Careful, you are about to delete account </string>
     <string name="msg_account_deletion2">Do you confirm? </string>
     <string name="msg_account_deletion3">This Account and all its Sub Accounts will be deleted.</string>
+    <string name="msg_account_deletion4">Please enter your password.</string>
     <string name="msg_account_deletion_confirmation">Account deletion confirmation</string>  
     <string name="msg_incorrect_password">Incorrect password</string>
     <string name="msg_destination_cell_not_valid">A destination cell must be selected in order to drop the Accounts on the Worksheet.</string>

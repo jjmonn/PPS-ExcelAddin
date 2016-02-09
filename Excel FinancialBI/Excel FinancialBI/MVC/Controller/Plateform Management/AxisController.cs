@@ -16,18 +16,29 @@ namespace FBI.MVC.Controller
   {
     public override IView View { get { return (m_view); } }
     public AxisType AxisType { get; set; }
+    NewAxisUI m_newAxisUI;
 
     public AxisController(AxisType p_axisType)
     {
       AxisType = p_axisType;
       m_view = new AxisView();
       m_view.SetController(this);
+      m_newAxisUI = new NewAxisUI();
+      m_newAxisUI.SetController(this);
       LoadView();
     }
 
     public override void LoadView()
     {
       m_view.LoadView();
+      m_newAxisUI.LoadView();
+    }
+
+    public void ShowNewAxisUI(UInt32 p_parentId = 0)
+    {
+      if (p_parentId != 0)
+        m_newAxisUI.ParentAxisElemId = p_parentId;
+      m_newAxisUI.ShowDialog();
     }
 
     public bool Delete(AxisElem p_elem)
