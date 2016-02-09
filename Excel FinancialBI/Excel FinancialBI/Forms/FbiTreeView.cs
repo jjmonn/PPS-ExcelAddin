@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VIBlend;
 using VIBlend.WinForms.Controls;
+using System.Windows.Forms;
 
 namespace FBI.Forms
 {
@@ -17,14 +18,25 @@ namespace FBI.Forms
     private MultiIndexDictionary<UInt32, String, T> m_items;
     private static readonly string ERR_GENERATE = "[FbiTreeView] Cannot generate vTreeView. Either the MultiIndexDictionary is null or incorrect";
 
-    public FbiTreeView(MultiIndexDictionary<UInt32, String, T> p_items = null, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    public FbiTreeView(MultiIndexDictionary<UInt32, String, T> p_items = null, MultiIndexDictionary<UInt32, String, T> p_icons = null,
+                       bool p_allowDragAndDrop = false)
     {
       m_items = p_items;
       if (p_items != null && !this.Load(p_items, p_icons))
-      {
         throw new Exception(ERR_GENERATE);
-      }
+      
       InitTVFormat(this);
+      this.AllowDrop = p_allowDragAndDrop;
+      if (p_allowDragAndDrop == true)
+        SubscribeDragAndDropEvents();
+    }
+
+    private void SubscribeDragAndDropEvents()
+    {
+      // Careful: you must subscribe to the mouse down event into your view and launch the drag and drop from it
+      this.DragEnter += FbiTreeview_DragEnter;
+      this.DragOver += FbiTreeview_DragOver;
+      // You must subscribe to the DragDrop event into your view in order to send the parent id update to your model
     }
 
     public bool Append(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
@@ -275,5 +287,29 @@ namespace FBI.Forms
     {
       return (FindNode(this, p_value));
     }
+
+
+    private void FbiTreeview_DragEnter(object sender, DragEventArgs e)
+    {
+      if (e.Data.GetData(typeof(vTreeNode)) as vTreeNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
+      {
+        e.Effect = DragDropEffects.Move;
+      }
+      else
+      {
+        e.Effect = DragDropEffects.None;
+      }
+    }
+
+    private void FbiTreeview_DragOver(object sender, DragEventArgs e)
+    {
+      vTreeNode l_treenode = this.FindAtPosition(new Point(e.X, e.Y));
+      if (l_treenode != null && !object.ReferenceEquals(l_treenode, e.Data as vTreeNode))
+      {
+        e.Effect = DragDropEffects.Move;
+      }
+
+    }
+  
   }
 }

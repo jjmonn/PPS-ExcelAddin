@@ -275,6 +275,7 @@
     <string name="new_version">Nouvelle Version</string>
     <string name="new_folder">Nouveau Dossier</string>
     <string name="version">Version</string>
+    <string name="version_copy_title">Copie de version</string>
 
     <string name="add_version">Ajouter une version</string>
     <string name="add_folder">Ajouter un dossier</string>
@@ -290,7 +291,15 @@
 
     <string name="rates_version_not_selected">Une version des taux de change doit être sélectionnée.</string>
     <string name="gfacts_version_not_selected">Une version des indicateurs macro economiques doit être sélectionnée.</string>
-  
+ 
+    <category name="error">
+      <string name="rates_version_not_selected">Veuillez sélectioner une version des taux de change.</string>
+      <string name="gfacts_version_not_selected">Veuillez sélectioner une version des indicateurs macro économiques.</string>
+      <string name="time_config_not_supported">Cette configuration de périodes n'existe pas. Veuillez contacter votre administrateur Financial BI.</string>
+      <string name="cannot_copy_folder">Un dossier ne peut pas être copié.</string>
+      <string name="no_selected_version">Veuillez sélectioner une version.</string>
+    </category>
+    
   </category>
 
   <category name="process">
@@ -484,7 +493,7 @@
     <string name="cancel">Annuler</string>
     <string name="help">Aide</string>
     <string name="create">Créer</string>
-   
+    <string name="copy">Copier</string>
     <string name="name">Nom</string>
     <string name="delete">Supprimer</string>
     <string name="rename">Renommer</string>

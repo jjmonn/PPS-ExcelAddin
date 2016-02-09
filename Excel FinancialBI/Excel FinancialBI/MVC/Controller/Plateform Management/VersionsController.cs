@@ -15,7 +15,8 @@ namespace FBI.MVC.Controller
   public class VersionsController : NameController<VersionsView>
   {
     public override IView View { get { return (m_view); } }
-    private NewDataVersionUI m_newVersionView;
+    private NewDataVersionUI m_newVersionView = new NewDataVersionUI();
+    private CopyVersionView m_copyVersionView = new CopyVersionView();
 
     public VersionsController()
     {
@@ -26,8 +27,8 @@ namespace FBI.MVC.Controller
     {
       m_view = new VersionsView();
       m_view.SetController(this);
-      m_newVersionView = new NewDataVersionUI();
       m_newVersionView.SetController(this);
+      m_copyVersionView.SetController(this);
     }
 
     #region Validity checks
@@ -142,9 +143,21 @@ namespace FBI.MVC.Controller
       m_newVersionView.ShowDialog();
     }
 
-    public void ShowVersionCopyView()
+    public void ShowVersionCopyView(uint p_id)
     {
-      // TO DO
+      Version l_version = VersionModel.Instance.GetValue(p_id);
+      if (l_version == null)
+      {
+        Error= Local.GetValue("versions.error.no_selected_version");
+        return;
+      }
+      if (l_version.IsFolder == true)
+      {
+        Error = Local.GetValue("versions.error.cannot_copy_folder");
+        return;
+      }
+      m_copyVersionView.SetCopiedVersion(l_version);
+      m_copyVersionView.Show();
     }
 
     private void SetStartPeriod(Version p_version)

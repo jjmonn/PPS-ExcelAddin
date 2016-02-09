@@ -110,6 +110,7 @@ namespace FBI.MVC.View
       l_version.StartPeriod = (uint)m_startingPeriodDatePicker.Value.Value.ToOADate();
       l_version.NbPeriod = (ushort)m_nbPeriods.Value;
       l_version.IsFolder = false;
+      l_version.Locked = false;
       l_version.ItemPosition = 0;
       l_version.TimeConfiguration = (TimeConfig)this.m_timeConfigCB.SelectedItem.Value;
       l_version.RateVersionId = (uint)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;

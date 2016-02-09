@@ -21,8 +21,9 @@ namespace FBI.MVC.View
 
   public partial class VersionsView : UserControl, IView
   {
-    VersionsController m_controller;
-    FbiTreeView<Version> m_versionsTreeview;
+    private VersionsController m_controller;
+    private FbiTreeView<Version> m_versionsTreeview;
+    private RightManager m_rightMgr = new RightManager();
     private bool m_isDisplaying;
     private vTreeNode m_currentNode;
 
@@ -34,7 +35,7 @@ namespace FBI.MVC.View
 
     public void LoadView()
     {
-      m_versionsTreeview = new FbiTreeView<Version>(VersionModel.Instance.GetDictionary());
+      m_versionsTreeview = new FbiTreeView<Version>(VersionModel.Instance.GetDictionary(), null, true);
       m_versionsTreeview.ImageList = m_versionsTreeviewImageList;
       m_versionsTVPanel.Controls.Add(m_versionsTreeview);
       m_versionsTreeview.Dock = DockStyle.Fill;
@@ -42,11 +43,33 @@ namespace FBI.MVC.View
 
       FbiTreeView<ExchangeRateVersion>.Load(m_exchangeRatesVersionVTreeviewbox.TreeView.Nodes, RatesVersionModel.Instance.GetDictionary());
       FbiTreeView<GlobalFactVersion>.Load(m_factsVersionVTreeviewbox.TreeView.Nodes, GlobalFactVersionModel.Instance.GetDictionary());
-     
-      //this.DefineUIPermissions(); TODO : RightManager
-      //this.DesactivateUnallowed(); TODO : RightManager  
+
+      this.DefineUIPermissions(); 
+      this.DesactivateUnallowed();  
       this.MultilanguageSetup();
       this.SuscribeEvents();
+    }
+
+    private void DefineUIPermissions()
+    {
+      m_rightMgr[m_lockCombobox] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_exchangeRatesVersionVTreeviewbox] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_factsVersionVTreeviewbox] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_newFolderMenuBT] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_newVersionMenuBT] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_renameMenuBT] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_deleteVersionMenuBT] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_new_VersionRCMButton] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_newFolderRCMButton] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_deleteRCMButton] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_deleteRCMButton] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_renameRCMButton] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_copyVersionRCMButton] = Group.Permission.EDIT_BASE;
+    }
+
+    private void DesactivateUnallowed()
+    {
+      m_rightMgr.Enable(UserModel.Instance.GetCurrentUserRights());
     }
 
     void SuscribeEvents()
@@ -62,9 +85,11 @@ namespace FBI.MVC.View
       m_versionsTreeview.AfterSelect += OnVersionTVSelectNode;
       m_versionsTreeview.KeyDown += OnVersionTVKeyDown;
       m_versionsTreeview.MouseClick += OnVersionTVMouseClick;
-      //   m_versionsTreeview.DragEnter += versionsTV_DragEnter;
-      //   m_versionsTreeview.DragOver += versionsTV_DragOver;
-      //   m_versionsTreeview.DragDrop += versionsTV_DragDrop;
+      m_lockCombobox.CheckedChanged += OnChangeVersionLock;
+
+      m_versionsTreeview.MouseDown += this.VersionsTV_MouseDown;
+      m_versionsTreeview.DragDrop += this.VersionsTV_DragDrop;
+
       m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect += OnChangeVersionExchangeRate;
       m_factsVersionVTreeviewbox.TreeView.AfterSelect += OnChangeVersionFactRate;
 
@@ -129,19 +154,19 @@ namespace FBI.MVC.View
 
       if (p_version.Locked)
       {
-        lockedCB.Checked = true;
+        m_lockCombobox.Checked = true;
         LockedDateT.Text = p_version.LockDate;
       }
       else
       {
-        lockedCB.Checked = false;
+        m_lockCombobox.Checked = false;
         LockedDateT.Text = Local.GetValue("facts_versions.version_not_locked");
       }
     }
 
     private void SetControlsEnabled(bool p_allowed)
     {
-      lockedCB.Checked = p_allowed;
+      m_lockCombobox.Checked = p_allowed;
       m_exchangeRatesVersionVTreeviewbox.Enabled = p_allowed;
       m_factsVersionVTreeviewbox.Enabled = p_allowed;
     }
@@ -274,7 +299,7 @@ namespace FBI.MVC.View
 
     private void OnClickCopyVersion(object sender, EventArgs e)
     {
-      m_controller.ShowVersionCopyView();
+      m_controller.ShowVersionCopyView((uint)m_currentNode.Value);
     }
 
     private void OnClickNewFolder(object sender, EventArgs e)
@@ -305,12 +330,14 @@ namespace FBI.MVC.View
         m_currentNode = e.Node;
         m_isDisplaying = true;
 
-        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
-        if (l_version == null) return;
-        DisplayVersion(l_version);
-        m_isDisplaying = false;
-
-        // DesactivateUnallowed();
+        if (m_currentNode != null)
+        {
+          Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
+          if (l_version == null) return;
+          DisplayVersion(l_version);
+          m_isDisplaying = false;
+        }
+         DesactivateUnallowed();
       }
 
     }
@@ -321,7 +348,7 @@ namespace FBI.MVC.View
       if (InvokeRequired)
       {
         DeleteNode_Delegate MyDelegate = new DeleteNode_Delegate(DeleteNode);
-        this.Invoke(MyDelegate, new object[] {p_id});
+        this.Invoke(MyDelegate, new object[] { p_id });
       }
       else
       {
@@ -339,25 +366,43 @@ namespace FBI.MVC.View
       if (InvokeRequired)
       {
         UpdateNode_Delegate MyDelegate = new UpdateNode_Delegate(UpdateNode);
-        this.Invoke(MyDelegate, new object[] {p_version});
+        this.Invoke(MyDelegate, new object[] { p_version });
       }
       else
       {
-        vTreeNode l_newNode = new vTreeNode();
-        vTreeNode l_parentNode = m_versionsTreeview.FindNode(p_version.ParentId);
-        l_newNode.Text = p_version.Name;
-        l_newNode.Value = p_version.Id;
-        l_newNode.ImageIndex = (int)p_version.Image;
-        if (l_parentNode != null)
+        vTreeNode l_node = m_versionsTreeview.FindNode(p_version.Id);
+        m_versionsTreeview.SuspendLayout();
+        if (l_node == null)
         {
-          l_parentNode.Nodes.Add(l_newNode);
+          AddNode(p_version);
         }
         else
         {
-          m_versionsTreeview.Nodes.Add(l_newNode);
+          l_node.Text = p_version.Name;
+          m_currentNode = l_node;
         }
-        m_versionsTreeview.Refresh();
+        m_versionsTreeview.ResumeLayout();
+        DisplayVersion(p_version);
       }
+    }
+
+    private void AddNode(Version p_version)
+    {
+      vTreeNode l_newNode = new vTreeNode();
+      vTreeNode l_parentNode = m_versionsTreeview.FindNode(p_version.ParentId);
+      l_newNode.Text = p_version.Name;
+      l_newNode.Value = p_version.Id;
+      l_newNode.ImageIndex = (int)p_version.Image;
+      if (l_parentNode != null)
+      {
+        l_parentNode.Nodes.Add(l_newNode);
+      }
+      else
+      {
+        m_versionsTreeview.Nodes.Add(l_newNode);
+      }
+      m_currentNode = l_newNode;
+      m_versionsTreeview.Refresh();
     }
 
     private void OnVersionTVMouseClick(object sender, MouseEventArgs e)
@@ -388,19 +433,9 @@ namespace FBI.MVC.View
 
     private void OnChangeVersionLock(object sender, EventArgs e)
     {
-      if (m_isDisplaying == false)
+      if (m_isDisplaying == false && m_currentNode != null)
       {
-        if ((m_versionsTreeview.SelectedNode != null) && m_isDisplaying == false)
-        {
-          if (lockedCB.Checked)
-          {
-            // m_controller.LockVersion(m_versionsTreeview.SelectedNode.Value);
-          }
-          else
-          {
-            // m_controller.UnlockVersion(m_versionsTreeview.SelectedNode.Value);
-          }
-        }
+        UpdateLocked(m_currentNode, m_lockCombobox.Checked);
       }
     }
 
@@ -431,20 +466,56 @@ namespace FBI.MVC.View
       if (m_currentNode != null && m_isDisplaying == false)
       {
         Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
-        if (l_version != null && m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode != null)
+        if (l_version != null && m_factsVersionVTreeviewbox.TreeView.SelectedNode != null)
         {
-          UInt32 l_ratesVersionId = (UInt32)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
+          UInt32 l_gfactsVersionId = (UInt32)m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value;
 
           Version l_versionCopy = l_version.Clone();
-          l_versionCopy.RateVersionId = l_ratesVersionId;
+          l_versionCopy.GlobalFactVersionId = l_gfactsVersionId;
           if (m_controller.Update(l_versionCopy) == false)
           {
             MessageBox.Show(m_controller.Error);
             m_isDisplaying = true;
-            SetExchangeVersion(l_version);
+            SetGlobalFactsVersion(l_version);
             m_isDisplaying = false;
           }
         }
+      }
+    }
+
+    private void VersionsTV_MouseDown(object sender, MouseEventArgs e)
+    {
+      m_currentNode = m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y));
+      if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
+      {
+        m_versionsTreeview.DoDragDrop(m_currentNode, DragDropEffects.Move);
+      }
+    }
+
+    private void VersionsTV_DragDrop(object sender, DragEventArgs e)
+    {
+      vTreeNode l_draggedNode = e.Data.GetData(typeof(vTreeNode)) as vTreeNode;
+      if (l_draggedNode != null)
+      {
+        Point location = m_versionsTreeview.PointToClient(Cursor.Position);
+        vTreeNode l_targetNode = m_versionsTreeview.HitTest(location);
+
+        uint l_parent_id = 0;
+        Version l_targetVersion = VersionModel.Instance.GetValue((uint)l_targetNode.Value);
+        
+        if (l_draggedNode.Equals(l_targetNode) == true || l_targetVersion == null 
+            || l_targetVersion.IsFolder == false)
+          return;
+       
+        if (l_targetNode != null)
+          l_parent_id = (uint)l_targetNode.Value;
+          
+        Version l_version = VersionModel.Instance.GetValue((uint)l_draggedNode.Value).Clone();
+        if (l_version == null)
+          return;
+        l_draggedNode.Remove();
+        l_version.ParentId = l_parent_id;
+        m_controller.Update(l_version);
       }
     }
 
@@ -491,6 +562,25 @@ namespace FBI.MVC.View
         }
       }
     }
+
+    private void UpdateLocked(vTreeNode p_node, bool p_locked)
+    {
+      Version l_version = VersionModel.Instance.GetValue((uint)p_node.Value).Clone();
+      if (l_version == null)
+        return;
+      l_version.Locked = p_locked;
+      if (p_locked == true)
+      {
+        l_version.LockDate = DateTime.Now.ToShortDateString();
+      }
+      else
+      {
+        l_version.LockDate = "";
+      }
+        if (m_controller.Update(l_version) == false)
+        MessageBox.Show(m_controller.Error);
+    }
+
   }
 }
 

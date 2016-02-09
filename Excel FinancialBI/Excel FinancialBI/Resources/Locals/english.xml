@@ -287,7 +287,8 @@
     <string name="add_version">Add version</string>
     <string name="add_folder">Add folder</string>
     <string name="copy_version">Copy version</string>
-
+    <string name="version_copy_title">Version Copy</string>
+    
     <!--messages-->
       <string name="msg_folder_name">Please enter a name for the new Folder</string>
       <string name="msg_new_name">Please enter the new name</string>
@@ -301,6 +302,8 @@
       <string name="rates_version_not_selected">Please select an exchange rates version.</string>
       <string name="gfacts_version_not_selected">Please select a macro economic indicators rates version.</string>
       <string name="time_config_not_supported">This time configuration is not supported. Please contact your local administrator.</string>
+      <string name="cannot_copy_folder">Folders cannot be copied.</string>
+      <string name="no_selected_version">Please select a version.</string>
     </category>
   </category>
 
@@ -498,8 +501,9 @@
      <string name="cancel">Cancel</string>
      <string name="help">Help</string>
      <string name="create">Create</string>
+    <string name="copy">Copy</string>
 
-     <string name="name">Name</string>
+    <string name="name">Name</string>
      <string name="delete">Delete</string>
      <string name="rename">Rename</string>
      <string name="expand_all">Expand all</string>

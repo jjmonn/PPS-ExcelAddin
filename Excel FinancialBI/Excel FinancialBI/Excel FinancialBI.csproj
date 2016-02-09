@@ -389,6 +389,12 @@
     <Compile Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.Designer.cs">
       <DependentUpon>HierarchyTreeView.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\Plateform Management\Data Versions\CopyVersionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Data Versions\CopyVersionView.Designer.cs">
+      <DependentUpon>CopyVersionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\Plateform Management\FactBaseView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -407,11 +413,11 @@
     <Compile Include="MVC\View\Plateform Management\NewAxisUI.Designer.cs">
       <DependentUpon>NewAxisUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\NewDataVersionUI.cs">
+    <Compile Include="MVC\View\Plateform Management\Data Versions\NewDataVersionView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\NewDataVersionUI.Designer.cs">
-      <DependentUpon>NewDataVersionUI.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\Data Versions\NewDataVersionView.Designer.cs">
+      <DependentUpon>NewDataVersionView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\GlobalFactUI.cs">
       <SubType>UserControl</SubType>
@@ -498,10 +504,10 @@
     <Compile Include="MVC\View\Plateform Management\UsersView.Designer.cs">
       <DependentUpon>UsersView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\VersionsView.cs">
+    <Compile Include="MVC\View\Plateform Management\Data Versions\VersionsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\VersionsView.designer.cs">
+    <Compile Include="MVC\View\Plateform Management\Data Versions\VersionsView.designer.cs">
       <DependentUpon>VersionsView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\PPS Controls\CircularProgressUI.cs">
@@ -677,6 +683,9 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.resx">
       <DependentUpon>HierarchyTreeView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Data Versions\CopyVersionView.resx">
+      <DependentUpon>CopyVersionView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\FactBaseView.resx">
       <DependentUpon>FactBaseView.cs</DependentUpon>
     </EmbeddedResource>
@@ -686,8 +695,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\NewAxisUI.resx">
       <DependentUpon>NewAxisUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\NewDataVersionUI.resx">
-      <DependentUpon>NewDataVersionUI.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Data Versions\NewDataVersionView.resx">
+      <DependentUpon>NewDataVersionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\AxisView.resx">
       <DependentUpon>AxisView.cs</DependentUpon>
@@ -725,7 +734,7 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\VersionsView.resx">
+    <EmbeddedResource Include="MVC\View\Plateform Management\Data Versions\VersionsView.resx">
       <DependentUpon>VersionsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\CircularProgressUI.resx">
