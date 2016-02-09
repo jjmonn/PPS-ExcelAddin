@@ -23,19 +23,16 @@ namespace FBI.MVC.View
     FbiDataGridView m_dgv = new FbiDataGridView();
     AxisController m_controller;
     bool m_cellModif = false;
-    NewAxisUI m_newAxisUI;
 
     public AxisView()
     {
       InitializeComponent();
       m_dgv.ContextMenuStrip = m_axisRightClickMenu;
-      m_newAxisUI = new NewAxisUI();
     }
 
     public void SetController(IController p_controller)
     {
       m_controller = p_controller as AxisController;
-      m_newAxisUI.SetController(m_controller);
     }
 
     #region "Load"
@@ -55,7 +52,6 @@ namespace FBI.MVC.View
       m_dgv.InitializeColumns(FilterModel.Instance, l_filterDic);
       FillDGV();
       SuscribeEvents();
-      m_newAxisUI.LoadView();
     }
 
     void SuscribeEvents()
@@ -135,7 +131,7 @@ namespace FBI.MVC.View
       {
         MessageBox.Show(Local.GetValue("general.invalid_password"));
         return;
-      }
+      } 
       if (m_controller.Delete(l_axisItem) == false)
         MessageBox.Show(m_controller.Error);
     }
@@ -145,8 +141,9 @@ namespace FBI.MVC.View
       HierarchyItem row = m_dgv.HoveredRow;
 
       if (row != null)
-        m_newAxisUI.ParentAxisElemId = (UInt32)row.ItemValue;
-      m_newAxisUI.ShowDialog();
+        m_controller.ShowNewAxisUI((UInt32)row.ItemValue);
+      else
+        m_controller.ShowNewAxisUI();
     }
 
     private void OnDGVCellValueChanged(object sender, CellEventArgs args)

@@ -119,9 +119,6 @@ namespace FBI.MVC.View
       m_passwordTextBox.Text = "";
       e.Cancel = true;
     }
-
-
   }
-
 }
 

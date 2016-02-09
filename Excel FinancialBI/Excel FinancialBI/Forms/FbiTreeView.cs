@@ -27,19 +27,25 @@ namespace FBI.Forms
       InitTVFormat(this);
     }
 
-    public bool Append(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
-    {
-      if (p_items == null)
-        return (false);
-      return (this.Load(p_items, p_icons));
-    }
-
     public bool Add(vTreeNode p_node)
     {
       if (p_node == null)
         return (false);
       this.Nodes.Add(p_node);
       return (true);
+    }
+
+    public void FindAndAdd(NamedHierarchyCRUDEntity p_value)
+    {
+      vTreeNode l_parentNode = FindNode(p_value.ParentId);
+      vTreeNode l_newNode = new vTreeNode();
+
+      l_newNode.Text = p_value.Name;
+      l_newNode.Value = p_value.Id;
+      if (l_parentNode != null)
+        l_parentNode.Nodes.Add(l_newNode);
+      else
+        Nodes.Add(l_newNode);
     }
 
     public bool Remove(vTreeNode p_node)

@@ -234,6 +234,9 @@
     <Compile Include="Forms\FbiFilterHierarchyTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\FbiToolStripMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -242,6 +245,7 @@
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\BasePlatformMgtComponent.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\FactBaseController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\FilterController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\IBasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
@@ -387,17 +391,20 @@
     <Compile Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.Designer.cs">
       <DependentUpon>HierarchyTreeView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\FactBaseView.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\FactBaseView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\FactBaseView.Designer.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\FactBaseView.Designer.cs">
       <DependentUpon>FactBaseView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\NewRateVersionView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.Designer.cs">
-      <DependentUpon>NewGlobalFactVersionUI.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\NewVersionBaseView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\NewVersionBaseView.Designer.cs">
+      <DependentUpon>NewVersionBaseView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\NewAxisUI.cs">
       <SubType>Form</SubType>
@@ -463,16 +470,16 @@
     <Compile Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.Designer.cs">
       <DependentUpon>FilterStructView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\ExcelExchangeRatesImportUI.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\ExcelExchangeRatesImportUI.Designer.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.Designer.cs">
       <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\ExcelGlobalFactsImportUI.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\ExcelGlobalFactsImportUI.Designer.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.Designer.cs">
       <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\ExchangeRatesView.cs">
@@ -675,11 +682,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.resx">
       <DependentUpon>HierarchyTreeView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\FactBaseView.resx">
+    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\FactBaseView.resx">
       <DependentUpon>FactBaseView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.resx">
-      <DependentUpon>NewGlobalFactVersionUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\NewAxisUI.resx">
       <DependentUpon>NewAxisUI.cs</DependentUpon>
@@ -708,10 +712,10 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.resx">
       <DependentUpon>FilterStructView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\ExcelExchangeRatesImportUI.resx">
+    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.resx">
       <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\ExcelGlobalFactsImportUI.resx">
+    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.resx">
       <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\GlobalFactUI.resx">
@@ -722,6 +726,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\NewVersionBaseView.resx">
+      <DependentUpon>NewVersionBaseView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\VersionsView.resx">
       <DependentUpon>VersionsView.cs</DependentUpon>

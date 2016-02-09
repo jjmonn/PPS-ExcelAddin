@@ -76,7 +76,6 @@ namespace FBI.MVC.Model
       {
         RaiseReadEvent(packet.GetError(), null);
       }
-
     }
 
     protected override void DeleteAnswer(ByteBuffer packet)
