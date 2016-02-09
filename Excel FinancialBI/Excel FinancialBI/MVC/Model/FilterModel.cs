@@ -46,23 +46,23 @@ namespace FBI.MVC.Model
       return (0);
     }
 
-    public MultiIndexDictionary<uint, string, Filter> GetSortedByParentsDictionary(AxisType p_axisType)
+    public List<Filter> GetSortedByParentsDictionary(AxisType p_axisType)
     {
       MultiIndexDictionary<uint, string, Filter> l_filterDic = this.GetDictionary(p_axisType);
-      MultiIndexDictionary<uint, string, Filter> l_newFilterDic = new MultiIndexDictionary<uint, string, Filter>();
+      List<Filter> l_newFilterDic = new List<Filter>();
       
       foreach (Filter l_filter in l_filterDic.Values)
       {
         SortedByParentsDictionaryAddElem(l_filter, l_newFilterDic, l_filterDic);
       }
-      return (l_filterDic);
+      return (l_newFilterDic);
     }
 
-    private void SortedByParentsDictionaryAddElem(Filter p_filter, MultiIndexDictionary<uint, string, Filter> p_newFilterDic, MultiIndexDictionary<uint, string, Filter> p_filterDic)
+    private void SortedByParentsDictionaryAddElem(Filter p_filter, List<Filter> p_newFilterDic, MultiIndexDictionary<uint, string, Filter> p_filterDic)
     {
-      if (p_newFilterDic.ContainsKey(p_filter.Id) == false)
+      if (p_newFilterDic.Contains(p_filter) == false)
       {
-        p_newFilterDic.Set(p_filter.Id, p_filter.Name, p_filter);
+        p_newFilterDic.Add(p_filter);
       }
       if (p_filter.IsParent == true)
         foreach (Filter l_toAdd in p_filterDic.Values)
@@ -70,6 +70,16 @@ namespace FBI.MVC.Model
           if (l_toAdd.ParentId == p_filter.Id)
             SortedByParentsDictionaryAddElem(l_toAdd, p_newFilterDic, p_filterDic);
         }
+    }
+
+    public bool HasChild(UInt32 p_filterId, AxisType p_axisType)
+    {
+      foreach (Filter l_filter in this.GetDictionary(p_axisType).Values)
+      {
+        if (l_filter.ParentId == p_filterId)
+          return (true);
+      }
+      return (false);
     }
   }
 }

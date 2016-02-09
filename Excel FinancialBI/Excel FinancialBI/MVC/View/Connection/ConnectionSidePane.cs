@@ -82,7 +82,7 @@ namespace FBI.MVC.View
       if (InvokeRequired)
       {
         OnConnectionChanged_delegate func = new OnConnectionChanged_delegate(OnConnectionChanged);
-        Invoke(func);
+        Invoke(func, p_connected);
       }
       else
       {

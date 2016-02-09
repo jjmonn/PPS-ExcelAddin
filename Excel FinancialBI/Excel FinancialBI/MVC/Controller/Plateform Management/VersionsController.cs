@@ -74,37 +74,11 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-    internal bool IsRatesVersionCompatible(Version p_version, uint p_ratesVersionId)
-    {
-      ExchangeRateVersion l_ratesVersion = RatesVersionModel.Instance.GetValue(p_ratesVersionId);
-      if (l_ratesVersion == null)
-        return false;
-
-      if (p_version.StartPeriod >= l_ratesVersion.StartPeriod && p_version.NbPeriod <= l_ratesVersion.NbPeriod)
-      {
-        return true;
-      }
-      return false;
-    }
-
-    internal bool IsGlobalFactsVersionCompatible(Version p_version, uint p_globalFactsVersionId)
-    {
-      GlobalFactVersion l_globalFactsVersion = GlobalFactVersionModel.Instance.GetValue(p_globalFactsVersionId);
-      if (l_globalFactsVersion == null)
-        return false;
-
-      if (p_version.StartPeriod >= l_globalFactsVersion.StartPeriod && p_version.NbPeriod <= l_globalFactsVersion.NbPeriod)
-      {
-        return true;
-      }
-      return false;
-    }
-
     #endregion
 
     public bool Create(Version p_version)
     {
-      if (!IsVersionValid(p_version) || IsNameAlreadyUsed(p_version.Name))
+      if (!IsVersionValid(p_version) || VersionModel.Instance.GetValue(p_version.Name) != null)
         return (false);
       VersionModel.Instance.Create(p_version);
       return (true);
@@ -137,14 +111,12 @@ namespace FBI.MVC.Controller
 
     public void ShowNewVersionView()
     {
-      m_newVersionView.Show();
+      m_newVersionView.ShowDialog();
     }
 
     public void ShowVersionCopyView()
     {
       // TO DO
     }
-
-
   }
 }

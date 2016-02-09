@@ -178,5 +178,10 @@ namespace FBI.Utils
       dest.m_mainDic = m_mainDic as Dictionary<uint, DValue>;
       return dest;
     }
+
+    public Value AtIndex(uint p_index)
+    {
+      return (m_mainDic[p_index]);
+    }
   }
 }

@@ -85,6 +85,8 @@ namespace FBI.MVC.View
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.m_globalFactsImageList = new System.Windows.Forms.ImageList(this.components);
+      this.m_ProcessLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.ProcessComboBox = new VIBlend.WinForms.Controls.vComboBox();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
       this.SplitContainer1.Panel1.SuspendLayout();
       this.SplitContainer1.Panel2.SuspendLayout();
@@ -126,7 +128,7 @@ namespace FBI.MVC.View
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.AccountsTVPanel.Location = new System.Drawing.Point(2, 54);
-      this.AccountsTVPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.AccountsTVPanel.Margin = new System.Windows.Forms.Padding(2);
       this.AccountsTVPanel.Name = "AccountsTVPanel";
       this.AccountsTVPanel.Size = new System.Drawing.Size(423, 988);
       this.AccountsTVPanel.TabIndex = 3;
@@ -331,6 +333,8 @@ namespace FBI.MVC.View
       // 
       // m_accountInformationGroupbox
       // 
+      this.m_accountInformationGroupbox.Controls.Add(this.ProcessComboBox);
+      this.m_accountInformationGroupbox.Controls.Add(this.m_ProcessLabel);
       this.m_accountInformationGroupbox.Controls.Add(this.ConsolidationOptionComboBox);
       this.m_accountInformationGroupbox.Controls.Add(this.CurrencyConversionComboBox);
       this.m_accountInformationGroupbox.Controls.Add(this.m_accountNameLabel);
@@ -358,7 +362,7 @@ namespace FBI.MVC.View
       this.ConsolidationOptionComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.ConsolidationOptionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.ConsolidationOptionComboBox.DropDownWidth = 465;
-      this.ConsolidationOptionComboBox.Location = new System.Drawing.Point(240, 305);
+      this.ConsolidationOptionComboBox.Location = new System.Drawing.Point(240, 365);
       this.ConsolidationOptionComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.ConsolidationOptionComboBox.Name = "ConsolidationOptionComboBox";
       this.ConsolidationOptionComboBox.RoundedCornersMaskListItem = ((byte)(15));
@@ -378,7 +382,7 @@ namespace FBI.MVC.View
       this.CurrencyConversionComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.CurrencyConversionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.CurrencyConversionComboBox.DropDownWidth = 465;
-      this.CurrencyConversionComboBox.Location = new System.Drawing.Point(242, 243);
+      this.CurrencyConversionComboBox.Location = new System.Drawing.Point(242, 303);
       this.CurrencyConversionComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.CurrencyConversionComboBox.Name = "CurrencyConversionComboBox";
       this.CurrencyConversionComboBox.RoundedCornersMaskListItem = ((byte)(15));
@@ -413,7 +417,7 @@ namespace FBI.MVC.View
       this.m_accountFormulaTypeLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_accountFormulaTypeLabel.Ellipsis = false;
       this.m_accountFormulaTypeLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_accountFormulaTypeLabel.Location = new System.Drawing.Point(30, 120);
+      this.m_accountFormulaTypeLabel.Location = new System.Drawing.Point(30, 180);
       this.m_accountFormulaTypeLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.m_accountFormulaTypeLabel.Multiline = true;
       this.m_accountFormulaTypeLabel.Name = "m_accountFormulaTypeLabel";
@@ -430,7 +434,7 @@ namespace FBI.MVC.View
       this.m_accountTypeLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_accountTypeLabel.Ellipsis = false;
       this.m_accountTypeLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_accountTypeLabel.Location = new System.Drawing.Point(30, 180);
+      this.m_accountTypeLabel.Location = new System.Drawing.Point(30, 240);
       this.m_accountTypeLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.m_accountTypeLabel.Multiline = true;
       this.m_accountTypeLabel.Name = "m_accountTypeLabel";
@@ -447,7 +451,7 @@ namespace FBI.MVC.View
       this.m_accountConsolidationOptionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_accountConsolidationOptionLabel.Ellipsis = false;
       this.m_accountConsolidationOptionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_accountConsolidationOptionLabel.Location = new System.Drawing.Point(30, 305);
+      this.m_accountConsolidationOptionLabel.Location = new System.Drawing.Point(30, 365);
       this.m_accountConsolidationOptionLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.m_accountConsolidationOptionLabel.Multiline = true;
       this.m_accountConsolidationOptionLabel.Name = "m_accountConsolidationOptionLabel";
@@ -464,7 +468,7 @@ namespace FBI.MVC.View
       this.m_accountCurrenciesConversionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_accountCurrenciesConversionLabel.Ellipsis = false;
       this.m_accountCurrenciesConversionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_accountCurrenciesConversionLabel.Location = new System.Drawing.Point(30, 243);
+      this.m_accountCurrenciesConversionLabel.Location = new System.Drawing.Point(30, 303);
       this.m_accountCurrenciesConversionLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.m_accountCurrenciesConversionLabel.Multiline = true;
       this.m_accountCurrenciesConversionLabel.Name = "m_accountCurrenciesConversionLabel";
@@ -483,7 +487,7 @@ namespace FBI.MVC.View
       this.FormulaTypeComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.FormulaTypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.FormulaTypeComboBox.DropDownWidth = 465;
-      this.FormulaTypeComboBox.Location = new System.Drawing.Point(242, 120);
+      this.FormulaTypeComboBox.Location = new System.Drawing.Point(242, 180);
       this.FormulaTypeComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.FormulaTypeComboBox.Name = "FormulaTypeComboBox";
       this.FormulaTypeComboBox.RoundedCornersMaskListItem = ((byte)(15));
@@ -503,7 +507,7 @@ namespace FBI.MVC.View
       this.TypeComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.TypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.TypeComboBox.DropDownWidth = 465;
-      this.TypeComboBox.Location = new System.Drawing.Point(242, 180);
+      this.TypeComboBox.Location = new System.Drawing.Point(242, 240);
       this.TypeComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.TypeComboBox.Name = "TypeComboBox";
       this.TypeComboBox.RoundedCornersMaskListItem = ((byte)(15));
@@ -729,6 +733,43 @@ namespace FBI.MVC.View
       this.m_globalFactsImageList.Images.SetKeyName(1, "chart_line.ico");
       this.m_globalFactsImageList.Images.SetKeyName(2, "money_interest.ico");
       // 
+      // m_ProcessLabel
+      // 
+      this.m_ProcessLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_ProcessLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_ProcessLabel.Ellipsis = false;
+      this.m_ProcessLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_ProcessLabel.Location = new System.Drawing.Point(30, 120);
+      this.m_ProcessLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.m_ProcessLabel.Multiline = true;
+      this.m_ProcessLabel.Name = "m_ProcessLabel";
+      this.m_ProcessLabel.Size = new System.Drawing.Size(194, 34);
+      this.m_ProcessLabel.TabIndex = 45;
+      this.m_ProcessLabel.Text = "Process Selection";
+      this.m_ProcessLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_ProcessLabel.UseMnemonics = true;
+      this.m_ProcessLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // ProcessComboBox
+      // 
+      this.ProcessComboBox.BackColor = System.Drawing.Color.White;
+      this.ProcessComboBox.DisplayMember = "";
+      this.ProcessComboBox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.ProcessComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.ProcessComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.ProcessComboBox.DropDownWidth = 465;
+      this.ProcessComboBox.Location = new System.Drawing.Point(242, 120);
+      this.ProcessComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.ProcessComboBox.Name = "ProcessComboBox";
+      this.ProcessComboBox.RoundedCornersMaskListItem = ((byte)(15));
+      this.ProcessComboBox.Size = new System.Drawing.Size(465, 34);
+      this.ProcessComboBox.TabIndex = 33;
+      this.ProcessComboBox.UseThemeBackColor = false;
+      this.ProcessComboBox.UseThemeDropDownArrowColor = true;
+      this.ProcessComboBox.ValueMember = "";
+      this.ProcessComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.ProcessComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
       // AccountsView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -805,5 +846,7 @@ namespace FBI.MVC.View
     internal VIBlend.WinForms.Controls.vButton m_formulaEditionButton;
 
     internal VIBlend.WinForms.Controls.vButton m_cancelFormulaEditionButton;
+    internal VIBlend.WinForms.Controls.vComboBox ProcessComboBox;
+    internal VIBlend.WinForms.Controls.vLabel m_ProcessLabel;
   }
 }
