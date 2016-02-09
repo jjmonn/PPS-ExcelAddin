@@ -224,7 +224,7 @@ namespace FBI
 
     private void m_settingsRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      
     }
 
     #endregion

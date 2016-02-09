@@ -68,6 +68,7 @@
     <string name="connection">Connection</string>
 	<string name="msg_version_mismatch">Your version of Financial BI is not up-to-date. Please restart Excel.</string>
 	<string name="msg_auth_request_default">The server refused your authentication request.</string>
+    <string name="msg_wrong_credentials">Your ID or password is incorrect.</string>
   </category>
     
   <category name="accounts_edition">
