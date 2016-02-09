@@ -474,7 +474,7 @@ namespace FBI.Properties {
         ///    &lt;string name=&quot;unselect_all&quot;&gt;Unselect all&lt;/string&gt;
         ///    &lt;string name=&quot;expand_all&quot;&gt;Expand all&lt;/string&gt;
         ///    &lt;string name=&quot;collapse_all&quot;&gt;Collapse all&lt;/string&gt;
-        ///    &lt;string name=&quot;log&quot; [rest of string was truncated]&quot;;.
+        ///    &lt;stri [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string english {
             get {
@@ -695,6 +695,16 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Financial_BI_dark_blue_add {
+            get {
+                object obj = ResourceManager.GetObject("Financial BI dark blue_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap folder_open_add {
             get {
                 object obj = ResourceManager.GetObject("folder_open_add", resourceCulture);
@@ -735,8 +745,7 @@ namespace FBI.Properties {
         ///    &lt;string name=&quot;select_all&quot;&gt;Tout sélectionner&lt;/string&gt;
         ///    &lt;string name=&quot;unselect_all&quot;&gt;Tout désélectionner&lt;/string&gt;
         ///    &lt;string name=&quot;expand_all&quot;&gt;Tout dégrouper&lt;/string&gt;
-        ///    &lt;string name=&quot;collapse_all&quot;&gt;Tout grouper&lt;/string&gt;
-        ///   [rest of string was truncated]&quot;;.
+        ///    &lt;string name=&quot;collapse_all&quot;&gt;Tout grouper [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string french {
             get {
