@@ -382,12 +382,6 @@
     <Compile Include="MVC\View\PeriodRangeSelectionControl.Designer.cs">
       <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.Designer.cs">
-      <DependentUpon>HierarchyTreeView.cs</DependentUpon>
-    </Compile>
     <Compile Include="MVC\View\Plateform Management\Data Versions\CopyVersionView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -630,6 +624,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utils\BNF\BnfConsumer.cs" />
+    <Compile Include="Utils\BNF\SimpleBnf.cs" />
     <Compile Include="Utils\CustomComponentResourceManager.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\Local.cs" />
@@ -678,9 +674,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PeriodRangeSelectionControl.resx">
       <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.resx">
-      <DependentUpon>HierarchyTreeView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\Data Versions\CopyVersionView.resx">
       <DependentUpon>CopyVersionView.cs</DependentUpon>

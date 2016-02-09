@@ -65,7 +65,7 @@ namespace FBI.MVC.View
 
     private void RegisterEvents()
     {
-      m_tree.KeyDown += OnKeyDown;
+      m_tree.KeyDown += OnTreeKeyDown;
       m_addValueRightClick.Click += OnAddValueClick;
       m_deleteRightClick.Click += OnDeleteClick;
       m_renameRightClick.Click += OnRenameClick;
@@ -83,22 +83,6 @@ namespace FBI.MVC.View
       m_tree.Nodes.Clear();
       m_tree.Load();
       m_tree.Refresh();
-    }
-
-    private void OnKeyDown(object p_sender, KeyEventArgs p_e)
-    {
-      switch (p_e.KeyCode)
-      {
-        case Keys.Delete:
-          this.OnDeleteClick(null, null);
-          break;
-        case Keys.Back:
-          this.OnDeleteClick(null, null);
-          break;
-        case Keys.Return:
-          this.OnRenameClick(null, null);
-          break;
-      }
     }
 
     #region Utils
@@ -137,7 +121,23 @@ namespace FBI.MVC.View
     #endregion
 
     #region FormEvents
-    
+
+    private void OnTreeKeyDown(object p_sender, KeyEventArgs p_e)
+    {
+      switch (p_e.KeyCode)
+      {
+        case Keys.Delete:
+          this.OnDeleteClick(null, null);
+          break;
+        case Keys.Back:
+          this.OnDeleteClick(null, null);
+          break;
+        case Keys.Space:
+          this.OnRenameClick(null, null);
+          break;
+      }
+    }
+
     private void CreateValue()
     {
       if (this.IsCategory())
@@ -313,7 +313,7 @@ namespace FBI.MVC.View
           }
           return;
         }
-        MessageBox.Show("{DELETE}", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -336,6 +336,7 @@ namespace FBI.MVC.View
             l_node = new vTreeNode();
             l_node.Value = p_attributes.Id;
             l_node.Text = p_attributes.Name;
+            l_node.Tag = typeof(FilterValue);
             if ((l_parentNode = m_tree.Get(p_attributes.ParentId, typeof(FilterValue))) == null) //If the parent is null, add to the tree -> Category, else, add the node to the parent
             {
               if ((l_parentNode = m_tree.Get(p_attributes.FilterId, typeof(Filter))) == null) //Get the filterNode -> Category

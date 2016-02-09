@@ -65,7 +65,7 @@ namespace FBI.MVC.View
 
     private void RegisterEvents()
     {
-      m_tree.KeyDown += m_tree_KeyDown;
+      m_tree.KeyDown += OnTreeKeyDown;
       m_addFilter.Click += OnAddCategory;
       m_createSubCategory.Click += OnAddSubCategory;
       m_deleteFilter.Click += OnDeleteCategory;
@@ -77,21 +77,7 @@ namespace FBI.MVC.View
       FilterModel.Instance.UpdateEvent += OnModelUpdate;
     }
 
-    private void m_tree_KeyDown(object sender, KeyEventArgs e)
-    {
-      switch (e.KeyCode)
-      {
-        case Keys.Delete:
-          this.OnDeleteCategory(null, null);
-          break;
-        case Keys.Back:
-          this.OnDeleteCategory(null, null);
-          break;
-        case Keys.Return:
-          this.OnRenameCategory(null, null);
-          break;
-      }
-    }
+    #region Utils
 
     private bool HasChild()
     {
@@ -108,6 +94,26 @@ namespace FBI.MVC.View
         return (false);
       }
       return (true);
+    }
+
+    #endregion
+
+    #region FormEvents
+
+    private void OnTreeKeyDown(object sender, KeyEventArgs e)
+    {
+      switch (e.KeyCode)
+      {
+        case Keys.Delete:
+          this.OnDeleteCategory(null, null);
+          break;
+        case Keys.Back:
+          this.OnDeleteCategory(null, null);
+          break;
+        case Keys.Space:
+          this.OnRenameCategory(null, null);
+          break;
+      }
     }
 
     private void OnAddCategory(object sender, EventArgs e)
@@ -168,6 +174,8 @@ namespace FBI.MVC.View
       }
     }
 
+    #endregion
+
     #region ServerEvents
 
     delegate void OnModelCreate_delegate(ErrorMessage p_status, UInt32 p_id);
@@ -226,7 +234,9 @@ namespace FBI.MVC.View
           {
             m_tree.Nodes.Remove(l_node);
           }
+          return;
         }
+        MessageBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 

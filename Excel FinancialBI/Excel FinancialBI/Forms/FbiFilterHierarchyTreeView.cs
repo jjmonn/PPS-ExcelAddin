@@ -56,11 +56,16 @@ namespace FBI.Forms
       Filter l_topLevel = FilterModel.Instance.GetValue(p_filterRoot);
 
       if (l_topLevel != null)
+      {
         l_childrenDic.Set(l_topLevel.Id, l_topLevel.Name, l_topLevel);
+      }
       foreach (Filter l_filter in l_childrenDic.SortedValues)
       {
         foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(l_filter.Id).SortedValues)
         {
+
+          System.Diagnostics.Debug.WriteLine(">> FilterValue added: " + l_filterValue.Name);
+
           vTreeNode l_node = new vTreeNode();
           l_node.Text = l_filterValue.Name;
           l_node.Value = l_filterValue.Id;
