@@ -246,7 +246,6 @@
     <Compile Include="MVC\Controller\Plateform Management\IBasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
-    <Compile Include="MVC\Controller\Plateform Management\FiltersStructController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
@@ -432,11 +431,11 @@
     <Compile Include="MVC\View\Plateform Management\CurrenciesView.Designer.cs">
       <DependentUpon>CurrenciesView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Axis Filters\FiltersView.cs">
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\FilterView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Axis Filters\FiltersView.Designer.cs">
-      <DependentUpon>FiltersView.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\FilterView.Designer.cs">
+      <DependentUpon>FilterView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\Accounts\AccountsView.cs">
       <SubType>UserControl</SubType>
@@ -693,8 +692,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\CurrenciesView.resx">
       <DependentUpon>CurrenciesView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\FiltersView.resx">
-      <DependentUpon>FiltersView.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\FilterView.resx">
+      <DependentUpon>FilterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\Accounts\AccountsView.resx">
       <DependentUpon>AccountsView.cs</DependentUpon>

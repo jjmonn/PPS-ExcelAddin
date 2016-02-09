@@ -36,14 +36,27 @@ namespace FBI.MVC.Model
       InitCallbacks();
     }
 
-    public bool HasChild(UInt32 p_filterId, AxisType p_axisType)
+    public Filter GetChild(UInt32 p_filterId, AxisType p_axisType)
     {
       foreach (Filter l_filter in this.GetDictionary(p_axisType).Values)
       {
         if (l_filter.ParentId == p_filterId)
-          return (true);
+          return (l_filter);
       }
-      return (false);
+      return (null);
+    }
+
+    public void GetChildrenDictionary(UInt32 p_filterId, MultiIndexDictionary<UInt32, string, Filter> p_childrenDic)
+    {
+      MultiIndexDictionary<UInt32, string, Filter> l_resultDic = new MultiIndexDictionary<uint, string, Filter>();
+
+      foreach (MultiIndexDictionary<UInt32, string, Filter> l_dic in this.m_CRUDDic.Values)
+        foreach (Filter l_fv in l_dic.Values)
+          if (l_fv.ParentId == p_filterId)
+          {
+            p_childrenDic.Set(l_fv.Id, l_fv.Name, l_fv);
+            GetChildrenDictionary(l_fv.Id, p_childrenDic);
+          }
     }
   }
 }
