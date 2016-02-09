@@ -90,7 +90,6 @@ namespace FBI.MVC.View
             this.AccountsBT.Text = "Accounts";
             this.AccountsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.AccountsBT.ToolTipText = "[GeneralEditionUI.tool_tip_account]";
-            this.AccountsBT.Click += new System.EventHandler(this.AccountsBT_Click);
             // 
             // m_entitiesBT
             // 
@@ -102,7 +101,6 @@ namespace FBI.MVC.View
             this.m_entitiesBT.Text = "Entities";
             this.m_entitiesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.m_entitiesBT.ToolTipText = "[GeneralEditionUI.tool_tip_entities]";
-            this.m_entitiesBT.Click += new System.EventHandler(this.m_entitiesBT_Click);
             // 
             // m_employeesButton
             // 
@@ -112,7 +110,6 @@ namespace FBI.MVC.View
             this.m_employeesButton.Size = new System.Drawing.Size(94, 55);
             this.m_employeesButton.Text = "Consultants";
             this.m_employeesButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.m_employeesButton.Click += new System.EventHandler(this.m_employeesButton_Click);
             // 
             // ClientsBT
             // 
@@ -124,7 +121,6 @@ namespace FBI.MVC.View
             this.ClientsBT.Text = "Clients";
             this.ClientsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ClientsBT.ToolTipText = "[GeneralEditionUI.tool_tip_clients]";
-            this.ClientsBT.Click += new System.EventHandler(this.ClientsBT_Click);
             // 
             // ProductsBT
             // 
@@ -136,7 +132,6 @@ namespace FBI.MVC.View
             this.ProductsBT.Text = "Products";
             this.ProductsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ProductsBT.ToolTipText = "[GeneralEditionUI.tool_tip_products]";
-            this.ProductsBT.Click += new System.EventHandler(this.ProductsBT_Click);
             // 
             // AdjustmentsBT
             // 
@@ -147,7 +142,6 @@ namespace FBI.MVC.View
             this.AdjustmentsBT.Text = "Adjustments";
             this.AdjustmentsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.AdjustmentsBT.ToolTipText = "[GeneralEditionUI.tool_tip_adjustments]";
-            this.AdjustmentsBT.Click += new System.EventHandler(this.AdjustmentsBT_Click);
             // 
             // CategoriesBT
             // 
@@ -171,7 +165,6 @@ namespace FBI.MVC.View
             this.m_entitiesFiltersBT.Name = "m_entitiesFiltersBT";
             this.m_entitiesFiltersBT.Size = new System.Drawing.Size(155, 24);
             this.m_entitiesFiltersBT.Text = "Entities";
-            this.m_entitiesFiltersBT.Click += new System.EventHandler(this.m_entitiesFiltersBT_Click);
             // 
             // m_employeesFiltersBT
             // 
@@ -179,7 +172,6 @@ namespace FBI.MVC.View
             this.m_employeesFiltersBT.Name = "m_employeesFiltersBT";
             this.m_employeesFiltersBT.Size = new System.Drawing.Size(155, 24);
             this.m_employeesFiltersBT.Text = "Consultants";
-            this.m_employeesFiltersBT.Click += new System.EventHandler(this.m_employeesFiltersBT_Click);
             // 
             // m_clientsFiltersBT
             // 
@@ -187,7 +179,6 @@ namespace FBI.MVC.View
             this.m_clientsFiltersBT.Name = "m_clientsFiltersBT";
             this.m_clientsFiltersBT.Size = new System.Drawing.Size(155, 24);
             this.m_clientsFiltersBT.Text = "Clients";
-            this.m_clientsFiltersBT.Click += new System.EventHandler(this.m_clientsFiltersBT_Click);
             // 
             // m_productsFiltersBT
             // 
@@ -195,7 +186,6 @@ namespace FBI.MVC.View
             this.m_productsFiltersBT.Name = "m_productsFiltersBT";
             this.m_productsFiltersBT.Size = new System.Drawing.Size(155, 24);
             this.m_productsFiltersBT.Text = "Products";
-            this.m_productsFiltersBT.Click += new System.EventHandler(this.m_productsFiltersBT_Click);
             // 
             // m_adjustmentsFiltersBT
             // 
@@ -203,7 +193,6 @@ namespace FBI.MVC.View
             this.m_adjustmentsFiltersBT.Name = "m_adjustmentsFiltersBT";
             this.m_adjustmentsFiltersBT.Size = new System.Drawing.Size(155, 24);
             this.m_adjustmentsFiltersBT.Text = "Adjustments";
-            this.m_adjustmentsFiltersBT.Click += new System.EventHandler(this.m_adjustmentsFiltersBT_Click);
             // 
             // VersionsBT
             // 
@@ -215,7 +204,6 @@ namespace FBI.MVC.View
             this.VersionsBT.Text = "Versions";
             this.VersionsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.VersionsBT.ToolTipText = "[GeneralEditionUI.tool_tip_versions]";
-            this.VersionsBT.Click += new System.EventHandler(this.VersionsBT_Click);
             // 
             // CurrenciesBT
             // 
@@ -227,7 +215,6 @@ namespace FBI.MVC.View
             this.CurrenciesBT.Text = "Currencies";
             this.CurrenciesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CurrenciesBT.ToolTipText = "[GeneralEditionUI.tool_tip_currencies]";
-            this.CurrenciesBT.Click += new System.EventHandler(this.CurrenciesBT_Click);
             // 
             // ExchangeRatesButton
             // 
@@ -238,7 +225,6 @@ namespace FBI.MVC.View
             this.ExchangeRatesButton.Text = "Exchange rates";
             this.ExchangeRatesButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ExchangeRatesButton.ToolTipText = "[GeneralEditionUI.tool_tip_exchange_rates]";
-            this.ExchangeRatesButton.Click += new System.EventHandler(this.ExchangeRatesButton_Click);
             // 
             // GlobalFact_BT
             // 
@@ -259,7 +245,6 @@ namespace FBI.MVC.View
             this.GroupsBT.Text = "Users Groups";
             this.GroupsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.GroupsBT.ToolTipText = "[GeneralEditionUI.tool_tip_users_groups]";
-            this.GroupsBT.Click += new System.EventHandler(this.GroupsBT_Click);
             // 
             // Panel1
             // 
