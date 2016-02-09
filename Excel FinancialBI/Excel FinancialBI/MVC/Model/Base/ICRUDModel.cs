@@ -174,86 +174,86 @@ namespace FBI.MVC.Model
 
   private void ReadAnswer_Intern(ByteBuffer p_packet)
   {
-    try
-    {
+    /*try
+    {*/
       ReadAnswer(p_packet);
-    }
+   /* }
     catch (Exception ex)
     {
       Debug.WriteLine("ReadAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("ReadAnswer: " + ex.InnerException.Message);
-    }
+    }*/
   }
 
   private void UpdateAnswer_Intern(ByteBuffer p_packet)
   {
-    try
-    {
+   /* try
+    {*/
       UpdateAnswer(p_packet);
-    }
+   /* }
     catch (Exception ex)
     {
       Debug.WriteLine("UpdateAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("UpdateAnswer: " + ex.InnerException.Message);
-    }
+    }*/
   }
 
   private void UpdateListAnswer_Intern(ByteBuffer p_packet)
   {
-    try
-    {
+  /*  try
+    {*/
       UpdateListAnswer(p_packet);
-    }
+  /*  }
     catch (Exception ex)
     {
       Debug.WriteLine("UpdateListAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("UpdateListAnswer: " + ex.InnerException.Message);
-    }
+    }*/
   }
 
   private void CreateAnswer_Intern(ByteBuffer p_packet)
   {
-    try
-    {
+ /*   try
+    {*/
       CreateAnswer(p_packet);
-    }
+ /*   }
     catch (Exception ex)
     {
       Debug.WriteLine("CreateAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("CreateAnswer: " + ex.InnerException.Message);
-    }
+    }*/
   }
 
   private void DeleteAnswer_Intern(ByteBuffer p_packet)
   {
-    try
-    {
+/*    try
+    {*/
       DeleteAnswer(p_packet);
-    }
+  /*  }
     catch (Exception ex)
     {
       Debug.WriteLine("DeleteAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("DeleteAnswer: " + ex.InnerException.Message);
-    }
+    }*/
   }
 
   private void ListAnswer_Intern(ByteBuffer p_packet)
   {
-    try
-    {
+   /* try
+    {*/
       ListAnswer(p_packet);
-    }
+/*    }
     catch (Exception ex)
     {
       Debug.WriteLine("ListAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("ListAnswer: " + ex.InnerException.Message);
-    }
+    }*/
   }
 
 	#endregion

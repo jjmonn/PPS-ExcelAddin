@@ -78,15 +78,12 @@ namespace FBI.MVC.Model.CRUD
     public int CompareTo(object p_obj)
     {
       if (p_obj == null)
-        return 0;
+        return (0);
       Filter l_cmpFilter = p_obj as Filter;
 
       if (l_cmpFilter == null)
-        return 0;
-      if (l_cmpFilter.ItemPosition > ItemPosition)
-        return -1;
-      else
-        return 1;
+        return (0);
+      return (string.Compare(Name.ToUpper(), l_cmpFilter.Name.ToUpper()));
     }
 
   }

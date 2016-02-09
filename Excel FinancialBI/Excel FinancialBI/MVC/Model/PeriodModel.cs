@@ -363,7 +363,6 @@ namespace FBI.MVC.Model
 
     static internal List<Int32> GetDaysPeriodsListFromWeeksId(List<Int32> p_weeksPeriodsList)
     {
-
       List<Int32> l_periods = new List<Int32>();
       foreach (Int32 l_weekId in p_weeksPeriodsList)
         foreach (Int32 l_day in GetDaysIdListInWeek(l_weekId))
@@ -373,7 +372,6 @@ namespace FBI.MVC.Model
 
     static internal List<Int32> GetDaysIdListInWeek(Int32 p_weekId)
     {
-
       List<Int32> l_daysIdList = new List<Int32>();
       Int32 l_dayId = GetFirstDayOfWeekId(p_weekId);
       for (Int32 i = 1; i <= 7; i++)
@@ -385,7 +383,6 @@ namespace FBI.MVC.Model
     }
 
     #endregion
-
 
     #region "Utilities"
 
@@ -399,7 +396,7 @@ namespace FBI.MVC.Model
       return (DateTime.FromOADate(Convert.ToDouble(p_yearId)).Year);
     }
 
-    static internal Int32 GetYearIdFromPeriodId(Int32 p_periodId)
+    static internal Int32 GetYearIdFromPeriodId(int p_periodId)
     {
       return (GetYearIdFromMonthID(GetMonthIdFromPeriodId(p_periodId)));
     }

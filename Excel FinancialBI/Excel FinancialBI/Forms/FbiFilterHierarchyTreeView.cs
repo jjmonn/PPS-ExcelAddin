@@ -22,13 +22,14 @@ namespace FBI.Forms
       m_axisType = p_axisType;
       m_filters = FilterModel.Instance.GetDictionary(m_axisType);
       this.Load();
+      FbiTreeView<Filter>.InitTVFormat(this);
     }
 
-    private bool Load()
+    public bool Load()
     {
-      SortedDictionary<string, vTreeNode> l_dic;
+      SafeDictionary<UInt32, vTreeNode> l_dic;
 
-      l_dic = new SortedDictionary<string, vTreeNode>();
+      l_dic = new SafeDictionary<UInt32, vTreeNode>();
       if (m_filters == null)
         return (false);
       foreach (Filter l_filter in m_filters.SortedValues)
@@ -39,7 +40,7 @@ namespace FBI.Forms
           l_node.Text = l_filter.Name;
           l_node.Value = l_filter.Id;
           l_node.Tag = l_filter.GetType();
-          if (!this.Generate(l_dic, l_node))
+          if (!this.Generate(l_dic, l_filter.Id, l_node))
             return (false);
           this.Sort(l_dic, l_node);
           this.Nodes.Add(l_node);
@@ -48,27 +49,35 @@ namespace FBI.Forms
       return (true);
     }
 
-    private bool Generate(SortedDictionary<string, vTreeNode> p_dic, vTreeNode p_root)
+    private bool Generate(SafeDictionary<UInt32, vTreeNode> p_dic, UInt32 p_filterRoot, vTreeNode p_root)
     {
-      foreach (Filter l_filter in m_filters.SortedValues)
+      MultiIndexDictionary<UInt32, string, Filter> l_childrenDic = new MultiIndexDictionary<uint, string, Filter>();
+      FilterModel.Instance.GetChildrenDictionary(p_filterRoot, l_childrenDic);
+      Filter l_topLevel = FilterModel.Instance.GetValue(p_filterRoot);
+
+      if (l_topLevel != null)
+      {
+        l_childrenDic.Set(l_topLevel.Id, l_topLevel.Name, l_topLevel);
+      }
+      foreach (Filter l_filter in l_childrenDic.SortedValues)
       {
         foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(l_filter.Id).SortedValues)
         {
+
+          System.Diagnostics.Debug.WriteLine(">> FilterValue added: " + l_filterValue.Name);
+
           vTreeNode l_node = new vTreeNode();
           l_node.Text = l_filterValue.Name;
           l_node.Value = l_filterValue.Id;
           l_node.Tag = l_filterValue.GetType();
-          if (p_dic.ContainsKey(l_filterValue.Name.ToUpper()))
-            p_dic[l_filterValue.Name.ToUpper()] = l_node;
-          else
-            p_dic.Add(l_filterValue.Name.ToUpper(), l_node);
+          p_dic[l_filterValue.Id] = l_node;
           p_root.Nodes.Add(l_node);
         }
       }
       return (true);
     }
 
-    private bool Sort(SortedDictionary<string, vTreeNode> p_dic, vTreeNode p_root)
+    private bool Sort(SafeDictionary<UInt32, vTreeNode> p_dic, vTreeNode p_root)
     {
       vTreeNode l_node;
       FilterValue l_val;
@@ -82,13 +91,11 @@ namespace FBI.Forms
         }
         if (l_val.ParentId != 0)
         {
-          FilterValue parent = FilterValueModel.Instance.GetValue(l_val.ParentId);
-
-          if (parent != null && p_dic.ContainsKey(parent.Name.ToUpper()))
+          if (p_dic.ContainsKey(l_val.ParentId))
           {
             l_node = p_root.Nodes[i];
             p_root.Nodes.Remove(l_node);
-            p_dic[parent.Name.ToUpper()].Nodes.Add(l_node);
+            p_dic[l_val.ParentId].Nodes.Add(l_node);
             i--;
           }
         }
