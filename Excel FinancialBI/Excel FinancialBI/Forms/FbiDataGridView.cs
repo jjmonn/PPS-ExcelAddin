@@ -21,6 +21,9 @@ namespace FBI.Forms
     SafeDictionary<UInt32, HierarchyItem> m_columnsDic = new SafeDictionary<UInt32, HierarchyItem>();
     const Int32 COLUMNS_WIDTH = 150;
     public GridCell HoveredCell { get; private set; }
+    string m_cellValue = null;
+    bool m_validated = false;
+    public event CellEventHandler CellChangedAndValidated;
 
     public HierarchyItem HoveredColumn
     {
@@ -40,6 +43,18 @@ namespace FBI.Forms
           return (null);
         return (HoveredCell.RowItem);
       }
+    }
+
+    public void ClearRows()
+    {
+      m_rowsDic.Clear();
+      RowsHierarchy.Clear();
+    }
+
+    public void ClearColumns()
+    {
+      m_columnsDic.Clear();
+      ColumnsHierarchy.Clear();
     }
 
     static bool Implements<TInterface>(Type type) where TInterface : class
@@ -65,6 +80,8 @@ namespace FBI.Forms
         return;
       CellMouseEnter += OnMouseEnterCell;
       CellMouseLeave += OnMouseLeaveCell;
+      CellValidating += OnCellValidating;
+      CellValueChanged += OnCellChanged;
     }
 
     void InitDGVDisplay()
@@ -127,23 +144,23 @@ namespace FBI.Forms
         p_saveDic[p_id] = l_dim;
         if (p_parentId == 0)
           p_dimension.Add(l_dim);
+        if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
+        {
+          HierarchyItem parent = null;
+          NamedHierarchyCRUDEntity parentEntity = p_model.GetValue(p_parentId) as NamedHierarchyCRUDEntity;
+
+          if (parentEntity == null)
+            return (l_dim);
+          if (p_saveDic.ContainsKey(p_parentId) == true)
+            parent = p_saveDic[p_parentId];
+          else
+            parent = SetDimension(p_dimension, p_saveDic, parentEntity.Id, p_name, p_model, p_hasParent, parentEntity.ParentId);
+          if (parent != null)
+            parent.Items.Add(l_dim);
+        }
       }
       else
         l_dim = p_saveDic[p_id];
-      if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
-      {
-        HierarchyItem parent = null;
-        NamedHierarchyCRUDEntity parentEntity = p_model.GetValue(p_parentId) as NamedHierarchyCRUDEntity;
-
-        if (parentEntity == null)
-          return (l_dim);
-        if (p_saveDic.ContainsKey(p_parentId) == true)
-          parent = p_saveDic[p_parentId];
-        else
-          parent = SetDimension(p_dimension, p_saveDic, parentEntity.Id, p_name, p_model, p_hasParent, parentEntity.ParentId);
-        if (parent != null)
-          parent.Items.Add(l_dim);
-      }
       l_dim.ItemValue = p_id;
       l_dim.Caption = p_name;
       l_dim.Width = COLUMNS_WIDTH;
@@ -159,7 +176,7 @@ namespace FBI.Forms
         return;
       if (column == null)
         return;
-      this.CellsArea.SetCellValue(row, column, p_value);
+      this.CellsArea.SetCellValue(row, column, (V)p_value);
       this.CellsArea.SetCellEditor(row, column, p_editor);
     }
 
@@ -207,6 +224,20 @@ namespace FBI.Forms
       if (column == null)
         return;
       this.CellsArea.SetCellValue(row, column, p_value);
+    }
+
+    void OnCellValidating(object p_sender, CellEventArgs p_args)
+    {
+      m_cellValue = p_args.Cell.FormattedText;
+      m_validated = true;
+    }
+
+    void OnCellChanged(object p_sender, CellEventArgs p_args)
+    {
+      if (CellChangedAndValidated != null && m_cellValue != p_args.Cell.FormattedText && m_validated)
+        CellChangedAndValidated(p_sender, p_args);
+      m_validated = false;
+      m_cellValue = null;
     }
   }
 }

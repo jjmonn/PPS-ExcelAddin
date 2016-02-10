@@ -75,6 +75,8 @@ namespace FBI.Utils
 
     public Value PrimaryKeyItem(KeyA p_key)
     {
+      if (p_key == null)
+        return default(Value);
       if (!m_firstDic.ContainsKey(p_key))
         return default(Value);
       if (!m_mainDic.ContainsKey(m_firstDic[p_key]))
@@ -84,6 +86,8 @@ namespace FBI.Utils
 
     public Value SecondaryKeyItem(KeyB p_key)
     {
+      if (p_key == null)
+        return default(Value);
       if (!m_secondDic.ContainsKey(p_key))
         return default(Value);
       if (!m_mainDic.ContainsKey(m_secondDic[p_key]))
@@ -188,6 +192,11 @@ namespace FBI.Utils
       dest.m_id = m_id;
       dest.m_mainDic = m_mainDic as Dictionary<uint, DValue>;
       return dest;
+    }
+
+    public Value AtIndex(uint p_index)
+    {
+      return (m_mainDic[p_index]);
     }
   }
 }

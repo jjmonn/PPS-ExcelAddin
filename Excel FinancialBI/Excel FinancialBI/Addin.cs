@@ -41,33 +41,35 @@ namespace FBI
       }
     }
 
-    static void InitModels()
+    static void InitModels(bool p_suscribeEvent = true)
     {
-      SuscribeModel<Account>(AccountModel.Instance);
-      SuscribeModel<AxisElem>(AxisElemModel.Instance);
-      SuscribeModel<AxisFilter>(AxisFilterModel.Instance);
-      SuscribeModel<AxisOwner>(AxisOwnerModel.Instance);
-      SuscribeModel<Commit>(CommitModel.Instance);
-      SuscribeModel<Currency>(CurrencyModel.Instance);
-      SuscribeModel<EntityCurrency>(EntityCurrencyModel.Instance);
-      SuscribeModel<EntityDistribution>(EntityDistributionModel.Instance);
-      SuscribeModel<FactTag>(FactTagModel.Instance);
-      SuscribeModel<Filter>(FilterModel.Instance);
-      SuscribeModel<FilterValue>(FilterValueModel.Instance);
-      SuscribeModel<FModelingAccount>(FModelingAccountModel.Instance);
-      SuscribeModel<GlobalFactData>(GlobalFactDataModel.Instance);
-      SuscribeModel<GlobalFact>(GlobalFactModel.Instance);
-      SuscribeModel<GlobalFactVersion>(GlobalFactVersionModel.Instance);
-      SuscribeModel<Group>(GroupModel.Instance);
-      SuscribeModel<ExchangeRateVersion>(RatesVersionModel.Instance);
-      SuscribeModel<UserAllowedEntity>(UserAllowedEntityModel.Instance);
-      SuscribeModel<User>(UserModel.Instance);
-      SuscribeModel<Version>(VersionModel.Instance);
+      SuscribeModel<Account>(AccountModel.Instance, p_suscribeEvent);
+      SuscribeModel<AxisElem>(AxisElemModel.Instance, p_suscribeEvent);
+      SuscribeModel<AxisFilter>(AxisFilterModel.Instance, p_suscribeEvent);
+      SuscribeModel<AxisOwner>(AxisOwnerModel.Instance, p_suscribeEvent);
+      SuscribeModel<Commit>(CommitModel.Instance, p_suscribeEvent);
+      SuscribeModel<Currency>(CurrencyModel.Instance, p_suscribeEvent);
+      SuscribeModel<EntityCurrency>(EntityCurrencyModel.Instance, p_suscribeEvent);
+      SuscribeModel<EntityDistribution>(EntityDistributionModel.Instance, p_suscribeEvent);
+      SuscribeModel<FactTag>(FactTagModel.Instance, p_suscribeEvent);
+      SuscribeModel<Filter>(FilterModel.Instance, p_suscribeEvent);
+      SuscribeModel<FilterValue>(FilterValueModel.Instance, p_suscribeEvent);
+      SuscribeModel<FModelingAccount>(FModelingAccountModel.Instance, p_suscribeEvent);
+      SuscribeModel<GlobalFactData>(GlobalFactDataModel.Instance, p_suscribeEvent);
+      SuscribeModel<GlobalFact>(GlobalFactModel.Instance, p_suscribeEvent);
+      SuscribeModel<GlobalFactVersion>(GlobalFactVersionModel.Instance, p_suscribeEvent);
+      SuscribeModel<Group>(GroupModel.Instance, p_suscribeEvent);
+      SuscribeModel<ExchangeRateVersion>(RatesVersionModel.Instance, p_suscribeEvent);
+      SuscribeModel<UserAllowedEntity>(UserAllowedEntityModel.Instance, p_suscribeEvent);
+      SuscribeModel<User>(UserModel.Instance, p_suscribeEvent);
+      SuscribeModel<Version>(VersionModel.Instance, p_suscribeEvent);
+      SuscribeModel<ExchangeRate>(ExchangeRateModel.Instance, p_suscribeEvent);
     }
 
-    static void SuscribeModel<T>(ICRUDModel<T> p_model) where T : class, CRUDEntity
+    static void SuscribeModel<T>(ICRUDModel<T> p_model, bool p_suscribeEvent) where T : class, CRUDEntity
     {
-      p_model.ObjectInitialized += OnModelInit;
+      if (p_suscribeEvent)
+        p_model.ObjectInitialized += OnModelInit;
       m_initTypeSet.Add(typeof(T));
     }
 
@@ -75,10 +77,12 @@ namespace FBI
     {
       if (p_success == ErrorMessage.SUCCESS && m_initTypeSet.Contains(p_type))
       {
-        System.Threading.Thread.Sleep(100);
         m_initTypeSet.Remove(p_type);
         if (m_initTypeSet.Count == 0 && InitializationEvent != null)
+        {
           InitializationEvent();
+          InitModels(false);
+        }
       }
     }
 
@@ -126,10 +130,11 @@ namespace FBI
       while (failed && nbTry > 0)
       {
         System.Threading.Thread.Sleep(3000);
-        Connect(UserName, Password);
+        failed = !Connect(UserName, Password);
+        nbTry--;
       }
       if (ConnectionStateEvent != null)
-        ConnectionStateEvent(false);
+        ConnectionStateEvent(!failed);
     }
   }
 }

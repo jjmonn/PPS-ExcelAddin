@@ -88,7 +88,7 @@ namespace FBI.MVC.View
       m_lockCombobox.CheckedChanged += OnChangeVersionLock;
 
       m_versionsTreeview.MouseDown += this.VersionsTV_MouseDown;
-      m_versionsTreeview.DragDrop += this.VersionsTV_DragDrop;
+      m_versionsTreeview.NodeDropped += this.VersionsTV_NodeDropped;
 
       m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect += OnChangeVersionExchangeRate;
       m_factsVersionVTreeviewbox.TreeView.AfterSelect += OnChangeVersionFactRate;
@@ -139,6 +139,7 @@ namespace FBI.MVC.View
 
     private void DisplayVersion(Version p_version)
     {
+      m_isDisplaying = true;
       if (p_version.IsFolder)
       {
         DisplayFolderVersion();
@@ -162,6 +163,7 @@ namespace FBI.MVC.View
         m_lockCombobox.Checked = false;
         LockedDateT.Text = Local.GetValue("facts_versions.version_not_locked");
       }
+      m_isDisplaying = false;
     }
 
     private void SetControlsEnabled(bool p_allowed)
@@ -299,7 +301,8 @@ namespace FBI.MVC.View
 
     private void OnClickCopyVersion(object sender, EventArgs e)
     {
-      m_controller.ShowVersionCopyView((uint)m_currentNode.Value);
+      if (m_currentNode != null)
+        m_controller.ShowVersionCopyView((uint)m_currentNode.Value);
     }
 
     private void OnClickNewFolder(object sender, EventArgs e)
@@ -405,6 +408,12 @@ namespace FBI.MVC.View
       m_versionsTreeview.Refresh();
     }
 
+  
+
+    #endregion
+
+    #region Events
+
     private void OnVersionTVMouseClick(object sender, MouseEventArgs e)
     {
       m_currentNode = m_versionsTreeview.FindAtPosition(e.Location);
@@ -485,40 +494,39 @@ namespace FBI.MVC.View
 
     private void VersionsTV_MouseDown(object sender, MouseEventArgs e)
     {
-      m_currentNode = m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y));
+      if (m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y)) != null)
+        m_currentNode = m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y));
       if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
       {
         m_versionsTreeview.DoDragDrop(m_currentNode, DragDropEffects.Move);
       }
     }
 
-    private void VersionsTV_DragDrop(object sender, DragEventArgs e)
+    private void VersionsTV_NodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)
     {
-      vTreeNode l_draggedNode = e.Data.GetData(typeof(vTreeNode)) as vTreeNode;
-      if (l_draggedNode != null)
-      {
-        Point location = m_versionsTreeview.PointToClient(Cursor.Position);
-        vTreeNode l_targetNode = m_versionsTreeview.HitTest(location);
+      if (p_targetNode == null)
+      return;
 
-        uint l_parent_id = 0;
-        Version l_targetVersion = VersionModel.Instance.GetValue((uint)l_targetNode.Value);
+      Version l_targetVersion = VersionModel.Instance.GetValue((uint)p_targetNode.Value);
         
-        if (l_draggedNode.Equals(l_targetNode) == true || l_targetVersion == null 
-            || l_targetVersion.IsFolder == false)
-          return;
-       
-        if (l_targetNode != null)
-          l_parent_id = (uint)l_targetNode.Value;
-          
-        Version l_version = VersionModel.Instance.GetValue((uint)l_draggedNode.Value).Clone();
-        if (l_version == null)
-          return;
-        l_draggedNode.Remove();
-        l_version.ParentId = l_parent_id;
-        m_controller.Update(l_version);
-      }
-    }
+      if (p_draggedNode.Equals(p_targetNode) == true || l_targetVersion.IsFolder == false || p_draggedNode.Parent.Equals(p_targetNode.Value))
+        return;
+             
+      Version l_version = VersionModel.Instance.GetValue((uint)p_draggedNode.Value).Clone();
+      if (l_version == null)
+        return;
 
+      vTreeNode l_newNode = new vTreeNode();
+      l_newNode.Value = p_draggedNode.Value;
+      l_newNode.Text = p_draggedNode.Text;
+      l_newNode.ImageIndex = p_draggedNode.ImageIndex;
+      p_draggedNode.Remove();
+      m_versionsTreeview.DoDragDrop(p_draggedNode, DragDropEffects.None);
+      p_targetNode.Nodes.Add(l_newNode);
+      l_version.ParentId = (uint)p_targetNode.Value;
+      m_controller.Update(l_version);
+    }
+   
     #endregion
 
     private void CreateVersion()
