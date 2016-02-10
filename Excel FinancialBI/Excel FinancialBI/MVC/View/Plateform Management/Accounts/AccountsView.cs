@@ -232,8 +232,8 @@ namespace FBI.MVC.View
         if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value)) != null)
         {
           l_currentAccount = l_currentAccount.Clone();
-          m_bnf.AddRule("fbi_grammar", m_grammar.IsGrammarCompliant);
-          if (m_bnf.Parse("fbi_grammar", m_formulaTextBox.Text))
+          m_bnf.AddRule("fbi_to_grammar", m_grammar.ToGrammar);
+          if (m_bnf.Parse("fbi_to_grammar", m_formulaTextBox.Text))
           {
             l_currentAccount.Formula = m_grammar.Formula;
             this.m_controller.UpdateAccount(l_currentAccount);
@@ -931,11 +931,15 @@ namespace FBI.MVC.View
         }
 
         // Formula TB
-        //if (m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType))
-        //m_formulaTextBox.Text = m_controller.GetFormulaText(l_account_id); //TODO : Controller formula test
-        //else
-        //  m_formulaTextBox.Text = "";
-        m_formulaTextBox.Text = l_account.Formula;
+        m_bnf.AddRule("fbi_to_human_grammar", m_grammar.ToHuman);
+        if (m_bnf.Parse("fbi_to_human_grammar", l_account.Formula))
+        {
+          m_formulaTextBox.Text = m_grammar.Formula;
+        }
+        else
+        {
+          MessageBox.Show(m_grammar.LastError);
+        }
 
         //Description
         this.m_descriptionTextBox.Text = l_account.Description;
