@@ -49,10 +49,10 @@ namespace FBI.MVC.View
       m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, 2, "Symbol");
       foreach (Currency l_currency in l_currencyDic.Values)
       {
-        m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, l_currency.Id, "");
+        m_dgv.SetDimension<Currency>(FbiDataGridView.Dimension.ROW, l_currency.Id, "", 0, null, 0);
         m_dgv.FillField(l_currency.Id, 0, l_currency.InUse, new CheckBoxEditor());
-        m_dgv.FillField(l_currency.Id, 1, l_currency.Name);
-        m_dgv.FillField(l_currency.Id, 2, l_currency.Symbol);
+        m_dgv.FillField(l_currency.Id, 1, l_currency.Name, new TextBoxEditor());
+        m_dgv.FillField(l_currency.Id, 2, l_currency.Symbol, new TextBoxEditor());
       }
     }
 
@@ -60,6 +60,27 @@ namespace FBI.MVC.View
     {
       m_dgv.CellChangedAndValidated += OnDgvCellChangedAndValidated;
       CurrencyModel.Instance.ReadEvent += OnModelRead;
+      CurrencyModel.Instance.DeleteEvent += OnModelDelete;
+    }
+
+    delegate void OnModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);
+    void OnModelDelete(ErrorMessage p_status, UInt32 p_id)
+    {
+      switch (p_status)
+      {
+        case ErrorMessage.SUCCESS:
+          m_dgv.DeleteRow(p_id);
+          break;
+        case ErrorMessage.PERMISSION_DENIED:
+          MessageBox.Show(Local.GetValue("general.error.permission_denied"));
+          break;
+        case ErrorMessage.NOT_FOUND:
+          MessageBox.Show(Local.GetValue("general.error.not_found"));
+          break;
+        default:
+          MessageBox.Show(Local.GetValue("general.error.system"));
+          break;
+      }
     }
 
     void OnDgvCellChangedAndValidated(object sender, CellEventArgs args)
@@ -92,8 +113,9 @@ namespace FBI.MVC.View
       m_controller.UpdateCurrency(l_currency, l_currency.InUse, l_currency.Name, p_newValue);
     }
 
-    private void UpdateCurrencyRow(Currency p_currency)
+    private void UpdateOrAddCurrencyRow(Currency p_currency)
     {
+      m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, p_currency.Id, "", 0, AxisElemModel.Instance);
       m_dgv.FillField(p_currency.Id, 0, p_currency.InUse);
       m_dgv.FillField(p_currency.Id, 1, p_currency.Name);
       m_dgv.FillField(p_currency.Id, 2, p_currency.Symbol);
@@ -112,7 +134,7 @@ namespace FBI.MVC.View
         switch (p_status)
         {
           case ErrorMessage.SUCCESS:
-            UpdateCurrencyRow(p_attributes);
+            UpdateOrAddCurrencyRow(p_attributes);
             break;
           case ErrorMessage.PERMISSION_DENIED:
             MessageBox.Show(Local.GetValue("general.error.permission_denied"));
@@ -126,5 +148,6 @@ namespace FBI.MVC.View
         }
       }
     }
+
   }
 }

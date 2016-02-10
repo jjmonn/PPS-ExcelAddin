@@ -17,6 +17,15 @@ namespace FBI.MVC.View
     public CUI2RightPane()
     {
       InitializeComponent();
+      MultilangueSetup();
+    }
+
+    private void MultilangueSetup()
+    {
+      this.m_columnsLabel.Text = Local.GetValue("CUI.columns_label");
+      this.m_rowsLabel.Text = Local.GetValue("CUI.rows_label");
+      this.UpdateBT.Text = Local.GetValue("CUI.refresh");
+      this.m_fieldChoiceLabel.Text = Local.GetValue("CUI.fields_choice");
     }
 
     public void SetController(IController p_controller)

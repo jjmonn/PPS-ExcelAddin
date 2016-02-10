@@ -40,12 +40,23 @@ namespace FBI.MVC.View
         m_valuePanel.Controls.Add(m_tree, 0, 1);
         this.RegisterEvents();
         this.LoadLanguage();
+        this.MultilangueSetup();
       }
       catch (Exception e)
       {
         MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.Message + e.StackTrace);
       }
+    }
+
+    private void MultilangueSetup()
+    {
+      this.m_editStruct.Text = Local.GetValue("filters.edit_structure");
+      this.m_addValueRightClick.Text = Local.GetValue("filters.new_value");
+      this.m_deleteRightClick.Text = Local.GetValue("general.delete");
+      this.m_renameRightClick.Text = Local.GetValue("general.rename");
+      this.m_expand.Text = Local.GetValue("general.expand_all");
+      this.m_collapse.Text = Local.GetValue("general.collapse_all");
     }
 
     public void SetController(IController p_controller)

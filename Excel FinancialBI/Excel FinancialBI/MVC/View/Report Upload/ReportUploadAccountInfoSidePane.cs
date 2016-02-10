@@ -5,18 +5,30 @@ using System.Runtime.InteropServices;
 using AddinExpress.XL;
   
 namespace FBI.MVC.View
-{  
-    public partial class ReportUploadAccountInfoSidePane : AddinExpress.XL.ADXExcelTaskPane
-    {
-      internal bool m_shown { set; get; }
-      public ReportUploadAccountInfoSidePane()
-      {
-          InitializeComponent();
-      }
+{
+  using FBI;
+  using Utils;
 
-      private void ReportUploadAccountInfoSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)
-      {
-        if (m_shown == false) { this.Visible = false; }
-      }
+  public partial class ReportUploadAccountInfoSidePane : AddinExpress.XL.ADXExcelTaskPane
+  {
+    internal bool m_shown { set; get; }
+    public ReportUploadAccountInfoSidePane()
+    {
+      InitializeComponent();
+      MultilangueSetup();
     }
+
+    private void MultilangueSetup()
+    {
+      VLabel1.Text = Local.GetValue("general.account");
+      VLabel2.Text = Local.GetValue("general.formula");
+      VLabel3.Text = Local.GetValue("general.description");
+      VLabel4.Text = Local.GetValue("accounts_edition.account_type");
+    }
+
+    private void ReportUploadAccountInfoSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)
+    {
+      if (m_shown == false) { this.Visible = false; }
+    }
+  }
 }
