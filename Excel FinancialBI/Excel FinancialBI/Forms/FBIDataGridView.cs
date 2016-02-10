@@ -95,7 +95,7 @@ namespace FBI.Forms
       RowsHierarchy.CompactStyleRenderingEnabled = true;
       AllowCopyPaste = true;
       FilterDisplayMode = FilterDisplayMode.Custom;
-      RowsHierarchy.AllowDragDrop = true;
+      //RowsHierarchy.AllowDragDrop = true;
       AllowDragDropIndication = true;
     }
 

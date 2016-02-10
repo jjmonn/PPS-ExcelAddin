@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-  partial class NewAxisUI : System.Windows.Forms.Form
+  partial class NewAxisUI<TController> : System.Windows.Forms.Form
   {
 
     //Form overrides dispose to clean up the component list.

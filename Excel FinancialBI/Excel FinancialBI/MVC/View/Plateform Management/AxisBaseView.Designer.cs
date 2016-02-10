@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-  partial class AxisView : System.Windows.Forms.UserControl
+  partial class AxisBaseView<TControllerType> : System.Windows.Forms.UserControl
   {
     //UserControl overrides dispose to clean up the component list.
     [System.Diagnostics.DebuggerNonUserCode()]
@@ -35,7 +35,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AxisView));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AxisBaseView));
       this.EntitiesIL = new System.Windows.Forms.ImageList(this.components);
       this.ButtonsIL = new System.Windows.Forms.ImageList(this.components);
       this.m_axisRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
