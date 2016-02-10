@@ -168,7 +168,7 @@ namespace FBI.MVC.View
 
     private void CurrenciesBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      m_controller.SwitchView<CurrenciesView, CurrenciesController>(new CurrenciesController());
     }
 
     private void ExchangeRatesButton_Click(object sender, EventArgs e)
