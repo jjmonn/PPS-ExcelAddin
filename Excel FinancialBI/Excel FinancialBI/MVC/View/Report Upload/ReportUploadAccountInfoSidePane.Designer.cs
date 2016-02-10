@@ -190,15 +190,15 @@ namespace FBI.MVC.View
         }
 
 
-        internal VIBlend.WinForms.Controls.vTextBox m_accountTypeTextBox;
-        internal VIBlend.WinForms.Controls.vTextBox m_accountTextBox;
-        internal System.Windows.Forms.TextBox m_formulaTextBox;
-        internal System.Windows.Forms.TextBox m_descriptionTextBox;
-        internal VIBlend.WinForms.Controls.vLabel VLabel1;
-        internal VIBlend.WinForms.Controls.vLabel VLabel2;
-        internal VIBlend.WinForms.Controls.vLabel VLabel3;
+        public VIBlend.WinForms.Controls.vTextBox m_accountTypeTextBox;
+        public VIBlend.WinForms.Controls.vTextBox m_accountTextBox;
+        public System.Windows.Forms.TextBox m_formulaTextBox;
+        public System.Windows.Forms.TextBox m_descriptionTextBox;
+        public VIBlend.WinForms.Controls.vLabel VLabel1;
+        public VIBlend.WinForms.Controls.vLabel VLabel2;
+        public VIBlend.WinForms.Controls.vLabel VLabel3;
 
-        internal VIBlend.WinForms.Controls.vLabel VLabel4;
+        public VIBlend.WinForms.Controls.vLabel VLabel4;
 
         #endregion
     }

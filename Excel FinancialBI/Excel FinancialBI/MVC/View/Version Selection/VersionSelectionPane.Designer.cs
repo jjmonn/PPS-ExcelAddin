@@ -120,12 +120,12 @@ partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
       this.ResumeLayout(false);
 
 	}
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-	internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-	internal VIBlend.WinForms.Controls.vLabel m_versionSelectionLabel;
-	internal System.Windows.Forms.ImageList BTsIL;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+	public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+	public VIBlend.WinForms.Controls.vLabel m_versionSelectionLabel;
+	public System.Windows.Forms.ImageList BTsIL;
 
-  internal VIBlend.WinForms.Controls.vButton m_validateButton;
+  public VIBlend.WinForms.Controls.vButton m_validateButton;
 }
 
 }

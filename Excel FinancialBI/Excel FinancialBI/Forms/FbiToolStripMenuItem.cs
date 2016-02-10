@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace FBI.Forms
 {
-  class FbiToolStripMenuItem : ToolStripMenuItem
+  public class FbiToolStripMenuItem : ToolStripMenuItem
   {
     Control m_control;
     ContextMenuStrip m_menu;

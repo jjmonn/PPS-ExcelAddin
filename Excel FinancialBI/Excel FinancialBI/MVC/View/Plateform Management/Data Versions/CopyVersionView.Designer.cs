@@ -240,16 +240,16 @@
 
     #endregion
 
-    internal VIBlend.WinForms.Controls.vNumericUpDown m_nbPeriods;
-    internal System.Windows.Forms.Label m_versionNameLabel;
-    internal VIBlend.WinForms.Controls.vTextBox m_versionNameTextbox;
-    internal VIBlend.WinForms.Controls.vButton m_CancelButton;
-    internal VIBlend.WinForms.Controls.vButton m_copyVersionButton;
-    internal System.Windows.Forms.Label m_nbPeriodsLabel;
-    internal VIBlend.WinForms.Controls.vDatePicker m_startingPeriodDatePicker;
-    internal System.Windows.Forms.Label m_startingPeriodLabel;
-    internal System.Windows.Forms.ImageList ButtonIcons;
-    internal System.Windows.Forms.Label m_copiedVersionNameLabel;
-    internal VIBlend.WinForms.Controls.vTextBox m_copiedVersionName;
+    public VIBlend.WinForms.Controls.vNumericUpDown m_nbPeriods;
+    public System.Windows.Forms.Label m_versionNameLabel;
+    public VIBlend.WinForms.Controls.vTextBox m_versionNameTextbox;
+    public VIBlend.WinForms.Controls.vButton m_CancelButton;
+    public VIBlend.WinForms.Controls.vButton m_copyVersionButton;
+    public System.Windows.Forms.Label m_nbPeriodsLabel;
+    public VIBlend.WinForms.Controls.vDatePicker m_startingPeriodDatePicker;
+    public System.Windows.Forms.Label m_startingPeriodLabel;
+    public System.Windows.Forms.ImageList ButtonIcons;
+    public System.Windows.Forms.Label m_copiedVersionNameLabel;
+    public VIBlend.WinForms.Controls.vTextBox m_copiedVersionName;
   }
 }

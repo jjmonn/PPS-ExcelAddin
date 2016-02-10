@@ -310,26 +310,26 @@ partial class SubmissionsControlUI : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-	internal System.Windows.Forms.SplitContainer SplitContainer1;
-	internal System.Windows.Forms.TableLayoutPanel ChartsTableLayoutPanel;
-	internal System.Windows.Forms.ImageList EntitiesTVImageList;
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
-	internal System.Windows.Forms.Panel EntitiesTVPanel;
-	internal System.Windows.Forms.Panel ControlsDGVPanel;
-	internal System.Windows.Forms.ContextMenuStrip TVRCM;
-	internal System.Windows.Forms.ToolStripMenuItem DisplayEntityControlsToolStripMenuItem;
-	internal System.Windows.Forms.ImageList ButtonsImageList;
-	internal System.Windows.Forms.Panel Panel1;
-	internal System.Windows.Forms.Button RefreshBT;
-	internal System.Windows.Forms.Panel Panel3;
-	internal System.Windows.Forms.TextBox EntityTB;
-	internal System.Windows.Forms.Label Label2;
-	internal System.Windows.Forms.Panel Panel2;
-	internal System.Windows.Forms.TextBox VersionTB;
-	internal System.Windows.Forms.Label Label1;
-	internal System.Windows.Forms.Panel Panel4;
-	internal System.Windows.Forms.TextBox CurrencyTB;
-	internal System.Windows.Forms.Label Label3;
+	public System.Windows.Forms.SplitContainer SplitContainer1;
+	public System.Windows.Forms.TableLayoutPanel ChartsTableLayoutPanel;
+	public System.Windows.Forms.ImageList EntitiesTVImageList;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
+	public System.Windows.Forms.Panel EntitiesTVPanel;
+	public System.Windows.Forms.Panel ControlsDGVPanel;
+	public System.Windows.Forms.ContextMenuStrip TVRCM;
+	public System.Windows.Forms.ToolStripMenuItem DisplayEntityControlsToolStripMenuItem;
+	public System.Windows.Forms.ImageList ButtonsImageList;
+	public System.Windows.Forms.Panel Panel1;
+	public System.Windows.Forms.Button RefreshBT;
+	public System.Windows.Forms.Panel Panel3;
+	public System.Windows.Forms.TextBox EntityTB;
+	public System.Windows.Forms.Label Label2;
+	public System.Windows.Forms.Panel Panel2;
+	public System.Windows.Forms.TextBox VersionTB;
+	public System.Windows.Forms.Label Label1;
+	public System.Windows.Forms.Panel Panel4;
+	public System.Windows.Forms.TextBox CurrencyTB;
+	public System.Windows.Forms.Label Label3;
 }
 
 }

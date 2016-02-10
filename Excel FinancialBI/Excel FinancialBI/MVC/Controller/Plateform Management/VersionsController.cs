@@ -45,18 +45,18 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("versions.error.rate_or_gfact_version_is_folder");
         return (false);
       }
-      uint l_baseVersionEndPeriod = (uint)DateTime.FromOADate(p_cmpVersion.StartPeriod).AddMonths(p_cmpVersion.NbPeriod).ToOADate();
-      uint l_versionEndPeriod = 0;
+      UInt32 l_baseVersionEndPeriod = (UInt32)DateTime.FromOADate(p_cmpVersion.StartPeriod).AddMonths(p_cmpVersion.NbPeriod).ToOADate();
+      UInt32 l_versionEndPeriod = 0;
       switch (p_version.TimeConfiguration)
       {
         case TimeConfig.YEARS :
-          l_versionEndPeriod = (uint)DateTime.FromOADate(p_version.StartPeriod).AddYears(p_version.NbPeriod).ToOADate(); 
+          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddYears(p_version.NbPeriod).ToOADate(); 
           break;
         case TimeConfig.MONTHS:
-          l_versionEndPeriod = (uint)DateTime.FromOADate(p_version.StartPeriod).AddMonths(p_version.NbPeriod).ToOADate();
+          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddMonths(p_version.NbPeriod).ToOADate();
           break;
         case TimeConfig.DAYS :
-          l_versionEndPeriod = (uint)DateTime.FromOADate(p_version.StartPeriod).AddDays(p_version.NbPeriod).ToOADate();
+          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddDays(p_version.NbPeriod).ToOADate();
           break;
         default :
           Error = Local.GetValue("versions.error.time_config_not_supported");
@@ -137,7 +137,7 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-    public void ShowNewVersionView(uint p_parentVersionId)
+    public void ShowNewVersionView(UInt32 p_parentVersionId)
     {
       Version l_parentVersion = VersionModel.Instance.GetValue(p_parentVersionId);
       if (l_parentVersion == null || l_parentVersion.IsFolder == false)
@@ -148,7 +148,7 @@ namespace FBI.MVC.Controller
       m_newVersionView.ShowDialog();
     }
 
-    public void ShowVersionCopyView(uint p_id)
+    public void ShowVersionCopyView(UInt32 p_id)
     {
       Version l_version = VersionModel.Instance.GetValue(p_id);
       if (l_version == null)
@@ -170,11 +170,11 @@ namespace FBI.MVC.Controller
       switch (p_version.TimeConfiguration)
       {
         case TimeConfig.YEARS:
-          p_version.StartPeriod = (uint)Period.GetYearIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
+          p_version.StartPeriod = (UInt32)Period.GetYearIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
           break;
 
         case TimeConfig.MONTHS:
-          p_version.StartPeriod = (uint)Period.GetMonthIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
+          p_version.StartPeriod = (UInt32)Period.GetMonthIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
           break;
 
         case TimeConfig.DAYS :

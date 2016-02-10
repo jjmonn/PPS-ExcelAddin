@@ -123,7 +123,7 @@ namespace FBI.MVC.Model
 
     public override AxisFilter GetValue(UInt32 p_axisFilterId)
     {
-      foreach (MultiIndexDictionary<uint, Tuple<uint, uint>, AxisFilter> axis in m_axisFilterDictionary.Values)
+      foreach (MultiIndexDictionary<UInt32, Tuple<UInt32, UInt32>, AxisFilter> axis in m_axisFilterDictionary.Values)
       {
         if (axis.ContainsKey(p_axisFilterId) == false)
           continue;

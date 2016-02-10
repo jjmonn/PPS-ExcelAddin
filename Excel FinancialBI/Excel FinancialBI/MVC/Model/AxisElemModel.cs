@@ -42,7 +42,7 @@ namespace FBI.MVC.Model
     {
       UInt32 count = 1;
       AxisElem parent = GetValue(p_axis, p_id);
-      MultiIndexDictionary<uint, string, AxisElem> dictionary = GetDictionary(p_axis);
+      MultiIndexDictionary<UInt32, string, AxisElem> dictionary = GetDictionary(p_axis);
 
       if (parent == null || dictionary == null)
         return (count);

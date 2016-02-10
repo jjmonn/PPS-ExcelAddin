@@ -228,19 +228,19 @@ partial class ManualRangesSelectionUI : System.Windows.Forms.Form
 		this.PerformLayout();
 
 	}
-	internal System.Windows.Forms.Label Label1;
-	internal System.Windows.Forms.Button Validate_Cmd;
-	internal System.Windows.Forms.Label Label4;
-	internal System.Windows.Forms.Label Label2;
-	internal System.Windows.Forms.Label Label3;
-	internal System.Windows.Forms.Button PeriodsEditBT;
-	internal System.Windows.Forms.TextBox PeriodsRefEdit;
-	internal System.Windows.Forms.Button AccountsEditBT;
-	internal System.Windows.Forms.TextBox AccountsRefEdit;
-	internal System.Windows.Forms.Button EntitiesEditBT;
-	internal System.Windows.Forms.TextBox EntitiesRefEdit;
-	internal System.Windows.Forms.ImageList ButtonsImageList;
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+	public System.Windows.Forms.Label Label1;
+	public System.Windows.Forms.Button Validate_Cmd;
+	public System.Windows.Forms.Label Label4;
+	public System.Windows.Forms.Label Label2;
+	public System.Windows.Forms.Label Label3;
+	public System.Windows.Forms.Button PeriodsEditBT;
+	public System.Windows.Forms.TextBox PeriodsRefEdit;
+	public System.Windows.Forms.Button AccountsEditBT;
+	public System.Windows.Forms.TextBox AccountsRefEdit;
+	public System.Windows.Forms.Button EntitiesEditBT;
+	public System.Windows.Forms.TextBox EntitiesRefEdit;
+	public System.Windows.Forms.ImageList ButtonsImageList;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
 }
 
 }

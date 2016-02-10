@@ -81,8 +81,8 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.TableLayoutPanel LayoutPanel;
+    public System.Windows.Forms.TableLayoutPanel LayoutPanel;
 
-    internal VIBlend.WinForms.Controls.vTreeView EntitiesTV;
+    public VIBlend.WinForms.Controls.vTreeView EntitiesTV;
   }
 }

@@ -14,11 +14,11 @@ namespace FBI.MVC.Model
   {
     #region "Instance Variables"
 
-    internal const Int32 m_nbMonthInYear = 12;
-    internal const Int32 m_nbDaysInWeek = 7;
-    internal const Int32 m_nbWeekdsInYear = 52;
+    public const Int32 m_nbMonthInYear = 12;
+    public const Int32 m_nbDaysInWeek = 7;
+    public const Int32 m_nbWeekdsInYear = 52;
 
-    internal const Int32 m_nbDaysInYear = 365;
+    public const Int32 m_nbDaysInYear = 365;
 
     static Int32[] m_monthList = new Int32[] {
 			31,
@@ -39,7 +39,7 @@ namespace FBI.MVC.Model
 
     #region "Years interface"
 
-    static internal Int32[] GetYearsList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
+    static public Int32[] GetYearsList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
     {
 
       switch (p_timeConfig)
@@ -134,7 +134,7 @@ namespace FBI.MVC.Model
 
     #region "Months interface"
 
-    static internal Int32[] GetMonthsList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfiguration)
+    static public Int32[] GetMonthsList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfiguration)
     {
 
       switch (p_timeConfiguration)
@@ -232,7 +232,7 @@ namespace FBI.MVC.Model
     }
 
     // yearId: "31/12/N" au format INT
-    static internal Int32[] GetMonthsIdsInYear(Int32 p_yearId)
+    static public Int32[] GetMonthsIdsInYear(Int32 p_yearId)
     {
 
       Int32[] l_monthsIdList = new Int32[12];
@@ -267,7 +267,7 @@ namespace FBI.MVC.Model
 
     #region "Weeks interface"
 
-    static internal Int32[] GetWeeksList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
+    static public Int32[] GetWeeksList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
     {
 
       switch (p_timeConfig)
@@ -321,7 +321,7 @@ namespace FBI.MVC.Model
 
     }
 
-    static internal Int32 GetFirstDayOfWeekId(Int32 p_dayId)
+    static public Int32 GetFirstDayOfWeekId(Int32 p_dayId)
     {
       if (p_dayId == 0)
         return (0);
@@ -331,7 +331,7 @@ namespace FBI.MVC.Model
 
     }
 
-    static internal List<Int32> GetWeeksPeriodListFromPeriodsRange(System.DateTime p_startDate, System.DateTime p_endDate)
+    static public List<Int32> GetWeeksPeriodListFromPeriodsRange(System.DateTime p_startDate, System.DateTime p_endDate)
     {
 
       List<Int32> l_periods = new List<Int32>();
@@ -348,7 +348,7 @@ namespace FBI.MVC.Model
 
     #region "Days interface"
     // To be checked 
-    static internal Int32[] GetDaysList(Int32 p_startDayId, Int32 p_nbDays)
+    static public Int32[] GetDaysList(Int32 p_startDayId, Int32 p_nbDays)
     {
 
       List<Int32> l_daysList = new List<Int32>();
@@ -361,7 +361,7 @@ namespace FBI.MVC.Model
 
     }
 
-    static internal List<Int32> GetDaysPeriodsListFromWeeksId(List<Int32> p_weeksPeriodsList)
+    static public List<Int32> GetDaysPeriodsListFromWeeksId(List<Int32> p_weeksPeriodsList)
     {
       List<Int32> l_periods = new List<Int32>();
       foreach (Int32 l_weekId in p_weeksPeriodsList)
@@ -370,7 +370,7 @@ namespace FBI.MVC.Model
       return (l_periods);
     }
 
-    static internal List<Int32> GetDaysIdListInWeek(Int32 p_weekId)
+    static public List<Int32> GetDaysIdListInWeek(Int32 p_weekId)
     {
       List<Int32> l_daysIdList = new List<Int32>();
       Int32 l_dayId = GetFirstDayOfWeekId(p_weekId);
@@ -386,22 +386,22 @@ namespace FBI.MVC.Model
 
     #region "Utilities"
 
-    static internal Int32 GetYearIDFromYearValue(Int32 p_yearValue)
+    static public Int32 GetYearIDFromYearValue(Int32 p_yearValue)
     {
       return ((Int32)(DateAndTime.DateSerial(p_yearValue, 12, 31).ToOADate()));
     }
 
-    static internal Int32 GetYearValueFromYearID(Int32 p_yearId)
+    static public Int32 GetYearValueFromYearID(Int32 p_yearId)
     {
       return (DateTime.FromOADate(Convert.ToDouble(p_yearId)).Year);
     }
 
-    static internal Int32 GetYearIdFromPeriodId(int p_periodId)
+    static public Int32 GetYearIdFromPeriodId(int p_periodId)
     {
       return (GetYearIdFromMonthID(GetMonthIdFromPeriodId(p_periodId)));
     }
 
-    static internal Int32 GetYearIdFromMonthID(Int32 p_monthId)
+    static public Int32 GetYearIdFromMonthID(Int32 p_monthId)
     {
 
       Int32 year_ = System.DateTime.FromOADate(p_monthId).Year;
@@ -409,7 +409,7 @@ namespace FBI.MVC.Model
 
     }
 
-    static internal Int32 GetWeekIdFromPeriodId(Int32 p_dayId)
+    static public Int32 GetWeekIdFromPeriodId(Int32 p_dayId)
     {
 
       // Uses localized settings for the first day of the week.
@@ -421,7 +421,7 @@ namespace FBI.MVC.Model
     }
 
     // Return the last day of month
-    static internal Int32 GetMonthIdFromPeriodId(Int32 p_periodId)
+    static public Int32 GetMonthIdFromPeriodId(Int32 p_periodId)
     {
 
       Int32 l_monthId = default(Int32);
@@ -437,7 +437,7 @@ namespace FBI.MVC.Model
     }
 
     // Compliant with ISO 860
-    static internal Int32 GetWeekNumberFromDateId(ref Int32 p_periodId)
+    static public Int32 GetWeekNumberFromDateId(ref Int32 p_periodId)
     {
 
       // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
@@ -451,7 +451,7 @@ namespace FBI.MVC.Model
       return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(l_time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
     }
 
-    static internal List<Int32> FilterPeriodList(Int32[] p_filteredPeriods, List<Int32> m_FilterReferencePeriodsList)
+    static public List<Int32> FilterPeriodList(Int32[] p_filteredPeriods, List<Int32> m_FilterReferencePeriodsList)
     {
 
       List<Int32> l_resultPeriods = new List<Int32>();
