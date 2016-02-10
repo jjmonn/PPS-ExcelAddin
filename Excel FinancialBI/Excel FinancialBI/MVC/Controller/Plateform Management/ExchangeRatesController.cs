@@ -11,9 +11,9 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  class ExchangeRatesController : FactBaseController<ExchangeRatesView>
+  public class ExchangeRatesController : FactBaseController<ExchangeRatesView, ExchangeRateVersion>
   {
-    public ExchangeRatesController() : base(new NewRateVersionView())
+    public ExchangeRatesController() : base()
     {
       m_view = new ExchangeRatesView();
       m_view.SetController(this);
@@ -27,38 +27,69 @@ namespace FBI.MVC.Controller
       m_view.LoadView();
     }
 
-    public bool Update(ExchangeRate p_rate)
+    bool IsRateValid(ExchangeRate p_rate)
     {
+      Currency l_currency = CurrencyModel.Instance.GetValue(p_rate.DestCurrencyId);
+      ExchangeRateVersion l_version = RatesVersionModel.Instance.GetValue(p_rate.RateVersionId);
+
+      if (l_version == null)
+      {
+        Error = Local.GetValue("exchange_rate.error.version_not_found");
+        return (false);
+      }
+      if (l_currency == null)
+      {
+        Error = Local.GetValue("exchange_rate.error.currency_not_found");
+        return (false);
+      }
+      return (true);
+    }
+
+    public bool UpdateRate(ExchangeRate p_rate)
+    {
+      if (IsRateValid(p_rate) == false)
+        return (false);
       ExchangeRateModel.Instance.Update(p_rate);
       return (true);
     }
 
-    public bool Create(ExchangeRate p_rate)
+    public bool CreateRate(ExchangeRate p_rate)
     {
-      ExchangeRateModel.Instance.Create(p_rate);
-      return (true);
-    }
-
-    bool IsVersionNameAvailable(string p_name)
-    {
-      if (RatesVersionModel.Instance.GetValue(p_name) != null)
+      if (IsRateValid(p_rate) == false)
+        return (false);
+      if (ExchangeRateModel.Instance.GetValue(p_rate.DestCurrencyId, p_rate.RateVersionId, p_rate.Period) != null)
       {
         Error = Local.GetValue("general.error.name_already_used");
         return (false);
       }
+      ExchangeRateModel.Instance.Create(p_rate);
       return (true);
     }
 
-    public bool CreateVersion(ExchangeRateVersion p_rateVersion)
+    public override bool CreateVersion(ExchangeRateVersion p_rateVersion)
     {
-      if (!IsNameValid(p_rateVersion.Name) || !IsVersionNameAvailable(p_rateVersion.Name))
+      if (!IsVersionValid(p_rateVersion, RatesVersionModel.Instance) || !IsVersionNameAvailable(p_rateVersion.Name, RatesVersionModel.Instance))
         return (false);
-      if (p_rateVersion.NbPeriod == 0)
+      RatesVersionModel.Instance.Create(p_rateVersion);
+      return (true);
+    }
+
+    public override bool UpdateVersion(ExchangeRateVersion p_rateVersion)
+    {
+      if (!IsVersionValid(p_rateVersion, RatesVersionModel.Instance))
+        return (false);
+      RatesVersionModel.Instance.Update(p_rateVersion);
+      return (true);
+    }
+
+    public override bool DeleteVersion(UInt32 p_versionId)
+    {
+      if (RatesVersionModel.Instance.GetValue(p_versionId) == null)
       {
-        Error = Local.GetValue("version.error.nb_period");
+        Error = Local.GetValue("general.error.not_found");
         return (false);
       }
-      RatesVersionModel.Instance.Create(p_rateVersion);
+      RatesVersionModel.Instance.Delete(p_versionId);
       return (true);
     }
   }

@@ -99,6 +99,11 @@ namespace FBI.MVC.Model.CRUD
       return (l_clone);
     }
 
+    public override BaseVersion BaseClone()
+    {
+      return (Clone());
+    }
+
     public int CompareTo(object p_obj)
     {
       if (p_obj == null)

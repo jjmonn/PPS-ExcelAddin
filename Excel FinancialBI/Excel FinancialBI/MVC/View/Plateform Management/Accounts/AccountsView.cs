@@ -21,6 +21,10 @@ namespace FBI.MVC.View
   using Network;
   using Model.CRUD;
 
+  //
+  using Utils.BNF;
+  //
+
   public partial class AccountsView : UserControl, IView
   {
 
@@ -47,6 +51,9 @@ namespace FBI.MVC.View
     private const UInt32 ACCOUNTS_VIEW_TV_MAX_WIDTH = 600;
     private const UInt32 MARGIN1 = 30;
 
+    private SimpleBnf m_bnf = new SimpleBnf();
+    private FbiGrammar m_grammar = new FbiGrammar();
+
     #endregion
 
 
@@ -64,7 +71,7 @@ namespace FBI.MVC.View
     {
       try
       {
-        this.m_accountTV = new FbiTreeView<Account>(AccountModel.Instance.GetDictionary());
+        this.m_accountTV = new FbiTreeView<Account>(AccountModel.Instance.GetDictionary(), null, true);
         this.m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary());
       }
       catch (Exception e)
@@ -111,6 +118,10 @@ namespace FBI.MVC.View
       this.m_cancelFormulaEditionButton.Click += OnCancelFormulaEditionButtonClick;
       this.m_validateFormulaButton.Click += OnValidateFormulaButtonClick;
       this.m_allocationKeyButton.Click += OnAllocationKeyButtonClick;
+
+      this.m_accountTV.MouseDown += AccountsTreeview_MouseDown;
+      this.m_accountTV.NodeDropped += AccountsTreeview_NodeDropped;
+
     }
 
     private void OnAllocationKeyButtonClick(object p_sender, EventArgs p_e)
@@ -213,15 +224,23 @@ namespace FBI.MVC.View
       else
         if (MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), Local.GetValue("general.accounts"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
           return;
-      this.OnCancelFormulaEditionButtonClick(p_sender, p_e);
-      return; //TODO : do check
       if (m_currentNode != null)
       {
-        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        Account l_currentAccount;
+
+        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value)) != null)
         {
-          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
-          l_currentAccount.Formula = m_formulaTextBox.Text;
-          this.m_controller.UpdateAccount(l_currentAccount);
+          l_currentAccount = l_currentAccount.Clone();
+          m_bnf.AddRule("fbi_to_grammar", m_grammar.ToGrammar);
+          if (m_bnf.Parse("fbi_to_grammar", m_formulaTextBox.Text))
+          {
+            l_currentAccount.Formula = m_grammar.Formula;
+            this.m_controller.UpdateAccount(l_currentAccount);
+          }
+          else
+          {
+            MessageBox.Show(m_grammar.LastError);
+          }
         }
       }
     }
@@ -913,11 +932,15 @@ namespace FBI.MVC.View
         }
 
         // Formula TB
-        //if (m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType))
-        //m_formulaTextBox.Text = m_controller.GetFormulaText(l_account_id); //TODO : Controller formula test
-        //else
-        //  m_formulaTextBox.Text = "";
-        m_formulaTextBox.Text = l_account.Formula;
+        m_bnf.AddRule("fbi_to_human_grammar", m_grammar.ToHuman);
+        if (m_bnf.Parse("fbi_to_human_grammar", l_account.Formula))
+        {
+          m_formulaTextBox.Text = m_grammar.Formula;
+        }
+        else
+        {
+          MessageBox.Show(m_grammar.LastError);
+        }
 
         //Description
         this.m_descriptionTextBox.Text = l_account.Description;
@@ -942,5 +965,39 @@ namespace FBI.MVC.View
       this.m_descriptionTextBox.BackColor = Color.White;
     }
 
+    private void AccountsTreeview_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (m_accountTV.FindAtPosition(new Point(e.X, e.Y)) != null)
+        m_currentNode = m_accountTV.FindAtPosition(new Point(e.X, e.Y));
+      if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
+      {
+        m_accountTV.DoDragDrop(m_currentNode, DragDropEffects.Move);
+      }
+    }
+
+    private void AccountsTreeview_NodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)
+    {    
+      if (p_targetNode == null)
+        return;
+
+      Account l_targetAccount = AccountModel.Instance.GetValue((uint)p_targetNode.Value);
+      if (p_draggedNode.Equals(p_targetNode) == true || p_draggedNode.Parent.Equals(p_targetNode.Value))
+        return;
+
+      Account l_account = AccountModel.Instance.GetValue((uint)p_draggedNode.Value).Clone();
+      if (l_account == null)
+        return;
+
+      vTreeNode l_newNode = new vTreeNode();
+      l_newNode.Value = p_draggedNode.Value;
+      l_newNode.Text = p_draggedNode.Text;
+      l_newNode.ImageIndex = p_draggedNode.ImageIndex;
+      p_draggedNode.Remove();
+      m_accountTV.DoDragDrop(p_draggedNode, DragDropEffects.None);
+      p_targetNode.Nodes.Add(l_newNode);
+      l_account.ParentId = (uint)p_targetNode.Value;
+      m_controller.UpdateAccount(l_account);
+    }
+    
   }
 }
