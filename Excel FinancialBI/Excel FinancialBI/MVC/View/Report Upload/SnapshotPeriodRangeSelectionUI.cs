@@ -14,7 +14,7 @@ namespace FBI.MVC.View
 
   public partial class SnapshotPeriodRangeSelectionUI : Form, IView
   {
-    internal bool m_showned { set; get; } 
+    public bool m_showned { set; get; } 
     public SnapshotPeriodRangeSelectionUI()
     {
       InitializeComponent();

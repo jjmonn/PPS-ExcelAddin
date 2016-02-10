@@ -124,8 +124,8 @@ namespace FBI.MVC.View
       }
     }
 
-    delegate void OnGlobalFactModelDelete_delegate(ErrorMessage p_status, uint p_id);
-    private void OnGlobalFactModelDelete(ErrorMessage p_status, uint p_id)
+    delegate void OnGlobalFactModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);
+    private void OnGlobalFactModelDelete(ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -147,8 +147,8 @@ namespace FBI.MVC.View
       }
     }
 
-    delegate void OnGlobalFactModelCreation_delegate(ErrorMessage p_status, uint p_id);
-    private void OnGlobalFactModelCreation(ErrorMessage p_status, uint p_id)
+    delegate void OnGlobalFactModelCreation_delegate(ErrorMessage p_status, UInt32 p_id);
+    private void OnGlobalFactModelCreation(ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -191,8 +191,8 @@ namespace FBI.MVC.View
       }
     }
 
-    delegate void OnGlobalFactModelUpdate_delegate(ErrorMessage p_status, uint p_id);
-    private void OnGlobalFactModelUpdate(ErrorMessage p_status, uint p_id)
+    delegate void OnGlobalFactModelUpdate_delegate(ErrorMessage p_status, UInt32 p_id);
+    private void OnGlobalFactModelUpdate(ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -335,8 +335,8 @@ namespace FBI.MVC.View
       }
     }
 
-    delegate void OnModelCreation_delegate(ErrorMessage p_status, uint p_id);
-    private void OnModelCreation(ErrorMessage p_status, uint p_id)
+    delegate void OnModelCreation_delegate(ErrorMessage p_status, UInt32 p_id);
+    private void OnModelCreation(ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -391,8 +391,8 @@ namespace FBI.MVC.View
       }
     }
 
-    delegate void OnModelUpdate_delegate(ErrorMessage p_status, uint p_id);
-    private void OnModelUpdate(ErrorMessage p_status, uint p_id)
+    delegate void OnModelUpdate_delegate(ErrorMessage p_status, UInt32 p_id);
+    private void OnModelUpdate(ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -408,8 +408,8 @@ namespace FBI.MVC.View
       }
     }
 
-    delegate void OnModelDelete_delegate(ErrorMessage p_status, uint p_id);
-    private void OnModelDelete(ErrorMessage p_status, uint p_id)
+    delegate void OnModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);
+    private void OnModelDelete(ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -967,11 +967,11 @@ namespace FBI.MVC.View
       if (p_targetNode == null)
         return;
 
-      Account l_targetAccount = AccountModel.Instance.GetValue((uint)p_targetNode.Value);
+      Account l_targetAccount = AccountModel.Instance.GetValue((UInt32)p_targetNode.Value);
       if (p_draggedNode.Equals(p_targetNode) == true || p_draggedNode.Parent.Equals(p_targetNode.Value))
         return;
 
-      Account l_account = AccountModel.Instance.GetValue((uint)p_draggedNode.Value).Clone();
+      Account l_account = AccountModel.Instance.GetValue((UInt32)p_draggedNode.Value).Clone();
       if (l_account == null)
         return;
 
@@ -982,7 +982,7 @@ namespace FBI.MVC.View
       p_draggedNode.Remove();
       m_accountTV.DoDragDrop(p_draggedNode, DragDropEffects.None);
       p_targetNode.Nodes.Add(l_newNode);
-      l_account.ParentId = (uint)p_targetNode.Value;
+      l_account.ParentId = (UInt32)p_targetNode.Value;
       m_controller.UpdateAccount(l_account);
     }
     

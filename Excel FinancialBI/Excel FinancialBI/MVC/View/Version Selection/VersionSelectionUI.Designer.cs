@@ -103,10 +103,10 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.ImageList VersioningTVIL;
-    internal System.Windows.Forms.Button ValidateButton;
-    internal System.Windows.Forms.ImageList ImageList2;
-    internal VIBlend.WinForms.Controls.vTreeViewBox VersionsTreeComboBox;
+    public System.Windows.Forms.ImageList VersioningTVIL;
+    public System.Windows.Forms.Button ValidateButton;
+    public System.Windows.Forms.ImageList ImageList2;
+    public VIBlend.WinForms.Controls.vTreeViewBox VersionsTreeComboBox;
   }
 
 }

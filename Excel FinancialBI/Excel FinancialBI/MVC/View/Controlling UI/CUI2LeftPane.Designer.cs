@@ -266,23 +266,23 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
 		this.ResumeLayout(false);
 
 	}
-	internal System.Windows.Forms.TableLayoutPanel MainTableLayout;
-	internal System.Windows.Forms.Label m_entitySelectionLabel;
-	internal System.Windows.Forms.SplitContainer SplitContainer;
-	internal System.Windows.Forms.TableLayoutPanel m_selectionTableLayout;
-	internal VIBlend.WinForms.Controls.vComboBox SelectionCB;
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
-	internal VIBlend.WinForms.Controls.vButton CollapseSelectionBT;
-	internal System.Windows.Forms.ImageList CategoriesIL;
+	public System.Windows.Forms.TableLayoutPanel MainTableLayout;
+	public System.Windows.Forms.Label m_entitySelectionLabel;
+	public System.Windows.Forms.SplitContainer SplitContainer;
+	public System.Windows.Forms.TableLayoutPanel m_selectionTableLayout;
+	public VIBlend.WinForms.Controls.vComboBox SelectionCB;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
+	public VIBlend.WinForms.Controls.vButton CollapseSelectionBT;
+	public System.Windows.Forms.ImageList CategoriesIL;
 	public System.Windows.Forms.ImageList EntitiesTVImageList;
-	internal System.Windows.Forms.Panel Panel1;
-	internal VIBlend.WinForms.Controls.vButton PanelCollapseBT;
+	public System.Windows.Forms.Panel Panel1;
+	public VIBlend.WinForms.Controls.vButton PanelCollapseBT;
 	public System.Windows.Forms.ImageList ExpansionImageList;
-	internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-	internal System.Windows.Forms.ContextMenuStrip m_rightClickMenu;
-	internal System.Windows.Forms.ToolStripMenuItem SelectAllToolStripMenuItem;
+	public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+	public System.Windows.Forms.ContextMenuStrip m_rightClickMenu;
+	public System.Windows.Forms.ToolStripMenuItem SelectAllToolStripMenuItem;
 
-	internal System.Windows.Forms.ToolStripMenuItem UnselectAllToolStripMenuItem;
+	public System.Windows.Forms.ToolStripMenuItem UnselectAllToolStripMenuItem;
 }
 
 }

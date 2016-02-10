@@ -9,9 +9,9 @@ namespace FBI.Utils
   public class MultiIndexDictionary<KeyA, KeyB, Value>
   {
     private UInt32 m_id = 0;
-    private Dictionary<KeyA, UInt32> m_firstDic = new Dictionary<KeyA, uint>();
-    private Dictionary<KeyB, UInt32> m_secondDic = new Dictionary<KeyB, uint>();
-    private Dictionary<UInt32, Value> m_mainDic = new Dictionary<uint, Value>();
+    private Dictionary<KeyA, UInt32> m_firstDic = new Dictionary<KeyA, UInt32>();
+    private Dictionary<KeyB, UInt32> m_secondDic = new Dictionary<KeyB, UInt32>();
+    private Dictionary<UInt32, Value> m_mainDic = new Dictionary<UInt32, Value>();
     private List<Value> m_sortedList = null;
 
     public Dictionary<UInt32, Value>.ValueCollection Values
@@ -37,12 +37,12 @@ namespace FBI.Utils
       get { return (m_mainDic.Count); }
     }
 
-    public Dictionary<KeyA, uint>.KeyCollection Keys
+    public Dictionary<KeyA, UInt32>.KeyCollection Keys
     {
       get { return m_firstDic.Keys; }
     }
 
-    public Dictionary<KeyB, uint>.KeyCollection SecondaryKeys
+    public Dictionary<KeyB, UInt32>.KeyCollection SecondaryKeys
     {
       get { return m_secondDic.Keys; }
     }
@@ -190,11 +190,11 @@ namespace FBI.Utils
       dest.m_firstDic = m_firstDic;
       dest.m_secondDic = m_secondDic;
       dest.m_id = m_id;
-      dest.m_mainDic = m_mainDic as Dictionary<uint, DValue>;
+      dest.m_mainDic = m_mainDic as Dictionary<UInt32, DValue>;
       return dest;
     }
 
-    public Value AtIndex(uint p_index)
+    public Value AtIndex(UInt32 p_index)
     {
       return (m_mainDic[p_index]);
     }

@@ -208,11 +208,11 @@ partial class PDCPlanningUI : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.DataGridView.vDataGridView m_PDCDataGridView;
-	internal VIBlend.WinForms.Controls.vTabControl m_TabPages;
-	internal VIBlend.WinForms.Controls.vTabPage m_PDCTab;
-	internal VIBlend.WinForms.Controls.vSplitContainer m_PDCSplitContainer;
-	internal VIBlend.WinForms.DataGridView.vDataGridViewPivotDesign m_PDCDataGridViewPivotDesign;
+	public VIBlend.WinForms.DataGridView.vDataGridView m_PDCDataGridView;
+	public VIBlend.WinForms.Controls.vTabControl m_TabPages;
+	public VIBlend.WinForms.Controls.vTabPage m_PDCTab;
+	public VIBlend.WinForms.Controls.vSplitContainer m_PDCSplitContainer;
+	public VIBlend.WinForms.DataGridView.vDataGridViewPivotDesign m_PDCDataGridViewPivotDesign;
 }
 
 }

@@ -112,10 +112,10 @@ namespace FBI.MVC.View
       this.PerformLayout();
 
     }
-    internal System.Windows.Forms.Label m_nameLabel;
-    internal System.Windows.Forms.TextBox NameTB;
-    internal System.Windows.Forms.Button CancelBT;
-    internal System.Windows.Forms.Button ValidateBT;
-    internal System.Windows.Forms.ImageList ButtonIcons;
+    public System.Windows.Forms.Label m_nameLabel;
+    public System.Windows.Forms.TextBox NameTB;
+    public System.Windows.Forms.Button CancelBT;
+    public System.Windows.Forms.Button ValidateBT;
+    public System.Windows.Forms.ImageList ButtonIcons;
   }
 }

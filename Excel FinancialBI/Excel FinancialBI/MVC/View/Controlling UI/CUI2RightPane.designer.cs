@@ -233,20 +233,20 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
 		this.ResumeLayout(false);
 
 	}
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
-	internal System.Windows.Forms.Label m_columnsLabel;
-	internal System.Windows.Forms.Label m_fieldChoiceLabel;
-	internal System.Windows.Forms.Panel DimensionsTVPanel;
-	internal System.Windows.Forms.Button UpdateBT;
-	internal System.Windows.Forms.ImageList ImageList1;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
+	public System.Windows.Forms.Label m_columnsLabel;
+	public System.Windows.Forms.Label m_fieldChoiceLabel;
+	public System.Windows.Forms.Panel DimensionsTVPanel;
+	public System.Windows.Forms.Button UpdateBT;
+	public System.Windows.Forms.ImageList ImageList1;
 	public VIBlend.WinForms.Controls.vListBox columnsDisplayList;
 	public VIBlend.WinForms.Controls.vListBox rowsDisplayList;
-	internal System.Windows.Forms.Panel Panel1;
-	internal System.Windows.Forms.ImageList ImageList2;
-	internal VIBlend.WinForms.Controls.vButton CollapseRightPaneBT;
+	public System.Windows.Forms.Panel Panel1;
+	public System.Windows.Forms.ImageList ImageList2;
+	public VIBlend.WinForms.Controls.vButton CollapseRightPaneBT;
 
-	internal System.Windows.Forms.Label m_rowsLabel;
+	public System.Windows.Forms.Label m_rowsLabel;
 }
 
 }

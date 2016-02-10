@@ -320,31 +320,31 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.ImageList MenuButtonIL;
-    internal System.Windows.Forms.ContextMenuStrip m_versionMenu;
-    internal System.Windows.Forms.ToolStripMenuItem select_version;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
-    internal System.Windows.Forms.ToolStripMenuItem m_addRatesVersionRCM;
-    internal System.Windows.Forms.ToolStripMenuItem m_addFolderRCM;
-    internal System.Windows.Forms.ToolStripMenuItem m_deleteVersionRCM;
-    internal System.Windows.Forms.ContextMenuStrip m_exchangeRatesRightClickMenu;
-    internal System.Windows.Forms.ToolStripMenuItem CopyRateDownToolStripMenuItem;
-    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel4;
-    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel5;
-    internal System.Windows.Forms.MenuStrip MenuStrip1;
-    internal System.Windows.Forms.ToolStripMenuItem ImportFromExcelToolStripMenuItem;
-    internal System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem1;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator6;
-    internal FBI.Forms.FbiToolStripMenuItem m_versionTopMenu;
-    internal System.Windows.Forms.Label VersionLabel;
-    internal System.Windows.Forms.TextBox rates_version_TB;
-    internal System.Windows.Forms.SplitContainer m_mainContainer;
-    internal System.Windows.Forms.Panel m_versionNamePanel;
-    internal System.Windows.Forms.ToolStripMenuItem m_renameBT;
-    internal System.Windows.Forms.ToolStripMenuItem ImportFromExcelToolStripMenuItem1;
-    internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-    internal VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
+    public System.Windows.Forms.ImageList MenuButtonIL;
+    public System.Windows.Forms.ContextMenuStrip m_versionMenu;
+    public System.Windows.Forms.ToolStripMenuItem select_version;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
+    public System.Windows.Forms.ToolStripMenuItem m_addRatesVersionRCM;
+    public System.Windows.Forms.ToolStripMenuItem m_addFolderRCM;
+    public System.Windows.Forms.ToolStripMenuItem m_deleteVersionRCM;
+    public System.Windows.Forms.ContextMenuStrip m_exchangeRatesRightClickMenu;
+    public System.Windows.Forms.ToolStripMenuItem CopyRateDownToolStripMenuItem;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel4;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel5;
+    public System.Windows.Forms.MenuStrip MenuStrip1;
+    public System.Windows.Forms.ToolStripMenuItem ImportFromExcelToolStripMenuItem;
+    public System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem1;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator6;
+    public FBI.Forms.FbiToolStripMenuItem m_versionTopMenu;
+    public System.Windows.Forms.Label VersionLabel;
+    public System.Windows.Forms.TextBox rates_version_TB;
+    public System.Windows.Forms.SplitContainer m_mainContainer;
+    public System.Windows.Forms.Panel m_versionNamePanel;
+    public System.Windows.Forms.ToolStripMenuItem m_renameBT;
+    public System.Windows.Forms.ToolStripMenuItem ImportFromExcelToolStripMenuItem1;
+    public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+    public VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
 
-    internal System.ComponentModel.BackgroundWorker m_deleteBackgroundWorker;
+    public System.ComponentModel.BackgroundWorker m_deleteBackgroundWorker;
   }
 }

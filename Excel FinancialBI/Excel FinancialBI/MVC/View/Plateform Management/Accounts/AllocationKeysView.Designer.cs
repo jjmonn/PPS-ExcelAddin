@@ -190,10 +190,10 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-    internal VIBlend.WinForms.DataGridView.vDataGridView m_allocationsKeysDGV;
-    internal System.Windows.Forms.Panel Panel1;
-    internal VIBlend.WinForms.Controls.vTextBox m_accountTextBox;
-    internal VIBlend.WinForms.Controls.vLabel m_accountLabel;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+    public VIBlend.WinForms.DataGridView.vDataGridView m_allocationsKeysDGV;
+    public System.Windows.Forms.Panel Panel1;
+    public VIBlend.WinForms.Controls.vTextBox m_accountTextBox;
+    public VIBlend.WinForms.Controls.vLabel m_accountLabel;
   }
 }

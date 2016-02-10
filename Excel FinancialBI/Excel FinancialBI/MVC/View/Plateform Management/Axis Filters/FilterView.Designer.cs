@@ -160,18 +160,18 @@ namespace FBI.MVC.View
       this.PerformLayout();
 
     }
-    internal System.Windows.Forms.TableLayoutPanel m_valuePanel;
-    internal System.Windows.Forms.ImageList ImageList1;
-    internal System.Windows.Forms.MenuStrip MenuStrip1;
-    internal System.Windows.Forms.ContextMenuStrip m_contextRightClick;
-    internal System.Windows.Forms.ToolStripMenuItem m_addValueRightClick;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
-    internal System.Windows.Forms.ToolStripMenuItem m_renameRightClick;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
-    internal System.Windows.Forms.ToolStripMenuItem m_deleteRightClick;
-    internal System.Windows.Forms.ToolStripMenuItem m_expand;
-    internal System.Windows.Forms.ToolStripMenuItem m_collapse;
+    public System.Windows.Forms.TableLayoutPanel m_valuePanel;
+    public System.Windows.Forms.ImageList ImageList1;
+    public System.Windows.Forms.MenuStrip MenuStrip1;
+    public System.Windows.Forms.ContextMenuStrip m_contextRightClick;
+    public System.Windows.Forms.ToolStripMenuItem m_addValueRightClick;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
+    public System.Windows.Forms.ToolStripMenuItem m_renameRightClick;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
+    public System.Windows.Forms.ToolStripMenuItem m_deleteRightClick;
+    public System.Windows.Forms.ToolStripMenuItem m_expand;
+    public System.Windows.Forms.ToolStripMenuItem m_collapse;
 
-    internal System.Windows.Forms.ToolStripMenuItem m_editStruct;
+    public System.Windows.Forms.ToolStripMenuItem m_editStruct;
   }
 }

@@ -8,7 +8,7 @@ namespace FBI.MVC.View
 {
   public partial class ReportUploadEntitySelectionSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
-    internal bool m_shown { set; get; }
+    public bool m_shown { set; get; }
     public ReportUploadEntitySelectionSidePane()
     {
       InitializeComponent();

@@ -51,7 +51,7 @@ namespace FBI.Forms
 
     private bool Generate(SafeDictionary<UInt32, vTreeNode> p_dic, UInt32 p_filterRoot, vTreeNode p_root)
     {
-      MultiIndexDictionary<UInt32, string, Filter> l_childrenDic = new MultiIndexDictionary<uint, string, Filter>();
+      MultiIndexDictionary<UInt32, string, Filter> l_childrenDic = new MultiIndexDictionary<UInt32, string, Filter>();
       FilterModel.Instance.GetChildrenDictionary(p_filterRoot, l_childrenDic);
       Filter l_topLevel = FilterModel.Instance.GetValue(p_filterRoot);
 

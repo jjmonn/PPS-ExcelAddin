@@ -157,11 +157,11 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal VIBlend.WinForms.Controls.vContextMenu VContextMenu1;
-    internal VIBlend.WinForms.Controls.vButton ValidateButton;
-    internal VIBlend.WinForms.DataGridView.vDataGridView m_currenciesDataGridView;
-    internal System.Windows.Forms.MenuItem SetMainCurrencyCallBack;
+    public VIBlend.WinForms.Controls.vContextMenu VContextMenu1;
+    public VIBlend.WinForms.Controls.vButton ValidateButton;
+    public VIBlend.WinForms.DataGridView.vDataGridView m_currenciesDataGridView;
+    public System.Windows.Forms.MenuItem SetMainCurrencyCallBack;
 
-    internal System.Windows.Forms.ImageList EditButtonsImagelist;
+    public System.Windows.Forms.ImageList EditButtonsImagelist;
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,11 @@ namespace FBI.MVC.Model.CRUD
 
   public class Currency : NamedCRUDEntity, System.IComparable
   {
-    public System.UInt32 Id { get; private set; }
+    public UInt32 Id { get; private set; }
     public string Name { get; set; }
     public string Symbol { get; set; }
     public bool InUse { get; set; }
-    public uint Image { get; set; }
+    public UInt32 Image { get; set; }
 
     public Currency() { }
     private Currency(System.UInt32 p_id)

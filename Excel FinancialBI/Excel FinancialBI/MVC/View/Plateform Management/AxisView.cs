@@ -107,12 +107,12 @@ namespace FBI.MVC.View
       }
     }
 
-    void FillParentsColumn(uint p_filterValueId, uint p_parentId, AxisFilter p_axisFilter)
+    void FillParentsColumn(UInt32 p_filterValueId, UInt32 p_parentId, AxisFilter p_axisFilter)
     {
       if (p_filterValueId != 0 && p_parentId != 0)
       {
         FilterValue l_parent = FilterValueModel.Instance.GetValue(p_parentId);
-        MultiIndexDictionary<uint, string, FilterValue> l_filterValueDic = null;
+        MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = null;
         if (l_parent == null)
           return;
         if (l_parent.ParentId != 0)
@@ -324,7 +324,7 @@ namespace FBI.MVC.View
       }
     }
 
-    void SetParentsCells(uint p_axisElemId, uint p_filterId, FilterValue p_filterValue)
+    void SetParentsCells(UInt32 p_axisElemId, UInt32 p_filterId, FilterValue p_filterValue)
     {
       if (p_filterValue.ParentId != 0)
       {

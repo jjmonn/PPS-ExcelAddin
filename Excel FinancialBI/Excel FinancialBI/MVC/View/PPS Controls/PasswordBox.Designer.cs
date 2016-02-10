@@ -118,10 +118,10 @@ partial class PasswordBox : System.Windows.Forms.Form
       this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.Controls.vTextBox m_passwordTextBox;
-	internal VIBlend.WinForms.Controls.vLabel DescTB;
-	internal VIBlend.WinForms.Controls.vButton AcceptBT;
-	internal VIBlend.WinForms.Controls.vButton CancelBT;
+	public VIBlend.WinForms.Controls.vTextBox m_passwordTextBox;
+	public VIBlend.WinForms.Controls.vLabel DescTB;
+	public VIBlend.WinForms.Controls.vButton AcceptBT;
+	public VIBlend.WinForms.Controls.vButton CancelBT;
 }
 
 }
