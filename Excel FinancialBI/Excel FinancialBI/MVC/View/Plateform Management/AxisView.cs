@@ -25,11 +25,40 @@ namespace FBI.MVC.View
     FbiDataGridView m_dgv = new FbiDataGridView();
     AxisController m_controller;
     bool m_cellModif = false;
+    RightManager m_rightMgr = new RightManager();
 
     public AxisView()
     {
       InitializeComponent();
       m_dgv.ContextMenuStrip = m_axisRightClickMenu;
+      DefineUIPermissions();
+      MultiLangueSetup();
+    }
+
+    private void MultiLangueSetup()
+    {
+      this.m_renameAxisElemMenu.Text = Local.GetValue("general.rename");
+      this.m_createAxisElemMenu.Text = Local.GetValue("general.create");
+      this.m_deleteAxisElemMenu.Text = Local.GetValue("general.delete");
+      this.m_copyDownMenu.Text = Local.GetValue("general.copy_down");
+      this.m_dropToExcelMenu.Text = Local.GetValue("general.drop_on_excel");
+      this.m_autoResizeMenu.Text = Local.GetValue("general.auto_resize_columns");
+      this.m_expandAllMenu.Text = Local.GetValue("general.expand_all");
+      this.m_collapseAllMenu.Text = Local.GetValue("general.collapse_all");
+      this.m_createNewAxisElemMenuTop.Text = Local.GetValue("general.create");
+      this.m_deleteAxisElemMenuTop.Text = Local.GetValue("general.delete");
+      this.m_dropToExcelMenuTop.Text = Local.GetValue("general.drop_on_excel");
+      this.m_axisEditionButton.Text = Local.GetValue("general.edition");
+    }
+
+    private void DefineUIPermissions()
+    {
+      m_rightMgr[m_renameAxisElemMenu] = Group.Permission.EDIT_AXIS;
+      m_rightMgr[m_createAxisElemMenu] = Group.Permission.CREATE_AXIS;
+      m_rightMgr[m_deleteAxisElemMenuTop] = Group.Permission.DELETE_AXIS;
+      m_rightMgr[m_deleteAxisElemMenu] = Group.Permission.DELETE_AXIS;
+      m_rightMgr[m_createNewAxisElemMenuTop] = Group.Permission.CREATE_AXIS;
+      m_rightMgr[m_copyDownMenu] = Group.Permission.EDIT_AXIS;
     }
 
     public void SetController(IController p_controller)
