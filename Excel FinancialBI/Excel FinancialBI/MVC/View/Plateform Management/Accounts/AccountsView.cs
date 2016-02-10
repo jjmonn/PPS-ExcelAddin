@@ -20,6 +20,10 @@ namespace FBI.MVC.View
   using Network;
   using Model.CRUD;
 
+  //
+  using Utils.BNF;
+  //
+
   public partial class AccountsView : UserControl, IView
   {
 

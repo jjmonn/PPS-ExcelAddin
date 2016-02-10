@@ -12,24 +12,37 @@ namespace FBI.Utils.BNF
     private string m_str;
     private SafeDictionary<string, int> m_save;
 
-    public static readonly char NA = (char)0;
     public static readonly string m_spaces = " \t\v\f";
 
-    public BnfConsumer()
+    public BnfConsumer(string p_consumer = "")
     {
-      this.Clear();
+      this.Set(p_consumer);
+      m_save = new SafeDictionary<string, int>();
     }
 
-    #region Setters
+    #region Get/Set
 
-    public void Set(string p_str)
+    public void Set(string p_str, int p_ptr = 0)
     {
       m_str = p_str;
+      m_ptr = p_ptr;
     }
 
     public void SetPtr(int p_ptr)
     {
       m_ptr = p_ptr;
+    }
+
+    public int GetPtr()
+    {
+      return (m_ptr);
+    }
+
+    public string GetStr(bool p_current = false)
+    {
+      if (p_current)
+        return (m_str.Substring(m_ptr));
+      return (m_str);
     }
 
     #endregion
@@ -50,12 +63,14 @@ namespace FBI.Utils.BNF
     public char ReadChar()
     {
       if (m_ptr >= m_str.Length)
-        return (NA);
+        return ('\0');
       return (m_str[m_ptr++]);
     }
 
     public bool ReadChar(char p_c)
     {
+      if (m_ptr >= m_str.Length)
+        return (false);
       if (m_str[m_ptr] == p_c)
       {
         ++m_ptr;
@@ -66,11 +81,15 @@ namespace FBI.Utils.BNF
 
     public bool IsChar(char p_c)
     {
+      if (m_ptr >= m_str.Length)
+        return (false);
       return (m_str[m_ptr] == p_c);
     }
 
     public bool ReadRange(char p_a, char p_b)
     {
+      if (m_ptr >= m_str.Length)
+        return (false);
       if (m_str[m_ptr] >= p_a && m_str[m_ptr] <= p_b)
       {
         ++m_ptr;
@@ -79,24 +98,40 @@ namespace FBI.Utils.BNF
       return (false);
     }
 
-    public bool ReadOf(string chars)
+    public bool ReadOf(string p_chars)
     {
-      foreach (char c in chars)
+      foreach (char l_c in p_chars)
       {
-        if (this.ReadChar(c))
+        if (this.ReadChar(l_c))
           return (true);
       }
       return (false);
     }
 
-    public bool ReadText(string text)
+    private bool ReadInsensitiveText(string p_text)
     {
-      if (m_str.Substring(m_ptr).StartsWith(text))
+      string l_str = m_str.Substring(m_ptr).ToUpper();
+
+      if (l_str.StartsWith(p_text.ToUpper()))
       {
-        m_ptr += text.Length;
+        m_ptr += p_text.Length;
         return (true);
       }
       return (false);
+    }
+
+    public bool ReadText(string p_text, bool p_sensitive = true)
+    {
+      if (p_sensitive)
+      {
+        if (m_str.Substring(m_ptr).StartsWith(p_text))
+        {
+          m_ptr += p_text.Length;
+          return (true);
+        }
+        return (false);
+      }
+      return (this.ReadInsensitiveText(p_text));
     }
 
     public bool ReadFor(char p_c)
@@ -142,6 +177,75 @@ namespace FBI.Utils.BNF
 
 #endregion
 
+    #region Standard Methods
+
+    public bool ReadAlpha()
+    {
+      return (this.ReadRange('a', 'z') || this.ReadRange('A', 'Z'));
+    }
+
+    public bool ReadAlphaNum()
+    {
+      return (this.ReadAlpha() || this.ReadNum());
+    }
+
+    public bool ReadNum()
+    {
+      return (this.ReadRange('0', '9'));
+    }
+
+    public bool ReadNumber()
+    {
+      if (!this.ReadNum())
+        return (false);
+      while (!this.IsEOI())
+      {
+        if (!this.ReadNum())
+          return (true);
+      }
+      return (true);
+    }
+
+    public bool ReadOptNegNumber()
+    {
+      int l_ptr;
+
+      l_ptr = m_ptr;
+      this.ReadChar('-');
+      if (!this.ReadNumber())
+      {
+        m_ptr = l_ptr;
+        return (false);
+      }
+      return (true);
+    }
+
+    public bool ReadOptNegDouble()
+    {
+      int l_ptr;
+
+      l_ptr = m_ptr;
+      if (this.ReadOptNegNumber() && this.ReadChar('.') && this.ReadNum())
+      {
+        this.ReadNumber();
+        return (true);
+      }
+      m_ptr = l_ptr;
+      return (false);
+    }
+
+    public bool ReadIdentifier()
+    {
+      if (!(this.ReadAlpha() || this.ReadChar('_')))
+        return (false);
+      while (!this.IsEOI())
+      {
+        if (!(this.ReadAlphaNum() || this.ReadChar('_')))
+          return (true);
+      }
+      return (true);
+    }
+
     public bool ReadWhitespaces()
     {
       if (!this.ReadOf(m_spaces))
@@ -153,6 +257,8 @@ namespace FBI.Utils.BNF
       }
       return (true);
     }
+
+    #endregion
 
     public bool Save(string p_name)
     {

@@ -9,6 +9,6 @@ namespace FBI.MVC.Model
   class Constants
   {
     public const uint NAMES_MAX_LENGTH = 100;
-    public const string FORBIDEN_CHARS = ",";
+    public const string FORBIDEN_CHARS = ",\"";
   }
 }
