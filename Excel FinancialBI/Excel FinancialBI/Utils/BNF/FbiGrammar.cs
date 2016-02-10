@@ -24,16 +24,48 @@ namespace FBI.Utils.BNF
     private static readonly string m_periodSeparators = "[]";
     private static readonly string[] m_funcs = { "IF", "SIN", "COS", "TAN", "LOG2", "LOG10", "LOG", "LN", "EXP", "SQRT", "SIGN", "RINT", "ABS", "MIN", "MAX", "SUM", "AVG" };
 
-    private string m_formula = "";
-    private int m_inputPtr = 0;
-    private int m_formulaPtr = 0;
+    private enum m_functions { PERIOD, IDENTIFICATOR, FUNCTION, NA };
+
+    private SafeDictionary<m_functions, string> m_errors = new SafeDictionary<m_functions, string>();
+
+    private string m_formula;
+    private int m_inputPtr;
+    private int m_formulaPtr;
+    private string m_lastError;
 
     public string Formula
     {
       get { return (m_formula); }
     }
 
+    public string LastError
+    {
+      get
+      {
+        if (m_lastError == "")
+          return (m_errors[m_functions.NA]);
+        return (m_lastError);
+      }
+    }
+
+    public FbiGrammar()
+    {
+      m_errors[m_functions.PERIOD] = "bnf.error.period";
+      m_errors[m_functions.IDENTIFICATOR] = "bnf.error.identificator";
+      m_errors[m_functions.FUNCTION] = "bnf.error.function";
+      m_errors[m_functions.NA] = "bnf.error.syntax";
+    }
+
     #region Internal Utils
+
+    public void Clear()
+    {
+      m_formula = "";
+      m_inputPtr = 0;
+      m_formulaPtr = 0;
+      m_lastError = "";
+      m_formula = "";
+    }
 
     private void Add(string p_data)
     {
@@ -50,14 +82,23 @@ namespace FBI.Utils.BNF
       m_inputPtr = p_input.GetPtr();
     }
 
-    private bool ResetPtrs(BnfConsumer p_input)
+    private bool Error(BnfConsumer p_input, m_functions p_f)
+    {
+      if (p_f != m_functions.NA)
+      {
+        m_lastError = m_errors[p_f];
+      }
+      this.ResetPtrs(p_input);
+      return (false);
+    }
+
+    private void ResetPtrs(BnfConsumer p_input)
     {
       if (m_formula.Length > m_formulaPtr)
       {
         m_formula = m_formula.Remove(m_formulaPtr);
       }
       p_input.SetPtr(m_inputPtr);
-      return (false);
     }
 
     //Find the equivalence from simple operator to server operator (m_operator to m_serverOperator)
@@ -95,6 +136,7 @@ namespace FBI.Utils.BNF
     {
       try
       {
+        this.Clear();
         return (this.IsExprList(p_input));
       }
       catch (Exception e)
@@ -117,11 +159,11 @@ namespace FBI.Utils.BNF
           this.Add(p_input.Stop("period_number")); //Add the number to the formula
           p_input.ReadWhitespaces();
           if (!p_input.ReadChar(m_periodSeparators[1])) //Read NOT ']'
-            return (this.ResetPtrs(p_input));
+            return (this.Error(p_input, m_functions.PERIOD));
           return (true);
         }
       }
-      return (this.ResetPtrs(p_input));
+      return (this.Error(p_input, m_functions.PERIOD));
     }
 
     //Period like [n+1] OR [n3]
@@ -132,7 +174,7 @@ namespace FBI.Utils.BNF
       {
         p_input.ReadWhitespaces();
         if (!p_input.ReadChar(m_periodId)) //Read 'n' -> [n3] OR [n+1]
-          return (this.ResetPtrs(p_input));
+          return (this.Error(p_input, m_functions.PERIOD));
         p_input.ReadWhitespaces();
         p_input.Save("period_op");
         if (p_input.ReadChar(m_operators[0]) || p_input.ReadChar(m_operators[1])) //If read a valid operator: '-' or '+' [n+1] OR [n-1]
@@ -141,7 +183,7 @@ namespace FBI.Utils.BNF
           p_input.ReadWhitespaces();
           p_input.Save("period_number");
           if (!p_input.ReadNumber()) //Read a number -> [n+'1']
-            return (this.ResetPtrs(p_input));
+            return (this.Error(p_input, m_functions.PERIOD));
           this.Add(p_input.Stop("period_number")); //Add the number to the formula
         }
         p_input.ReadWhitespaces();
@@ -150,10 +192,10 @@ namespace FBI.Utils.BNF
         this.Add(p_input.Stop("period_number")); //Add the number to the formula [n'3']
         p_input.ReadWhitespaces();
         if (!p_input.ReadChar(m_periodSeparators[1])) //Read ']'
-          return (this.ResetPtrs(p_input));
+          return (this.Error(p_input, m_functions.PERIOD));
         return (true);
       }
-      return (this.ResetPtrs(p_input));
+      return (this.Error(p_input, m_functions.PERIOD));
     }
 
     //If the string is a valid period like [n + 1], [n], [n+8], [n5], [9], ...
@@ -182,7 +224,7 @@ namespace FBI.Utils.BNF
         this.IsPeriod(p_input); //If the identificator is followed by a time period ([n+1], etc), add it to the formula !
         return (true);
       }
-      return (this.ResetPtrs(p_input));
+      return (this.Error(p_input, m_functions.IDENTIFICATOR));
     }
 
     //If the string correspond to a number (1, -1, -1.0, 1.0)
@@ -195,18 +237,17 @@ namespace FBI.Utils.BNF
         this.Add(p_input.Stop("number"));
         return (true);
       }
-      return (this.ResetPtrs(p_input));
+      return (this.Error(p_input, m_functions.NA));
     }
 
     //If the string is a valid argument
     //Ex: "Chiffre d'affaire", 3, sum(...), -9.9, ...
     public bool IsArgument(BnfConsumer p_input)
     {
-      this.SavePtrs(p_input);
       p_input.ReadWhitespaces();
       if (this.IsIdentificator(p_input) || this.IsFunction(p_input) || this.IsNumber(p_input))
         return (true);
-      return (this.ResetPtrs(p_input));
+      return (false);
     }
 
     //If string is an expression : 3 + 5 + "Chiffre d'affaire"[n + 6]
@@ -234,7 +275,7 @@ namespace FBI.Utils.BNF
           {
             this.Add(p_input.Stop("operator"));
             if (!this.IsExpr(p_input))
-              return (this.ResetPtrs(p_input));
+              return (this.Error(p_input, m_functions.NA));
           }
           else
             l_isOperation = false;
@@ -247,11 +288,11 @@ namespace FBI.Utils.BNF
             this.Add(m_funcSeparators[1].ToString());
             return (true);
           }
-          return (this.ResetPtrs(p_input));
+          return (this.Error(p_input, m_functions.NA));
         }
         return (true);
       }
-      return (this.ResetPtrs(p_input));
+      return (this.Error(p_input, m_functions.NA));
     }
 
     //List of arguments, separated by a ',' -> 1+1, "Input"[5] / 2 + (3 - 9)
@@ -272,7 +313,7 @@ namespace FBI.Utils.BNF
           {
             this.Add(m_separator.ToString());
             if (!this.IsExpr(p_input)) //Read the expression
-              return (this.ResetPtrs(p_input));
+              return (this.Error(p_input, m_functions.FUNCTION));
           }
           else //If NOT ','
           {
@@ -281,7 +322,7 @@ namespace FBI.Utils.BNF
           ++l_args;
         }
       }
-      return (this.ResetPtrs(p_input));
+      return (this.Error(p_input, m_functions.FUNCTION));
     }
 
     //Return if a function is found, with parameters.
@@ -308,10 +349,10 @@ namespace FBI.Utils.BNF
             }
           }
           else //If NOT read '('
-            return (this.ResetPtrs(p_input));
+            return (this.Error(p_input, m_functions.FUNCTION));
         }
       }
-      return (this.ResetPtrs(p_input));
+      return (this.Error(p_input, m_functions.FUNCTION));
     }
 
     //If the string is a list of expression.
@@ -331,14 +372,14 @@ namespace FBI.Utils.BNF
           {
             this.Add(p_input.Stop("operator"));
             if (!this.IsExpr(p_input))
-              return (this.ResetPtrs(p_input));
+              return (this.Error(p_input, m_functions.NA));
           }
           else
             l_isExpr = false;
         }
         return (true);
       }
-      return (this.ResetPtrs(p_input));
+      return (false);
     }
   }
 }
