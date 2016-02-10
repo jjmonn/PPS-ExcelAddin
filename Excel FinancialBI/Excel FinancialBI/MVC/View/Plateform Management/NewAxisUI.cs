@@ -71,7 +71,7 @@ namespace FBI.MVC.View
       l_newElem.Name = m_nameTextBox.Text;
       l_newElem.Axis = m_controller.AxisType;
       l_newElem.ParentId = l_parentAxisId;
-      if (m_controller.Create(l_newElem) == false)
+      if (m_controller.CreateAxisElem(l_newElem) == false)
         MessageBox.Show(m_controller.Error);
       Hide();
     }

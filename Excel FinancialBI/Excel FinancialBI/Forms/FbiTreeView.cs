@@ -13,9 +13,12 @@ namespace FBI.Forms
   using Utils;
   using MVC.Model.CRUD;
 
+  public delegate void NodeDropedEventHandler(vTreeNode p_draggedNode, vTreeNode p_targetNode);
+
   public class FbiTreeView<T> : vTreeView where T : NamedCRUDEntity
   {
     private MultiIndexDictionary<UInt32, String, T> m_items;
+    public event NodeDropedEventHandler NodeDropped;
     private static readonly string ERR_GENERATE = "[FbiTreeView] Cannot generate vTreeView. Either the MultiIndexDictionary is null or incorrect";
 
     public FbiTreeView(MultiIndexDictionary<UInt32, String, T> p_items = null, MultiIndexDictionary<UInt32, String, T> p_icons = null,
@@ -33,10 +36,11 @@ namespace FBI.Forms
 
     private void SubscribeDragAndDropEvents()
     {
-      // Careful: you must subscribe to the mouse down event into your view and launch the drag and drop from it
+      // Careful: you must subscribe to the mouse down event into your view to launch the drag and drop
       this.DragEnter += FbiTreeview_DragEnter;
       this.DragOver += FbiTreeview_DragOver;
-      // You must subscribe to the DragDrop event into your view in order to send the parent id update to your model
+      this.DragDrop += FbiTreeview_DragDrop;
+      // You must subscribe to the NodeDropped event into your view in order to send the parent id update to your model
     }
 
     public bool Add(vTreeNode p_node)
@@ -49,20 +53,32 @@ namespace FBI.Forms
 
     public void FindAndAdd(NamedHierarchyCRUDEntity p_value)
     {
+      vTreeNode l_newNode = FindNode(p_value.Id);
       vTreeNode l_parentNode = FindNode(p_value.ParentId);
-      vTreeNode l_newNode = new vTreeNode();
 
+      if (l_newNode == null)
+      {
+        l_newNode = new vTreeNode();
+        l_newNode.Value = p_value.Id;
+        if (l_parentNode != null)
+          l_parentNode.Nodes.Add(l_newNode);
+        else
+          Nodes.Add(l_newNode);
+      }
       l_newNode.Text = p_value.Name;
-      l_newNode.Value = p_value.Id;
-      if (l_parentNode != null)
-        l_parentNode.Nodes.Add(l_newNode);
-      else
-        Nodes.Add(l_newNode);
+    }
+
+    public void FindAndRemove(UInt32 p_value)
+    {
+      vTreeNode l_node = FindNode(p_value);
+
+      if (l_node != null)
+        Remove(l_node);
     }
 
     public bool Remove(vTreeNode p_node)
     {
-      if (p_node == null || this.GetNodes().Exists(x => x != p_node))
+      if (p_node == null)
         return (false);
       if (p_node.Parent != null)
       {
@@ -298,6 +314,7 @@ namespace FBI.Forms
       return (FindNode(this, p_value));
     }
 
+    #region Drag and drop envents
 
     private void FbiTreeview_DragEnter(object sender, DragEventArgs e)
     {
@@ -320,6 +337,17 @@ namespace FBI.Forms
       }
 
     }
-  
+
+    private void FbiTreeview_DragDrop(object sender, DragEventArgs e)
+    {
+      vTreeNode l_draggedNode = e.Data.GetData(typeof(vTreeNode)) as vTreeNode;
+      if (l_draggedNode != null)
+      {
+        Point location = this.PointToClient(Cursor.Position);
+        vTreeNode l_targetNode = this.HitTest(location);
+        NodeDropped(l_draggedNode, l_targetNode);  
+      }
+    }
+    #endregion
   }
 }

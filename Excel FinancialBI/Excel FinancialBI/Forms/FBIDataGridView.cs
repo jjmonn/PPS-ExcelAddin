@@ -144,23 +144,23 @@ namespace FBI.Forms
         p_saveDic[p_id] = l_dim;
         if (p_parentId == 0)
           p_dimension.Add(l_dim);
+        if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
+        {
+          HierarchyItem parent = null;
+          NamedHierarchyCRUDEntity parentEntity = p_model.GetValue(p_parentId) as NamedHierarchyCRUDEntity;
+
+          if (parentEntity == null)
+            return (l_dim);
+          if (p_saveDic.ContainsKey(p_parentId) == true)
+            parent = p_saveDic[p_parentId];
+          else
+            parent = SetDimension(p_dimension, p_saveDic, parentEntity.Id, p_name, p_model, p_hasParent, parentEntity.ParentId);
+          if (parent != null)
+            parent.Items.Add(l_dim);
+        }
       }
       else
         l_dim = p_saveDic[p_id];
-      if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
-      {
-        HierarchyItem parent = null;
-        NamedHierarchyCRUDEntity parentEntity = p_model.GetValue(p_parentId) as NamedHierarchyCRUDEntity;
-
-        if (parentEntity == null)
-          return (l_dim);
-        if (p_saveDic.ContainsKey(p_parentId) == true)
-          parent = p_saveDic[p_parentId];
-        else
-          parent = SetDimension(p_dimension, p_saveDic, parentEntity.Id, p_name, p_model, p_hasParent, parentEntity.ParentId);
-        if (parent != null)
-          parent.Items.Add(l_dim);
-      }
       l_dim.ItemValue = p_id;
       l_dim.Caption = p_name;
       l_dim.Width = COLUMNS_WIDTH;
