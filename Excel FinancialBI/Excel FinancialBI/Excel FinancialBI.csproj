@@ -251,7 +251,6 @@
     </Compile>
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
-    <Compile Include="MVC\Controller\Plateform Management\AllocationKeysController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\CurrenciesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
@@ -334,6 +333,12 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
+    <Compile Include="MVC\View\CommitFollowUpView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\CommitFollowUpView.Designer.cs">
+      <DependentUpon>CommitFollowUpView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\Connection\ConnectionSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
