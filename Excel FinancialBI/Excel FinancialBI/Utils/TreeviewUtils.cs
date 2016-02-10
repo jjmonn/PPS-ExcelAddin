@@ -12,7 +12,7 @@ namespace FBI.Utils
 
     #region Find node
 
-    public static vTreeNode FindNode(vTreeView p_treeview, uint p_id)
+    public static vTreeNode FindNode(vTreeView p_treeview, UInt32 p_id)
     {
       List<vTreeNode> childrenNodesList = new List<vTreeNode>();
       foreach (vTreeNode subNode in p_treeview.Nodes)
@@ -21,7 +21,7 @@ namespace FBI.Utils
       }
       foreach (vTreeNode subNode in childrenNodesList)
       {
-        if ((uint)subNode.Value == p_id)
+        if ((UInt32)subNode.Value == p_id)
           return subNode;
       }
       return null;

@@ -320,21 +320,21 @@ namespace FBI.MVC.View
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.Controls.vLabel m_chartTitleLabel;
-	internal VIBlend.WinForms.Controls.vTextBox m_chartTitleTextBox;
-	internal VIBlend.WinForms.Controls.vLabel m_chartSerie2Label;
-	internal VIBlend.WinForms.Controls.vLabel m_chartSerie1Label;
-	internal VIBlend.WinForms.Controls.vColorPicker m_serie1ColorPicker;
-	internal VIBlend.WinForms.Controls.vColorPicker m_serie2ColorPicker;
-	internal VIBlend.WinForms.Controls.vLabel m_AccountLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_ColorLabel;
-	internal VIBlend.WinForms.Controls.vComboBox m_serie1TypeComboBox;
-	internal VIBlend.WinForms.Controls.vComboBox m_serie2TypeComboBox;
-	internal VIBlend.WinForms.Controls.vLabel m_typeLabel;
-	internal VIBlend.WinForms.Controls.vButton m_saveButton;
-	internal System.Windows.Forms.ImageList ImageList1;
-	internal VIBlend.WinForms.Controls.vTreeViewBox m_serie1AccountTreeviewBox;
-	internal VIBlend.WinForms.Controls.vTreeViewBox m_serie2AccountTreeviewBox;
+	public VIBlend.WinForms.Controls.vLabel m_chartTitleLabel;
+	public VIBlend.WinForms.Controls.vTextBox m_chartTitleTextBox;
+	public VIBlend.WinForms.Controls.vLabel m_chartSerie2Label;
+	public VIBlend.WinForms.Controls.vLabel m_chartSerie1Label;
+	public VIBlend.WinForms.Controls.vColorPicker m_serie1ColorPicker;
+	public VIBlend.WinForms.Controls.vColorPicker m_serie2ColorPicker;
+	public VIBlend.WinForms.Controls.vLabel m_AccountLabel;
+	public VIBlend.WinForms.Controls.vLabel m_ColorLabel;
+	public VIBlend.WinForms.Controls.vComboBox m_serie1TypeComboBox;
+	public VIBlend.WinForms.Controls.vComboBox m_serie2TypeComboBox;
+	public VIBlend.WinForms.Controls.vLabel m_typeLabel;
+	public VIBlend.WinForms.Controls.vButton m_saveButton;
+	public System.Windows.Forms.ImageList ImageList1;
+	public VIBlend.WinForms.Controls.vTreeViewBox m_serie1AccountTreeviewBox;
+	public VIBlend.WinForms.Controls.vTreeViewBox m_serie2AccountTreeviewBox;
 }
 
 }

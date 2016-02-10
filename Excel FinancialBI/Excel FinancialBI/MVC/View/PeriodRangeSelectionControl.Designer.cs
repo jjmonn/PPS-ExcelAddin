@@ -179,13 +179,13 @@ partial class PeriodRangeSelectionControl : System.Windows.Forms.UserControl
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.Controls.vTextBox m_endWeekTB;
-	internal VIBlend.WinForms.Controls.vTextBox m_startWeekTB;
-	internal VIBlend.WinForms.Controls.vLabel m_startDateLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_endDateLabel;
-	internal VIBlend.WinForms.Controls.vDatePicker m_startDate;
+	public VIBlend.WinForms.Controls.vTextBox m_endWeekTB;
+	public VIBlend.WinForms.Controls.vTextBox m_startWeekTB;
+	public VIBlend.WinForms.Controls.vLabel m_startDateLabel;
+	public VIBlend.WinForms.Controls.vLabel m_endDateLabel;
+	public VIBlend.WinForms.Controls.vDatePicker m_startDate;
 
-	internal VIBlend.WinForms.Controls.vDatePicker m_endDate;
+	public VIBlend.WinForms.Controls.vDatePicker m_endDate;
 }
 
 }

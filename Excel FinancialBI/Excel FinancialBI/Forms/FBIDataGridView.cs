@@ -71,11 +71,11 @@ namespace FBI.Forms
       HoveredCell = null;
       InitDGVDisplay();
       this.RowsHierarchy.Clear();
-      m_rowsDic = new SafeDictionary<uint, HierarchyItem>();
+      m_rowsDic = new SafeDictionary<UInt32, HierarchyItem>();
       if (m_columnsDic == null)
         return;
       this.ColumnsHierarchy.Clear();
-      m_columnsDic = new SafeDictionary<uint, HierarchyItem>();
+      m_columnsDic = new SafeDictionary<UInt32, HierarchyItem>();
       if (m_columnsDic == null)
         return;
       CellMouseEnter += OnMouseEnterCell;
@@ -99,7 +99,7 @@ namespace FBI.Forms
       AllowDragDropIndication = true;
     }
 
-    public void InitializeRows<T>(ICRUDModel<T> p_model, MultiIndexDictionary<uint, string, T> p_dic) where T : class, NamedCRUDEntity 
+    public void InitializeRows<T>(ICRUDModel<T> p_model, MultiIndexDictionary<UInt32, string, T> p_dic) where T : class, NamedCRUDEntity 
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
         foreach (T l_elem in p_dic.Values)
@@ -112,7 +112,7 @@ namespace FBI.Forms
           SetDimension(RowsHierarchy.Items, m_rowsDic, l_elem.Id, l_elem.Name, p_model);
     }
 
-    public void InitializeColumns<U>(ICRUDModel<U> p_model, MultiIndexDictionary<uint, string, U> p_dic) where U : class, NamedCRUDEntity
+    public void InitializeColumns<U>(ICRUDModel<U> p_model, MultiIndexDictionary<UInt32, string, U> p_dic) where U : class, NamedCRUDEntity
     {
       foreach (U l_elem in p_dic.Values)
         SetDimension(ColumnsHierarchy.Items, m_columnsDic, l_elem.Id, l_elem.Name, p_model);
@@ -123,16 +123,16 @@ namespace FBI.Forms
       SetDimension<NamedCRUDEntity>(p_dimension, p_id, p_name);
     }
 
-    public void SetDimension<J>(Dimension p_dimension, UInt32 p_id, string p_name, UInt32 p_parentId = 0, ICRUDModel<J> p_model = null) where J : class, NamedCRUDEntity
+    public void SetDimension<J>(Dimension p_dimension, UInt32 p_id, string p_name, UInt32 p_parentId = 0, ICRUDModel<J> p_model = null, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
     {
       if (p_dimension == Dimension.COLUMN)
-        SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId);
+        SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
       else if (p_dimension == Dimension.ROW)
-        SetDimension<J>(RowsHierarchy.Items, m_rowsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId);
+        SetDimension<J>(RowsHierarchy.Items, m_rowsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
     }
 
     HierarchyItem SetDimension<J>(HierarchyItemsCollection p_dimension, SafeDictionary<UInt32, HierarchyItem> p_saveDic, UInt32 p_id,
-      string p_name, ICRUDModel<J> p_model = null, bool p_hasParent = false, UInt32 p_parentId = 0) where J : class, NamedCRUDEntity
+      string p_name, ICRUDModel<J> p_model = null, bool p_hasParent = false, UInt32 p_parentId = 0, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
     {
       HierarchyItem l_dim;
 
@@ -163,7 +163,7 @@ namespace FBI.Forms
         l_dim = p_saveDic[p_id];
       l_dim.ItemValue = p_id;
       l_dim.Caption = p_name;
-      l_dim.Width = COLUMNS_WIDTH;
+      l_dim.Width = p_width;
       return (l_dim);
     }
 

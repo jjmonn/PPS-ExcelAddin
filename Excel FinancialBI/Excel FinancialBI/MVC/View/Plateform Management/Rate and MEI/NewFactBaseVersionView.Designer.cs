@@ -204,16 +204,16 @@ namespace FBI.MVC.View
       this.PerformLayout();
 
     }
-    internal System.Windows.Forms.Label m_nameLabel;
-    internal System.Windows.Forms.Label m_startingPeriodLabel;
-    internal System.Windows.Forms.Label m_numberPeriodsLabel;
-    internal System.Windows.Forms.TextBox NameTB;
-    internal System.Windows.Forms.Button CancelBT;
-    internal System.Windows.Forms.Button ValidateBT;
-    internal System.Windows.Forms.ImageList ButtonIcons;
-    internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-    internal VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
-    internal System.ComponentModel.BackgroundWorker m_creationBackgroundWorker;
+    public System.Windows.Forms.Label m_nameLabel;
+    public System.Windows.Forms.Label m_startingPeriodLabel;
+    public System.Windows.Forms.Label m_numberPeriodsLabel;
+    public System.Windows.Forms.TextBox NameTB;
+    public System.Windows.Forms.Button CancelBT;
+    public System.Windows.Forms.Button ValidateBT;
+    public System.Windows.Forms.ImageList ButtonIcons;
+    public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+    public VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
+    public System.ComponentModel.BackgroundWorker m_creationBackgroundWorker;
     protected VIBlend.WinForms.Controls.vDatePicker m_startPeriod;
     protected VIBlend.WinForms.Controls.vNumericUpDown m_nbPeriod;
   }

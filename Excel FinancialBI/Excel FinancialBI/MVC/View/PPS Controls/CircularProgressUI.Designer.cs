@@ -74,8 +74,8 @@ partial class CircularProgressUI : System.Windows.Forms.Form
 		this.PerformLayout();
 
 	}
-	internal ProgressControls.ProgressIndicator CP;
-	internal System.Windows.Forms.Label Label1;
+	public ProgressControls.ProgressIndicator CP;
+	public System.Windows.Forms.Label Label1;
 }
 
 }

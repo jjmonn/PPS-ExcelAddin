@@ -57,7 +57,7 @@ namespace FBI.MVC.View
       this.m_copyVersionButton.Click += new System.EventHandler(this.m_copyVersionButton_Click);
     }
 
-     internal void SetCopiedVersion(Version p_copiedVersion)
+     public void SetCopiedVersion(Version p_copiedVersion)
      {
        m_copiedVersion = p_copiedVersion;
        m_copiedVersionName.Text = m_copiedVersion.Name;
@@ -70,7 +70,7 @@ namespace FBI.MVC.View
        Version l_newVersion = m_copiedVersion.Clone();
        l_newVersion.CopyFrom(m_copiedVersion);
        l_newVersion.Name = m_versionNameTextbox.Text;
-       l_newVersion.StartPeriod = (uint)m_startingPeriodDatePicker.Value.Value.ToOADate();
+       l_newVersion.StartPeriod = (UInt32)m_startingPeriodDatePicker.Value.Value.ToOADate();
        l_newVersion.NbPeriod = (ushort)m_nbPeriods.Value;
        l_newVersion.IsFolder = false;
        l_newVersion.Locked = false;

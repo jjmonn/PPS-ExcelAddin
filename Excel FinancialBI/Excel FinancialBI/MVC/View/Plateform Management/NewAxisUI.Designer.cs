@@ -197,14 +197,14 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-    internal System.Windows.Forms.Button CancelBT;
-    internal System.Windows.Forms.Button CreateAxisBT;
-    internal System.Windows.Forms.ImageList ButtonsIL;
-    internal System.Windows.Forms.ImageList ButtonIcons;
-    internal VIBlend.WinForms.Controls.vTextBox m_nameTextBox;
-    internal VIBlend.WinForms.Controls.vLabel m_nameLabel;
-    internal VIBlend.WinForms.Controls.vLabel m_parentAxisLabel;
-    internal VIBlend.WinForms.Controls.vTreeViewBox m_parentAxisElemTreeviewBox;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+    public System.Windows.Forms.Button CancelBT;
+    public System.Windows.Forms.Button CreateAxisBT;
+    public System.Windows.Forms.ImageList ButtonsIL;
+    public System.Windows.Forms.ImageList ButtonIcons;
+    public VIBlend.WinForms.Controls.vTextBox m_nameTextBox;
+    public VIBlend.WinForms.Controls.vLabel m_nameLabel;
+    public VIBlend.WinForms.Controls.vLabel m_parentAxisLabel;
+    public VIBlend.WinForms.Controls.vTreeViewBox m_parentAxisElemTreeviewBox;
   }
 }

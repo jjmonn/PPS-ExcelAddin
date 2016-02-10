@@ -40,12 +40,23 @@ namespace FBI.MVC.View
         m_valuePanel.Controls.Add(m_tree, 0, 1);
         this.RegisterEvents();
         this.LoadLanguage();
+        this.MultilangueSetup();
       }
       catch (Exception e)
       {
         MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.Message + e.StackTrace);
       }
+    }
+
+    private void MultilangueSetup()
+    {
+      this.m_editStruct.Text = Local.GetValue("filters.edit_structure");
+      this.m_addValueRightClick.Text = Local.GetValue("filters.new_value");
+      this.m_deleteRightClick.Text = Local.GetValue("general.delete");
+      this.m_renameRightClick.Text = Local.GetValue("general.rename");
+      this.m_expand.Text = Local.GetValue("general.expand_all");
+      this.m_collapse.Text = Local.GetValue("general.collapse_all");
     }
 
     public void SetController(IController p_controller)
@@ -256,7 +267,7 @@ namespace FBI.MVC.View
     #region ServerEvents
 
     delegate void OnModelCreate_delegate(ErrorMessage p_status, UInt32 p_id);
-    void OnModelCreate(Network.ErrorMessage p_status, uint p_id)
+    void OnModelCreate(Network.ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -273,7 +284,7 @@ namespace FBI.MVC.View
     }
 
     delegate void OnModelUpdate_delegate(ErrorMessage p_status, UInt32 p_id);
-    void OnModelUpdate(Network.ErrorMessage p_status, uint p_id)
+    void OnModelUpdate(Network.ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -290,7 +301,7 @@ namespace FBI.MVC.View
     }
 
     delegate void OnModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);
-    void OnModelDelete(Network.ErrorMessage p_status, uint p_id)
+    void OnModelDelete(Network.ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {

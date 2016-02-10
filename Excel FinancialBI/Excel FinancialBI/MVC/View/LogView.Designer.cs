@@ -192,11 +192,11 @@ partial class LogView : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.DataGridView.vDataGridView m_logDataGridView;
-	internal VIBlend.WinForms.Controls.vTextBox m_entityTextBox;
-	internal VIBlend.WinForms.Controls.vTextBox m_accountTextBox;
-	internal VIBlend.WinForms.Controls.vLabel VLabel1;
-	internal VIBlend.WinForms.Controls.vLabel VLabel2;
+	public VIBlend.WinForms.DataGridView.vDataGridView m_logDataGridView;
+	public VIBlend.WinForms.Controls.vTextBox m_entityTextBox;
+	public VIBlend.WinForms.Controls.vTextBox m_accountTextBox;
+	public VIBlend.WinForms.Controls.vLabel VLabel1;
+	public VIBlend.WinForms.Controls.vLabel VLabel2;
 }
 
 }

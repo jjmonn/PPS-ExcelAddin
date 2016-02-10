@@ -14,7 +14,7 @@ namespace FBI.MVC.Model
   {
     static FilterValueModel s_instance = new FilterValueModel();
     public static FilterValueModel Instance { get { return (s_instance); } }
-    private SortedDictionary<UInt32, MultiIndexDictionary<UInt32, string, FilterValue>> m_filterValuesDic = new SortedDictionary<uint, MultiIndexDictionary<uint, string, FilterValue>>();
+    private SortedDictionary<UInt32, MultiIndexDictionary<UInt32, string, FilterValue>> m_filterValuesDic = new SortedDictionary<UInt32, MultiIndexDictionary<UInt32, string, FilterValue>>();
 
     FilterValueModel()
     {
@@ -68,7 +68,7 @@ namespace FBI.MVC.Model
         FilterValue filterValue = Build(p_packet) as FilterValue;
 
         if (m_filterValuesDic.ContainsKey(filterValue.FilterId) == false)
-          m_filterValuesDic[filterValue.FilterId] = new MultiIndexDictionary<uint, string, FilterValue>();
+          m_filterValuesDic[filterValue.FilterId] = new MultiIndexDictionary<UInt32, string, FilterValue>();
         m_filterValuesDic[filterValue.FilterId].Set(filterValue.Id, filterValue.Name, filterValue);
         RaiseReadEvent(p_packet.GetError(), filterValue);
       }
@@ -103,7 +103,7 @@ namespace FBI.MVC.Model
 
     public MultiIndexDictionary<UInt32, string, FilterValue> GetChildrenDictionary(UInt32 p_filterValueId)
     {
-      MultiIndexDictionary<UInt32, string, FilterValue> l_resultDic = new MultiIndexDictionary<uint,string,FilterValue>();
+      MultiIndexDictionary<UInt32, string, FilterValue> l_resultDic = new MultiIndexDictionary<UInt32, string, FilterValue>();
 
       foreach (MultiIndexDictionary<UInt32, string, FilterValue> l_dic in m_filterValuesDic.Values)
         foreach (FilterValue l_fv in l_dic.Values)
@@ -114,7 +114,7 @@ namespace FBI.MVC.Model
 
     public void GetChildrenDictionary(UInt32 p_filterValueId, MultiIndexDictionary<UInt32, string, FilterValue> p_childrenDic)
     {
-      MultiIndexDictionary<UInt32, string, Filter> l_resultDic = new MultiIndexDictionary<uint, string, Filter>();
+      MultiIndexDictionary<UInt32, string, Filter> l_resultDic = new MultiIndexDictionary<UInt32, string, Filter>();
 
       foreach (dynamic l_fvDic in m_filterValuesDic.Values)
         foreach (FilterValue l_fv in l_fvDic.Values)

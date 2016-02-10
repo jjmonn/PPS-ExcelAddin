@@ -241,16 +241,16 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-    internal System.Windows.Forms.Button periods_edit_BT;
-    internal System.Windows.Forms.Button rates_edit_BT;
-    internal System.Windows.Forms.ImageList ButtonsImageList;
-    internal System.Windows.Forms.Button import_BT;
-    internal VIBlend.WinForms.Controls.vTextBox m_ratesRangeTextBox;
-    internal VIBlend.WinForms.Controls.vTextBox m_periodsRangeTextBox;
-    internal VIBlend.WinForms.Controls.vLabel m_periodsLabel;
-    internal VIBlend.WinForms.Controls.vLabel m_ratesLabel;
-    internal VIBlend.WinForms.Controls.vComboBox m_currencyComboBox;
-    internal VIBlend.WinForms.Controls.vLabel m_currencyLabel;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+    public System.Windows.Forms.Button periods_edit_BT;
+    public System.Windows.Forms.Button rates_edit_BT;
+    public System.Windows.Forms.ImageList ButtonsImageList;
+    public System.Windows.Forms.Button import_BT;
+    public VIBlend.WinForms.Controls.vTextBox m_ratesRangeTextBox;
+    public VIBlend.WinForms.Controls.vTextBox m_periodsRangeTextBox;
+    public VIBlend.WinForms.Controls.vLabel m_periodsLabel;
+    public VIBlend.WinForms.Controls.vLabel m_ratesLabel;
+    public VIBlend.WinForms.Controls.vComboBox m_currencyComboBox;
+    public VIBlend.WinForms.Controls.vLabel m_currencyLabel;
   }
 }

@@ -107,10 +107,10 @@ partial class PDCClientSelectionUI : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.Controls.vTreeView m_clientsTreeview;
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-	internal VIBlend.WinForms.Controls.vButton m_validateButton;
-	internal System.Windows.Forms.ImageList ImageList1;
+	public VIBlend.WinForms.Controls.vTreeView m_clientsTreeview;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+	public VIBlend.WinForms.Controls.vButton m_validateButton;
+	public System.Windows.Forms.ImageList ImageList1;
 }
 
 }

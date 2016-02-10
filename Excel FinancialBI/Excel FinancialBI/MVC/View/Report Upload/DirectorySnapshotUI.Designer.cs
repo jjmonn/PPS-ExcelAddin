@@ -200,16 +200,16 @@ partial class DirectorySnapshotUI : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.Controls.vLabel m_directoryLabel;
-	internal System.Windows.Forms.FolderBrowserDialog m_FolderBrowserDialog1;
-	internal VIBlend.WinForms.Controls.vTextBox m_directoryTextBox;
-	internal VIBlend.WinForms.Controls.vLabel m_accountSelectionLabel;
-	internal VIBlend.WinForms.Controls.vComboBox m_accountSelectionComboBox;
-	internal System.Windows.Forms.Panel m_periodSelectionPanel;
-	internal VIBlend.WinForms.Controls.vButton m_validateButton;
-	internal System.Windows.Forms.ImageList ImageList1;
-	internal VIBlend.WinForms.Controls.vTextBox m_worksheetTargetName;
-	internal VIBlend.WinForms.Controls.vLabel m_worksheetNameLabel;
+	public VIBlend.WinForms.Controls.vLabel m_directoryLabel;
+	public System.Windows.Forms.FolderBrowserDialog m_FolderBrowserDialog1;
+	public VIBlend.WinForms.Controls.vTextBox m_directoryTextBox;
+	public VIBlend.WinForms.Controls.vLabel m_accountSelectionLabel;
+	public VIBlend.WinForms.Controls.vComboBox m_accountSelectionComboBox;
+	public System.Windows.Forms.Panel m_periodSelectionPanel;
+	public VIBlend.WinForms.Controls.vButton m_validateButton;
+	public System.Windows.Forms.ImageList ImageList1;
+	public VIBlend.WinForms.Controls.vTextBox m_worksheetTargetName;
+	public VIBlend.WinForms.Controls.vLabel m_worksheetNameLabel;
 }
 
 }

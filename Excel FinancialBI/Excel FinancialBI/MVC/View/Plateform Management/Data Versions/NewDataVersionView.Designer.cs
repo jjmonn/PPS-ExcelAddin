@@ -313,22 +313,22 @@ namespace FBI.MVC.View
       this.PerformLayout();
 
     }
-    internal System.Windows.Forms.Label m_startingPeriodLabel;
-    internal System.Windows.Forms.Label m_periodConfigLabel;
-    internal System.Windows.Forms.Label m_versionNameLabel;
-    internal VIBlend.WinForms.Controls.vTextBox m_versionNameTextbox;
-    internal VIBlend.WinForms.Controls.vComboBox m_timeConfigCB;
-    internal VIBlend.WinForms.Controls.vButton m_CancelButton;
-    internal VIBlend.WinForms.Controls.vButton m_createVersionButton;
-    internal System.Windows.Forms.ImageList ButtonIcons;
-    internal System.Windows.Forms.ImageList BigIcons;
-    internal System.Windows.Forms.Label m_nbPeriodsLabel;
-    internal System.Windows.Forms.Label m_rateVersionLabel;
-    internal System.Windows.Forms.Label m_factVersionLabel;
-    internal VIBlend.WinForms.Controls.vTreeViewBox m_exchangeRatesVersionVTreeviewbox;
-    internal VIBlend.WinForms.Controls.vTreeViewBox m_factsVersionVTreeviewbox;
-    internal VIBlend.WinForms.Controls.vNumericUpDown m_nbPeriods;
-    internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-    internal VIBlend.WinForms.Controls.vDatePicker m_startingPeriodDatePicker;
+    public System.Windows.Forms.Label m_startingPeriodLabel;
+    public System.Windows.Forms.Label m_periodConfigLabel;
+    public System.Windows.Forms.Label m_versionNameLabel;
+    public VIBlend.WinForms.Controls.vTextBox m_versionNameTextbox;
+    public VIBlend.WinForms.Controls.vComboBox m_timeConfigCB;
+    public VIBlend.WinForms.Controls.vButton m_CancelButton;
+    public VIBlend.WinForms.Controls.vButton m_createVersionButton;
+    public System.Windows.Forms.ImageList ButtonIcons;
+    public System.Windows.Forms.ImageList BigIcons;
+    public System.Windows.Forms.Label m_nbPeriodsLabel;
+    public System.Windows.Forms.Label m_rateVersionLabel;
+    public System.Windows.Forms.Label m_factVersionLabel;
+    public VIBlend.WinForms.Controls.vTreeViewBox m_exchangeRatesVersionVTreeviewbox;
+    public VIBlend.WinForms.Controls.vTreeViewBox m_factsVersionVTreeviewbox;
+    public VIBlend.WinForms.Controls.vNumericUpDown m_nbPeriods;
+    public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+    public VIBlend.WinForms.Controls.vDatePicker m_startingPeriodDatePicker;
   }
 }

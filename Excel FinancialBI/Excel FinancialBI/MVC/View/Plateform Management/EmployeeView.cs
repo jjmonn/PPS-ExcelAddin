@@ -15,6 +15,7 @@ namespace FBI.MVC.View
 {
   using Model;
   using Model.CRUD;
+  using Model;
   using Controller;
   using Utils;
   using Network;
@@ -26,7 +27,7 @@ namespace FBI.MVC.View
 
     public EmployeeView()
     {
-      
+
     }
 
     public override void LoadView()
@@ -59,8 +60,7 @@ namespace FBI.MVC.View
       AxisOwnerModel.Instance.CreationEvent += OnModelCreateAxisOwner;
       AxisOwnerModel.Instance.UpdateEvent += OnModelUpdateAxisOwner;
     }
-
-
+    
     #region User Callback
 
     void OnDGVMouseDown(object p_sender, MouseEventArgs p_args)
@@ -72,7 +72,6 @@ namespace FBI.MVC.View
         {
           m_dgv.DoDragDrop(m_dgv.HoveredRow, DragDropEffects.Move);
           m_draggingRow = m_dgv.HoveredRow;
-          System.Diagnostics.Debug.WriteLine("Drag " + m_draggingRow.ItemValue);
         }
     }
 
@@ -82,7 +81,6 @@ namespace FBI.MVC.View
 
       if (l_node == null || m_draggingRow == null)
         return;
-      System.Diagnostics.Debug.WriteLine("Drop " + m_draggingRow.ItemValue);
       UInt32 l_employeeId = (UInt32)m_draggingRow.ItemValue;
 
       m_draggingRow = null;

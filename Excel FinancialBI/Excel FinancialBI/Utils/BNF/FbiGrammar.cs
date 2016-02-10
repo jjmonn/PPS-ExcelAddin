@@ -25,7 +25,6 @@ namespace FBI.Utils.BNF
     private static readonly string[] m_funcs = { "IF", "SIN", "COS", "TAN", "LOG2", "LOG10", "LOG", "LN", "EXP", "SQRT", "SIGN", "RINT", "ABS", "MIN", "MAX", "SUM", "AVG" };
 
     private enum m_functions { PERIOD, IDENTIFICATOR, FUNCTION, NA };
-
     private SafeDictionary<m_functions, string> m_errors = new SafeDictionary<m_functions, string>();
 
     private string m_formula;
@@ -120,6 +119,23 @@ namespace FBI.Utils.BNF
       return (null);
     }
 
+    private string ServerOpToOp(string p_op)
+    {
+      char l_c;
+      int i = 0;
+
+      if (p_op == null || p_op.Length != 1)
+        return (null);
+      l_c = p_op[0];
+      while (i < m_serverOperators.Length)
+      {
+        if (l_c == m_serverOperators[i])
+          return (m_operators[i].ToString());
+        ++i;
+      }
+      return (null);
+    }
+
     //Return a string from an account name (Chiffre d'affaire) to a server-formatted name (acc2)
     private string AccountToServerAccount(string p_account)
     {
@@ -130,14 +146,26 @@ namespace FBI.Utils.BNF
       return (m_serverAccount + l_account.Id.ToString());
     }
 
+    private string GetInputNumber(BnfConsumer p_input)
+    {
+      UInt32 l_int;
+
+      p_input.Save("number");
+      if (!p_input.ReadNumber())
+        return (null);
+      if (UInt32.TryParse(p_input.Stop("number"), out l_int))
+        return (l_int.ToString());
+      return (null);
+    }
+
     #endregion
 
-    public bool IsGrammarCompliant(BnfConsumer p_input)
+    public bool ToGrammar(BnfConsumer p_input)
     {
       try
       {
         this.Clear();
-        return (this.IsExprList(p_input));
+        return (this.IsHumanExprList(p_input));
       }
       catch (Exception e)
       {
@@ -145,6 +173,22 @@ namespace FBI.Utils.BNF
         return (false);
       }
     }
+
+    public bool ToHuman(BnfConsumer p_input)
+    {
+      try
+      {
+        this.Clear();
+        return (this.IsGrammarExprList(p_input));
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine(e.Message);
+        return (false);
+      }
+    }
+
+    #region HumanToGrammar
 
     //Period like [9]
     public bool IsPeriodNumber(BnfConsumer p_input)
@@ -304,7 +348,7 @@ namespace FBI.Utils.BNF
 
       this.SavePtrs(p_input);
       p_input.ReadWhitespaces();
-      if (this.IsExprList(p_input)) //If the function has at least one argument
+      if (this.IsHumanExprList(p_input)) //If the function has at least one argument
       {
         while (l_hasArguments)
         {
@@ -312,7 +356,7 @@ namespace FBI.Utils.BNF
           if (p_input.ReadChar(m_separator)) //If read ','
           {
             this.Add(m_separator.ToString());
-            if (!this.IsExpr(p_input)) //Read the expression
+            if (!this.IsHumanExprList(p_input)) //Read the expression
               return (this.Error(p_input, m_functions.FUNCTION));
           }
           else //If NOT ','
@@ -340,8 +384,7 @@ namespace FBI.Utils.BNF
           p_input.ReadWhitespaces();
           if (p_input.ReadChar(m_funcSeparators[0])) //If read '('
           {
-            this.Add(l_str);
-            this.Add(m_funcSeparators[0].ToString());
+            this.Add(l_str + m_funcSeparators[0].ToString());
             if (this.IsFunctionArgument(p_input) && p_input.ReadChar(m_funcSeparators[1])) //If read arguments followed by a ')'
             {
               this.Add(m_funcSeparators[1].ToString());
@@ -357,7 +400,7 @@ namespace FBI.Utils.BNF
 
     //If the string is a list of expression.
     //Ex. "Chiffre d'affaire"[n + 3] + ((9.6 / 3) - "Test")
-    public bool IsExprList(BnfConsumer p_input)
+    public bool IsHumanExprList(BnfConsumer p_input)
     {
       bool l_isExpr = true;
 
@@ -381,5 +424,66 @@ namespace FBI.Utils.BNF
       }
       return (false);
     }
+  
+    #endregion
+
+    #region GrammarToHuman
+
+    public string ToHumanPeriod(BnfConsumer p_input)
+    {
+      if (!p_input.ReadChar('T'))
+        return (null);
+      if (p_input.ReadChar('n'))
+      {
+        this.Add("[n");
+        p_input.Save("operator");
+        if (p_input.ReadChar('p') || p_input.ReadChar('m')) //If there is a '+' or '-'
+        {
+          this.Add(" " + this.ServerOpToOp(p_input.Stop("operator")) + " " + this.GetInputNumber(p_input) + "]");
+        }
+        else //If there is NOT '+' or '-' to add...
+        {
+          this.Add(this.GetInputNumber(p_input) + "]");
+        }
+      }
+      return (null);
+    }
+
+    public string ToHumanAccount(BnfConsumer p_input)
+    {
+      UInt32 l_accountId;
+      Account l_account;
+
+      p_input.Save("account_n");
+      p_input.ReadNumber();
+      if (UInt32.TryParse(p_input.Stop("account_n"), out l_accountId))
+      {
+        if ((l_account = AccountModel.Instance.GetValue(l_accountId)) != null)
+        {
+          this.Add("\"" + l_account.Name + "\"");
+        }
+      }
+      return (null);
+    }
+
+    public bool IsGrammarExprList(BnfConsumer p_input)
+    {
+      while (!p_input.IsEOI())
+      {
+        if (p_input.ReadText("acc"))
+        {
+          this.ToHumanAccount(p_input);
+          this.ToHumanPeriod(p_input);
+        }
+        else
+        {
+          this.Add(p_input.ReadChar().ToString());
+        }
+      }
+      return (true);
+    }
+
+    #endregion
+
   }
 }

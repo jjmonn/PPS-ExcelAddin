@@ -250,27 +250,27 @@ namespace FBI.MVC.View
 
     }
     public System.Windows.Forms.ImageList EntitiesIL;
-    internal System.Windows.Forms.ImageList ButtonsIL;
-    internal System.Windows.Forms.ContextMenuStrip m_axisRightClickMenu;
-    internal System.Windows.Forms.ToolStripMenuItem m_copyDownMenu;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator5;
-    internal System.Windows.Forms.ToolStripMenuItem m_dropToExcelMenu;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator4;
-    internal System.Windows.Forms.ToolStripMenuItem m_createAxisElemMenu;
-    internal System.Windows.Forms.ToolStripMenuItem m_deleteAxisElemMenu;
-    internal System.Windows.Forms.MenuStrip MenuStrip1;
-    internal System.Windows.Forms.ToolStripMenuItem m_axisEditionButton;
-    internal System.Windows.Forms.ToolStripMenuItem m_deleteAxisElemMenuTop;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
-    internal System.Windows.Forms.ToolStripMenuItem ExcelToolStripMenuItem;
-    internal System.Windows.Forms.ToolStripMenuItem m_dropToExcelMenuTop;
-    internal System.Windows.Forms.ToolStripMenuItem m_renameAxisElemMenu;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
-    internal System.Windows.Forms.ToolStripMenuItem m_autoResizeMenu;
-    internal System.Windows.Forms.ToolStripMenuItem m_expandAllMenu;
-    internal System.Windows.Forms.ToolStripMenuItem m_collapseAllMenu;
+    public System.Windows.Forms.ImageList ButtonsIL;
+    public System.Windows.Forms.ContextMenuStrip m_axisRightClickMenu;
+    public System.Windows.Forms.ToolStripMenuItem m_copyDownMenu;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator5;
+    public System.Windows.Forms.ToolStripMenuItem m_dropToExcelMenu;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator4;
+    public System.Windows.Forms.ToolStripMenuItem m_createAxisElemMenu;
+    public System.Windows.Forms.ToolStripMenuItem m_deleteAxisElemMenu;
+    public System.Windows.Forms.MenuStrip MenuStrip1;
+    public System.Windows.Forms.ToolStripMenuItem m_axisEditionButton;
+    public System.Windows.Forms.ToolStripMenuItem m_deleteAxisElemMenuTop;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
+    public System.Windows.Forms.ToolStripMenuItem ExcelToolStripMenuItem;
+    public System.Windows.Forms.ToolStripMenuItem m_dropToExcelMenuTop;
+    public System.Windows.Forms.ToolStripMenuItem m_renameAxisElemMenu;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
+    public System.Windows.Forms.ToolStripMenuItem m_autoResizeMenu;
+    public System.Windows.Forms.ToolStripMenuItem m_expandAllMenu;
+    public System.Windows.Forms.ToolStripMenuItem m_collapseAllMenu;
 
     protected System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-    internal System.Windows.Forms.ToolStripMenuItem m_createNewAxisElemMenuTop;
+    public System.Windows.Forms.ToolStripMenuItem m_createNewAxisElemMenuTop;
   }
 }

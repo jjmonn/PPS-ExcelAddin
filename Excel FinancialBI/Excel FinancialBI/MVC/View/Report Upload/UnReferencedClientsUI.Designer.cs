@@ -112,11 +112,11 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.Panel m_clientsDGVPanel;
-    internal VIBlend.WinForms.Controls.vButton m_createAllButton;
-    internal System.Windows.Forms.ContextMenuStrip m_DGVContextMenuStrip;
-    internal System.Windows.Forms.ToolStripMenuItem UnselectBothOptionsToolStripMenuItem;
-    internal System.Windows.Forms.ToolStripMenuItem SelectAllOnColumnToolStripMenuItem;
-    internal System.Windows.Forms.ToolStripMenuItem UnselectAllOnColumnToolStripMenuItem;
+    public System.Windows.Forms.Panel m_clientsDGVPanel;
+    public VIBlend.WinForms.Controls.vButton m_createAllButton;
+    public System.Windows.Forms.ContextMenuStrip m_DGVContextMenuStrip;
+    public System.Windows.Forms.ToolStripMenuItem UnselectBothOptionsToolStripMenuItem;
+    public System.Windows.Forms.ToolStripMenuItem SelectAllOnColumnToolStripMenuItem;
+    public System.Windows.Forms.ToolStripMenuItem UnselectAllOnColumnToolStripMenuItem;
   }
 }

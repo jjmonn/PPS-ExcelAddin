@@ -123,11 +123,11 @@ partial class SnapshotPeriodRangeSelectionUI : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.Controls.vButton m_validateButton;
-	internal System.Windows.Forms.ImageList ImageList1;
-	internal System.Windows.Forms.Panel m_periodSelectionPanel;
-	internal VIBlend.WinForms.Controls.vComboBox m_accountSelectionComboBox;
-	internal VIBlend.WinForms.Controls.vLabel m_accountSelectionLabel;
+	public VIBlend.WinForms.Controls.vButton m_validateButton;
+	public System.Windows.Forms.ImageList ImageList1;
+	public System.Windows.Forms.Panel m_periodSelectionPanel;
+	public VIBlend.WinForms.Controls.vComboBox m_accountSelectionComboBox;
+	public VIBlend.WinForms.Controls.vLabel m_accountSelectionLabel;
 }
 
 }

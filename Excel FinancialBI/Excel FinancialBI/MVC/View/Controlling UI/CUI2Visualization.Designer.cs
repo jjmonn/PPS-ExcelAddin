@@ -460,27 +460,27 @@ partial class CUI2Visualization : System.Windows.Forms.UserControl
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.Controls.vSplitContainer VSplitContainer1;
-	internal VIBlend.WinForms.Controls.vSplitContainer VSplitContainer3;
-	internal VIBlend.WinForms.Controls.vSplitContainer VSplitContainer2;
-	internal System.Windows.Forms.DataVisualization.Charting.Chart Chart1;
-	internal System.Windows.Forms.DataVisualization.Charting.Chart Chart3;
-	internal System.Windows.Forms.DataVisualization.Charting.Chart Chart2;
-	internal System.Windows.Forms.DataVisualization.Charting.Chart Chart4;
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-	internal System.Windows.Forms.Panel Panel1;
-	internal VIBlend.WinForms.Controls.vTextBox VersionTB;
-	internal VIBlend.WinForms.Controls.vTextBox CurrencyTB;
-	internal VIBlend.WinForms.Controls.vTextBox EntityTB;
-	internal VIBlend.WinForms.Controls.vLabel m_currencyLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_versionLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_entityLabel;
-	internal System.Windows.Forms.ContextMenuStrip m_chartsRightClickMenu;
-	internal System.Windows.Forms.ToolStripMenuItem m_editChartButton;
-	internal System.Windows.Forms.ToolStripMenuItem m_dropChartOnExcelButton;
-	internal VIBlend.WinForms.Controls.vButton m_refreshButton;
+	public VIBlend.WinForms.Controls.vSplitContainer VSplitContainer1;
+	public VIBlend.WinForms.Controls.vSplitContainer VSplitContainer3;
+	public VIBlend.WinForms.Controls.vSplitContainer VSplitContainer2;
+	public System.Windows.Forms.DataVisualization.Charting.Chart Chart1;
+	public System.Windows.Forms.DataVisualization.Charting.Chart Chart3;
+	public System.Windows.Forms.DataVisualization.Charting.Chart Chart2;
+	public System.Windows.Forms.DataVisualization.Charting.Chart Chart4;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+	public System.Windows.Forms.Panel Panel1;
+	public VIBlend.WinForms.Controls.vTextBox VersionTB;
+	public VIBlend.WinForms.Controls.vTextBox CurrencyTB;
+	public VIBlend.WinForms.Controls.vTextBox EntityTB;
+	public VIBlend.WinForms.Controls.vLabel m_currencyLabel;
+	public VIBlend.WinForms.Controls.vLabel m_versionLabel;
+	public VIBlend.WinForms.Controls.vLabel m_entityLabel;
+	public System.Windows.Forms.ContextMenuStrip m_chartsRightClickMenu;
+	public System.Windows.Forms.ToolStripMenuItem m_editChartButton;
+	public System.Windows.Forms.ToolStripMenuItem m_dropChartOnExcelButton;
+	public VIBlend.WinForms.Controls.vButton m_refreshButton;
 
-	internal System.Windows.Forms.ImageList ImageList1;
+	public System.Windows.Forms.ImageList ImageList1;
 }
 
 }

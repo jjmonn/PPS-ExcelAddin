@@ -198,16 +198,16 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal VIBlend.WinForms.Controls.vLabel m_userLabel;
-    internal VIBlend.WinForms.Controls.vTextBox m_userNameTextBox;
-    internal VIBlend.WinForms.Controls.vTextBox m_passwordTextBox;
-    internal VIBlend.WinForms.Controls.vLabel m_passwordLabel;
-    internal System.ComponentModel.BackgroundWorker BackgroundWorker1;
-    internal System.Windows.Forms.Panel Panel1;
-    internal VIBlend.WinForms.Controls.vButton ConnectionBT;
-    internal VIBlend.WinForms.Controls.vButton m_cancelButton;
+    public VIBlend.WinForms.Controls.vLabel m_userLabel;
+    public VIBlend.WinForms.Controls.vTextBox m_userNameTextBox;
+    public VIBlend.WinForms.Controls.vTextBox m_passwordTextBox;
+    public VIBlend.WinForms.Controls.vLabel m_passwordLabel;
+    public System.ComponentModel.BackgroundWorker BackgroundWorker1;
+    public System.Windows.Forms.Panel Panel1;
+    public VIBlend.WinForms.Controls.vButton ConnectionBT;
+    public VIBlend.WinForms.Controls.vButton m_cancelButton;
 
-    internal VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress2;
+    public VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress2;
     private System.Windows.Forms.ImageList imageList1;
 
   }

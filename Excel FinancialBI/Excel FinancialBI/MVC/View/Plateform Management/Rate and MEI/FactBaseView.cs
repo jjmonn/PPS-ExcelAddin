@@ -45,6 +45,21 @@ namespace FBI.MVC.View
       m_versionTV.Dock = DockStyle.Fill;
       m_mainContainer.Panel1.Controls.Add(m_versionTV);
       m_mainContainer.Panel2.Controls.Add(m_dgv);
+      MultilanguageSetup();
+    }
+
+    private void MultilanguageSetup()
+    {
+      m_versionTopMenu.Text = Local.GetValue("general.versions");
+      ImportFromExcelToolStripMenuItem.Text = Local.GetValue("upload.upload");
+      ImportFromExcelToolStripMenuItem1.Text = Local.GetValue("upload.upload");
+      VersionLabel.Text = Local.GetValue("facts_versions.facts_versions");
+      select_version.Text = Local.GetValue("versions.select_version");
+      m_addRatesVersionRCM.Text = Local.GetValue("versions.new_version");
+      m_addFolderRCM.Text = Local.GetValue("versions.new_folder");
+      m_deleteVersionRCM.Text = Local.GetValue("general.delete");
+      m_renameBT.Text = Local.GetValue("general.rename");
+      m_copyValueDown.Text = Local.GetValue("general.copy_down");
     }
 
     protected virtual void SuscribeEvents()

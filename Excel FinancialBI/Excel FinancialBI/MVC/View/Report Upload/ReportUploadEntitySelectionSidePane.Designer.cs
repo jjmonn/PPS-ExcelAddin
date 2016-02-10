@@ -197,14 +197,14 @@ namespace FBI.MVC.View
 
         #endregion
 
-        internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-        internal VIBlend.WinForms.Controls.vLabel m_entitySelectionLabel;
-        internal VIBlend.WinForms.Controls.vLabel m_periodsSelectionLabel;
-        internal VIBlend.WinForms.Controls.vLabel m_accountSelectionLabel;
-        internal VIBlend.WinForms.Controls.vComboBox m_accountSelectionComboBox;
-        internal VIBlend.WinForms.Controls.vTreeView m_entitiesTV;
-        internal VIBlend.WinForms.Controls.vButton m_validateButton;
-        internal System.Windows.Forms.Panel m_periodsSelectionPanel;
+        public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+        public VIBlend.WinForms.Controls.vLabel m_entitySelectionLabel;
+        public VIBlend.WinForms.Controls.vLabel m_periodsSelectionLabel;
+        public VIBlend.WinForms.Controls.vLabel m_accountSelectionLabel;
+        public VIBlend.WinForms.Controls.vComboBox m_accountSelectionComboBox;
+        public VIBlend.WinForms.Controls.vTreeView m_entitiesTV;
+        public VIBlend.WinForms.Controls.vButton m_validateButton;
+        public System.Windows.Forms.Panel m_periodsSelectionPanel;
 
     }
 }
