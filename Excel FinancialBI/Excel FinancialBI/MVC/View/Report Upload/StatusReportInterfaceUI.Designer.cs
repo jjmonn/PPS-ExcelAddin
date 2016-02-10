@@ -60,7 +60,7 @@ partial class StatusReportInterfaceUI : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.Controls.vListBox m_errorsListBox;
+	public VIBlend.WinForms.Controls.vListBox m_errorsListBox;
 }
 
 }

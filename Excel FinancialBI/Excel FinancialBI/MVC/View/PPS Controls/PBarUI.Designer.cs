@@ -67,8 +67,8 @@ partial class PBarUI : System.Windows.Forms.Form
 		this.PerformLayout();
 
 	}
-	internal ProgressBarControl ProgressBarControl1;
-	internal System.Windows.Forms.Label Label1;
+	public ProgressBarControl ProgressBarControl1;
+	public System.Windows.Forms.Label Label1;
 }
 
 }

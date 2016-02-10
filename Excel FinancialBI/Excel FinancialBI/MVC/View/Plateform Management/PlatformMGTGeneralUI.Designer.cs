@@ -274,24 +274,24 @@ namespace FBI.MVC.View
       this.PerformLayout();
 
     }
-    internal System.Windows.Forms.MenuStrip MenuStrip1;
-    internal System.Windows.Forms.ToolStripMenuItem AccountsBT;
-    internal System.Windows.Forms.ToolStripMenuItem m_entitiesBT;
-    internal System.Windows.Forms.ToolStripMenuItem ClientsBT;
-    internal System.Windows.Forms.ToolStripMenuItem ProductsBT;
-    internal System.Windows.Forms.ToolStripMenuItem VersionsBT;
-    internal System.Windows.Forms.ToolStripMenuItem CurrenciesBT;
-    internal System.Windows.Forms.Panel Panel1;
-    internal System.Windows.Forms.ToolStripMenuItem AdjustmentsBT;
-    internal System.Windows.Forms.ToolStripMenuItem CategoriesBT;
-    internal System.Windows.Forms.ToolStripMenuItem m_clientsFiltersBT;
-    internal System.Windows.Forms.ToolStripMenuItem m_entitiesFiltersBT;
-    internal System.Windows.Forms.ToolStripMenuItem m_productsFiltersBT;
-    internal System.Windows.Forms.ToolStripMenuItem m_adjustmentsFiltersBT;
-    internal System.Windows.Forms.ToolStripMenuItem GroupsBT;
-    internal System.Windows.Forms.ToolStripMenuItem ExchangeRatesButton;
+    public System.Windows.Forms.MenuStrip MenuStrip1;
+    public System.Windows.Forms.ToolStripMenuItem AccountsBT;
+    public System.Windows.Forms.ToolStripMenuItem m_entitiesBT;
+    public System.Windows.Forms.ToolStripMenuItem ClientsBT;
+    public System.Windows.Forms.ToolStripMenuItem ProductsBT;
+    public System.Windows.Forms.ToolStripMenuItem VersionsBT;
+    public System.Windows.Forms.ToolStripMenuItem CurrenciesBT;
+    public System.Windows.Forms.Panel Panel1;
+    public System.Windows.Forms.ToolStripMenuItem AdjustmentsBT;
+    public System.Windows.Forms.ToolStripMenuItem CategoriesBT;
+    public System.Windows.Forms.ToolStripMenuItem m_clientsFiltersBT;
+    public System.Windows.Forms.ToolStripMenuItem m_entitiesFiltersBT;
+    public System.Windows.Forms.ToolStripMenuItem m_productsFiltersBT;
+    public System.Windows.Forms.ToolStripMenuItem m_adjustmentsFiltersBT;
+    public System.Windows.Forms.ToolStripMenuItem GroupsBT;
+    public System.Windows.Forms.ToolStripMenuItem ExchangeRatesButton;
     private System.Windows.Forms.ToolStripMenuItem GlobalFact_BT;
-    internal System.Windows.Forms.ToolStripMenuItem m_employeesButton;
-    internal System.Windows.Forms.ToolStripMenuItem m_employeesFiltersBT;
+    public System.Windows.Forms.ToolStripMenuItem m_employeesButton;
+    public System.Windows.Forms.ToolStripMenuItem m_employeesFiltersBT;
   }
 }

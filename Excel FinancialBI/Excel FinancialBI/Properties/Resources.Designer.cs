@@ -22,21 +22,21 @@ namespace FBI.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        public Resources() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FBI.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace FBI.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap add {
+        public static System.Drawing.Bitmap add {
             get {
                 object obj = ResourceManager.GetObject("add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Add_file {
+        public static System.Drawing.Bitmap Add_file {
             get {
                 object obj = ResourceManager.GetObject("Add_file", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap arrow_1 {
+        public static System.Drawing.Bitmap arrow_1 {
             get {
                 object obj = ResourceManager.GetObject("arrow_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +93,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap arrow_down {
+        public static System.Drawing.Bitmap arrow_down {
             get {
                 object obj = ResourceManager.GetObject("arrow_down", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,7 +103,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap bank_building {
+        public static System.Drawing.Bitmap bank_building {
             get {
                 object obj = ResourceManager.GetObject("bank_building", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -113,7 +113,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap barcode {
+        public static System.Drawing.Bitmap barcode {
             get {
                 object obj = ResourceManager.GetObject("barcode", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -123,7 +123,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap barcode_add {
+        public static System.Drawing.Bitmap barcode_add {
             get {
                 object obj = ResourceManager.GetObject("barcode_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -133,7 +133,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap barcode_delete {
+        public static System.Drawing.Bitmap barcode_delete {
             get {
                 object obj = ResourceManager.GetObject("barcode_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -143,7 +143,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap barcode1 {
+        public static System.Drawing.Bitmap barcode1 {
             get {
                 object obj = ResourceManager.GetObject("barcode1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -153,7 +153,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap breakpoints {
+        public static System.Drawing.Bitmap breakpoints {
             get {
                 object obj = ResourceManager.GetObject("breakpoints", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -163,7 +163,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap calendar_31 {
+        public static System.Drawing.Bitmap calendar_31 {
             get {
                 object obj = ResourceManager.GetObject("calendar_31", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -173,7 +173,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chart_line {
+        public static System.Drawing.Bitmap chart_line {
             get {
                 object obj = ResourceManager.GetObject("chart_line", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -183,7 +183,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chart_pie {
+        public static System.Drawing.Bitmap chart_pie {
             get {
                 object obj = ResourceManager.GetObject("chart_pie", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -193,7 +193,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chart2 {
+        public static System.Drawing.Bitmap chart2 {
             get {
                 object obj = ResourceManager.GetObject("chart2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -203,7 +203,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap checkbox3 {
+        public static System.Drawing.Bitmap checkbox3 {
             get {
                 object obj = ResourceManager.GetObject("checkbox3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -213,7 +213,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap checked1 {
+        public static System.Drawing.Bitmap checked1 {
             get {
                 object obj = ResourceManager.GetObject("checked1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -223,7 +223,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap config_circle_green {
+        public static System.Drawing.Bitmap config_circle_green {
             get {
                 object obj = ResourceManager.GetObject("config_circle_green", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -233,7 +233,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap constraint {
+        public static System.Drawing.Bitmap constraint {
             get {
                 object obj = ResourceManager.GetObject("constraint", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -243,7 +243,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap constraint1 {
+        public static System.Drawing.Bitmap constraint1 {
             get {
                 object obj = ResourceManager.GetObject("constraint1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -253,7 +253,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap down_arrow {
+        public static System.Drawing.Bitmap down_arrow {
             get {
                 object obj = ResourceManager.GetObject("down_arrow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -263,7 +263,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Download {
+        public static System.Drawing.Bitmap Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -273,7 +273,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap element_branch2 {
+        public static System.Drawing.Bitmap element_branch2 {
             get {
                 object obj = ResourceManager.GetObject("element_branch2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -283,7 +283,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap element_branch2_add {
+        public static System.Drawing.Bitmap element_branch2_add {
             get {
                 object obj = ResourceManager.GetObject("element_branch2_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -293,7 +293,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap element_branch2_delete {
+        public static System.Drawing.Bitmap element_branch2_delete {
             get {
                 object obj = ResourceManager.GetObject("element_branch2_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -303,7 +303,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap element_branch21 {
+        public static System.Drawing.Bitmap element_branch21 {
             get {
                 object obj = ResourceManager.GetObject("element_branch21", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -313,7 +313,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap element_branch23 {
+        public static System.Drawing.Bitmap element_branch23 {
             get {
                 object obj = ResourceManager.GetObject("element_branch23", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -323,7 +323,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap element_branch24 {
+        public static System.Drawing.Bitmap element_branch24 {
             get {
                 object obj = ResourceManager.GetObject("element_branch24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -333,7 +333,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap element_branch25 {
+        public static System.Drawing.Bitmap element_branch25 {
             get {
                 object obj = ResourceManager.GetObject("element_branch25", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -343,7 +343,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements {
+        public static System.Drawing.Bitmap elements {
             get {
                 object obj = ResourceManager.GetObject("elements", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -353,7 +353,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements_add {
+        public static System.Drawing.Bitmap elements_add {
             get {
                 object obj = ResourceManager.GetObject("elements_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -363,7 +363,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements_delete {
+        public static System.Drawing.Bitmap elements_delete {
             get {
                 object obj = ResourceManager.GetObject("elements_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -373,7 +373,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements_hierarchy {
+        public static System.Drawing.Bitmap elements_hierarchy {
             get {
                 object obj = ResourceManager.GetObject("elements_hierarchy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -383,7 +383,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements1 {
+        public static System.Drawing.Bitmap elements1 {
             get {
                 object obj = ResourceManager.GetObject("elements1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -393,7 +393,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements2 {
+        public static System.Drawing.Bitmap elements2 {
             get {
                 object obj = ResourceManager.GetObject("elements2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -403,7 +403,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements3 {
+        public static System.Drawing.Bitmap elements3 {
             get {
                 object obj = ResourceManager.GetObject("elements3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -413,7 +413,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements3_add {
+        public static System.Drawing.Bitmap elements3_add {
             get {
                 object obj = ResourceManager.GetObject("elements3_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -423,7 +423,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements3_delete {
+        public static System.Drawing.Bitmap elements3_delete {
             get {
                 object obj = ResourceManager.GetObject("elements3_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -433,7 +433,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements31 {
+        public static System.Drawing.Bitmap elements31 {
             get {
                 object obj = ResourceManager.GetObject("elements31", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -443,7 +443,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap elements4 {
+        public static System.Drawing.Bitmap elements4 {
             get {
                 object obj = ResourceManager.GetObject("elements4", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -453,7 +453,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap engineer {
+        public static System.Drawing.Bitmap engineer {
             get {
                 object obj = ResourceManager.GetObject("engineer", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -476,7 +476,7 @@ namespace FBI.Properties {
         ///    &lt;string name=&quot;collapse_all&quot;&gt;Collapse all&lt;/string&gt;
         ///    &lt;stri [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string english {
+        public static string english {
             get {
                 return ResourceManager.GetString("english", resourceCulture);
             }
@@ -485,7 +485,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap excel {
+        public static System.Drawing.Bitmap excel {
             get {
                 object obj = ResourceManager.GetObject("excel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -495,7 +495,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap excel_2 {
+        public static System.Drawing.Bitmap excel_2 {
             get {
                 object obj = ResourceManager.GetObject("excel_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -505,7 +505,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Excel_Blue_32x32 {
+        public static System.Drawing.Bitmap Excel_Blue_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Excel_Blue_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -515,7 +515,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap excel_blue2 {
+        public static System.Drawing.Bitmap excel_blue2 {
             get {
                 object obj = ResourceManager.GetObject("excel_blue2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -525,7 +525,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Excel_dark_24_24 {
+        public static System.Drawing.Bitmap Excel_dark_24_24 {
             get {
                 object obj = ResourceManager.GetObject("Excel_dark_24_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -535,7 +535,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Excel_Green_32x32 {
+        public static System.Drawing.Bitmap Excel_Green_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Excel_Green_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -545,7 +545,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_17_1 {
+        public static System.Drawing.Bitmap favicon_17_1 {
             get {
                 object obj = ResourceManager.GetObject("favicon_17_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -555,7 +555,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_18_ {
+        public static System.Drawing.Bitmap favicon_18_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_18_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -565,7 +565,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_188_ {
+        public static System.Drawing.Bitmap favicon_188_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_188_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -575,7 +575,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_217 {
+        public static System.Drawing.Bitmap favicon_217 {
             get {
                 object obj = ResourceManager.GetObject("favicon_217", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -585,7 +585,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_220_ {
+        public static System.Drawing.Bitmap favicon_220_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_220_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -595,7 +595,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_226_ {
+        public static System.Drawing.Bitmap favicon_226_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_226_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -605,7 +605,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_232_ {
+        public static System.Drawing.Bitmap favicon_232_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_232_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -615,7 +615,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_233_ {
+        public static System.Drawing.Bitmap favicon_233_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_233_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -625,7 +625,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_239_ {
+        public static System.Drawing.Bitmap favicon_239_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_239_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -635,7 +635,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_249_ {
+        public static System.Drawing.Bitmap favicon_249_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_249_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -645,7 +645,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_48_ {
+        public static System.Drawing.Bitmap favicon_48_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_48_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -655,7 +655,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap favicon_81_ {
+        public static System.Drawing.Bitmap favicon_81_ {
             get {
                 object obj = ResourceManager.GetObject("favicon_81_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -665,7 +665,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap fbi_dark_blue_icon {
+        public static System.Drawing.Bitmap fbi_dark_blue_icon {
             get {
                 object obj = ResourceManager.GetObject("fbi_dark_blue_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -675,7 +675,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap fbiIcon {
+        public static System.Drawing.Bitmap fbiIcon {
             get {
                 object obj = ResourceManager.GetObject("fbiIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -685,7 +685,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap filter_and_sort {
+        public static System.Drawing.Bitmap filter_and_sort {
             get {
                 object obj = ResourceManager.GetObject("filter_and_sort", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -695,7 +695,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Financial_BI_dark_blue_add {
+        public static System.Drawing.Bitmap Financial_BI_dark_blue_add {
             get {
                 object obj = ResourceManager.GetObject("Financial BI dark blue_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -705,7 +705,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap folder_open_add {
+        public static System.Drawing.Bitmap folder_open_add {
             get {
                 object obj = ResourceManager.GetObject("folder_open_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -715,7 +715,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap folder2 {
+        public static System.Drawing.Bitmap folder2 {
             get {
                 object obj = ResourceManager.GetObject("folder2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -725,7 +725,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap folder21 {
+        public static System.Drawing.Bitmap folder21 {
             get {
                 object obj = ResourceManager.GetObject("folder21", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -747,7 +747,7 @@ namespace FBI.Properties {
         ///    &lt;string name=&quot;expand_all&quot;&gt;Tout dégrouper&lt;/string&gt;
         ///    &lt;string name=&quot;collapse_all&quot;&gt;Tout grouper [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string french {
+        public static string french {
             get {
                 return ResourceManager.GetString("french", resourceCulture);
             }
@@ -756,7 +756,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap graph_5_ctrl_bgd {
+        public static System.Drawing.Bitmap graph_5_ctrl_bgd {
             get {
                 object obj = ResourceManager.GetObject("graph_5_ctrl_bgd", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -766,7 +766,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap imageres_59 {
+        public static System.Drawing.Bitmap imageres_59 {
             get {
                 object obj = ResourceManager.GetObject("imageres_59", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -776,7 +776,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap imageres_89 {
+        public static System.Drawing.Bitmap imageres_89 {
             get {
                 object obj = ResourceManager.GetObject("imageres_89", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -786,7 +786,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap imageres_891 {
+        public static System.Drawing.Bitmap imageres_891 {
             get {
                 object obj = ResourceManager.GetObject("imageres_891", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -796,7 +796,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap images {
+        public static System.Drawing.Bitmap images {
             get {
                 object obj = ResourceManager.GetObject("images", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -806,7 +806,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap images1 {
+        public static System.Drawing.Bitmap images1 {
             get {
                 object obj = ResourceManager.GetObject("images1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -816,7 +816,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap money_interest {
+        public static System.Drawing.Bitmap money_interest {
             get {
                 object obj = ResourceManager.GetObject("money_interest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -826,7 +826,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap money_interest1 {
+        public static System.Drawing.Bitmap money_interest1 {
             get {
                 object obj = ResourceManager.GetObject("money_interest1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -836,7 +836,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap money_interest2 {
+        public static System.Drawing.Bitmap money_interest2 {
             get {
                 object obj = ResourceManager.GetObject("money_interest2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -846,7 +846,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap money_interest3 {
+        public static System.Drawing.Bitmap money_interest3 {
             get {
                 object obj = ResourceManager.GetObject("money_interest3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -856,7 +856,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ok {
+        public static System.Drawing.Bitmap ok {
             get {
                 object obj = ResourceManager.GetObject("ok", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -866,7 +866,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ok1 {
+        public static System.Drawing.Bitmap ok1 {
             get {
                 object obj = ResourceManager.GetObject("ok1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -876,7 +876,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap plus {
+        public static System.Drawing.Bitmap plus {
             get {
                 object obj = ResourceManager.GetObject("plus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -886,7 +886,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap presentation2 {
+        public static System.Drawing.Bitmap presentation2 {
             get {
                 object obj = ResourceManager.GetObject("presentation2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -896,7 +896,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap refresh {
+        public static System.Drawing.Bitmap refresh {
             get {
                 object obj = ResourceManager.GetObject("refresh", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -906,7 +906,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap refresh_2 {
+        public static System.Drawing.Bitmap refresh_2 {
             get {
                 object obj = ResourceManager.GetObject("refresh_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -916,7 +916,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap refresh_greay_bcgd {
+        public static System.Drawing.Bitmap refresh_greay_bcgd {
             get {
                 object obj = ResourceManager.GetObject("refresh_greay_bcgd", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -926,7 +926,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap refresh0_1 {
+        public static System.Drawing.Bitmap refresh0_1 {
             get {
                 object obj = ResourceManager.GetObject("refresh0_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -936,7 +936,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap refresh1 {
+        public static System.Drawing.Bitmap refresh1 {
             get {
                 object obj = ResourceManager.GetObject("refresh1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -946,7 +946,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Refresh2 {
+        public static System.Drawing.Bitmap Refresh2 {
             get {
                 object obj = ResourceManager.GetObject("Refresh2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -956,7 +956,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Refresh21 {
+        public static System.Drawing.Bitmap Refresh21 {
             get {
                 object obj = ResourceManager.GetObject("Refresh21", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -966,7 +966,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap registry {
+        public static System.Drawing.Bitmap registry {
             get {
                 object obj = ResourceManager.GetObject("registry", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -976,7 +976,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap registry_add {
+        public static System.Drawing.Bitmap registry_add {
             get {
                 object obj = ResourceManager.GetObject("registry_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -986,7 +986,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap registry_delete {
+        public static System.Drawing.Bitmap registry_delete {
             get {
                 object obj = ResourceManager.GetObject("registry_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -996,7 +996,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap registry1 {
+        public static System.Drawing.Bitmap registry1 {
             get {
                 object obj = ResourceManager.GetObject("registry1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1006,7 +1006,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap registry2 {
+        public static System.Drawing.Bitmap registry2 {
             get {
                 object obj = ResourceManager.GetObject("registry2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1016,7 +1016,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Report {
+        public static System.Drawing.Bitmap Report {
             get {
                 object obj = ResourceManager.GetObject("Report", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1026,7 +1026,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Report1 {
+        public static System.Drawing.Bitmap Report1 {
             get {
                 object obj = ResourceManager.GetObject("Report1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1036,7 +1036,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap symbol_dollar_euro {
+        public static System.Drawing.Bitmap symbol_dollar_euro {
             get {
                 object obj = ResourceManager.GetObject("symbol_dollar_euro", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1046,7 +1046,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap symbol_dollar_euro_add {
+        public static System.Drawing.Bitmap symbol_dollar_euro_add {
             get {
                 object obj = ResourceManager.GetObject("symbol_dollar_euro_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1056,7 +1056,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap symbol_dollar_euro_delete {
+        public static System.Drawing.Bitmap symbol_dollar_euro_delete {
             get {
                 object obj = ResourceManager.GetObject("symbol_dollar_euro_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1066,7 +1066,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap symbol_dollar_euro1 {
+        public static System.Drawing.Bitmap symbol_dollar_euro1 {
             get {
                 object obj = ResourceManager.GetObject("symbol_dollar_euro1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1076,7 +1076,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap tablet_computer {
+        public static System.Drawing.Bitmap tablet_computer {
             get {
                 object obj = ResourceManager.GetObject("tablet_computer", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1086,7 +1086,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap tablet_computer1 {
+        public static System.Drawing.Bitmap tablet_computer1 {
             get {
                 object obj = ResourceManager.GetObject("tablet_computer1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1096,7 +1096,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap tablet_computer3 {
+        public static System.Drawing.Bitmap tablet_computer3 {
             get {
                 object obj = ResourceManager.GetObject("tablet_computer3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1106,7 +1106,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap UIscon_Yellow {
+        public static System.Drawing.Bitmap UIscon_Yellow {
             get {
                 object obj = ResourceManager.GetObject("UIscon_Yellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1116,7 +1116,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap upload {
+        public static System.Drawing.Bitmap upload {
             get {
                 object obj = ResourceManager.GetObject("upload", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1126,7 +1126,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap user {
+        public static System.Drawing.Bitmap user {
             get {
                 object obj = ResourceManager.GetObject("user", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1136,7 +1136,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap user1 {
+        public static System.Drawing.Bitmap user1 {
             get {
                 object obj = ResourceManager.GetObject("user1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1146,7 +1146,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap users_family {
+        public static System.Drawing.Bitmap users_family {
             get {
                 object obj = ResourceManager.GetObject("users_family", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1156,7 +1156,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap users_relation {
+        public static System.Drawing.Bitmap users_relation {
             get {
                 object obj = ResourceManager.GetObject("users_relation", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1166,7 +1166,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap users_relation2 {
+        public static System.Drawing.Bitmap users_relation2 {
             get {
                 object obj = ResourceManager.GetObject("users_relation2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1176,7 +1176,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap users_relation2_add {
+        public static System.Drawing.Bitmap users_relation2_add {
             get {
                 object obj = ResourceManager.GetObject("users_relation2_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1186,7 +1186,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap users_relation2_delete {
+        public static System.Drawing.Bitmap users_relation2_delete {
             get {
                 object obj = ResourceManager.GetObject("users_relation2_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1196,7 +1196,7 @@ namespace FBI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap users_relation21 {
+        public static System.Drawing.Bitmap users_relation21 {
             get {
                 object obj = ResourceManager.GetObject("users_relation21", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

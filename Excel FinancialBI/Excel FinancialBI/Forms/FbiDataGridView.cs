@@ -71,11 +71,11 @@ namespace FBI.Forms
       HoveredCell = null;
       InitDGVDisplay();
       this.RowsHierarchy.Clear();
-      m_rowsDic = new SafeDictionary<uint, HierarchyItem>();
+      m_rowsDic = new SafeDictionary<UInt32, HierarchyItem>();
       if (m_columnsDic == null)
         return;
       this.ColumnsHierarchy.Clear();
-      m_columnsDic = new SafeDictionary<uint, HierarchyItem>();
+      m_columnsDic = new SafeDictionary<UInt32, HierarchyItem>();
       if (m_columnsDic == null)
         return;
       CellMouseEnter += OnMouseEnterCell;
@@ -99,7 +99,7 @@ namespace FBI.Forms
       AllowDragDropIndication = true;
     }
 
-    public void InitializeRows<T>(ICRUDModel<T> p_model, MultiIndexDictionary<uint, string, T> p_dic) where T : class, NamedCRUDEntity 
+    public void InitializeRows<T>(ICRUDModel<T> p_model, MultiIndexDictionary<UInt32, string, T> p_dic) where T : class, NamedCRUDEntity 
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
         foreach (T l_elem in p_dic.Values)
@@ -112,7 +112,7 @@ namespace FBI.Forms
           SetDimension(RowsHierarchy.Items, m_rowsDic, l_elem.Id, l_elem.Name, p_model);
     }
 
-    public void InitializeColumns<U>(ICRUDModel<U> p_model, MultiIndexDictionary<uint, string, U> p_dic) where U : class, NamedCRUDEntity
+    public void InitializeColumns<U>(ICRUDModel<U> p_model, MultiIndexDictionary<UInt32, string, U> p_dic) where U : class, NamedCRUDEntity
     {
       foreach (U l_elem in p_dic.Values)
         SetDimension(ColumnsHierarchy.Items, m_columnsDic, l_elem.Id, l_elem.Name, p_model);

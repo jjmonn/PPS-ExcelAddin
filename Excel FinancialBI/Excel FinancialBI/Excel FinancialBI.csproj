@@ -231,6 +231,12 @@
     <Compile Include="AddinModule.Designer.cs">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExcelSheetModule1.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExcelSheetModule1.Designer.cs">
+      <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -243,7 +249,9 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AllocationKeysController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\CurrenciesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
@@ -255,6 +263,7 @@
     <Compile Include="MVC\Controller\Plateform Management\IBasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
@@ -295,6 +304,10 @@
     <Compile Include="MVC\Model\CRUD\GlobalFactData.cs" />
     <Compile Include="MVC\Model\CRUD\GlobalFactVersion.cs" />
     <Compile Include="MVC\Model\CRUD\Group.cs" />
+    <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsManager.cs" />
+    <Compile Include="MVC\Model\Facts Edition\IEditedFactsManager.cs" />
+    <Compile Include="MVC\Model\Facts Edition\OutputFact.cs" />
+    <Compile Include="MVC\Model\Facts Edition\Period.cs" />
     <Compile Include="MVC\Model\CRUD\User.cs" />
     <Compile Include="MVC\Model\CRUD\UserAllowedEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Version.cs" />
@@ -303,6 +316,11 @@
     <Compile Include="MVC\Model\EntityDistributionModel.cs" />
     <Compile Include="MVC\Model\ExchangeRateModel.cs" />
     <Compile Include="MVC\Model\FactLogModel.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\Dimension.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\Dimensions.cs" />
+    <Compile Include="MVC\Model\Facts Edition\EditedFact.cs" />
+    <Compile Include="MVC\Model\Facts Edition\RHEditedFactsManager.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\WorksheetAnalyzer.cs" />
     <Compile Include="MVC\Model\FactsModel.cs" />
     <Compile Include="MVC\Model\FactTagModel.cs" />
     <Compile Include="MVC\Model\FilterModel.cs" />
@@ -644,6 +662,9 @@
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExcelSheetModule1.resx">
+      <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Connection\ConnectionSidePane.resx">
       <DependentUpon>ConnectionSidePane.cs</DependentUpon>
     </EmbeddedResource>
@@ -809,5 +830,8 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MVC\View\Facts Edition\" />
   </ItemGroup>
 </Project>

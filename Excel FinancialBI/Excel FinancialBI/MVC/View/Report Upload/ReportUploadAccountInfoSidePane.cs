@@ -11,7 +11,7 @@ namespace FBI.MVC.View
 
   public partial class ReportUploadAccountInfoSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
-    internal bool m_shown { set; get; }
+    public  bool m_shown { set; get; }
     public ReportUploadAccountInfoSidePane()
     {
       InitializeComponent();

@@ -454,12 +454,12 @@
         private AddinExpress.MSO.ADXRibbonMenuSeparator adxRibbonMenuSeparator1;
         private AddinExpress.MSO.ADXRibbonCheckBox m_autoRefreshRibbonChackBox;
         private AddinExpress.XL.ADXExcelTaskPanesManager adxExcelTaskPanesManager1;
-        internal AddinExpress.MSO.ADXRibbonTab m_financialbiRibbon;
-        internal AddinExpress.XL.ADXExcelTaskPanesCollectionItem ConnectionSidePaneItem;
-        internal AddinExpress.XL.ADXExcelTaskPanesCollectionItem VersionSelectionSidePaneItem;
-        internal AddinExpress.XL.ADXExcelTaskPanesCollectionItem ReportUploadAccountInfoSidePaneItem;
+        public AddinExpress.MSO.ADXRibbonTab m_financialbiRibbon;
+        public AddinExpress.XL.ADXExcelTaskPanesCollectionItem ConnectionSidePaneItem;
+        public AddinExpress.XL.ADXExcelTaskPanesCollectionItem VersionSelectionSidePaneItem;
+        public AddinExpress.XL.ADXExcelTaskPanesCollectionItem ReportUploadAccountInfoSidePaneItem;
         private AddinExpress.MSO.ADXExcelAppEvents adxExcelAppEvents1;
-        internal AddinExpress.XL.ADXExcelTaskPanesCollectionItem ReportUploadEntitySelectionSidePaneItem;
+        public AddinExpress.XL.ADXExcelTaskPanesCollectionItem ReportUploadEntitySelectionSidePaneItem;
         private AddinExpress.MSO.ADXRibbonSplitButton m_processRibbonButton;
         private AddinExpress.MSO.ADXRibbonMenu adxRibbonMenu4;
         private AddinExpress.MSO.ADXRibbonButton m_financialProcessRibbonButton;

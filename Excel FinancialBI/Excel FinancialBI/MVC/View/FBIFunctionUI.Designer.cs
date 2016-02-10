@@ -444,29 +444,29 @@ partial class FBIFunctionUI : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-  internal VIBlend.WinForms.Controls.vButton validate_cmd;
-	internal System.Windows.Forms.ImageList ButtonsIL;
-	internal System.Windows.Forms.ImageList categoriesIL;
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-	internal VIBlend.WinForms.Controls.vLabel m_categoryFilterLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_productFilterLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_clientFilterLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_versionLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_currencyLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_entityLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_accountLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_periodLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_adjustmentFilterLabel;
-	internal VIBlend.WinForms.Controls.vTreeViewBox PeriodTreeBox;
-	internal VIBlend.WinForms.Controls.vTreeViewBox EntityTreeBox;
-	internal VIBlend.WinForms.Controls.vTreeViewBox AccountTreeBox;
-	internal VIBlend.WinForms.Controls.vTreeViewBox VersionTreeBox;
-	internal VIBlend.WinForms.Controls.vComboBox CurrenciesComboBox;
-	internal VIBlend.WinForms.Controls.vTreeViewBox CategoriesFiltersTreebox;
-	internal VIBlend.WinForms.Controls.vTreeViewBox AdjustmentsTreeviewBox;
-	internal VIBlend.WinForms.Controls.vTreeViewBox ProductsTreeviewBox;
-	internal VIBlend.WinForms.Controls.vTreeViewBox ClientsTreeviewBox;
-	internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+  public VIBlend.WinForms.Controls.vButton validate_cmd;
+	public System.Windows.Forms.ImageList ButtonsIL;
+	public System.Windows.Forms.ImageList categoriesIL;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+	public VIBlend.WinForms.Controls.vLabel m_categoryFilterLabel;
+	public VIBlend.WinForms.Controls.vLabel m_productFilterLabel;
+	public VIBlend.WinForms.Controls.vLabel m_clientFilterLabel;
+	public VIBlend.WinForms.Controls.vLabel m_versionLabel;
+	public VIBlend.WinForms.Controls.vLabel m_currencyLabel;
+	public VIBlend.WinForms.Controls.vLabel m_entityLabel;
+	public VIBlend.WinForms.Controls.vLabel m_accountLabel;
+	public VIBlend.WinForms.Controls.vLabel m_periodLabel;
+	public VIBlend.WinForms.Controls.vLabel m_adjustmentFilterLabel;
+	public VIBlend.WinForms.Controls.vTreeViewBox PeriodTreeBox;
+	public VIBlend.WinForms.Controls.vTreeViewBox EntityTreeBox;
+	public VIBlend.WinForms.Controls.vTreeViewBox AccountTreeBox;
+	public VIBlend.WinForms.Controls.vTreeViewBox VersionTreeBox;
+	public VIBlend.WinForms.Controls.vComboBox CurrenciesComboBox;
+	public VIBlend.WinForms.Controls.vTreeViewBox CategoriesFiltersTreebox;
+	public VIBlend.WinForms.Controls.vTreeViewBox AdjustmentsTreeviewBox;
+	public VIBlend.WinForms.Controls.vTreeViewBox ProductsTreeviewBox;
+	public VIBlend.WinForms.Controls.vTreeViewBox ClientsTreeviewBox;
+	public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
 }
 
 }

@@ -15,7 +15,7 @@ namespace FBI.MVC.View
 
   public partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
   {
-    internal bool m_shown { set; get; } 
+    public bool m_shown { set; get; } 
     public VersionSelectionPane()
     {
       InitializeComponent();

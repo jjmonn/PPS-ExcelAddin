@@ -192,15 +192,15 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal VIBlend.WinForms.Controls.vButton m_addFilter;
-    internal VIBlend.WinForms.Controls.vButton m_deleteFilter;
-    internal VIBlend.WinForms.Controls.vPanel VPanel1;
-    internal VIBlend.WinForms.Controls.vPanel m_filterPanel;
-    internal System.Windows.Forms.ContextMenuStrip m_structureTreeviewRightClickMenu;
-    internal System.Windows.Forms.ToolStripMenuItem m_createSubCategory;
-    internal System.Windows.Forms.ToolStripMenuItem m_renameButton;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
-    internal System.Windows.Forms.ToolStripMenuItem m_deleteButton;
-    internal System.Windows.Forms.ImageList EditButtonsImagelist;
+    public VIBlend.WinForms.Controls.vButton m_addFilter;
+    public VIBlend.WinForms.Controls.vButton m_deleteFilter;
+    public VIBlend.WinForms.Controls.vPanel VPanel1;
+    public VIBlend.WinForms.Controls.vPanel m_filterPanel;
+    public System.Windows.Forms.ContextMenuStrip m_structureTreeviewRightClickMenu;
+    public System.Windows.Forms.ToolStripMenuItem m_createSubCategory;
+    public System.Windows.Forms.ToolStripMenuItem m_renameButton;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
+    public System.Windows.Forms.ToolStripMenuItem m_deleteButton;
+    public System.Windows.Forms.ImageList EditButtonsImagelist;
   }
 }

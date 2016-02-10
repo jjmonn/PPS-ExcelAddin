@@ -17,7 +17,7 @@ namespace FBI.MVC.View
   using Utils;
   using Model.CRUD;
 
-  internal partial class PlatformMGTGeneralUI : Form, IView
+  public partial class PlatformMGTGeneralUI : Form, IView
   {
     PlatformMgtController m_controller;
 
@@ -178,7 +178,7 @@ namespace FBI.MVC.View
 
     private void GroupsBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      m_controller.SwitchView<UsersView, UserController>(new UserController());
     }
     #endregion
 

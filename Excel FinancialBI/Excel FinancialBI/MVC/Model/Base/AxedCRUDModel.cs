@@ -12,7 +12,7 @@ namespace FBI.MVC.Model
 
   class AxedCRUDModel<T> : ICRUDModel<T> where T : class, AxedCRUDEntity, NamedCRUDEntity
   {
-    protected SortedDictionary<AxisType, MultiIndexDictionary<UInt32, string, T>> m_CRUDDic = new SortedDictionary<AxisType,MultiIndexDictionary<uint,string,T>>();
+    protected SortedDictionary<AxisType, MultiIndexDictionary<UInt32, string, T>> m_CRUDDic = new SortedDictionary<AxisType, MultiIndexDictionary<UInt32, string, T>>();
 
     public AxedCRUDModel()
     {

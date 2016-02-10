@@ -34,7 +34,7 @@ namespace FBI.MVC.Model
       NetworkManager.RemoveCallback((UInt16)ServerMessage.SMSG_DELETE_FACT_ANSWER, DeleteFactAnswer);
     }
 
-    Int32 GetFact(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_employeeId, UInt32 p_versionId, UInt32 p_startPeriod, UInt32 p_endPeriod)
+    public Int32 GetFact(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_employeeId, UInt32 p_versionId, UInt32 p_startPeriod, UInt32 p_endPeriod)
     {
 
       NetworkManager.SetCallback((UInt16)ServerMessage.SMSG_GET_FACT_ANSWER, GetFactAnswer);

@@ -277,7 +277,7 @@ namespace FBI.MVC.View
     #region ServerEvents
 
     delegate void OnModelCreate_delegate(ErrorMessage p_status, UInt32 p_id);
-    void OnModelCreate(Network.ErrorMessage p_status, uint p_id)
+    void OnModelCreate(Network.ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -294,7 +294,7 @@ namespace FBI.MVC.View
     }
 
     delegate void OnModelUpdate_delegate(ErrorMessage p_status, UInt32 p_id);
-    void OnModelUpdate(Network.ErrorMessage p_status, uint p_id)
+    void OnModelUpdate(Network.ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -311,7 +311,7 @@ namespace FBI.MVC.View
     }
 
     delegate void OnModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);
-    void OnModelDelete(Network.ErrorMessage p_status, uint p_id)
+    void OnModelDelete(Network.ErrorMessage p_status, UInt32 p_id)
     {
       if (InvokeRequired)
       {

@@ -454,7 +454,7 @@ namespace FBI.MVC.View
       this.ProcessComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.ProcessComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.ProcessComboBox.DropDownWidth = 465;
-      this.ProcessComboBox.Location = new System.Drawing.Point(209, 445);
+      this.ProcessComboBox.Location = new System.Drawing.Point(209, 433);
       this.ProcessComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.ProcessComboBox.Name = "ProcessComboBox";
       this.ProcessComboBox.RoundedCornersMaskListItem = ((byte)(15));
@@ -472,7 +472,7 @@ namespace FBI.MVC.View
       this.m_ProcessLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_ProcessLabel.Ellipsis = false;
       this.m_ProcessLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_ProcessLabel.Location = new System.Drawing.Point(-3, 445);
+      this.m_ProcessLabel.Location = new System.Drawing.Point(-3, 433);
       this.m_ProcessLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.m_ProcessLabel.Multiline = true;
       this.m_ProcessLabel.Name = "m_ProcessLabel";
@@ -505,30 +505,30 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal VIBlend.WinForms.Controls.vButton CancelBT;
-    internal VIBlend.WinForms.Controls.vButton CreateAccountBT;
-    internal System.Windows.Forms.ImageList ButtonIcons;
-    internal System.Windows.Forms.ImageList ButtonsIL;
-    internal System.Windows.Forms.ImageList accountsIL;
-    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-    internal VIBlend.WinForms.Controls.vLabel m_accountNameLabel;
-    internal VIBlend.WinForms.Controls.vLabel m_accountParentLabel;
-    internal VIBlend.WinForms.Controls.vLabel m_formulaTypeLabel;
-    internal VIBlend.WinForms.Controls.vLabel m_formatLabel;
-    internal VIBlend.WinForms.Controls.vGroupBox GroupBox1;
-    internal VIBlend.WinForms.Controls.vRadioButton m_recomputeRadioButton;
-    internal VIBlend.WinForms.Controls.vRadioButton m_aggregationRadioButton;
-    internal VIBlend.WinForms.Controls.vLabel m_consolidationOptionLabel;
-    internal VIBlend.WinForms.Controls.vGroupBox GroupBox2;
-    internal VIBlend.WinForms.Controls.vRadioButton m_endOfPeriodRadioButton;
-    internal VIBlend.WinForms.Controls.vRadioButton m_averageRateRadioButton;
-    internal VIBlend.WinForms.Controls.vLabel m_conversionOptionLabel;
-    internal System.Windows.Forms.Panel ParentTVPanel;
-    internal VIBlend.WinForms.Controls.vTextBox NameTextBox;
-    internal VIBlend.WinForms.Controls.vComboBox FormulaComboBox;
-    internal VIBlend.WinForms.Controls.vComboBox TypeComboBox;
-    internal VIBlend.WinForms.Controls.vRadioButton m_nonRadioButton;
-    internal VIBlend.WinForms.Controls.vComboBox ProcessComboBox;
-    internal VIBlend.WinForms.Controls.vLabel m_ProcessLabel;
+    public VIBlend.WinForms.Controls.vButton CancelBT;
+    public VIBlend.WinForms.Controls.vButton CreateAccountBT;
+    public System.Windows.Forms.ImageList ButtonIcons;
+    public System.Windows.Forms.ImageList ButtonsIL;
+    public System.Windows.Forms.ImageList accountsIL;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+    public VIBlend.WinForms.Controls.vLabel m_accountNameLabel;
+    public VIBlend.WinForms.Controls.vLabel m_accountParentLabel;
+    public VIBlend.WinForms.Controls.vLabel m_formulaTypeLabel;
+    public VIBlend.WinForms.Controls.vLabel m_formatLabel;
+    public VIBlend.WinForms.Controls.vGroupBox GroupBox1;
+    public VIBlend.WinForms.Controls.vRadioButton m_recomputeRadioButton;
+    public VIBlend.WinForms.Controls.vRadioButton m_aggregationRadioButton;
+    public VIBlend.WinForms.Controls.vLabel m_consolidationOptionLabel;
+    public VIBlend.WinForms.Controls.vGroupBox GroupBox2;
+    public VIBlend.WinForms.Controls.vRadioButton m_endOfPeriodRadioButton;
+    public VIBlend.WinForms.Controls.vRadioButton m_averageRateRadioButton;
+    public VIBlend.WinForms.Controls.vLabel m_conversionOptionLabel;
+    public System.Windows.Forms.Panel ParentTVPanel;
+    public VIBlend.WinForms.Controls.vTextBox NameTextBox;
+    public VIBlend.WinForms.Controls.vComboBox FormulaComboBox;
+    public VIBlend.WinForms.Controls.vComboBox TypeComboBox;
+    public VIBlend.WinForms.Controls.vRadioButton m_nonRadioButton;
+    public VIBlend.WinForms.Controls.vComboBox ProcessComboBox;
+    public VIBlend.WinForms.Controls.vLabel m_ProcessLabel;
   }
 }

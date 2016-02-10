@@ -277,18 +277,18 @@ partial class SubmissionsFollowUpView : System.Windows.Forms.Form
 		this.ResumeLayout(false);
 
 	}
-	internal VIBlend.WinForms.DataGridView.vDataGridView m_submissionsDGV;
-	internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-	internal System.Windows.Forms.Panel Panel1;
-	internal VIBlend.WinForms.Controls.vLabel m_startDateLabel;
-	internal VIBlend.WinForms.Controls.vLabel m_endDateLabel;
-	internal VIBlend.WinForms.Controls.vDatePicker m_startDate;
-	internal VIBlend.WinForms.Controls.vDatePicker m_endDate;
-	internal System.Windows.Forms.ContextMenuStrip m_cellsRightClickMenu;
-	internal System.Windows.Forms.ContextMenuStrip m_hierarchyRightClickMenu;
-	internal System.Windows.Forms.ToolStripMenuItem CopyDownToolStripMenuItem;
-	internal System.Windows.Forms.ToolStripMenuItem ExpandAllToolStripMenuItem;
-	internal System.Windows.Forms.ToolStripMenuItem CollapseAllToolStripMenuItem;
+	public VIBlend.WinForms.DataGridView.vDataGridView m_submissionsDGV;
+	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
+	public System.Windows.Forms.Panel Panel1;
+	public VIBlend.WinForms.Controls.vLabel m_startDateLabel;
+	public VIBlend.WinForms.Controls.vLabel m_endDateLabel;
+	public VIBlend.WinForms.Controls.vDatePicker m_startDate;
+	public VIBlend.WinForms.Controls.vDatePicker m_endDate;
+	public System.Windows.Forms.ContextMenuStrip m_cellsRightClickMenu;
+	public System.Windows.Forms.ContextMenuStrip m_hierarchyRightClickMenu;
+	public System.Windows.Forms.ToolStripMenuItem CopyDownToolStripMenuItem;
+	public System.Windows.Forms.ToolStripMenuItem ExpandAllToolStripMenuItem;
+	public System.Windows.Forms.ToolStripMenuItem CollapseAllToolStripMenuItem;
 }
 
 }

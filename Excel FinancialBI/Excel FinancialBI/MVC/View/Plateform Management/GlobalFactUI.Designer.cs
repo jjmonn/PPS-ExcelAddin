@@ -356,36 +356,36 @@ namespace FBI.MVC.View
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.ImageList MenuButtonIL;
-    internal System.Windows.Forms.ContextMenuStrip VersionsRCMenu;
-    internal System.Windows.Forms.ToolStripMenuItem select_version;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
-    internal System.Windows.Forms.ToolStripMenuItem AddRatesVersionRCM;
-    internal System.Windows.Forms.ToolStripMenuItem AddFolderRCM;
-    internal System.Windows.Forms.ToolStripMenuItem DeleteVersionRCM;
-    internal System.Windows.Forms.ContextMenuStrip dgvRCM;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator3;
-    internal System.Windows.Forms.ToolStripMenuItem CopyFactDownToolStripMenuItem;
-    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel4;
-    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel5;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator6;
-    internal System.Windows.Forms.Label VersionLabel;
-    internal System.Windows.Forms.TextBox version_TB;
-    internal System.Windows.Forms.SplitContainer SplitContainer1;
-    internal System.Windows.Forms.Panel Panel1;
-    internal System.Windows.Forms.ContextMenuStrip FactRightClickMenu;
-    internal System.Windows.Forms.ToolStripMenuItem RenameBT;
-    internal System.Windows.Forms.ToolStripMenuItem DeleteBT;
-    internal System.Windows.Forms.ToolStripMenuItem CreateNewFact;
-    internal System.Windows.Forms.ToolStripMenuItem CreateNewFact2;
-    internal System.Windows.Forms.ToolStripMenuItem RenameVersionBT;
-    internal System.Windows.Forms.ToolStripMenuItem ImportFromExcelBT;
-    internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator4;
-    internal System.Windows.Forms.ToolStripMenuItem m_importFromExcelBT2;
-    internal VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
+    public System.Windows.Forms.ImageList MenuButtonIL;
+    public System.Windows.Forms.ContextMenuStrip VersionsRCMenu;
+    public System.Windows.Forms.ToolStripMenuItem select_version;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
+    public System.Windows.Forms.ToolStripMenuItem AddRatesVersionRCM;
+    public System.Windows.Forms.ToolStripMenuItem AddFolderRCM;
+    public System.Windows.Forms.ToolStripMenuItem DeleteVersionRCM;
+    public System.Windows.Forms.ContextMenuStrip dgvRCM;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator3;
+    public System.Windows.Forms.ToolStripMenuItem CopyFactDownToolStripMenuItem;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel4;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel5;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator6;
+    public System.Windows.Forms.Label VersionLabel;
+    public System.Windows.Forms.TextBox version_TB;
+    public System.Windows.Forms.SplitContainer SplitContainer1;
+    public System.Windows.Forms.Panel Panel1;
+    public System.Windows.Forms.ContextMenuStrip FactRightClickMenu;
+    public System.Windows.Forms.ToolStripMenuItem RenameBT;
+    public System.Windows.Forms.ToolStripMenuItem DeleteBT;
+    public System.Windows.Forms.ToolStripMenuItem CreateNewFact;
+    public System.Windows.Forms.ToolStripMenuItem CreateNewFact2;
+    public System.Windows.Forms.ToolStripMenuItem RenameVersionBT;
+    public System.Windows.Forms.ToolStripMenuItem ImportFromExcelBT;
+    public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
+    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator4;
+    public System.Windows.Forms.ToolStripMenuItem m_importFromExcelBT2;
+    public VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
 
-    internal System.ComponentModel.BackgroundWorker m_deleteBackgroundWorker;
+    public System.ComponentModel.BackgroundWorker m_deleteBackgroundWorker;
   }
 }

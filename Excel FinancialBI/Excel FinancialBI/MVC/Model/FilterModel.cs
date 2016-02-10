@@ -35,9 +35,9 @@ namespace FBI.MVC.Model
 
       InitCallbacks();
     }
-    public uint FindChildId(AxisType p_axisType, uint p_id)
+    public UInt32 FindChildId(AxisType p_axisType, UInt32 p_id)
     {
-      MultiIndexDictionary<uint, string, Filter> l_filterDic = this.GetDictionary(p_axisType);
+      MultiIndexDictionary<UInt32, string, Filter> l_filterDic = this.GetDictionary(p_axisType);
       foreach (Filter l_filter in l_filterDic.Values)
       {
         if (l_filter.ParentId == p_id)
@@ -48,7 +48,7 @@ namespace FBI.MVC.Model
 
     public List<Filter> GetSortedByParentsDictionary(AxisType p_axisType)
     {
-      MultiIndexDictionary<uint, string, Filter> l_filterDic = this.GetDictionary(p_axisType);
+      MultiIndexDictionary<UInt32, string, Filter> l_filterDic = this.GetDictionary(p_axisType);
       List<Filter> l_newFilterDic = new List<Filter>();
       
       foreach (Filter l_filter in l_filterDic.Values)
@@ -58,7 +58,7 @@ namespace FBI.MVC.Model
       return (l_newFilterDic);
     }
 
-    private void SortedByParentsDictionaryAddElem(Filter p_filter, List<Filter> p_newFilterDic, MultiIndexDictionary<uint, string, Filter> p_filterDic)
+    private void SortedByParentsDictionaryAddElem(Filter p_filter, List<Filter> p_newFilterDic, MultiIndexDictionary<UInt32, string, Filter> p_filterDic)
     {
       if (p_newFilterDic.Contains(p_filter) == false)
       {
@@ -84,7 +84,7 @@ namespace FBI.MVC.Model
 
     public void GetChildrenDictionary(UInt32 p_filterId, MultiIndexDictionary<UInt32, string, Filter> p_childrenDic)
     {
-      MultiIndexDictionary<UInt32, string, Filter> l_resultDic = new MultiIndexDictionary<uint, string, Filter>();
+      MultiIndexDictionary<UInt32, string, Filter> l_resultDic = new MultiIndexDictionary<UInt32, string, Filter>();
 
       foreach (MultiIndexDictionary<UInt32, string, Filter> l_dic in this.m_CRUDDic.Values)
         foreach (Filter l_fv in l_dic.Values)

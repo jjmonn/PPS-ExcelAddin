@@ -302,7 +302,7 @@ namespace FBI.MVC.View
     private void OnClickCopyVersion(object sender, EventArgs e)
     {
       if (m_currentNode != null)
-        m_controller.ShowVersionCopyView((uint)m_currentNode.Value);
+        m_controller.ShowVersionCopyView((UInt32)m_currentNode.Value);
     }
 
     private void OnClickNewFolder(object sender, EventArgs e)
@@ -335,7 +335,7 @@ namespace FBI.MVC.View
 
         if (m_currentNode != null)
         {
-          Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
+          Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
           if (l_version == null) return;
           DisplayVersion(l_version);
           m_isDisplaying = false;
@@ -345,8 +345,8 @@ namespace FBI.MVC.View
 
     }
 
-    private delegate void DeleteNode_Delegate(uint p_id);
-    private void DeleteNode(uint p_id)
+    private delegate void DeleteNode_Delegate(UInt32 p_id);
+    private void DeleteNode(UInt32 p_id)
     {
       if (InvokeRequired)
       {
@@ -507,12 +507,12 @@ namespace FBI.MVC.View
       if (p_targetNode == null)
       return;
 
-      Version l_targetVersion = VersionModel.Instance.GetValue((uint)p_targetNode.Value);
+      Version l_targetVersion = VersionModel.Instance.GetValue((UInt32)p_targetNode.Value);
         
       if (p_draggedNode.Equals(p_targetNode) == true || l_targetVersion.IsFolder == false || p_draggedNode.Parent.Equals(p_targetNode.Value))
         return;
-             
-      Version l_version = VersionModel.Instance.GetValue((uint)p_draggedNode.Value).Clone();
+
+      Version l_version = VersionModel.Instance.GetValue((UInt32)p_draggedNode.Value).Clone();
       if (l_version == null)
         return;
 
@@ -523,7 +523,7 @@ namespace FBI.MVC.View
       p_draggedNode.Remove();
       m_versionsTreeview.DoDragDrop(p_draggedNode, DragDropEffects.None);
       p_targetNode.Nodes.Add(l_newNode);
-      l_version.ParentId = (uint)p_targetNode.Value;
+      l_version.ParentId = (UInt32)p_targetNode.Value;
       m_controller.Update(l_version);
     }
    
@@ -531,9 +531,9 @@ namespace FBI.MVC.View
 
     private void CreateVersion()
     {
-      uint l_parentId = 0;
+      UInt32 l_parentId = 0;
       if (m_currentNode != null)
-        l_parentId = (uint)m_currentNode.Value;
+        l_parentId = (UInt32)m_currentNode.Value;
       m_controller.ShowNewVersionView(l_parentId);
     }
 
@@ -550,7 +550,7 @@ namespace FBI.MVC.View
     {
       if (p_node != null)
       {
-        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
+        Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
         if (l_version != null)
           if (m_controller.Delete(l_version) == false)
             MessageBox.Show(m_controller.Error);
@@ -561,7 +561,7 @@ namespace FBI.MVC.View
     {
       if (p_node != null)
       {
-        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value).Clone();
+        Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value).Clone();
         if (l_version != null)
         {
           l_version.Name = Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
@@ -573,7 +573,7 @@ namespace FBI.MVC.View
 
     private void UpdateLocked(vTreeNode p_node, bool p_locked)
     {
-      Version l_version = VersionModel.Instance.GetValue((uint)p_node.Value).Clone();
+      Version l_version = VersionModel.Instance.GetValue((UInt32)p_node.Value).Clone();
       if (l_version == null)
         return;
       l_version.Locked = p_locked;

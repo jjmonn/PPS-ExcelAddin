@@ -21,7 +21,7 @@ namespace FBI.MVC.View
   public partial class NewDataVersionUI : Form, IView
   {
     VersionsController m_controller;
-    internal uint m_parentId { set; private get; }
+    public UInt32 m_parentId { set; private get; }
     public NewDataVersionUI()
     {
       InitializeComponent();
@@ -106,15 +106,15 @@ namespace FBI.MVC.View
       }
       Version l_version = new Version();
       l_version.Name = this.m_versionNameTextbox.Text;
-      l_version.ParentId = m_parentId;   
-      l_version.StartPeriod = (uint)m_startingPeriodDatePicker.Value.Value.ToOADate();
+      l_version.ParentId = m_parentId;
+      l_version.StartPeriod = (UInt32)m_startingPeriodDatePicker.Value.Value.ToOADate();
       l_version.NbPeriod = (ushort)m_nbPeriods.Value;
       l_version.IsFolder = false;
       l_version.Locked = false;
       l_version.ItemPosition = 0;
       l_version.TimeConfiguration = (TimeConfig)this.m_timeConfigCB.SelectedItem.Value;
-      l_version.RateVersionId = (uint)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
-      l_version.GlobalFactVersionId = (uint)m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value;
+      l_version.RateVersionId = (UInt32)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
+      l_version.GlobalFactVersionId = (UInt32)m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value;
       l_version.CreatedAt = DateTime.Now.ToShortDateString();
       if (m_controller.Create(l_version) == false)
       {

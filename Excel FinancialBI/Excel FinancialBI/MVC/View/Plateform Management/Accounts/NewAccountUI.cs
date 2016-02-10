@@ -19,9 +19,16 @@ namespace FBI.MVC.View
 
   public partial class NewAccountUI : Form, IView
   {
+
+    #region Variables
+
     private AccountController m_controller = null;
     private AccountsView m_view = null;
     private vTreeViewBox m_parentAccountsTreeviewBox = new vTreeViewBox();
+
+    #endregion
+
+    #region Initialize
 
     public NewAccountUI()
     {
@@ -54,6 +61,45 @@ namespace FBI.MVC.View
       FbiTreeView<Account>.Load(this.m_parentAccountsTreeviewBox.TreeView.Nodes, AccountModel.Instance.GetDictionary());
       this.m_parentAccountsTreeviewBox.TreeView.SelectedNode = p_node;
     }
+
+    private void MultilangueSetup()
+    {
+      this.CancelBT.Text = Local.GetValue("general.cancel");
+      this.CreateAccountBT.Text = Local.GetValue("general.create");
+      this.m_accountNameLabel.Text = Local.GetValue("accounts_edition.account_name");
+      this.m_accountParentLabel.Text = Local.GetValue("accounts_edition.account_parent");
+      this.m_formulaTypeLabel.Text = Local.GetValue("accounts_edition.formula_type");
+      this.m_formatLabel.Text = Local.GetValue("accounts_edition.account_format");
+      this.m_recomputeRadioButton.Text = Local.GetValue("accounts_edition.recomputation");
+      this.m_aggregationRadioButton.Text = Local.GetValue("accounts_edition.aggregation");
+      this.m_consolidationOptionLabel.Text = Local.GetValue("accounts_edition.consolidation_option");
+      this.m_endOfPeriodRadioButton.Text = Local.GetValue("accounts_edition.end_of_period_rate");
+      this.m_averageRateRadioButton.Text = Local.GetValue("accounts_edition.average_rate");
+      this.m_conversionOptionLabel.Text = Local.GetValue("accounts_edition.currencies_conversion");
+      this.Text = Local.GetValue("accounts_edition.title_new_account");
+    }
+
+    private void ComboBoxesInit()
+    {
+      foreach (ListItem l_item in m_view.TypeComboBox.Items)
+        this.TypeComboBox.Items.Add(l_item);
+      this.TypeComboBox.SelectedIndex = 0;
+      this.TypeComboBox.DropDownList = true;
+
+      foreach (ListItem l_item in m_view.ProcessComboBox.Items)
+        this.ProcessComboBox.Items.Add(l_item);
+      this.ProcessComboBox.SelectedIndex = 0;
+      this.ProcessComboBox.DropDownList = true;
+
+      foreach (ListItem l_item in m_view.FormulaTypeComboBox.Items)
+        this.FormulaComboBox.Items.Add(l_item);
+      this.FormulaComboBox.SelectedIndex = 0;
+      this.FormulaComboBox.DropDownList = true;
+    }
+
+    #endregion
+
+    #region Event
 
     private void OnCreateAccountClick(object sender, EventArgs e)
     {
@@ -127,39 +173,7 @@ namespace FBI.MVC.View
       this.Close();
     }
 
-    private void MultilangueSetup()
-    {
-      this.CancelBT.Text = Local.GetValue("general.cancel");
-      this.CreateAccountBT.Text = Local.GetValue("general.create");
-      this.m_accountNameLabel.Text = Local.GetValue("accounts_edition.account_name");
-      this.m_accountParentLabel.Text = Local.GetValue("accounts_edition.account_parent");
-      this.m_formulaTypeLabel.Text = Local.GetValue("accounts_edition.formula_type");
-      this.m_formatLabel.Text = Local.GetValue("accounts_edition.account_format");
-      this.m_recomputeRadioButton.Text = Local.GetValue("accounts_edition.recomputation");
-      this.m_aggregationRadioButton.Text = Local.GetValue("accounts_edition.aggregation");
-      this.m_consolidationOptionLabel.Text = Local.GetValue("accounts_edition.consolidation_option");
-      this.m_endOfPeriodRadioButton.Text = Local.GetValue("accounts_edition.end_of_period_rate");
-      this.m_averageRateRadioButton.Text = Local.GetValue("accounts_edition.average_rate");
-      this.m_conversionOptionLabel.Text = Local.GetValue("accounts_edition.currencies_conversion");
-      this.Text = Local.GetValue("accounts_edition.title_new_account");
-    }
+    #endregion
 
-    private void ComboBoxesInit()
-    {
-      foreach (ListItem l_item in m_view.TypeComboBox.Items)
-        this.TypeComboBox.Items.Add(l_item);
-      this.TypeComboBox.SelectedIndex = 0;
-      this.TypeComboBox.DropDownList = true;
-
-      foreach (ListItem l_item in m_view.ProcessComboBox.Items)
-        this.ProcessComboBox.Items.Add(l_item);
-      this.ProcessComboBox.SelectedIndex = 0;
-      this.ProcessComboBox.DropDownList = true;
-
-      foreach (ListItem l_item in m_view.FormulaTypeComboBox.Items)
-        this.FormulaComboBox.Items.Add(l_item);
-      this.FormulaComboBox.SelectedIndex = 0;
-      this.FormulaComboBox.DropDownList = true;
-    }
   }
 }
