@@ -135,7 +135,7 @@ namespace FBI.Forms
       string p_name, ICRUDModel<J> p_model = null, bool p_hasParent = false, UInt32 p_parentId = 0, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
     {
       HierarchyItem l_dim;
-      
+
       if (p_saveDic.ContainsKey(p_id) == false)
       {
         l_dim = new HierarchyItem();
@@ -218,6 +218,7 @@ namespace FBI.Forms
     {
       HierarchyItem column = m_columnsDic[p_column];
       HierarchyItem row = m_rowsDic[p_row];
+
       if (row == null)
         return;
       if (column == null)

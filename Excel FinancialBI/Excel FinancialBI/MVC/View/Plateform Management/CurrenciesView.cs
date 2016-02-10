@@ -115,7 +115,7 @@ namespace FBI.MVC.View
 
     private void UpdateOrAddCurrencyRow(Currency p_currency)
     {
-      m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, p_currency.Id, "", 0, AxisElemModel.Instance);
+      m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, p_currency.Id, "", 0, AxisElemModel.Instance, 0);
       m_dgv.FillField(p_currency.Id, 0, p_currency.InUse);
       m_dgv.FillField(p_currency.Id, 1, p_currency.Name);
       m_dgv.FillField(p_currency.Id, 2, p_currency.Symbol);

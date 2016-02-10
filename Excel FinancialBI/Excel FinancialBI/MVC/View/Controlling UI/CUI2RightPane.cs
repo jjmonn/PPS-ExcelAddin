@@ -11,6 +11,7 @@ using System.Windows.Forms;
 namespace FBI.MVC.View
 {
   using Controller;
+  using Utils;
 
   public partial class CUI2RightPane : UserControl, IView
   {

@@ -66,6 +66,7 @@ namespace FBI.Forms
           Nodes.Add(l_newNode);
       }
       l_newNode.Text = p_value.Name;
+      l_newNode.ImageIndex = (int)p_value.Image;
     }
 
     public void FindAndRemove(UInt32 p_value)

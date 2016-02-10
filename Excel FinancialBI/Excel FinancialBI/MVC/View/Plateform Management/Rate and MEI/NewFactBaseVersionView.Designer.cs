@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-  partial class NewVersionBaseView : System.Windows.Forms.Form
+  partial class NewFactBaseVersionView<TController, TVersion> : System.Windows.Forms.Form
   {
     //Form overrides dispose to clean up the component list.
     [System.Diagnostics.DebuggerNonUserCode()]
@@ -35,7 +35,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewVersionBaseView));
+      System.ComponentModel.ComponentResourceManager resources = new Utils.CustomComponentResourceManager(typeof(NewFactBaseVersionView<TController, TVersion>), "NewFactBaseVersionView");
       this.m_nameLabel = new System.Windows.Forms.Label();
       this.m_startingPeriodLabel = new System.Windows.Forms.Label();
       this.m_numberPeriodsLabel = new System.Windows.Forms.Label();

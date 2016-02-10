@@ -21,6 +21,10 @@ namespace FBI.MVC.View
   using Network;
   using Model.CRUD;
 
+  //
+  using Utils.BNF;
+  //
+
   public partial class AccountsView : UserControl, IView
   {
 
@@ -46,6 +50,9 @@ namespace FBI.MVC.View
     private const UInt32 MARGIN_SIZE = 15;
     private const UInt32 ACCOUNTS_VIEW_TV_MAX_WIDTH = 600;
     private const UInt32 MARGIN1 = 30;
+
+    private SimpleBnf m_bnf = new SimpleBnf();
+    private FbiGrammar m_grammar = new FbiGrammar();
 
     #endregion
 
@@ -218,15 +225,23 @@ namespace FBI.MVC.View
       else
         if (MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), Local.GetValue("general.accounts"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
           return;
-      this.OnCancelFormulaEditionButtonClick(p_sender, p_e);
-      return; //TODO : do check
       if (m_currentNode != null)
       {
-        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        Account l_currentAccount;
+
+        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value)) != null)
         {
-          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
-          l_currentAccount.Formula = m_formulaTextBox.Text;
-          this.m_controller.UpdateAccount(l_currentAccount);
+          l_currentAccount = l_currentAccount.Clone();
+          m_bnf.AddRule("fbi_to_grammar", m_grammar.ToGrammar);
+          if (m_bnf.Parse("fbi_to_grammar", m_formulaTextBox.Text))
+          {
+            l_currentAccount.Formula = m_grammar.Formula;
+            this.m_controller.UpdateAccount(l_currentAccount);
+          }
+          else
+          {
+            MessageBox.Show(m_grammar.LastError);
+          }
         }
       }
     }
@@ -916,11 +931,15 @@ namespace FBI.MVC.View
         }
 
         // Formula TB
-        //if (m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType))
-        //m_formulaTextBox.Text = m_controller.GetFormulaText(l_account_id); //TODO : Controller formula test
-        //else
-        //  m_formulaTextBox.Text = "";
-        m_formulaTextBox.Text = l_account.Formula;
+        m_bnf.AddRule("fbi_to_human_grammar", m_grammar.ToHuman);
+        if (m_bnf.Parse("fbi_to_human_grammar", l_account.Formula))
+        {
+          m_formulaTextBox.Text = m_grammar.Formula;
+        }
+        else
+        {
+          MessageBox.Show(m_grammar.LastError);
+        }
 
         //Description
         this.m_descriptionTextBox.Text = l_account.Description;

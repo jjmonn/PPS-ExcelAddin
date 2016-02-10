@@ -182,6 +182,11 @@ namespace FBI.MVC.View
     }
     #endregion
 
+    private void GlobalFact_BT_Click(object sender, EventArgs e)
+    {
+      m_controller.SwitchView<GlobalFactView, GlobalFactController>(new GlobalFactController());
+    }
+
   }
 
 }

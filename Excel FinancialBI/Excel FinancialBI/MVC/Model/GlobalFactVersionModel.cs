@@ -34,5 +34,13 @@ namespace FBI.MVC.Model
 
       InitCallbacks();
     }
+
+    public Int32[] GetMonthsList(UInt32 versionId)
+    {
+      GlobalFactVersion l_version = GetValue(versionId);
+      if (l_version == null)
+        return (null);
+      return (Period.GetMonthsList((int)l_version.StartPeriod, (int)l_version.NbPeriod, CRUD.TimeConfig.MONTHS));
+    }
   }
 }
