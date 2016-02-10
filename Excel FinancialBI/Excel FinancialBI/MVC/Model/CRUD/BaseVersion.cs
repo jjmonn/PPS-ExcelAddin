@@ -8,7 +8,7 @@ namespace FBI.MVC.Model.CRUD
 {
   using Network;
 
-  public class BaseVersion
+  public abstract class BaseVersion
   {
     public UInt32 Id { get; protected set; }
     public UInt32 ParentId { get; set; }
@@ -19,6 +19,7 @@ namespace FBI.MVC.Model.CRUD
     public string Name { get; set; }
     public Int32 ItemPosition { get; set; }
 
-    protected BaseVersion() { }
+    public BaseVersion() { }
+    public abstract BaseVersion BaseClone();
   }
 }

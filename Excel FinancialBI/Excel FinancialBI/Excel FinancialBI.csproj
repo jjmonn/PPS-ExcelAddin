@@ -246,6 +246,7 @@
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\GlobalFactController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\BasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\FactBaseController.cs" />
@@ -393,20 +394,14 @@
     <Compile Include="MVC\View\Plateform Management\Data Versions\CopyVersionView.Designer.cs">
       <DependentUpon>CopyVersionView.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\GlobalFactView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MVC\View\Plateform Management\Rate and MEI\FactBaseView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\Rate and MEI\FactBaseView.Designer.cs">
       <DependentUpon>FactBaseView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\NewRateVersionView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\NewVersionBaseView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\NewVersionBaseView.Designer.cs">
-      <DependentUpon>NewVersionBaseView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\NewAxisUI.cs">
       <SubType>Form</SubType>
@@ -484,20 +479,20 @@
     <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.Designer.cs">
       <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\ExchangeRatesView.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExchangeRatesView.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\NewGlobalFactUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\NewGlobalFactUI.Designer.cs">
-      <DependentUpon>NewGlobalFactUI.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.Designer.cs">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\NewFactBaseVersionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\NewFactBaseVersionView.Designer.cs">
+      <DependentUpon>NewFactBaseVersionView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\UsersView.cs">
       <SubType>UserControl</SubType>
@@ -728,14 +723,11 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\GlobalFactUI.resx">
       <DependentUpon>GlobalFactUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\NewGlobalFactUI.resx">
-      <DependentUpon>NewGlobalFactUI.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\NewVersionBaseView.resx">
-      <DependentUpon>NewVersionBaseView.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\NewFactBaseVersionView.resx">
+      <DependentUpon>NewFactBaseVersionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\CircularProgressUI.resx">
       <DependentUpon>CircularProgressUI.cs</DependentUpon>

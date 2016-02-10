@@ -11,16 +11,24 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Controller;
 
-  class NewRateVersionView : NewVersionBaseView
+  partial class NewFactBaseVersionView<TController, TVersion>
+    where TController : class, IFactBaseController<TVersion>
+    where TVersion : BaseVersion, NamedCRUDEntity, new()
   {
-    ExchangeRatesController m_controller;
+    TController m_controller;
+    public UInt32 SelectedParent { get; set; }
 
-    public override void SetController(IController p_controller)
+    public NewFactBaseVersionView()
     {
-      m_controller = p_controller as ExchangeRatesController;
+      InitializeComponent();
     }
 
-    public override void LoadView()
+    public void SetController(IController p_controller)
+    {
+      m_controller = p_controller as TController;
+    }
+
+    public void LoadView()
     {
       SuscribeEvents();
     }
@@ -33,7 +41,7 @@ namespace FBI.MVC.View
 
     void OnValidate(object p_sender, EventArgs p_args)
     {
-      ExchangeRateVersion l_newVersion = new ExchangeRateVersion();
+      TVersion l_newVersion = new TVersion();
 
       l_newVersion.StartPeriod = (UInt32)m_startPeriod.Value.GetValueOrDefault().ToOADate();
       l_newVersion.NbPeriod =(UInt16)m_nbPeriod.Value;
