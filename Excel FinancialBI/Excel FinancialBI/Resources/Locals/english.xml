@@ -125,13 +125,27 @@
     <string name="msg_name_empty">The Account Name must not be empty.</string>
     <string name="msg_fill_values">"Account's Format and Formula type must be populated."</string>
     <string name="msg_name_already_used">This name is already used by another fact or account.</string>
-	<string name="msg_error_create">The account could not be created.</string>
+	  <string name="msg_error_create">The account could not be created.</string>
     <string name="msg_error_update">The account could not be updated.</string>
-	<string name="msg_error_delete">The account could not be deleted.</string>
-	<string name="msg_invalid_attribute">Invalid attribute.</string>
-	<string name="msg_syntax">Syntax incorrect</string>
-	<string name="msg_not_found">One or more of formula's defined elements does not exist.</string>
-	<string name="msg_unknown">Unknown error.</string>
+	  <string name="msg_error_delete">The account could not be deleted.</string>
+  	<string name="msg_invalid_attribute">Invalid attribute.</string>
+  	<string name="msg_syntax">Syntax incorrect</string>
+	  <string name="msg_not_found">One or more of formula's defined elements does not exist.</string>
+	  <string name="msg_unknown">Unknown error.</string>
+    <string name="formula_type_formula">Formula</string>
+    <string name="formula_type_input">Input</string>
+    <string name="formula_type_sub">Aggregation of Sub Accounts</string>
+    <string name="formula_type_first">First Period Input</string>
+    <string name="formula_type_title">Title</string>
+    <string name="account_type_monetary">Monetary</string>
+    <string name="account_type_number">Number</string>
+    <string name="account_type_percentage">Percentage</string>
+    <string name="account_type_date">Date</string>
+    <string name="currencies_type_average">Average Exchange Rate</string>
+    <string name="currencies_type_end">End of Period Exchange Rate</string>
+    <string name="consolidation_type_aggregated">Aggregated</string>
+    <string name="consolidation_type_recomputed">Recomputed</string>
+    <string name="consolidation_type_none">None</string>
   </category>
  
   <category name="axis_edition">
@@ -358,6 +372,9 @@
     <string name="new_version">New Macro Economic Indicators Version</string>
     <string name="msg_name_already_taken">This name is already used for another macro economic indicator or account</string>
     <string name="display_version">Display macro economics indicators</string>
+    <string name="msg_error_create">The Globalfact could not be created.</string>
+    <string name="msg_error_update">The Globalfact could not be updated.</string>
+    <string name="msg_error_delete">The Globalfact could not be deleted.</string>
   </category>
 
   <category name="facts_versions">

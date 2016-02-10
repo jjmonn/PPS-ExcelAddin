@@ -16,7 +16,15 @@ namespace FBI.MVC.Controller
 
   class AccountController : NameController<AccountsView>
   {
+
+    #region Variables
+
     public override IView View { get { return (m_view); } }
+    private const string ACCOUNTS_FORBIDDEN_CHARACTERS = "+-*=<>^?:;![]";
+
+    #endregion
+
+    #region Initialize
 
     public AccountController()
     {
@@ -29,6 +37,10 @@ namespace FBI.MVC.Controller
     {
       m_view.InitView();
     }
+
+    #endregion
+
+    #region CreateUI
 
     public void CreateNewUI(vTreeNode p_node)
     {
@@ -47,6 +59,10 @@ namespace FBI.MVC.Controller
           new AllocationKeysController(l_account);
     }
 
+    #endregion
+
+    #region Server
+
     public void UpdateAccount(Account p_account)
     {
       if (p_account != null)
@@ -56,6 +72,7 @@ namespace FBI.MVC.Controller
     public void DeleteAccount(vTreeNode p_node)
     {
       List<String> l_dependantAccounts = this.ExistingDependantAccounts(p_node);
+
       if (l_dependantAccounts.Count > 0)
       {
         string l_msg = "";
@@ -86,9 +103,7 @@ namespace FBI.MVC.Controller
     public void DeleteAccount(UInt32 p_id)
     {
       if (AccountModel.Instance.GetValue(p_id) != null)
-      {
         AccountModel.Instance.Delete(p_id);
-      }
       else
         Error = Local.GetValue("general.error.system");
     }
@@ -104,6 +119,7 @@ namespace FBI.MVC.Controller
       string p_formatId, UInt32 p_image, Int32 p_itemPosition)
     {
       Account l_new = new Account();
+
       l_new.ParentId = p_parentId;
       l_new.Name = p_name;
       l_new.Process = p_process;
@@ -115,16 +131,18 @@ namespace FBI.MVC.Controller
       l_new.FormatId = p_formatId;
       l_new.Image = p_image;
       l_new.ItemPosition = p_itemPosition;
-      AccountModel.Instance.Create(l_new);
+      this.CreateAccount(l_new);
     }
+
+    #endregion
+
+    #region Check
 
     public bool AccountNameCheck(string p_accountName)
     {
-      //TODO : "" etc dans le nom
-      if (p_accountName == "" || !this.IsNameValid(p_accountName) || AccountModel.Instance.GetValue(p_accountName) != null)
-      {
+      if (p_accountName == "" || !this.IsNameValid(p_accountName) || AccountModel.Instance.GetValue(p_accountName) != null ||
+        StringUtils.ContainChars(p_accountName, ACCOUNTS_FORBIDDEN_CHARACTERS))
         return (false);
-      }
      return (true);
     }
 
@@ -132,9 +150,11 @@ namespace FBI.MVC.Controller
     {
       List<string> l_dependantAccounts = new List<string>();
       List<UInt32> l_accountKeyList = FbiTreeView<Account>.GetNodesIdsUint(p_node);
+
       l_accountKeyList.Reverse();
 
       List<UInt32> l_dependantAccountsId = this.DependenciesLoopCheck(l_accountKeyList);
+
       foreach (UInt32 l_dependantAccountId in l_dependantAccountsId)
       {
         Account l_account = AccountModel.Instance.GetValue(l_dependantAccountId);
@@ -150,7 +170,9 @@ namespace FBI.MVC.Controller
 
       foreach (UInt32 l_key in p_accountKeyList)
         this.CheckForDependencies(l_key, l_dependenciesList);
+
       List<UInt32> l_uniqueDependenciesList = l_dependenciesList.Distinct().ToList();
+
       foreach (UInt32 l_accountId in p_accountKeyList)
       {
         if (l_uniqueDependenciesList.Contains(l_accountId))
@@ -174,6 +196,8 @@ namespace FBI.MVC.Controller
         }
       }
     }
+
+    #endregion
 
   }
 }
