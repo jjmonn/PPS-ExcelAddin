@@ -49,6 +49,7 @@ namespace FBI.MVC.View
 
     #endregion
 
+
     public AccountsView()
     {
       InitializeComponent();
@@ -115,9 +116,7 @@ namespace FBI.MVC.View
     private void OnAllocationKeyButtonClick(object p_sender, EventArgs p_e)
     {
       if (this.m_accountTV.SelectedNode != null)
-      {
-
-      }
+        this.m_controller.CreateAllocationKeysView(this.m_accountTV.SelectedNode);
     }
 
     delegate void OnGlobalFactModelDelete_delegate(ErrorMessage p_status, uint p_id);
@@ -322,9 +321,11 @@ namespace FBI.MVC.View
     {
       if (m_currentNode != null)
       {
-        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        Account l_currentAccount;
+
+        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value)) != null)
         {
-          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+          l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.Description = m_descriptionTextBox.Text;
           this.m_controller.UpdateAccount(l_currentAccount);
         }
@@ -365,8 +366,8 @@ namespace FBI.MVC.View
           l_oldNode.ImageIndex = (Int32)p_attributes.Image;
           if (this.m_currentNode == l_oldNode)
           {
-            this.DisplayAttributes();
             this.DesactivateUnallowed();
+            this.DisplayAttributes();
           }
         }
         else
@@ -574,8 +575,8 @@ namespace FBI.MVC.View
         this.m_currentNode = p_e.Node;
         if (this.m_currentNode != null)
         {
-          this.DisplayAttributes();
           this.DesactivateUnallowed();
+          this.DisplayAttributes();
         }
         else
           this.m_accountTV.Capture = false;
@@ -816,12 +817,12 @@ namespace FBI.MVC.View
           Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
           Account.FormulaTypes l_value = (Account.FormulaTypes)((vComboBox)p_sender).SelectedItem.Value;
 
-          if (l_currentAccount.FormulaType == Account.FormulaTypes.FORMULA || l_currentAccount.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
+          if (l_currentAccount.FormulaType == Account.FormulaTypes.HARD_VALUE_INPUT || l_currentAccount.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
           {
-            if (l_value != Account.FormulaTypes.FORMULA || l_value != Account.FormulaTypes.FIRST_PERIOD_INPUT)
+            if (l_value != Account.FormulaTypes.HARD_VALUE_INPUT || l_value != Account.FormulaTypes.FIRST_PERIOD_INPUT)
             {
               string l_result = PasswordBox.Open(Local.GetValue("accounts_edition.msg_password_required"), 
-                Local.GetValue("accounts_edition.title_formula_validation_confirmation"));
+                Local.GetValue("cateories.accpunts"));
 
               if (l_result == PasswordBox.Canceled || l_result != Addin.Password)
               {
@@ -928,7 +929,7 @@ namespace FBI.MVC.View
     private void SetEnableStatusEdition(Boolean p_status, Boolean p_isRootAccount, Account p_account)
     {
       if (p_isRootAccount == true)
-        this.FormulaTypeComboBox.Enabled = p_status;
+        this.FormulaTypeComboBox.Enabled = false;
       if (p_account != null)
       {
         if (p_account.FormulaType == Account.FormulaTypes.FORMULA || p_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
@@ -938,13 +939,6 @@ namespace FBI.MVC.View
       }
       else
         this.m_formulaEditionButton.Visible = false;
-      this.Name_TB.Enabled = p_status;
-      this.ProcessComboBox.Enabled = p_status;
-      this.TypeComboBox.Enabled = p_status;
-      this.CurrencyConversionComboBox.Enabled = p_status;
-      this.SaveDescriptionBT.Enabled = p_status;
-      this.m_descriptionTextBox.Enabled = p_status;
-      this.ConsolidationOptionComboBox.Enabled = p_status;
       this.m_descriptionTextBox.BackColor = Color.White;
     }
 

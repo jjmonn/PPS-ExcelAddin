@@ -44,12 +44,7 @@ namespace FBI.MVC.Controller
 
       if (l_account != null)
         if (l_account.FormulaType == Account.FormulaTypes.HARD_VALUE_INPUT || l_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
-        {
-          AllocationKeysView l_allocationKeyView = new AllocationKeysView();
-          l_allocationKeyView.SetController(null);
-          //l_allocationKeyView.LoadView(l_account);
-          l_allocationKeyView.ShowDialog();
-        }
+          new AllocationKeysController(l_account);
     }
 
     public void UpdateAccount(Account p_account)
@@ -125,7 +120,7 @@ namespace FBI.MVC.Controller
 
     public bool AccountNameCheck(string p_accountName)
     {
-      //TODO : error
+      //TODO : "" etc dans le nom
       if (p_accountName == "" || !this.IsNameValid(p_accountName) || AccountModel.Instance.GetValue(p_accountName) != null)
       {
         return (false);

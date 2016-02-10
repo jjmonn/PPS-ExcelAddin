@@ -243,6 +243,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AllocationKeysController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
