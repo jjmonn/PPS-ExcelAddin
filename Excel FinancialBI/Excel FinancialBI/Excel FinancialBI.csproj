@@ -251,6 +251,7 @@
     </Compile>
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AllocationKeysController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\CurrenciesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />

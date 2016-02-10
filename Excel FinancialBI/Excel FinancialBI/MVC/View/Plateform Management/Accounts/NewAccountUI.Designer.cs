@@ -454,7 +454,7 @@ namespace FBI.MVC.View
       this.ProcessComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.ProcessComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.ProcessComboBox.DropDownWidth = 465;
-      this.ProcessComboBox.Location = new System.Drawing.Point(209, 445);
+      this.ProcessComboBox.Location = new System.Drawing.Point(209, 433);
       this.ProcessComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.ProcessComboBox.Name = "ProcessComboBox";
       this.ProcessComboBox.RoundedCornersMaskListItem = ((byte)(15));
@@ -472,7 +472,7 @@ namespace FBI.MVC.View
       this.m_ProcessLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_ProcessLabel.Ellipsis = false;
       this.m_ProcessLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_ProcessLabel.Location = new System.Drawing.Point(-3, 445);
+      this.m_ProcessLabel.Location = new System.Drawing.Point(-3, 433);
       this.m_ProcessLabel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.m_ProcessLabel.Multiline = true;
       this.m_ProcessLabel.Name = "m_ProcessLabel";
