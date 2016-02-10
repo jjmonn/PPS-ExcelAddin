@@ -11,12 +11,22 @@ using System.Windows.Forms;
 namespace FBI.MVC.View
 {
   using Controller;
+  using FBI;
+  using Utils;
 
   public partial class PasswordBox : Form
   {
     public PasswordBox()
     {
       InitializeComponent();
+      MultilanguageSetup();
+    }
+
+    private void MultilanguageSetup()
+    {
+      this.Text = Local.GetValue("general.password");
+      this.AcceptBT.Text = Local.GetValue("general.validate");
+      this.CancelBT.Text = Local.GetValue("general.cancel");
     }
 
     public const string Canceled = "PBoxCanceled";

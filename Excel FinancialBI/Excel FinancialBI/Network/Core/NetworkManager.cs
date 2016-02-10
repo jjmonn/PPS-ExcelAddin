@@ -182,6 +182,7 @@ namespace FBI.Network
       catch (Exception e)
       {
         Debug.WriteLine(e.Message);
+        Disconnect();
         return null;
       }
     }

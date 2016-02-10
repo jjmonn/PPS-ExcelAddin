@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FBI.Utils;
 
 namespace FBI.MVC.View
 {
@@ -28,6 +29,12 @@ namespace FBI.MVC.View
 
     public void LoadView()
     {
+      this.MultilangueSetup();
+    }
+
+    private void MultilangueSetup()
+    {
+      m_accountLabel.Text = Local.GetValue("accounts_edition.account_name");
 
     }
   }

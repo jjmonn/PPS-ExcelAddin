@@ -94,9 +94,9 @@ namespace FBI.MVC.Model
       return (m_globalFactDic[p_id]);
     }
 
-    public GlobalFactData GetValue(UInt32 p_globalFactId, UInt32 p_period, UInt32 p_rateVersionId)
+    public GlobalFactData GetValue(UInt32 p_globalFactId, UInt32 p_period, UInt32 p_gfactVersionId)
     {
-      return (m_globalFactDic[new Tuple<UInt32, UInt32, UInt32>(p_globalFactId, p_period, p_rateVersionId)]);
+      return (m_globalFactDic[new Tuple<UInt32, UInt32, UInt32>(p_globalFactId, p_period, p_gfactVersionId)]);
     }
 
     public MultiIndexDictionary<UInt32, Tuple<UInt32, UInt32, UInt32>, GlobalFactData> GetDictionary()

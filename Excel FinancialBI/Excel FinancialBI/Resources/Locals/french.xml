@@ -321,13 +321,18 @@
     <string name="global_facts_upload">Import des Indicateurs Macro Economiques</string>
     <string name="range_mismatch">Les sélections pour les périodes et les valeurs n'ont pas la même taille, ou la sélection n'est pas valide.</string>
     <string name="report_as_of">Rapport du </string>
-   <string name="folder_snapshot">Snapshot d'un Dossier</string>
+	<string name="folder_snapshot">Snapshot d'un Dossier</string>
+	<string name="worksheet_name">Nom de la Feuille</string>
 
     
+    <string name="msg_selection_instruction">Selectionnez les plage correspondant aux entités, comptes et périodes</string>
     <string name="input_sidepane_title">Import de données depuis Excel</string>
     <string name="entity_selection">Selection de l'entité</string>
     <string name="periods_selection">Sélection des périodes</string>
     <string name="accounts_selection">Sélection du compte</string>
+    <string name="title_input_ranges_edition">Edition des plages d'entrée</string>
+	<string name="title_client_selection">Selection des Clients</string>
+	<string name="title_upload_error_messages">Erreur d'import</string>
     
     <string name="msg_periods_selection">Sélectionnez la(les) période(s)</string>
     <string name="msg_rates_selection">Sélectionnez le(s) taux</string>
@@ -344,7 +349,8 @@
     <string name="msg_error_upload">Une erreur est survenue dans Excel et le rapport ne peut pas être affiché.</string>
     <string name="msg_invalid_value_for_client">Cette valeur n'est pas valide pour un nom de client: </string>
     <string name="msg_no_account_setup">Aucun compte n'a été spécifié. Impossible de soumettre la donnée.</string>
-      <string name="msg_no_account_selected">Aucun compte n'a été sélectioné.</string>
+    <string name="msg_no_account_selected">Aucun compte n'a été sélectioné.</string>
+	<string name="msg_uploading">Importation ...</string>
   </category>
 
   <category name="global_facts">
@@ -475,8 +481,11 @@
 
   <category name="general">
     <string name="edition">Edition</string>
+    <string name="initializing">Initialisation ...</string>
+    <string name="formula">Formule</string>
     <string name="week">Semaine</string>
     <string name="account">Compte</string>
+    <string name="description">Description</string>
     <string name="entity">Entity</string>
     <string name="client">Client</string>
     <string name="product">Product</string>
@@ -555,6 +564,7 @@
 
   <category name="submissionsFollowUp">
     <string name="submissions_tracking">Suivi des Soumissions</string>
+    <string name="submissions_controls">Controle des soumissions</string>
     <string name="start_date">Date de départ</string>
     <string name="end_date">Date de fin</string>
     <string name="red_status">Non édité</string>

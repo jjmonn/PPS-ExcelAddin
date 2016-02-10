@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace FBI.MVC.View
 {
   using Model.CRUD;
-  partial class FactBaseView<TCrudType> : System.Windows.Forms.UserControl where TCrudType : BaseVersion, NamedHierarchyCRUDEntity
+  partial class FactBaseView<TVersion, TControllerType> : System.Windows.Forms.UserControl
   {
 
     //UserControl overrides dispose to clean up the component list.
@@ -37,7 +37,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new Utils.CustomComponentResourceManager(typeof(FactBaseView<>), "FactBaseView");
+      System.ComponentModel.ComponentResourceManager resources = new Utils.CustomComponentResourceManager(typeof(FactBaseView<,>), "FactBaseView");
       this.MenuButtonIL = new System.Windows.Forms.ImageList(this.components);
       this.m_versionMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.select_version = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,9 +47,9 @@ namespace FBI.MVC.View
       this.ToolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
       this.m_deleteVersionRCM = new System.Windows.Forms.ToolStripMenuItem();
       this.m_renameBT = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_exchangeRatesRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.m_dgvMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.ImportFromExcelToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-      this.CopyRateDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_copyValueDown = new System.Windows.Forms.ToolStripMenuItem();
       this.TableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
       this.m_mainContainer = new System.Windows.Forms.SplitContainer();
       this.m_circularProgress = new VIBlend.WinForms.Controls.vCircularProgressBar();
@@ -63,8 +63,12 @@ namespace FBI.MVC.View
       this.rates_version_TB = new System.Windows.Forms.TextBox();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
       this.m_deleteBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+      this.m_gfactMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.m_newGFact = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_deleteGFact = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_renameGFact = new System.Windows.Forms.ToolStripMenuItem();
       this.m_versionMenu.SuspendLayout();
-      this.m_exchangeRatesRightClickMenu.SuspendLayout();
+      this.m_dgvMenu.SuspendLayout();
       this.TableLayoutPanel4.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.m_mainContainer)).BeginInit();
       this.m_mainContainer.Panel2.SuspendLayout();
@@ -72,6 +76,7 @@ namespace FBI.MVC.View
       this.TableLayoutPanel5.SuspendLayout();
       this.MenuStrip1.SuspendLayout();
       this.m_versionNamePanel.SuspendLayout();
+      this.m_gfactMenu.SuspendLayout();
       this.SuspendLayout();
       // 
       // MenuButtonIL
@@ -141,13 +146,13 @@ namespace FBI.MVC.View
       this.m_renameBT.Size = new System.Drawing.Size(146, 22);
       this.m_renameBT.Text = "Rename";
       // 
-      // m_exchangeRatesRightClickMenu
+      // m_dgvMenu
       // 
-      this.m_exchangeRatesRightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+      this.m_dgvMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ImportFromExcelToolStripMenuItem1,
-            this.CopyRateDownToolStripMenuItem});
-      this.m_exchangeRatesRightClickMenu.Name = "dgvRCM";
-      this.m_exchangeRatesRightClickMenu.Size = new System.Drawing.Size(136, 48);
+            this.m_copyValueDown});
+      this.m_dgvMenu.Name = "dgvRCM";
+      this.m_dgvMenu.Size = new System.Drawing.Size(136, 48);
       // 
       // ImportFromExcelToolStripMenuItem1
       // 
@@ -158,10 +163,10 @@ namespace FBI.MVC.View
       // 
       // CopyRateDownToolStripMenuItem
       // 
-      this.CopyRateDownToolStripMenuItem.Image = global::FBI.Properties.Resources.Download;
-      this.CopyRateDownToolStripMenuItem.Name = "CopyRateDownToolStripMenuItem";
-      this.CopyRateDownToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-      this.CopyRateDownToolStripMenuItem.Text = "Copy down";
+      this.m_copyValueDown.Image = global::FBI.Properties.Resources.Download;
+      this.m_copyValueDown.Name = "CopyRateDownToolStripMenuItem";
+      this.m_copyValueDown.Size = new System.Drawing.Size(135, 22);
+      this.m_copyValueDown.Text = "Copy down";
       // 
       // TableLayoutPanel4
       // 
@@ -297,6 +302,35 @@ namespace FBI.MVC.View
       this.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico");
       this.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico");
       // 
+      // m_gfactMenu
+      // 
+      this.m_gfactMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_newGFact,
+            this.m_deleteGFact,
+            this.m_renameGFact});
+      this.m_gfactMenu.Name = "m_gfactMenu";
+      this.m_gfactMenu.Size = new System.Drawing.Size(153, 92);
+      // 
+      // m_newGFact
+      // 
+      this.m_newGFact.Image = global::FBI.Properties.Resources.elements_add;
+      this.m_newGFact.Name = "m_newGFact";
+      this.m_newGFact.Size = new System.Drawing.Size(152, 22);
+      this.m_newGFact.Text = "New";
+      // 
+      // m_deleteGFact
+      // 
+      this.m_deleteGFact.Image = global::FBI.Properties.Resources.elements_delete;
+      this.m_deleteGFact.Name = "m_deleteGFact";
+      this.m_deleteGFact.Size = new System.Drawing.Size(117, 22);
+      this.m_deleteGFact.Text = "Delete";
+      // 
+      // m_renameGFact
+      // 
+      this.m_renameGFact.Name = "m_renameGFact";
+      this.m_renameGFact.Size = new System.Drawing.Size(117, 22);
+      this.m_renameGFact.Text = "Rename";
+      // 
       // FactBaseView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -306,7 +340,7 @@ namespace FBI.MVC.View
       this.Name = "FactBaseView";
       this.Size = new System.Drawing.Size(886, 605);
       this.m_versionMenu.ResumeLayout(false);
-      this.m_exchangeRatesRightClickMenu.ResumeLayout(false);
+      this.m_dgvMenu.ResumeLayout(false);
       this.TableLayoutPanel4.ResumeLayout(false);
       this.m_mainContainer.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.m_mainContainer)).EndInit();
@@ -317,34 +351,39 @@ namespace FBI.MVC.View
       this.MenuStrip1.PerformLayout();
       this.m_versionNamePanel.ResumeLayout(false);
       this.m_versionNamePanel.PerformLayout();
+      this.m_gfactMenu.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
-    public System.Windows.Forms.ImageList MenuButtonIL;
-    public System.Windows.Forms.ContextMenuStrip m_versionMenu;
-    public System.Windows.Forms.ToolStripMenuItem select_version;
-    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
-    public System.Windows.Forms.ToolStripMenuItem m_addRatesVersionRCM;
-    public System.Windows.Forms.ToolStripMenuItem m_addFolderRCM;
-    public System.Windows.Forms.ToolStripMenuItem m_deleteVersionRCM;
-    public System.Windows.Forms.ContextMenuStrip m_exchangeRatesRightClickMenu;
-    public System.Windows.Forms.ToolStripMenuItem CopyRateDownToolStripMenuItem;
-    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel4;
-    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel5;
-    public System.Windows.Forms.MenuStrip MenuStrip1;
-    public System.Windows.Forms.ToolStripMenuItem ImportFromExcelToolStripMenuItem;
-    public System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem1;
-    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator6;
-    public FBI.Forms.FbiToolStripMenuItem m_versionTopMenu;
-    public System.Windows.Forms.Label VersionLabel;
-    public System.Windows.Forms.TextBox rates_version_TB;
-    public System.Windows.Forms.SplitContainer m_mainContainer;
-    public System.Windows.Forms.Panel m_versionNamePanel;
-    public System.Windows.Forms.ToolStripMenuItem m_renameBT;
-    public System.Windows.Forms.ToolStripMenuItem ImportFromExcelToolStripMenuItem1;
-    public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-    public VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
+    internal System.Windows.Forms.ImageList MenuButtonIL;
+    internal System.Windows.Forms.ContextMenuStrip m_versionMenu;
+    internal System.Windows.Forms.ToolStripMenuItem select_version;
+    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
+    internal System.Windows.Forms.ToolStripMenuItem m_addRatesVersionRCM;
+    internal System.Windows.Forms.ToolStripMenuItem m_addFolderRCM;
+    internal System.Windows.Forms.ToolStripMenuItem m_deleteVersionRCM;
+    internal System.Windows.Forms.ContextMenuStrip m_dgvMenu;
+    internal System.Windows.Forms.ToolStripMenuItem m_copyValueDown;
+    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel4;
+    internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel5;
+    internal System.Windows.Forms.MenuStrip MenuStrip1;
+    internal System.Windows.Forms.ToolStripMenuItem ImportFromExcelToolStripMenuItem;
+    internal System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem1;
+    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator6;
+    internal FBI.Forms.FbiToolStripMenuItem m_versionTopMenu;
+    internal System.Windows.Forms.Label VersionLabel;
+    internal System.Windows.Forms.TextBox rates_version_TB;
+    internal System.Windows.Forms.SplitContainer m_mainContainer;
+    internal System.Windows.Forms.Panel m_versionNamePanel;
+    internal System.Windows.Forms.ToolStripMenuItem m_renameBT;
+    internal System.Windows.Forms.ToolStripMenuItem ImportFromExcelToolStripMenuItem1;
+    internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+    internal VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
 
-    public System.ComponentModel.BackgroundWorker m_deleteBackgroundWorker;
+    internal System.ComponentModel.BackgroundWorker m_deleteBackgroundWorker;
+    protected System.Windows.Forms.ToolStripMenuItem m_newGFact;
+    protected System.Windows.Forms.ToolStripMenuItem m_deleteGFact;
+    protected System.Windows.Forms.ToolStripMenuItem m_renameGFact;
+    protected System.Windows.Forms.ContextMenuStrip m_gfactMenu;
   }
 }
