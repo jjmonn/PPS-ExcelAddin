@@ -35,7 +35,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new Utils.CustomComponentResourceManager(typeof(NewFactBaseVersionView<TController, TVersion>), "NewFactBaseVersionView");
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewFactBaseVersionView));
       this.m_nameLabel = new System.Windows.Forms.Label();
       this.m_startingPeriodLabel = new System.Windows.Forms.Label();
       this.m_numberPeriodsLabel = new System.Windows.Forms.Label();

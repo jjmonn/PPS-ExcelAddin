@@ -18,9 +18,9 @@ namespace FBI.MVC.View
   using FBI;
   using Utils;
 
-  public partial class NewAxisUI : Form, IView
+  public partial class NewAxisUI<TController> : Form, IView where TController : class, IAxisController
   {
-    AxisController m_controller;
+    TController m_controller;
 
     public NewAxisUI()
     {
@@ -29,7 +29,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-      m_controller = p_controller as AxisController;
+      m_controller = p_controller as TController;
     }
 
     public void LoadView()

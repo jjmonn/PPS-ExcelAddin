@@ -13,12 +13,14 @@ namespace FBI.Forms
   using Utils;
   using MVC.Model.CRUD;
 
+  public delegate void DropedEventHandler(object sender, DragEventArgs e);
   public delegate void NodeDropedEventHandler(vTreeNode p_draggedNode, vTreeNode p_targetNode);
 
   public class FbiTreeView<T> : vTreeView where T : NamedCRUDEntity
   {
     private MultiIndexDictionary<UInt32, String, T> m_items;
     public event NodeDropedEventHandler NodeDropped;
+    public event DropedEventHandler Dropped;
     private static readonly string ERR_GENERATE = "[FbiTreeView] Cannot generate vTreeView. Either the MultiIndexDictionary is null or incorrect";
 
     public FbiTreeView(MultiIndexDictionary<UInt32, String, T> p_items = null, MultiIndexDictionary<UInt32, String, T> p_icons = null,
@@ -39,6 +41,7 @@ namespace FBI.Forms
       // Careful: you must subscribe to the mouse down event into your view to launch the drag and drop
       this.DragEnter += FbiTreeview_DragEnter;
       this.DragOver += FbiTreeview_DragOver;
+      this.DragDrop += FbiTreeview_DragDropNode;
       this.DragDrop += FbiTreeview_DragDrop;
       // You must subscribe to the NodeDropped event into your view in order to send the parent id update to your model
     }
@@ -339,15 +342,22 @@ namespace FBI.Forms
 
     }
 
-    private void FbiTreeview_DragDrop(object sender, DragEventArgs e)
+    private void FbiTreeview_DragDropNode(object sender, DragEventArgs e)
     {
       vTreeNode l_draggedNode = e.Data.GetData(typeof(vTreeNode)) as vTreeNode;
       if (l_draggedNode != null)
       {
         Point location = this.PointToClient(Cursor.Position);
         vTreeNode l_targetNode = this.HitTest(location);
-        NodeDropped(l_draggedNode, l_targetNode);  
+        if (NodeDropped != null)
+          NodeDropped(l_draggedNode, l_targetNode);  
       }
+    }
+
+    private void FbiTreeview_DragDrop(object sender, DragEventArgs e)
+    {
+      if (Dropped != null)
+        Dropped(sender, e);
     }
     #endregion
   }

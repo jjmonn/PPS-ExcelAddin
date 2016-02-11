@@ -28,6 +28,7 @@ namespace FBI.MVC.View
     protected FbiDataGridView m_dgv;
     NamedCRUDModel<TVersion> m_versionModel;
     protected TControllerType m_controller;
+    RightManager m_rightMgr = new RightManager();
 
     public FactBaseView(NamedCRUDModel<TVersion> p_versionModel)
     {
@@ -46,6 +47,26 @@ namespace FBI.MVC.View
       m_mainContainer.Panel1.Controls.Add(m_versionTV);
       m_mainContainer.Panel2.Controls.Add(m_dgv);
       MultilanguageSetup();
+      DefineUIPermissions();
+      DesactivateUnallowed();
+    }
+
+    private void DefineUIPermissions()
+    {
+      m_rightMgr[m_addRatesVersionRCM] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_deleteVersionRCM] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_addFolderRCM] = Group.Permission.EDIT_BASE;
+      m_rightMgr[m_renameGFact] = Group.Permission.EDIT_GFACTS;
+      m_rightMgr[m_deleteGFact] = Group.Permission.EDIT_GFACTS;
+      m_rightMgr[m_newGFact] = Group.Permission.EDIT_GFACTS;
+      m_rightMgr[ImportFromExcelToolStripMenuItem] = Group.Permission.EDIT_RATES;
+      m_rightMgr[m_renameBT] = Group.Permission.EDIT_RATES;
+      m_rightMgr[m_copyValueDown] = Group.Permission.EDIT_RATES;
+    }
+
+    private void DesactivateUnallowed()
+    {
+      m_rightMgr.Enable(UserModel.Instance.GetCurrentUserRights());
     }
 
     private void MultilanguageSetup()
@@ -53,7 +74,7 @@ namespace FBI.MVC.View
       m_versionTopMenu.Text = Local.GetValue("general.versions");
       ImportFromExcelToolStripMenuItem.Text = Local.GetValue("upload.upload");
       ImportFromExcelToolStripMenuItem1.Text = Local.GetValue("upload.upload");
-      VersionLabel.Text = Local.GetValue("facts_versions.facts_versions");
+      VersionLabel.Text = Local.GetValue("facts_versions.fact_version");
       select_version.Text = Local.GetValue("versions.select_version");
       m_addRatesVersionRCM.Text = Local.GetValue("versions.new_version");
       m_addFolderRCM.Text = Local.GetValue("versions.new_folder");
@@ -157,6 +178,7 @@ namespace FBI.MVC.View
       else
       {
         m_versionTV.FindAndAdd(p_version);
+        DesactivateUnallowed();
       }
     }
 
@@ -164,12 +186,14 @@ namespace FBI.MVC.View
     {
       if (p_status != ErrorMessage.SUCCESS)
         MessageBox.Show(Error.GetMessage(p_status));
+      DesactivateUnallowed();
     }
 
     void OnModelCreateVersion(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
         MessageBox.Show(Error.GetMessage(p_status));
+      DesactivateUnallowed();
     }
 
     delegate void OnModelDeleteVersion_delegate(ErrorMessage p_status, UInt32 p_id);
