@@ -18,6 +18,7 @@ namespace FBI.MVC.View
   using FBI.Forms;
   using Utils;
   using Network;
+  
 
   public partial class CurrenciesView : UserControl, IView
   {
@@ -38,6 +39,12 @@ namespace FBI.MVC.View
       this.dgvLoad();
       this.suscribeEvents();
       this.Controls.Add(m_dgv);
+      this.MultilangueSetup();
+    }
+
+    private void MultilangueSetup()
+    {
+      this.SetMainCurrencyCallBack.Text = Local.GetValue("currencies.set_main_currency");
     }
 
     private void dgvLoad()
@@ -50,9 +57,18 @@ namespace FBI.MVC.View
       foreach (Currency l_currency in l_currencyDic.Values)
       {
         m_dgv.SetDimension<Currency>(FbiDataGridView.Dimension.ROW, l_currency.Id, "", 0, null, 0);
-        m_dgv.FillField(l_currency.Id, 0, l_currency.InUse, new CheckBoxEditor());
-        m_dgv.FillField(l_currency.Id, 1, l_currency.Name, new TextBoxEditor());
-        m_dgv.FillField(l_currency.Id, 2, l_currency.Symbol, new TextBoxEditor());
+        if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_CURRENCIES) == true)
+        {
+          m_dgv.FillField(l_currency.Id, 0, l_currency.InUse, new CheckBoxEditor());
+          m_dgv.FillField(l_currency.Id, 1, l_currency.Name, new TextBoxEditor());
+          m_dgv.FillField(l_currency.Id, 2, l_currency.Symbol, new TextBoxEditor());
+        }
+        else
+        {
+          m_dgv.FillField(l_currency.Id, 0, l_currency.InUse);
+          m_dgv.FillField(l_currency.Id, 1, l_currency.Name);
+          m_dgv.FillField(l_currency.Id, 2, l_currency.Symbol);
+        }
       }
     }
 

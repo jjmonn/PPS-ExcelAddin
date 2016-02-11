@@ -25,6 +25,7 @@ namespace FBI.MVC.View
     protected FbiDataGridView m_dgv = new FbiDataGridView();
     protected TControllerType m_controller;
     bool m_cellModif = false;
+    RightManager m_rightMgr = new RightManager();
 
     public AxisBaseView()
     {
@@ -46,7 +47,41 @@ namespace FBI.MVC.View
 
       TableLayoutPanel1.Controls.Add(m_dgv);
 
+      DefineUIPermissions();
+      DesactivateUnallowed();
       SuscribeEvents();
+      MultiLangueSetup();
+    }
+
+    private void MultiLangueSetup()
+    {
+      this.m_renameAxisElemMenu.Text = Local.GetValue("general.rename");
+      this.m_createAxisElemMenu.Text = Local.GetValue("general.create");
+      this.m_deleteAxisElemMenu.Text = Local.GetValue("general.delete");
+      this.m_copyDownMenu.Text = Local.GetValue("general.copy_down");
+      this.m_dropToExcelMenu.Text = Local.GetValue("general.drop_on_excel");
+      this.m_autoResizeMenu.Text = Local.GetValue("general.auto_resize_columns");
+      this.m_expandAllMenu.Text = Local.GetValue("general.expand_all");
+      this.m_collapseAllMenu.Text = Local.GetValue("general.collapse_all");
+      this.m_createNewAxisElemMenuTop.Text = Local.GetValue("general.create");
+      this.m_deleteAxisElemMenuTop.Text = Local.GetValue("general.delete");
+      this.m_dropToExcelMenuTop.Text = Local.GetValue("general.drop_on_excel");
+      this.m_axisEditionButton.Text = Local.GetValue("general.edition");
+    }
+
+    private void DesactivateUnallowed()
+    {
+      this.m_rightMgr.Enable(UserModel.Instance.GetCurrentUserRights());
+    }
+
+    private void DefineUIPermissions()
+    {
+      m_rightMgr[m_renameAxisElemMenu] = Group.Permission.EDIT_AXIS;
+      m_rightMgr[m_createAxisElemMenu] = Group.Permission.CREATE_AXIS;
+      m_rightMgr[m_deleteAxisElemMenuTop] = Group.Permission.DELETE_AXIS;
+      m_rightMgr[m_deleteAxisElemMenu] = Group.Permission.DELETE_AXIS;
+      m_rightMgr[m_createNewAxisElemMenuTop] = Group.Permission.CREATE_AXIS;
+      m_rightMgr[m_copyDownMenu] = Group.Permission.EDIT_AXIS;
     }
 
     void SuscribeEvents()
@@ -151,6 +186,8 @@ namespace FBI.MVC.View
 
     private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
     {
+      if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_AXIS) == false)
+        return;
       UInt32 l_filterId = (UInt32)p_e.Cell.ColumnItem.ItemValue;
       Filter l_filter = FilterModel.Instance.GetValue(l_filterId);
       UInt32 l_filterValueParent = 0;
@@ -303,6 +340,7 @@ namespace FBI.MVC.View
       {
         m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, p_attributes.Id, p_attributes.Name, p_attributes.ParentId, AxisElemModel.Instance);
         m_dgv.Refresh();
+        DesactivateUnallowed();
       }
     }
 
@@ -366,6 +404,7 @@ namespace FBI.MVC.View
           FilterValue l_filterValue = FilterValueModel.Instance.GetValue(p_attributes.FilterValueId);
           SetParentsCells(p_attributes.AxisElemId, p_attributes.FilterId, l_filterValue);
           m_dgv.Refresh();
+          DesactivateUnallowed();
         }
         else
           MessageBox.Show(Local.GetValue("general.error.system"));

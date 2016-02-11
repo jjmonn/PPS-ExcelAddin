@@ -24,6 +24,7 @@ namespace FBI.MVC.View
   {
     private FbiFilterHierarchyTreeView m_tree;
     private FilterController m_controller;
+    private RightManager m_rightMgr = new RightManager();
 
     public FilterView()
     {
@@ -41,12 +42,27 @@ namespace FBI.MVC.View
         this.RegisterEvents();
         this.LoadLanguage();
         this.MultilangueSetup();
+        this.DefineUIPermissions();
+        this.DesactivateUnallowed();
       }
       catch (Exception e)
       {
         MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.Message + e.StackTrace);
       }
+    }
+
+    private void DesactivateUnallowed()
+    {
+      m_rightMgr.Enable(UserModel.Instance.GetCurrentUserRights());
+    }
+
+    private void DefineUIPermissions()
+    {
+      m_rightMgr[m_renameRightClick] = Group.Permission.EDIT_AXIS;
+      m_rightMgr[m_deleteRightClick] = Group.Permission.DELETE_AXIS;
+      m_rightMgr[m_addValueRightClick] = Group.Permission.CREATE_AXIS;
+      m_rightMgr[m_editStruct] = Group.Permission.EDIT_AXIS;
     }
 
     private void MultilangueSetup()
@@ -279,6 +295,7 @@ namespace FBI.MVC.View
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
           MessageBox.Show("{CREATE}", "filters.new_value", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          this.DesactivateUnallowed();
         }
       }
     }
@@ -296,6 +313,7 @@ namespace FBI.MVC.View
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
           MessageBox.Show("{UPDATE}", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          this.DesactivateUnallowed();
         }
       }
     }
@@ -359,6 +377,7 @@ namespace FBI.MVC.View
           {
             l_node.Text = p_attributes.Name;
           }
+          this.DesactivateUnallowed();
         }
       }
     }

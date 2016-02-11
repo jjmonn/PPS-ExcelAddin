@@ -35,54 +35,46 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-      this.EntitiesTV = new VIBlend.WinForms.Controls.vTreeView();
+      this.PanelEntities = new System.Windows.Forms.Panel();
       this.LayoutPanel.SuspendLayout();
       this.SuspendLayout();
-      //
-      //LayoutPanel
-      //
+      // 
+      // LayoutPanel
+      // 
       this.LayoutPanel.BackColor = System.Drawing.SystemColors.ControlLight;
       this.LayoutPanel.ColumnCount = 2;
-      this.LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100f));
-      this.LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500f));
-      this.LayoutPanel.Controls.Add(this.EntitiesTV, 1, 0);
+      this.LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 750F));
+      this.LayoutPanel.Controls.Add(this.PanelEntities, 1, 0);
       this.LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.LayoutPanel.Location = new System.Drawing.Point(0, 0);
+      this.LayoutPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.LayoutPanel.Name = "LayoutPanel";
       this.LayoutPanel.RowCount = 1;
-      this.LayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100f));
-      this.LayoutPanel.Size = new System.Drawing.Size(1156, 477);
+      this.LayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.LayoutPanel.Size = new System.Drawing.Size(1734, 734);
       this.LayoutPanel.TabIndex = 0;
-      //
-      //EntitiesTV
-      //
-      this.EntitiesTV.AccessibleName = "TreeView";
-      this.EntitiesTV.AccessibleRole = System.Windows.Forms.AccessibleRole.List;
-      this.EntitiesTV.CheckBoxes = true;
-      this.EntitiesTV.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.EntitiesTV.Location = new System.Drawing.Point(659, 3);
-      this.EntitiesTV.Name = "EntitiesTV";
-      this.EntitiesTV.ScrollPosition = new System.Drawing.Point(0, 0);
-      this.EntitiesTV.SelectedNode = null;
-      this.EntitiesTV.Size = new System.Drawing.Size(494, 471);
-      this.EntitiesTV.TabIndex = 0;
-      this.EntitiesTV.Text = "VTreeView1";
-      this.EntitiesTV.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      this.EntitiesTV.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //UsersControl
-      //
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6f, 13f);
+      // 
+      // PanelEntities
+      // 
+      this.PanelEntities.Location = new System.Drawing.Point(987, 3);
+      this.PanelEntities.Name = "PanelEntities";
+      this.PanelEntities.Size = new System.Drawing.Size(744, 728);
+      this.PanelEntities.TabIndex = 0;
+      // 
+      // UsersView
+      // 
+      this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.Controls.Add(this.LayoutPanel);
-      this.Name = "UsersControl";
-      this.Size = new System.Drawing.Size(1156, 477);
+      this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.Name = "UsersView";
+      this.Size = new System.Drawing.Size(1734, 734);
       this.LayoutPanel.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
     public System.Windows.Forms.TableLayoutPanel LayoutPanel;
-
-    public VIBlend.WinForms.Controls.vTreeView EntitiesTV;
+    private System.Windows.Forms.Panel PanelEntities;
   }
 }
