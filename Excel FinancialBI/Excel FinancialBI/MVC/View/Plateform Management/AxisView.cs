@@ -175,6 +175,8 @@ namespace FBI.MVC.View
 
     private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
     {
+      if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_AXIS) == false)
+        return;
       UInt32 l_filterId = (UInt32)p_e.Cell.ColumnItem.ItemValue;
       Filter l_filter = FilterModel.Instance.GetValue(l_filterId);
       UInt32 l_filterValueParent = 0;
@@ -325,6 +327,7 @@ namespace FBI.MVC.View
       }
       else
       {
+        DefineUIPermissions();
         m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, p_attributes.Id, p_attributes.Name, p_attributes.ParentId, AxisElemModel.Instance);
         m_dgv.Refresh();
       }
@@ -387,6 +390,7 @@ namespace FBI.MVC.View
       {
         if (p_status == ErrorMessage.SUCCESS && p_attributes != null)
         {
+          DefineUIPermissions();
           FilterValue l_filterValue = FilterValueModel.Instance.GetValue(p_attributes.FilterValueId);
           SetParentsCells(p_attributes.AxisElemId, p_attributes.FilterId, l_filterValue);
           m_dgv.Refresh();
