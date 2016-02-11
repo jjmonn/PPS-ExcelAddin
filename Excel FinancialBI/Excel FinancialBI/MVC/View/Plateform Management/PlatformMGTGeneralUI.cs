@@ -111,12 +111,12 @@ namespace FBI.MVC.View
 
     private void m_entitiesBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Entities));
+      m_controller.SwitchView<EntityView, EntityController>(new EntityController());
     }
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Employee));
+      m_controller.SwitchView<EmployeeView, EmployeeController>(new EmployeeController());
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)

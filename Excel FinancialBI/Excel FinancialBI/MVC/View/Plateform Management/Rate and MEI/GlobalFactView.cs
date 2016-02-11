@@ -78,12 +78,16 @@ namespace FBI.MVC.View
 
     void InitGlobalFactData(UInt32 p_versionId, Int32[] p_monthList, List<GlobalFact> p_gfactList)
     {
+      TextBoxEditor l_tbEditor = null;
+
       foreach (Int32 l_monthId in p_monthList)
         foreach (GlobalFact l_fact in p_gfactList)
         {
           GlobalFactData l_data = GlobalFactDataModel.Instance.GetValue(l_fact.Id, (UInt32)l_monthId, p_versionId);
 
-          m_dgv.FillField((UInt32)l_monthId, l_fact.Id, ((l_data != null) ? l_data.Value : 0), new TextBoxEditor());
+          if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_GFACTS) == true)
+            l_tbEditor = new TextBoxEditor();
+          m_dgv.FillField((UInt32)l_monthId, l_fact.Id, ((l_data != null) ? l_data.Value : 0), l_tbEditor);
         }
     }
 
@@ -218,8 +222,11 @@ namespace FBI.MVC.View
       }
       else
       {
+        TextBoxEditor l_tbEditor = null;
+        if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_GFACTS) == true)
+          l_tbEditor = new TextBoxEditor();
         if (p_gfactData.VersionId == m_controller.SelectedVersion)
-          m_dgv.FillField(p_gfactData.Period, p_gfactData.GlobalFactId, p_gfactData.Value, new TextBoxEditor());
+          m_dgv.FillField(p_gfactData.Period, p_gfactData.GlobalFactId, p_gfactData.Value, l_tbEditor);
       }
     }
 

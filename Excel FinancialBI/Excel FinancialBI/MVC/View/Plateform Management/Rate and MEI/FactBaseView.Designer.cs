@@ -37,7 +37,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new Utils.CustomComponentResourceManager(typeof(FactBaseView<,>), "FactBaseView");
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FactBaseView));
       this.MenuButtonIL = new System.Windows.Forms.ImageList(this.components);
       this.m_versionMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.select_version = new System.Windows.Forms.ToolStripMenuItem();

@@ -13,13 +13,30 @@ namespace FBI.MVC.View
   using Controller;
   using FBI;
   using Utils;
+  using Model.CRUD;
 
   public partial class GlobalFactUI : UserControl, IView
   {
+    RightManager m_rightMgr = new RightManager();
     public GlobalFactUI()
     {
       InitializeComponent();
       this.MultilangueSetup();
+      this.DefineUIPermissions();
+    }
+
+    private void DefineUIPermissions()
+    {
+      m_rightMgr[AddRatesVersionRCM] = Group.Permission.EDIT_BASE;
+      m_rightMgr[DeleteVersionRCM] = Group.Permission.EDIT_BASE;
+      m_rightMgr[AddFolderRCM] = Group.Permission.EDIT_BASE;
+      m_rightMgr[ImportFromExcelBT] = Group.Permission.EDIT_GFACTS;
+      m_rightMgr[RenameBT] = Group.Permission.EDIT_GFACTS;
+      m_rightMgr[RenameVersionBT] = Group.Permission.EDIT_BASE;
+      m_rightMgr[CopyFactDownToolStripMenuItem] = Group.Permission.EDIT_GFACTS;
+      m_rightMgr[DeleteBT] = Group.Permission.DELETE_GFACTS;
+      m_rightMgr[CreateNewFact] = Group.Permission.CREATE_GFACTS;
+      m_rightMgr[CreateNewFact2] = Group.Permission.CREATE_GFACTS;
     }
 
     private void MultilangueSetup()
