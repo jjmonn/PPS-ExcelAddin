@@ -752,6 +752,9 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\NewFactBaseVersionView.resx">
       <DependentUpon>NewFactBaseVersionView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\UsersView.resx">
+      <DependentUpon>UsersView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\CircularProgressUI.resx">
       <DependentUpon>CircularProgressUI.cs</DependentUpon>
     </EmbeddedResource>

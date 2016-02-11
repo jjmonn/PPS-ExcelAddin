@@ -433,7 +433,13 @@
 	<string name="msg_unknown">Error system.  Please contact your administrator.</string>
   </category>
 
-    <category name="period">
+  <category name="users">
+    <string name="msg_error_update">The User could not be updated.</string>
+    <string name="msg_error_delete">The User could not be deleted.</string>
+    <string name="msg_error_create">The User could not be created.</string>
+  </category>
+
+  <category name="period">
 		<string name="month1">January</string>
 		<string name="month2">February</string>
 		<string name="month3">March</string>
