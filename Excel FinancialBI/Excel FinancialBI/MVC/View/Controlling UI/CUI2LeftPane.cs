@@ -12,6 +12,9 @@ namespace FBI.MVC.View
 {
   using Controller;
   using Utils;
+  using Forms;
+  using Model;
+  using Model.CRUD;
 
   public partial class CUI2LeftPane : UserControl, IView
   {
@@ -20,6 +23,8 @@ namespace FBI.MVC.View
 
     private CUILeftPaneController m_controller = null;
 
+    private FbiTreeView<AxisElem> m_entitiesTV = null;
+
     #endregion
 
     #region Initialize
@@ -27,12 +32,33 @@ namespace FBI.MVC.View
     public CUI2LeftPane()
     {
       InitializeComponent();
-      MultilangueSetup();
     }
 
     public void SetController(IController p_controller)
     {
       this.m_controller = p_controller as CUILeftPaneController;
+    }
+
+    public void InitView()
+    {
+      this.EntitiesTVInit();
+      this.ComboBoxInit();
+      this.MultilangueSetup();
+    }
+
+    private void ComboBoxInit()
+    {
+      
+    }
+
+    private void EntitiesTVInit()
+    {
+      this.m_entitiesTV = new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Entities));
+
+      this.m_entitiesTV.CheckBoxes = true;
+      this.m_entitiesTV.TriStateMode = true;
+      this.m_entitiesTV.Dock = DockStyle.Fill;
+      this.SplitContainer.Panel1.Controls.Add(this.m_entitiesTV);
     }
 
     private void MultilangueSetup()

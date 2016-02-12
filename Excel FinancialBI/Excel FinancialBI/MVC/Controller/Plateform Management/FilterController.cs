@@ -140,6 +140,23 @@ namespace FBI.MVC.Controller
       return (false);
     }
 
+    public bool UpdateValue(UInt32 p_filterId, UInt32 p_newParentId, UInt32 p_newFilterId)
+    {
+      FilterValue l_tmp, l_filterVal;
+
+      if ((l_tmp = FilterValueModel.Instance.GetValue(p_filterId)) == null)
+        return (false);
+      l_filterVal = l_tmp.Clone();
+      if (l_filterVal != null)
+      {
+        l_filterVal.ParentId = p_newParentId;
+        l_filterVal.FilterId = p_newFilterId;
+        FilterValueModel.Instance.Update(l_filterVal);
+        return (true);
+      }
+      return (false);
+    }
+
     public bool UpdateCategory(UInt32 p_filterId, string p_filterNewName)
     {
       Filter l_tmp, l_filter;
