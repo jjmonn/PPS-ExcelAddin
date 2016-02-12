@@ -27,7 +27,10 @@ namespace FBI.MVC.View
     private AllocationKeysController m_controller = null;
 
     private FbiDataGridView m_allocationsKeysDGV = new FbiDataGridView();
+    private TextBoxEditor m_allocatedTextBoxEditor = new TextBoxEditor();
+    private TextBoxEditor m_allocatedTextBoxEditorDisabled = new TextBoxEditor();
     private Account m_account = null;
+    private bool m_isFillingPercentage = false;
 
     #endregion
 
@@ -80,21 +83,16 @@ namespace FBI.MVC.View
         this.SpecificyAllocationKeysEditionEnabling(l_row, l_nonEditionCellStyle, l_editableCellStyle);
 
       foreach (AxisElem l_entity in l_axisElemMID.SortedValues)
-      {
-        EntityDistribution l_entityDistrib = EntityDistributionModel.Instance.GetValue(l_entity.Id, this.m_account.Id);
+        FillPercentage(l_entity);
 
-        if (l_entityDistrib == null)
-          this.m_allocationsKeysDGV.FillField<string, TextBoxEditor>(l_entity.Id, 42, "0 %", this.CreateTextBoxEditor(l_entity.AllowEdition));
-        else
-          this.m_allocationsKeysDGV.FillField<string, TextBoxEditor>(l_entity.Id, 42, l_entityDistrib.Percentage.ToString() + " %"
-            , this.CreateTextBoxEditor(l_entity.AllowEdition));
-      }
       this.ChangeAllParentsPercentages();
 
       this.m_allocationsKeysDGV.Dock = DockStyle.Fill;
       this.m_DGVPanel.Controls.Add(this.m_allocationsKeysDGV);
 
       this.m_allocationsKeysDGV.CellChangedAndValidated += OnAllocationsKeysDGVCellChangedAndValidated;
+      this.m_allocationsKeysDGV.CellEditorActivate += OnAllocationsKeysDGVCellEditorActivate;
+      this.m_allocationsKeysDGV.CellEditorDeActivate += OnAllocationsKeysDGVCellEditorDeActivate;
     }
 
     private void SpecificyAllocationKeysEditionEnabling(HierarchyItem p_row, GridCellStyle p_nonEditionCellStyle, GridCellStyle p_editableCellStyle)
@@ -112,7 +110,7 @@ namespace FBI.MVC.View
       }
       else
       {
-        p_row.CellsEditor = this.CreateTextBoxEditor(true);
+        p_row.CellsEditor = m_allocatedTextBoxEditor;
         if (this.m_allocationsKeysDGV.ColumnsHierarchy.Items != null)
           m_allocationsKeysDGV.CellsArea.SetCellDrawStyle(p_row, m_allocationsKeysDGV.ColumnsHierarchy.Items[0], p_editableCellStyle);
       }
@@ -164,8 +162,7 @@ namespace FBI.MVC.View
           AxisElem l_entity = AxisElemModel.Instance.GetValue(p_attributes.EntityId);
           if (l_entity != null)
             this.ChangeParentPercentage(l_entity.ParentId);
-          this.m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_attributes.EntityId, 42, p_attributes.Percentage.ToString() + " %", 
-            new TextBoxEditor());
+          this.FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, p_attributes.EntityId));
         }
       }
     }
@@ -176,7 +173,18 @@ namespace FBI.MVC.View
 
     private void OnAllocationsKeysDGVCellChangedAndValidated(object p_sender, CellEventArgs p_args)
     {
-      this.m_controller.CheckUpdateAllocationKey(p_args);
+      if (!this.m_isFillingPercentage)
+        this.CheckUpdateAllocationKey(p_args);
+    }
+
+    private void OnAllocationsKeysDGVCellEditorActivate(object p_sender, EditorActivationCancelEventArgs p_args)
+    {
+      p_args.Cell.Value = ((string)p_args.Cell.Value).Replace(" %", "");
+    }
+
+    private void OnAllocationsKeysDGVCellEditorDeActivate(object p_sender, EditorActivationCancelEventArgs p_args)
+    {
+      this.FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)p_args.Cell.RowItem.ItemValue));
     }
 
     #endregion
@@ -185,17 +193,58 @@ namespace FBI.MVC.View
 
     #region Utils
 
-    private TextBoxEditor CreateTextBoxEditor(bool p_status)
+    public void CheckUpdateAllocationKey(CellEventArgs p_args)
     {
-      TextBoxEditor l_textBoxEditor = new TextBoxEditor();
+      double l_value = 0.0;
 
-      l_textBoxEditor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL;
-      l_textBoxEditor.Enabled = p_status;
-      if (p_status)
-        l_textBoxEditor.BackColor = Color.White;
+      if (Double.TryParse((string)p_args.Cell.Value, out l_value))
+      {
+        if (l_value < 0 || l_value > 100)
+        {
+          MessageBox.Show(Local.GetValue("allocationKeys.msg_invalid_percentage"));
+          this.FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)p_args.Cell.RowItem.ItemValue));
+        }
+        else
+        {
+          if (this.m_controller.TotalPercentageValid() + l_value <= 100)
+          {
+            this.m_controller.UpdateAllocationKey((UInt32)p_args.Cell.RowItem.ItemValue, l_value);
+            this.FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)p_args.Cell.RowItem.ItemValue));
+          }
+          else
+          {
+            MessageBox.Show(Local.GetValue("allocationKeys.msg_percentageOver100"));
+            this.FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)p_args.Cell.RowItem.ItemValue));
+          }
+        }
+      }
       else
-        l_textBoxEditor.BackColor = Color.LightGray;
-      return (l_textBoxEditor);
+        this.FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)p_args.Cell.RowItem.ItemValue));
+    }
+
+    private void FillPercentage(AxisElem p_entity)
+    {
+      if (p_entity == null)
+        return;
+      this.m_isFillingPercentage = true;
+
+      EntityDistribution l_entityDistrib = EntityDistributionModel.Instance.GetValue(p_entity.Id, this.m_account.Id);
+
+      if (l_entityDistrib == null)
+      {
+        if (p_entity.AllowEdition)
+          this.m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_entity.Id, 42, "0 %", m_allocatedTextBoxEditor);
+        else
+          this.m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_entity.Id, 42, "0 %", null);
+      }
+      else
+      {
+        if (p_entity.AllowEdition)
+          this.m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_entity.Id, 42, l_entityDistrib.Percentage.ToString() + " %", m_allocatedTextBoxEditor);
+        else
+          this.m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_entity.Id, 42, l_entityDistrib.Percentage.ToString() + " %", null);
+      }
+      this.m_isFillingPercentage = false;
     }
 
     private void ChangeAllParentsPercentages()
@@ -224,7 +273,10 @@ namespace FBI.MVC.View
             l_percentage += l_entityDistrib.Percentage;
         }
       }
-      this.m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_parentId, 42, l_percentage.ToString() + " %", this.CreateTextBoxEditor(false));
+      TextBoxEditor l_block = new TextBoxEditor();
+
+      this.FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, p_parentId));
+      this.m_controller.UpdateAllocationKey(p_parentId, l_percentage);
     }
 
     #endregion
