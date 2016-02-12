@@ -206,7 +206,7 @@ namespace FBI.MVC.View
         }
         else
         {
-          if (this.m_controller.TotalPercentageValid() + l_value <= 100)
+          if (this.m_controller.TotalPercentageValid((UInt32)p_args.Cell.RowItem.ItemValue) + l_value <= 100)
           {
             this.m_controller.UpdateAllocationKey((UInt32)p_args.Cell.RowItem.ItemValue, l_value);
             this.FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)p_args.Cell.RowItem.ItemValue));

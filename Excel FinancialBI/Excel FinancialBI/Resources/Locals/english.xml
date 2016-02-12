@@ -52,6 +52,16 @@
     <string name="msg_permission_denied">You are not allowed to execute this compute.</string>
     <string name="warning_complexity">Asked request is complex and can be long to compute. Compute anyway ?</string>
     <string name="error_complexity">Asked request is too complex.</string>
+    <string name="combobox_entities_cat">Entities categories</string>
+    <string name="combobox_clients">Clients</string>
+    <string name="combobox_clients_cat">Clients categories</string>
+    <string name="combobox_products">Products</string>
+    <string name="combobox_products_cat">Products categories</string>
+    <string name="combobox_employees_cat">Employees categories</string>
+    <string name="combobox_adjustments">Adjustments</string>
+    <string name="combobox_adjustments_cat">Adjustments categories</string>
+    <string name="combobox_periods">Periods</string>
+    <string name="combobox_versions">Versions</string>
   </category>
 
   <category name="CUI_Charts">
