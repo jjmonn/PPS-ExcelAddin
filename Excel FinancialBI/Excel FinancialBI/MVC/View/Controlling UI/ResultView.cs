@@ -13,7 +13,7 @@ using VIBlend.WinForms.DataGridView;
 namespace FBI.MVC.View
 {
   using Controller;
-  using FBI.Forms;
+  using Forms;
   using Model;
   using Model.CRUD;
   using Utils;
@@ -25,7 +25,7 @@ namespace FBI.MVC.View
   {
     BaseFbiDataGridView<ResultViewDgvKey> m_dgv = new BaseFbiDataGridView<ResultViewDgvKey>();
     private delegate void DGVBuilder(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent);
-    SafeDictionary<Type, DGVBuilder> m_builderList;
+    SafeDictionary<Type, DGVBuilder> m_builderList = new SafeDictionary<Type,DGVBuilder>();
     ComputeConfig m_computeConfig;
  
     public ResultView()
@@ -56,6 +56,8 @@ namespace FBI.MVC.View
 
     private void InitDimension(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent)
     {
+      if (p_conf == null)
+        return;
       if (m_builderList[p_conf.ModelType] != null)
         m_builderList[p_conf.ModelType](p_conf, p_dimension, p_parent);
     }
@@ -73,7 +75,7 @@ namespace FBI.MVC.View
         HierarchyItem l_newItem = m_dgv.SetDimension(p_dimension, p_parent, new ResultViewDgvKey(p_conf.ModelType, (UInt32)l_date), l_formatedDate);
 
         if (l_newItem != null)
-         InitDimension(p_conf, p_dimension, l_newItem.Items);
+         InitDimension(p_conf.Child, p_dimension, l_newItem.Items);
       }
     }
 
@@ -85,16 +87,38 @@ namespace FBI.MVC.View
     private void AxisElemBuilder(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent)
     {
       AxisElemConf l_conf = p_conf as AxisElemConf;
+
+      foreach (AxisElem l_elem in AxisElemModel.Instance.GetDictionary(l_conf.AxisTypeId).SortedValues)
+      {
+        HierarchyItem l_newItem = m_dgv.SetDimension(p_dimension, p_parent, new ResultViewDgvKey(p_conf.ModelType, (UInt32)l_elem.Id), l_elem.Name);
+
+        if (l_newItem != null)
+          InitDimension(p_conf, p_dimension, l_newItem.Items);
+      }
     }
 
     private void FilterValueBuilder(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent)
     {
+      FilterConf l_conf = p_conf as FilterConf;
 
+      foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(l_conf.FilterId).SortedValues)
+      {
+        HierarchyItem l_newItem = m_dgv.SetDimension(p_dimension, p_parent, new ResultViewDgvKey(p_conf.ModelType, (UInt32)l_filterValue.Id), l_filterValue.Name);
+
+        if (l_newItem != null)
+          InitDimension(p_conf, p_dimension, l_newItem.Items);
+      }
     }
 
     private void AccountBuilder(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent)
     {
+      foreach (Account l_account in AccountModel.Instance.GetDictionary().SortedValues)
+      {
+        HierarchyItem l_newItem = m_dgv.SetDimension(p_dimension, p_parent, new ResultViewDgvKey(p_conf.ModelType, (UInt32)l_account.Id), l_account.Name);
 
+        if (l_newItem != null)
+          InitDimension(p_conf, p_dimension, l_newItem.Items);
+      }
     }
   }
 }
