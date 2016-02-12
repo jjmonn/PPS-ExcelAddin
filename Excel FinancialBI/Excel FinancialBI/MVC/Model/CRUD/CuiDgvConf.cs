@@ -6,13 +6,22 @@ using System.Threading.Tasks;
 
 namespace FBI.MVC.Model.CRUD
 {
-  class CuiDgvConf
+  public class CuiDgvConf
   {
-    public object Type { get; set; }
+    public Type ModelType { get; set; }
     public UInt32 FilterId { get; set; }
+    public CuiDgvConf child { get; set; }
+  }
+
+  class AxisElemConf : CuiDgvConf
+  {
     public AxisType AxisTypeId { get; set; }
-    public UInt32 StartPeriod { get; set; }
-    public UInt32 NbPeriods { get; set; }
+  }
+
+  class PeriodConf : CuiDgvConf
+  {
+    public int StartPeriod { get; set; }
+    public int NbPeriods { get; set; }
     public TimeConfig PeriodRange { get; set; }
   }
 }
