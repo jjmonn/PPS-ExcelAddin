@@ -237,6 +237,9 @@
     <Compile Include="ExcelSheetModule1.Designer.cs">
       <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AFbiTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>

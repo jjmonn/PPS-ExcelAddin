@@ -35,8 +35,9 @@ namespace FBI.MVC.View
     {
       try
       {
-        m_tree = new FbiFilterHierarchyTreeView(m_controller.AxisType);
+        m_tree = new FbiFilterHierarchyTreeView(m_controller.AxisType, true);
         m_tree.ContextMenuStrip = m_contextRightClick;
+        m_tree.AllowDragAndDrop = true;
         m_tree.Dock = DockStyle.Fill;
         m_valuePanel.Controls.Add(m_tree, 0, 1);
         this.RegisterEvents();
@@ -47,7 +48,7 @@ namespace FBI.MVC.View
       catch (Exception e)
       {
         MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-        Debug.WriteLine(e.Message + e.StackTrace);
+        Debug.WriteLine(e.StackTrace);
       }
     }
 
@@ -88,10 +89,35 @@ namespace FBI.MVC.View
       m_editStruct.Click += OnEditStructClick;
       m_expand.Click += OnExpandClick;
       m_collapse.Click += OnCollapseClick;
+      m_tree.NodeMouseDown += OnTreeMouseDown;
+      m_tree.NodeDropped += OnTreeNodeDropped;
       FilterValueModel.Instance.ReadEvent += OnModelRead;
       FilterValueModel.Instance.CreationEvent += OnModelCreate;
       FilterValueModel.Instance.DeleteEvent += OnModelDelete;
       FilterValueModel.Instance.UpdateEvent += OnModelUpdate;
+    }
+
+    private void OnTreeNodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)
+    {
+      if (p_targetNode == null || p_draggedNode.Equals(p_targetNode))
+        return;
+
+      m_tree.DoDragDrop(p_draggedNode, DragDropEffects.None);
+      if (this.Update(p_draggedNode, p_targetNode))
+      {
+        p_draggedNode.Remove();
+      }
+    }
+
+    private void OnTreeMouseDown(object sender, vTreeViewMouseEventArgs e)
+    {
+      vTreeNode l_node;
+
+      l_node = e.Node;
+      if (l_node != null && ModifierKeys.HasFlag(Keys.Control) == true && this.IsValue(l_node))
+      {
+        m_tree.DoDragDrop(l_node, DragDropEffects.Move);
+      }
     }
 
     public void Reload()
@@ -103,18 +129,18 @@ namespace FBI.MVC.View
 
     #region Utils
 
-    private bool IsCategory()
+    private bool IsCategory(vTreeNode p_node)
     {
-      if (m_tree.SelectedNode == null)
+      if (p_node == null)
         return (false);
-      return (m_tree.SelectedNode.Parent == null);
+      return (p_node.Parent == null);
     }
 
-    private bool IsValue()
+    private bool IsValue(vTreeNode p_node)
     {
-      if (m_tree.SelectedNode == null)
+      if (p_node == null)
         return (false);
-      return (!this.IsCategory());
+      return (!this.IsCategory(p_node));
     }
 
     private bool AskConfirmation(string msg, string title)
@@ -122,6 +148,55 @@ namespace FBI.MVC.View
       if (MessageBox.Show(Local.GetValue(msg), Local.GetValue(title), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
         return (true);
       return (false);
+    }
+
+    private bool Create(vTreeNode p_atNode, string p_name)
+    {
+      Filter l_filter;
+      FilterValue l_filterValue;
+
+      if (this.IsCategory(p_atNode))
+      {
+        if ((l_filter = FilterModel.Instance.GetValue((UInt32)p_atNode.Value)) != null)
+          return (m_controller.Add(p_name, 0, l_filter.Id, typeof(FilterValue)));
+        return (false);
+      }
+      if ((l_filterValue = FilterValueModel.Instance.GetValue((UInt32)p_atNode.Value)) != null)
+      {
+        if ((l_filter = FilterModel.Instance.GetChild(l_filterValue.FilterId, m_controller.AxisType)) == null)
+          return (false);
+        return (m_controller.Add(p_name, l_filterValue.Id, l_filter.Id, typeof(FilterValue)));
+      }
+      return (false);
+    }
+
+    private bool Update(vTreeNode p_node, vTreeNode p_atNode)
+    {
+      Filter l_filter;
+      FilterValue l_filterValue;
+
+      if (this.IsCategory(p_atNode))
+      {
+        if ((l_filter = FilterModel.Instance.GetValue((UInt32)p_atNode.Value)) != null)
+          return (m_controller.UpdateValue((UInt32)p_node.Value, 0, l_filter.Id));
+        return (false);
+      }
+      if ((l_filterValue = FilterValueModel.Instance.GetValue((UInt32)p_atNode.Value)) != null)
+      {
+        if ((l_filter = FilterModel.Instance.GetChild(l_filterValue.FilterId, m_controller.AxisType)) == null)
+          return (false);
+        return (m_controller.UpdateValue((UInt32)p_node.Value, l_filterValue.Id, l_filter.Id));
+      }
+      return (false);
+    }
+
+    private bool Remove(vTreeNode p_node)
+    {
+      if (this.IsCategory(p_node))
+      {
+        return (m_controller.Remove((UInt32)p_node.Value, typeof(Filter)));
+      }
+      return (m_controller.Remove((UInt32)p_node.Value, typeof(FilterValue)));
     }
 
     private bool IsNodeSelected(string title)
@@ -154,25 +229,25 @@ namespace FBI.MVC.View
       }
     }
 
-    private void CreateValue()
+    private void CreateValue(vTreeNode p_node)
     {
-      if (this.IsCategory())
+      if (this.IsCategory(p_node))
       {
-        this.CreateValueFromCategory();
+        this.CreateValueFromCategory(p_node);
       }
       else
       {
-        this.CreateValueFromValue();
+        this.CreateValueFromValue(p_node);
       }
     }
 
-    private void CreateValueFromValue()
+    private void CreateValueFromValue(vTreeNode p_node)
     {
       Filter l_filter;
       FilterValue l_value;
       string l_filterName;
-      
-      if ((l_value = FilterValueModel.Instance.GetValue((UInt32)m_tree.SelectedNode.Value)) != null)
+
+      if ((l_value = FilterValueModel.Instance.GetValue((UInt32)p_node.Value)) != null)
       {
         if ((l_filter = FilterModel.Instance.GetChild(l_value.FilterId, m_controller.AxisType)) == null) //Can't go deeper, if you known what I mean ;)
         {
@@ -187,18 +262,14 @@ namespace FBI.MVC.View
       }
     }
 
-    private void CreateValueFromCategory()
+    private void CreateValueFromCategory(vTreeNode p_node)
     {
-      Filter l_value;
       string l_filterName;
 
-      if ((l_value = FilterModel.Instance.GetValue((UInt32)m_tree.SelectedNode.Value)) != null)
+      l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_value_name")).Trim();
+      if (!this.Create(p_node, l_filterName))
       {
-        l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_value_name")).Trim();
-        if (!m_controller.Add(l_filterName, 0, l_value.Id, typeof(FilterValue)))
-        {
-          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -206,42 +277,34 @@ namespace FBI.MVC.View
     {
       if (!this.IsNodeSelected("filters.new_value"))
         return;
-      this.CreateValue();
+      this.CreateValue(m_tree.SelectedNode);
     }
 
     private void OnDeleteClick(object p_sender, EventArgs p_e)
     {
       if (!this.IsNodeSelected("general.delete"))
         return;
-      if (this.IsCategory() && this.AskConfirmation("filters.msg_delete_category", "filters.delete_category"))
+      if (this.AskConfirmation("filters.confirmation_delete", "filters.confirmation_delete"))
       {
-        m_controller.Remove((UInt32)m_tree.SelectedNode.Value, typeof(Filter));
-      }
-      else if (this.IsValue() && this.AskConfirmation("filters.msg_delete_value", "filters.delete_value"))
-      {
-        m_controller.Remove((UInt32)m_tree.SelectedNode.Value, typeof(FilterValue));
-      }
-      else
-      {
-        MessageBox.Show(Local.GetValue("filters.error.no_selection"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        if (!this.Remove(m_tree.SelectedNode))
+        {
+          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
       }
     }
 
     private void OnRenameClick(object p_sender, EventArgs p_e)
     {
+      vTreeNode l_node;
       string l_filterName;
 
+      l_node = m_tree.SelectedNode;
       if (!this.IsNodeSelected("filters.new_value"))
         return;
-      l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name")).Trim();
-      if (this.IsCategory())
+      if (!this.IsCategory(l_node))
       {
-        if (!m_controller.Update((UInt32)m_tree.SelectedNode.Value, l_filterName, typeof(Filter)))
-          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-      }
-      else
-      {
-        if (!m_controller.Update((UInt32)m_tree.SelectedNode.Value, l_filterName, typeof(FilterValue)))
+        l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name")).Trim();
+        if (!m_controller.Update((UInt32)l_node.Value, l_filterName, typeof(FilterValue)))
           MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
@@ -299,11 +362,13 @@ namespace FBI.MVC.View
       }
       else
       {
-        if (p_status != Network.ErrorMessage.SUCCESS)
+        FilterValue l_value;
+
+        if (p_status != ErrorMessage.SUCCESS)
         {
           MessageBox.Show("{UPDATE}", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-          this.DesactivateUnallowed();
         }
+        this.DesactivateUnallowed();
       }
     }
 
@@ -329,6 +394,7 @@ namespace FBI.MVC.View
           {
             m_tree.Nodes.Remove(l_node);
           }
+          m_tree.Refresh();
           return;
         }
         MessageBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -366,6 +432,7 @@ namespace FBI.MVC.View
           {
             l_node.Text = p_attributes.Name;
           }
+          m_tree.Refresh();
           this.DesactivateUnallowed();
         }
       }
