@@ -362,8 +362,6 @@ namespace FBI.MVC.View
       }
       else
       {
-        FilterValue l_value;
-
         if (p_status != ErrorMessage.SUCCESS)
         {
           MessageBox.Show("{UPDATE}", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
