@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace FBI.MVC.Model.CRUD
 {
   using Network;
-  using AccountKey = UInt32; //account
+  using AccountKey = UInt32;
   using SortKey = String; // is fv, axis, value
-  using PeriodTypeKey = TimeConfig; // period type
-  using PeriodKey = Int32; // period type
+  using PeriodTypeKey = TimeConfig; 
+  using PeriodKey = Int32;
   using VersionKey = UInt32;
 
   class ComputeResult
   {
-    public Dictionary<Tuple<AccountKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey>, double> Values { get; private set; }
+    public SafeDictionary<Tuple<AccountKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey>, double> Values { get; private set; }
     ComputeRequest m_request;
     Version m_version;
     List<Int32> m_periodList;
@@ -23,7 +23,7 @@ namespace FBI.MVC.Model.CRUD
 
     ComputeResult()
     {
-      Values = new Dictionary<Tuple<AccountKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey>, double>();
+      Values = new SafeDictionary<Tuple<AccountKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey>, double>();
     }
 
     public static ComputeResult BuildComputeResult(ComputeRequest p_request, ByteBuffer p_packet) // store request by request id
@@ -119,6 +119,20 @@ namespace FBI.MVC.Model.CRUD
       key += "v";
       key += p_value.ToString();
       return (key);
+    }
+
+    public static ComputeResult operator-(ComputeResult p_a, ComputeResult p_b)
+    {
+      ComputeResult l_result = new ComputeResult();
+
+      foreach (KeyValuePair<Tuple<AccountKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey>, double> l_pair in p_a.Values)
+      {
+        double l_bValue = p_b.Values[l_pair.Key];
+
+        if (l_bValue != null)
+          l_result.Values[l_pair.Key] = l_pair.Value - l_bValue;
+      }
+      return (l_result);
     }
   }
 }
