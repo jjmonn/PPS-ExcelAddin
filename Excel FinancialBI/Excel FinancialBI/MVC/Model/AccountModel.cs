@@ -35,5 +35,50 @@ namespace FBI.MVC.Model
 
       InitCallbacks();
     }
+
+  /*  public List<string> GetAccountsNameList(Account.FormulaTypesLookUpOption LookupOption, Account.AccountProcess p_process)
+    {
+      List<string> l_accountsList = new List<string>();
+      List<Account.FormulaTypes> l_formulaTypesFilter = new List<Account.FormulaTypes>();
+      switch (LookupOption)
+      {
+        case Account.FormulaTypesLookUpOption.ALL:
+          l_formulaTypesFilter.Add(Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS);
+          l_formulaTypesFilter.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT);
+          l_formulaTypesFilter.Add(Account.FormulaTypes.FORMULA);
+          l_formulaTypesFilter.Add(Account.FormulaTypes.HARD_VALUE_INPUT);
+          break;
+
+        case Account.FormulaTypesLookUpOption.INPUTS:
+          l_formulaTypesFilter.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT);
+          l_formulaTypesFilter.Add(Account.FormulaTypes.HARD_VALUE_INPUT);
+          break;
+
+        case Account.FormulaTypesLookUpOption.OUTPUTS:
+          l_formulaTypesFilter.Add(Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS);
+          l_formulaTypesFilter.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT);
+          l_formulaTypesFilter.Add(Account.FormulaTypes.FORMULA);
+          break;
+
+        case Account.FormulaTypesLookUpOption.TITLES:
+          l_formulaTypesFilter.Add(Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS);
+          l_formulaTypesFilter.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT);
+          l_formulaTypesFilter.Add(Account.FormulaTypes.FORMULA);
+          break;
+      }
+
+      foreach (UInt32 l_id in m_CRUDDic.Keys)
+      {
+        Account l_account = GetValue(l_id);
+        if (l_account == null)
+          continue;
+        if (l_formulaTypesFilter.Contains(l_account.FormulaType) && l_account.Process == p_process)
+        {
+          l_accountsList.Add(l_account.Name);
+        }
+      }
+      return l_accountsList;
+    }*/
+
   }
 }

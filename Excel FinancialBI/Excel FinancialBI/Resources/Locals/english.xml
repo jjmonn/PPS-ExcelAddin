@@ -342,17 +342,18 @@
     <string name="global_facts_upload">Macro Economic Indicator Upload</string>
     <string name="range_mismatch">The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.</string>
     <string name="folder_snapshot">Directory Snapshot</string>
-	<string name="worksheet_name">Worksheet Name</string>
+	  <string name="worksheet_name">Worksheet Name</string>
     
     <string name="input_sidepane_title">Report Upload</string>
     <string name="entity_selection">Entity selection</string>
     <string name="periods_selection">Periods selection</string>
     <string name="accounts_selection">Account selection</string>
     <string name="title_input_ranges_edition">Input Ranges Edition</string>
-	<string name="title_client_selection">Client Selection</string>
-	<string name="title_upload_error_messages">Upload Error</string>
-	
-	<string name="msg_selection_instruction">Select the ranges corresponding to the Entities, Accounts and Periods</string>
+	  <string name="title_client_selection">Client Selection</string>
+	  <string name="title_upload_error_messages">Upload Error</string>
+
+    <string name="msg_empty_worksheet">The worksheet is empty</string>
+	  <string name="msg_selection_instruction">Select the ranges corresponding to the Entities, Accounts and Periods</string>
     <string name="msg_periods_selection">Select periods(s) range(s)</string>
     <string name="msg_rates_selection">Select rates(s) range(s)</string>
     <string name="msg_values_selection">Select value(s) range(s)</string>
@@ -369,7 +370,7 @@
     <string name="msg_invalid_value_for_client">This value is not suitable for a client's name: </string>
     <string name="msg_no_account_setup">No Account was setup. Cannot submit.</string>
     <string name="msg_no_account_selected">No account selected.</string>
-	<string name="msg_uploading">Uploading ...</string>
+	  <string name="msg_uploading">Uploading ...</string>
   </category>
 
   <category name="global_facts">

@@ -37,21 +37,23 @@ namespace FBI.MVC.Controller
       m_editedFactsManager.FactsDownloaded += AfterHRFactsDownloaded;
     }
 
-
     public bool Launch(Worksheet p_worksheet)
     {
+      // Before = sidepane -> ask to choose a range
+      // TO DO : RH process -> take RH Account as param
       m_worksheet = p_worksheet;
 
       // TO DO: Clean current status, higlights and so on
+      // Check that a version is selected first
 
-      if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet) == true)
+      if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
       {
         m_worksheetAnalyzer.Snapshot(m_dimensions);
+        m_dimensions.DefineOrientation(m_process);
         if (m_dimensions.IsValid() == false)
           return false;
 
-        // TO DO : register Editedfact
-
+        m_editedFactsManager.RegisterEditedFacts(m_dimensions);
 
         switch (m_dimensions.m_process)
         {
