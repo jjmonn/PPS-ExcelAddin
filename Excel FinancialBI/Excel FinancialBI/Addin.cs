@@ -137,7 +137,5 @@ namespace FBI
         ConnectionStateEvent(!failed);
     }
 
-
-
   }
 }

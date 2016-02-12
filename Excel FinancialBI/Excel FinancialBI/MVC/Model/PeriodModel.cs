@@ -10,7 +10,7 @@ using Microsoft.VisualBasic;
 namespace FBI.MVC.Model
 {
 
-  class Period
+  class PeriodModel
   {
     #region "Instance Variables"
 
@@ -38,6 +38,22 @@ namespace FBI.MVC.Model
     #endregion
 
     #region "Years interface"
+
+    static public List<Int32> GetPeriodList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
+    {
+      switch (p_timeConfig)
+      {
+        case CRUD.TimeConfig.YEARS:
+          return GetYearsListFromYearlyConfiguration(p_startPeriod, p_nbPeriod);
+        case CRUD.TimeConfig.MONTHS:
+          return GetMonthsListFromMonthlyConfiguration(p_startPeriod, p_nbPeriod);
+        case CRUD.TimeConfig.WEEK:
+          return GetWeekIDListFromWeeklyConfig(p_startPeriod, p_nbPeriod);
+        case CRUD.TimeConfig.DAYS:
+          return GetDaysList(p_startPeriod, p_nbPeriod);
+      }
+      return new List<Int32>();
+    }
 
     static public Int32[] GetYearsList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
     {
@@ -155,28 +171,12 @@ namespace FBI.MVC.Model
 
     }
 
-    private static Int32[] GetMonthsListFromMonthlyConfiguration(Int32 p_startPeriod, Int32 p_nbPeriod)
+    private static List<Int32> GetMonthsListFromMonthlyConfiguration(Int32 p_startPeriod, Int32 p_nbPeriod)
     {
-
       List<Int32> l_periodsList = new List<Int32>();
       l_periodsList.Add(p_startPeriod);
       if ((p_nbPeriod <= 1))
-        return (l_periodsList.ToArray());
-      Int32[] m_monthList = {
-			31,
-			28,
-			31,
-			30,
-			31,
-			30,
-			31,
-			31,
-			30,
-			31,
-			30,
-			31
-		};
-
+        return (l_periodsList);
       double l_currentYear = System.DateTime.FromOADate(p_startPeriod).Year;
       Int32 l_currentMonth = System.DateTime.FromOADate(p_startPeriod).Month;
 
@@ -196,9 +196,7 @@ namespace FBI.MVC.Model
         }
         l_currentMonth += 1;
       }
-
-      return (l_periodsList.ToArray());
-
+      return (l_periodsList);
     }
 
     private static List<Int32> GetMonthsListFromWeeklyConfiguration(Int32 p_startPeriod, Int32 p_nbPeriods)
@@ -308,7 +306,7 @@ namespace FBI.MVC.Model
       List<Int32> l_weeksList = new List<Int32>();
       Int32 l_periodId = p_startPeriod;
       Int32 l_currentWeekId = 0;
-      Int32[] l_dayList = GetDaysList(p_startPeriod, p_nbPeriod);
+      List<Int32> l_dayList = GetDaysList(p_startPeriod, p_nbPeriod);
 
 
       foreach (Int32 l_dayId in l_dayList)
@@ -337,7 +335,7 @@ namespace FBI.MVC.Model
       List<Int32> l_periods = new List<Int32>();
       while (p_startDate < p_endDate)
       {
-        l_periods.Add(Period.GetWeekIdFromPeriodId((Int32)p_startDate.ToOADate()));
+        l_periods.Add(PeriodModel.GetWeekIdFromPeriodId((Int32)p_startDate.ToOADate()));
         p_startDate = p_startDate.AddDays(m_nbDaysInWeek);
       }
       return l_periods;
@@ -348,16 +346,15 @@ namespace FBI.MVC.Model
 
     #region "Days interface"
     // To be checked 
-    static public Int32[] GetDaysList(Int32 p_startDayId, Int32 p_nbDays)
+    static public List<Int32> GetDaysList(Int32 p_startDayId, Int32 p_nbDays)
     {
-
       List<Int32> l_daysList = new List<Int32>();
       for (Int32 i = 0; i <= p_nbDays - 1; i++)
       {
         l_daysList.Add(p_startDayId);
         p_startDayId += 1;
       }
-      return (l_daysList.ToArray());
+      return (l_daysList);
 
     }
 

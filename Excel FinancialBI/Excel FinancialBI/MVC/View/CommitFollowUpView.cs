@@ -76,12 +76,12 @@ namespace FBI.MVC.View
 
     private void PeriodRangeSetup()
     {
-      DateTime l_dateStart = DateTime.Today.AddDays(-Period.m_nbDaysInWeek);
-      DateTime l_dateEnd = DateTime.Today.AddDays(Period.m_nbDaysInWeek * 2);
+      DateTime l_dateStart = DateTime.Today.AddDays(-PeriodModel.m_nbDaysInWeek);
+      DateTime l_dateEnd = DateTime.Today.AddDays(PeriodModel.m_nbDaysInWeek * 2);
 
       m_dateFromPicker.Text = l_dateStart.ToString();
       m_dateToPicker.Text = l_dateEnd.ToString();
-      m_dates = Period.GetWeeksPeriodListFromPeriodsRange(l_dateStart, l_dateEnd);
+      m_dates = PeriodModel.GetWeeksPeriodListFromPeriodsRange(l_dateStart, l_dateEnd);
     }
 
     private void InitDataGridView()
@@ -93,7 +93,7 @@ namespace FBI.MVC.View
       foreach (Int32 l_item in m_dates)
       {
         l_date = l_item;
-        l_name = Local.GetValue("general.week") + " " + Period.GetWeekNumberFromDateId(ref l_date) + ", " + DateTime.FromOADate((double)l_date).Year;
+        l_name = Local.GetValue("general.week") + " " + PeriodModel.GetWeekNumberFromDateId(ref l_date) + ", " + DateTime.FromOADate((double)l_date).Year;
         m_dataGridView.SetDimension(FbiDataGridView.Dimension.COLUMN, (UInt32)l_date, l_name);
       }
       this.SetRows();
@@ -297,7 +297,7 @@ namespace FBI.MVC.View
 
     private void OndateChanged(object p_sender, EventArgs p_e)
     {
-      m_dates = Period.GetWeeksPeriodListFromPeriodsRange(m_dateFromPicker.Value, m_dateToPicker.Value);
+      m_dates = PeriodModel.GetWeeksPeriodListFromPeriodsRange(m_dateFromPicker.Value, m_dateToPicker.Value);
       m_dataGridView.ClearColumns();
       m_dataGridView.ClearRows();
       this.InitDataGridView();

@@ -8,6 +8,7 @@ namespace FBI.MVC.Controller
 {
   using Forms;
   using Model;
+  using Utils;
   using View;
   using Model.CRUD;
 
@@ -32,6 +33,40 @@ namespace FBI.MVC.Controller
     public override void LoadView()
     {
       m_view.InitView();
+    }
+
+    #endregion
+
+    #region Server
+
+    public void UpdateUser(User p_user)
+    {
+      if (p_user != null)
+        UserModel.Instance.Update(p_user);
+    }
+
+    public void DeleteUserAllowed(UInt32 p_id, UInt32 p_userId, UInt32 p_entityId)
+    {
+      UserAllowedEntityModel.Instance.Delete(p_id, p_userId, p_entityId);
+    }
+
+    public void CreateUserAllowed(UserAllowedEntity p_userAllowed)
+    {
+      if (p_userAllowed != null)
+        UserAllowedEntityModel.Instance.Create(p_userAllowed);
+    }
+
+    #endregion
+
+    #region Check
+
+    public bool IsAllowedEntity(UInt32 p_userId, UInt32 p_entityId)
+    {
+      MultiIndexDictionary<UInt32, UInt32, UserAllowedEntity> l_entitiesAllowed = UserAllowedEntityModel.Instance.GetDictionary(p_userId);
+
+      if (l_entitiesAllowed != null)
+        return (l_entitiesAllowed.ContainsSecondaryKey(p_entityId));
+      return (false);
     }
 
     #endregion

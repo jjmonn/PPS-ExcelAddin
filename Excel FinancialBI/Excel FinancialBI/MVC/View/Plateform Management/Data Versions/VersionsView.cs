@@ -25,7 +25,6 @@ namespace FBI.MVC.View
     private FbiTreeView<Version> m_versionsTreeview;
     private RightManager m_rightMgr = new RightManager();
     private bool m_isDisplaying;
-    private vTreeNode m_currentNode;
 
     public VersionsView()
     {
@@ -82,7 +81,7 @@ namespace FBI.MVC.View
       VersionModel.Instance.DeleteEvent += AfterDelete;
 
       // View events
-      m_versionsTreeview.AfterSelect += OnVersionTVSelectNode;
+      m_versionsTreeview.NodeMouseDown += OnVersionTVSelectNode;
       m_versionsTreeview.KeyDown += OnVersionTVKeyDown;
       m_versionsTreeview.MouseClick += OnVersionTVMouseClick;
       m_lockCombobox.CheckedChanged += OnChangeVersionLock;
@@ -301,8 +300,8 @@ namespace FBI.MVC.View
 
     private void OnClickCopyVersion(object sender, EventArgs e)
     {
-      if (m_currentNode != null)
-        m_controller.ShowVersionCopyView((UInt32)m_currentNode.Value);
+      if (m_controller.SelectedVersion != 0)
+        m_controller.ShowVersionCopyView(m_controller.SelectedVersion);
     }
 
     private void OnClickNewFolder(object sender, EventArgs e)
@@ -312,16 +311,16 @@ namespace FBI.MVC.View
 
     private void OnClickRename(object sender, EventArgs e)
     {
-      RenameVersion(m_currentNode);
+      RenameVersion(m_controller.SelectedVersion);
     }
 
     private void OnClickDelete(object sender, EventArgs e)
     {
-      DeleteVersion(m_currentNode);
+      DeleteVersion(m_controller.SelectedVersion);
     }
 
-    public delegate void VersionsTreeview_AfterSelect_Delegate(object sender, vTreeViewEventArgs e);
-    private void OnVersionTVSelectNode(object sender, vTreeViewEventArgs e)
+    public delegate void VersionsTreeview_AfterSelect_Delegate(object sender, vTreeViewMouseEventArgs e);
+    private void OnVersionTVSelectNode(object sender, vTreeViewMouseEventArgs e)
     {
       if (InvokeRequired)
       {
@@ -330,17 +329,14 @@ namespace FBI.MVC.View
       }
       else
       {
-        m_currentNode = e.Node;
+        m_controller.SelectedVersion = (UInt32)e.Node.Value;
         m_isDisplaying = true;
 
-        if (m_currentNode != null)
-        {
-          Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
-          if (l_version == null) return;
-          DisplayVersion(l_version);
-          m_isDisplaying = false;
-        }
-         DesactivateUnallowed();
+        Version l_version = VersionModel.Instance.GetValue(m_controller.SelectedVersion);
+        if (l_version == null) return;
+        DisplayVersion(l_version);
+        m_isDisplaying = false;
+        DesactivateUnallowed();
       }
 
     }
@@ -372,43 +368,8 @@ namespace FBI.MVC.View
         this.Invoke(MyDelegate, new object[] { p_version });
       }
       else
-      {
-        vTreeNode l_node = m_versionsTreeview.FindNode(p_version.Id);
-        m_versionsTreeview.SuspendLayout();
-        if (l_node == null)
-        {
-          AddNode(p_version);
-        }
-        else
-        {
-          l_node.Text = p_version.Name;
-          m_currentNode = l_node;
-        }
-        m_versionsTreeview.ResumeLayout();
-        DisplayVersion(p_version);
-      }
+        m_versionsTreeview.FindAndAdd(p_version);
     }
-
-    private void AddNode(Version p_version)
-    {
-      vTreeNode l_newNode = new vTreeNode();
-      vTreeNode l_parentNode = m_versionsTreeview.FindNode(p_version.ParentId);
-      l_newNode.Text = p_version.Name;
-      l_newNode.Value = p_version.Id;
-      l_newNode.ImageIndex = (int)p_version.Image;
-      if (l_parentNode != null)
-      {
-        l_parentNode.Nodes.Add(l_newNode);
-      }
-      else
-      {
-        m_versionsTreeview.Nodes.Add(l_newNode);
-      }
-      m_currentNode = l_newNode;
-      m_versionsTreeview.Refresh();
-    }
-
-  
 
     #endregion
 
@@ -416,43 +377,46 @@ namespace FBI.MVC.View
 
     private void OnVersionTVMouseClick(object sender, MouseEventArgs e)
     {
-      m_currentNode = m_versionsTreeview.FindAtPosition(e.Location);
+      vTreeNode l_node = m_versionsTreeview.FindAtPosition(e.Location);
+      if (l_node == null)
+      {
+        m_versionsTreeview.SelectedNode = null;
+        m_controller.SelectedVersion = 0;
+      }
     }
 
     private void OnVersionTVKeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Control == true && m_currentNode != null)
+      if (e.Control == true && m_versionsTreeview.SelectedNode != null)
       {
         switch (e.KeyCode)
         {
           case Keys.Up:
-            m_versionsTreeview.moveNodeUp(m_currentNode);
+            m_versionsTreeview.moveNodeUp(m_versionsTreeview.SelectedNode);
             return;
 
           case Keys.Down:
-            m_versionsTreeview.moveNodeDown(m_currentNode);
+            m_versionsTreeview.moveNodeDown(m_versionsTreeview.SelectedNode);
             return;
         }
       }
       if (e.KeyCode == Keys.Delete)
-      {
-        DeleteVersion(m_currentNode);
-      }
+        DeleteVersion(m_controller.SelectedVersion);
     }
 
     private void OnChangeVersionLock(object sender, EventArgs e)
     {
-      if (m_isDisplaying == false && m_currentNode != null)
+      if (m_isDisplaying == false)
       {
-        UpdateLocked(m_currentNode, m_lockCombobox.Checked);
+        UpdateLocked(m_controller.SelectedVersion, m_lockCombobox.Checked);
       }
     }
 
     private void OnChangeVersionExchangeRate(object sender, EventArgs e)
     {
-      if (m_currentNode != null && m_isDisplaying == false)
+      if (m_isDisplaying == false)
       {
-        Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
+        Version l_version = VersionModel.Instance.GetValue(m_controller.SelectedVersion);
         if (l_version != null && m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode != null)
         {
           UInt32 l_ratesVersionId = (UInt32)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
@@ -472,9 +436,9 @@ namespace FBI.MVC.View
 
     private void OnChangeVersionFactRate(object sender, EventArgs e)
     {
-      if (m_currentNode != null && m_isDisplaying == false)
+      if (m_isDisplaying == false)
       {
-        Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
+        Version l_version = VersionModel.Instance.GetValue(m_controller.SelectedVersion);
         if (l_version != null && m_factsVersionVTreeviewbox.TreeView.SelectedNode != null)
         {
           UInt32 l_gfactsVersionId = (UInt32)m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value;
@@ -494,11 +458,12 @@ namespace FBI.MVC.View
 
     private void VersionsTV_MouseDown(object sender, MouseEventArgs e)
     {
-      if (m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y)) != null)
-        m_currentNode = m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y));
-      if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
+      vTreeNode l_node;
+
+      l_node = m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y));
+      if (l_node != null && ModifierKeys.HasFlag(Keys.Control) == true)
       {
-        m_versionsTreeview.DoDragDrop(m_currentNode, DragDropEffects.Move);
+        m_versionsTreeview.DoDragDrop(l_node, DragDropEffects.Move);
       }
     }
 
@@ -522,7 +487,6 @@ namespace FBI.MVC.View
       l_newNode.ImageIndex = p_draggedNode.ImageIndex;
       p_draggedNode.Remove();
       m_versionsTreeview.DoDragDrop(p_draggedNode, DragDropEffects.None);
-      p_targetNode.Nodes.Add(l_newNode);
       l_version.ParentId = (UInt32)p_targetNode.Value;
       m_controller.Update(l_version);
     }
@@ -531,10 +495,7 @@ namespace FBI.MVC.View
 
     private void CreateVersion()
     {
-      UInt32 l_parentId = 0;
-      if (m_currentNode != null)
-        l_parentId = (UInt32)m_currentNode.Value;
-      m_controller.ShowNewVersionView(l_parentId);
+      m_controller.ShowNewVersionView(m_controller.SelectedVersion);
     }
 
     private void CreateFolder()
@@ -542,50 +503,44 @@ namespace FBI.MVC.View
       Version l_newFolderVersion = new Version();
       l_newFolderVersion.Name = Interaction.InputBox(Local.GetValue("versions.msg_folder_name"));
       l_newFolderVersion.IsFolder = true;
+      l_newFolderVersion.ParentId = m_controller.SelectedVersion;
       if (m_controller.Create(l_newFolderVersion) == false)
         MessageBox.Show(m_controller.Error);
     }
 
-    private void DeleteVersion(vTreeNode p_node)
+    private void DeleteVersion(UInt32 p_versionId)
     {
-      if (p_node != null)
+      if (m_controller.Delete(p_versionId) == false)
+        MessageBox.Show(m_controller.Error);
+    }
+
+    private void RenameVersion(UInt32 p_versionId)
+    {
+
+      Version l_version = VersionModel.Instance.GetValue(p_versionId);
+
+      if (l_version != null)
       {
-        Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
-        if (l_version != null)
-          if (m_controller.Delete(l_version) == false)
-            MessageBox.Show(m_controller.Error);
+        l_version = l_version.Clone();
+        l_version.Name = Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
+        if (m_controller.Update(l_version) == false)
+          MessageBox.Show(m_controller.Error);
       }
     }
 
-    private void RenameVersion(vTreeNode p_node)
+    private void UpdateLocked(UInt32 p_versionId, bool p_locked)
     {
-      if (p_node != null)
-      {
-        Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value).Clone();
-        if (l_version != null)
-        {
-          l_version.Name = Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
-          if (m_controller.Update(l_version) == false)
-            MessageBox.Show(m_controller.Error);
-        }
-      }
-    }
+      Version l_version = VersionModel.Instance.GetValue(p_versionId);
 
-    private void UpdateLocked(vTreeNode p_node, bool p_locked)
-    {
-      Version l_version = VersionModel.Instance.GetValue((UInt32)p_node.Value).Clone();
       if (l_version == null)
         return;
+      l_version = l_version.Clone();
       l_version.Locked = p_locked;
       if (p_locked == true)
-      {
         l_version.LockDate = DateTime.Now.ToShortDateString();
-      }
       else
-      {
         l_version.LockDate = "";
-      }
-        if (m_controller.Update(l_version) == false)
+      if (m_controller.Update(l_version) == false)
         MessageBox.Show(m_controller.Error);
     }
 

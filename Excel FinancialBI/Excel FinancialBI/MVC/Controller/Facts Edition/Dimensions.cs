@@ -34,7 +34,7 @@ namespace FBI.MVC.Model
     public Dimension<Account> m_outputsAccounts { get; set; }
     public Dimension<AxisElem> m_entities { get; set; }
     public Dimension<AxisElem> m_employees { get; set; }
-    public Dimension<Period> m_periods { get; set; }
+    public Dimension<PeriodModel> m_periods { get; set; }
 
     public Dimensions()
     {
@@ -42,7 +42,7 @@ namespace FBI.MVC.Model
       m_outputsAccounts= new Dimension<Account>();
       m_entities  = new Dimension<AxisElem>();
       m_employees = new Dimension<AxisElem>();
-      m_periods = new Dimension<Period>();
+      m_periods = new Dimension<PeriodModel>();
     }
                                                          
 

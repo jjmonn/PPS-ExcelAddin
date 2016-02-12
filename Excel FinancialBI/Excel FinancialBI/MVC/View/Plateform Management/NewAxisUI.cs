@@ -18,9 +18,9 @@ namespace FBI.MVC.View
   using FBI;
   using Utils;
 
-  public partial class NewAxisUI : Form, IView
+  public partial class NewAxisUI<TController> : Form, IView where TController : class, IAxisController
   {
-    AxisController m_controller;
+    TController m_controller;
 
     public NewAxisUI()
     {
@@ -29,7 +29,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-      m_controller = p_controller as AxisController;
+      m_controller = p_controller as TController;
     }
 
     public void LoadView()
@@ -111,6 +111,7 @@ namespace FBI.MVC.View
       l_newElem.Name = m_nameTextBox.Text;
       l_newElem.Axis = m_controller.AxisType;
       l_newElem.ParentId = l_parentAxisId;
+      l_newElem.AllowEdition = true;
       if (m_controller.CreateAxisElem(l_newElem) == false)
         MessageBox.Show(m_controller.Error);
       Hide();
