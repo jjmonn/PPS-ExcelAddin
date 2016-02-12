@@ -111,12 +111,12 @@ namespace FBI.MVC.View
 
     private void m_entitiesBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Entities));
+      m_controller.SwitchView<EntityView, EntityController>(new EntityController());
     }
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Employee));
+      m_controller.SwitchView<EmployeeView, EmployeeController>(new EmployeeController());
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)
@@ -147,7 +147,6 @@ namespace FBI.MVC.View
     private void m_clientsFiltersBT_Click(object sender, EventArgs e)
     {
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Client));
-
     }
 
     private void m_productsFiltersBT_Click(object sender, EventArgs e)
@@ -158,7 +157,6 @@ namespace FBI.MVC.View
     private void m_adjustmentsFiltersBT_Click(object sender, EventArgs e)
     {
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Adjustment));
-
     }
 
     private void VersionsBT_Click(object sender, EventArgs e)

@@ -48,7 +48,7 @@ namespace FBI.MVC.Model
           break;
       }
 
-      TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
+     // TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
     }
 
     private void CreateRHEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)

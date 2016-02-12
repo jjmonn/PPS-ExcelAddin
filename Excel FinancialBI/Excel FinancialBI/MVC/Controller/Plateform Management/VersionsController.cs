@@ -17,6 +17,7 @@ namespace FBI.MVC.Controller
     public override IView View { get { return (m_view); } }
     private NewDataVersionUI m_newVersionView = new NewDataVersionUI();
     private CopyVersionView m_copyVersionView = new CopyVersionView();
+    public UInt32 SelectedVersion { get; set; }
 
     public VersionsController()
     {
@@ -79,20 +80,23 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.name_in_use");
         return (false);
       }
-      if (Enum.IsDefined(typeof(TimeConfig), p_version.TimeConfiguration) == false)
+      if (p_version.IsFolder == false)
       {
-        Error = Local.GetValue("version.error.invalid_time_config");
-        return (false);
+        if (Enum.IsDefined(typeof(TimeConfig), p_version.TimeConfiguration) == false)
+        {
+          Error = Local.GetValue("version.error.invalid_time_config");
+          return (false);
+        }
+        if (p_version.NbPeriod <= 0)
+        {
+          Error = Local.GetValue("version.error.invalid_nb_period");
+          return (false);
+        }
+        if (IsCompatibleVersion(p_version, RatesVersionModel.Instance.GetValue(p_version.RateVersionId)) == false)
+          return (false);
+        if (IsCompatibleVersion(p_version, GlobalFactVersionModel.Instance.GetValue(p_version.GlobalFactVersionId)) == false)
+          return (false);
       }
-      if (p_version.NbPeriod <= 0)
-      {
-        Error = Local.GetValue("version.error.invalid_nb_period");
-        return (false);
-      }
-      if (IsCompatibleVersion(p_version, RatesVersionModel.Instance.GetValue(p_version.RateVersionId)) == false)
-        return (false);
-      if (IsCompatibleVersion(p_version, GlobalFactVersionModel.Instance.GetValue(p_version.GlobalFactVersionId)) == false)
-        return (false);
       return (true);
     }
 
@@ -126,14 +130,14 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-    public bool Delete(Version p_version)
+    public bool Delete(UInt32 p_versionId)
     {
-      if (VersionModel.Instance.GetValue(p_version.Id) == null)
+      if (VersionModel.Instance.GetValue(p_versionId) == null)
       {
         Error = Local.GetValue("general.version.unknown_version");
         return (false);
       }
-      VersionModel.Instance.Delete(p_version.Id);
+      VersionModel.Instance.Delete(p_versionId);
       return (true);
     }
 
@@ -170,11 +174,11 @@ namespace FBI.MVC.Controller
       switch (p_version.TimeConfiguration)
       {
         case TimeConfig.YEARS:
-          p_version.StartPeriod = (UInt32)Period.GetYearIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
+          p_version.StartPeriod = (UInt32)PeriodModel.GetYearIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
           break;
 
         case TimeConfig.MONTHS:
-          p_version.StartPeriod = (UInt32)Period.GetMonthIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
+          p_version.StartPeriod = (UInt32)PeriodModel.GetMonthIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
           break;
 
         case TimeConfig.DAYS :

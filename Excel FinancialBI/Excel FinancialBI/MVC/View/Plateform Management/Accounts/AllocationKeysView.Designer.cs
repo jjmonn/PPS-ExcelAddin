@@ -113,6 +113,7 @@ namespace FBI.MVC.View
       // 
       // m_DGVPanel
       // 
+      this.m_DGVPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_DGVPanel.Location = new System.Drawing.Point(3, 41);
       this.m_DGVPanel.Name = "m_DGVPanel";
       this.m_DGVPanel.Size = new System.Drawing.Size(885, 770);

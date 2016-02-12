@@ -12,17 +12,16 @@ namespace FBI.Forms
   using MVC.Model;
   using MVC.Model.CRUD;
 
-  class FbiFilterHierarchyTreeView : vTreeView
+  class FbiFilterHierarchyTreeView : AFbiTreeView
   {
     private AxisType m_axisType;
     private MultiIndexDictionary<UInt32, string, Filter> m_filters;
 
-    public FbiFilterHierarchyTreeView(AxisType p_axisType)
+    public FbiFilterHierarchyTreeView(AxisType p_axisType, bool p_allowDragDrop = false) : base(p_allowDragDrop)
     {
       m_axisType = p_axisType;
       m_filters = FilterModel.Instance.GetDictionary(m_axisType);
       this.Load();
-      FbiTreeView<Filter>.InitTVFormat(this);
     }
 
     public bool Load()
@@ -49,6 +48,24 @@ namespace FBI.Forms
       return (true);
     }
 
+    public void GetAndAdd(NamedHierarchyCRUDEntity p_value, Type p_type)
+    {
+      vTreeNode l_newNode = this.Get(p_value.Id, p_type);
+      vTreeNode l_parentNode = this.Get(p_value.ParentId, p_type);
+
+      if (l_newNode == null)
+      {
+        l_newNode = new vTreeNode();
+        l_newNode.Value = p_value.Id;
+        if (l_parentNode != null)
+          l_parentNode.Nodes.Add(l_newNode);
+        else
+          Nodes.Add(l_newNode);
+      }
+      l_newNode.Text = p_value.Name;
+      l_newNode.ImageIndex = (int)p_value.Image;
+    }
+
     private bool Generate(SafeDictionary<UInt32, vTreeNode> p_dic, UInt32 p_filterRoot, vTreeNode p_root)
     {
       MultiIndexDictionary<UInt32, string, Filter> l_childrenDic = new MultiIndexDictionary<UInt32, string, Filter>();
@@ -63,9 +80,6 @@ namespace FBI.Forms
       {
         foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(l_filter.Id).SortedValues)
         {
-
-          System.Diagnostics.Debug.WriteLine(">> FilterValue added: " + l_filterValue.Name);
-
           vTreeNode l_node = new vTreeNode();
           l_node.Text = l_filterValue.Name;
           l_node.Value = l_filterValue.Id;

@@ -111,7 +111,7 @@ namespace FBI.MVC.Model
     private bool RegisterAccount(Range p_cell, Account p_account)
     {
       return m_accounts.AddValue(p_cell, p_account);
-    }
+     }
 
     private bool IsEntity(Range p_cell)
     {

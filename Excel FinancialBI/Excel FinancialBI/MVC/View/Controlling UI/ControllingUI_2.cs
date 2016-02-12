@@ -15,10 +15,34 @@ namespace FBI.MVC.View
 
   public partial class ControllingUI_2 : Form, IView
   {
+
+    #region Variables
+
+    private CUIController m_controller = null;
+
+    #endregion
+
+    #region Initialize
+
     public ControllingUI_2()
     {
-      MultilangueSetup();
       InitializeComponent();
+    }
+
+    public void SetController(IController p_controller)
+    {
+      this.m_controller = p_controller as CUIController;
+    }
+
+    public void InitView()
+    {
+      this.MultilangueSetup();
+
+      this.m_controller.CreatePane();
+      this.SplitContainer1.Panel1.Controls.Add(this.m_controller.LeftPaneController.View as CUI2LeftPane);
+      //this.SplitContainer2.Panel2.Controls.Add(this.m_controller.RightPaneController.View as CUI2LeftPane);
+
+      this.Show();
     }
 
     private void MultilangueSetup()
@@ -55,9 +79,7 @@ namespace FBI.MVC.View
       this.Text = Local.GetValue("CUI.financials");
     }
 
-    public void SetController(IController p_controller)
-    {
+    #endregion
 
-    }
   }
 }

@@ -35,8 +35,6 @@ namespace FBI.MVC.Model
     {
       m_dimensions = p_dimensions;
       DimensionsIdentificationProcess();
-
-      m_dimensions.DefineOrientation();
     }
 
     private void DimensionsIdentificationProcess()

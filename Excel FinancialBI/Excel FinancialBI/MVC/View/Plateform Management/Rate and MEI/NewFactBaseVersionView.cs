@@ -10,6 +10,7 @@ namespace FBI.MVC.View
   using Model;
   using Model.CRUD;
   using Controller;
+  using Utils;
 
   partial class NewFactBaseVersionView<TController, TVersion>
     where TController : class, IFactBaseController<TVersion>
@@ -31,6 +32,17 @@ namespace FBI.MVC.View
     public void LoadView()
     {
       SuscribeEvents();
+      MultiLangueSetup();
+    }
+
+    private void MultiLangueSetup()
+    {
+      this.Text = Local.GetValue("versions.new_version");
+      m_nameLabel.Text = Local.GetValue("general.name");
+      m_startingPeriodLabel.Text = Local.GetValue("facts_versions.starting_period");
+      m_numberPeriodsLabel.Text = Local.GetValue("facts_versions.nb_years");
+      CancelBT.Text = Local.GetValue("general.cancel");
+      ValidateBT.Text = Local.GetValue("general.validate");
     }
 
     void SuscribeEvents()

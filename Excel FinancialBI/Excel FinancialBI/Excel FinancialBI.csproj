@@ -237,24 +237,30 @@
     <Compile Include="ExcelSheetModule1.Designer.cs">
       <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AFbiTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\FbiFilterHierarchyTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Forms\FbiFilterHierarchyTreeView.cs" />
     <Compile Include="Forms\FbiToolStripMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\FbiTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Forms\FbiTreeView.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
+    <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AllocationKeysController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\CurrenciesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\EmployeeControler.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\EntityController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\GlobalFactController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\BasePlatformMgtComponent.cs" />
@@ -274,6 +280,7 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\ComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElem.cs" />
@@ -288,7 +295,10 @@
     <Compile Include="MVC\Model\CRUD\Base\NamedHierarchyCRUDEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Commit.cs" />
     <Compile Include="MVC\Model\CRUD\CommitLog.cs" />
+    <Compile Include="MVC\Model\CRUD\ComputeRequest.cs" />
+    <Compile Include="MVC\Model\CRUD\ComputeResult.cs" />
     <Compile Include="MVC\Model\CRUD\CRUDAction.cs" />
+    <Compile Include="MVC\Model\CRUD\CuiDgvConf.cs" />
     <Compile Include="MVC\Model\CRUD\Currency.cs" />
     <Compile Include="MVC\Model\CRUD\EntityCurrency.cs" />
     <Compile Include="MVC\Model\CRUD\EntityDistribution.cs" />
@@ -335,6 +345,12 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
+    <Compile Include="MVC\View\CommitFollowUpView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\CommitFollowUpView.Designer.cs">
+      <DependentUpon>CommitFollowUpView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\Connection\ConnectionSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -384,6 +400,10 @@
     <Compile Include="MVC\View\FBIFunctionUI.Designer.cs">
       <DependentUpon>FBIFunctionUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\FixDesigner\AxisBaseView.cs" />
+    <Compile Include="MVC\View\FixDesigner\FactBaseView.cs" />
+    <Compile Include="MVC\View\FixDesigner\NewAxisUI.cs" />
+    <Compile Include="MVC\View\FixDesigner\NewFactBaseVersionView.cs" />
     <Compile Include="MVC\View\GenericView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -408,11 +428,17 @@
     <Compile Include="MVC\View\PeriodRangeSelectionControl.Designer.cs">
       <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\Plateform Management\AxisView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MVC\View\Plateform Management\Data Versions\CopyVersionView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\Data Versions\CopyVersionView.Designer.cs">
       <DependentUpon>CopyVersionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\EntityView.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\Rate and MEI\GlobalFactView.cs">
       <SubType>UserControl</SubType>
@@ -441,11 +467,11 @@
     <Compile Include="MVC\View\Plateform Management\GlobalFactUI.Designer.cs">
       <DependentUpon>GlobalFactUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\AxisView.cs">
+    <Compile Include="MVC\View\Plateform Management\AxisBaseView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\AxisView.Designer.cs">
-      <DependentUpon>AxisView.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\AxisBaseView.Designer.cs">
+      <DependentUpon>AxisBaseView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\EmployeeView.cs">
       <SubType>UserControl</SubType>
@@ -666,6 +692,9 @@
     <EmbeddedResource Include="ExcelSheetModule1.resx">
       <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
+      <DependentUpon>CommitFollowUpView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Connection\ConnectionSidePane.resx">
       <DependentUpon>ConnectionSidePane.cs</DependentUpon>
     </EmbeddedResource>
@@ -717,8 +746,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\Data Versions\NewDataVersionView.resx">
       <DependentUpon>NewDataVersionView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\AxisView.resx">
-      <DependentUpon>AxisView.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\AxisBaseView.resx">
+      <DependentUpon>AxisBaseView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\CurrenciesView.resx">
       <DependentUpon>CurrenciesView.cs</DependentUpon>

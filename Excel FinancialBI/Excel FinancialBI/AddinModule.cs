@@ -30,6 +30,22 @@ namespace FBI
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
       Addin.Main();
+      fbiRibbonChangeState(false);
+      Addin.InitializationEvent += OnAddinInitializationEvent;
+      Addin.ConnectionStateEvent += OnConnectionEvent;
+    }
+
+    private void fbiRibbonChangeState(bool p_enabled)
+    {
+      m_versionRibbonButton.Enabled = p_enabled;
+      m_processRibbonButton.Enabled = p_enabled;
+      m_snapshotRibbonSplitButton.Enabled = p_enabled;
+      m_reportUploadRibbonButton.Enabled = p_enabled;
+      m_CUIRibbonButton.Enabled = p_enabled;
+      m_submissionsTrackingRibbonButton.Enabled = p_enabled;
+      m_fbiRibbonButton.Enabled = p_enabled;
+      m_refreshRibbonButton.Enabled = p_enabled;
+      m_platformManagementButton.Enabled = p_enabled;
     }
 
     #region Add-in Express automatic code
@@ -173,12 +189,12 @@ namespace FBI
 
     private void m_CUIRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      new CUIController();
     }
 
     private void m_submissionsTrackingRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      new CommitFollowUpController();
     }
 
     private void m_fbiRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -228,6 +244,17 @@ namespace FBI
     }
 
     #endregion
+
+    void OnAddinInitializationEvent()
+    {
+      fbiRibbonChangeState(true);
+    }
+
+    private void OnConnectionEvent(bool p_connected)
+    {
+      if (p_connected == false)
+        fbiRibbonChangeState(false);
+    }
 
     #endregion
 

@@ -79,6 +79,11 @@ namespace FBI.MVC.Model
       return (m_dic[p_id]);
     }
 
+    public SortedDictionary<UInt32, T> GetDictionary()
+    {
+      return (m_dic);
+    }
+
     #endregion
   }
 }

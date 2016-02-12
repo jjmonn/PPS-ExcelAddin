@@ -73,12 +73,15 @@ namespace FBI.MVC.View
 
     void InitRates(UInt32 p_versionId, Int32[] p_monthList, SortedSet<UInt32> p_currencies)
     {
+      TextBoxEditor l_tbEditor = null;
       foreach (Int32 l_monthId in p_monthList)
         foreach (UInt32 l_currencyId in p_currencies)
         {
           ExchangeRate l_rate = ExchangeRateModel.Instance.GetValue(l_currencyId, p_versionId, (UInt32)l_monthId);
 
-          m_dgv.FillField((UInt32)l_monthId, l_currencyId, ((l_rate != null) ? l_rate.Value : 0), new TextBoxEditor());
+          if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_RATES) == true)
+            l_tbEditor = new TextBoxEditor();
+          m_dgv.FillField((UInt32)l_monthId, l_currencyId, ((l_rate != null) ? l_rate.Value : 0), l_tbEditor);
         }
     }
 
@@ -125,8 +128,11 @@ namespace FBI.MVC.View
       }
       else
       {
+        TextBoxEditor l_tbEditor = null;
+        if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_RATES) == true)
+          l_tbEditor = new TextBoxEditor();
         if (p_rate.RateVersionId == m_controller.SelectedVersion)
-          m_dgv.FillField(p_rate.Period, p_rate.DestCurrencyId, p_rate.Value, new TextBoxEditor());
+          m_dgv.FillField(p_rate.Period, p_rate.DestCurrencyId, p_rate.Value, l_tbEditor);
       }
     }
 

@@ -54,30 +54,15 @@ namespace FBI.MVC.Controller
           return false;
 
         m_editedFactsManager.RegisterEditedFacts(m_dimensions);
-
-        switch (m_dimensions.m_process)
+        if (m_version != null && m_periodsList.Count > 0)
         {
-          case Account.AccountProcess.FINANCIAL: 
-            FinancialFactsDownload(); 
-            break;
-          case Account.AccountProcess.RH: 
-            RHFactsDownload(); 
-            break;
+          m_editedFactsManager.DownloadFacts(m_version, m_periodsList);
+          return true;
         }
-        return true;
+        else
+          return false;
       }
       return false;
-    }
-
-    private void FinancialFactsDownload()
-    {
-      // TO DO
-    }
-
-    private void RHFactsDownload()
-    {
-      if (m_version != null && m_periodsList.Count > 0)
-        m_editedFactsManager.DownloadFacts(m_version, m_periodsList);
     }
 
     public void UpdateWorksheetInputs()
@@ -95,6 +80,7 @@ namespace FBI.MVC.Controller
       m_editedFactsManager.CommitDifferences();
     }
 
+    // BELOW : to be checked
     private void AfterHRFactsDownloaded(bool p_sucess)
     {
       m_editedFactsManager.IdentifyDifferences();
