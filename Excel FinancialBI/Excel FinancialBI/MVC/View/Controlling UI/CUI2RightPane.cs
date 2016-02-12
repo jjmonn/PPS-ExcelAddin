@@ -34,20 +34,20 @@ namespace FBI.MVC.View
 
     #region Initialize
 
-    public CuiDgvConf GetRowConf()
+    public CUIDimensionConf GetRowConf()
     {
       return (GetDisplayListConf(m_rowsDisplayList));
     }
 
-    public CuiDgvConf GetColumnConf()
+    public CUIDimensionConf GetColumnConf()
     {
       return (GetDisplayListConf(m_columnsDisplayList));
     }
 
-    CuiDgvConf GetDisplayListConf(vListBox p_displayList)
+    CUIDimensionConf GetDisplayListConf(vListBox p_displayList)
     {
-      CuiDgvConf l_topConf = null;
-      CuiDgvConf l_currentConf = null;
+      CUIDimensionConf l_topConf = null;
+      CUIDimensionConf l_currentConf = null;
 
       foreach (ListItem l_item in p_displayList.Items)
       {
@@ -59,7 +59,7 @@ namespace FBI.MVC.View
         if (l_topConf == null)
           l_topConf = l_dimension.Conf;
         else
-          l_currentConf.child = l_dimension.Conf;
+          l_currentConf.Child = l_dimension.Conf;
         l_currentConf = l_dimension.Conf;
       }
       return (l_topConf);
@@ -82,8 +82,8 @@ namespace FBI.MVC.View
       LoadFilters(AxisType.Client, l_client);
       UInt32 l_entity = SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.entity"), new AxisElemConf(AxisType.Entities)));
       LoadFilters(AxisType.Entities, l_entity);
-      SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.version"), new CuiDgvConf(typeof(Version))));
-      SetToRowList(GenerateDimension(Local.GetValue("CUI.dimension.account"), new CuiDgvConf(typeof(Account)), false));
+      SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.version"), new CUIDimensionConf(typeof(Version))));
+      SetToRowList(GenerateDimension(Local.GetValue("CUI.dimension.account"), new CUIDimensionConf(typeof(Account)), false));
 
       if ((Account.AccountProcess)Settings.Default.processId == Account.AccountProcess.FINANCIAL)
       {
@@ -238,7 +238,7 @@ namespace FBI.MVC.View
       return (SetToDisplayList(p_dimensionId, m_columnsDisplayList));
     }
 
-    UInt32 GenerateDimension(string p_name, CuiDgvConf p_conf, bool p_deletable = true, bool p_draggable = true, UInt32 p_parentId = 0)
+    UInt32 GenerateDimension(string p_name, CUIDimensionConf p_conf, bool p_deletable = true, bool p_draggable = true, UInt32 p_parentId = 0)
     {
       UInt32 l_id = m_dimensionId++;
 

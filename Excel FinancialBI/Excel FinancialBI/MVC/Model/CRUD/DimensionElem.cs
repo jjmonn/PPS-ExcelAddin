@@ -10,7 +10,7 @@ namespace FBI.MVC.Model.CRUD
 
   public class DimensionElem : NamedHierarchyCRUDEntity
   {
-    public DimensionElem(UInt32 p_id, string p_name, CuiDgvConf p_conf, bool p_deletable = true, bool p_draggable = true, UInt32 p_parentId = 0)
+    public DimensionElem(UInt32 p_id, string p_name, CUIDimensionConf p_conf, bool p_deletable = true, bool p_draggable = true, UInt32 p_parentId = 0)
     {
       Id = p_id;
       Name = p_name;
@@ -22,7 +22,7 @@ namespace FBI.MVC.Model.CRUD
     public UInt32 Id { get; set; }
     public UInt32 ParentId { get; set; }
     public string Name { get; set; }
-    public CuiDgvConf Conf { get; set; }
+    public CUIDimensionConf Conf { get; set; }
     public UInt32 Image { get; set; }
     public bool Deletable { get; set; }
     public bool Draggable { get; set; }

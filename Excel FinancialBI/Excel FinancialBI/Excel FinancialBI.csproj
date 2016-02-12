@@ -237,6 +237,9 @@
     <Compile Include="ExcelSheetModule1.Designer.cs">
       <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AFbiTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -296,10 +299,11 @@
     <Compile Include="MVC\Model\CRUD\Base\NamedHierarchyCRUDEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Commit.cs" />
     <Compile Include="MVC\Model\CRUD\CommitLog.cs" />
+    <Compile Include="MVC\Model\CRUD\ComputeConfig.cs" />
     <Compile Include="MVC\Model\CRUD\ComputeRequest.cs" />
     <Compile Include="MVC\Model\CRUD\ComputeResult.cs" />
     <Compile Include="MVC\Model\CRUD\CRUDAction.cs" />
-    <Compile Include="MVC\Model\CRUD\CuiDgvConf.cs" />
+    <Compile Include="MVC\Model\CRUD\CUIDimensionConf.cs" />
     <Compile Include="MVC\Model\CRUD\Currency.cs" />
     <Compile Include="MVC\Model\CRUD\DimensionElem.cs" />
     <Compile Include="MVC\Model\CRUD\EntityCurrency.cs" />
@@ -394,6 +398,12 @@
     </Compile>
     <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.Designer.cs">
       <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ResultView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ResultView.Designer.cs">
+      <DependentUpon>ResultView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\FBIFunctionUI.cs">
       <SubType>Form</SubType>
