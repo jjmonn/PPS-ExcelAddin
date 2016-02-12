@@ -118,7 +118,7 @@ Public Class SubmissionsFollowUpView
         For Each l_row As HierarchyItem In m_submissionsDGV.RowsHierarchy.Items
             RowInitialize(l_row, l_statusCombobox)
         Next
-        m_submissionsDGV.RowsHierarchy.ExpandAllItems()
+
         DataGridViewsUtil.FormatDGVRowsHierarchy(m_submissionsDGV)
 
     End Sub

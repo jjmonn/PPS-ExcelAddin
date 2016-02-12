@@ -15,6 +15,15 @@ namespace FBI.MVC.View
 
   public partial class ControllingUI_2 : Form, IView
   {
+
+    #region Variables
+
+    private CUIController m_controller = null;
+
+    #endregion
+
+    #region Initialize
+
     public ControllingUI_2()
     {
       MultilangueSetup();
@@ -57,7 +66,10 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-
+      this.m_controller = p_controller as CUIController;
     }
+
+    #endregion
+
   }
 }

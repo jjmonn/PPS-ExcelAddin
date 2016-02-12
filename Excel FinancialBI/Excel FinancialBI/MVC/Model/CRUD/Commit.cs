@@ -14,8 +14,8 @@ namespace FBI.MVC.Model.CRUD
 
     public enum Status
     {
-      NOT_EDITED = 0x00,
-      EDITED = 0x01,
+      EDITED = 0x00,
+      NOT_EDITED = 0x01,
       COMMITTED = 0x02
     }
     #endregion

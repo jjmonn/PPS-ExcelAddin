@@ -147,7 +147,6 @@ namespace FBI.MVC.View
     private void m_clientsFiltersBT_Click(object sender, EventArgs e)
     {
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Client));
-
     }
 
     private void m_productsFiltersBT_Click(object sender, EventArgs e)
@@ -158,7 +157,6 @@ namespace FBI.MVC.View
     private void m_adjustmentsFiltersBT_Click(object sender, EventArgs e)
     {
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Adjustment));
-
     }
 
     private void VersionsBT_Click(object sender, EventArgs e)

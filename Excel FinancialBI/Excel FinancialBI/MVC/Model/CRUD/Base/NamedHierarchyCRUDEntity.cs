@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace FBI.MVC.Model.CRUD
 {
-  public interface NamedHierarchyCRUDEntity : NamedCRUDEntity
+  public interface NamedHierarchyCRUDEntity : NamedCRUDEntity, HierarchyCRUDEntity
   {
-    UInt32 ParentId { get; set; }
   }
 }

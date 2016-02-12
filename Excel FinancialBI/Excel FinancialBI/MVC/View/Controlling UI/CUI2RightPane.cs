@@ -15,6 +15,15 @@ namespace FBI.MVC.View
 
   public partial class CUI2RightPane : UserControl, IView
   {
+
+    #region Variables
+
+    private CUIRightPaneController m_controller = null;
+
+    #endregion
+
+    #region Initialize
+
     public CUI2RightPane()
     {
       InitializeComponent();
@@ -31,7 +40,10 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-
+      this.m_controller = p_controller as CUIRightPaneController;
     }
+
+    #endregion
+
   }
 }
