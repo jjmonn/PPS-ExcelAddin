@@ -72,32 +72,7 @@ namespace FBI.MVC.Controller
 
     #region Check
 
-    public void CheckUpdateAllocationKey(CellEventArgs p_args)
-    {
-      double l_value = 0.0;
-      if (Double.TryParse((string)p_args.Cell.Value, out l_value))
-      {
-        if (l_value < 0 || l_value > 100)
-        {
-          MessageBox.Show(Local.GetValue("allocationKeys.msg_invalid_percentage"));
-          this.UpdateAllocationKey((UInt32)p_args.Cell.RowItem.ItemValue, -1);
-        }
-        else
-        {
-          if (this.IsTotalPercentageValid())
-            this.UpdateAllocationKey((UInt32)p_args.Cell.RowItem.ItemValue, l_value);
-          else
-          {
-            MessageBox.Show(Local.GetValue("allocationKeys.msg_percentageOver100"));
-            this.UpdateAllocationKey((UInt32)p_args.Cell.RowItem.ItemValue, -1);
-          }
-        }
-      }
-      else
-        this.UpdateAllocationKey((UInt32)p_args.Cell.RowItem.ItemValue, -1);
-    }
-
-    private bool IsTotalPercentageValid()
+    public double TotalPercentageValid()
     {
       double l_totalPercentage = 0.0;
       MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemMID = AxisElemModel.Instance.GetDictionary(AxisType.Entities);
@@ -110,9 +85,9 @@ namespace FBI.MVC.Controller
           if (l_entity.AllowEdition)
             l_totalPercentage += l_entityDistrib.Percentage;
         if (l_totalPercentage > 100)
-          return (false);
+          return (l_totalPercentage);
       }
-      return (true);
+      return (l_totalPercentage);
     }
 
     #endregion

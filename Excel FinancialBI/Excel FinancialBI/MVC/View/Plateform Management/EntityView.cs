@@ -19,17 +19,20 @@ namespace FBI.MVC.View
     public EntityView()
     {
       SuscribeEvents();
+      m_dgv.AllowDragAndDrop = true;
     }
 
     void SuscribeEvents()
     {
       m_dgv.CellMouseClick += OnClickCell;
       m_dgv.CellChangedAndValidated += OnEntityCurrencyChanged;
+      m_dgv.Dropped += OnDGVDropItem;
     }
 
     public override void LoadView()
     {
       base.LoadView();
+
       MultiIndexDictionary<UInt32, Tuple<UInt32, UInt32>, AxisFilter> l_axisFilterDic = AxisFilterModel.Instance.GetDictionary(AxisType.Entities);
       MultiIndexDictionary<UInt32, string, AxisElem> l_entityDic = AxisElemModel.Instance.GetDictionary(AxisType.Entities);
 
@@ -47,6 +50,9 @@ namespace FBI.MVC.View
         m_dgv.FillField(l_entity.Id, 0, CurrencyModel.Instance.GetValueName(l_entityCurrency.CurrencyId));
       }
       m_dgv.Refresh();
+
+      m_dgv.AllowDrop = true;
+      m_dgv.AllowDragDropIndication = true;
     }
 
     private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
@@ -85,6 +91,21 @@ namespace FBI.MVC.View
       l_entity = l_entity.Clone();
       l_entity.CurrencyId = l_currency.Id;
       if (m_controller.UpdateEntityCurrency(l_entity) == false)
+        MessageBox.Show(m_controller.Error);
+    }
+
+    void OnDGVDropItem(HierarchyItem p_origin, HierarchyItem p_dest, DragEventArgs p_args)
+    {
+      if (p_origin == null || p_dest == null)
+        return;
+      AxisElem l_originAxis = AxisElemModel.Instance.GetValue((UInt32)p_origin.ItemValue);
+      AxisElem l_destAxis = AxisElemModel.Instance.GetValue((UInt32)p_dest.ItemValue);
+
+      if (l_originAxis == null || l_destAxis == null)
+        return;
+      l_originAxis = l_originAxis.Clone();
+      l_originAxis.ParentId = l_destAxis.Id;
+      if (m_controller.UpdateAxisElem(l_originAxis) == false)
         MessageBox.Show(m_controller.Error);
     }
   }

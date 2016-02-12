@@ -82,7 +82,6 @@ namespace FBI.MVC.View
 
       this.DefineUIPermissions();
       this.DesactivateUnallowed();
-      this.SetAccountUIState(false);
 
       this.MultilangueSetup();
       this.SetFormulaEditionState(false);
@@ -487,6 +486,13 @@ namespace FBI.MVC.View
         if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value)) != null)
         {
           l_currentAccount = l_currentAccount.Clone();
+          if (this.m_formulaTextBox.Text == "")
+          {
+            l_currentAccount.Formula = m_grammar.Formula;
+            this.m_controller.UpdateAccount(l_currentAccount);
+            this.SetEditingFormulaUI(false);
+            return;
+          }
           m_bnf.AddRule("fbi_to_grammar", m_grammar.ToGrammar);
           if (m_bnf.Parse("fbi_to_grammar", m_formulaTextBox.Text))
           {
@@ -560,7 +566,7 @@ namespace FBI.MVC.View
       {
         vTreeNode l_node = this.m_accountTV.FindAtPosition(((MouseEventArgs)p_e).Location);
         if (l_node != null)
-          this.m_formulaTextBox.Text += l_node.Text;
+          this.m_formulaTextBox.Text += "\"" + l_node.Text + "\"";
       }
     }
 
@@ -871,7 +877,7 @@ namespace FBI.MVC.View
       {
         vTreeNode l_node = this.m_accountTV.FindAtPosition(((MouseEventArgs)p_e).Location);
         if (l_node != null)
-          this.m_formulaTextBox.Text += l_node.Text;
+          this.m_formulaTextBox.Text += "\"" + l_node.Text + "\"";
       }
     }
 
