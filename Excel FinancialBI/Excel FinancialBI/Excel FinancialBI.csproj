@@ -243,11 +243,15 @@
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\FbiFilterHierarchyTreeView.cs" />
+    <Compile Include="Forms\FbiFilterHierarchyTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiToolStripMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\FbiTreeView.cs" />
+    <Compile Include="Forms\FbiTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
@@ -394,6 +398,12 @@
       <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Facts Edition\RangeHighlighter.cs" />
+    <Compile Include="MVC\View\Controlling UI\ResultView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ResultView.Designer.cs">
+      <DependentUpon>ResultView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\FBIFunctionUI.cs">
       <SubType>Form</SubType>
     </Compile>

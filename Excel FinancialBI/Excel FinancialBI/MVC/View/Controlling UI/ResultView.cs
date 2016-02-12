@@ -35,20 +35,20 @@ namespace FBI.MVC.View.Controlling_UI
 
     public void LoadView()
     {
-      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(PeriodModel), periodBuilder));
-      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(VersionModel), versionBuilder));
-      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(AxisElemModel), axisElemBuilder));
-      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(FilterValueModel), filterValueBuilder));
-      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(AccountModel), accountBuilder));
+      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(PeriodModel), PeriodBuilder));
+      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(VersionModel), VersionBuilder));
+      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(AxisElemModel), AxisElemBuilder));
+      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(FilterValueModel), FilterValueBuilder));
+      m_builderList.Add(new Tuple<Type, dgvBuilder>(typeof(AccountModel), AccountBuilder));
     }
 
-    public void PrepareDgv(CuiDgvConf p_rows, CuiDgvConf p_collumns)
+    public void PrepareDgv(CuiDgvConf p_rows, CuiDgvConf p_columns)
     {
-      findMethod(p_rows, FbiDataGridView.Dimension.ROW);
-      findMethod(p_collumns, FbiDataGridView.Dimension.COLUMN);
+      FindMethod(p_rows, FbiDataGridView.Dimension.ROW);
+      FindMethod(p_columns, FbiDataGridView.Dimension.COLUMN);
     }
 
-    private void findMethod(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
+    private void FindMethod(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
     {
       foreach (Tuple<Type, dgvBuilder> l_elem in m_builderList)
       {
@@ -60,7 +60,7 @@ namespace FBI.MVC.View.Controlling_UI
       }
     }
 
-    private void periodBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
+    private void PeriodBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
     {
       PeriodConf l_conf = p_conf as PeriodConf;
       List<int> l_periodList = PeriodModel.GetPeriodList(l_conf.StartPeriod, l_conf.NbPeriods, l_conf.PeriodRange);
@@ -75,22 +75,22 @@ namespace FBI.MVC.View.Controlling_UI
       }
     }
 
-    private void versionBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
+    private void VersionBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
     {
 
     }
 
-    private void axisElemBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
+    private void AxisElemBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
     {
       AxisElemConf l_conf = p_conf as AxisElemConf;
     }
 
-    private void filterValueBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
+    private void FilterValueBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
     {
 
     }
 
-    private void accountBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
+    private void AccountBuilder(CuiDgvConf p_conf, FbiDataGridView.Dimension p_dimension)
     {
 
     }
