@@ -397,6 +397,12 @@
     <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.Designer.cs">
       <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\Controlling UI\ResultView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ResultView.Designer.cs">
+      <DependentUpon>ResultView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\FBIFunctionUI.cs">
       <SubType>Form</SubType>
     </Compile>

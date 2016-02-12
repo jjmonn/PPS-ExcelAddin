@@ -10,7 +10,7 @@ namespace FBI.MVC.Model.CRUD
   {
     public Type ModelType { get; set; }
     public UInt32 FilterId { get; set; }
-    public CuiDgvConf child { get; set; }
+    public CuiDgvConf Child { get; set; }
   }
 
   class AxisElemConf : CuiDgvConf
