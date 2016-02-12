@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using VIBlend.WinForms.DataGridView;
+using System.Drawing;
 
 namespace FBI.Forms
 {
@@ -120,10 +121,10 @@ namespace FBI.Forms
 
     public void SetDimension(Dimension p_dimension, UInt32 p_id, string p_name)
     {
-      SetDimension<NamedCRUDEntity>(p_dimension, p_id, p_name);
+      SetDimension<CRUDEntity>(p_dimension, p_id, p_name);
     }
 
-    public void SetDimension<J>(Dimension p_dimension, UInt32 p_id, string p_name, UInt32 p_parentId = 0, ICRUDModel<J> p_model = null, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
+    public void SetDimension<J>(Dimension p_dimension, UInt32 p_id, string p_name, UInt32 p_parentId = 0, ICRUDModel<J> p_model = null, int p_width = COLUMNS_WIDTH) where J : class, CRUDEntity
     {
       if (p_dimension == Dimension.COLUMN)
         SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
@@ -132,7 +133,7 @@ namespace FBI.Forms
     }
 
     HierarchyItem SetDimension<J>(HierarchyItemsCollection p_dimension, SafeDictionary<UInt32, HierarchyItem> p_saveDic, UInt32 p_id,
-      string p_name, ICRUDModel<J> p_model = null, bool p_hasParent = false, UInt32 p_parentId = 0, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
+      string p_name, ICRUDModel<J> p_model = null, bool p_hasParent = false, UInt32 p_parentId = 0, int p_width = COLUMNS_WIDTH) where J : class, CRUDEntity
     {
       HierarchyItem l_dim;
 
@@ -144,10 +145,10 @@ namespace FBI.Forms
         p_saveDic[p_id] = l_dim;
         if (p_parentId == 0)
           p_dimension.Add(l_dim);
-        if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
+        if (p_hasParent == true && p_parentId != 0 && Implements<HierarchyCRUDEntity>(typeof(J)) && p_model != null)
         {
           HierarchyItem parent = null;
-          NamedHierarchyCRUDEntity parentEntity = p_model.GetValue(p_parentId) as NamedHierarchyCRUDEntity;
+          HierarchyCRUDEntity parentEntity = p_model.GetValue(p_parentId) as HierarchyCRUDEntity;
 
           if (parentEntity == null)
             return (l_dim);
@@ -172,12 +173,30 @@ namespace FBI.Forms
       HierarchyItem row = m_rowsDic[p_row];
       HierarchyItem column = m_columnsDic[p_column];
 
-      if (row == null)
-        return;
-      if (column == null)
+      if (row == null || column == null)
         return;
       this.CellsArea.SetCellValue(row, column, (V)p_value);
       this.CellsArea.SetCellEditor(row, column, p_editor);
+    }
+
+    public object GetCellValue(UInt32 p_row, UInt32 p_column)
+    {
+      HierarchyItem row = m_rowsDic[p_row];
+      HierarchyItem column = m_columnsDic[p_column];
+
+      if (row == null || column == null)
+        return (null);
+      return (this.CellsArea.GetCellValue(row, column));
+    }
+
+    public object GetCellEditor(UInt32 p_row, UInt32 p_column)
+    {
+      HierarchyItem row = m_rowsDic[p_row];
+      HierarchyItem column = m_columnsDic[p_column];
+
+      if (row == null || column == null)
+        return (null);
+      return (this.CellsArea.GetCellEditor(row, column));
     }
 
     void OnMouseEnterCell(object p_sender, CellEventArgs p_args)

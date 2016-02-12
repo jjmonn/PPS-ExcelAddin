@@ -178,7 +178,7 @@ namespace FBI
 
     private void m_submissionsTrackingRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      new CommitFollowUpController();
     }
 
     private void m_fbiRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
