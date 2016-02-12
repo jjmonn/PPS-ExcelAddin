@@ -15,6 +15,7 @@ namespace FBI.MVC.Controller
 
     private IView m_view;
     public IView View { get { return (m_view); } }
+    public string Error { get; set; }
 
     #endregion
 

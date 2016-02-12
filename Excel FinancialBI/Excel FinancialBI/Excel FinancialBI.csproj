@@ -249,6 +249,9 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
@@ -277,6 +280,7 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\ComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElem.cs" />

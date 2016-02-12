@@ -69,6 +69,9 @@ namespace FBI.MVC.Model
               l_result = l_result - m_computeResultDic[l_diffId.Item2];
             else
               l_result = m_computeResultDic[l_diffId.Item2] - l_result;
+            m_computeResultDic.Remove(l_diffId.Item2);
+            m_computeRequestDic.Remove(l_requestId);
+            m_computeRequestDic.Remove(l_diffId.Item2);
           }
           else
           {
