@@ -82,7 +82,7 @@ namespace FBI.MVC.View
       LoadFilters(AxisType.Client, l_client);
       UInt32 l_entity = SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.entity"), new AxisElemConf(AxisType.Entities)));
       LoadFilters(AxisType.Entities, l_entity);
-      SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.version"), new CUIDimensionConf(typeof(Version))));
+      SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.version"), new VersionConf(Convert.ToUInt32(Settings.Default.version_id))));
       SetToRowList(GenerateDimension(Local.GetValue("CUI.dimension.account"), new CUIDimensionConf(typeof(Account)), false));
 
       if ((Account.AccountProcess)Settings.Default.processId == Account.AccountProcess.FINANCIAL)

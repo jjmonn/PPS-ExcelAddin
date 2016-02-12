@@ -30,4 +30,15 @@ namespace FBI.MVC.Model.CRUD
     public PeriodConf(TimeConfig p_config) : base(typeof(PeriodModel)) { PeriodType = p_config; }
     public TimeConfig PeriodType { get; set; }
   }
+
+  class VersionConf : CUIDimensionConf
+  {
+    public VersionConf(UInt32 p_version1, UInt32 p_version2 = 0) : base(typeof(Version))
+    {
+      Version1 = p_version1;
+      Version2 = p_version2;
+    }
+    public UInt32 Version1 { get; set; }
+    public UInt32 Version2 { get; set; }
+  }
 }

@@ -41,10 +41,10 @@ namespace FBI.MVC.View
     public void LoadView()
     {
       m_builderList.Add(typeof(PeriodModel), PeriodBuilder);
-     /* m_builderList.Add(typeof(VersionModel), VersionBuilder);
+      m_builderList.Add(typeof(VersionModel), VersionBuilder);
       m_builderList.Add(typeof(AxisElemModel), AxisElemBuilder);
       m_builderList.Add(typeof(FilterValueModel), FilterValueBuilder);
-      m_builderList.Add(typeof(AccountModel), AccountBuilder);*/
+      m_builderList.Add(typeof(AccountModel), AccountBuilder);
     }
 
     public void PrepareDgv(ComputeConfig p_config)
@@ -56,6 +56,8 @@ namespace FBI.MVC.View
 
     private void InitDimension(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent)
     {
+      if (p_conf == null)
+        return;
       if (m_builderList[p_conf.ModelType] != null)
         m_builderList[p_conf.ModelType](p_conf, p_dimension, p_parent);
     }
@@ -73,13 +75,26 @@ namespace FBI.MVC.View
         HierarchyItem l_newItem = m_dgv.SetDimension(p_dimension, p_parent, new ResultViewDgvKey(p_conf.ModelType, (UInt32)l_date), l_formatedDate);
 
         if (l_newItem != null)
-         InitDimension(p_conf, p_dimension, l_newItem.Items);
+         InitDimension(p_conf.Child, p_dimension, l_newItem.Items);
       }
     }
 
     private void VersionBuilder(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent)
     {
+      VersionConf l_conf = p_conf as VersionConf;
+      Version[] l_versions = new Version[2];
+      l_versions[0] = VersionModel.Instance.GetValue(l_conf.Version1);
+      l_versions[1] = VersionModel.Instance.GetValue(l_conf.Version2);
 
+      foreach (Version l_version in l_versions)
+      {
+        if (l_version == null)
+          continue;
+        HierarchyItem l_newItem = m_dgv.SetDimension(p_dimension, p_parent, new ResultViewDgvKey(p_conf.ModelType, (UInt32)l_version.Id), l_version.Name);
+
+        if (l_newItem != null)
+          InitDimension(p_conf.Child, p_dimension, l_newItem.Items);
+      }
     }
 
     private void AxisElemBuilder(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent)
