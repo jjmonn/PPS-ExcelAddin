@@ -174,11 +174,11 @@ namespace FBI.MVC.Controller
       switch (p_version.TimeConfiguration)
       {
         case TimeConfig.YEARS:
-          p_version.StartPeriod = (UInt32)Period.GetYearIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
+          p_version.StartPeriod = (UInt32)PeriodModel.GetYearIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
           break;
 
         case TimeConfig.MONTHS:
-          p_version.StartPeriod = (UInt32)Period.GetMonthIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
+          p_version.StartPeriod = (UInt32)PeriodModel.GetMonthIdFromPeriodId(Convert.ToInt32(p_version.StartPeriod));
           break;
 
         case TimeConfig.DAYS :

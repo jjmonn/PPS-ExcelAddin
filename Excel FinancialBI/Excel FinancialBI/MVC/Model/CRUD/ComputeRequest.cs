@@ -24,8 +24,21 @@ namespace FBI.MVC.Model.CRUD
     public List<Tuple<AxisType, UInt32>> FilterSortList { get; set; }
     public List<AxisType> AxisSortList { get; set; }
 
+    public ComputeRequest()
+    {
+      AccountList = new List<uint>();
+      FilterList = new List<Tuple<AxisType, uint, uint>>();
+      AxisElemList = new List<Tuple<AxisType, uint>>();
+      FilterSortList = new List<Tuple<AxisType, uint>>();
+      AxisSortList = new List<AxisType>();
+    }
+
     public void Dump(ByteBuffer p_packet)
     {
+      bool l_entityDecomposition = AxisSortList.Contains(AxisType.Entities);
+
+      if (l_entityDecomposition)
+        AxisSortList.Remove(AxisType.Entities);
       p_packet.WriteUint32(VersionId);
       p_packet.WriteUint32(GlobalFactVersionId);
       p_packet.WriteUint32(RateVersionId);
@@ -34,8 +47,7 @@ namespace FBI.MVC.Model.CRUD
       p_packet.WriteUint32(StartPeriod);
       p_packet.WriteUint32(NbPeriods);
       p_packet.WriteBool(AxisHierarchy);
-      p_packet.WriteBool(AxisSortList.Contains(AxisType.Entities));
-      AxisSortList.Remove(AxisType.Entities);
+      p_packet.WriteBool(l_entityDecomposition);
       p_packet.WriteUint32((UInt32)FilterList.Count);
       foreach (Tuple<AxisType, UInt32, UInt32> l_filter in FilterList)
       {
@@ -65,6 +77,8 @@ namespace FBI.MVC.Model.CRUD
       p_packet.WriteUint32((UInt32)AccountList.Count);
       foreach (UInt32 l_account in AccountList)
         p_packet.WriteUint32(l_account);
+      if (l_entityDecomposition)
+        AxisSortList.Add(AxisType.Entities);
     }
   }
 }
