@@ -300,7 +300,7 @@ namespace FBI.Forms
 
       if (row == null || column == null)
         return (null);
-      return (this.CellsArea.GetCellValue(row, column);
+      return (this.CellsArea.GetCellValue(row, column));
     }
 
     void OnCellValidating(object p_sender, CellEventArgs p_args)
