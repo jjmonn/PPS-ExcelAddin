@@ -189,7 +189,7 @@ namespace FBI
 
     private void m_CUIRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      new CUIController();
     }
 
     private void m_submissionsTrackingRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
