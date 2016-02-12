@@ -13,9 +13,14 @@ namespace FBI.MVC.Controller
 
     #region Variables
 
-    private IView m_view;
+    private ControllingUI_2 m_view;
+
+    public CUILeftPaneController LeftPaneController { get; set; }
+    public CUIRightPaneController RightPaneController { get; set; }
+
     public IView View { get { return (m_view); } }
     public string Error { get; set; }
+
 
     #endregion
 
@@ -30,7 +35,17 @@ namespace FBI.MVC.Controller
 
     private void LoadView()
     {
-      
+      this.m_view.InitView();
+    }
+
+    #endregion
+
+    #region Pane
+
+    public void CreatePane()
+    {
+      LeftPaneController = new CUILeftPaneController();
+      RightPaneController = new CUIRightPaneController();
     }
 
     #endregion
