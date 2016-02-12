@@ -249,6 +249,10 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
+    <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
@@ -277,6 +281,7 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\ComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElem.cs" />
@@ -341,6 +346,12 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
+    <Compile Include="MVC\View\CommitFollowUpView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\CommitFollowUpView.Designer.cs">
+      <DependentUpon>CommitFollowUpView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\Connection\ConnectionSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -686,6 +697,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExcelSheetModule1.resx">
       <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
+      <DependentUpon>CommitFollowUpView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Connection\ConnectionSidePane.resx">
       <DependentUpon>ConnectionSidePane.cs</DependentUpon>

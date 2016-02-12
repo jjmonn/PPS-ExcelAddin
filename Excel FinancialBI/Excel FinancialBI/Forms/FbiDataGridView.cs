@@ -11,7 +11,7 @@ namespace FBI.Forms
   using MVC.Model.CRUD;
   using MVC.Model;
 
-  public class FbiDataGridView : vDataGridView 
+  public class FbiDataGridView : vDataGridView
   {
     public enum Dimension
     {
@@ -162,7 +162,7 @@ namespace FBI.Forms
       return (l_row);
     }
 
-    public void InitializeRows<T>(ICRUDModel<T> p_model, MultiIndexDictionary<UInt32, string, T> p_dic) where T : class, NamedCRUDEntity 
+    public void InitializeRows<T>(ICRUDModel<T> p_model, MultiIndexDictionary<UInt32, string, T> p_dic) where T : class, NamedCRUDEntity
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
         foreach (T l_elem in p_dic.Values)
@@ -288,11 +288,19 @@ namespace FBI.Forms
       HierarchyItem column = m_columnsDic[p_column];
       HierarchyItem row = m_rowsDic[p_row];
 
-      if (row == null)
-        return;
-      if (column == null)
+      if (row == null || column == null)
         return;
       this.CellsArea.SetCellValue(row, column, p_value);
+    }
+
+    public object GetCellValue(UInt32 p_row, UInt32 p_column)
+    {
+      HierarchyItem column = m_columnsDic[p_column];
+      HierarchyItem row = m_rowsDic[p_row];
+
+      if (row == null || column == null)
+        return (null);
+      return (this.CellsArea.GetCellValue(row, column));
     }
 
     void OnCellValidating(object p_sender, CellEventArgs p_args)

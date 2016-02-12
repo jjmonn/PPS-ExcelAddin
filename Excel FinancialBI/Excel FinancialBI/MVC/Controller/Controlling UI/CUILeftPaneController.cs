@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FBI.MVC.Model.CRUD
+namespace FBI.MVC.Controller
 {
-  public interface NamedHierarchyCRUDEntity : NamedCRUDEntity, HierarchyCRUDEntity
+  class CUILeftPaneController
   {
   }
 }

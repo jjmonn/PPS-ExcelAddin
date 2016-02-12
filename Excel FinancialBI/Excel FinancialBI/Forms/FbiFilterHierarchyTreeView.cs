@@ -63,9 +63,6 @@ namespace FBI.Forms
       {
         foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(l_filter.Id).SortedValues)
         {
-
-          System.Diagnostics.Debug.WriteLine(">> FilterValue added: " + l_filterValue.Name);
-
           vTreeNode l_node = new vTreeNode();
           l_node.Text = l_filterValue.Name;
           l_node.Value = l_filterValue.Id;

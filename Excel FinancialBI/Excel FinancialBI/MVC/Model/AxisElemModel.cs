@@ -52,6 +52,29 @@ namespace FBI.MVC.Model
       return (count);
     }
 
+    public List<AxisElem> GetChildren(AxisType p_axisType, UInt32 l_parentId)
+    {
+      List<AxisElem> l_list = new List<AxisElem>();
+
+      foreach (AxisElem l_elem in this.GetDictionary(p_axisType).Values)
+      {
+        if (l_elem.ParentId == l_parentId)
+          l_list.Add(l_elem);
+      }
+      return (l_list);
+    }
+
+    public bool IsParent(AxisType p_axisType, UInt32 p_id)
+    {
+      foreach (AxisElem l_elem in this.GetDictionary(p_axisType).Values)
+      {
+        if (l_elem.ParentId == p_id)
+          return (true);
+      }
+      return (false);
+    }
+
+
     public bool IsParent(UInt32 p_axisElemId)
     {
       foreach (MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemDic in m_CRUDDic.Values)

@@ -40,7 +40,6 @@ namespace FBI.MVC.View
         m_tree.Dock = DockStyle.Fill;
         m_valuePanel.Controls.Add(m_tree, 0, 1);
         this.RegisterEvents();
-        this.LoadLanguage();
         this.MultilangueSetup();
         this.DefineUIPermissions();
         this.DesactivateUnallowed();
@@ -78,16 +77,6 @@ namespace FBI.MVC.View
     public void SetController(IController p_controller)
     {
       m_controller = p_controller as FilterController;
-    }
-
-    private void LoadLanguage()
-    {
-      m_editStruct.Text = Local.GetValue("filters.edit_structure");
-      m_addValueRightClick.Text = Local.GetValue("filters.new_value");
-      m_deleteRightClick.Text = Local.GetValue("general.delete");
-      m_renameRightClick.Text = Local.GetValue("general.rename");
-      m_expand.Text = Local.GetValue("general.expand_all");
-      m_collapse.Text = Local.GetValue("general.collapse_all");
     }
 
     private void RegisterEvents()

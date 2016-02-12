@@ -15,10 +15,24 @@ namespace FBI.MVC.View
 
   public partial class CUI2LeftPane : UserControl, IView
   {
+
+    #region Variables
+
+    private CUILeftPaneController m_controller = null;
+
+    #endregion
+
+    #region Initialize
+
     public CUI2LeftPane()
     {
       InitializeComponent();
       MultilangueSetup();
+    }
+
+    public void SetController(IController p_controller)
+    {
+      this.m_controller = p_controller as CUILeftPaneController;
     }
 
     private void MultilangueSetup()
@@ -29,9 +43,7 @@ namespace FBI.MVC.View
       this.UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all");
     }
 
-    public void SetController(IController p_controller)
-    {
+    #endregion
 
-    }
   }
 }
