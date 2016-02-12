@@ -256,6 +256,7 @@
     <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />

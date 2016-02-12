@@ -13,6 +13,7 @@ namespace FBI.MVC.Controller
 
     #region Variables
 
+    private CUIController m_parentController;
     private CUI2LeftPane m_view;
     public IView View { get { return (m_view); } }
     public string Error { get; set; }
@@ -21,8 +22,9 @@ namespace FBI.MVC.Controller
 
     #region Initialize
 
-    public CUILeftPaneController()
+    public CUILeftPaneController(CUIController p_parentController)
     {
+      m_parentController = p_parentController;
       this.m_view = new CUI2LeftPane();
       this.m_view.SetController(this);
       this.LoadView();
