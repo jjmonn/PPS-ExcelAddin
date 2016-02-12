@@ -72,7 +72,7 @@ namespace FBI.MVC.Controller
 
     #region Check
 
-    public double TotalPercentageValid()
+    public double TotalPercentageValid(UInt32 l_id)
     {
       double l_totalPercentage = 0.0;
       MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemMID = AxisElemModel.Instance.GetDictionary(AxisType.Entities);
@@ -82,8 +82,9 @@ namespace FBI.MVC.Controller
         EntityDistribution l_entityDistrib = EntityDistributionModel.Instance.GetValue(l_entity.Id, this.m_account.Id);
 
         if (l_entityDistrib != null)
-          if (l_entity.AllowEdition)
-            l_totalPercentage += l_entityDistrib.Percentage;
+          if (l_entity.Id != l_id)
+            if (l_entity.AllowEdition)
+              l_totalPercentage += l_entityDistrib.Percentage;
         if (l_totalPercentage > 100)
           return (l_totalPercentage);
       }
