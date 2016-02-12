@@ -10,8 +10,13 @@ namespace FBI.MVC.Model.CRUD
   {
     public CuiDgvConf(Type p_type) { ModelType = p_type; }
     public Type ModelType { get; set; }
-    public UInt32 Id { get; set; }
     public CuiDgvConf child { get; set; }
+  }
+
+  class FilterConf : CuiDgvConf
+  {
+    public FilterConf(UInt32 p_filterId) : base(typeof(Filter)) { FilterId = p_filterId; }
+    public UInt32 FilterId { get; set; }
   }
 
   class AxisElemConf : CuiDgvConf
@@ -22,9 +27,7 @@ namespace FBI.MVC.Model.CRUD
 
   class PeriodConf : CuiDgvConf
   {
-    public PeriodConf(TimeConfig p_config) : base(typeof(PeriodModel)) { PeriodRange = p_config; }
-    public int StartPeriod { get; set; }
-    public int NbPeriods { get; set; }
-    public TimeConfig PeriodRange { get; set; }
+    public PeriodConf(TimeConfig p_config) : base(typeof(PeriodModel)) { PeriodType = p_config; }
+    public TimeConfig PeriodType { get; set; }
   }
 }

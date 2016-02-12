@@ -301,6 +301,7 @@
     <Compile Include="MVC\Model\CRUD\CRUDAction.cs" />
     <Compile Include="MVC\Model\CRUD\CuiDgvConf.cs" />
     <Compile Include="MVC\Model\CRUD\Currency.cs" />
+    <Compile Include="MVC\Model\CRUD\DimensionElem.cs" />
     <Compile Include="MVC\Model\CRUD\EntityCurrency.cs" />
     <Compile Include="MVC\Model\CRUD\EntityDistribution.cs" />
     <Compile Include="MVC\Model\CRUD\ExchangeRate.cs" />

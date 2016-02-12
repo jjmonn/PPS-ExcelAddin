@@ -40,7 +40,7 @@ namespace FBI.MVC.View
 
       this.m_controller.CreatePane();
       this.SplitContainer1.Panel1.Controls.Add(this.m_controller.LeftPaneController.View as CUI2LeftPane);
-      //this.SplitContainer2.Panel2.Controls.Add(this.m_controller.RightPaneController.View as CUI2LeftPane);
+      this.SplitContainer2.Panel2.Controls.Add(this.m_controller.RightPaneController.View as CUI2RightPane);
 
       this.Show();
     }

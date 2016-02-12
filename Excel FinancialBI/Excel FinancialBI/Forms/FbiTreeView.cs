@@ -322,7 +322,7 @@ namespace FBI.Forms
 
     private void FbiTreeview_DragEnter(object sender, DragEventArgs e)
     {
-      if (e.Data.GetData(typeof(vTreeNode)) as vTreeNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
+      if (e.Data.GetData(typeof(vTreeNode)) as vTreeNode != null)
       {
         e.Effect = DragDropEffects.Move;
       }
@@ -339,7 +339,6 @@ namespace FBI.Forms
       {
         e.Effect = DragDropEffects.Move;
       }
-
     }
 
     private void FbiTreeview_DragDropNode(object sender, DragEventArgs e)
