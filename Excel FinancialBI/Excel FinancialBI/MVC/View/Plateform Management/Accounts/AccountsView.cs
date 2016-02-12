@@ -82,7 +82,7 @@ namespace FBI.MVC.View
 
       this.DefineUIPermissions();
       this.DesactivateUnallowed();
-
+      
       this.MultilangueSetup();
       this.SetFormulaEditionState(false);
     }
