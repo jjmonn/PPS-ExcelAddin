@@ -25,9 +25,10 @@ namespace FBI.MVC.View
   {
     public ExchangeRatesView() : base(RatesVersionModel.Instance)
     {
+      m_excelImportController = new ExcelRateController();
     }
 
-    override public void SetController(IController p_controller)
+    public override void SetController(IController p_controller)
     {
       m_controller = p_controller as ExchangeRatesController;
     }

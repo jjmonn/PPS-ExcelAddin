@@ -37,7 +37,7 @@ namespace FBI.MVC.View
     public void LoadView()
     {
       this.dgvLoad();
-      this.suscribeEvents();
+      this.SuscribeEvents();
       this.Controls.Add(m_dgv);
       this.MultilangueSetup();
     }
@@ -72,7 +72,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void suscribeEvents()
+    private void SuscribeEvents()
     {
       m_dgv.CellChangedAndValidated += OnDgvCellChangedAndValidated;
       CurrencyModel.Instance.ReadEvent += OnModelRead;

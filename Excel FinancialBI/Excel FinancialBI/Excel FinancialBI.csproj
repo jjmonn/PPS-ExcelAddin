@@ -265,12 +265,15 @@
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\EmployeeControler.cs" />
     <Compile Include="MVC\Controller\Plateform Management\EntityController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\ExcelGlobalFactController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\ExcelRateController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\GlobalFactController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\BasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\FactBaseController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\FilterController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\IBasePlatformMgtComponent.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\IExcelImportController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
@@ -524,17 +527,11 @@
     <Compile Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.Designer.cs">
       <DependentUpon>FilterStructView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelImportView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.Designer.cs">
-      <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.Designer.cs">
-      <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelImportView.Designer.cs">
+      <DependentUpon>ExcelImportView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExchangeRatesView.cs">
       <SubType>UserControl</SubType>
@@ -778,11 +775,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.resx">
       <DependentUpon>FilterStructView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.resx">
-      <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.resx">
-      <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelImportView.resx">
+      <DependentUpon>ExcelImportView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\GlobalFactUI.resx">
       <DependentUpon>GlobalFactUI.cs</DependentUpon>

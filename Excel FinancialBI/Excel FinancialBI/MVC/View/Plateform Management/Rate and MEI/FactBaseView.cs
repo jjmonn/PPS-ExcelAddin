@@ -27,7 +27,10 @@ namespace FBI.MVC.View
     protected FbiTreeView<TVersion> m_versionTV;
     protected FbiDataGridView m_dgv;
     NamedCRUDModel<TVersion> m_versionModel;
+
     protected TControllerType m_controller;
+    protected IExcelImportController m_excelImportController;
+    
     RightManager m_rightMgr = new RightManager();
 
     public FactBaseView(NamedCRUDModel<TVersion> p_versionModel)
@@ -59,7 +62,7 @@ namespace FBI.MVC.View
       m_rightMgr[m_renameGFact] = Group.Permission.EDIT_GFACTS;
       m_rightMgr[m_deleteGFact] = Group.Permission.EDIT_GFACTS;
       m_rightMgr[m_newGFact] = Group.Permission.EDIT_GFACTS;
-      m_rightMgr[ImportFromExcelToolStripMenuItem] = Group.Permission.EDIT_RATES;
+      m_rightMgr[m_importExcelMenu] = Group.Permission.EDIT_RATES;
       m_rightMgr[m_renameBT] = Group.Permission.EDIT_RATES;
       m_rightMgr[m_copyValueDown] = Group.Permission.EDIT_RATES;
     }
@@ -72,8 +75,8 @@ namespace FBI.MVC.View
     private void MultilanguageSetup()
     {
       m_versionTopMenu.Text = Local.GetValue("general.versions");
-      ImportFromExcelToolStripMenuItem.Text = Local.GetValue("upload.upload");
-      ImportFromExcelToolStripMenuItem1.Text = Local.GetValue("upload.upload");
+      m_importExcelMenu.Text = Local.GetValue("upload.upload");
+      m_importExcelRightClick.Text = Local.GetValue("upload.upload");
       VersionLabel.Text = Local.GetValue("facts_versions.fact_version");
       select_version.Text = Local.GetValue("versions.select_version");
       m_addRatesVersionRCM.Text = Local.GetValue("versions.new_version");
@@ -94,6 +97,9 @@ namespace FBI.MVC.View
       m_deleteVersionRCM.Click += OnDeleteVersionClick;
       m_versionTV.NodeMouseDown += OnNodeSelect;
 
+      m_importExcelMenu.Click += OnImportExcel;
+      m_importExcelRightClick.Click += OnImportExcel;
+
       m_versionModel.ReadEvent += OnModelReadVersion;
       m_versionModel.UpdateEvent += OnModelUpdateVersion;
       m_versionModel.CreationEvent += OnModelCreateVersion;
@@ -101,6 +107,11 @@ namespace FBI.MVC.View
     }
 
     #region User Callback
+
+    private void OnImportExcel(object sender, EventArgs e)
+    {
+      m_excelImportController.LoadView(m_controller.SelectedVersion);
+    }
 
     void OnNodeSelect(object p_sender, vTreeViewMouseEventArgs p_event)
     {
