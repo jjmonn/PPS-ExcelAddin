@@ -35,5 +35,6 @@ namespace FBI.MVC.Model
 
       InitCallbacks();
     }
+
   }
 }

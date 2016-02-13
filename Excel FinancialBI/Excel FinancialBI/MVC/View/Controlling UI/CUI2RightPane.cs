@@ -28,7 +28,7 @@ namespace FBI.MVC.View
     SafeDictionary<UInt32, ListItem> m_listItemDimensions;
     UInt32 m_dimensionId = 1;
     FbiTreeView<DimensionElem> m_dimensionTV;
-    UInt32 m_draggingItem = 0;
+    UInt32 m_draggingItem = 666;
 
     #endregion
 
@@ -56,11 +56,13 @@ namespace FBI.MVC.View
 
         if (l_dimension == null)
           continue;
+        CUIDimensionConf l_dimensionConf = l_dimension.Conf.Clone();
+
         if (l_topConf == null)
-          l_topConf = l_dimension.Conf;
+          l_topConf = l_dimensionConf;
         else
-          l_currentConf.Child = l_dimension.Conf;
-        l_currentConf = l_dimension.Conf;
+          l_currentConf.Child = l_dimensionConf;
+        l_currentConf = l_dimensionConf;
       }
       return (l_topConf);
     }
@@ -82,21 +84,23 @@ namespace FBI.MVC.View
       LoadFilters(AxisType.Client, l_client);
       UInt32 l_entity = SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.entity"), new AxisElemConf(AxisType.Entities)));
       LoadFilters(AxisType.Entities, l_entity);
-      SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.version"), new CUIDimensionConf(typeof(Version))));
-      SetToRowList(GenerateDimension(Local.GetValue("CUI.dimension.account"), new CUIDimensionConf(typeof(Account)), false));
+      SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.version"), new VersionConf(Convert.ToUInt32(Settings.Default.version_id))));
+      SetToRowList(GenerateDimension(Local.GetValue("CUI.dimension.account"), new CUIDimensionConf(typeof(AccountModel)), false));
 
       if ((Account.AccountProcess)Settings.Default.processId == Account.AccountProcess.FINANCIAL)
       {
-        SetToColumnList(GenerateDimension(Local.GetValue("CUI.dimension.year"), new PeriodConf(TimeConfig.YEARS)));
-        SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.year"), new PeriodConf(TimeConfig.YEARS)));
+        UInt32 l_year = GenerateDimension(Local.GetValue("CUI.dimension.year"), new PeriodConf(TimeConfig.YEARS));
+        SetToColumnList(l_year);
+        SetToDimensionTV(l_year);
         SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.month"), new PeriodConf(TimeConfig.MONTHS)));
         UInt32 l_product = SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.product"), new AxisElemConf(AxisType.Product)));
         LoadFilters(AxisType.Product, l_product);
       }
       else
       {
-        SetToColumnList(GenerateDimension(Local.GetValue("CUI.dimension.day"), new PeriodConf(TimeConfig.DAYS)));
-        SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.day"), new PeriodConf(TimeConfig.DAYS)));
+        UInt32 l_day = GenerateDimension(Local.GetValue("CUI.dimension.day"), new PeriodConf(TimeConfig.DAYS));
+        SetToColumnList(l_day);
+        SetToDimensionTV(l_day);
         SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.week"), new PeriodConf(TimeConfig.WEEK)));
         UInt32 l_employee = SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.employee"), new AxisElemConf(AxisType.Employee), true, false));
         LoadFilters(AxisType.Employee, l_employee);
@@ -122,6 +126,12 @@ namespace FBI.MVC.View
       m_columnsDisplayList.DragDrop += OnDisplayListDropItem;
       m_rowsDisplayList.KeyDown += OnDisplayListKeyDown;
       m_columnsDisplayList.KeyDown += OnDisplayListKeyDown;
+      m_updateBT.MouseClick += OnUpdateClick;
+    }
+
+    void OnUpdateClick(object p_sender, MouseEventArgs p_e)
+    {
+      m_controller.Update(GetRowConf(), GetColumnConf());
     }
 
     void OnDisplayListKeyDown(object p_sender, KeyEventArgs p_args)
@@ -154,8 +164,8 @@ namespace FBI.MVC.View
 
         if (l_dimension != null && l_dimension.Draggable)
         {
-          l_displayList.DoDragDrop(p_args.Item, DragDropEffects.Move);
           m_draggingItem = l_dimension.Id;
+          l_displayList.DoDragDrop(p_args.Item, DragDropEffects.Move);
         }
       }
     }
@@ -165,11 +175,10 @@ namespace FBI.MVC.View
       if (p_e.Node != null)
       {
         DimensionElem l_dimension = (DimensionElem)m_dimensions[(UInt32)p_e.Node.Value];
-
         if (l_dimension != null && l_dimension.Draggable)
         {
-          m_dimensionTV.DoDragDrop(p_e.Node, DragDropEffects.Move);
           m_draggingItem = l_dimension.Id;
+          m_dimensionTV.DoDragDrop(p_e.Node, DragDropEffects.Move);
         }
       }
     }
@@ -250,7 +259,7 @@ namespace FBI.MVC.View
     {
       this.m_columnsLabel.Text = Local.GetValue("CUI.columns_label");
       this.m_rowsLabel.Text = Local.GetValue("CUI.rows_label");
-      this.UpdateBT.Text = Local.GetValue("CUI.refresh");
+      this.m_updateBT.Text = Local.GetValue("CUI.refresh");
       this.m_fieldChoiceLabel.Text = Local.GetValue("CUI.fields_choice");
     }
 

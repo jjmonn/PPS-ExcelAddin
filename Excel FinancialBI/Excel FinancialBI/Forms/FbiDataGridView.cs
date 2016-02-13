@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using VIBlend.WinForms.DataGridView;
@@ -254,15 +254,15 @@ namespace FBI.Forms
         l_dimensionDic = m_columnsDic;
       else if (p_dimension == Dimension.ROW)
         l_dimensionDic = m_rowsDic;
-      if (l_dimensionDic == null)
+ /*     if (l_dimensionDic == null)
         return (null);
       if (l_dimensionDic[p_key] != null)
         l_item = l_dimensionDic[p_key];
       else
-      {
+      {*/
         l_item = new HierarchyItem();
         l_dimensionDic[p_key] = l_item;
-      }
+  /*    }*/
       l_item.ItemValue = p_key;
       l_item.Caption = p_name;
       l_item.Width = COLUMNS_WIDTH;

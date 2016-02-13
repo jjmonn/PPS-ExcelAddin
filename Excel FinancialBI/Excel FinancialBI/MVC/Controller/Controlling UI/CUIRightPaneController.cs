@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace FBI.MVC.Controller
 {
   using View;
+  using Model.CRUD;
 
   enum CUIDimension
   {
@@ -26,6 +27,7 @@ namespace FBI.MVC.Controller
   {
     #region Variables
 
+    private CUIController m_parentController;
     private CUI2RightPane m_view;
     public IView View { get { return (m_view); } }
     public string Error { get; set; }
@@ -34,8 +36,9 @@ namespace FBI.MVC.Controller
 
     #region Initialize
 
-    public CUIRightPaneController()
+    public CUIRightPaneController(CUIController p_parentController)
     {
+      m_parentController = p_parentController;
       m_view = new CUI2RightPane();
       m_view.SetController(this);
       LoadView();
@@ -44,6 +47,11 @@ namespace FBI.MVC.Controller
     private void LoadView()
     {
       m_view.LoadView();    
+    }
+
+    public void Update(CUIDimensionConf p_row, CUIDimensionConf p_column)
+    {
+      m_parentController.Compute(p_row, p_column);
     }
 
     #endregion

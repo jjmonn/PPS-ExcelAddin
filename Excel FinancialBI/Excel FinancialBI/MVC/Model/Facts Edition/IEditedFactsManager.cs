@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace FBI.MVC.Model
 {
   using FBI.MVC.Model.CRUD;
+  using Microsoft.Office.Interop.Excel;
 
   public delegate void OnFactsDownloaded(bool p_success);
 
@@ -15,7 +16,7 @@ namespace FBI.MVC.Model
    
     event OnFactsDownloaded FactsDownloaded;
 
-     void RegisterEditedFacts();
+    void RegisterEditedFacts(Dimensions p_dimensions);
 
      void DownloadFacts(Version p_version, List<UInt32> p_periodList);
 
@@ -24,6 +25,7 @@ namespace FBI.MVC.Model
      void UpdateWorksheetInputs();
 
      void CommitDifferences();
+
 
   }
 }

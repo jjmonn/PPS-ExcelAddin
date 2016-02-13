@@ -58,6 +58,15 @@ namespace FBI.MVC.Model.CRUD
       DATE_
     }
 
+    public enum FormulaTypesLookUpOption
+    {
+     ALL = 1,
+     INPUTS,
+     OUTPUTS,
+     TITLES
+    }
+
+
     #endregion
 
     public UInt32 Id { get; private set; }

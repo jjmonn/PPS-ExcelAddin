@@ -41,7 +41,6 @@ namespace FBI.MVC.View
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConnectionSidePane_FormClosing);
       this.ConnectionBT.Click += new System.EventHandler(this.ConnectionBT_Click);
       this.m_cancelButton.Click += new System.EventHandler(this.m_cancelButton_Click);
-
     }
 
     private void SetupMultilangue()
@@ -142,11 +141,6 @@ namespace FBI.MVC.View
       IsLoading = false;
     }
 
-    private void ConnectionSidePane_ADXBeforeTaskPaneShow(object sender, AddinExpress.XL.ADXBeforeTaskPaneShowEventArgs e)
-    {
-      if (m_shown == false) { this.Visible = false; }
-    }
-
     #endregion
 
     #region Connection background worker
@@ -188,6 +182,11 @@ namespace FBI.MVC.View
       if (m_circularProgress2 != null) { m_circularProgress2.Stop(); }
       m_passwordTextBox.Text = "";
       e.Cancel = true;
+    }
+
+    private void ConnectionSidePane_ADXBeforeTaskPaneShow(object sender, AddinExpress.XL.ADXBeforeTaskPaneShowEventArgs e)
+    {
+      if (m_shown == false) { this.Visible = false; }
     }
 
   }

@@ -321,19 +321,18 @@
     <string name="global_facts_upload">Import des Indicateurs Macro Economiques</string>
     <string name="range_mismatch">Les sélections pour les périodes et les valeurs n'ont pas la même taille, ou la sélection n'est pas valide.</string>
     <string name="report_as_of">Rapport du </string>
-	<string name="folder_snapshot">Snapshot d'un Dossier</string>
-	<string name="worksheet_name">Nom de la Feuille</string>
+	  <string name="folder_snapshot">Snapshot d'un Dossier</string>
+	  <string name="worksheet_name">Nom de la Feuille</string>
 
-    
+    <string name="msg_empty_worksheet">La feuille est vide.</string>
     <string name="msg_selection_instruction">Selectionnez les plage correspondant aux entités, comptes et périodes</string>
     <string name="input_sidepane_title">Import de données depuis Excel</string>
     <string name="entity_selection">Selection de l'entité</string>
     <string name="periods_selection">Sélection des périodes</string>
     <string name="accounts_selection">Sélection du compte</string>
     <string name="title_input_ranges_edition">Edition des plages d'entrée</string>
-	<string name="title_client_selection">Selection des Clients</string>
-	<string name="title_upload_error_messages">Erreur d'import</string>
-    
+	  <string name="title_client_selection">Selection des Clients</string>
+	  <string name="title_upload_error_messages">Erreur d'import</string>
     <string name="msg_periods_selection">Sélectionnez la(les) période(s)</string>
     <string name="msg_rates_selection">Sélectionnez le(s) taux</string>
     <string name="msg_values_selection">Sélectionnez la(les) valeur(s)</string>

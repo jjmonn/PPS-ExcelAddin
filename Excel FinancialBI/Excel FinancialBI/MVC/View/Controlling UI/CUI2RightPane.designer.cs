@@ -41,7 +41,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.m_columnsDisplayList = new VIBlend.WinForms.Controls.vListBox();
       this.m_rowsLabel = new System.Windows.Forms.Label();
       this.m_rowsDisplayList = new VIBlend.WinForms.Controls.vListBox();
-      this.UpdateBT = new System.Windows.Forms.Button();
+      this.m_updateBT = new System.Windows.Forms.Button();
       this.ImageList1 = new System.Windows.Forms.ImageList(this.components);
       this.m_dimensionsTVPanel = new System.Windows.Forms.Panel();
       this.Panel1 = new System.Windows.Forms.Panel();
@@ -79,7 +79,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.TableLayoutPanel2.Controls.Add(this.m_columnsDisplayList, 1, 1);
       this.TableLayoutPanel2.Controls.Add(this.m_rowsLabel, 0, 0);
       this.TableLayoutPanel2.Controls.Add(this.m_rowsDisplayList, 0, 1);
-      this.TableLayoutPanel2.Controls.Add(this.UpdateBT, 1, 2);
+      this.TableLayoutPanel2.Controls.Add(this.m_updateBT, 1, 2);
       this.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.TableLayoutPanel2.Location = new System.Drawing.Point(3, 337);
       this.TableLayoutPanel2.Name = "TableLayoutPanel2";
@@ -154,17 +154,17 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       // 
       // UpdateBT
       // 
-      this.UpdateBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.UpdateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.UpdateBT.ImageKey = "Refresh DB 24.ico";
-      this.UpdateBT.ImageList = this.ImageList1;
-      this.UpdateBT.Location = new System.Drawing.Point(193, 249);
-      this.UpdateBT.Name = "UpdateBT";
-      this.UpdateBT.Size = new System.Drawing.Size(75, 24);
-      this.UpdateBT.TabIndex = 0;
-      this.UpdateBT.Text = "[CUI.refresh]";
-      this.UpdateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      this.UpdateBT.UseVisualStyleBackColor = true;
+      this.m_updateBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_updateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_updateBT.ImageKey = "Refresh DB 24.ico";
+      this.m_updateBT.ImageList = this.ImageList1;
+      this.m_updateBT.Location = new System.Drawing.Point(193, 249);
+      this.m_updateBT.Name = "UpdateBT";
+      this.m_updateBT.Size = new System.Drawing.Size(75, 24);
+      this.m_updateBT.TabIndex = 0;
+      this.m_updateBT.Text = "[CUI.refresh]";
+      this.m_updateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_updateBT.UseVisualStyleBackColor = true;
       // 
       // ImageList1
       // 
@@ -238,7 +238,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
 	public System.Windows.Forms.Label m_columnsLabel;
 	public System.Windows.Forms.Label m_fieldChoiceLabel;
 	public System.Windows.Forms.Panel m_dimensionsTVPanel;
-	public System.Windows.Forms.Button UpdateBT;
+	public System.Windows.Forms.Button m_updateBT;
 	public System.Windows.Forms.ImageList ImageList1;
 	public VIBlend.WinForms.Controls.vListBox m_columnsDisplayList;
 	public VIBlend.WinForms.Controls.vListBox m_rowsDisplayList;
