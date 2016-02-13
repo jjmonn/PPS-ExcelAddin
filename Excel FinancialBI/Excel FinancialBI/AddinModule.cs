@@ -11,6 +11,7 @@ namespace FBI
   using MVC.View;
   using MVC.Model.CRUD;
   using MVC.Controller;
+  using Utils;
 
   [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("ExcelFinancialBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
@@ -184,7 +185,13 @@ namespace FBI
 
     private void m_reportUploadRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      if (FBI.Properties.Settings.Default.version_id == 0)
+      {
+        MessageBox.Show(Local.GetValue("versions.error.no_selected_version"));
+        return;
+      }
+       ReportUploadEntitySelectionSidePane.InitView((Account.AccountProcess)FBI.Properties.Settings.Default.processId);
+       ReportUploadEntitySelectionSidePane.Show();
     }
 
     private void m_CUIRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -53,7 +53,7 @@ namespace FBI.MVC.View
       m_endWeekTB.Text = PeriodModel.GetDateAsStringWeekFormat(m_endDate.DateTimeEditor.Value.Value);
     }
 
-    private void PeriodsRangeSetup(UInt32 p_versionId)
+    public void PeriodsRangeSetup(UInt32 p_versionId)
     {
       m_startDate.MinDate = m_controller.GetMinDate();
       m_startDate.MaxDate = m_controller.GetMaxDate();

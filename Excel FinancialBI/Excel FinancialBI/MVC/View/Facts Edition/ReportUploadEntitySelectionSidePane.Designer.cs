@@ -29,6 +29,7 @@ namespace FBI.MVC.View
         /// </summary>
         private void InitializeComponent()
         {
+      this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportUploadEntitySelectionSidePane));
       this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_entitySelectionLabel = new VIBlend.WinForms.Controls.vLabel();
@@ -37,6 +38,9 @@ namespace FBI.MVC.View
       this.m_accountSelectionComboBox = new VIBlend.WinForms.Controls.vComboBox();
       this.m_validateButton = new VIBlend.WinForms.Controls.vButton();
       this.m_periodsSelectionPanel = new System.Windows.Forms.Panel();
+      this.m_entitiesImageList = new System.Windows.Forms.ImageList(this.components);
+      this.m_treeviewPanel = new System.Windows.Forms.Panel();
+      this.m_buttonsImageList = new System.Windows.Forms.ImageList(this.components);
       this.TableLayoutPanel1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -51,16 +55,17 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.Controls.Add(this.m_accountSelectionComboBox, 0, 5);
       this.TableLayoutPanel1.Controls.Add(this.m_validateButton, 0, 6);
       this.TableLayoutPanel1.Controls.Add(this.m_periodsSelectionPanel, 0, 3);
+      this.TableLayoutPanel1.Controls.Add(this.m_treeviewPanel, 0, 1);
       this.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.TableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
       this.TableLayoutPanel1.Name = "TableLayoutPanel1";
       this.TableLayoutPanel1.RowCount = 7;
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 203F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74F));
       this.TableLayoutPanel1.Size = new System.Drawing.Size(258, 876);
       this.TableLayoutPanel1.TabIndex = 7;
@@ -75,7 +80,7 @@ namespace FBI.MVC.View
       this.m_entitySelectionLabel.Location = new System.Drawing.Point(3, 3);
       this.m_entitySelectionLabel.Multiline = true;
       this.m_entitySelectionLabel.Name = "m_entitySelectionLabel";
-      this.m_entitySelectionLabel.Size = new System.Drawing.Size(252, 18);
+      this.m_entitySelectionLabel.Size = new System.Drawing.Size(252, 17);
       this.m_entitySelectionLabel.TabIndex = 4;
       this.m_entitySelectionLabel.Text = "Entity selection";
       this.m_entitySelectionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -89,10 +94,10 @@ namespace FBI.MVC.View
       this.m_periodsSelectionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_periodsSelectionLabel.Ellipsis = false;
       this.m_periodsSelectionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_periodsSelectionLabel.Location = new System.Drawing.Point(3, 522);
+      this.m_periodsSelectionLabel.Location = new System.Drawing.Point(3, 533);
       this.m_periodsSelectionLabel.Multiline = true;
       this.m_periodsSelectionLabel.Name = "m_periodsSelectionLabel";
-      this.m_periodsSelectionLabel.Size = new System.Drawing.Size(252, 18);
+      this.m_periodsSelectionLabel.Size = new System.Drawing.Size(252, 17);
       this.m_periodsSelectionLabel.TabIndex = 3;
       this.m_periodsSelectionLabel.Text = "Periods selection";
       this.m_periodsSelectionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -106,10 +111,10 @@ namespace FBI.MVC.View
       this.m_accountSelectionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_accountSelectionLabel.Ellipsis = false;
       this.m_accountSelectionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_accountSelectionLabel.Location = new System.Drawing.Point(3, 749);
+      this.m_accountSelectionLabel.Location = new System.Drawing.Point(3, 759);
       this.m_accountSelectionLabel.Multiline = true;
       this.m_accountSelectionLabel.Name = "m_accountSelectionLabel";
-      this.m_accountSelectionLabel.Size = new System.Drawing.Size(252, 21);
+      this.m_accountSelectionLabel.Size = new System.Drawing.Size(252, 17);
       this.m_accountSelectionLabel.TabIndex = 5;
       this.m_accountSelectionLabel.Text = "Account selection";
       this.m_accountSelectionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -126,10 +131,10 @@ namespace FBI.MVC.View
       this.m_accountSelectionComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_accountSelectionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.m_accountSelectionComboBox.DropDownWidth = 252;
-      this.m_accountSelectionComboBox.Location = new System.Drawing.Point(3, 776);
+      this.m_accountSelectionComboBox.Location = new System.Drawing.Point(3, 782);
       this.m_accountSelectionComboBox.Name = "m_accountSelectionComboBox";
       this.m_accountSelectionComboBox.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_accountSelectionComboBox.Size = new System.Drawing.Size(252, 23);
+      this.m_accountSelectionComboBox.Size = new System.Drawing.Size(252, 17);
       this.m_accountSelectionComboBox.TabIndex = 2;
       this.m_accountSelectionComboBox.UseThemeBackColor = false;
       this.m_accountSelectionComboBox.UseThemeDropDownArrowColor = true;
@@ -144,8 +149,10 @@ namespace FBI.MVC.View
       this.m_validateButton.BackColor = System.Drawing.Color.Transparent;
       this.m_validateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_validateButton.ImageKey = "1420498403_340208.ico";
+      this.m_validateButton.ImageList = this.m_buttonsImageList;
       this.m_validateButton.Location = new System.Drawing.Point(3, 849);
       this.m_validateButton.Name = "m_validateButton";
+      this.m_validateButton.Padding = new System.Windows.Forms.Padding(5, 5, 0, 0);
       this.m_validateButton.RoundedCornersMask = ((byte)(15));
       this.m_validateButton.Size = new System.Drawing.Size(98, 24);
       this.m_validateButton.TabIndex = 7;
@@ -157,10 +164,31 @@ namespace FBI.MVC.View
       // m_periodsSelectionPanel
       // 
       this.m_periodsSelectionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.m_periodsSelectionPanel.Location = new System.Drawing.Point(3, 546);
+      this.m_periodsSelectionPanel.Location = new System.Drawing.Point(3, 556);
       this.m_periodsSelectionPanel.Name = "m_periodsSelectionPanel";
       this.m_periodsSelectionPanel.Size = new System.Drawing.Size(252, 197);
       this.m_periodsSelectionPanel.TabIndex = 8;
+      // 
+      // m_entitiesImageList
+      // 
+      this.m_entitiesImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_entitiesImageList.ImageStream")));
+      this.m_entitiesImageList.TransparentColor = System.Drawing.Color.Transparent;
+      this.m_entitiesImageList.Images.SetKeyName(0, "favicon(81) (1).ico");
+      this.m_entitiesImageList.Images.SetKeyName(1, "elements_branch.ico");
+      // 
+      // m_treeviewPanel
+      // 
+      this.m_treeviewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_treeviewPanel.Location = new System.Drawing.Point(3, 26);
+      this.m_treeviewPanel.Name = "m_treeviewPanel";
+      this.m_treeviewPanel.Size = new System.Drawing.Size(252, 501);
+      this.m_treeviewPanel.TabIndex = 9;
+      // 
+      // m_buttonsImageList
+      // 
+      this.m_buttonsImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_buttonsImageList.ImageStream")));
+      this.m_buttonsImageList.TransparentColor = System.Drawing.Color.Transparent;
+      this.m_buttonsImageList.Images.SetKeyName(0, "1420498403_340208.ico");
       // 
       // ReportUploadEntitySelectionSidePane
       // 
@@ -185,6 +213,9 @@ namespace FBI.MVC.View
         public VIBlend.WinForms.Controls.vComboBox m_accountSelectionComboBox;
         public VIBlend.WinForms.Controls.vButton m_validateButton;
         public System.Windows.Forms.Panel m_periodsSelectionPanel;
+        private System.Windows.Forms.ImageList m_entitiesImageList;
+        private System.Windows.Forms.Panel m_treeviewPanel;
+        private System.Windows.Forms.ImageList m_buttonsImageList;
 
     }
 }

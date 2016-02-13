@@ -316,6 +316,7 @@
     <string name="rates">Taux</string>
     <string name="values">Valeurs</string>
     <string name="upload">Importer</string>
+    <string name="edition">Edition</string>
     <string name="clientSelectionButtonText">PDC: Sélection client</string>
     <string name="exchange_rates_upload">Import des Taux de Change</string>
     <string name="global_facts_upload">Import des Indicateurs Macro Economiques</string>
@@ -333,6 +334,10 @@
     <string name="title_input_ranges_edition">Edition des plages d'entrée</string>
 	  <string name="title_client_selection">Selection des Clients</string>
 	  <string name="title_upload_error_messages">Erreur d'import</string>
+
+    <string name="msg_invalidEntity">L'entité sélectionée n'est pas valide.</string>
+    <string name="msg_invalidRHAccount">Le compte sélectionné n'est pas valide.</string>
+    <string name="msg_select_entity">Une entité doit êter sélectionnée.</string>
     <string name="msg_periods_selection">Sélectionnez la(les) période(s)</string>
     <string name="msg_rates_selection">Sélectionnez le(s) taux</string>
     <string name="msg_values_selection">Sélectionnez la(les) valeur(s)</string>

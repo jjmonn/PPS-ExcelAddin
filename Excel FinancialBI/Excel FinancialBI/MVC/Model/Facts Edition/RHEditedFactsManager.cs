@@ -25,8 +25,9 @@ namespace FBI.MVC.Model
     //public event OnOutputsComputed OutputsComputed;    
 
 
-    public void RegisterEditedFacts(Dimensions p_dimensions)
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
+      m_worksheet = p_worksheet;
       switch (p_dimensions.m_orientation)
       {
         case Dimensions.Orientation.EMPLOYEES_PERIODS:

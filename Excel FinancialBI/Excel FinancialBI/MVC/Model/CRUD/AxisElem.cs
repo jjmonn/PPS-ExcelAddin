@@ -42,6 +42,10 @@ namespace FBI.MVC.Model.CRUD
       l_axisElem.Axis = (AxisType)p_packet.ReadUint32();
       l_axisElem.ItemPosition = p_packet.ReadInt32();
       l_axisElem.AllowEdition = p_packet.ReadBool();
+      if (l_axisElem.AllowEdition)
+        l_axisElem.Image = 1;
+      else
+        l_axisElem.Image = 0;
 
       return (l_axisElem);
     }

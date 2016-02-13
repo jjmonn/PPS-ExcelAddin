@@ -345,6 +345,7 @@
     <string name="rates">rates</string>
     <string name="values">Values</string>
     <string name="upload">Upload</string>
+    <string name="edition">Edition</string>
     <string name="report_as_of">Report as of </string>
     <string name="clientSelectionButtonText">PDC: Select client</string>
     <string name="financialBILog">Financial BI: Data Log</string> 
@@ -362,6 +363,9 @@
 	  <string name="title_client_selection">Client Selection</string>
 	  <string name="title_upload_error_messages">Upload Error</string>
 
+    <string name="msg_invalidEntity">Invalid Entity selection</string>
+    <string name="msg_invalidRHAccount">Invalid Account selection</string>
+    <string name="msg_select_entity">Please select an Entity</string>
     <string name="msg_empty_worksheet">The worksheet is empty</string>
 	  <string name="msg_selection_instruction">Select the ranges corresponding to the Entities, Accounts and Periods</string>
     <string name="msg_periods_selection">Select periods(s) range(s)</string>

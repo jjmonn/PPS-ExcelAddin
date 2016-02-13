@@ -414,6 +414,8 @@
       // ReportUploadEntitySelectionSidePaneItem
       // 
       this.ReportUploadEntitySelectionSidePaneItem.AllowedDropPositions = ((AddinExpress.XL.ADXExcelAllowedDropPositions)((AddinExpress.XL.ADXExcelAllowedDropPositions.Right | AddinExpress.XL.ADXExcelAllowedDropPositions.Left)));
+      this.ReportUploadEntitySelectionSidePaneItem.AlwaysShowHeader = true;
+      this.ReportUploadEntitySelectionSidePaneItem.CloseButton = true;
       this.ReportUploadEntitySelectionSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left;
       this.ReportUploadEntitySelectionSidePaneItem.TaskPaneClassName = "FBI.MVC.View.ReportUploadEntitySelectionSidePane";
       this.ReportUploadEntitySelectionSidePaneItem.UseOfficeThemeForBackground = true;

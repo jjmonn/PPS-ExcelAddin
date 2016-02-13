@@ -19,8 +19,9 @@ namespace FBI.MVC.Model
     List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
     Worksheet m_worksheet;
 
-    public void RegisterEditedFacts(Dimensions p_dimensions)
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
+      m_worksheet = p_worksheet;
       switch (p_dimensions.m_orientation)
       {
         case Dimensions.Orientation.ACCOUNTS_PERIODS :
