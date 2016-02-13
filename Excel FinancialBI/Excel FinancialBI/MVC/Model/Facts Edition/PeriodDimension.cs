@@ -48,6 +48,11 @@ namespace FBI.MVC.Model
       return a.Id == b.Id;
     }
 
+    public static bool operator !=(PeriodDimension a, PeriodDimension b)
+    {
+      return !(a == b);
+    }
+
 
   }
 }

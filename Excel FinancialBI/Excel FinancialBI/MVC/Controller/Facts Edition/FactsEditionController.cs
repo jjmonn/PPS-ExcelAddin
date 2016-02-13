@@ -13,17 +13,26 @@ namespace FBI.MVC.Controller
 
   class FactsEditionController
   {
-    IEditedFactsManager m_editedFactsManager ;
+    IEditedFactsManager m_editedFactsManager;
     Account.AccountProcess m_process;
-    Dimensions m_dimensions = new Dimensions();
+    Account m_RHAccount;
+    Dimensions m_dimensions;
     WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     Worksheet m_worksheet;
     List<UInt32> m_periodsList;
     Version m_version;
 
-    public FactsEditionController(Account.AccountProcess p_process)
+    public FactsEditionController(Account.AccountProcess p_process, Account p_RHAccount = null, List<UInt32> p_periodList = null)
     {
+      UInt32 l_versionId = FBI.Properties.Settings.Default.version_id;
+      m_dimensions = new Dimensions(l_versionId);
       m_process = p_process;
+      if (p_process == Account.AccountProcess.RH)
+      {
+        m_RHAccount = p_RHAccount;
+        m_periodsList = p_periodList;
+      }
+      
       if (p_process == Account.AccountProcess.FINANCIAL)
         m_editedFactsManager = new FinancialEditedFactsManager();
       else

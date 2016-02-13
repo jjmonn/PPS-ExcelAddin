@@ -37,7 +37,7 @@ namespace FBI.MVC.Model
     public Dimension<CRUDEntity> m_employees { get; set; }
     public Dimension<CRUDEntity> m_periods { get; set; }
 
-    public Dimensions(List<Int32> p_periodsList = null)
+    public Dimensions(UInt32 p_versionId, List<UInt32> p_periodsList = null)
     {
       m_accounts = new Dimension<CRUDEntity>(DimensionType.ACCOUNT);
       m_entities = new Dimension<CRUDEntity>(DimensionType.ENTITY);
@@ -46,7 +46,7 @@ namespace FBI.MVC.Model
 
       if (p_periodsList == null)
       {
-        // TO DO p_periodsList = VersionModel.Instance.GetPeriodsList(m_currentVersionId).ToList;
+        p_periodsList = PeriodModel.GetPeriodsList(p_versionId);
       }
       foreach (UInt32 periodId in p_periodsList)
       {
@@ -75,13 +75,12 @@ namespace FBI.MVC.Model
       }
     }
 
-    private void DimensionsIdentifyRH(Range p_cell)   // , List<Account> m_accountsList
+    private void DimensionsIdentifyRH(Range p_cell)
     {
       if (p_cell.Value2.GetType() == typeof(string))
       {
         if (IsEmployee(p_cell) == true)
           return;
-        //      If AccountsIdentify(l_currentStr, p_cell, p_cellAddress, m_outputsAccountsList) = True Then Exit Sub
         if (IsEntity(p_cell) == true)
           return;
       }

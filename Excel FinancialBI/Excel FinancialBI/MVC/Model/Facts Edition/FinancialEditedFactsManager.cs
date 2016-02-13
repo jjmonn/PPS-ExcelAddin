@@ -137,7 +137,7 @@ namespace FBI.MVC.Model
 
     public void UpdateWorkSheetOutputs()
     {
-      foreach (OutputFact l_outputFact in m_editedFacts.Values)
+      foreach (EditedFact l_outputFact in m_editedFacts.Values)
       {
         l_outputFact.UpdateCellValue();
       }

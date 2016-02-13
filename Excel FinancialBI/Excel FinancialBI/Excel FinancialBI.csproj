@@ -257,6 +257,7 @@
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
+    <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AllocationKeysController.cs" />
@@ -320,7 +321,6 @@
     <Compile Include="MVC\Model\CRUD\Group.cs" />
     <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsManager.cs" />
     <Compile Include="MVC\Model\Facts Edition\IEditedFactsManager.cs" />
-    <Compile Include="MVC\Model\Facts Edition\OutputFact.cs" />
     <Compile Include="MVC\Model\CRUD\User.cs" />
     <Compile Include="MVC\Model\CRUD\UserAllowedEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Version.cs" />
