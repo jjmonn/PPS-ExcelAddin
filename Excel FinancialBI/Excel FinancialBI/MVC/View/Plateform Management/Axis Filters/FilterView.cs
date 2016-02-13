@@ -37,7 +37,6 @@ namespace FBI.MVC.View
       {
         m_tree = new FbiFilterHierarchyTreeView(m_controller.AxisType, true);
         m_tree.ContextMenuStrip = m_contextRightClick;
-        m_tree.AllowDragAndDrop = true;
         m_tree.Dock = DockStyle.Fill;
         m_valuePanel.Controls.Add(m_tree, 0, 1);
         this.RegisterEvents();

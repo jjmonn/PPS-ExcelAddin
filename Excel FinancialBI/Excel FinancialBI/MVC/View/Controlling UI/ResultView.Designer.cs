@@ -1,4 +1,4 @@
-﻿namespace FBI.MVC.View.Controlling_UI
+﻿namespace FBI.MVC.View
 {
   partial class ResultView
   {

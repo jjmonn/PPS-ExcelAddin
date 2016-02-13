@@ -8,15 +8,15 @@ namespace FBI.MVC.Model.CRUD
 {
   using Network;
 
-  class ComputeRequest
+  public class ComputeRequest
   {
     public UInt32 VersionId { get; set; }
     public UInt32 GlobalFactVersionId { get; set; }
     public UInt32 RateVersionId { get; set; }
     public UInt32 EntityId { get; set; }
     public UInt32 CurrencyId { get; set; }
-    public UInt32 StartPeriod { get; set; }
-    public UInt32 NbPeriods { get; set; }
+    public Int32 StartPeriod { get; set; }
+    public Int32 NbPeriods { get; set; }
     public bool AxisHierarchy { get; set; }
     public List<UInt32> AccountList { get; set; }
     public List<Tuple<AxisType, UInt32, UInt32>> FilterList { get; set; }
@@ -44,8 +44,8 @@ namespace FBI.MVC.Model.CRUD
       p_packet.WriteUint32(RateVersionId);
       p_packet.WriteUint32(EntityId);
       p_packet.WriteUint32(CurrencyId);
-      p_packet.WriteUint32(StartPeriod);
-      p_packet.WriteUint32(NbPeriods);
+      p_packet.WriteInt32(StartPeriod);
+      p_packet.WriteInt32(NbPeriods);
       p_packet.WriteBool(AxisHierarchy);
       p_packet.WriteBool(l_entityDecomposition);
       p_packet.WriteUint32((UInt32)FilterList.Count);

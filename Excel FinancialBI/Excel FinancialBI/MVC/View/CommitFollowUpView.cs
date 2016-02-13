@@ -110,13 +110,9 @@ namespace FBI.MVC.View
         foreach (UInt32 l_date in m_dates)
         {
           if (l_entity.AllowEdition && l_commits != null && l_commits.ContainsSecondaryKey(l_date))
-          {
             m_dataGridView.FillField<string, IEditor>(l_entity.Id, l_date, this.GetStatusString((Commit.Status)(l_commits.SecondaryKeyItem(l_date).Value)), null);
-          }
           else
-          {
             m_dataGridView.FillField<string, IEditor>(l_entity.Id, l_date, this.GetStatusString(Commit.Status.NOT_EDITED), null);
-          }
         }
       }
     }
