@@ -16,13 +16,17 @@ namespace FBI.Forms
   public class FbiTreeView<T> : AFbiTreeView where T : NamedCRUDEntity
   {
     private MultiIndexDictionary<UInt32, String, T> m_items;
+    MultiIndexDictionary<UInt32, String, T> m_icons;
+    public override bool Loaded { get; protected set; }
     private static readonly string ERR_GENERATE = "[FbiTreeView] Cannot generate vTreeView. Either the MultiIndexDictionary is null or incorrect";
 
     public FbiTreeView(MultiIndexDictionary<UInt32, String, T> p_items = null, MultiIndexDictionary<UInt32, String, T> p_icons = null,
-                       bool p_allowDragAndDrop = false) : base(p_allowDragAndDrop)
+                       bool p_allowDragAndDrop = false, bool p_load = true) : base(p_allowDragAndDrop)
     {
+      Loaded = false;
       m_items = p_items;
-      if (p_items != null && !this.Load(p_items, p_icons))
+      m_icons = p_icons;
+      if (p_load && Load() == false)
         throw new Exception(ERR_GENERATE);
     }
 
@@ -237,6 +241,14 @@ namespace FBI.Forms
           p_nodes.Add(l_node);
         }
       }
+      return (true);
+    }
+
+    public override bool Load()
+    {
+      if (m_items != null && !this.Load(m_items, m_icons))
+        return (false);
+      Loaded = true;
       return (true);
     }
 

@@ -392,11 +392,11 @@ namespace FBI.MVC.View
         switch (e.KeyCode)
         {
           case Keys.Up:
-            m_versionsTreeview.moveNodeUp(m_versionsTreeview.SelectedNode);
+            m_versionsTreeview.MoveNodeUp(m_versionsTreeview.SelectedNode);
             return;
 
           case Keys.Down:
-            m_versionsTreeview.moveNodeDown(m_versionsTreeview.SelectedNode);
+            m_versionsTreeview.MoveNodeDown(m_versionsTreeview.SelectedNode);
             return;
         }
       }

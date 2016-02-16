@@ -24,7 +24,7 @@ namespace FBI.Forms
       this.Load();
     }
 
-    public bool Load()
+    public override bool Load()
     {
       SafeDictionary<UInt32, vTreeNode> l_dic;
 

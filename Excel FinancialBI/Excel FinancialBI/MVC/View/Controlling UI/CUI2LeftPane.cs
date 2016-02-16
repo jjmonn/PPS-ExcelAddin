@@ -24,11 +24,13 @@ namespace FBI.MVC.View
 
     private enum ComboBoxType
     {
-      EntitiesCategories = 1,
+      Entities = 1,
+      EntitiesCategories,
       Clients,
       ClientsCategories,
       Products,
       ProductsCategories,
+      Employees,
       EmployeesCategories,
       Adjustments,
       AdjustmentsCategories,
@@ -38,15 +40,7 @@ namespace FBI.MVC.View
 
     private CUILeftPaneController m_controller = null;
 
-    private FbiTreeView<AxisElem> m_entitiesTV = null;
-    private FbiTreeView<Filter> m_entitiesCat = null;
-    private FbiTreeView<AxisElem> m_clients = null;
-    private FbiTreeView<Filter> m_clientsCat = null;
-    private FbiTreeView<AxisElem> m_products = null;
-    private FbiTreeView<Filter> m_productsCat = null;
-    private FbiTreeView<Filter> m_employeesCat = null;
-    private FbiTreeView<AxisElem> m_adjustments = null;
-    private FbiTreeView<Filter> m_adjustmentsCat = null;
+    SafeDictionary<ComboBoxType, AFbiTreeView> m_selectionTVList = new SafeDictionary<ComboBoxType, AFbiTreeView>();
     //Periods
     //Versions
     private PeriodRangeSelectionControl m_periodControl = null;
@@ -62,137 +56,77 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-      this.m_controller = p_controller as CUILeftPaneController;
+      m_controller = p_controller as CUILeftPaneController;
     }
 
     public void InitView()
     {
-      this.TreeViewInit();
-      this.ComboBoxInit();
+      TreeViewInit();
+      ComboBoxInit();
 
-      this.MultilangueSetup();
-      this.HideAllTV();
+      MultilangueSetup();
+      HideAllTV();
     }
 
     private void ComboBoxInit()
     {
+      InitCBListItem(Local.GetValue("CUI.adjustment"), ComboBoxType.Adjustments);
+      InitCBListItem(Local.GetValue("CUI.adjustment_cat"), ComboBoxType.AdjustmentsCategories);
+      InitCBListItem(Local.GetValue("CUI.product"), ComboBoxType.Products);
+      InitCBListItem(Local.GetValue("CUI.product_cat"), ComboBoxType.ProductsCategories);
+      InitCBListItem(Local.GetValue("CUI.client"), ComboBoxType.Clients);
+      InitCBListItem(Local.GetValue("CUI.client_cat"), ComboBoxType.ClientsCategories);
+      InitCBListItem(Local.GetValue("CUI.employee_cat"), ComboBoxType.EmployeesCategories);
+      InitCBListItem(Local.GetValue("CUI.entity_cat"), ComboBoxType.EntitiesCategories);
+      InitCBListItem(Local.GetValue("CUI.periods"), ComboBoxType.Periods);
+      InitCBListItem(Local.GetValue("CUI.versions"), ComboBoxType.Versions);
+
+      SelectionCB.DropDownList = true;
+      SelectionCB.SelectedItemChanged += OnSelectionCBSelectedItemChanged;
+    }
+
+    void InitCBListItem(string p_text, ComboBoxType p_value)
+    {
       ListItem l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_entities_cat");
-      l_listItem.Value = ComboBoxType.EntitiesCategories;
-      this.SelectionCB.Items.Add(l_listItem);
+      l_listItem.Text = p_text;
+      l_listItem.Value = p_value;
+      SelectionCB.Items.Add(l_listItem);
+    }
 
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_clients");
-      l_listItem.Value = ComboBoxType.Clients;
-      this.SelectionCB.Items.Add(l_listItem);
+    void InitTV(ComboBoxType p_category, AFbiTreeView p_tv)
+    {
+      InitTV(p_category, p_tv, m_selectionTableLayout.Controls, false);
+    }
 
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_clients_cat");
-      l_listItem.Value = ComboBoxType.ClientsCategories;
-      this.SelectionCB.Items.Add(l_listItem);
-
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_products");
-      l_listItem.Value = ComboBoxType.Products;
-      this.SelectionCB.Items.Add(l_listItem);
-
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_products_cat");
-      l_listItem.Value = ComboBoxType.ProductsCategories;
-      this.SelectionCB.Items.Add(l_listItem);
-
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_employees_cat");
-      l_listItem.Value = ComboBoxType.EmployeesCategories;
-      this.SelectionCB.Items.Add(l_listItem);
-
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_adjustments");
-      l_listItem.Value = ComboBoxType.Adjustments;
-      this.SelectionCB.Items.Add(l_listItem);
-
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_adjustments_cat");
-      l_listItem.Value = ComboBoxType.AdjustmentsCategories;
-      this.SelectionCB.Items.Add(l_listItem);
-
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_periods");
-      l_listItem.Value = ComboBoxType.Periods;
-      this.SelectionCB.Items.Add(l_listItem);
-
-      l_listItem = new ListItem();
-      l_listItem.Text = Local.GetValue("CUI.combobox_versions");
-      l_listItem.Value = ComboBoxType.Versions;
-      this.SelectionCB.Items.Add(l_listItem);
-
-      this.SelectionCB.DropDownList = true;
-      this.SelectionCB.SelectedItemChanged += OnSelectionCBSelectedItemChanged;
+    void InitTV(ComboBoxType p_category, AFbiTreeView p_tv, ControlCollection p_control, bool p_visible = true)
+    {
+      m_selectionTVList[p_category] = p_tv;
+      p_tv.CheckBoxes = true;
+      p_tv.TriStateMode = true;
+      p_tv.Dock = DockStyle.Fill;
+      p_tv.Visible = p_visible;
+      p_control.Add(p_tv);
     }
 
     private void TreeViewInit()
     {
-      this.m_entitiesTV = new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Entities));
-      this.m_entitiesTV.CheckBoxes = true;
-      this.m_entitiesTV.TriStateMode = true;
-      this.m_entitiesTV.Dock = DockStyle.Fill;
-      this.SplitContainer.Panel1.Controls.Add(this.m_entitiesTV);
-
-      this.m_entitiesCat = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Entities));
-      this.m_entitiesCat.CheckBoxes = true;
-      this.m_entitiesCat.TriStateMode = true;
-      this.m_entitiesCat.Dock = DockStyle.Fill;
-      this.m_selectionTableLayout.Controls.Add(this.m_entitiesCat);
-
-      this.m_clients = new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Client));
-      this.m_clients.CheckBoxes = true;
-      this.m_clients.TriStateMode = true;
-      this.m_clients.Dock = DockStyle.Fill;
-      this.m_selectionTableLayout.Controls.Add(this.m_clients);
-
-      this.m_clientsCat = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Client));
-      this.m_clientsCat.CheckBoxes = true;
-      this.m_clientsCat.TriStateMode = true;
-      this.m_clientsCat.Dock = DockStyle.Fill;
-      this.m_selectionTableLayout.Controls.Add(this.m_clientsCat);
-
-      this.m_products = new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Product));
-      this.m_products.CheckBoxes = true;
-      this.m_products.TriStateMode = true;
-      this.m_products.Dock = DockStyle.Fill;
-      this.m_selectionTableLayout.Controls.Add(this.m_products);
-
-      this.m_productsCat = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Product));
-      this.m_productsCat.CheckBoxes = true;
-      this.m_productsCat.TriStateMode = true;
-      this.m_productsCat.Dock = DockStyle.Fill;
-      this.m_selectionTableLayout.Controls.Add(this.m_productsCat);
-
-      this.m_employeesCat = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Employee));
-      this.m_employeesCat.CheckBoxes = true;
-      this.m_employeesCat.TriStateMode = true;
-      this.m_employeesCat.Dock = DockStyle.Fill;
-      this.m_selectionTableLayout.Controls.Add(this.m_employeesCat);
-
-      this.m_adjustments = new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Adjustment));
-      this.m_adjustments.CheckBoxes = true;
-      this.m_adjustments.TriStateMode = true;
-      this.m_adjustments.Dock = DockStyle.Fill;
-      this.m_selectionTableLayout.Controls.Add(this.m_adjustments);
-
-      this.m_adjustmentsCat = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Adjustment));
-      this.m_adjustmentsCat.CheckBoxes = true;
-      this.m_adjustmentsCat.TriStateMode = true;
-      this.m_adjustmentsCat.Dock = DockStyle.Fill;
-      this.m_selectionTableLayout.Controls.Add(this.m_adjustmentsCat);
+      InitTV(ComboBoxType.Entities, new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Entities)), SplitContainer.Panel1.Controls);
+      InitTV(ComboBoxType.EntitiesCategories, new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Entities), null, false, false));
+      InitTV(ComboBoxType.Clients, new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Client), null, false, false));
+      InitTV(ComboBoxType.ClientsCategories, new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Client), null, false, false));
+      InitTV(ComboBoxType.Products, new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Product), null, false, false));
+      InitTV(ComboBoxType.ProductsCategories, new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Product), null, false, false));
+      InitTV(ComboBoxType.EmployeesCategories, new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Employee), null, false, false));
+      InitTV(ComboBoxType.Adjustments, new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Adjustment), null, false, false));
+      InitTV(ComboBoxType.AdjustmentsCategories, new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(AxisType.Adjustment), null, false, false));
     }
 
     private void MultilangueSetup()
     {
-      this.SelectionCB.Text = Local.GetValue("CUI.selection");
-      this.m_entitySelectionLabel.Text = Local.GetValue("CUI.entities_selection");
-      this.SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all");
-      this.UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all");
+      SelectionCB.Text = Local.GetValue("CUI.selection");
+      m_entitySelectionLabel.Text = Local.GetValue("CUI.entities_selection");
+      SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all");
+      UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all");
     }
 
     #endregion
@@ -203,39 +137,15 @@ namespace FBI.MVC.View
     {
       ListItem l_listItem;
 
-      this.HideAllTV();
+      HideAllTV();
       if ((l_listItem = ((vComboBox)p_sender).SelectedItem) != null)
       {
-        switch ((ComboBoxType)l_listItem.Value)
+        if (m_selectionTVList[(ComboBoxType)l_listItem.Value] != null)
         {
-          case ComboBoxType.EntitiesCategories:
-            this.m_entitiesCat.Visible = true;
-            break;
-          case ComboBoxType.Clients:
-            this.m_clients.Visible = true;
-            break;
-          case ComboBoxType.ClientsCategories:
-            this.m_clientsCat.Visible = true;
-            break;
-          case ComboBoxType.Products:
-            this.m_products.Visible = true;
-            break;
-          case ComboBoxType.ProductsCategories:
-            this.m_productsCat.Visible = true;
-            break;
-          case ComboBoxType.EmployeesCategories:
-            this.m_employeesCat.Visible = true;
-            break;
-          case ComboBoxType.Adjustments:
-            this.m_adjustments.Visible = true;
-            break;
-          case ComboBoxType.AdjustmentsCategories:
-            this.m_adjustmentsCat.Visible = true;
-            break;
-          case ComboBoxType.Periods:
-            break;
-          case ComboBoxType.Versions:
-            break;
+          AFbiTreeView l_tv = m_selectionTVList[(ComboBoxType)l_listItem.Value];
+          if (l_tv.Loaded == false)
+            l_tv.Load();
+          l_tv.Visible = true;
         }
       }
     }
@@ -246,16 +156,9 @@ namespace FBI.MVC.View
 
     private void HideAllTV()
     {
-      this.m_entitiesCat.Visible = false;
-      this.m_clients.Visible = false;
-      this.m_clientsCat.Visible = false;
-      this.m_products.Visible = false;
-      this.m_productsCat.Visible = false;
-      this.m_employeesCat.Visible = false;
-      this.m_adjustments.Visible = false;
-      this.m_adjustmentsCat.Visible = false;
-      //
-      //
+      foreach (KeyValuePair<ComboBoxType, AFbiTreeView> l_tv in m_selectionTVList)
+        if (l_tv.Key != ComboBoxType.Entities)
+          l_tv.Value.Visible = false;
     }
 
     #endregion

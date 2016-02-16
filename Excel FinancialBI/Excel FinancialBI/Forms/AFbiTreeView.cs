@@ -13,11 +13,11 @@ namespace FBI.Forms
   public delegate void DroppedEventHandler(object sender, DragEventArgs e);
   public delegate void NodeDroppedEventHandler(vTreeNode p_draggedNode, vTreeNode p_targetNode);
 
-  public class AFbiTreeView : vTreeView
+  public abstract class AFbiTreeView : vTreeView
   {
-
     public event NodeDroppedEventHandler NodeDropped;
     public event DroppedEventHandler Dropped;
+    public virtual bool Loaded { get; protected set; }
 
     public AFbiTreeView(bool p_allowDragAndDrop)
     {
@@ -26,6 +26,8 @@ namespace FBI.Forms
       if (p_allowDragAndDrop == true)
         SubscribeDragAndDropEvents();
     }
+
+    public abstract bool Load();
 
     public static void InitTVFormat(vTreeView p_treeview)
     {

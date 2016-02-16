@@ -577,14 +577,14 @@ namespace FBI.MVC.View
         case Keys.Down:
           if (p_e.Control == true)
           {
-            this.m_accountTV.moveNodeDown(this.m_accountTV.SelectedNode);
+            this.m_accountTV.MoveNodeDown(this.m_accountTV.SelectedNode);
             this.m_currentNode = this.m_accountTV.SelectedNode;
           }
           break;
         case Keys.Up:
           if (p_e.Control == true)
           {
-            this.m_accountTV.moveNodeUp(this.m_accountTV.SelectedNode);
+            this.m_accountTV.MoveNodeUp(this.m_accountTV.SelectedNode);
             this.m_currentNode = this.m_accountTV.SelectedNode;
           }
           break;
