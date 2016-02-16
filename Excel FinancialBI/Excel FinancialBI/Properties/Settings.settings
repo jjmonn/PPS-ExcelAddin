@@ -110,7 +110,7 @@
     <Setting Name="snapshotOutputsTextColor" Type="System.String" Scope="User">
       <Value Profile="(Default)">Black</Value>
     </Setting>
-    <Setting Name="currentCurrency" Type="System.String" Scope="User">
+    <Setting Name="currentCurrency" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">34</Value>
     </Setting>
     <Setting Name="chart1Serie1AccountId" Type="System.String" Scope="User">
@@ -197,7 +197,7 @@
     <Setting Name="chart4Title" Type="System.String" Scope="User">
       <Value Profile="(Default)">Ratios Financiers (%)</Value>
     </Setting>
-    <Setting Name="port_number" Type="System.String" Scope="User">
+    <Setting Name="port_number" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">4242</Value>
     </Setting>
     <Setting Name="serverIp" Type="System.String" Scope="User">

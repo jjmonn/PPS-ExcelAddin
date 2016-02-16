@@ -104,6 +104,20 @@ namespace FBI.Forms
       if (Dropped != null)
         Dropped(sender, e);
     }
+
+    public static vTreeNode FindNode(vTreeView p_tv, UInt32 p_value)
+    {
+      foreach (vTreeNode l_node in p_tv.GetNodes())
+        if ((UInt32)l_node.Value == p_value)
+          return (l_node);
+      return (null);
+    }
+
+    public vTreeNode FindNode(UInt32 p_value)
+    {
+      return (FindNode(this, p_value));
+    }
+
     #endregion
 
   }
