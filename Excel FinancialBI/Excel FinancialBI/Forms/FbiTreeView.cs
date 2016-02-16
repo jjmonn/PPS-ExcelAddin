@@ -26,6 +26,21 @@ namespace FBI.Forms
         throw new Exception(ERR_GENERATE);
     }
 
+    public static SafeDictionary<UInt32, Utils.TreeNode<UInt32>> LoadVirtualTree(MultiIndexDictionary<UInt32, String, T> p_items)
+    {
+      SafeDictionary<UInt32, Utils.TreeNode<UInt32>> l_dic = new SafeDictionary<uint, TreeNode<uint>>();
+      if (Implements<HierarchyCRUDEntity>(typeof(T)) == false)
+        return (null);
+      foreach (T l_item in p_items.Values)
+        l_dic[l_item.Id] = new TreeNode<UInt32>(l_item.Id);
+      foreach (HierarchyCRUDEntity l_item in p_items.Values)
+      {
+        if (l_dic.ContainsKey(l_item.Id) && l_dic.ContainsKey(l_item.ParentId))
+          l_dic[l_item.ParentId].AddChild(l_dic[l_item.Id]);
+      }
+      return (l_dic);
+    }
+
     public bool Add(vTreeNode p_node)
     {
       if (p_node == null)
@@ -73,7 +88,7 @@ namespace FBI.Forms
       return (true);
     }
 
-    public void moveNodeUp(vTreeNode p_node)
+    public void MoveNodeUp(vTreeNode p_node)
     {
       if (p_node == null)
         return;
@@ -81,7 +96,7 @@ namespace FBI.Forms
       this.Refresh();
     }
 
-    public void moveNodeDown(vTreeNode p_node)
+    public void MoveNodeDown(vTreeNode p_node)
     {
       if (p_node == null)
         return;
@@ -194,8 +209,11 @@ namespace FBI.Forms
       return (Load(Nodes, p_items, p_icons));
     }
 
-    public static bool Load(vTreeNodeCollection p_nodes, MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    public static bool Load(vTreeNodeCollection p_nodes, MultiIndexDictionary<UInt32, String, T> p_items,
+      MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
+      SafeDictionary<UInt32, Utils.TreeNode<UInt32>> l_virtualHierarchy = LoadVirtualTree(p_items);
+
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
       {
         foreach (NamedHierarchyCRUDEntity l_item in p_items.SortedValues)
@@ -203,7 +221,7 @@ namespace FBI.Forms
           if (l_item.ParentId == 0)
           {
             vTreeNode l_node = new vTreeNode();
-            if (!Generate(p_items, l_node, l_item.Id, p_icons))
+            if (!Generate(l_virtualHierarchy, p_items, l_node, l_item.Id, p_icons))
               return (false);
             p_nodes.Add(l_node);
           }
@@ -214,7 +232,7 @@ namespace FBI.Forms
         foreach (NamedCRUDEntity l_item in p_items.SortedValues)
         {
           vTreeNode l_node = new vTreeNode();
-          if (!Generate(p_items, l_node, l_item.Id, p_icons))
+          if (!Generate(l_virtualHierarchy, p_items, l_node, l_item.Id, p_icons))
             return (false);
           p_nodes.Add(l_node);
         }
@@ -222,30 +240,28 @@ namespace FBI.Forms
       return (true);
     }
 
-    private static bool Generate(MultiIndexDictionary<UInt32, String, T> p_items, vTreeNode p_node, UInt32 p_itemId, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    private static bool Generate(SafeDictionary<UInt32, Utils.TreeNode<UInt32>> p_virtualHierarchy, MultiIndexDictionary<UInt32, String, T> p_items,
+      vTreeNode p_node, UInt32 p_itemId, MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
-      if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
+      if (Implements<NamedHierarchyCRUDEntity>(typeof(T)) && p_virtualHierarchy != null)
       {
         NamedHierarchyCRUDEntity l_currentItem = (NamedHierarchyCRUDEntity)p_items[p_itemId];
 
-        if (l_currentItem == null)
+        if (l_currentItem == null || p_virtualHierarchy.ContainsKey(l_currentItem.Id) == false)
           return (false);
         p_node.Value = l_currentItem.Id;
         p_node.Text = l_currentItem.Name;
         p_node.ImageIndex = (Int32)l_currentItem.Image;
-        foreach (NamedHierarchyCRUDEntity l_item in p_items.SortedValues)
+        foreach (TreeNode<UInt32> l_childNode in p_virtualHierarchy[l_currentItem.Id].Children)
         {
-          if (l_item.ParentId == l_currentItem.Id)
-          {
-            vTreeNode l_node = new vTreeNode();
-            if (!Generate(p_items, l_node, l_item.Id, p_icons))
-              return (false);
-            p_node.Nodes.Add(l_node);
-            if (p_icons != null)
-            {
-              p_node.ImageIndex = (int)p_icons[l_item.Id].Image;
-            }
-          }
+          if (p_items.ContainsKey(l_childNode.Value) == false)
+            continue;
+          vTreeNode l_node = new vTreeNode();
+          if (!Generate(p_virtualHierarchy, p_items, l_node, l_childNode.Value, p_icons))
+            return (false);
+          p_node.Nodes.Add(l_node);
+          if (p_icons != null)
+            p_node.ImageIndex = (int)p_icons[l_childNode.Value].Image;
         }
       }
       else
