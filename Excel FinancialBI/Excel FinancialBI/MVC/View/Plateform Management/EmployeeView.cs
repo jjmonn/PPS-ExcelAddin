@@ -15,7 +15,6 @@ namespace FBI.MVC.View
 {
   using Model;
   using Model.CRUD;
-  using Model;
   using Controller;
   using Utils;
   using Network;

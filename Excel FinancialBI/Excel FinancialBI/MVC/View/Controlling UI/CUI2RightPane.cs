@@ -58,6 +58,16 @@ namespace FBI.MVC.View
           continue;
         CUIDimensionConf l_dimensionConf = l_dimension.Conf.Clone();
 
+        if (l_dimensionConf.ModelType == typeof(PeriodModel))
+          if (l_currentConf != null && l_currentConf.ModelType == typeof(PeriodModel))
+          {
+            PeriodConf l_conf = l_dimensionConf as PeriodConf;
+            PeriodConf l_parentConf = l_currentConf as PeriodConf;
+
+            l_conf.IsSubPeriod = true;
+            l_conf.ParentType = l_parentConf.PeriodType;
+          }
+
         if (l_topConf == null)
           l_topConf = l_dimensionConf;
         else
@@ -131,7 +141,7 @@ namespace FBI.MVC.View
 
     void OnUpdateClick(object p_sender, MouseEventArgs p_e)
     {
-      m_controller.Update(GetRowConf(), GetColumnConf());
+      m_controller.Update();
     }
 
     void OnDisplayListKeyDown(object p_sender, KeyEventArgs p_args)
@@ -266,6 +276,38 @@ namespace FBI.MVC.View
     public void SetController(IController p_controller)
     {
       this.m_controller = p_controller as CUIRightPaneController;
+    }
+
+    public List<Tuple<bool, AxisType, UInt32>> GetSort()
+    {
+      List<Tuple<bool, AxisType, UInt32>> l_list = new List<Tuple<bool, AxisType, uint>>();
+
+      GetSort(l_list, m_rowsDisplayList);
+      GetSort(l_list, m_columnsDisplayList);
+      return (l_list);
+    }
+
+    void GetSort(List<Tuple<bool, AxisType, UInt32>> p_list, vListBox p_displayList)
+    {
+      foreach (ListItem l_dimensionItem in p_displayList.Items)
+      {
+        DimensionElem l_dimension = m_dimensions[(UInt32)l_dimensionItem.Value];
+
+        if (l_dimension.Conf.ModelType == typeof(FilterModel))
+        {
+          FilterConf l_conf = l_dimension.Conf as FilterConf;
+          Filter l_filter = FilterModel.Instance.GetValue(l_conf.FilterId);
+
+          if (l_filter != null)
+            p_list.Add(new Tuple<bool, AxisType, uint>(false, l_filter.Axis, l_conf.FilterId));
+        }
+        else if (l_dimension.Conf.ModelType == typeof(AxisElemModel))
+        {
+          AxisElemConf l_conf = l_dimension.Conf as AxisElemConf;
+
+          p_list.Add(new Tuple<bool, AxisType, uint>(true, l_conf.AxisTypeId, 0));
+        }
+      }
     }
 
     #endregion

@@ -33,5 +33,10 @@ namespace FBI.MVC.Controller
     {
       m_view.PrepareDgv(p_config);
     }
+
+    public void DisplayResult(SafeDictionary<UInt32, ComputeResult> p_result)
+    {
+      m_view.FillDGV(p_result);
+    }
   }
 }

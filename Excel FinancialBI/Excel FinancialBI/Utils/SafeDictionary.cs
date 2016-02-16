@@ -10,9 +10,8 @@ public class SafeDictionary<TKey, TValue> : Dictionary<TKey, TValue>
   {
     get
     {
-      TValue l_value;
-      if (TryGetValue(key, out l_value))
-        return (l_value);
+      if (ContainsKey(key))
+        return (base[key]);
       return (default(TValue));
     }
     set

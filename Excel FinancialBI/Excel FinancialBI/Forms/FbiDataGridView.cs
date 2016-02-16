@@ -32,6 +32,17 @@ namespace FBI.Forms
     public delegate void DropedEventHandler(HierarchyItem p_origin, HierarchyItem p_dest, DragEventArgs p_args);
     public event DropedEventHandler Dropped;
 
+
+    public SafeDictionary<KeyType, HierarchyItem> Rows
+    {
+      get { return (m_rowsDic); }
+    }
+
+    public SafeDictionary<KeyType, HierarchyItem> Columns
+    {
+      get { return (m_columnsDic); }
+    }
+
     public HierarchyItem HoveredColumn
     {
       get
@@ -254,15 +265,15 @@ namespace FBI.Forms
         l_dimensionDic = m_columnsDic;
       else if (p_dimension == Dimension.ROW)
         l_dimensionDic = m_rowsDic;
- /*     if (l_dimensionDic == null)
+      if (l_dimensionDic == null)
         return (null);
       if (l_dimensionDic[p_key] != null)
         l_item = l_dimensionDic[p_key];
       else
-      {*/
+      {
         l_item = new HierarchyItem();
         l_dimensionDic[p_key] = l_item;
-  /*    }*/
+      }
       l_item.ItemValue = p_key;
       l_item.Caption = p_name;
       l_item.Width = COLUMNS_WIDTH;

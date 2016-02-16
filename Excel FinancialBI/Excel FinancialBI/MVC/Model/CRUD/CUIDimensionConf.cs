@@ -41,8 +41,13 @@ namespace FBI.MVC.Model.CRUD
 
   class AxisElemConf : CUIDimensionConf
   {
-    public AxisElemConf(AxisType p_axisType) : base(typeof(AxisElemModel)) { AxisTypeId = p_axisType; }
+    public AxisElemConf(AxisType p_axisType) : base(typeof(AxisElemModel)) 
+    {
+      AxisTypeId = p_axisType;
+      ParentId = 0;
+    }
     public AxisType AxisTypeId { get; set; }
+    public UInt32 ParentId { get; set; }
 
     public override CUIDimensionConf Clone()
     {
@@ -54,13 +59,23 @@ namespace FBI.MVC.Model.CRUD
 
   class PeriodConf : CUIDimensionConf
   {
-    public PeriodConf(TimeConfig p_config) : base(typeof(PeriodModel)) { PeriodType = p_config; }
+    public PeriodConf(TimeConfig p_config) : base(typeof(PeriodModel)) 
+    {
+      PeriodType = p_config;
+      ParentType = p_config;
+      ParentPeriod = 0;
+      IsSubPeriod = false;
+    }
     public TimeConfig PeriodType { get; set; }
-
+    public bool IsSubPeriod { get; set; }
+    public TimeConfig ParentType { get; set; }
+    public Int32 ParentPeriod { get; set; }
     public override CUIDimensionConf Clone()
     {
       PeriodConf l_new = new PeriodConf(PeriodType);
 
+      l_new.IsSubPeriod = IsSubPeriod;
+      l_new.ParentPeriod = ParentPeriod;
       return (Copy(l_new));
     }
   }

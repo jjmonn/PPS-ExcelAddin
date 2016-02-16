@@ -12,78 +12,93 @@ namespace FBI.MVC.Model
   class ComputeModel
   {
     public event ComputeCompleteEventHandler ComputeCompleteEvent;
-    public delegate void ComputeCompleteEventHandler(ErrorMessage p_status, ComputeRequest p_request, ComputeResult p_result);
+    public delegate void ComputeCompleteEventHandler(ErrorMessage p_status, ComputeRequest p_request, SafeDictionary<uint, ComputeResult> p_result);
 
     static ComputeModel s_instance = new ComputeModel();
     public static ComputeModel Instance { get { return (s_instance); } }
-    SafeDictionary<Int32, ComputeRequest> m_computeRequestDic;
-    SafeDictionary<Int32, ComputeResult> m_computeResultDic;
+    SafeDictionary<ComputeRequest, SafeDictionary<UInt32, ComputeResult>> m_computeResultDic;
     SafeDictionary<Int32, Tuple<bool, Int32>> m_toDiffList;
+    List<Tuple<ComputeRequest, List<Int32>>> m_computeRequestList;
+    SafeDictionary<Int32, UInt32> m_computeRequestVersionList;
 
     ComputeModel() 
     {
-      m_computeRequestDic = new SafeDictionary<Int32, ComputeRequest>();
-      m_computeResultDic = new SafeDictionary<Int32, ComputeResult>();
+      m_computeResultDic = new SafeDictionary<ComputeRequest, SafeDictionary<uint, ComputeResult>>();
+      m_computeRequestList = new List<Tuple<ComputeRequest, List<int>>>();
+      m_computeRequestVersionList = new SafeDictionary<int, uint>();
       m_toDiffList = new SafeDictionary<Int32, Tuple<bool, Int32>>();
       NetworkManager.SetCallback((UInt16)ServerMessage.SMSG_COMPUTE_RESULT, OnComputeResult);
     }
 
-    public void ComputeDiff(ComputeRequest p_request1, ComputeRequest p_request2)
+    public bool ComputeDiff(ComputeRequest p_request)
     {
-      Int32 l_first = Compute(p_request1);
-      Int32 l_second = Compute(p_request2);
-
-      m_toDiffList[l_first] = new Tuple<bool, Int32>(false, l_second);
-      m_toDiffList[l_second] = new Tuple<bool, Int32>(true, l_first);
+      if (p_request.Versions.Count > 2)
+        return (false);
+      p_request.IsDiff = true;
+      Compute(p_request);
+      return (true);
     }
 
-    public Int32 Compute(ComputeRequest p_request)
+    public void Compute(ComputeRequest p_request)
     {
-      ByteBuffer l_packet = new ByteBuffer((UInt16)ClientMessage.CMSG_COMPUTE_REQUEST);
-      Int32 l_requestId = l_packet.AssignRequestId();
+      ByteBuffer[] l_packetList = new ByteBuffer[p_request.Versions.Count];
+      List<Int32> l_requestIdList = new List<int>();
 
-      m_computeRequestDic[l_requestId] = p_request;
-      p_request.Dump(l_packet);
+      for (Int32 i = 0; i < l_packetList.Length; ++i)
+      {
+        l_packetList[i] = new ByteBuffer((UInt16)ClientMessage.CMSG_COMPUTE_REQUEST);
+        l_requestIdList.Add(l_packetList[i].AssignRequestId());
+        m_computeRequestVersionList[l_requestIdList[i]] = p_request.Versions[i];
+      }
+      m_computeRequestList.Add(new Tuple<ComputeRequest, List<Int32>>(p_request, l_requestIdList));
+      m_computeResultDic[p_request] = new SafeDictionary<uint, ComputeResult>();
+      for (Int32 i = 0; i < l_packetList.Length; ++i)
+      {
+        p_request.Dump(l_packetList[i], p_request.Versions[i]);
+        l_packetList[i].Release();
+        NetworkManager.Send(l_packetList[i]);
+      }
+    }
 
-      l_packet.Release();
-      NetworkManager.Send(l_packet);
-      return (l_requestId);
+    public Tuple<ComputeRequest, List<Int32>> FindComputeRequest(Int32 p_requestId)
+    {
+      foreach (Tuple<ComputeRequest, List<Int32>> l_elem in m_computeRequestList)
+        foreach (Int32 l_requestId in l_elem.Item2)
+          if (l_requestId == p_requestId)
+            return (l_elem);
+      return (null);
     }
 
     public void OnComputeResult(ByteBuffer p_packet)
     {
       Int32 l_requestId = p_packet.GetRequestId();
-      ComputeRequest l_request = m_computeRequestDic[l_requestId];
+      Tuple<ComputeRequest, List<Int32>> l_requestTuple = FindComputeRequest(l_requestId);
+      ComputeRequest l_request = l_requestTuple.Item1;
+      List<Int32> l_requestIdList = l_requestTuple.Item2;
       ComputeResult l_result = null;
 
       if (l_request != null)
       {
-        l_result = ComputeResult.BuildComputeResult(l_request, p_packet);
-        if (m_toDiffList.ContainsKey(l_requestId))
+        l_requestIdList.Remove(l_requestId);
+        l_result = ComputeResult.BuildComputeResult(l_request, p_packet, m_computeRequestVersionList[l_requestId]);
+        m_computeRequestVersionList.Remove(l_requestId);
+        m_computeResultDic[l_request][l_result.VersionId] = l_result;
+        if (l_requestIdList.Count == 0)
         {
-          Tuple<bool, Int32> l_diffId = m_toDiffList[l_requestId];
+          SafeDictionary<UInt32, ComputeResult> l_resultList = m_computeResultDic[l_request];
 
-          if (m_computeResultDic[l_diffId.Item2] != null)
+          if (l_request.IsDiff && l_resultList.Count == 2)
           {
-            if (l_diffId.Item1)
-              l_result = l_result - m_computeResultDic[l_diffId.Item2];
-            else
-              l_result = m_computeResultDic[l_diffId.Item2] - l_result;
-            m_computeResultDic.Remove(l_diffId.Item2);
-            m_computeRequestDic.Remove(l_requestId);
-            m_computeRequestDic.Remove(l_diffId.Item2);
+            ComputeResult l_diff = l_resultList[0] - l_resultList[1];
+            l_resultList.Clear();
+            l_resultList[l_diff.VersionId] = l_diff;
           }
-          else
-          {
-            m_computeResultDic[l_requestId] = l_result;
-            return;
-          }
+          m_computeRequestList.Remove(l_requestTuple);
+          m_computeResultDic.Remove(l_request);
+          if (ComputeCompleteEvent != null)
+            ComputeCompleteEvent(p_packet.GetError(), l_request, l_resultList);
         }
-        else
-          m_computeRequestDic.Remove(l_requestId);
       }
-      if (ComputeCompleteEvent != null)
-        ComputeCompleteEvent(p_packet.GetError(), l_request, l_result);
     }
   }
 }

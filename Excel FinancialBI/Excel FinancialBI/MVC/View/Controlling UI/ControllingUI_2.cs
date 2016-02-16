@@ -12,6 +12,9 @@ namespace FBI.MVC.View
 {
   using Controller;
   using Utils;
+  using Network;
+  using Model;
+  using Model.CRUD;
 
   public partial class ControllingUI_2 : Form, IView
   {
@@ -35,7 +38,7 @@ namespace FBI.MVC.View
       this.m_controller = p_controller as CUIController;
     }
 
-    public void InitView()
+    public void LoadView()
     {
       this.MultilangueSetup();
 
@@ -45,6 +48,12 @@ namespace FBI.MVC.View
       this.m_DGVsControlTab.Controls.Add(m_controller.ResultController.View as ResultView);
 
       this.Show();
+      SuscribeEvents();
+    }
+
+    public void SuscribeEvents()
+    {
+      ComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
     }
 
     private void MultilangueSetup()
@@ -79,6 +88,14 @@ namespace FBI.MVC.View
       this.RefreshToolStripMenuItem.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
       this.ChartBT.Text = Local.GetValue("CUI.charts");
       this.Text = Local.GetValue("CUI.financials");
+    }
+
+    void OnComputeResult(ErrorMessage p_status, ComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
+    {
+      if (p_status == ErrorMessage.SUCCESS && p_result != null)
+        m_controller.ResultController.DisplayResult(p_result);
+      else
+        MessageBox.Show(Error.GetMessage(p_status));
     }
 
     #endregion

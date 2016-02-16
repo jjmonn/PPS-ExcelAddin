@@ -72,7 +72,6 @@ namespace FBI.MVC.View
        l_newVersion.Name = m_versionNameTextbox.Text;
        l_newVersion.StartPeriod = (UInt32)m_startingPeriodDatePicker.Value.Value.ToOADate();
        l_newVersion.NbPeriod = (ushort)m_nbPeriods.Value;
-       l_newVersion.IsFolder = false;
        l_newVersion.Locked = false;
        l_newVersion.ItemPosition = l_newVersion.ItemPosition +1;
        l_newVersion.CreatedAt = DateTime.Now.ToShortDateString();

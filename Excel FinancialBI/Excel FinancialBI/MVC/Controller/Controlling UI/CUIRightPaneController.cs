@@ -49,9 +49,24 @@ namespace FBI.MVC.Controller
       m_view.LoadView();    
     }
 
-    public void Update(CUIDimensionConf p_row, CUIDimensionConf p_column)
+    public CUIDimensionConf GetRows()
     {
-      m_parentController.Compute(p_row, p_column);
+      return (m_view.GetRowConf());
+    }
+
+    public CUIDimensionConf GetColumns()
+    {
+      return (m_view.GetColumnConf());
+    }
+
+    public List<Tuple<bool, AxisType, UInt32>> GetSort()
+    {
+      return (m_view.GetSort());
+    }
+
+    public void Update()
+    {
+      m_parentController.Compute();
     }
 
     #endregion

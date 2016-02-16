@@ -9,6 +9,8 @@ namespace FBI.MVC.Controller
   using View;
   using Model.CRUD;
   using Model;
+  using Network;
+  using Properties;
 
   class CUIController : IController
   {
@@ -36,7 +38,7 @@ namespace FBI.MVC.Controller
 
     private void LoadView()
     {
-      this.m_view.InitView();
+      this.m_view.LoadView();
     }
 
     #endregion
@@ -52,17 +54,29 @@ namespace FBI.MVC.Controller
 
     #endregion
 
-    public void Compute(CUIDimensionConf p_rows, CUIDimensionConf p_columns)
+    public void Compute()
     {
       ComputeConfig l_config = new ComputeConfig();
+      ComputeRequest l_request = new ComputeRequest();
+      Version l_version = VersionModel.Instance.GetValue(12);
 
-      l_config.Request = new ComputeRequest();
+      l_request.StartPeriod = (Int32)l_version.StartPeriod;
+      l_request.NbPeriods = 61;//(Int32)l_version.NbPeriod;
+      l_request.Versions.Add(l_version.Id);
+      //l_request.Versions.Add(11);
+      l_request.CurrencyId = Convert.ToUInt32(Settings.Default.currentCurrency);
+      l_request.SortList = RightPaneController.GetSort();
+      l_request.EntityId = 1;
+      l_request.GlobalFactVersionId = l_version.GlobalFactVersionId;
+      l_request.RateVersionId = l_version.RateVersionId;
+      l_request.Process = Account.AccountProcess.RH;
+      l_request.AxisHierarchy = true;
 
-      l_config.Request.StartPeriod = (Int32)VersionModel.Instance.GetValue(Convert.ToUInt32(Properties.Settings.Default.version_id)).StartPeriod;
-      l_config.Request.NbPeriods = (Int32)VersionModel.Instance.GetValue(Convert.ToUInt32(Properties.Settings.Default.version_id)).NbPeriod;
-      l_config.Request.VersionId = Convert.ToUInt32(Properties.Settings.Default.version_id);
-      l_config.Rows = p_rows;
-      l_config.Columns = p_columns;
+      l_config.Rows = RightPaneController.GetRows();
+      l_config.Columns = RightPaneController.GetColumns();
+      l_config.Request = l_request;
+
+      ComputeModel.Instance.Compute(l_request);
       ResultController.LoadDGV(l_config);
     }
   }

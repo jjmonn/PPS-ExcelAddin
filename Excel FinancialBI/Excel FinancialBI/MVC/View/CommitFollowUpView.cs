@@ -93,7 +93,7 @@ namespace FBI.MVC.View
       foreach (Int32 l_item in m_dates)
       {
         l_date = l_item;
-        l_name = Local.GetValue("general.week") + " " + PeriodModel.GetWeekNumberFromDateId(ref l_date) + ", " + DateTime.FromOADate((double)l_date).Year;
+        l_name = Local.GetValue("general.week") + " " + PeriodModel.GetWeekNumberFromDateId(l_date) + ", " + DateTime.FromOADate((double)l_date).Year;
         m_dataGridView.SetDimension(FbiDataGridView.Dimension.COLUMN, (UInt32)l_date, l_name);
       }
       this.SetRows();
