@@ -14,16 +14,30 @@ namespace FBI.MVC.Model
   {
     Account.AccountProcess m_process;
     Fact m_fact { get; set;}
+    public Account m_account { get; private set;}
+    public AxisElem m_entity { get; private set;}
+    public AxisElem m_employee { get; private set;}
+    public PeriodDimension m_period { get; private set;}
     double m_editedValue { get; set;}
     UInt32 m_editedClientId;
     Range m_cell { get; set;}
     bool m_mustCommit {get ; set;}
 
-    public EditedFact(Fact p_fact, Range p_cell, Account.AccountProcess p_process)
+    public EditedFact(Account p_account, AxisElem p_entity, AxisElem p_employee, PeriodDimension p_period, Range p_cell, Account.AccountProcess p_process)
     {
-      m_fact = p_fact;
       m_cell = p_cell;
       m_process = p_process;
+      m_account = p_account;
+      m_entity = p_entity;
+      m_employee = p_employee;
+      m_period = p_period;
+
+      Fact l_fact = new Fact();
+      l_fact.AccountId = m_account.Id;
+      l_fact.EntityId = m_entity.Id;
+      l_fact.Period = m_period.Id;
+      l_fact.EmployeeId = m_employee.Id;
+      m_fact = l_fact;
     }
 
     virtual public bool IsDifferent()
@@ -42,7 +56,6 @@ namespace FBI.MVC.Model
       }
       return l_isDifferent;
     }
-
 
     public void UpdateFactValue(double p_value)
     {

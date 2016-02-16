@@ -258,6 +258,7 @@
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
+    <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AllocationKeysController.cs" />
@@ -266,12 +267,15 @@
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\EmployeeControler.cs" />
     <Compile Include="MVC\Controller\Plateform Management\EntityController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\ExcelGlobalFactController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\ExcelRateController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\GlobalFactController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\BasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\FactBaseController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\FilterController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\IBasePlatformMgtComponent.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\IExcelImportController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
@@ -323,8 +327,6 @@
     <Compile Include="MVC\Model\CRUD\Group.cs" />
     <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsManager.cs" />
     <Compile Include="MVC\Model\Facts Edition\IEditedFactsManager.cs" />
-    <Compile Include="MVC\Model\Facts Edition\OutputFact.cs" />
-    <Compile Include="MVC\Model\Facts Edition\Period.cs" />
     <Compile Include="MVC\Model\CRUD\User.cs" />
     <Compile Include="MVC\Model\CRUD\UserAllowedEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Version.cs" />
@@ -333,9 +335,10 @@
     <Compile Include="MVC\Model\EntityDistributionModel.cs" />
     <Compile Include="MVC\Model\ExchangeRateModel.cs" />
     <Compile Include="MVC\Model\FactLogModel.cs" />
-    <Compile Include="MVC\Controller\Facts Edition\Dimension.cs" />
+    <Compile Include="MVC\Model\Facts Edition\Dimension.cs" />
     <Compile Include="MVC\Controller\Facts Edition\Dimensions.cs" />
     <Compile Include="MVC\Model\Facts Edition\EditedFact.cs" />
+    <Compile Include="MVC\Model\Facts Edition\PeriodDimension.cs" />
     <Compile Include="MVC\Model\Facts Edition\RHEditedFactsManager.cs" />
     <Compile Include="MVC\Controller\Facts Edition\WorksheetAnalyzer.cs" />
     <Compile Include="MVC\Model\FactsModel.cs" />
@@ -400,6 +403,7 @@
     <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.Designer.cs">
       <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\Facts Edition\RangeHighlighter.cs" />
     <Compile Include="MVC\View\Controlling UI\ResultView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -525,17 +529,11 @@
     <Compile Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.Designer.cs">
       <DependentUpon>FilterStructView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.cs">
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelImportView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.Designer.cs">
-      <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.Designer.cs">
-      <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExcelImportView.Designer.cs">
+      <DependentUpon>ExcelImportView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\Rate and MEI\ExchangeRatesView.cs">
       <SubType>UserControl</SubType>
@@ -588,52 +586,52 @@
     <Compile Include="MVC\View\PPS Controls\ProgressBarControl.Designer.cs">
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\DirectorySnapshotUI.cs">
+    <Compile Include="MVC\View\Facts Edition\DirectorySnapshotUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\DirectorySnapshotUI.Designer.cs">
+    <Compile Include="MVC\View\Facts Edition\DirectorySnapshotUI.Designer.cs">
       <DependentUpon>DirectorySnapshotUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\ManualRangesSelectionUI.cs">
+    <Compile Include="MVC\View\Facts Edition\ManualRangesSelectionUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\ManualRangesSelectionUI.Designer.cs">
+    <Compile Include="MVC\View\Facts Edition\ManualRangesSelectionUI.Designer.cs">
       <DependentUpon>ManualRangesSelectionUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\PDCClientSelectionUI.cs">
+    <Compile Include="MVC\View\Facts Edition\PDCClientSelectionUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\PDCClientSelectionUI.Designer.cs">
+    <Compile Include="MVC\View\Facts Edition\PDCClientSelectionUI.Designer.cs">
       <DependentUpon>PDCClientSelectionUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\ReportUploadAccountInfoSidePane.cs">
+    <Compile Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\ReportUploadAccountInfoSidePane.Designer.cs">
+    <Compile Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.Designer.cs">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\ReportUploadEntitySelectionSidePane.cs">
+    <Compile Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\ReportUploadEntitySelectionSidePane.Designer.cs">
+    <Compile Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.Designer.cs">
       <DependentUpon>ReportUploadEntitySelectionSidePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\SnapshotPeriodRangeSelectionUI.cs">
+    <Compile Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\SnapshotPeriodRangeSelectionUI.Designer.cs">
+    <Compile Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.Designer.cs">
       <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\StatusReportInterfaceUI.cs">
+    <Compile Include="MVC\View\Facts Edition\StatusReportInterfaceUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\StatusReportInterfaceUI.Designer.cs">
+    <Compile Include="MVC\View\Facts Edition\StatusReportInterfaceUI.Designer.cs">
       <DependentUpon>StatusReportInterfaceUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\UnReferencedClientsUI.cs">
+    <Compile Include="MVC\View\Facts Edition\UnReferencedClientsUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\UnReferencedClientsUI.Designer.cs">
+    <Compile Include="MVC\View\Facts Edition\UnReferencedClientsUI.Designer.cs">
       <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\ReportsDesignerUI.cs">
@@ -779,11 +777,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.resx">
       <DependentUpon>FilterStructView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelExchangeRatesImportUI.resx">
-      <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelGlobalFactsImportUI.resx">
-      <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelImportView.resx">
+      <DependentUpon>ExcelImportView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\GlobalFactUI.resx">
       <DependentUpon>GlobalFactUI.cs</DependentUpon>
@@ -806,28 +801,28 @@
     <EmbeddedResource Include="MVC\View\PPS Controls\ProgressBarControl.resx">
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\DirectorySnapshotUI.resx">
+    <EmbeddedResource Include="MVC\View\Facts Edition\DirectorySnapshotUI.resx">
       <DependentUpon>DirectorySnapshotUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\ManualRangesSelectionUI.resx">
+    <EmbeddedResource Include="MVC\View\Facts Edition\ManualRangesSelectionUI.resx">
       <DependentUpon>ManualRangesSelectionUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\PDCClientSelectionUI.resx">
+    <EmbeddedResource Include="MVC\View\Facts Edition\PDCClientSelectionUI.resx">
       <DependentUpon>PDCClientSelectionUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\ReportUploadAccountInfoSidePane.resx">
+    <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.resx">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\ReportUploadEntitySelectionSidePane.resx">
+    <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.resx">
       <DependentUpon>ReportUploadEntitySelectionSidePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\SnapshotPeriodRangeSelectionUI.resx">
+    <EmbeddedResource Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.resx">
       <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\StatusReportInterfaceUI.resx">
+    <EmbeddedResource Include="MVC\View\Facts Edition\StatusReportInterfaceUI.resx">
       <DependentUpon>StatusReportInterfaceUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\UnReferencedClientsUI.resx">
+    <EmbeddedResource Include="MVC\View\Facts Edition\UnReferencedClientsUI.resx">
       <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\ReportsDesignerUI.resx">
@@ -873,7 +868,5 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MVC\View\Facts Edition\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

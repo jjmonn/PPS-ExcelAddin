@@ -9,6 +9,8 @@ using Microsoft.VisualBasic;
 
 namespace FBI.MVC.Model
 {
+  using Utils;
+
 
   class PeriodModel
   {
@@ -36,6 +38,13 @@ namespace FBI.MVC.Model
 		};
 
     #endregion
+
+    static public List<UInt32> GetPeriodsList(UInt32 p_versionId)
+    {
+      List<UInt32> l_list = new List<UInt32>();
+
+      return l_list;
+    }
 
     #region "Years interface"
 
@@ -483,6 +492,14 @@ namespace FBI.MVC.Model
         }
       }
       return l_resultPeriods;
+    }
+
+
+    public static string GetDateAsStringWeekFormat(DateTime p_date)
+    {
+      Int32 l_period = (Int32)p_date.ToOADate();
+      string l_weekString = Local.GetValue("general.week");
+      return l_weekString + PeriodModel.GetWeekNumberFromDateId(l_period) + ", " + DateTime.FromOADate(l_period).Year;
     }
 
     #endregion
