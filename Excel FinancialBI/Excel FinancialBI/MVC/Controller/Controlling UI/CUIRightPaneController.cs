@@ -64,9 +64,14 @@ namespace FBI.MVC.Controller
       return (m_view.GetSort());
     }
 
-    public void Update()
+    public bool Update()
     {
-      m_parentController.Compute();
+      if (m_parentController.Compute() == false)
+      {
+        Error = m_parentController.Error;
+        return (false);
+      }
+      return (true);
     }
 
     #endregion

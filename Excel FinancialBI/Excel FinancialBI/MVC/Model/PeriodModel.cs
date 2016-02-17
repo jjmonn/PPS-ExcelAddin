@@ -39,9 +39,9 @@ namespace FBI.MVC.Model
 
     #endregion
 
-    static public List<UInt32> GetPeriodsList(UInt32 p_versionId)
+    static public List<Int32> GetPeriodsList(UInt32 p_versionId)
     {
-      List<UInt32> l_list = new List<UInt32>();
+      List<Int32> l_list = new List<Int32>();
 
       return l_list;
     }

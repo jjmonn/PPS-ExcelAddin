@@ -26,7 +26,6 @@ namespace FBI.MVC.View
 
     SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView> m_selectionTVList = new SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView>();
     SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>> m_TVFormatData = new SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>>();
-    private PeriodRangeSelectionControl m_periodControl = null;
 
     #endregion
 
@@ -44,11 +43,20 @@ namespace FBI.MVC.View
 
     public void InitView()
     {
+      InitPeriodRangeSelection();
       TreeViewInit();
       ComboBoxInit();
 
       MultilangueSetup();
       HideAllTV();
+    }
+
+    private void MultilangueSetup()
+    {
+      SelectionCB.Text = Local.GetValue("CUI.selection");
+      m_entitySelectionLabel.Text = Local.GetValue("CUI.entities_selection");
+      SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all");
+      UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all");
     }
 
     private void ComboBoxInit()
@@ -84,6 +92,17 @@ namespace FBI.MVC.View
       InitTV(CurrencyModel.Instance, m_selectionTableLayout.Controls, false, Properties.Settings.Default.currentCurrency, false, true);
     }
 
+    private void InitPeriodRangeSelection()
+    {
+      PeriodRangeSelectionControl l_view = m_controller.PeriodController.View as PeriodRangeSelectionControl;
+      m_selectionTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 150));
+      m_selectionTableLayout.RowCount++;
+      m_selectionTableLayout.Controls.Add(l_view, 0, m_selectionTableLayout.RowCount - 1);
+      l_view.Dock = DockStyle.Fill;
+      l_view.BackColor = Color.White;
+      l_view.BorderStyle = BorderStyle.FixedSingle;
+    }
+
     void InitCBListItem<T>(string p_text, AxisType p_axis = (AxisType)0)
       where T : class, NamedCRUDEntity
     {
@@ -107,10 +126,11 @@ namespace FBI.MVC.View
     void InitTVAxisElem<T>(AxedCRUDModel<T> p_model, AxisType p_axis, bool p_hideParentCB = false, UInt32 p_checkedValue = 0)
             where T : class, AxedCRUDEntity, NamedCRUDEntity
     {
-      InitTVAxisElem(p_model, p_axis, m_selectionTableLayout.Controls, p_hideParentCB, p_checkedValue, false, false, true);
+      FbiTreeView<T> l_tv = InitTVAxisElem(p_model, p_axis, null, p_hideParentCB, p_checkedValue, false, false, true);
+      m_selectionTableLayout.Controls.Add(l_tv, 0, 1);
     }
 
-    void InitTVAxisElem<T>(AxedCRUDModel<T> p_model, AxisType p_axis, ControlCollection p_control, bool p_hideParentCB = false, 
+    FbiTreeView<T> InitTVAxisElem<T>(AxedCRUDModel<T> p_model, AxisType p_axis, ControlCollection p_control, bool p_hideParentCB = false, 
       UInt32 p_checkedValue = 0, bool p_visible = true, bool p_load = true, bool p_checkAll = false) 
       where T : class, NamedCRUDEntity, AxedCRUDEntity
     {
@@ -118,6 +138,7 @@ namespace FBI.MVC.View
       Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>(p_axis, typeof(T));
 
       BaseInitTV<T>(l_key, l_tv, p_control, p_visible, p_hideParentCB, p_checkedValue, p_checkAll, p_load);
+      return (l_tv);
     }
 
     void InitTV<T>(NamedCRUDModel<T> p_model, ControlCollection p_control, bool p_hideParentCB,
@@ -134,50 +155,28 @@ namespace FBI.MVC.View
       bool p_hideParentCB, UInt32 p_checkedValue, bool p_checkAll, bool p_load)
     {
       m_selectionTVList[p_key] = p_tv;
-      p_tv.CheckBoxes = true;
       p_tv.TriStateMode = true;
-      p_tv.Dock = DockStyle.Fill;
       p_tv.Visible = p_visible;
       m_TVFormatData[p_key] = new Tuple<bool, bool, uint>(p_hideParentCB, p_checkAll, p_checkedValue);
       if (p_load)
         FormatTV(p_tv, m_TVFormatData[p_key]);
-      p_control.Add(p_tv);
+      if (p_control != null)
+        p_control.Add(p_tv);
     }
 
     void FormatTV(AFbiTreeView p_tv, Tuple<bool, bool, UInt32> p_format)
     {
       if (p_format == null)
         return;
-      if (p_format.Item1 == true) // Hide Parent CB
-        HideParentCheckBox(p_tv);
-      if (p_format.Item2 == true) // Select All CB
-        foreach (vTreeNode l_node in p_tv.Nodes)
-          l_node.Checked = CheckState.Checked;
-      else if (p_format.Item3 != 0)  // Select CB with value
-      {
-        vTreeNode l_node = p_tv.FindNode(p_format.Item3);
-
-        if (l_node != null)
-          l_node.Checked = CheckState.Checked;
-      }
+      if (p_format.Item1 == true)
+        p_tv.HideParentCheckBox();
+      if (p_format.Item2 == true)
+        p_tv.CheckAllParentNodes();
+      else if (p_format.Item3 != 0)
+        p_tv.CheckNode(p_format.Item3);
     }
 
     #endregion
-
-    void HideParentCheckBox(AFbiTreeView p_tv)
-    {
-      foreach (vTreeNode l_node in p_tv.GetNodes())
-        if (l_node.Nodes.Count != 0)
-          l_node.ShowCheckBox = false;
-    }
-
-    private void MultilangueSetup()
-    {
-      SelectionCB.Text = Local.GetValue("CUI.selection");
-      m_entitySelectionLabel.Text = Local.GetValue("CUI.entities_selection");
-      SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all");
-      UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all");
-    }
 
     #endregion
 

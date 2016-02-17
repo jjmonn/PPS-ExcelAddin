@@ -17,6 +17,7 @@ namespace FBI.MVC.Controller
 
     private CUIController m_parentController;
     private CUI2LeftPane m_view;
+    public PeriodRangeSelectionController PeriodController { get; set; }
     public IView View { get { return (m_view); } }
     public string Error { get; set; }
 
@@ -27,6 +28,7 @@ namespace FBI.MVC.Controller
     public CUILeftPaneController(CUIController p_parentController)
     {
       m_parentController = p_parentController;
+      PeriodController = new PeriodRangeSelectionController(Properties.Settings.Default.version_id);
       this.m_view = new CUI2LeftPane();
       this.m_view.SetController(this);
       this.LoadView();
@@ -104,6 +106,16 @@ namespace FBI.MVC.Controller
       if (l_entity != null)
         return (l_entity.Id);
       return (0);
+    }
+
+    public Int32 GetStartPeriod()
+    {
+      return ((Int32)PeriodController.GetStartDate().ToOADate());
+    }
+
+    public Int32 GetNbPeriod()
+    {
+      return (PeriodController.GetNbPeriods());
     }
 
     #endregion

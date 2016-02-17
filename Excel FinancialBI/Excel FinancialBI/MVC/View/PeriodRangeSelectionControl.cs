@@ -18,15 +18,20 @@ namespace FBI.MVC.View
   public partial class PeriodRangeSelectionControl : UserControl, IView
   {
     PeriodRangeSelectionController m_controller;
+    UInt32 m_versionId;
 
     public PeriodRangeSelectionControl(UInt32 p_versionId)
     {
       InitializeComponent();
-      m_controller = new PeriodRangeSelectionController(p_versionId);
+      m_versionId = p_versionId;
+    }
+
+    public void LoadView()
+    {
       MultilangueSetup();
       m_startDate.FormatValue = "MM-dd-yy";
       m_endDate.FormatValue = "MM-dd-yy";
-      PeriodsRangeSetup(p_versionId);
+      PeriodsRangeSetup(m_versionId);
       m_startDate.ValueChanged += Date_ValueChanged;
       m_endDate.ValueChanged += Date_ValueChanged;
     }
@@ -39,7 +44,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-
+      m_controller = p_controller as PeriodRangeSelectionController;
     }
 
     private void Date_ValueChanged(object sender, EventArgs e)
@@ -53,7 +58,7 @@ namespace FBI.MVC.View
       m_endWeekTB.Text = PeriodModel.GetDateAsStringWeekFormat(m_endDate.DateTimeEditor.Value.Value);
     }
 
-    private void PeriodsRangeSetup(UInt32 p_versionId)
+    public void PeriodsRangeSetup(UInt32 p_versionId)
     {
       m_startDate.MinDate = m_controller.GetMinDate();
       m_startDate.MaxDate = m_controller.GetMaxDate();
@@ -72,7 +77,7 @@ namespace FBI.MVC.View
       FillWeeksTextbox();
     }
 
-    public List<UInt32> GetPeriodList()
+    public List<Int32> GetPeriodList()
     {
       return m_controller.GetPeriodRange(m_startDate.DateTimeEditor.Value.Value, m_endDate.DateTimeEditor.Value.Value);
     }

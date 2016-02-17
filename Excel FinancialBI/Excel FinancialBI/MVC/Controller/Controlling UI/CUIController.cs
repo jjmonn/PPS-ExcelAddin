@@ -11,6 +11,7 @@ namespace FBI.MVC.Controller
   using Model;
   using Network;
   using Properties;
+  using Utils;
 
   class CUIController : IController
   {
@@ -54,14 +55,20 @@ namespace FBI.MVC.Controller
 
     #endregion
 
-    public void Compute()
+    public bool Compute()
     {
+      if (LeftPaneController.GetVersions() == null)
+      {
+        Error = Local.GetValue("CUI.error.no_version_selected");
+        return (false);
+      }
+
       ComputeConfig l_config = new ComputeConfig();
       ComputeRequest l_request = new ComputeRequest();
-      Version l_version = VersionModel.Instance.GetValue(12);
+      Version l_version = VersionModel.Instance.GetValue(LeftPaneController.GetVersions()[0]);
 
-      l_request.StartPeriod = (Int32)l_version.StartPeriod;
-      l_request.NbPeriods = 61;//(Int32)l_version.NbPeriod;
+      l_request.StartPeriod = LeftPaneController.GetStartPeriod();
+      l_request.NbPeriods = LeftPaneController.GetNbPeriod();
       l_request.Versions = LeftPaneController.GetVersions();
       l_request.CurrencyId = LeftPaneController.GetCurrency();
       l_request.SortList = RightPaneController.GetSort();
@@ -77,8 +84,84 @@ namespace FBI.MVC.Controller
       l_config.Columns = RightPaneController.GetColumns();
       l_config.Request = l_request;
 
+      if (CheckConfig(l_config) == false)
+        return (false);
       ComputeModel.Instance.Compute(l_request);
       ResultController.LoadDGV(l_config);
+      return (true);
+    }
+
+
+    bool CheckRequest(ComputeRequest p_request)
+    {
+      if (p_request.NbPeriods <= 1)
+      {
+        Error = Local.GetValue("CUI.error.period_range");
+        return (false);
+      }
+      return (true);
+    }
+
+    bool CheckModelType(CUIDimensionConf p_conf, Type p_type)
+    {
+      if (p_conf.ModelType == p_type)
+        return (true);
+      if (p_conf.Child != null)
+        return (CheckModelType(p_conf.Child, p_type));
+      return (false);
+    }
+
+    bool CheckValidVersion(ComputeConfig p_config)
+    {
+      if (p_config.Request.Versions.Count > 1 && 
+        !CheckModelType(p_config.Columns, typeof(VersionModel)) &&
+        !CheckModelType(p_config.Rows, typeof(VersionModel)))
+      {
+        Error = Local.GetValue("CUI.error.multiversion_no_sort");
+        return (false);
+      }
+      foreach (UInt32 l_versionId in p_config.Request.Versions)
+      {
+        Version l_version = VersionModel.Instance.GetValue(l_versionId);
+
+        if (l_version == null)
+        {
+          Error = Local.GetValue("CUI.error.unknown_version");
+          return (false);
+        }
+        switch (p_config.Request.Process)
+        {
+          case Account.AccountProcess.FINANCIAL:
+            if (l_version.TimeConfiguration == TimeConfig.DAYS || l_version.TimeConfiguration == TimeConfig.WEEK)
+            {
+              Error = Local.GetValue("CUI.error.version_process_invalid");
+              return (false);
+            }
+            break;
+          case Account.AccountProcess.RH:
+            if (l_version.TimeConfiguration == TimeConfig.MONTHS || l_version.TimeConfiguration == TimeConfig.YEARS)
+            {
+              Error = Local.GetValue("CUI.error.version_process_invalid");
+              return (false);
+            }
+            break;
+        }
+      }
+      return (true);
+    }
+
+    bool CheckConfig(ComputeConfig p_config)
+    {
+      if (CheckRequest(p_config.Request) == false)
+        return (false);
+      if (CheckValidVersion(p_config) == false)
+        return (false);
+      if (!CheckModelType(p_config.Rows, typeof(PeriodModel)) && !CheckModelType(p_config.Columns, typeof(PeriodModel)))
+      {
+        Error = Local.GetValue("CUI.error.no_period_sort");
+        return (false);
+      }
+      return (true);
     }
   }
 }

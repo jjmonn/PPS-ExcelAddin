@@ -37,7 +37,7 @@ namespace FBI.MVC.Model
     public Dimension<CRUDEntity> m_employees { get; set; }
     public Dimension<CRUDEntity> m_periods { get; set; }
 
-    public Dimensions(UInt32 p_versionId, List<UInt32> p_periodsList = null)
+    public Dimensions(UInt32 p_versionId, List<Int32> p_periodsList = null)
     {
       m_accounts = new Dimension<CRUDEntity>(DimensionType.ACCOUNT);
       m_entities = new Dimension<CRUDEntity>(DimensionType.ENTITY);

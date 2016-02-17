@@ -42,8 +42,34 @@ namespace FBI.Forms
       p_treeview.PaintNodesDefaultFill = false;
       p_treeview.UseThemeBackColor = false;
       p_treeview.BackColor = Color.White;
+      p_treeview.Dock = DockStyle.Fill;
     }
 
+    public void HideParentCheckBox()
+    {
+      foreach (vTreeNode l_node in GetNodes())
+        if (l_node.Nodes.Count != 0)
+          l_node.ShowCheckBox = false;
+    }
+
+    public void CheckNode(UInt32 p_id)
+    {
+      CheckNode(this, p_id);
+    }
+
+    public void CheckAllParentNodes()
+    {
+      foreach (vTreeNode l_node in Nodes)
+        l_node.Checked = CheckState.Checked;
+    }
+
+    public static void CheckNode(AFbiTreeView p_tv, UInt32 p_id)
+    {
+      vTreeNode l_node = p_tv.FindNode(p_id);
+
+      if (l_node != null)
+        l_node.Checked = CheckState.Checked;
+    }
 
     public vTreeNode FindAtPosition(Point p_position)
     {

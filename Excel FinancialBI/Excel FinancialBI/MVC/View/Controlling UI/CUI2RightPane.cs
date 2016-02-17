@@ -141,7 +141,8 @@ namespace FBI.MVC.View
 
     void OnUpdateClick(object p_sender, MouseEventArgs p_e)
     {
-      m_controller.Update();
+      if (m_controller.Update() == false)
+        MessageBox.Show(m_controller.Error);
     }
 
     void OnDisplayListKeyDown(object p_sender, KeyEventArgs p_args)
