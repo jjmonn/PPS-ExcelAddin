@@ -62,14 +62,15 @@ namespace FBI.MVC.Controller
 
       l_request.StartPeriod = (Int32)l_version.StartPeriod;
       l_request.NbPeriods = 61;//(Int32)l_version.NbPeriod;
-      l_request.Versions.Add(l_version.Id);
-      //l_request.Versions.Add(11);
-      l_request.CurrencyId = Convert.ToUInt32(Settings.Default.currentCurrency);
+      l_request.Versions = LeftPaneController.GetVersions();
+      l_request.CurrencyId = LeftPaneController.GetCurrency();
       l_request.SortList = RightPaneController.GetSort();
-      l_request.EntityId = 1;
+      l_request.FilterList = LeftPaneController.GetFilters();
+      l_request.AxisElemList = LeftPaneController.GetAxisElems();
+      l_request.EntityId = LeftPaneController.GetEntity();
       l_request.GlobalFactVersionId = l_version.GlobalFactVersionId;
       l_request.RateVersionId = l_version.RateVersionId;
-      l_request.Process = Account.AccountProcess.RH;
+      l_request.Process = (Account.AccountProcess)Settings.Default.processId;
       l_request.AxisHierarchy = true;
 
       l_config.Rows = RightPaneController.GetRows();

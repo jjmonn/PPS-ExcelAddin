@@ -25,7 +25,7 @@ namespace FBI.MVC.View
     private CUILeftPaneController m_controller = null;
 
     SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView> m_selectionTVList = new SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView>();
-    SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, UInt32>> m_TVFormatData = new SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, UInt32>>();
+    SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>> m_TVFormatData = new SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>>();
     private PeriodRangeSelectionControl m_periodControl = null;
 
     #endregion
@@ -70,18 +70,18 @@ namespace FBI.MVC.View
 
     private void TreeViewInit()
     {
-      InitTV(AxisElemModel.Instance, AxisType.Entities, SplitContainer.Panel1.Controls);
-      InitTV(FilterModel.Instance, AxisType.Entities);
-      InitTV(AxisElemModel.Instance, AxisType.Client);
-      InitTV(FilterModel.Instance, AxisType.Client);
-      InitTV(AxisElemModel.Instance, AxisType.Product);
-      InitTV(FilterModel.Instance, AxisType.Product);
-      InitTV(AxisElemModel.Instance, AxisType.Employee);
-      InitTV(FilterModel.Instance, AxisType.Employee);
-      InitTV(AxisElemModel.Instance, AxisType.Adjustment);
-      InitTV(FilterModel.Instance, AxisType.Adjustment);
-      InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id);
-      InitTV(CurrencyModel.Instance, m_selectionTableLayout.Controls, false, Properties.Settings.Default.currentCurrency);
+      InitTVAxisElem(AxisElemModel.Instance, AxisType.Entities, SplitContainer.Panel1.Controls, false, 0, true, true, true);
+      InitFilterTV(AxisType.Entities);
+      InitTVAxisElem(AxisElemModel.Instance, AxisType.Client);
+      InitFilterTV(AxisType.Client);
+      InitTVAxisElem(AxisElemModel.Instance, AxisType.Product);
+      InitFilterTV(AxisType.Product);
+      InitTVAxisElem(AxisElemModel.Instance, AxisType.Employee);
+      InitFilterTV(AxisType.Employee);
+      InitTVAxisElem(AxisElemModel.Instance, AxisType.Adjustment);
+      InitFilterTV(AxisType.Adjustment);
+      InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, false, true);
+      InitTV(CurrencyModel.Instance, m_selectionTableLayout.Controls, false, Properties.Settings.Default.currentCurrency, false, true);
     }
 
     void InitCBListItem<T>(string p_text, AxisType p_axis = (AxisType)0)
@@ -95,20 +95,29 @@ namespace FBI.MVC.View
 
     #region Initialize TV
 
-    void InitTV<T>(AxedCRUDModel<T> p_model, AxisType p_axis, bool p_hideParentCB = false, UInt32 p_checkedValue = 0)
-            where T : class, AxedCRUDEntity, NamedCRUDEntity
+    void InitFilterTV(AxisType p_axis)
     {
-      InitTV(p_model, p_axis, m_selectionTableLayout.Controls, p_hideParentCB, p_checkedValue, false, false);
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>(p_axis, typeof(Filter));
+      m_selectionTVList[l_key] = new FbiFilterHierarchyTreeView(p_axis);
+      BaseInitTV<Filter>(l_key, m_selectionTVList[l_key], m_selectionTableLayout.Controls, false, false, 0, true, true);
+      foreach (vTreeNode l_node in m_selectionTVList[l_key].Nodes)
+        l_node.ShowCheckBox = false;
     }
 
-    void InitTV<T>(AxedCRUDModel<T> p_model, AxisType p_axis, ControlCollection p_control, bool p_hideParentCB = false, 
-      UInt32 p_checkedValue = 0, bool p_visible = true, bool p_load = true) 
+    void InitTVAxisElem<T>(AxedCRUDModel<T> p_model, AxisType p_axis, bool p_hideParentCB = false, UInt32 p_checkedValue = 0)
+            where T : class, AxedCRUDEntity, NamedCRUDEntity
+    {
+      InitTVAxisElem(p_model, p_axis, m_selectionTableLayout.Controls, p_hideParentCB, p_checkedValue, false, false, true);
+    }
+
+    void InitTVAxisElem<T>(AxedCRUDModel<T> p_model, AxisType p_axis, ControlCollection p_control, bool p_hideParentCB = false, 
+      UInt32 p_checkedValue = 0, bool p_visible = true, bool p_load = true, bool p_checkAll = false) 
       where T : class, NamedCRUDEntity, AxedCRUDEntity
     {
       FbiTreeView<T> l_tv = new FbiTreeView<T>(p_model.GetDictionary(p_axis), null, false, p_load);
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>(p_axis, typeof(T));
 
-      m_selectionTVList[new Tuple<AxisType, Type>(p_axis, typeof(T))] = l_tv;
-      BaseInitTV<T>(l_tv, p_control, p_visible, p_hideParentCB, p_checkedValue);
+      BaseInitTV<T>(l_key, l_tv, p_control, p_visible, p_hideParentCB, p_checkedValue, p_checkAll, p_load);
     }
 
     void InitTV<T>(NamedCRUDModel<T> p_model, ControlCollection p_control, bool p_hideParentCB,
@@ -116,33 +125,37 @@ namespace FBI.MVC.View
       where T : class, NamedCRUDEntity
     {
       FbiTreeView<T> l_tv = new FbiTreeView<T>(p_model.GetDictionary(), null, false, p_load);
-
-      BaseInitTV<T>(l_tv, p_control, p_visible, p_hideParentCB, p_checkedValue);
-    }
-
-    void BaseInitTV<T>(AFbiTreeView p_tv, ControlCollection p_control, bool p_visible, bool p_hideParentCB, UInt32 p_checkedValue)
-    {
       Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(T));
 
-      m_selectionTVList[l_key] = p_tv;
+      BaseInitTV<T>(l_key, l_tv, p_control, p_visible, p_hideParentCB, p_checkedValue, false, p_load);
+    }
+
+    void BaseInitTV<T>(Tuple<AxisType, Type> p_key, AFbiTreeView p_tv, ControlCollection p_control, bool p_visible, 
+      bool p_hideParentCB, UInt32 p_checkedValue, bool p_checkAll, bool p_load)
+    {
+      m_selectionTVList[p_key] = p_tv;
       p_tv.CheckBoxes = true;
       p_tv.TriStateMode = true;
       p_tv.Dock = DockStyle.Fill;
       p_tv.Visible = p_visible;
-      m_TVFormatData[l_key] = new Tuple<bool, uint>(p_hideParentCB, p_checkedValue);
-
+      m_TVFormatData[p_key] = new Tuple<bool, bool, uint>(p_hideParentCB, p_checkAll, p_checkedValue);
+      if (p_load)
+        FormatTV(p_tv, m_TVFormatData[p_key]);
       p_control.Add(p_tv);
     }
 
-    void FormatTV(AFbiTreeView p_tv, Tuple<bool, UInt32> p_format)
+    void FormatTV(AFbiTreeView p_tv, Tuple<bool, bool, UInt32> p_format)
     {
       if (p_format == null)
         return;
-      if (p_format.Item1 == true)
+      if (p_format.Item1 == true) // Hide Parent CB
         HideParentCheckBox(p_tv);
-      if (p_format.Item2 != 0)
+      if (p_format.Item2 == true) // Select All CB
+        foreach (vTreeNode l_node in p_tv.Nodes)
+          l_node.Checked = CheckState.Checked;
+      else if (p_format.Item3 != 0)  // Select CB with value
       {
-        vTreeNode l_node = p_tv.FindNode(p_format.Item2);
+        vTreeNode l_node = p_tv.FindNode(p_format.Item3);
 
         if (l_node != null)
           l_node.Checked = CheckState.Checked;
@@ -193,15 +206,36 @@ namespace FBI.MVC.View
       }
     }
 
-    List<Tuple<Type, UInt32>> GetCheckedElements()
+    public SafeDictionary<Type, List<UInt32>> GetCheckedElements()
     {
-      List<Tuple<Type, UInt32>> l_checkedElements = new List<Tuple<Type, UInt32>>();
+      SafeDictionary<Type, List<UInt32>> l_checkedElements = new SafeDictionary<Type, List<uint>>();
 
       foreach (KeyValuePair<Tuple<AxisType, Type>, AFbiTreeView> l_tv in m_selectionTVList)
+      {
+        bool l_allChecked = true;
+
+        foreach (vTreeNode l_topNode in l_tv.Value.Nodes)
+          if (l_topNode.Checked != CheckState.Checked)
+            l_allChecked = false;
+        if (l_allChecked) // Do not add values when all elements are selected
+          continue;
+
         foreach (vTreeNode l_node in l_tv.Value.GetNodes())
           if (l_node.Checked == CheckState.Checked)
-            l_checkedElements.Add(new Tuple<Type, UInt32>(l_tv.Key.Item2, (UInt32)l_node.Value));
+          {
+            if (l_checkedElements[l_tv.Key.Item2] == null)
+              l_checkedElements[l_tv.Key.Item2] = new List<uint>();
+            l_checkedElements[l_tv.Key.Item2].Add((UInt32)l_node.Value);
+          }
+      }
       return (l_checkedElements);
+    }
+
+    public UInt32 GetSelectedEntity()
+    {
+      if (m_selectionTVList[new Tuple<AxisType, Type>(AxisType.Entities, typeof(AxisElem))].SelectedNode != null)
+        return ((UInt32)m_selectionTVList[new Tuple<AxisType, Type>(AxisType.Entities, typeof(AxisElem))].SelectedNode.Value);
+      return (0);
     }
 
     #endregion

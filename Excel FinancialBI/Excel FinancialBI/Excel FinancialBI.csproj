@@ -352,6 +352,7 @@
     <Compile Include="MVC\Model\GroupModel.cs" />
     <Compile Include="MVC\Model\PeriodModel.cs" />
     <Compile Include="MVC\Model\RatesVersionModel.cs" />
+    <Compile Include="MVC\Model\CRUD\ResultKey.cs" />
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />

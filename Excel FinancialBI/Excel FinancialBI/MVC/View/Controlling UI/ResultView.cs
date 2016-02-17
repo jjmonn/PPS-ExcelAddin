@@ -159,9 +159,18 @@ namespace FBI.MVC.View
     {
       AxisElemConf l_conf = p_conf as AxisElemConf;
 
-      List<AxisElem> l_axislist = AxisElemModel.Instance.GetChildren(l_conf.AxisTypeId, l_conf.ParentId);
-      foreach (AxisElem l_elem in l_axislist)
+      List<AxisElem> l_axisList = new List<AxisElem>();
+
+      if (l_conf.ParentId == 0 && l_conf.AxisTypeId == AxisType.Entities)
+        l_axisList.Add(AxisElemModel.Instance.GetValue(m_computeConfig.Request.EntityId));
+      else
+        l_axisList = AxisElemModel.Instance.GetChildren(l_conf.AxisTypeId, l_conf.ParentId);
+
+      foreach (AxisElem l_elem in l_axisList)
       {
+        if (l_elem == null)
+          continue;
+
         ResultKey l_key;
         
         if (l_conf.AxisTypeId == AxisType.Entities)
