@@ -72,7 +72,7 @@ namespace FBI.MVC.View
       FillWeeksTextbox();
     }
 
-    public List<UInt32> GetPeriodList()
+    public List<Int32> GetPeriodList()
     {
       return m_controller.GetPeriodRange(m_startDate.DateTimeEditor.Value.Value, m_endDate.DateTimeEditor.Value.Value);
     }

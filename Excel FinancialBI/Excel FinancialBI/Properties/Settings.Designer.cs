@@ -86,9 +86,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public string titleFontColor {
+        public global::System.Drawing.Color titleFontColor {
             get {
-                return ((string)(this["titleFontColor"]));
+                return ((global::System.Drawing.Color)(this["titleFontColor"]));
             }
             set {
                 this["titleFontColor"] = value;
@@ -98,9 +98,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DarkSlateBlue")]
-        public string titleBackColor {
+        public global::System.Drawing.Color titleBackColor {
             get {
-                return ((string)(this["titleBackColor"]));
+                return ((global::System.Drawing.Color)(this["titleBackColor"]));
             }
             set {
                 this["titleBackColor"] = value;
@@ -110,9 +110,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string titleFontBold {
+        public bool titleFontBold {
             get {
-                return ((string)(this["titleFontBold"]));
+                return ((bool)(this["titleFontBold"]));
             }
             set {
                 this["titleFontBold"] = value;
@@ -122,9 +122,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string titleFontItalic {
+        public bool titleFontItalic {
             get {
-                return ((string)(this["titleFontItalic"]));
+                return ((bool)(this["titleFontItalic"]));
             }
             set {
                 this["titleFontItalic"] = value;
@@ -134,9 +134,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string titleBordersPresent {
+        public bool titleBordersPresent {
             get {
-                return ((string)(this["titleBordersPresent"]));
+                return ((bool)(this["titleBordersPresent"]));
             }
             set {
                 this["titleBordersPresent"] = value;
@@ -146,9 +146,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string titleIndent {
+        public uint titleIndent {
             get {
-                return ((string)(this["titleIndent"]));
+                return ((uint)(this["titleIndent"]));
             }
             set {
                 this["titleIndent"] = value;
@@ -158,9 +158,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public string importantFontColor {
+        public global::System.Drawing.Color importantFontColor {
             get {
-                return ((string)(this["importantFontColor"]));
+                return ((global::System.Drawing.Color)(this["importantFontColor"]));
             }
             set {
                 this["importantFontColor"] = value;
@@ -170,9 +170,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public string importantBackColor {
+        public global::System.Drawing.Color importantBackColor {
             get {
-                return ((string)(this["importantBackColor"]));
+                return ((global::System.Drawing.Color)(this["importantBackColor"]));
             }
             set {
                 this["importantBackColor"] = value;
@@ -182,9 +182,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string importantFontBold {
+        public bool importantFontBold {
             get {
-                return ((string)(this["importantFontBold"]));
+                return ((bool)(this["importantFontBold"]));
             }
             set {
                 this["importantFontBold"] = value;
@@ -194,9 +194,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string importantFontItalic {
+        public bool importantFontItalic {
             get {
-                return ((string)(this["importantFontItalic"]));
+                return ((bool)(this["importantFontItalic"]));
             }
             set {
                 this["importantFontItalic"] = value;
@@ -206,9 +206,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string importantBordersPresent {
+        public bool importantBordersPresent {
             get {
-                return ((string)(this["importantBordersPresent"]));
+                return ((bool)(this["importantBordersPresent"]));
             }
             set {
                 this["importantBordersPresent"] = value;
@@ -218,9 +218,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public string importantBordersColor {
+        public global::System.Drawing.Color importantBordersColor {
             get {
-                return ((string)(this["importantBordersColor"]));
+                return ((global::System.Drawing.Color)(this["importantBordersColor"]));
             }
             set {
                 this["importantBordersColor"] = value;
@@ -230,9 +230,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public string normalFontColor {
+        public global::System.Drawing.Color normalFontColor {
             get {
-                return ((string)(this["normalFontColor"]));
+                return ((global::System.Drawing.Color)(this["normalFontColor"]));
             }
             set {
                 this["normalFontColor"] = value;
@@ -242,9 +242,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public string normalBackColor {
+        public global::System.Drawing.Color normalBackColor {
             get {
-                return ((string)(this["normalBackColor"]));
+                return ((global::System.Drawing.Color)(this["normalBackColor"]));
             }
             set {
                 this["normalBackColor"] = value;
@@ -254,9 +254,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string normalFontBold {
+        public bool normalFontBold {
             get {
-                return ((string)(this["normalFontBold"]));
+                return ((bool)(this["normalFontBold"]));
             }
             set {
                 this["normalFontBold"] = value;
@@ -266,9 +266,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string normalFontItalic {
+        public bool normalFontItalic {
             get {
-                return ((string)(this["normalFontItalic"]));
+                return ((bool)(this["normalFontItalic"]));
             }
             set {
                 this["normalFontItalic"] = value;
@@ -278,9 +278,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string normalBordersPresent {
+        public bool normalBordersPresent {
             get {
-                return ((string)(this["normalBordersPresent"]));
+                return ((bool)(this["normalBordersPresent"]));
             }
             set {
                 this["normalBordersPresent"] = value;
@@ -290,9 +290,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public string normalIndent {
+        public uint normalIndent {
             get {
-                return ((string)(this["normalIndent"]));
+                return ((uint)(this["normalIndent"]));
             }
             set {
                 this["normalIndent"] = value;
@@ -302,9 +302,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public string normalBordersColor {
+        public global::System.Drawing.Color normalBordersColor {
             get {
-                return ((string)(this["normalBordersColor"]));
+                return ((global::System.Drawing.Color)(this["normalBordersColor"]));
             }
             set {
                 this["normalBordersColor"] = value;
@@ -314,9 +314,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string detailFontBold {
+        public bool detailFontBold {
             get {
-                return ((string)(this["detailFontBold"]));
+                return ((bool)(this["detailFontBold"]));
             }
             set {
                 this["detailFontBold"] = value;
@@ -326,9 +326,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public string detailFontItalic {
+        public bool detailFontItalic {
             get {
-                return ((string)(this["detailFontItalic"]));
+                return ((bool)(this["detailFontItalic"]));
             }
             set {
                 this["detailFontItalic"] = value;
@@ -337,10 +337,10 @@ namespace FBI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string detailBordersPresent {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool detailBordersPresent {
             get {
-                return ((string)(this["detailBordersPresent"]));
+                return ((bool)(this["detailBordersPresent"]));
             }
             set {
                 this["detailBordersPresent"] = value;
@@ -350,9 +350,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public string detailIndent {
+        public uint detailIndent {
             get {
-                return ((string)(this["detailIndent"]));
+                return ((uint)(this["detailIndent"]));
             }
             set {
                 this["detailIndent"] = value;
@@ -362,9 +362,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public string detailBordersColor {
+        public global::System.Drawing.Color detailBordersColor {
             get {
-                return ((string)(this["detailBordersColor"]));
+                return ((global::System.Drawing.Color)(this["detailBordersColor"]));
             }
             set {
                 this["detailBordersColor"] = value;
@@ -374,9 +374,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public string importantIndent {
+        public uint importantIndent {
             get {
-                return ((string)(this["importantIndent"]));
+                return ((uint)(this["importantIndent"]));
             }
             set {
                 this["importantIndent"] = value;
@@ -386,9 +386,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DodgerBlue")]
-        public string detailFontColor {
+        public global::System.Drawing.Color detailFontColor {
             get {
-                return ((string)(this["detailFontColor"]));
+                return ((global::System.Drawing.Color)(this["detailFontColor"]));
             }
             set {
                 this["detailFontColor"] = value;
@@ -398,9 +398,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("192, 255, 255")]
-        public string detailBackColor {
+        public global::System.Drawing.Color detailBackColor {
             get {
-                return ((string)(this["detailBackColor"]));
+                return ((global::System.Drawing.Color)(this["detailBackColor"]));
             }
             set {
                 this["detailBackColor"] = value;
@@ -410,9 +410,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("PowderBlue")]
-        public string snapshotInputsBackColor {
+        public global::System.Drawing.Color snapshotInputsBackColor {
             get {
-                return ((string)(this["snapshotInputsBackColor"]));
+                return ((global::System.Drawing.Color)(this["snapshotInputsBackColor"]));
             }
             set {
                 this["snapshotInputsBackColor"] = value;
@@ -422,9 +422,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Navy")]
-        public string snapshotInputsTextColor {
+        public global::System.Drawing.Color snapshotInputsTextColor {
             get {
-                return ((string)(this["snapshotInputsTextColor"]));
+                return ((global::System.Drawing.Color)(this["snapshotInputsTextColor"]));
             }
             set {
                 this["snapshotInputsTextColor"] = value;
@@ -434,9 +434,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public string snapshotOutputsBackColor {
+        public global::System.Drawing.Color snapshotOutputsBackColor {
             get {
-                return ((string)(this["snapshotOutputsBackColor"]));
+                return ((global::System.Drawing.Color)(this["snapshotOutputsBackColor"]));
             }
             set {
                 this["snapshotOutputsBackColor"] = value;
@@ -446,9 +446,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public string snapshotOutputsTextColor {
+        public global::System.Drawing.Color snapshotOutputsTextColor {
             get {
-                return ((string)(this["snapshotOutputsTextColor"]));
+                return ((global::System.Drawing.Color)(this["snapshotOutputsTextColor"]));
             }
             set {
                 this["snapshotOutputsTextColor"] = value;
@@ -458,9 +458,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("34")]
-        public string currentCurrency {
+        public uint currentCurrency {
             get {
-                return ((string)(this["currentCurrency"]));
+                return ((uint)(this["currentCurrency"]));
             }
             set {
                 this["currentCurrency"] = value;
@@ -830,9 +830,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public string titleBordersColor {
+        public global::System.Drawing.Color titleBordersColor {
             get {
-                return ((string)(this["titleBordersColor"]));
+                return ((global::System.Drawing.Color)(this["titleBordersColor"]));
             }
             set {
                 this["titleBordersColor"] = value;

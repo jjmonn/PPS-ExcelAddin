@@ -1,6 +1,6 @@
 namespace FBI.MVC.View
 {
-    partial class ReportUploadEntitySelectionSidePane
+    public partial class ReportUploadEntitySelectionSidePane
     {
         /// <summary>
         /// Required designer variable.

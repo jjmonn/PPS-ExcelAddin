@@ -81,10 +81,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != ErrorMessage.SUCCESS)
-        {
           IsLoading = false;
-          FBI.AddinModule.CurrentInstance.SetConnectionIcon(false);
-        }
       }
     }
 
@@ -98,7 +95,6 @@ namespace FBI.MVC.View
       }
       else
       {
-        FBI.AddinModule.CurrentInstance.SetConnectionIcon(true);
         IsLoading = false;
         Hide(); 
       }
@@ -117,7 +113,6 @@ namespace FBI.MVC.View
         if (p_connected == false)
         {
           IsLoading = false;
-          FBI.AddinModule.CurrentInstance.SetConnectionIcon(false);
         }
       }
     }

@@ -79,14 +79,14 @@ namespace FBI.MVC.Model
     }
 
 
-    public void DownloadFacts(Version p_version, List<UInt32> p_periodsList)
+    public void DownloadFacts(Version p_version, List<Int32> p_periodsList)
     {
       // TO DO : Log and Check Download time
       AxisElem l_entity = m_dimensions.m_entities.UniqueValue as AxisElem;
       List<Account> l_accountsList = GetAccountsList(m_dimensions.m_accounts);
       List<AxisElem> l_employeesList = GetEmployeesList(m_dimensions.m_employees);
-      UInt32 l_startPeriod = p_periodsList.ElementAt(0);
-      UInt32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count);
+      Int32 l_startPeriod = p_periodsList.ElementAt(0);
+      Int32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count);
 
       FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
       m_requestIdList.Clear();
@@ -94,7 +94,7 @@ namespace FBI.MVC.Model
       {
         foreach (AxisElem l_employee in l_employeesList)
         {
-          m_requestIdList.Add(FactsModel.Instance.GetFact(l_account.Id, l_entity.Id, l_employee.Id, p_version.Id, l_startPeriod, l_endPeriod));
+            m_requestIdList.Add(FactsModel.Instance.GetFact(l_account.Id, l_entity.Id, l_employee.Id, p_version.Id, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
         }
       }
     }

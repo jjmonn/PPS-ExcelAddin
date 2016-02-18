@@ -35,7 +35,7 @@ namespace FBI.MVC.Model
       InitCallbacks();
     }
 
-    public Int32[] GetMonthsList(UInt32 versionId)
+    public List<Int32> GetMonthsList(UInt32 versionId)
     {
       ExchangeRateVersion l_version = GetValue(versionId);
       if (l_version == null)

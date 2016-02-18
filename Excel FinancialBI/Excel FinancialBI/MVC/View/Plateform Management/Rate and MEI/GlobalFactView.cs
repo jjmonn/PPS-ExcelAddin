@@ -62,7 +62,7 @@ namespace FBI.MVC.View
 
     #region Initialize
 
-    void InitPeriods(Int32[] p_monthList)
+    void InitPeriods(List<Int32> p_monthList)
     {
       m_dgv.ClearRows();
       foreach (Int32 l_monthId in p_monthList)
@@ -76,7 +76,7 @@ namespace FBI.MVC.View
         m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, l_gfact.Id, l_gfact.Name);
     }
 
-    void InitGlobalFactData(UInt32 p_versionId, Int32[] p_monthList, List<GlobalFact> p_gfactList)
+    void InitGlobalFactData(UInt32 p_versionId, List<Int32> p_monthList, List<GlobalFact> p_gfactList)
     {
       TextBoxEditor l_tbEditor = null;
 
@@ -93,7 +93,7 @@ namespace FBI.MVC.View
 
     protected override void DisplayVersion(UInt32 p_versionId)
     {
-      Int32[] l_monthList = GlobalFactVersionModel.Instance.GetMonthsList(p_versionId);
+      List<Int32> l_monthList = GlobalFactVersionModel.Instance.GetMonthsList(p_versionId);
       List<GlobalFact> l_gfactList = GlobalFactModel.Instance.GetDictionary().SortedValues;
 
       if (l_monthList == null)

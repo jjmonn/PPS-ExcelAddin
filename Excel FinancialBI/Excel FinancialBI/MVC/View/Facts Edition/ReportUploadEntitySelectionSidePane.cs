@@ -13,13 +13,13 @@ namespace FBI.MVC.View
   using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
   using VIBlend.WinForms.Controls;
-        using FBI.MVC.Controller;
+  using FBI.MVC.Controller;
 
   public partial class ReportUploadEntitySelectionSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
     public bool m_shown { set; get; }
     FbiTreeView<AxisElem> m_entitiesTreeview;
-    FactsEditionController m_factsEditionController;
+//    ReportBuilder m_controller;
     Account.AccountProcess m_process;
     PeriodRangeSelectionControl m_periodRangeSelectionControl;
 
@@ -30,7 +30,7 @@ namespace FBI.MVC.View
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReportUploadEntitySelectionSidePane_FormClosing);
       MultilangueSetup();
     }
-
+  
     public void InitView(Account.AccountProcess p_process)
     {
       m_shown = true;
@@ -49,7 +49,7 @@ namespace FBI.MVC.View
       m_validateButton.Text = Local.GetValue("general.validate");
     }
 
-     private void InitCommonProcessComponents()
+    private void InitCommonProcessComponents()
     {
       m_treeviewPanel.Controls.Clear();
       m_entitiesTreeview = new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Entities));
@@ -61,7 +61,7 @@ namespace FBI.MVC.View
       m_periodsSelectionPanel.Controls.Clear();
     }
 
-     private void SetRHComponentVisible(bool p_visible)
+    private void SetRHComponentVisible(bool p_visible)
      {
        this.m_accountSelectionLabel.Visible = p_visible;
        this.m_accountSelectionComboBox.Visible = p_visible;
@@ -100,33 +100,20 @@ namespace FBI.MVC.View
 
     private void EntitiesTreeviewKeyPress(object sender, KeyPressEventArgs e)
     {
-      // TO DO : key = enter   
-      var test = e.KeyChar;  
-      vTreeNode l_node = m_entitiesTreeview.SelectedNode;
-      if (l_node != null)
+      if (e.KeyChar == (char)Keys.Return)
       {
-
-        // TO DO : facts controller créé avant ?
-        // ne lances pas le report upload 
-
-        if (m_factsEditionController.IsInputEntity((UInt32)m_entitiesTreeview.SelectedNode.Value) == false)
-          return;
-
-        if (m_process == Account.AccountProcess.FINANCIAL)
-          m_factsEditionController = new FactsEditionController(m_process);
-        else
+        ReportBuilder l_reportBuilder = new ReportBuilder(FBI.Properties.Settings.Default.version_id);
+        bool l_inputsValids = l_reportBuilder.CanLaunchReport(m_entitiesTreeview.SelectedNode, m_process, m_accountSelectionComboBox.SelectedItem, m_periodRangeSelectionControl.GetPeriodList());
+        if (l_inputsValids)
         {
-          List<UInt32> l_periodsList =  m_periodRangeSelectionControl.GetPeriodList();
-          if (m_factsEditionController.AreRHInputsValid(m_accountSelectionComboBox.SelectedItem, l_periodsList) == false)
-          {
-            MessageBox.Show(m_factsEditionController.m_errorMessage);
+          bool l_reportResult = l_reportBuilder.CreateReport();
+          if (l_reportResult)
+
+            // TO DO : launch snapshot
+            //.Addin.AssociateReportUploadControler(true, p_periodList, p_RHaccountName);
             return;
-          } 
-            m_factsEditionController = new FactsEditionController(m_process);
-          }
+        }
       }
-      else
-        MessageBox.Show(Local.GetValue("upload.msg_select_entity"));
     }
 
     private void ReportUploadEntitySelectionSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)

@@ -20,14 +20,16 @@ namespace FBI.MVC.Controller
     Dimensions m_dimensions;
     WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     Worksheet m_worksheet;
-    List<UInt32> m_periodsList;
+    List<Int32> m_periodsList;
     Version m_version;
-    public string m_errorMessage {private set; get; }
 
-    public FactsEditionController(Account.AccountProcess p_process)
+
+    public FactsEditionController(Account.AccountProcess p_process, Version p_version, Worksheet p_worksheet)
     {
-      UInt32 l_versionId = FBI.Properties.Settings.Default.version_id;
-      m_dimensions = new Dimensions(l_versionId);
+
+      m_version = p_version;
+      m_worksheet = p_worksheet;
+      m_dimensions = new Dimensions(m_version.Id);
       m_process = p_process;
      
       if (p_process == Account.AccountProcess.FINANCIAL)
@@ -36,56 +38,27 @@ namespace FBI.MVC.Controller
         m_editedFactsManager = new RHEditedFactsManager();
 
       EventsSubsription();
+      Launch();
     }
 
-    // to do : not in this controller
-    public bool IsInputEntity(UInt32 p_entityId)
-    {
-      AxisElem l_entity = AxisElemModel.Instance.GetValue(p_entityId);
-      if (l_entity == null)
-        return (false);
-      if (l_entity.AllowEdition == false)
-        return (false);
-      return (true);
-    }
-
-    // to do : not in this controller
-    public bool AreRHInputsValid(ListItem p_RHAccountItem, List<UInt32> p_periodList)
-    {
-      if (p_RHAccountItem == null)
-      {
-        m_errorMessage = Local.GetValue("upload.msg_invalidRHAccount");
-        return (false);
-      }
-      else
-        m_RHAccount = AccountModel.Instance.GetValue((UInt32)p_RHAccountItem.Value);
-      
-      if (m_RHAccount == null)
-      {
-        m_errorMessage = Local.GetValue("upload.msg_invalidRHAccount");
-        return (false);
-      }
-      if (p_periodList == null)
-      {
-        m_errorMessage = Local.GetValue("upload.invalid_period_range");
-        return (false);
-      }
-      else
-        m_periodsList = p_periodList;
-      return (true);
-    }
-    
     private void EventsSubsription()
     {
-      m_editedFactsManager.FactsDownloaded += AfterHRFactsDownloaded;
+      m_editedFactsManager.FactsDownloaded += OnFactsDownloaded;
+      // attention cet event sera lancé après chaque calcul pour le financier (outputs) -> créer un autre event
+
+      // TO DO : subsribe to Submission events Ribbon
+      // TO DO : recreate ribbons !
+
     }
 
-    public bool Launch(Worksheet p_worksheet)
+      // TO DO : implement events from worksheet !
+
+    private bool Launch()
     {
       // Before = sidepane -> ask to choose a range
-      // TO DO : RH process -> take RH Account as param
-      m_worksheet = p_worksheet;
-
+      // TO DO : RH process ->
+     //   take RH Account as param
+  
       // TO DO: Clean current status, higlights and so on
       // Check that a version is selected first
 
@@ -108,6 +81,32 @@ namespace FBI.MVC.Controller
       return false;
     }
 
+    private void OnFactsEditionInitialized()
+    {
+        // show corresponding ribbon
+        if (m_process == Account.AccountProcess.FINANCIAL)
+        {
+            AddinModule.CurrentInstance.m_financialbiRibbon.Visible = true;
+            // TO DO subsribe to events
+        }
+        else
+        {
+           // AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = true;
+            // subsribe to events
+        }
+        
+        }
+
+    private void CloseInstance()
+    {
+        // TO DO Hide corresponding ribbon
+        // unsuscribe from event
+        // close current instances
+        // find a way to close this instance
+
+
+    }
+      
     public void UpdateWorksheetInputs()
     {
       m_editedFactsManager.UpdateWorksheetInputs();
@@ -124,15 +123,18 @@ namespace FBI.MVC.Controller
     }
 
     // BELOW : to be checked
-    private void AfterHRFactsDownloaded(bool p_sucess)
+    private void OnFactsDownloaded(bool p_sucess)
     {
       m_editedFactsManager.IdentifyDifferences();
-     // TO DO : ?
+     // TO DO : Register   worksheet events
     }
 
-    private void AfterOutputsComputed(bool p_sucess)
+    private void OnOutputsComputed(bool p_sucess)
     {
      UpdateWorksheetOutputs();
+
+      // TO DO : register event only in financial ? use only
+
     }
 
     

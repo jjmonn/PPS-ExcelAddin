@@ -55,7 +55,7 @@
       this.m_endWeekTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
       this.m_endWeekTB.SelectionLength = 0;
       this.m_endWeekTB.SelectionStart = 0;
-      this.m_endWeekTB.Size = new System.Drawing.Size(171, 20);
+      this.m_endWeekTB.Size = new System.Drawing.Size(182, 20);
       this.m_endWeekTB.TabIndex = 21;
       this.m_endWeekTB.Text = " ";
       this.m_endWeekTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -78,7 +78,7 @@
       this.m_startWeekTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
       this.m_startWeekTB.SelectionLength = 0;
       this.m_startWeekTB.SelectionStart = 0;
-      this.m_startWeekTB.Size = new System.Drawing.Size(171, 20);
+      this.m_startWeekTB.Size = new System.Drawing.Size(182, 20);
       this.m_startWeekTB.TabIndex = 16;
       this.m_startWeekTB.Text = " ";
       this.m_startWeekTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -134,7 +134,7 @@
       this.m_startDate.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
       this.m_startDate.Name = "m_startDate";
       this.m_startDate.ShowGrip = false;
-      this.m_startDate.Size = new System.Drawing.Size(171, 20);
+      this.m_startDate.Size = new System.Drawing.Size(182, 20);
       this.m_startDate.TabIndex = 18;
       this.m_startDate.Text = "VDatePicker1";
       this.m_startDate.UseThemeBackColor = false;
@@ -158,7 +158,7 @@
       this.m_endDate.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
       this.m_endDate.Name = "m_endDate";
       this.m_endDate.ShowGrip = false;
-      this.m_endDate.Size = new System.Drawing.Size(171, 20);
+      this.m_endDate.Size = new System.Drawing.Size(182, 20);
       this.m_endDate.TabIndex = 17;
       this.m_endDate.Text = "VDatePicker1";
       this.m_endDate.UseThemeBackColor = false;

@@ -9,6 +9,7 @@ using AddinExpress.XL;
 namespace FBI
 {
   using MVC.View;
+  using MVC.Model;
   using MVC.Model.CRUD;
   using MVC.Controller;
   using Utils;
@@ -31,6 +32,7 @@ namespace FBI
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
       Addin.Main();
+      m_financialbiRibbon.Visible = false;
       fbiRibbonChangeState(false);
       Addin.InitializationEvent += OnAddinInitializationEvent;
       Addin.ConnectionStateEvent += OnConnectionEvent;
@@ -47,6 +49,11 @@ namespace FBI
       m_fbiRibbonButton.Enabled = p_enabled;
       m_refreshRibbonButton.Enabled = p_enabled;
       m_platformManagementButton.Enabled = p_enabled;
+
+      if (p_enabled == false)
+          m_connectionButton.Image = 0;
+      else
+          m_connectionButton.Image = 1;
     }
 
     #region Add-in Express automatic code
@@ -175,7 +182,22 @@ namespace FBI
 
     private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+        Version l_version = VersionModel.Instance.GetValue(FBI.Properties.Settings.Default.version_id);
+        if (l_version == null)
+        {
+            MessageBox.Show("versions.select_version");
+            return;
+        }
+        Excel.Worksheet l_worksheet = this.ExcelApp.ActiveSheet as Excel.Worksheet;   
+        Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
+        if (l_process == Account.AccountProcess.FINANCIAL)
+        {
+            FactsEditionController l_factsEditionController = new FactsEditionController(l_process, l_version, l_worksheet);
+        }
+        else
+        {
+            // TO DO : launch snapshot RH selection Controller (to be implemented)
+        }
     }
 
     private void m_directoryRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -185,13 +207,9 @@ namespace FBI
 
     private void m_reportUploadRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      if (FBI.Properties.Settings.Default.version_id == 0)
-      {
-        MessageBox.Show(Local.GetValue("versions.error.no_selected_version"));
-        return;
-      }
-       ReportUploadEntitySelectionSidePane.InitView((Account.AccountProcess)FBI.Properties.Settings.Default.processId);
-       ReportUploadEntitySelectionSidePane.Show();
+      Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
+      ReportUploadEntitySelectionSidePane.InitView(l_process);
+      ReportUploadEntitySelectionSidePane.Show();
     }
 
     private void m_CUIRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -252,6 +270,26 @@ namespace FBI
 
     #endregion
 
+    #region Financial facts edition
+
+    private void m_financialSubmissionSubmitButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+        // TO DO raise event or call method in owned facts edition controller
+
+    }
+
+    private void m_financialSubmissionAutoCommitButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void CloseBT_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    #endregion
+
     void OnAddinInitializationEvent()
     {
       fbiRibbonChangeState(true);
@@ -265,22 +303,11 @@ namespace FBI
 
     #endregion
 
-    public void SetConnectionIcon(bool p_connectionState)
-    {
-      if (p_connectionState == false)
-      {
-        m_connectionButton.Image = 0;
-      }
-      else
-      {
-        m_connectionButton.Image = 1;
-      }
-    }
-
     public void SetProcessCaption(string p_process)
     {
       m_processRibbonButton.Caption = p_process;
     }
+
 
   }
 }

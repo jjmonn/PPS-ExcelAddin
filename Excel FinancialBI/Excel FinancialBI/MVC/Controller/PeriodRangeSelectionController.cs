@@ -11,7 +11,7 @@ namespace FBI.MVC.Controller
   class PeriodRangeSelectionController
   {
     UInt32 m_version;
-    public List<UInt32> m_periodList { get; private set; }
+    public List<Int32> m_periodList { get; private set; }
     public bool m_isPeriodListValid = true;
     UInt32 NB_WEEKS_FORWARD = 3;
     UInt32 NB_WEEKS_BACKWARD = 1;
@@ -58,13 +58,13 @@ namespace FBI.MVC.Controller
 
     }
 
-    public List<UInt32> GetPeriodRange(DateTime p_startDate, DateTime p_endDate)
+    public List<Int32> GetPeriodRange(DateTime p_startDate, DateTime p_endDate)
     {
-      List<UInt32> l_periodsRange = new List<UInt32>();
+      List<Int32> l_periodsRange = new List<Int32>();
       DateTime l_date = p_startDate;
       while (l_date <= p_endDate)
       {
-        l_periodsRange.Add((UInt32)l_date.ToOADate());
+        l_periodsRange.Add((Int32)l_date.ToOADate());
         l_date = l_date.AddDays(1);
       }
       return l_periodsRange;

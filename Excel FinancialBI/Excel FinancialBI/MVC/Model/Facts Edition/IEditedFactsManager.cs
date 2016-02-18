@@ -18,7 +18,7 @@ namespace FBI.MVC.Model
 
     void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet);
 
-     void DownloadFacts(Version p_version, List<UInt32> p_periodList);
+     void DownloadFacts(Version p_version, List<Int32> p_periodList);
 
      void IdentifyDifferences();
 
