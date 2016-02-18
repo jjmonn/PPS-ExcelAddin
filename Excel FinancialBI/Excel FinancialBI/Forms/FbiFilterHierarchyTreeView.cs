@@ -15,16 +15,18 @@ namespace FBI.Forms
   class FbiFilterHierarchyTreeView : AFbiTreeView
   {
     private AxisType m_axisType;
+    public override bool Loaded { get; protected set; }
     private MultiIndexDictionary<UInt32, string, Filter> m_filters;
 
     public FbiFilterHierarchyTreeView(AxisType p_axisType, bool p_allowDragDrop = false) : base(p_allowDragDrop)
     {
+      Loaded = false;
       m_axisType = p_axisType;
       m_filters = FilterModel.Instance.GetDictionary(m_axisType);
       this.Load();
     }
 
-    public bool Load()
+    public override bool Load()
     {
       SafeDictionary<UInt32, vTreeNode> l_dic;
 
@@ -45,6 +47,7 @@ namespace FBI.Forms
           this.Nodes.Add(l_node);
         }
       }
+      Loaded = true;
       return (true);
     }
 

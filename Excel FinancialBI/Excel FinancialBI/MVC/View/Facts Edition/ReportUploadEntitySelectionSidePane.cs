@@ -21,7 +21,7 @@ namespace FBI.MVC.View
     FbiTreeView<AxisElem> m_entitiesTreeview;
 //    ReportBuilder m_controller;
     Account.AccountProcess m_process;
-    PeriodRangeSelectionControl m_periodRangeSelectionControl;
+    PeriodRangeSelectionController m_periodRangeSelectionController;
 
     public ReportUploadEntitySelectionSidePane()
     {
@@ -70,11 +70,12 @@ namespace FBI.MVC.View
 
     private void InitRHProcessComponents()
     {
-      if (m_periodRangeSelectionControl == null)
+      if (m_periodRangeSelectionController == null)
       {
-        m_periodRangeSelectionControl = new PeriodRangeSelectionControl(FBI.Properties.Settings.Default.version_id);
-        m_periodsSelectionPanel.Controls.Add(m_periodRangeSelectionControl);
-        m_periodRangeSelectionControl.Dock = DockStyle.Fill;
+        m_periodRangeSelectionController = new PeriodRangeSelectionController(FBI.Properties.Settings.Default.version_id);
+        PeriodRangeSelectionControl l_periodRangeSelectionControl = m_periodRangeSelectionController.View as PeriodRangeSelectionControl;
+        m_periodsSelectionPanel.Controls.Add(l_periodRangeSelectionControl);
+        l_periodRangeSelectionControl.Dock = DockStyle.Fill;
       }
       InitRHAccountsCombobox();
       SetRHComponentVisible(true);
@@ -103,7 +104,7 @@ namespace FBI.MVC.View
       if (e.KeyChar == (char)Keys.Return)
       {
         ReportBuilder l_reportBuilder = new ReportBuilder(FBI.Properties.Settings.Default.version_id);
-        bool l_inputsValids = l_reportBuilder.CanLaunchReport(m_entitiesTreeview.SelectedNode, m_process, m_accountSelectionComboBox.SelectedItem, m_periodRangeSelectionControl.GetPeriodList());
+        bool l_inputsValids = l_reportBuilder.CanLaunchReport(m_entitiesTreeview.SelectedNode, m_process, m_accountSelectionComboBox.SelectedItem, m_periodRangeSelectionController.GetPeriodList());
         if (l_inputsValids)
         {
           bool l_reportResult = l_reportBuilder.CreateReport();

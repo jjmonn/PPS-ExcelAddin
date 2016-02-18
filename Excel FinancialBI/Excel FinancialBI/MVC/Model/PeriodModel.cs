@@ -12,6 +12,7 @@ namespace FBI.MVC.Model
   using Utils;
   using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
+  using CRUD;
 
   class PeriodModel
   {
@@ -62,7 +63,14 @@ namespace FBI.MVC.Model
       }
     }
 
-    #region "Years interface"
+    static public Int32 GetLastPeriod(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
+    {
+      List<Int32> l_list = GetPeriodList(p_startPeriod, p_nbPeriod, p_timeConfig);
+
+      if (l_list.Count > 0)
+        return (l_list[l_list.Count - 1]);
+      return (0);
+    }
 
     static public List<Int32> GetPeriodList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
     {
@@ -80,9 +88,40 @@ namespace FBI.MVC.Model
       return new List<Int32>();
     }
 
+    #region "Years interface"
+  
+    static public List<Int32> GetSubPeriods(CRUD.TimeConfig p_timeConfig, Int32 p_period)
+    {
+      switch (p_timeConfig)
+      {
+        case CRUD.TimeConfig.YEARS:
+          return GetMonthsIdsInYear(p_period);
+        case CRUD.TimeConfig.WEEK:
+          return GetDaysIdListInWeek(p_period);
+        default:
+          return new List<int>();
+      }
+    }
+
+    static public string GetFormatedDate(Int32 p_period, CRUD.TimeConfig p_timeConfig)
+    {
+      switch (p_timeConfig)
+      {
+        case CRUD.TimeConfig.YEARS:
+          return DateTime.FromOADate(p_period).ToString("yyyy");
+        case CRUD.TimeConfig.MONTHS:
+          return DateTime.FromOADate(p_period).ToString("mm yyyy");
+        case CRUD.TimeConfig.WEEK:
+          return Utils.Local.GetValue("general.week") + " " + GetWeekNumberFromDateId(p_period) + ", " + DateTime.FromOADate(p_period).ToString("yyyy");
+        case CRUD.TimeConfig.DAYS:
+          return DateTime.FromOADate(p_period).ToLongDateString();
+          //return DateTime.FromOADate(p_period).ToString("MMMM dd, yyyy");
+      }
+      return (DateTime.FromOADate(p_period).ToShortDateString());
+    }
+
     static public List<Int32> GetYearsList(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
     {
-
       switch (p_timeConfig)
       {
         case CRUD.TimeConfig.YEARS:
@@ -94,7 +133,7 @@ namespace FBI.MVC.Model
         case CRUD.TimeConfig.DAYS:
           return GetYearsListFromDailyConfiguration(p_startPeriod, p_nbPeriod);
         default:
-          System.Diagnostics.Debug.WriteLine("Period.vb - Get YearsList() - Undefined time configuration");
+          System.Diagnostics.Debug.WriteLine("Undefined time configuration");
           return null;
       }
     }
@@ -259,28 +298,15 @@ namespace FBI.MVC.Model
     {
       List<Int32> l_monthsIdList = new List<Int32>();
       Int32 l_monthId = 0;
-      Int32 l_year = (Int32)DateTime.FromOADate((Int32)p_yearId).Year;
-      Int32[] m_monthList = {
-			31,
-			28,
-			31,
-			30,
-			31,
-			30,
-			31,
-			31,
-			30,
-			31,
-			30,
-			31
-		};
+      Int32 l_year = System.DateTime.FromOADate(p_yearId).Year;
+
       for (Int32 l_monthIndex = 0; l_monthIndex <= 11; l_monthIndex++)
       {
-        l_monthId = (Int32)DateAndTime.DateSerial((Int32)l_year, (Int32)l_monthIndex + 1, (Int32)m_monthList[l_monthIndex]).ToOADate();
+        l_monthId = (Int32)DateAndTime.DateSerial(l_year, l_monthIndex + 1, m_monthList[l_monthIndex]).ToOADate();
         // Add 1 day if february of a leap year
-        if (l_monthIndex == 1 && DateTime.IsLeapYear((Int32)l_year))
+        if (l_monthIndex == 1 && DateTime.IsLeapYear(l_year))
           l_monthId++;
-        l_monthsIdList[(Int32)l_monthIndex] = l_monthId;
+        l_monthsIdList[l_monthIndex] = l_monthId;
       }
       return (l_monthsIdList);
     }
@@ -311,11 +337,12 @@ namespace FBI.MVC.Model
     {
 
       List<Int32> l_weeksList = new List<Int32>();
-      Int32 l_periodId = p_startPeriod;
+      Int32 l_periodId = GetFirstDayOfWeekId(p_startPeriod);
 
       // Check which day a week starts !!
       for (Int32 i = 0; i <= p_nbPeriod - 1; i++)
       {
+        string l_period = DateTime.FromOADate(l_periodId).ToLongDateString();
         l_weeksList.Add(l_periodId);
         l_periodId += (Int32)m_nbDaysInWeek;
       }
@@ -345,10 +372,8 @@ namespace FBI.MVC.Model
     {
       if (p_dayId == 0)
         return (0);
-
-      Int32 l_weekId = p_dayId - (Int32)DateAndTime.Weekday(System.DateTime.FromOADate(p_dayId), Microsoft.VisualBasic.FirstDayOfWeek.System);
+      Int32 l_weekId = p_dayId - DateAndTime.Weekday(System.DateTime.FromOADate(p_dayId), Microsoft.VisualBasic.FirstDayOfWeek.Monday) + 1;
       return (l_weekId);
-
     }
 
     static public List<Int32> GetWeeksPeriodListFromPeriodsRange(System.DateTime p_startDate, System.DateTime p_endDate)
@@ -392,7 +417,9 @@ namespace FBI.MVC.Model
     static public List<Int32> GetDaysIdListInWeek(Int32 p_weekId)
     {
       List<Int32> l_daysIdList = new List<Int32>();
+      string l_date = DateTime.FromOADate(p_weekId).ToLongDateString();
       Int32 l_dayId = GetFirstDayOfWeekId(p_weekId);
+
       for (Int32 i = 1; i <= 7; i++)
       {
         l_daysIdList.Add(l_dayId);

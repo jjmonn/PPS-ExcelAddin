@@ -32,7 +32,7 @@ namespace FBI
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
       Addin.Main();
-      m_financialbiRibbon.Visible = false;
+      SubmissionModeRibbon.Visible = false;
       fbiRibbonChangeState(false);
       Addin.InitializationEvent += OnAddinInitializationEvent;
       Addin.ConnectionStateEvent += OnConnectionEvent;

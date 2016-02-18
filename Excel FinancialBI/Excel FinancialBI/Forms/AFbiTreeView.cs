@@ -13,11 +13,11 @@ namespace FBI.Forms
   public delegate void DroppedEventHandler(object sender, DragEventArgs e);
   public delegate void NodeDroppedEventHandler(vTreeNode p_draggedNode, vTreeNode p_targetNode);
 
-  public class AFbiTreeView : vTreeView
+  public abstract class AFbiTreeView : vTreeView
   {
-
     public event NodeDroppedEventHandler NodeDropped;
     public event DroppedEventHandler Dropped;
+    public virtual bool Loaded { get; protected set; }
 
     public AFbiTreeView(bool p_allowDragAndDrop)
     {
@@ -26,6 +26,8 @@ namespace FBI.Forms
       if (p_allowDragAndDrop == true)
         SubscribeDragAndDropEvents();
     }
+
+    public abstract bool Load();
 
     public static void InitTVFormat(vTreeView p_treeview)
     {
@@ -40,8 +42,34 @@ namespace FBI.Forms
       p_treeview.PaintNodesDefaultFill = false;
       p_treeview.UseThemeBackColor = false;
       p_treeview.BackColor = Color.White;
+      p_treeview.Dock = DockStyle.Fill;
     }
 
+    public void HideParentCheckBox()
+    {
+      foreach (vTreeNode l_node in GetNodes())
+        if (l_node.Nodes.Count != 0)
+          l_node.ShowCheckBox = false;
+    }
+
+    public void CheckNode(UInt32 p_id)
+    {
+      CheckNode(this, p_id);
+    }
+
+    public void CheckAllParentNodes()
+    {
+      foreach (vTreeNode l_node in Nodes)
+        l_node.Checked = CheckState.Checked;
+    }
+
+    public static void CheckNode(AFbiTreeView p_tv, UInt32 p_id)
+    {
+      vTreeNode l_node = p_tv.FindNode(p_id);
+
+      if (l_node != null)
+        l_node.Checked = CheckState.Checked;
+    }
 
     public vTreeNode FindAtPosition(Point p_position)
     {
@@ -102,6 +130,20 @@ namespace FBI.Forms
       if (Dropped != null)
         Dropped(sender, e);
     }
+
+    public static vTreeNode FindNode(vTreeView p_tv, UInt32 p_value)
+    {
+      foreach (vTreeNode l_node in p_tv.GetNodes())
+        if ((UInt32)l_node.Value == p_value)
+          return (l_node);
+      return (null);
+    }
+
+    public vTreeNode FindNode(UInt32 p_value)
+    {
+      return (FindNode(this, p_value));
+    }
+
     #endregion
 
   }

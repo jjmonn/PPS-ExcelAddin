@@ -114,26 +114,6 @@ namespace FBI.MVC.Model
       return (m_CRUDDic[p_axis]);
     }
 
-    /* MultiIndexDictionary<UInt32, string, T> GetDictionary(AxisType p_axis, UInt32 p_AxisOwner)
-     {
-       if (m_CRUDDic.ContainsKey(p_axis) == false)
-         return null;
-       MultiIndexDictionary<UInt32, string, T> l_multiIndexDict = new MultiIndexDictionary<UInt32, string, T>();
-
-       foreach (T l_axisElem in m_CRUDDic[p_axis].Values)
-       {
-         AxisOwner l_AxisOwner = GlobalVariables.AxisOwners.GetValue(l_axisElem.Id);
-         if (l_AxisOwner == null)
-           continue;
-         if (l_AxisOwner.OwnerId == p_AxisOwner)
-         {
-           l_multiIndexDict.Set(l_axisElem.Id, l_axisElem.Name, l_axisElem);
-         }
-       }
-       return l_multiIndexDict;
-
-     }*/
-
     SortedDictionary<AxisType, MultiIndexDictionary<UInt32, string, T>> GetDictionary()
     {
       return m_CRUDDic;

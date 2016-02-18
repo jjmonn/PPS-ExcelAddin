@@ -18,17 +18,22 @@ namespace FBI.MVC.View
   public partial class PeriodRangeSelectionControl : UserControl, IView
   {
     PeriodRangeSelectionController m_controller;
+    UInt32 m_versionId;
 
     public PeriodRangeSelectionControl(UInt32 p_versionId)
     {
       InitializeComponent();
-      m_controller = new PeriodRangeSelectionController(p_versionId);
+      m_versionId = p_versionId;
+    }
+
+    public void LoadView()
+    {
       MultilangueSetup();
       m_startDate.FormatValue = "MM-dd-yy";
       m_endDate.FormatValue = "MM-dd-yy";
-      PeriodsRangeSetup(p_versionId);
-      m_startDate.ValueChanged += Date_ValueChanged;
-      m_endDate.ValueChanged += Date_ValueChanged;
+      PeriodsRangeSetup(m_versionId);
+      m_startDate.Validated += Date_ValueChanged;
+      m_endDate.Validated += Date_ValueChanged;
     }
 
     private void MultilangueSetup()
@@ -39,7 +44,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-
+      m_controller = p_controller as PeriodRangeSelectionController;
     }
 
     private void Date_ValueChanged(object sender, EventArgs e)
@@ -55,21 +60,35 @@ namespace FBI.MVC.View
 
     public void PeriodsRangeSetup(UInt32 p_versionId)
     {
-      m_startDate.MinDate = m_controller.GetMinDate();
-      m_startDate.MaxDate = m_controller.GetMaxDate();
-      m_endDate.MinDate = m_controller.GetMinDate();
-      m_endDate.MaxDate = m_controller.GetMaxDate();
-
-      DateTime l_startDate = m_controller.GetStartDate();
-      DateTime l_endDate = m_controller.GetEndDate();
-
-      m_startDate.Text = l_startDate.ToShortDateString();
-      m_endDate.Text = l_endDate.ToShortDateString();
+      DateTime l_startDate = m_controller.GetDefaultStartDate();
+      DateTime l_endDate = m_controller.GetDefaultEndDate();
 
       m_startDate.DateTimeEditor.Value = l_startDate;
       m_endDate.DateTimeEditor.Value = l_endDate;
 
       FillWeeksTextbox();
+    }
+
+    public DateTime MinDate
+    {
+      set
+      {
+        m_startDate.MinDate = value;
+        m_endDate.MinDate = value;
+        m_startDate.DateTimeEditor.Value = m_controller.GetDefaultStartDate();
+        m_endDate.DateTimeEditor.Value = m_controller.GetDefaultEndDate();
+      }
+    }
+
+    public DateTime MaxDate
+    {
+      set
+      {
+        m_startDate.MaxDate = value;
+        m_endDate.MaxDate = value;
+        m_startDate.DateTimeEditor.Value = m_controller.GetDefaultStartDate();
+        m_endDate.DateTimeEditor.Value = m_controller.GetDefaultEndDate();
+      }
     }
 
     public List<Int32> GetPeriodList()

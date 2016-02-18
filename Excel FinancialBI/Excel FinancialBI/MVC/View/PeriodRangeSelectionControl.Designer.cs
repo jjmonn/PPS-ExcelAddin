@@ -1,4 +1,4 @@
-﻿namespace FBI.MVC.View
+namespace FBI.MVC.View
 {
   partial class PeriodRangeSelectionControl
   {
@@ -40,8 +40,7 @@
       // 
       // m_endWeekTB
       // 
-      this.m_endWeekTB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_endWeekTB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right))));
       this.m_endWeekTB.BackColor = System.Drawing.Color.White;
       this.m_endWeekTB.BoundsOffset = new System.Drawing.Size(1, 1);
       this.m_endWeekTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
@@ -63,8 +62,7 @@
       // 
       // m_startWeekTB
       // 
-      this.m_startWeekTB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_startWeekTB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right))));
       this.m_startWeekTB.BackColor = System.Drawing.Color.White;
       this.m_startWeekTB.BoundsOffset = new System.Drawing.Size(1, 1);
       this.m_startWeekTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
@@ -120,8 +118,7 @@
       // 
       // m_startDate
       // 
-      this.m_startDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_startDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right))));
       this.m_startDate.BackColor = System.Drawing.Color.White;
       this.m_startDate.BorderColor = System.Drawing.Color.Black;
       this.m_startDate.Culture = new System.Globalization.CultureInfo("");
@@ -144,8 +141,7 @@
       // 
       // m_endDate
       // 
-      this.m_endDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_endDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right))));  
       this.m_endDate.BackColor = System.Drawing.Color.White;
       this.m_endDate.BorderColor = System.Drawing.Color.Black;
       this.m_endDate.Culture = new System.Globalization.CultureInfo("");

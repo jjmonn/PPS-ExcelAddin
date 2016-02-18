@@ -46,7 +46,5 @@ namespace FBI.Utils
         p_treeviewbox.Text = p_treeviewbox.TreeView.SelectedNode.Text;
       }
     }
-
-
   }
 }

@@ -39,7 +39,7 @@ namespace FBI.MVC.View
       this.dgvLoad();
       m_dgv.RowsHierarchy.Visible = false;
       m_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
-      this.suscribeEvents();
+
       this.Controls.Add(m_dgv);
       this.MultilangueSetup();
     }
@@ -74,7 +74,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void suscribeEvents()
+    private void SuscribeEvents()
     {
       m_dgv.CellChangedAndValidated += OnDgvCellChangedAndValidated;
       CurrencyModel.Instance.ReadEvent += OnModelRead;

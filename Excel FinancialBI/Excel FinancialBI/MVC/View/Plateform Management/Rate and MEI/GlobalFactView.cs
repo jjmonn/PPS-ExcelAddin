@@ -28,6 +28,7 @@ namespace FBI.MVC.View
     public GlobalFactView()
       : base(GlobalFactVersionModel.Instance)
     {
+      m_excelImportController = new ExcelGlobalFactController();
     }
 
     override public void SetController(IController p_controller)
