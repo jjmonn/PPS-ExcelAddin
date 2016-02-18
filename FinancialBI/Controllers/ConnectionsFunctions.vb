@@ -112,18 +112,16 @@ Friend Class ConnectionsFunctions
 
     Private Sub SMSG_AUTH_ANSWER(packet As ByteBuffer)
 
-        If packet.GetError() = 0 Then
-            If packet.ReadBool() = True Then
-                System.Diagnostics.Debug.WriteLine("Authentication succeeded")
-                GlobalVariables.Users.currentUserName = userName
-                globalAuthenticated = True
-            Else
-                globalInitFlag = True
-                System.Diagnostics.Debug.WriteLine("Authentication Failed!")
-                CloseNetworkConnection()
-                '    MsgBox("Authentication failed. Please review your ID and password.")
-                RaiseEvent ConnectionFailedEvent()
-            End If
+        If packet.GetError() = ErrorMessage.SUCCESS Then
+            System.Diagnostics.Debug.WriteLine("Authentication succeeded")
+            GlobalVariables.Users.currentUserName = userName
+            globalAuthenticated = True
+        Else
+            globalInitFlag = True
+            System.Diagnostics.Debug.WriteLine("Authentication Failed!")
+            CloseNetworkConnection()
+            '    MsgBox("Authentication failed. Please review your ID and password.")
+            RaiseEvent ConnectionFailedEvent()
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_AUTH_ANSWER, AddressOf SMSG_AUTH_ANSWER)
 
