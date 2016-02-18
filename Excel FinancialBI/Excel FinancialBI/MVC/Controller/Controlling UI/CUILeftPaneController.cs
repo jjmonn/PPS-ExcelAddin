@@ -29,14 +29,14 @@ namespace FBI.MVC.Controller
     {
       m_parentController = p_parentController;
       PeriodController = new PeriodRangeSelectionController(Properties.Settings.Default.version_id);
-      this.m_view = new CUI2LeftPane();
-      this.m_view.SetController(this);
-      this.LoadView();
+      m_view = new CUI2LeftPane();
+      m_view.SetController(this);
+      LoadView();
     }
 
     private void LoadView()
     {
-      this.m_view.InitView();
+      m_view.LoadView();
     }
 
     public UInt32 GetCurrency()
@@ -110,7 +110,7 @@ namespace FBI.MVC.Controller
 
     public Int32 GetStartPeriod()
     {
-      return ((Int32)PeriodController.GetStartDate().ToOADate());
+      return (PeriodController.GetStartDate());
     }
 
     public Int32 GetNbPeriod()

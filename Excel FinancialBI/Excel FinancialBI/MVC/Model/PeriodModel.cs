@@ -10,7 +10,7 @@ using Microsoft.VisualBasic;
 namespace FBI.MVC.Model
 {
   using Utils;
-
+  using CRUD;
 
   class PeriodModel
   {
@@ -39,11 +39,22 @@ namespace FBI.MVC.Model
 
     #endregion
 
+    static public Int32 GetLastPeriod(Int32 p_startPeriod, Int32 p_nbPeriod, CRUD.TimeConfig p_timeConfig)
+    {
+      List<Int32> l_list = GetPeriodList(p_startPeriod, p_nbPeriod, p_timeConfig);
+
+      if (l_list.Count > 0)
+        return (l_list[l_list.Count - 1]);
+      return (0);
+    }
+
     static public List<Int32> GetPeriodsList(UInt32 p_versionId)
     {
-      List<Int32> l_list = new List<Int32>();
+      Version l_version = VersionModel.Instance.GetValue(p_versionId);
 
-      return l_list;
+      if (l_version == null)
+        return new List<int>();
+      return (GetPeriodList((Int32)l_version.StartPeriod, (Int32)l_version.NbPeriod, l_version.TimeConfiguration));
     }
 
     #region "Years interface"

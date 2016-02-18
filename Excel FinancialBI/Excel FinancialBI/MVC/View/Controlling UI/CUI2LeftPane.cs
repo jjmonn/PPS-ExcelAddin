@@ -41,7 +41,7 @@ namespace FBI.MVC.View
       m_controller = p_controller as CUILeftPaneController;
     }
 
-    public void InitView()
+    public void LoadView()
     {
       InitPeriodRangeSelection();
       TreeViewInit();
@@ -49,6 +49,13 @@ namespace FBI.MVC.View
 
       MultilangueSetup();
       HideAllTV();
+      SuscribeEvents();
+    }
+
+    void SuscribeEvents()
+    {
+      m_selectionTVList[new Tuple<AxisType, Type>((AxisType)0, typeof(Version))].NodeChecked += OnVersionSelect;
+      SelectionCB.SelectedItemChanged += OnSelectionCBSelectedItemChanged;
     }
 
     private void MultilangueSetup()
@@ -73,7 +80,6 @@ namespace FBI.MVC.View
       InitCBListItem<Currency>(Local.GetValue("CUI.currencies"));
 
       SelectionCB.DropDownList = true;
-      SelectionCB.SelectedItemChanged += OnSelectionCBSelectedItemChanged;
     }
 
     private void TreeViewInit()
@@ -181,6 +187,31 @@ namespace FBI.MVC.View
     #endregion
 
     #region Event
+
+    void OnVersionSelect(object p_sender, vTreeViewEventArgs p_e)
+    {
+      Int32 l_minStartPeriod = -1;
+      Int32 l_maxLastPeriod = 0;
+      SafeDictionary<Type, List<UInt32>> l_dic = GetCheckedElements();
+
+      if (l_dic[typeof(Version)] == null)
+        return;
+      foreach (UInt32 l_versionId in l_dic[typeof(Version)])
+      {
+        Version l_version = VersionModel.Instance.GetValue(l_versionId);
+        Int32 l_lastPeriod;
+        if (l_version == null)
+          continue;
+
+        l_lastPeriod = PeriodModel.GetLastPeriod((Int32)l_version.StartPeriod, (Int32)l_version.NbPeriod, l_version.TimeConfiguration);
+        if (l_version.StartPeriod < l_minStartPeriod || l_minStartPeriod == -1)
+          l_minStartPeriod = (Int32)l_version.StartPeriod;
+        if (l_maxLastPeriod < l_lastPeriod)
+          l_maxLastPeriod = l_lastPeriod;
+      }
+      m_controller.PeriodController.MinDate = DateTime.FromOADate(l_minStartPeriod);
+      m_controller.PeriodController.MaxDate = DateTime.FromOADate(l_maxLastPeriod);
+    }
 
     private void OnSelectionCBSelectedItemChanged(object p_sender, EventArgs p_e)
     {

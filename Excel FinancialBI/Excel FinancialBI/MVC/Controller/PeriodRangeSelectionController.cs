@@ -18,6 +18,8 @@ namespace FBI.MVC.Controller
     public bool m_isPeriodListValid = true;
     const UInt32 NB_WEEKS_FORWARD = 3;
     const UInt32 NB_WEEKS_BACKWARD = 1;
+    private DateTime m_minDate;
+    private DateTime m_maxDate;
 
     public PeriodRangeSelectionController(UInt32 p_versionId)
     {
@@ -26,6 +28,8 @@ namespace FBI.MVC.Controller
       m_periodList = PeriodModel.GetPeriodsList(p_versionId);
       if (m_periodList == null || m_periodList.Count == 0)
         m_isPeriodListValid = false;
+      MinDate = (m_isPeriodListValid) ? DateTime.FromOADate(m_periodList[0]) : DateTime.Now;
+      MaxDate = (m_isPeriodListValid) ? DateTime.FromOADate(m_periodList[m_periodList.Count - 1]) : DateTime.Now;
       LoadView();
     }
 
@@ -34,38 +38,44 @@ namespace FBI.MVC.Controller
       m_view.LoadView();
     }
 
-    public DateTime GetMinDate()
+    public DateTime MinDate 
     {
-      if (m_isPeriodListValid)
-        return DateTime.FromOADate(m_periodList[0]);
-      else
-        return DateTime.Now;
+      get { return (m_minDate); }
+      set
+      {
+        m_minDate = value;
+        if (m_view != null)
+          m_view.MinDate = value;
+      }
     }
 
-    public DateTime GetMaxDate()
+    public DateTime MaxDate
     {
-      if (m_isPeriodListValid)
-        return DateTime.FromOADate(m_periodList[m_periodList.Count - 1]);
-      else
-        return DateTime.Now;
+      get { return (m_maxDate); }
+      set
+      {
+        m_maxDate = value;
+        if (m_view != null)
+          m_view.MaxDate = value;
+      }
     }
 
-    public DateTime GetStartDate()
+    public DateTime GetDefaultStartDate()
     {
       DateTime l_startDate = DateTime.Now.AddDays(-PeriodModel.m_nbDaysInWeek * NB_WEEKS_BACKWARD);
-      if (l_startDate >= GetMinDate() && l_startDate <= GetMaxDate())
+      if (l_startDate >= MinDate && l_startDate <= MaxDate)
         return l_startDate;
       else
-        return GetMinDate();
+        return MinDate;
     }
 
-    public DateTime GetEndDate()
+    public DateTime GetDefaultEndDate()
     {
       DateTime l_endDate = DateTime.Now.AddDays(PeriodModel.m_nbDaysInWeek * NB_WEEKS_FORWARD);
-      if (l_endDate >= GetMinDate() && l_endDate <= GetMaxDate())
+      if (l_endDate >= MinDate && l_endDate <= MaxDate)
         return l_endDate;
       else
-        return GetMaxDate();
+        return MaxDate;
 
     }
 
@@ -83,8 +93,21 @@ namespace FBI.MVC.Controller
 
     public Int32 GetNbPeriods()
     {
-      return (GetPeriodRange(GetStartDate(), GetEndDate()).Count);
+      return (m_view.GetPeriodList().Count);
     }
 
+    public List<Int32> GetPeriodList()
+    {
+      return (m_view.GetPeriodList());
+    }
+
+    public Int32 GetStartDate()
+    {
+      List<Int32> m_periods = m_view.GetPeriodList();
+
+      if (m_periods == null || m_periods.Count <= 0)
+        return (0);
+      return (m_periods[0]);
+    }
   }
 }

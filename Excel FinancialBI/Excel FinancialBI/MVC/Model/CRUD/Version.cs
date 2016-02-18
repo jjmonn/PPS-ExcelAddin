@@ -118,6 +118,14 @@ namespace FBI.MVC.Model.CRUD
         return 1;
     }
 
-    public string S { get; set; }
+    public Account.AccountProcess Process
+    {
+      get
+      {
+        if (TimeConfiguration == TimeConfig.DAYS || TimeConfiguration == TimeConfig.WEEK)
+          return (Account.AccountProcess.RH);
+        return (Account.AccountProcess.FINANCIAL);
+      }
+    }
   }
 }

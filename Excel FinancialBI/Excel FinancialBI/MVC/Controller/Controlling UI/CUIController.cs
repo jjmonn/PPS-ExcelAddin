@@ -129,22 +129,10 @@ namespace FBI.MVC.Controller
           Error = Local.GetValue("CUI.error.unknown_version");
           return (false);
         }
-        switch (p_config.Request.Process)
+        if (p_config.Request.Process != l_version.Process)
         {
-          case Account.AccountProcess.FINANCIAL:
-            if (l_version.TimeConfiguration == TimeConfig.DAYS || l_version.TimeConfiguration == TimeConfig.WEEK)
-            {
-              Error = Local.GetValue("CUI.error.version_process_invalid");
-              return (false);
-            }
-            break;
-          case Account.AccountProcess.RH:
-            if (l_version.TimeConfiguration == TimeConfig.MONTHS || l_version.TimeConfiguration == TimeConfig.YEARS)
-            {
-              Error = Local.GetValue("CUI.error.version_process_invalid");
-              return (false);
-            }
-            break;
+          Error = Local.GetValue("CUI.error.version_process_invalid");
+          return (false);
         }
       }
       return (true);
