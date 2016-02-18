@@ -19,7 +19,7 @@ namespace FBI.MVC.Model.CRUD
     public SortKey SortHash { get { return (m_key.Item2); } }
     public SortKey EntityHash { get { return (m_key.Item3); } }
     public PeriodTypeKey PeriodType { get { return (m_key.Item4); } }
-    public DateTime Date { get { return (DateTime.FromOADate(m_key.Item5)); } }
+    public Int32 Period { get { return (m_key.Item5); } }
     Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey> m_key;
     public bool StrongVersion { get; private set; }
 

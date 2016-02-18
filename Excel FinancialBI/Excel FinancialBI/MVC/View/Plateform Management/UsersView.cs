@@ -136,7 +136,7 @@ namespace FBI.MVC.View
       {
         l_listItem = ((ComboBoxEditor)p_args.Cell.Editor).SelectedItem;
       }
-      catch (Exception e)
+      catch
       {
         return;
       }

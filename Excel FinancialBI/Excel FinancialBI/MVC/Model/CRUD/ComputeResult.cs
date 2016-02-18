@@ -22,6 +22,7 @@ namespace FBI.MVC.Model.CRUD
     List<Int32> m_periodList;
     List<Int32> m_aggregationPeriodList;
     public bool IsDiff { get; private set; }
+    public Tuple<VersionKey, VersionKey> VersionDiff { get; private set; }
 
     ComputeResult()
     {
@@ -115,18 +116,28 @@ namespace FBI.MVC.Model.CRUD
       }
     }
 
+    public static UInt32 GetDiffId(UInt32 p_idA, UInt32 p_idB)
+    {
+      return (p_idA * 1000 ^ p_idB * 2000);
+    }
+
     public static ComputeResult operator-(ComputeResult p_a, ComputeResult p_b)
     {
       ComputeResult l_result = new ComputeResult();
 
       l_result.IsDiff = true;
+      l_result.VersionDiff = new Tuple<VersionKey, VersionKey>(p_a.VersionId, p_b.VersionId);
+      l_result.VersionId = GetDiffId(p_a.VersionId, p_b.VersionId);
       foreach (KeyValuePair<ResultKey, double> l_pair in p_a.Values)
       {
-        double l_bValue = p_b.Values[l_pair.Key];
+        ResultKey l_bKey = new ResultKey(l_pair.Key.AccountId, l_pair.Key.SortHash, l_pair.Key.EntityHash,
+   l_pair.Key.PeriodType, l_pair.Key.Period, p_b.VersionId);
+        double l_bValue = p_b.Values[l_bKey];
 
-        l_result.Values[l_pair.Key] = l_pair.Value - l_bValue;
+       ResultKey l_key = new ResultKey(l_pair.Key.AccountId, l_pair.Key.SortHash, l_pair.Key.EntityHash,
+          l_pair.Key.PeriodType, l_pair.Key.Period, l_result.VersionId);
+       l_result.Values[l_key] = l_pair.Value - l_bValue;
       }
-      l_result.VersionId = p_a.VersionId ^ p_b.VersionId;
       return (l_result);
     }
   }

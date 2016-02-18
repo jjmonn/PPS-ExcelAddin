@@ -72,7 +72,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.VersionsComparisonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.SwitchVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.HideVersionsComparisonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.RefreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_refreshButton = new System.Windows.Forms.ToolStripMenuItem();
       this.ChartBT = new System.Windows.Forms.ToolStripMenuItem();
       this.ExpansionImageList = new System.Windows.Forms.ImageList(this.components);
       this.EntitiesRCMenu.SuspendLayout();
@@ -394,12 +394,12 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ExcelToolStripMenuItem,
             this.BusinessControlToolStripMenuItem,
-            this.RefreshToolStripMenuItem,
+            this.m_refreshButton,
             this.ChartBT});
       this.MainMenu.Location = new System.Drawing.Point(0, 0);
       this.MainMenu.Name = "MainMenu";
       this.MainMenu.ShowItemToolTips = true;
-      this.MainMenu.Size = new System.Drawing.Size(454, 55);
+      this.MainMenu.Size = new System.Drawing.Size(546, 55);
       this.MainMenu.TabIndex = 0;
       this.MainMenu.Text = "[CUI.main_menu]";
       // 
@@ -460,16 +460,16 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.HideVersionsComparisonToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
       this.HideVersionsComparisonToolStripMenuItem.Text = "[CUI.take_off_comparison]";
       // 
-      // RefreshToolStripMenuItem
+      // m_refreshButton
       // 
-      this.RefreshToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("RefreshToolStripMenuItem.Image")));
-      this.RefreshToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-      this.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem";
-      this.RefreshToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
-      this.RefreshToolStripMenuItem.Size = new System.Drawing.Size(85, 51);
-      this.RefreshToolStripMenuItem.Text = "[CUI.refresh]";
-      this.RefreshToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-      this.RefreshToolStripMenuItem.ToolTipText = "[CUI.refresh_tooltip]";
+      this.m_refreshButton.Image = ((System.Drawing.Image)(resources.GetObject("m_refreshButton.Image")));
+      this.m_refreshButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+      this.m_refreshButton.Name = "m_refreshButton";
+      this.m_refreshButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
+      this.m_refreshButton.Size = new System.Drawing.Size(85, 51);
+      this.m_refreshButton.Text = "[CUI.refresh]";
+      this.m_refreshButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+      this.m_refreshButton.ToolTipText = "[CUI.refresh_tooltip]";
       // 
       // ChartBT
       // 
@@ -537,7 +537,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
 	public VIBlend.WinForms.Controls.vTabControl m_DGVsControlTab;
 	public System.Windows.Forms.Panel Panel1;
 	public System.Windows.Forms.MenuStrip MainMenu;
-	public System.Windows.Forms.ToolStripMenuItem RefreshToolStripMenuItem;
+	public System.Windows.Forms.ToolStripMenuItem m_refreshButton;
 	public System.Windows.Forms.ToolStripMenuItem BusinessControlToolStripMenuItem;
 	public System.Windows.Forms.ToolStripMenuItem VersionsComparisonToolStripMenuItem;
 	public System.Windows.Forms.ToolStripMenuItem SwitchVersionsToolStripMenuItem;

@@ -79,18 +79,20 @@ namespace FBI.MVC.Controller
       l_request.RateVersionId = l_version.RateVersionId;
       l_request.Process = (Account.AccountProcess)Settings.Default.processId;
       l_request.AxisHierarchy = true;
-
+      l_request.IsDiff = (l_request.Versions.Count == 2);
       l_config.Rows = RightPaneController.GetRows();
       l_config.Columns = RightPaneController.GetColumns();
       l_config.Request = l_request;
 
       if (CheckConfig(l_config) == false)
         return (false);
-      ComputeModel.Instance.Compute(l_request);
       ResultController.LoadDGV(l_config);
+      if (l_request.IsDiff)
+        ComputeModel.Instance.Compute(l_request);
+      else
+        ComputeModel.Instance.ComputeDiff(l_request);
       return (true);
     }
-
 
     bool CheckRequest(ComputeRequest p_request)
     {

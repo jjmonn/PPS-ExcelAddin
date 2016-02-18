@@ -54,6 +54,7 @@ namespace FBI.MVC.View
     public void SuscribeEvents()
     {
       ComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
+      m_refreshButton.MouseDown += OnRefreshButtonMouseDown;
     }
 
     private void MultilangueSetup()
@@ -75,7 +76,7 @@ namespace FBI.MVC.View
       this.m_entityLabel.Text = Local.GetValue("CUI.entity");
 
       this.MainMenu.Text = Local.GetValue("CUI.main_menu");
-      this.RefreshToolStripMenuItem.Text = Local.GetValue("CUI.refresh");
+      this.m_refreshButton.Text = Local.GetValue("CUI.refresh");
       this.ExcelToolStripMenuItem.ToolTipText = Local.GetValue("CUI.drop_on_excel_tooltip");
       this.ExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel");
       this.DropOnExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel");
@@ -85,7 +86,7 @@ namespace FBI.MVC.View
       this.VersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.display_versions_comparison");
       this.SwitchVersionsToolStripMenuItem.Text = Local.GetValue("CUI.switch_versions");
       this.HideVersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.take_off_comparison");
-      this.RefreshToolStripMenuItem.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
+      this.m_refreshButton.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
       this.ChartBT.Text = Local.GetValue("CUI.charts");
       this.Text = Local.GetValue("CUI.financials");
     }
@@ -96,6 +97,11 @@ namespace FBI.MVC.View
         m_controller.ResultController.DisplayResult(p_result);
       else
         MessageBox.Show(Error.GetMessage(p_status));
+    }
+
+    void OnRefreshButtonMouseDown(object sender, MouseEventArgs e)
+    {
+      m_controller.Compute();
     }
 
     #endregion

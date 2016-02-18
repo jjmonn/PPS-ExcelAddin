@@ -88,6 +88,19 @@ namespace FBI.MVC.View
       }
     }
 
+    public void SetVersionVisible(UInt32 p_versionId, bool p_visible)
+    {
+      SetHierachyItemVisible(p_versionId, p_visible, m_dgv.Rows);
+      SetHierachyItemVisible(p_versionId, p_visible, m_dgv.Columns);
+    }
+
+    void SetHierachyItemVisible(UInt32 p_versionId, bool p_visible, SafeDictionary<ResultKey, HierarchyItem> p_items)
+    {
+      foreach (KeyValuePair<ResultKey, HierarchyItem> l_item in p_items)
+        if (l_item.Key.VersionId == p_versionId)
+          l_item.Value.Hidden = !p_visible;
+    }
+
     private void InitDimension(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
     {
       if (p_conf == null)
@@ -139,19 +152,36 @@ namespace FBI.MVC.View
 
     private void VersionBuilder(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
     {
-      VersionConf l_conf = p_conf as VersionConf;
-
       foreach (UInt32 l_versionId in m_computeConfig.Request.Versions)
       {
         Version l_version = VersionModel.Instance.GetValue(l_versionId);
         if (l_version == null)
           continue;
 
-        ResultKey l_key = p_parentKey + new ResultKey(0, "", "", 0, 0, l_version.Id,  true);
-        HierarchyItem l_newItem = m_dgv.SetDimension(p_dimension, p_parent, l_key, l_version.Name);
+        VersionBuilderSingle(p_conf, p_dimension, p_parent, p_parentKey, l_version.Id, l_version.Name);
+      }
+      if (m_computeConfig.Request.IsDiff)
+      {
+        Version l_versionA = VersionModel.Instance.GetValue(m_computeConfig.Request.Versions[0]);
+        Version l_versionB = VersionModel.Instance.GetValue(m_computeConfig.Request.Versions[1]);
 
-        if (l_newItem != null)
-          InitDimension(p_conf.Child, p_dimension, l_newItem.Items, l_key);
+        VersionBuilderSingle(p_conf, p_dimension, p_parent, p_parentKey,
+          ComputeResult.GetDiffId(l_versionA.Id, l_versionB.Id), l_versionA.Name + " vs. " + l_versionB.Name, true);
+        VersionBuilderSingle(p_conf, p_dimension, p_parent, p_parentKey,
+          ComputeResult.GetDiffId(l_versionB.Id, l_versionA.Id), l_versionB.Name + " vs. " + l_versionA.Name, true);
+      }
+    }
+
+    private void VersionBuilderSingle(CUIDimensionConf p_conf, DGVDimension p_dimension, HierarchyItemsCollection p_parent,
+      ResultKey p_parentKey, UInt32 p_id, string p_name, bool p_hidden = false)
+    {
+      ResultKey l_key = p_parentKey + new ResultKey(0, "", "", 0, 0, p_id, true);
+      HierarchyItem l_newItem = m_dgv.SetDimension(p_dimension, p_parent, l_key, p_name);
+
+      if (l_newItem != null)
+      {
+        l_newItem.Hidden = p_hidden;
+        InitDimension(p_conf.Child, p_dimension, l_newItem.Items, l_key);
       }
     }
 

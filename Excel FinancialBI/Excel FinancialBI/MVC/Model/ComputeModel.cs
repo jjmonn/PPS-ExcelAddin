@@ -12,7 +12,7 @@ namespace FBI.MVC.Model
   class ComputeModel
   {
     public event ComputeCompleteEventHandler ComputeCompleteEvent;
-    public delegate void ComputeCompleteEventHandler(ErrorMessage p_status, ComputeRequest p_request, SafeDictionary<uint, ComputeResult> p_result);
+    public delegate void ComputeCompleteEventHandler(ErrorMessage p_status, ComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result);
 
     static ComputeModel s_instance = new ComputeModel();
     public static ComputeModel Instance { get { return (s_instance); } }
@@ -85,18 +85,21 @@ namespace FBI.MVC.Model
         m_computeResultDic[l_request][l_result.VersionId] = l_result;
         if (l_requestIdList.Count == 0)
         {
-          SafeDictionary<UInt32, ComputeResult> l_resultList = m_computeResultDic[l_request];
+          SafeDictionary<UInt32, ComputeResult> l_resultDic = m_computeResultDic[l_request];
+          List<ComputeResult> l_resultList = l_resultDic.Values.ToList();
 
-          if (l_request.IsDiff && l_resultList.Count == 2)
+          if (l_request.IsDiff && l_resultDic.Count == 2)
           {
-            ComputeResult l_diff = l_resultList[0] - l_resultList[1];
-            l_resultList.Clear();
-            l_resultList[l_diff.VersionId] = l_diff;
+            ComputeResult l_diffA = l_resultList[0] - l_resultList[1];
+            ComputeResult l_diffB = l_resultList[1] - l_resultList[0];
+
+            l_resultDic[l_diffA.VersionId] = l_diffA;
+            l_resultDic[l_diffB.VersionId] = l_diffB;
           }
           m_computeRequestList.Remove(l_requestTuple);
           m_computeResultDic.Remove(l_request);
           if (ComputeCompleteEvent != null)
-            ComputeCompleteEvent(p_packet.GetError(), l_request, l_resultList);
+            ComputeCompleteEvent(p_packet.GetError(), l_request, l_resultDic);
         }
       }
     }
