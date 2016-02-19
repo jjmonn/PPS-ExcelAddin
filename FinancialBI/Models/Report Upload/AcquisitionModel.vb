@@ -130,12 +130,13 @@ Friend Class AcquisitionModel
         l_axisFilters(GlobalEnums.AnalysisAxis.ADJUSTMENTS).Add(p_adjustment_id)
 
         ' Actual Computation
-        m_computer.CMSG_COMPUTE_REQUEST({m_currentVersionId}, _
-                                        l_entitiesId, _
-                                        CRUD.Account.AccountProcess.FINANCIAL, _
-                                        Nothing, _
-                                        l_axisFilters, _
-                                        Nothing)
+    m_computer.CMSG_COMPUTE_REQUEST({m_currentVersionId}, _
+                                    l_entitiesId, _
+                                    CRUD.Account.AccountProcess.FINANCIAL, _
+                                    Nothing, _
+                                    Nothing, _
+                                    l_axisFilters, _
+                                    Nothing)
 
     End Sub
 
