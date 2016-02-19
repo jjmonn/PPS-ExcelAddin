@@ -38,7 +38,7 @@ namespace FBI.MVC.Controller
       m_view.LoadView();
     }
 
-    public DateTime MinDate 
+    public DateTime MinDate
     {
       get { return (m_minDate); }
       set

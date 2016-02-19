@@ -37,7 +37,9 @@ namespace FBI.MVC.View
     public void LoadView()
     {
       this.dgvLoad();
-      this.SuscribeEvents();
+      m_dgv.RowsHierarchy.Visible = false;
+      m_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+
       this.Controls.Add(m_dgv);
       this.MultilangueSetup();
     }

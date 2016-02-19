@@ -36,10 +36,18 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="AddinExpress.Install.2005, Version=5.2.2024.2005, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="AddinExpress.MSO.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL">
-      <Private>False</Private>
+    <Reference Include="AddinExpress.MSO.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.MSO.2005.dll</HintPath>
     </Reference>
-    <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.XL.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.XL.2005.dll</HintPath>
+    </Reference>
+    <Reference Include="AddinExpress.XL.2005.Design, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.XL.2005.Design.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zlib">
       <HintPath>dependencies\Ionic.Zlib.dll</HintPath>
     </Reference>
@@ -258,6 +266,7 @@
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\ReportBuilder.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
@@ -688,6 +697,9 @@
     <Compile Include="Utils\BNF\FbiGrammar.cs" />
     <Compile Include="Utils\BNF\SimpleBnf.cs" />
     <Compile Include="Utils\CustomComponentResourceManager.cs" />
+    <Compile Include="Utils\ExcelFormatting.cs" />
+    <Compile Include="Utils\ExcelUtils.cs" />
+    <Compile Include="Utils\Formats.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\Local.cs" />
     <Compile Include="Utils\MultiIndexDictionary.cs" />

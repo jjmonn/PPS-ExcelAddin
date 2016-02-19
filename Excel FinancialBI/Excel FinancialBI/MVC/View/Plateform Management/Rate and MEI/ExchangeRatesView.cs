@@ -53,7 +53,7 @@ namespace FBI.MVC.View
 
     #region Initialize
 
-    void InitPeriods(Int32[] p_monthList)
+    void InitPeriods(List<Int32> p_monthList)
     {
       m_dgv.ClearRows();
       foreach (Int32 l_monthId in p_monthList)
@@ -72,7 +72,7 @@ namespace FBI.MVC.View
       }
     }
 
-    void InitRates(UInt32 p_versionId, Int32[] p_monthList, SortedSet<UInt32> p_currencies)
+    void InitRates(UInt32 p_versionId, List<Int32> p_monthList, SortedSet<UInt32> p_currencies)
     {
       TextBoxEditor l_tbEditor = null;
       foreach (Int32 l_monthId in p_monthList)
@@ -88,7 +88,7 @@ namespace FBI.MVC.View
 
     protected override void DisplayVersion(UInt32 p_versionId)
     {
-      Int32[] l_monthList = RatesVersionModel.Instance.GetMonthsList(p_versionId);
+      List<Int32> l_monthList = RatesVersionModel.Instance.GetMonthsList(p_versionId);
       SortedSet<UInt32> l_currencies = CurrencyModel.Instance.GetUsedCurrencies();
 
       if (l_monthList == null)

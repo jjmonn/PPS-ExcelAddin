@@ -13,14 +13,16 @@ namespace FBI.MVC.Model
 
   class FinancialEditedFactsManager : IEditedFactsManager
   {
+
     MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact> m_editedFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact>();
     MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact> m_outputFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact>();
     public event OnFactsDownloaded FactsDownloaded;
     List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
     Worksheet m_worksheet;
 
-    public void RegisterEditedFacts(Dimensions p_dimensions)
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
+      m_worksheet = p_worksheet;
       switch (p_dimensions.m_orientation)
       {
         case Dimensions.Orientation.ACCOUNTS_PERIODS :
@@ -91,7 +93,7 @@ namespace FBI.MVC.Model
     }
 
    
-    public void DownloadFacts(Version p_version, List<UInt32> p_periodsList)
+    public void DownloadFacts(Version p_version, List<Int32> p_periodsList)
     {
 
     // TO DO 
@@ -115,7 +117,7 @@ namespace FBI.MVC.Model
 
     private bool FillEditedFacts(List<Fact> p_factsList)
     {
-    
+      // TO DO
       return true;
     }
 
@@ -153,6 +155,8 @@ namespace FBI.MVC.Model
       // ready to listen server answer
       //   -> update cells color on worksheet if success
     }
+
+      // TO DO : After commit event
 
   }
 }
