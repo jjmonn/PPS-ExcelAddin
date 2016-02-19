@@ -109,8 +109,10 @@ namespace FBI.MVC.View
         m_builderList[p_conf.ModelType](p_conf, p_dimension, p_parent, p_parentKey);
     }
 
-    Int32 GetNbPeriod(Int32 p_nbPeriod, TimeConfig p_config)
+    Int32 GetNbPeriod(Int32 p_nbPeriod, TimeConfig p_config, TimeConfig p_baseConfig)
     {
+      if ((int)p_config >= (int)p_baseConfig)
+        return (p_nbPeriod);
       switch (p_config)
       {
         case TimeConfig.WEEK:
@@ -128,7 +130,8 @@ namespace FBI.MVC.View
       string l_formatedDate;
       Int32 l_startPeriod = m_computeConfig.Request.StartPeriod;
       l_periodList = (l_conf.IsSubPeriod) ? PeriodModel.GetSubPeriods(l_conf.ParentType, l_conf.ParentPeriod) :
-        PeriodModel.GetPeriodList(l_startPeriod, GetNbPeriod(m_computeConfig.Request.NbPeriods, l_conf.PeriodType), l_conf.PeriodType);
+        PeriodModel.GetPeriodList(l_startPeriod,
+        GetNbPeriod(m_computeConfig.Request.NbPeriods, l_conf.PeriodType, m_computeConfig.BaseTimeConfig), l_conf.PeriodType);
 
       foreach (int l_date in l_periodList)
       {

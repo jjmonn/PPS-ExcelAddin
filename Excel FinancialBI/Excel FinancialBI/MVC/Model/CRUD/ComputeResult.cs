@@ -109,11 +109,11 @@ namespace FBI.MVC.Model.CRUD
             Values[new ResultKey(l_accountId, p_sortKey, "", l_aggregationTimeConfig, m_aggregationPeriodList[j], VersionId)] = l_value;
           Values[new ResultKey(l_accountId, p_sortKey, p_entityKey, l_aggregationTimeConfig, m_aggregationPeriodList[j], VersionId)] = l_value;
         }
-
-        UInt32 l_nbChildEntity = p_packet.ReadUint32();
-        for (UInt32 j = 0; j < l_nbChildEntity; ++j)
-          FillEntityData(p_packet, p_sortKey, p_currentLevelKey, p_entityKey);
       }
+
+      UInt32 l_nbChildEntity = p_packet.ReadUint32();
+      for (UInt32 j = 0; j < l_nbChildEntity; ++j)
+        FillEntityData(p_packet, p_sortKey, p_currentLevelKey, p_entityKey);
     }
 
     public static UInt32 GetDiffId(UInt32 p_idA, UInt32 p_idB)

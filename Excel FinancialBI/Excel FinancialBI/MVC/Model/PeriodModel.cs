@@ -293,7 +293,7 @@ namespace FBI.MVC.Model
         // Add 1 day if february of a leap year
         if (l_monthIndex == 1 && DateTime.IsLeapYear(l_year))
           l_monthId++;
-        l_monthsIdList[l_monthIndex] = l_monthId;
+        l_monthsIdList.Add(l_monthId);
       }
       return (l_monthsIdList);
     }

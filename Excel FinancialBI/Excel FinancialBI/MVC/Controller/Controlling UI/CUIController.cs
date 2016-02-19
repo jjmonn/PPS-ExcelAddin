@@ -67,8 +67,12 @@ namespace FBI.MVC.Controller
       ComputeRequest l_request = new ComputeRequest();
       Version l_version = VersionModel.Instance.GetValue(LeftPaneController.GetVersions()[0]);
 
-      l_request.StartPeriod = LeftPaneController.GetStartPeriod();
-      l_request.NbPeriods = LeftPaneController.GetNbPeriod();
+      l_config.BaseTimeConfig = l_version.TimeConfiguration;
+      l_request.Process = (Account.AccountProcess)Settings.Default.processId;
+      l_request.StartPeriod = (l_request.Process == Account.AccountProcess.RH) ? 
+        LeftPaneController.GetStartPeriod() : (int)l_version.StartPeriod;
+      l_request.NbPeriods = (l_request.Process == Account.AccountProcess.RH) ? 
+        LeftPaneController.GetNbPeriod() : (int)l_version.NbPeriod;
       l_request.Versions = LeftPaneController.GetVersions();
       l_request.CurrencyId = LeftPaneController.GetCurrency();
       l_request.SortList = RightPaneController.GetSort();
@@ -77,7 +81,6 @@ namespace FBI.MVC.Controller
       l_request.EntityId = LeftPaneController.GetEntity();
       l_request.GlobalFactVersionId = l_version.GlobalFactVersionId;
       l_request.RateVersionId = l_version.RateVersionId;
-      l_request.Process = (Account.AccountProcess)Settings.Default.processId;
       l_request.AxisHierarchy = true;
       l_request.IsDiff = (l_request.Versions.Count == 2);
       l_config.Rows = RightPaneController.GetRows();
