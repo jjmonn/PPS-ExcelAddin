@@ -116,6 +116,7 @@ namespace FBI
       UserName = p_userName;
       Password = p_password;
       UserModel.Instance.CurrentUserName = UserName;
+      m_networkLauncher = new NetworkLauncher();
       if ((result = m_networkLauncher.Launch("192.168.1.11", 4242, OnDisconnect)) == true)
         Authenticator.Instance.AskAuthentication(UserName, Password);
       if (ConnectionStateEvent != null)
