@@ -20,11 +20,8 @@ namespace FBI.MVC.Model
     public event OnFactsDownloaded FactsDownloaded;
     List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
     Worksheet m_worksheet;
-
-    //public event OnRHFactsDownloaded RHFactsDownloaded;
-    //public event OnOutputsComputed OutputsComputed;    
-
-
+    public bool m_autoCommit { set; get; }
+ 
     public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
@@ -78,13 +75,12 @@ namespace FBI.MVC.Model
       return new EditedFact(l_account, l_entity, null, l_period, p_cell, Account.AccountProcess.RH);
     }
 
-
     public void DownloadFacts(Version p_version, List<Int32> p_periodsList)
     {
       // TO DO : Log and Check Download time
       AxisElem l_entity = m_dimensions.m_entities.UniqueValue as AxisElem;
-      List<Account> l_accountsList = GetAccountsList(m_dimensions.m_accounts);
-      List<AxisElem> l_employeesList = GetEmployeesList(m_dimensions.m_employees);
+      List<Account> l_accountsList = m_dimensions.GetAccountsList();
+      List<AxisElem> l_employeesList = m_dimensions.GetAxisElemList(DimensionType.EMPLOYEE);
       Int32 l_startPeriod = p_periodsList.ElementAt(0);
       Int32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count);
 
@@ -174,31 +170,6 @@ namespace FBI.MVC.Model
       // ready to listen server answer
       //   -> update cells color on worksheet if success
     }
-
-
-    #region Utils
-
-    private List<Account> GetAccountsList(Dimension<CRUDEntity> p_dimension)
-    {
-      List<Account> l_list = new List<Account>();
-      foreach (CRUDEntity l_account in p_dimension.m_values.Values)
-      {
-        l_list.Add(l_account as Account);
-      }
-      return l_list;
-    }
-
-    private List<AxisElem> GetEmployeesList(Dimension<CRUDEntity> p_dimension)
-    {
-      List<AxisElem> l_list = new List<AxisElem>();
-      foreach (CRUDEntity l_employee in p_dimension.m_values.Values)
-      {
-        l_list.Add(l_employee as AxisElem);
-      }
-      return l_list;
-    }   
-    
-    #endregion
 
   }
 }

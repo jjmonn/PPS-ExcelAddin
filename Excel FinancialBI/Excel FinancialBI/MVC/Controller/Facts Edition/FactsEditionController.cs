@@ -12,7 +12,7 @@ namespace FBI.MVC.Controller
   using Utils;
   using VIBlend.WinForms.Controls;
 
-  class FactsEditionController
+  public class FactsEditionController
   {
     IEditedFactsManager m_editedFactsManager;
     Account.AccountProcess m_process;
@@ -23,10 +23,8 @@ namespace FBI.MVC.Controller
     List<Int32> m_periodsList;
     Version m_version;
 
-
     public FactsEditionController(Account.AccountProcess p_process, Version p_version, Worksheet p_worksheet)
     {
-
       m_version = p_version;
       m_worksheet = p_worksheet;
       m_dimensions = new Dimensions(m_version.Id);
@@ -44,9 +42,8 @@ namespace FBI.MVC.Controller
     private void EventsSubsription()
     {
       m_editedFactsManager.FactsDownloaded += OnFactsDownloaded;
+   
       // attention cet event sera lancé après chaque calcul pour le financier (outputs) -> créer un autre event
-
-      // TO DO : subsribe to Submission events Ribbon
       // TO DO : recreate ribbons !
 
     }
@@ -92,12 +89,12 @@ namespace FBI.MVC.Controller
         else
         {
            // AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = true;
-            // subsribe to events
+           // subsribe to events
         }
         
-        }
+    }
 
-    private void CloseInstance()
+    public void CloseInstance()
     {
         // TO DO Hide corresponding ribbon
         // unsuscribe from event
@@ -117,24 +114,41 @@ namespace FBI.MVC.Controller
       ((FinancialEditedFactsManager)m_editedFactsManager).UpdateWorkSheetOutputs();
     }
 
+    private void OnWorksheetChange()
+    {
+      // TO DO
+
+      // if cell belongs to edited fact
+      //   -> update edited fact status ()
+      //      if financial -> launch compute at the end of the cells range loop
+      
+      // if cell belongs to dimension
+      //   -> cancel modification and put back the dimension value
+
+      // if cell belongs to output
+      //   -> cancel modification and put back the output value 
+
+    }
+
+    private void BeforeRightClick()
+    {
+      // TO DO
+    }
+
     public void CommitFacts()
     {
       m_editedFactsManager.CommitDifferences();
     }
 
-    // BELOW : to be checked
-    private void OnFactsDownloaded(bool p_sucess)
+    public void SetAutoCommit(bool p_value)
     {
-      m_editedFactsManager.IdentifyDifferences();
-     // TO DO : Register   worksheet events
+      m_editedFactsManager.m_autoCommit = p_value; 
     }
 
-    private void OnOutputsComputed(bool p_sucess)
+    private void OnFactsDownloaded(bool p_sucess)
     {
-     UpdateWorksheetOutputs();
-
-      // TO DO : register event only in financial ? use only
-
+      // Attention : below : directement géré dans les FactsEditionManager ?
+      m_editedFactsManager.IdentifyDifferences();
     }
 
     
