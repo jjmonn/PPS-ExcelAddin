@@ -443,6 +443,43 @@ namespace FBI.MVC.Model
           break;
       }
     }
-  
+
+    public List<Account> GetAccountsList()
+    {
+        List<Account> l_list = new List<Account>();
+        foreach (CRUDEntity l_account in m_accounts.m_values.Values)
+        {
+            l_list.Add(l_account as Account);
+        }
+        return l_list;
+    }
+
+    public List<AxisElem> GetAxisElemList(DimensionType l_dimensionType)
+    {
+      List<AxisElem> l_list = new List<AxisElem>();
+      Dimension<CRUDEntity> l_dimension;
+      switch (l_dimensionType)
+      {
+        case DimensionType.EMPLOYEE:
+          l_dimension = m_employees;
+          break;
+        case DimensionType.ENTITY:
+          l_dimension = m_entities;
+          break;
+        default :
+          l_dimension = null;
+          break;
+      }
+
+      if (l_dimension == null)
+        return l_list;
+
+      foreach (CRUDEntity l_item in l_dimension.m_values.Values)
+      {
+        l_list.Add(l_item as AxisElem);
+      }
+      return l_list;
+    } 
+
   }
 }

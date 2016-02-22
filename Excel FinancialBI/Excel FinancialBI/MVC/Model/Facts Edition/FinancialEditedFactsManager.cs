@@ -13,47 +13,49 @@ namespace FBI.MVC.Model
 
   class FinancialEditedFactsManager : IEditedFactsManager
   {
-
     MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact> m_editedFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact>();
     MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact> m_outputFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact>();
+    Dimensions m_dimensions;
+    List<int> m_inputsRequestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
     List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
     Worksheet m_worksheet;
+    public bool m_autoCommit {set; get;}
 
     public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
       switch (p_dimensions.m_orientation)
       {
-        case Dimensions.Orientation.ACCOUNTS_PERIODS :
-          CreateRHEditedFacts(p_dimensions.m_accounts, p_dimensions.m_periods, p_dimensions.m_entities);
+        case Dimensions.Orientation.ACCOUNTS_PERIODS:
+          CreateEditedFacts(p_dimensions.m_accounts, p_dimensions.m_periods, p_dimensions.m_entities);
           break;
 
-        case Dimensions.Orientation.PERIODS_ACCOUNTS :
-          CreateRHEditedFacts(p_dimensions.m_periods, p_dimensions.m_accounts, p_dimensions.m_entities);
+        case Dimensions.Orientation.PERIODS_ACCOUNTS:
+          CreateEditedFacts(p_dimensions.m_periods, p_dimensions.m_accounts, p_dimensions.m_entities);
           break;
 
-        case Dimensions.Orientation.ENTITIES_ACCOUNTS :
-          CreateRHEditedFacts(p_dimensions.m_entities, p_dimensions.m_accounts, p_dimensions.m_periods);
+        case Dimensions.Orientation.ENTITIES_ACCOUNTS:
+          CreateEditedFacts(p_dimensions.m_entities, p_dimensions.m_accounts, p_dimensions.m_periods);
           break;
 
-        case Dimensions.Orientation.ACCOUNTS_ENTITIES :
-          CreateRHEditedFacts(p_dimensions.m_accounts, p_dimensions.m_entities, p_dimensions.m_periods);
+        case Dimensions.Orientation.ACCOUNTS_ENTITIES:
+          CreateEditedFacts(p_dimensions.m_accounts, p_dimensions.m_entities, p_dimensions.m_periods);
           break;
 
-        case Dimensions.Orientation.PERIODS_ENTITIES :
-          CreateRHEditedFacts(p_dimensions.m_periods, p_dimensions.m_entities, p_dimensions.m_accounts);
+        case Dimensions.Orientation.PERIODS_ENTITIES:
+          CreateEditedFacts(p_dimensions.m_periods, p_dimensions.m_entities, p_dimensions.m_accounts);
           break;
 
-        case Dimensions.Orientation.ENTITIES_PERIODS :
-          CreateRHEditedFacts(p_dimensions.m_entities, p_dimensions.m_periods, p_dimensions.m_accounts);
+        case Dimensions.Orientation.ENTITIES_PERIODS:
+          CreateEditedFacts(p_dimensions.m_entities, p_dimensions.m_periods, p_dimensions.m_accounts);
           break;
       }
 
-     // TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
+      // TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
     }
 
-    private void CreateRHEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)
+    private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)
     {
       foreach (KeyValuePair<Range, CRUDEntity> l_rowsKeyPair in p_rowsDimension.m_values)
       {
@@ -74,11 +76,11 @@ namespace FBI.MVC.Model
       }
     }
 
-    private EditedFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1, 
-                                        Dimension<CRUDEntity> p_dimension2, CRUDEntity p_dimensionValue2, 
-                                        Dimension<CRUDEntity> p_fixedDimension, 
+    private EditedFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1,
+                                        Dimension<CRUDEntity> p_dimension2, CRUDEntity p_dimensionValue2,
+                                        Dimension<CRUDEntity> p_fixedDimension,
                                         Range p_cell)
-    {   
+    {
       Account l_account = null;
       AxisElem l_entity = null;
       PeriodDimension l_period = null;
@@ -92,33 +94,95 @@ namespace FBI.MVC.Model
       return new EditedFact(l_account, l_entity, null, l_period, p_cell, Account.AccountProcess.FINANCIAL);
     }
 
-   
+
     public void DownloadFacts(Version p_version, List<Int32> p_periodsList)
     {
+      List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
+      Int32 l_startPeriod = p_periodsList.ElementAt(0);
+      Int32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count);
 
-    // TO DO 
-
+      FactsModel.Instance.ReadEvent += AfterFinancialInputDownloaded;
+      m_inputsRequestIdList.Clear();
+      foreach (EditedFact l_editedFact in m_editedFacts.Values)
+      {
+        foreach (AxisElem l_entity in l_entitiesList)
+        {
+          //
+          // TO DO : create method on server returning all facts specific to an entity :
+          //    - all accounts
+          //    - filter on client, product, adjustment and employee
+          //
+          m_inputsRequestIdList.Add(FactsModel.Instance.GetFact(l_editedFact.m_account.Id, l_entity.Id, (UInt32)AxisType.Employee, p_version.Id, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
+        }
+      }
 
     }
 
-    private void AfterFinancialInputDownloaded(bool p_success)
+    private void AfterFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
     {
-      // TO DO
-
-      // TO DO : request SOURCED COMPUTE
-    }
-
-    private void AfterFinancialOutputsComputed(bool p_success)
-    {
-      // TO DO : if success save values into facts
-
-      FactsDownloaded(true);
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        //
+        // Attention : pour l'instant la méthode n'est pas adaptée: nécessité de filtrer sur les
+        // clients, produits, ajustement et employé pour financial
+        //
+        if (FillEditedFacts(p_fact_list) != true)
+        {
+          FactsDownloaded(false);
+          FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
+        }
+        m_inputsRequestIdList.Remove(p_requestId);
+        if (m_inputsRequestIdList.Count == 0)
+        {
+          //
+          // TO DO : raise facts downloaded event or Outputs computation (SOURCED_COMPUTE)
+          //
+          FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
+        }
+      }
+      else
+      {
+        FactsDownloaded(false);
+        FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
+      }
     }
 
     private bool FillEditedFacts(List<Fact> p_factsList)
     {
-      // TO DO
+      foreach (Fact l_fact in p_factsList)
+      {
+        Account l_account = AccountModel.Instance.GetValue(l_fact.AccountId);
+        AxisElem l_entity = AxisElemModel.Instance.GetValue(AxisType.Entities, l_fact.EntityId);
+        PeriodDimension l_period = new PeriodDimension(l_fact.Period);
+
+        if (l_account == null || l_entity == null || l_period == null)
+          return false;
+
+        Tuple<AxisElem, Account, PeriodDimension> l_factTuple = new Tuple<AxisElem, Account, PeriodDimension>(l_entity, l_account, l_period);
+        EditedFact l_EditedFact = m_editedFacts[l_factTuple];
+        if (l_EditedFact != null)
+          l_EditedFact.UpdateFactValue(l_fact.Value);
+      }
       return true;
+    }
+
+    public void UpdateWorkSheetOutputs()
+    {
+      // Create Source_compute data set edited facts (object ?)
+      // send SOURCED_COMPUTE REQUEST
+      
+    }
+
+    private void AfterFinancialOutputsComputed(bool p_success)
+    {
+      //
+      // TO DO : if success save values into facts
+      //
+      foreach (EditedFact l_outputFact in m_editedFacts.Values)
+      {
+        l_outputFact.UpdateCellValue();
+      }
+      FactsDownloaded(true);
     }
 
     public void IdentifyDifferences()
@@ -137,14 +201,6 @@ namespace FBI.MVC.Model
       }
     }
 
-    public void UpdateWorkSheetOutputs()
-    {
-      foreach (EditedFact l_outputFact in m_editedFacts.Values)
-      {
-        l_outputFact.UpdateCellValue();
-      }
-    }
-
     public void CommitDifferences()
     {
       // TO DO
@@ -156,7 +212,7 @@ namespace FBI.MVC.Model
       //   -> update cells color on worksheet if success
     }
 
-      // TO DO : After commit event
+    // TO DO : After commit event
 
   }
 }

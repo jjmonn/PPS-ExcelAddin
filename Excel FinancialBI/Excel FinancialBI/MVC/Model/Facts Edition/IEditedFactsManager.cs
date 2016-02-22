@@ -13,7 +13,7 @@ namespace FBI.MVC.Model
 
   interface IEditedFactsManager
   {
-   
+    bool m_autoCommit { set; get;}
     event OnFactsDownloaded FactsDownloaded;
 
     void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet);
