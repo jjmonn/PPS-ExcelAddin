@@ -104,6 +104,8 @@ namespace FBI.MVC.View
       this.m_newFolderRCMButton.Click += new System.EventHandler(this.OnClickNewFolder);
       this.m_renameRCMButton.Click += new System.EventHandler(this.OnClickRename);
       this.m_deleteRCMButton.Click += new System.EventHandler(this.OnClickDelete);
+
+      Addin.SuscribeAutoLock(this);
     }
 
     private void MultilanguageSetup()

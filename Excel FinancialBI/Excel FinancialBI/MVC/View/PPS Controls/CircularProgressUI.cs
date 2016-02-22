@@ -19,13 +19,18 @@ namespace FBI.MVC.View
     public CircularProgressUI()
     {
       InitializeComponent();
-      this.MultilangueSetup();
+      LoadView();
+    }
+
+    public void LoadView()
+    {
+      MultilangueSetup();
     }
 
     private void MultilangueSetup()
     {
-      this.Label1.Text = Local.GetValue("general.initializing");
-      this.Text = Local.GetValue("general.initializing");
+      Label1.Text = Local.GetValue("general.initializing");
+      Text = Local.GetValue("general.initializing");
     }
 
     public void SetController(IController p_controller)

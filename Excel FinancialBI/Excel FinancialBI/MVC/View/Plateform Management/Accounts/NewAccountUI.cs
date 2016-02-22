@@ -48,10 +48,14 @@ namespace FBI.MVC.View
       this.MultilangueSetup();
 
       this.InitParentTV(p_node);
+      SuscribeEvents();
+    }
 
+    void SuscribeEvents()
+    {
+      Addin.SuscribeAutoLock(this);
       this.CreateAccountBT.Click += OnCreateAccountClick;
       this.CancelBT.Click += OnCancelClick;
-
     }
 
     private void InitParentTV(vTreeNode p_node)

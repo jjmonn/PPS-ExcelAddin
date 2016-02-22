@@ -25,7 +25,7 @@ namespace FBI.MVC.View
     public NewDataVersionUI()
     {
       InitializeComponent();
-      this.InitView();
+      this.LoadView();
     }
 
     public void SetController(IController p_controller)
@@ -33,7 +33,7 @@ namespace FBI.MVC.View
       this.m_controller = p_controller as VersionsController;
     }
 
-    private void InitView()
+    private void LoadView()
     {
       // Rates and global facts versions treeviewBoxes
       FbiTreeView<ExchangeRateVersion>.Load(m_exchangeRatesVersionVTreeviewbox.TreeView.Nodes, RatesVersionModel.Instance.GetDictionary());
@@ -50,14 +50,17 @@ namespace FBI.MVC.View
 
       this.m_startingPeriodDatePicker.Value = DateTime.Now;
 
-      // Events handlers
+      MultilangueSetup();
+    }
+
+    void SuscribeEvents()
+    {
+      Addin.SuscribeAutoLock(this);
       this.m_CancelButton.Click += new EventHandler(this.CancelBT_Click);
       this.m_createVersionButton.Click += new EventHandler(this.CreateVersionBT_Click);
       this.m_timeConfigCB.SelectedItemChanged += new EventHandler(this.m_timeConfigCB_SelectedItemChanged);
       this.m_startingPeriodDatePicker.Calendar.MouseClick += new MouseEventHandler(this.m_startingPeriodDatePicker_MouseClick);
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewDataVersionUI_FormClosing);
-
-      MultilangueSetup();
     }
 
     private void MultilangueSetup()

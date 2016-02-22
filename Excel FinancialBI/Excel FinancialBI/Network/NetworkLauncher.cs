@@ -69,7 +69,7 @@ namespace FBI.Network
       }
     }
 
-    ClientState GetState()
+    public ClientState GetState()
     {
       return (m_state);
     }

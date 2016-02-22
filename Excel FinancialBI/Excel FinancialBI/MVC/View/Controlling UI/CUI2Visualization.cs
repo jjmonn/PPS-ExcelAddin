@@ -33,5 +33,10 @@ namespace FBI.MVC.View
     {
 
     }
+
+    public void LoadView()
+    {
+
+    }
   }
 }

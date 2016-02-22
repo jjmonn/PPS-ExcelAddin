@@ -49,6 +49,7 @@ namespace FBI.MVC.View
     {
       ValidateBT.Click += OnValidate;
       CancelBT.Click += OnCancel;
+      Addin.SuscribeAutoLock(this);
     }
 
     void OnValidate(object p_sender, EventArgs p_args)

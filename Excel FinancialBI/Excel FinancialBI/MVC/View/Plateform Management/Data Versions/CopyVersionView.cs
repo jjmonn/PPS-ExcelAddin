@@ -27,7 +27,7 @@ namespace FBI.MVC.View
     {
       InitializeComponent();
       MultilangueSetup();
-      InitView();
+      LoadView();
     }
 
     private void MultilangueSetup()
@@ -46,15 +46,16 @@ namespace FBI.MVC.View
       this.m_controller = p_controller as VersionsController;
     }
 
-    private void InitView()
+    private void LoadView()
     {
       SuscribeEvents();
     }
 
-     void SuscribeEvents()
+    void SuscribeEvents()
     {
       this.m_CancelButton.Click += new System.EventHandler(this.m_CancelButton_Click);
       this.m_copyVersionButton.Click += new System.EventHandler(this.m_copyVersionButton_Click);
+      Addin.SuscribeAutoLock(this);
     }
 
      public void SetCopiedVersion(Version p_copiedVersion)

@@ -31,7 +31,7 @@ namespace FBI.MVC.View
       MultilangueSetup();
     }
   
-    public void InitView(Account.AccountProcess p_process)
+    public void LoadView(Account.AccountProcess p_process)
     {
       m_shown = true;
       m_process = p_process;

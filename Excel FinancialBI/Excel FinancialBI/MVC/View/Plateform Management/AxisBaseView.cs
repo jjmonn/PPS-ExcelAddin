@@ -96,6 +96,7 @@ namespace FBI.MVC.View
       m_renameAxisElemMenu.Click += OnClickRename;
       m_createNewAxisElemMenuTop.Click += OnClickCreate;
       m_deleteAxisElemMenuTop.Click += OnClickDelete;
+      Addin.SuscribeAutoLock(this);
     }
 
     #endregion

@@ -208,7 +208,7 @@ namespace FBI
     private void m_reportUploadRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
       Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
-      ReportUploadEntitySelectionSidePane.InitView(l_process);
+      ReportUploadEntitySelectionSidePane.LoadView(l_process);
       ReportUploadEntitySelectionSidePane.Show();
     }
 

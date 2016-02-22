@@ -19,7 +19,6 @@ namespace FBI.MVC.View
     public DirectorySnapshotUI()
     {
       InitializeComponent();
-      this.MultilangueSetup();
     }
 
     private void MultilangueSetup()
@@ -34,6 +33,11 @@ namespace FBI.MVC.View
     public void SetController(IController p_controller)
     {
 
+    }
+
+    public void LoadView()
+    {
+      MultilangueSetup();
     }
   }
 }

@@ -18,7 +18,6 @@ namespace FBI.MVC.View
     public FBIFunctionUI()
     {
       InitializeComponent();
-      MultilangueSetup();
     }
 
     private void MultilangueSetup()
@@ -39,6 +38,11 @@ namespace FBI.MVC.View
     public void SetController(IController p_controller)
     {
 
+    }
+
+    public void LoadView()
+    {
+      MultilangueSetup();
     }
   }
 }

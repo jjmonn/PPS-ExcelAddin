@@ -61,7 +61,7 @@ namespace FBI.MVC.View
       this.m_controller = p_controller as AccountController;
     }
 
-    public void InitView()
+    public void LoadView()
     {
       try
       {
@@ -78,7 +78,7 @@ namespace FBI.MVC.View
       this.GlobalFactsTVInit();
       this.ComboBoxesInit();
 
-      this.InitGeneralEvent();
+      this.SuscribeEvents();
 
       this.DefineUIPermissions();
       this.DesactivateUnallowed();
@@ -87,8 +87,9 @@ namespace FBI.MVC.View
       this.SetFormulaEditionState(false);
     }
 
-    private void InitGeneralEvent()
+    private void SuscribeEvents()
     {
+      Addin.SuscribeAutoLock(this);
       AccountModel.Instance.UpdateEvent += OnModelUpdate;
       AccountModel.Instance.ReadEvent += OnModelRead;
       AccountModel.Instance.CreationEvent += OnAccountModelCreation;

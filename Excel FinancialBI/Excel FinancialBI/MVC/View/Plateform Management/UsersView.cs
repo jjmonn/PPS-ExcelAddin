@@ -74,6 +74,7 @@ namespace FBI.MVC.View
       UserAllowedEntityModel.Instance.DeleteEvent += OnUserAllowedModelDeleteEvent;
       UserAllowedEntityModel.Instance.CreationEvent += OnUserAllowedModelCreationEvent;
       m_userDGV.CellMouseDown += OnCellMouseDown;
+      Addin.SuscribeAutoLock(this);
     }
 
     void EntitiesTVInit()

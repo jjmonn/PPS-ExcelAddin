@@ -35,7 +35,7 @@ namespace FBI.MVC.Controller
 
     public override void LoadView()
     {
-      m_view.InitView();
+      m_view.LoadView();
     }
 
     #endregion

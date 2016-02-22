@@ -104,6 +104,7 @@ namespace FBI.MVC.View
       m_versionModel.UpdateEvent += OnModelUpdateVersion;
       m_versionModel.CreationEvent += OnModelCreateVersion;
       m_versionModel.DeleteEvent += OnModelDeleteVersion;
+      Addin.SuscribeAutoLock(this);
     }
 
     #region User Callback

@@ -38,7 +38,7 @@ namespace FBI.MVC.Controller
 
     public override void LoadView()
     {
-      this.m_view.InitView(this.m_account);
+      this.m_view.LoadView(this.m_account);
       this.m_view.ShowDialog();
     }
 

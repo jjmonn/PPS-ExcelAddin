@@ -45,6 +45,13 @@ namespace FBI.MVC.View
           break;
       }
       this.MultilangueSetup();
+      SuscribeEvents();
+    }
+
+
+    void SuscribeEvents()
+    {
+      Addin.SuscribeAutoLock(this);
     }
 
     private void MultilangueSetup()

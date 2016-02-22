@@ -46,7 +46,7 @@ namespace FBI.MVC.View
       this.m_controller = p_controller as AllocationKeysController;
     }
 
-    public void InitView(Account p_account)
+    public void LoadView(Account p_account)
     {
       this.m_account = p_account;
       if (this.m_account == null)
@@ -58,8 +58,14 @@ namespace FBI.MVC.View
       this.DGVInit();
       this.MultilangueSetup();
 
+      SuscribeEvents();
+    }
+
+    void SuscribeEvents()
+    {
       EntityDistributionModel.Instance.ReadEvent += OnModelRead;
       EntityDistributionModel.Instance.UpdateEvent += OnModelUpdate;
+      Addin.SuscribeAutoLock(this);
     }
 
     private void DGVInit()

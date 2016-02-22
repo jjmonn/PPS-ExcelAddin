@@ -36,7 +36,7 @@ namespace FBI.MVC.View
 
     public void LoadView()
     {
-      this.dgvLoad();
+      this.DGVLoad();
       m_dgv.RowsHierarchy.Visible = false;
       m_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
 
@@ -49,7 +49,7 @@ namespace FBI.MVC.View
       this.SetMainCurrencyCallBack.Text = Local.GetValue("currencies.set_main_currency");
     }
 
-    private void dgvLoad()
+    private void DGVLoad()
     {
       MultiIndexDictionary<uint, string, Currency> l_currencyDic = CurrencyModel.Instance.GetDictionary();
 
@@ -79,6 +79,7 @@ namespace FBI.MVC.View
       m_dgv.CellChangedAndValidated += OnDgvCellChangedAndValidated;
       CurrencyModel.Instance.ReadEvent += OnModelRead;
       CurrencyModel.Instance.DeleteEvent += OnModelDelete;
+      Addin.SuscribeAutoLock(this);
     }
 
     delegate void OnModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);

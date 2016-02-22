@@ -479,12 +479,6 @@
     <Compile Include="MVC\View\Plateform Management\Data Versions\NewDataVersionView.Designer.cs">
       <DependentUpon>NewDataVersionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\GlobalFactUI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\GlobalFactUI.Designer.cs">
-      <DependentUpon>GlobalFactUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="MVC\View\Plateform Management\AxisBaseView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -785,9 +779,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\Rate and MEI\ExcelImportView.resx">
       <DependentUpon>ExcelImportView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\GlobalFactUI.resx">
-      <DependentUpon>GlobalFactUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>

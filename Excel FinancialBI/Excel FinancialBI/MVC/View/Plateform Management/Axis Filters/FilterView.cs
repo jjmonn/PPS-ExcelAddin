@@ -39,7 +39,7 @@ namespace FBI.MVC.View
         m_tree.ContextMenuStrip = m_contextRightClick;
         m_tree.Dock = DockStyle.Fill;
         m_valuePanel.Controls.Add(m_tree, 0, 1);
-        this.RegisterEvents();
+        this.SuscribeEvents();
         this.MultilangueSetup();
         this.DefineUIPermissions();
         this.DesactivateUnallowed();
@@ -79,7 +79,7 @@ namespace FBI.MVC.View
       m_controller = p_controller as FilterController;
     }
 
-    private void RegisterEvents()
+    private void SuscribeEvents()
     {
       m_tree.KeyDown += OnTreeKeyDown;
       m_addValueRightClick.Click += OnAddValueClick;
@@ -94,6 +94,7 @@ namespace FBI.MVC.View
       FilterValueModel.Instance.CreationEvent += OnModelCreate;
       FilterValueModel.Instance.DeleteEvent += OnModelDelete;
       FilterValueModel.Instance.UpdateEvent += OnModelUpdate;
+      Addin.SuscribeAutoLock(this);
     }
 
     private void OnTreeNodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)

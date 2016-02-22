@@ -53,7 +53,7 @@ namespace FBI.MVC.View
       {
         m_comboBox.DropDownList = true;
         this.LoadViewTypes();
-        this.RegisterEvents();
+        this.SuscribeEvents();
         m_locals[m_viewType]();
         MultilangueSetup();
       }
@@ -78,12 +78,13 @@ namespace FBI.MVC.View
       this.m_importButton.Text = Local.GetValue("upload.upload");
     }
 
-    private void RegisterEvents()
+    private void SuscribeEvents()
     {
       this.FormClosing += OnClosing;
       m_periodsButton.Click += OnPeriodButtonClick;
       m_valuesButton.Click += OnValButtonClick;
       m_importButton.Click += OnImportClick;
+      Addin.SuscribeAutoLock(this);
     }
 
     #region ViewType

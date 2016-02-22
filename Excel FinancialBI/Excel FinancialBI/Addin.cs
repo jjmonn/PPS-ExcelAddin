@@ -12,6 +12,7 @@ namespace FBI
   using MVC.Model.CRUD;
   using MVC.Model;
   using VIBlend.Utilities;
+  using System.Windows.Forms;
 
   static class Addin
   {
@@ -115,7 +116,7 @@ namespace FBI
       UserName = p_userName;
       Password = p_password;
       UserModel.Instance.CurrentUserName = UserName;
-      if ((result = m_networkLauncher.Launch("82.125.98.175", 4242, OnDisconnect)) == true)
+      if ((result = m_networkLauncher.Launch("192.168.1.11", 4242, OnDisconnect)) == true)
         Authenticator.Instance.AskAuthentication(UserName, Password);
       if (ConnectionStateEvent != null)
         ConnectionStateEvent(result);
@@ -127,6 +128,7 @@ namespace FBI
       bool failed = true;
       Int32 nbTry = 10;
 
+      ConnectionStateEvent(false);
       while (failed && nbTry > 0)
       {
         System.Threading.Thread.Sleep(3000);
@@ -135,6 +137,26 @@ namespace FBI
       }
       if (ConnectionStateEvent != null)
         ConnectionStateEvent(!failed);
+    }
+
+    public static void SuscribeAutoLock(ContainerControl p_control)
+    {
+      p_control.Enabled = m_networkLauncher.GetState() == ClientState.running;
+      Addin.ConnectionStateEvent += delegate(bool p_connected) { LockView(p_connected, p_control); };
+    }
+
+    delegate void LockView_delegate(bool p_connected, ContainerControl p_control);
+    public static void LockView(bool p_connected, ContainerControl p_control)
+    {
+      if (p_control.InvokeRequired)
+      {
+        LockView_delegate func = new LockView_delegate(LockView);
+        p_control.Invoke(func, p_connected, p_control);
+      }
+      else
+      {
+        p_control.Enabled = p_connected;
+      }
     }
 
   }

@@ -39,7 +39,7 @@ namespace FBI.MVC.View
         m_tree.ContextMenuStrip = m_structureTreeviewRightClickMenu;
         m_filterPanel.Content.Controls.Add(m_tree);
         this.LoadLanguage();
-        this.RegisterEvents();
+        this.SuscribeEvents();
         this.MultilangueSetup();
       }
       catch (Exception e)
@@ -75,7 +75,7 @@ namespace FBI.MVC.View
       this.Text = Local.GetValue("filters.title_filters_structure");
     }
 
-    private void RegisterEvents()
+    private void SuscribeEvents()
     {
       m_tree.KeyDown += OnTreeKeyDown;
       m_addFilter.Click += OnAddCategory;
@@ -87,6 +87,7 @@ namespace FBI.MVC.View
       FilterModel.Instance.CreationEvent += OnModelCreate;
       FilterModel.Instance.DeleteEvent += OnModelDelete;
       FilterModel.Instance.UpdateEvent += OnModelUpdate;
+      Addin.SuscribeAutoLock(this);
     }
 
     #region Utils
