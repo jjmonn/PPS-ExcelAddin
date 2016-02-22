@@ -43,7 +43,8 @@ namespace FBI.MVC.View
 
     public void LoadView()
     {
-      InitPeriodRangeSelection();
+      if ((Account.AccountProcess)Properties.Settings.Default.processId == Account.AccountProcess.RH)
+        InitPeriodRangeSelection();
       TreeViewInit();
       ComboBoxInit();
 

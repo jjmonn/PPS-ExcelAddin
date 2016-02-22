@@ -51,10 +51,18 @@ namespace FBI.MVC.Controller
     public List<UInt32> GetVersions()
     {
       SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();
+      List<UInt32> l_list = new List<uint>();
 
       if (l_dic == null)
-        return (new List<uint>());
-      return (l_dic[typeof(Version)]);
+        return (l_list);
+      foreach (UInt32 l_versionId in l_dic[typeof(Version)])
+      {
+        Version l_version = VersionModel.Instance.GetValue(l_versionId);
+
+        if (l_version != null && !l_version.IsFolder)
+          l_list.Add(l_versionId);
+      }
+      return (l_list);
     }
 
     public List<Tuple<AxisType, UInt32>> GetAxisElems()

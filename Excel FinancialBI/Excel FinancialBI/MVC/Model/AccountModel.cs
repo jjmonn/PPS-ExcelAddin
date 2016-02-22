@@ -36,5 +36,18 @@ namespace FBI.MVC.Model
       InitCallbacks();
     }
 
+    public List<Account> GetChildren(UInt32 p_parentId, List<Account> p_list = null)
+    {
+      if (p_list == null)
+        p_list = new List<Account>();
+      foreach (Account l_account in GetDictionary().Values)
+        if (l_account.ParentId == p_parentId)
+        {
+          p_list.Add(l_account);
+          GetChildren(l_account.Id, p_list);
+        }
+      return (p_list);
+    }
+
   }
 }

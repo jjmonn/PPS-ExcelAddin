@@ -109,6 +109,8 @@ namespace FBI.MVC.Controller
 
     bool CheckModelType(CUIDimensionConf p_conf, Type p_type)
     {
+      if (p_conf == null)
+        return (false);
       if (p_conf.ModelType == p_type)
         return (true);
       if (p_conf.Child != null)

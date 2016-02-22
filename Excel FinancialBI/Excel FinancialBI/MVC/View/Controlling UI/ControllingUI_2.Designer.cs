@@ -69,9 +69,9 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.DropOnExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.BusinessControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.VersionsComparisonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.SwitchVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.HideVersionsComparisonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_versionComparisonButton = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_versionSwitchButton = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_hideVersionButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_refreshButton = new System.Windows.Forms.ToolStripMenuItem();
       this.ChartBT = new System.Windows.Forms.ToolStripMenuItem();
       this.ExpansionImageList = new System.Windows.Forms.ImageList(this.components);
@@ -431,9 +431,9 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // BusinessControlToolStripMenuItem
       // 
       this.BusinessControlToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.VersionsComparisonToolStripMenuItem,
-            this.SwitchVersionsToolStripMenuItem,
-            this.HideVersionsComparisonToolStripMenuItem});
+            this.m_versionComparisonButton,
+            this.m_versionSwitchButton,
+            this.m_hideVersionButton});
       this.BusinessControlToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("BusinessControlToolStripMenuItem.Image")));
       this.BusinessControlToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.BusinessControlToolStripMenuItem.Name = "BusinessControlToolStripMenuItem";
@@ -442,23 +442,23 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.BusinessControlToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       this.BusinessControlToolStripMenuItem.ToolTipText = "[CUI.performance_review_tooltip]";
       // 
-      // VersionsComparisonToolStripMenuItem
+      // m_versionComparisonButton
       // 
-      this.VersionsComparisonToolStripMenuItem.Name = "VersionsComparisonToolStripMenuItem";
-      this.VersionsComparisonToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
-      this.VersionsComparisonToolStripMenuItem.Text = "[CUI.display_versions_comparison]";
+      this.m_versionComparisonButton.Name = "m_versionComparisonButton";
+      this.m_versionComparisonButton.Size = new System.Drawing.Size(257, 22);
+      this.m_versionComparisonButton.Text = "[CUI.display_versions_comparison]";
       // 
-      // SwitchVersionsToolStripMenuItem
+      // m_versionSwitchButton
       // 
-      this.SwitchVersionsToolStripMenuItem.Name = "SwitchVersionsToolStripMenuItem";
-      this.SwitchVersionsToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
-      this.SwitchVersionsToolStripMenuItem.Text = "[CUI.switch_versions]";
+      this.m_versionSwitchButton.Name = "m_versionSwitchButton";
+      this.m_versionSwitchButton.Size = new System.Drawing.Size(257, 22);
+      this.m_versionSwitchButton.Text = "[CUI.switch_versions]";
       // 
-      // HideVersionsComparisonToolStripMenuItem
+      // m_hideVersionButton
       // 
-      this.HideVersionsComparisonToolStripMenuItem.Name = "HideVersionsComparisonToolStripMenuItem";
-      this.HideVersionsComparisonToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
-      this.HideVersionsComparisonToolStripMenuItem.Text = "[CUI.take_off_comparison]";
+      this.m_hideVersionButton.Name = "m_hideVersionButton";
+      this.m_hideVersionButton.Size = new System.Drawing.Size(257, 22);
+      this.m_hideVersionButton.Text = "[CUI.take_off_comparison]";
       // 
       // m_refreshButton
       // 
@@ -473,7 +473,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // 
       // ChartBT
       // 
-      this.ChartBT.Image = global::FBI.Properties.Resources.chart_pie;
+      this.ChartBT.Image = ((System.Drawing.Image)(resources.GetObject("ChartBT.Image")));
       this.ChartBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.ChartBT.Name = "ChartBT";
       this.ChartBT.Size = new System.Drawing.Size(81, 51);
@@ -539,9 +539,9 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
 	public System.Windows.Forms.MenuStrip MainMenu;
 	public System.Windows.Forms.ToolStripMenuItem m_refreshButton;
 	public System.Windows.Forms.ToolStripMenuItem BusinessControlToolStripMenuItem;
-	public System.Windows.Forms.ToolStripMenuItem VersionsComparisonToolStripMenuItem;
-	public System.Windows.Forms.ToolStripMenuItem SwitchVersionsToolStripMenuItem;
-	public System.Windows.Forms.ToolStripMenuItem HideVersionsComparisonToolStripMenuItem;
+	public System.Windows.Forms.ToolStripMenuItem m_versionComparisonButton;
+	public System.Windows.Forms.ToolStripMenuItem m_versionSwitchButton;
+	public System.Windows.Forms.ToolStripMenuItem m_hideVersionButton;
 	public System.Windows.Forms.ToolStripMenuItem ExcelToolStripMenuItem;
 	public System.Windows.Forms.ToolStripMenuItem DropOnExcelToolStripMenuItem;
 	public System.Windows.Forms.Label m_currencyLabel;

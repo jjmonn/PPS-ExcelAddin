@@ -11,6 +11,7 @@ namespace FBI.MVC.Model.CRUD
   using PeriodTypeKey = TimeConfig;
   using PeriodKey = Int32;
   using VersionKey = UInt32;
+  using TabKey = UInt32;
 
   public class ResultKey
   {
@@ -20,15 +21,21 @@ namespace FBI.MVC.Model.CRUD
     public SortKey EntityHash { get { return (m_key.Item3); } }
     public PeriodTypeKey PeriodType { get { return (m_key.Item4); } }
     public Int32 Period { get { return (m_key.Item5); } }
-    Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey> m_key;
+    Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey, TabKey> m_key;
     public bool StrongVersion { get; private set; }
+
+    public void RemoveTab()
+    {
+      m_key = new Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey, TabKey>
+        (m_key.Item1, m_key.Item2, m_key.Item3, m_key.Item4, m_key.Item5, m_key.Item6, 0);
+    }
 
     public Tuple<ResultKey, bool> GetTuple()
     {
       return (new Tuple<ResultKey, bool>(this, StrongVersion));
     }
 
-    public ResultKey(Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey> p_key)
+    public ResultKey(Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey, TabKey> p_key)
     {
       m_key = p_key;
       StrongVersion = false;
@@ -36,13 +43,15 @@ namespace FBI.MVC.Model.CRUD
 
     public ResultKey()
     {
-      m_key = new Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey>(0, "", "", (PeriodTypeKey)0, 0, 0);
+      m_key = new Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey, TabKey>(0, "", "", (PeriodTypeKey)0, 0, 0, 0);
       StrongVersion = false;
     }
 
-    public ResultKey(AccountKey p_account, SortKey p_sort, SortKey p_entitySort, PeriodTypeKey p_periodType, PeriodKey p_period, VersionKey p_version, bool p_strongVersion = false)
+    public ResultKey(AccountKey p_account, SortKey p_sort, SortKey p_entitySort, 
+      PeriodTypeKey p_periodType, PeriodKey p_period, VersionKey p_version, bool p_strongVersion = false, TabKey p_tab = 0)
     {
-      m_key = new Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey>(p_account, p_sort, p_entitySort, p_periodType, p_period, p_version);
+      m_key = new Tuple<AccountKey, SortKey, SortKey, PeriodTypeKey, PeriodKey, VersionKey, TabKey>(
+        p_account, p_sort, p_entitySort, p_periodType, p_period, p_version, p_tab);
       StrongVersion = p_strongVersion;
     }
 
@@ -57,7 +66,7 @@ namespace FBI.MVC.Model.CRUD
               if (l_obj.m_key.Item4 == m_key.Item4)
                 if (l_obj.m_key.Item5 == m_key.Item5)
                   if (l_obj.m_key.Item6 == m_key.Item6)
-                    return (true);
+                    return (l_obj.m_key.Item7 == m_key.Item7);
       return (false);
     }
 
@@ -74,13 +83,17 @@ namespace FBI.MVC.Model.CRUD
       VersionKey l_versionkey;
       SortKey l_sortKey = p_a.m_key.Item2 + p_b.m_key.Item2;
       SortKey l_entitySortKey = p_a.m_key.Item3 + p_b.m_key.Item3;
+      TabKey l_tab;
 
       l_periodTypeKey = ((byte)p_b.m_key.Item4 == 0) ? p_a.m_key.Item4 : p_b.m_key.Item4;
       l_periodKey = (p_b.m_key.Item4 != 0) ? p_b.m_key.Item5 : p_a.m_key.Item5;
       l_accountKey = (p_b.m_key.Item1 != 0) ? p_b.m_key.Item1 : p_a.m_key.Item1;
+      l_tab = (p_b.m_key.Item7 != 0) ? p_b.m_key.Item7 : p_a.m_key.Item7;
       l_versionkey = (p_b.m_key.Item6 != 0 && (p_b.StrongVersion || !p_a.StrongVersion)) ? p_b.m_key.Item6 : p_a.m_key.Item6;
 
-      ResultKey l_newKey = new ResultKey(l_accountKey, l_sortKey, l_entitySortKey, l_periodTypeKey, l_periodKey, l_versionkey, (p_b.StrongVersion || p_a.StrongVersion));
+      ResultKey l_newKey = 
+        new ResultKey(l_accountKey, l_sortKey, l_entitySortKey, l_periodTypeKey, l_periodKey,
+          l_versionkey, (p_b.StrongVersion || p_a.StrongVersion), l_tab);
 
       return (l_newKey);
     }

@@ -55,6 +55,9 @@ namespace FBI.MVC.View
     {
       ComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
       m_refreshButton.MouseDown += OnRefreshButtonMouseDown;
+      m_versionComparisonButton.MouseDown += OnVersionComparisionButtonMouseDown;
+      m_versionSwitchButton.MouseDown += OnVersionSwitchButtonMouseDown;
+      m_hideVersionButton.MouseDown += OnHideVersionButtonMouseDown;
     }
 
     private void MultilangueSetup()
@@ -83,9 +86,9 @@ namespace FBI.MVC.View
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel_visible_part");
       this.BusinessControlToolStripMenuItem.Text = Local.GetValue("CUI.performance_review");
       this.BusinessControlToolStripMenuItem.ToolTipText = Local.GetValue("CUI.performance_review_tooltip");
-      this.VersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.display_versions_comparison");
-      this.SwitchVersionsToolStripMenuItem.Text = Local.GetValue("CUI.switch_versions");
-      this.HideVersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.take_off_comparison");
+      this.m_versionComparisonButton.Text = Local.GetValue("CUI.display_versions_comparison");
+      this.m_versionSwitchButton.Text = Local.GetValue("CUI.switch_versions");
+      this.m_hideVersionButton.Text = Local.GetValue("CUI.take_off_comparison");
       this.m_refreshButton.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
       this.ChartBT.Text = Local.GetValue("CUI.charts");
       this.Text = Local.GetValue("CUI.financials");
@@ -102,6 +105,21 @@ namespace FBI.MVC.View
     void OnRefreshButtonMouseDown(object sender, MouseEventArgs e)
     {
       m_controller.Compute();
+    }
+
+    void OnVersionComparisionButtonMouseDown(object sender, MouseEventArgs e)
+    {
+      m_controller.ResultController.DisplayVersionComparaison();
+    }
+
+    void OnVersionSwitchButtonMouseDown(object sender, MouseEventArgs e)
+    {
+      m_controller.ResultController.SwitchVersionComparaison();
+    }
+
+    void OnHideVersionButtonMouseDown(object sender, MouseEventArgs e)
+    {
+      m_controller.ResultController.HideVersionComparaison();
     }
 
     #endregion
