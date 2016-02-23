@@ -43,10 +43,16 @@ namespace FBI.MVC.View
       this.MultilangueSetup();
 
       this.m_controller.CreatePane();
-      this.SplitContainer1.Panel1.Controls.Add(this.m_controller.LeftPaneController.View as CUI2LeftPane);
-      this.SplitContainer2.Panel2.Controls.Add(this.m_controller.RightPaneController.View as CUI2RightPane);
-      this.m_DGVsControlTab.Controls.Add(m_controller.ResultController.View as ResultView);
-
+      CUI2LeftPane l_leftPane = this.m_controller.LeftPaneController.View as CUI2LeftPane;
+      CUI2RightPane l_rightPane = this.m_controller.RightPaneController.View as CUI2RightPane;
+      ResultView l_resultView =  m_controller.ResultController.View as ResultView;
+      this.SplitContainer1.Panel1.Controls.Add(l_leftPane);
+      this.SplitContainer2.Panel2.Controls.Add(l_rightPane);
+      this.m_DGVsControlTab.Controls.Add(l_resultView);
+      l_leftPane.Dock = DockStyle.Fill;
+      l_rightPane.Dock = DockStyle.Fill;
+      l_resultView.Dock = DockStyle.Fill;
+      
       this.Show();
       SuscribeEvents();
     }
