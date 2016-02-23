@@ -39,7 +39,8 @@ namespace FBI.MVC.Model
 
     private void DimensionsIdentificationProcess()
     {    
-      Range l_cell; 
+      Range l_cell;
+
       for (UInt32 l_rowIndex = 1; l_rowIndex <= m_lastCell.Row; l_rowIndex++)
       {
         for (UInt32 l_columnIndex = 1; l_columnIndex <= m_lastCell.Column; l_columnIndex++)
@@ -47,28 +48,19 @@ namespace FBI.MVC.Model
           l_cell = m_range.Cells[l_rowIndex, l_columnIndex] as Range;
           if (l_cell == null)
           {
-            System.Diagnostics.Debug.WriteLine("Dataset: Snapshot method: DimensionsIdentificationProcess > error in cell identication process: address : ");            
+            System.Diagnostics.Debug.WriteLine("Dataset: Snapshot method: DimensionsIdentificationProcess > error in cell identication process: address : ");
             continue;
           }
 
-          if (Convert.ToBoolean(l_cell.EntireRow.Hidden) == true  || Convert.ToBoolean(l_cell.EntireColumn.Hidden) == true)
+          if (Convert.ToBoolean(l_cell.EntireRow.Hidden) == true || Convert.ToBoolean(l_cell.EntireColumn.Hidden) == true)
             continue;
-        
-          DateTime l_isDate;
-          if (DateTime.TryParse(l_cell.Value as string, out l_isDate))
-          {
-            if (m_dimensions.IsPeriod(l_cell) == false)
-            {
-              m_dimensions.DimensionsIdentify(l_cell);
-            }
-          }
+
+          if (l_cell.Value.GetType() == typeof(DateTime))
+            m_dimensions.RegisterPeriod(l_cell);
           else
-          {
             m_dimensions.DimensionsIdentify(l_cell);
-          }
         }
       }
-
     }
   
     private Range GetRangeFromRowAndColumn(Int32 p_rowIndex, Int32 p_columnIndex)

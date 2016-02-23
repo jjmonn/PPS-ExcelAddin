@@ -27,8 +27,25 @@ namespace FBI.MVC.Model
     }
 
     public void Dump(ByteBuffer p_packet, bool p_includeId)
-    { 
+    {
+      GetHashCode();  
     }
+
+    public override bool Equals(object p_obj)
+    {
+      if (p_obj.GetType() != this.GetType())
+        return (false);
+      PeriodDimension l_obj = p_obj as PeriodDimension;
+
+      return (l_obj.Id == Id);
+    }
+
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
+
+
 
     public static bool operator ==(PeriodDimension a, PeriodDimension b)
     {

@@ -20,13 +20,14 @@ namespace FBI.MVC.Model
   public enum Alignment
   {
     UNDEFINED = 0,
-    VERTICAL,
     HORIZONTAL,
+    VERTICAL,
   }
 
   public enum DimensionType
   {
-    ACCOUNT = 0,
+    UNDEFINED = 0,
+    ACCOUNT,
     ENTITY,
     PERIOD,
     EMPLOYEE
@@ -43,6 +44,7 @@ namespace FBI.MVC.Model
     public Dimension(DimensionType p_dimensionType)
     {
       m_dimensionType = p_dimensionType;
+      m_alignment = Alignment.UNDEFINED;
     }
 
     public bool AddValue(Range p_range, T p_dimensionObject)

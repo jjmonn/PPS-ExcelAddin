@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI.MVC.Model
 {
-  using Microsoft.Office.Interop.Excel;
-  using FBI.MVC.Model.CRUD;
+  using CRUD;
   using Network;
   using Utils;
 
@@ -15,7 +15,7 @@ namespace FBI.MVC.Model
   class RHEditedFactsManager : IEditedFactsManager
   {
     MultiIndexDictionary<Range, Tuple<AxisElem, Account, AxisElem, PeriodDimension>, EditedFact> m_RHEditedFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, AxisElem, PeriodDimension>, EditedFact>();
-    Dimensions m_dimensions;
+    Dimensions m_dimensions = null;
     List<int> m_requestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
     List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
@@ -25,16 +25,11 @@ namespace FBI.MVC.Model
     public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
-      switch (p_dimensions.m_orientation)
-      {
-        case Dimensions.Orientation.EMPLOYEES_PERIODS:
-          CreateEditedFacts(p_dimensions.m_employees, p_dimensions.m_periods, p_dimensions.m_entities);
-          break;
+      m_dimensions = p_dimensions;
+      Dimension<CRUDEntity> l_vertical = p_dimensions.m_dimensions[p_dimensions.m_orientation.Vertical];
+      Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
 
-        case Dimensions.Orientation.PERIODS_EMPLOYEES:
-          CreateEditedFacts(p_dimensions.m_periods, p_dimensions.m_employees, p_dimensions.m_entities);
-          break;
-      }
+      CreateEditedFacts(l_vertical, l_horitontal, p_dimensions.m_entities);
    
       // Once facts registered clean dimensions and put them into a safe dictionary ?
     }

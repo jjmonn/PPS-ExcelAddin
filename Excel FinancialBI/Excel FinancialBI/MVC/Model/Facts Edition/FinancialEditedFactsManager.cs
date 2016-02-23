@@ -15,7 +15,7 @@ namespace FBI.MVC.Model
   {
     MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact> m_editedFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact>();
     MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact> m_outputFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact>();
-    Dimensions m_dimensions;
+    Dimensions m_dimensions = null;
     List<int> m_inputsRequestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
     List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
@@ -25,32 +25,12 @@ namespace FBI.MVC.Model
     public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
-      switch (p_dimensions.m_orientation)
-      {
-        case Dimensions.Orientation.ACCOUNTS_PERIODS:
-          CreateEditedFacts(p_dimensions.m_accounts, p_dimensions.m_periods, p_dimensions.m_entities);
-          break;
+      m_dimensions = p_dimensions;
+      Dimension<CRUDEntity> l_vertical = p_dimensions.m_dimensions[p_dimensions.m_orientation.Vertical];
+      Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
+      Dimension<CRUDEntity> l_tabDimension = p_dimensions.m_dimensions[p_dimensions.m_orientation.TabDimension];
 
-        case Dimensions.Orientation.PERIODS_ACCOUNTS:
-          CreateEditedFacts(p_dimensions.m_periods, p_dimensions.m_accounts, p_dimensions.m_entities);
-          break;
-
-        case Dimensions.Orientation.ENTITIES_ACCOUNTS:
-          CreateEditedFacts(p_dimensions.m_entities, p_dimensions.m_accounts, p_dimensions.m_periods);
-          break;
-
-        case Dimensions.Orientation.ACCOUNTS_ENTITIES:
-          CreateEditedFacts(p_dimensions.m_accounts, p_dimensions.m_entities, p_dimensions.m_periods);
-          break;
-
-        case Dimensions.Orientation.PERIODS_ENTITIES:
-          CreateEditedFacts(p_dimensions.m_periods, p_dimensions.m_entities, p_dimensions.m_accounts);
-          break;
-
-        case Dimensions.Orientation.ENTITIES_PERIODS:
-          CreateEditedFacts(p_dimensions.m_entities, p_dimensions.m_periods, p_dimensions.m_accounts);
-          break;
-      }
+      CreateEditedFacts(l_vertical, l_horitontal, l_tabDimension);
 
       // TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
     }
