@@ -7,7 +7,7 @@
     <ProjectGuid>{AB248BB1-1461-4160-AB69-D74A70FFC630}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FinancialBI_CSharp</RootNamespace>
+    <RootNamespace>FBI</RootNamespace>
     <AssemblyName>FinancialBI_CSharp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -54,45 +54,62 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\Core\ByteBuffer.cs" />
-    <Compile Include="Network\Core\ClientMessage.cs" />
-    <Compile Include="Network\Core\ClientState.cs" />
-    <Compile Include="Network\Core\ErrorMessage.cs" />
-    <Compile Include="Network\Core\NetworkLauncher.cs" />
-    <Compile Include="Network\Core\NetworkManager.cs" />
-    <Compile Include="Network\Core\ServerMessage.cs" />
-    <Compile Include="Network\CRUD\AxisElem.cs" />
-    <Compile Include="Network\CRUD\AxisFilter.cs" />
-    <Compile Include="Network\CRUD\FactTag.cs" />
-    <Compile Include="Network\CRUD\AxisOwner.cs" />
-    <Compile Include="Network\CRUD\Base\AxedCRUDEntity.cs" />
-    <Compile Include="Network\CRUD\Base\NamedHierarchyCRUDEntity.cs" />
-    <Compile Include="Network\CRUD\Base\NamedCRUDEntity.cs" />
-    <Compile Include="Network\CRUD\Base\CRUDEntity.cs" />
-    <Compile Include="Network\CRUD\AxisElemLog.cs" />
-    <Compile Include="Network\CRUD\CRUDAction.cs" />
-    <Compile Include="Network\CRUD\Currency.cs" />
-    <Compile Include="Network\CRUD\EntityCurrency.cs" />
-    <Compile Include="Network\CRUD\ExchangeRate.cs" />
-    <Compile Include="Network\CRUD\ExchangeRateVersion.cs" />
-    <Compile Include="Network\CRUD\CommitLog.cs" />
-    <Compile Include="Network\CRUD\FactLog.cs" />
-    <Compile Include="Network\CRUD\Fact.cs" />
-    <Compile Include="Network\CRUD\Filter.cs" />
-    <Compile Include="Network\CRUD\FilterValue.cs" />
-    <Compile Include="Network\CRUD\FModelingAccount.cs" />
-    <Compile Include="Network\CRUD\GlobalFact.cs" />
-    <Compile Include="Network\CRUD\GlobalFactData.cs" />
-    <Compile Include="Network\CRUD\GlobalFactVersion.cs" />
-    <Compile Include="Network\CRUD\Group.cs" />
-    <Compile Include="Network\CRUD\EntityDistribution.cs" />
-    <Compile Include="Network\CRUD\Base\HierarchyCRUDEntity.cs" />
-    <Compile Include="Network\CRUD\Commit.cs" />
-    <Compile Include="Network\CRUD\User.cs" />
-    <Compile Include="Network\CRUD\UserAllowedEntity.cs" />
-    <Compile Include="Network\CRUD\Version.cs" />
+    <Compile Include="MVC\Model\FactLogModel.cs" />
+    <Compile Include="MVC\Model\FactsModel.cs" />
+    <Compile Include="MVC\Model\FactTagModel.cs" />
+    <Compile Include="Network\ByteBuffer.cs" />
+    <Compile Include="Network\ClientMessage.cs" />
+    <Compile Include="Network\ClientState.cs" />
+    <Compile Include="Network\ErrorMessage.cs" />
+    <Compile Include="Network\NetworkLauncher.cs" />
+    <Compile Include="Network\NetworkManager.cs" />
+    <Compile Include="Network\ServerMessage.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisElem.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisFilter.cs" />
+    <Compile Include="MVC\Model\CRUD\FactTag.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisOwner.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\AxedCRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\NamedHierarchyCRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\NamedCRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\CRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisElemLog.cs" />
+    <Compile Include="MVC\Model\CRUD\CRUDAction.cs" />
+    <Compile Include="MVC\Model\CRUD\Currency.cs" />
+    <Compile Include="MVC\Model\CRUD\EntityCurrency.cs" />
+    <Compile Include="MVC\Model\CRUD\ExchangeRate.cs" />
+    <Compile Include="MVC\Model\CRUD\ExchangeRateVersion.cs" />
+    <Compile Include="MVC\Model\CRUD\CommitLog.cs" />
+    <Compile Include="MVC\Model\CRUD\FactLog.cs" />
+    <Compile Include="MVC\Model\CRUD\Fact.cs" />
+    <Compile Include="MVC\Model\CRUD\Filter.cs" />
+    <Compile Include="MVC\Model\CRUD\FilterValue.cs" />
+    <Compile Include="MVC\Model\CRUD\FModelingAccount.cs" />
+    <Compile Include="MVC\Model\CRUD\GlobalFact.cs" />
+    <Compile Include="MVC\Model\CRUD\GlobalFactData.cs" />
+    <Compile Include="MVC\Model\CRUD\GlobalFactVersion.cs" />
+    <Compile Include="MVC\Model\CRUD\Group.cs" />
+    <Compile Include="MVC\Model\CRUD\EntityDistribution.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\HierarchyCRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Commit.cs" />
+    <Compile Include="MVC\Model\CRUD\User.cs" />
+    <Compile Include="MVC\Model\CRUD\UserAllowedEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Version.cs" />
+    <Compile Include="MVC\Controller\IController.cs" />
+    <Compile Include="MVC\View\IView.cs" />
+    <Compile Include="MVC\Model\AccountModel.cs" />
+    <Compile Include="MVC\Model\AxisElemModel.cs" />
+    <Compile Include="MVC\Model\AxisFilterModel.cs" />
+    <Compile Include="MVC\Model\AxisOwnerModel.cs" />
+    <Compile Include="MVC\Model\Base\AxedCRUDModel.cs" />
+    <Compile Include="MVC\Model\Base\ICRUDModel.cs" />
+    <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
+    <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
+    <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\CurrencyModel.cs" />
+    <Compile Include="MVC\Model\EntityCurrencyModel.cs" />
+    <Compile Include="MVC\Model\EntityDistributionModel.cs" />
+    <Compile Include="MVC\Model\ExchangeRateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Updater\Updater.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\MultiIndexDictionary.cs" />
     <Compile Include="Utils\RightManager.cs" />
@@ -103,7 +120,7 @@
     <None Include="FinancialBICSharp.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\CRUD\Account.cs" />
+    <Compile Include="MVC\Model\CRUD\Account.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
