@@ -158,29 +158,29 @@ namespace FBI.MVC.View
     private void MultilangueSetup()
     {
       this.m_ProcessLabel.Text = Local.GetValue("process.process_selection");
-      this.m_accountDescriptionGroupbox.Text = Local.GetValue("accounts_edition.account_description");
-      this.SaveDescriptionBT.Text = Local.GetValue("accounts_edition.save_description");
-      this.m_accountFormulaGroupbox.Text = Local.GetValue("accounts_edition.account_formula");
-      this.m_formulaEditionButton.Text = Local.GetValue("accounts_edition.edit_formula");
+      this.m_accountDescriptionGroupbox.Text = Local.GetValue("accounts.description");
+      this.SaveDescriptionBT.Text = Local.GetValue("accounts.save_description");
+      this.m_accountFormulaGroupbox.Text = Local.GetValue("accounts.formula");
+      this.m_formulaEditionButton.Text = Local.GetValue("accounts.edit_formula");
       this.m_validateFormulaButton.Text = Local.GetValue("general.save");
       this.m_cancelFormulaEditionButton.Text = Local.GetValue("general.cancel");
-      this.m_accountInformationGroupbox.Text = Local.GetValue("accounts_edition.account_information");
-      this.m_accountNameLabel.Text = Local.GetValue("accounts_edition.account_name");
-      this.m_accountFormulaTypeLabel.Text = Local.GetValue("accounts_edition.formula_type");
-      this.m_accountTypeLabel.Text = Local.GetValue("accounts_edition.account_type");
-      this.m_accountConsolidationOptionLabel.Text = Local.GetValue("accounts_edition.consolidation_option");
-      this.m_accountCurrenciesConversionLabel.Text = Local.GetValue("accounts_edition.currencies_conversion");
-      this.m_globalFactsLabel.Text = Local.GetValue("accounts_edition.macro_economic_indicators");
-      this.AddSubAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_account");
-      this.AddCategoryToolStripMenuItem.Text = Local.GetValue("accounts_edition.add_tab_account");
-      this.DeleteAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.delete_account");
-      this.DropHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_to_excel");
+      this.m_accountInformationGroupbox.Text = Local.GetValue("accounts.information");
+      this.m_accountNameLabel.Text = Local.GetValue("accounts.name");
+      this.m_accountFormulaTypeLabel.Text = Local.GetValue("accounts.formula_type");
+      this.m_accountTypeLabel.Text = Local.GetValue("accounts.type");
+      this.m_accountConsolidationOptionLabel.Text = Local.GetValue("accounts.consolidation_option");
+      this.m_accountCurrenciesConversionLabel.Text = Local.GetValue("accounts.currencies_conversion");
+      this.m_globalFactsLabel.Text = Local.GetValue("accounts.macro_economic_indicators");
+      this.AddSubAccountToolStripMenuItem.Text = Local.GetValue("accounts.new_account");
+      this.AddCategoryToolStripMenuItem.Text = Local.GetValue("accounts.add_tab_account");
+      this.DeleteAccountToolStripMenuItem.Text = Local.GetValue("accounts.delete_account");
+      this.DropHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts.drop_to_excel");
       this.NewToolStripMenuItem.Text = Local.GetValue("general.account");
-      this.CreateANewAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_account");
-      this.CreateANewCategoryToolStripMenuItem.Text = Local.GetValue("accounts_edition.add_tab_account");
-      this.DeleteAccountToolStripMenuItem1.Text = Local.GetValue("accounts_edition.delete_account");
-      this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_to_excel");
-      this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_selected_hierarchy_to_excel");
+      this.CreateANewAccountToolStripMenuItem.Text = Local.GetValue("accounts.new_account");
+      this.CreateANewCategoryToolStripMenuItem.Text = Local.GetValue("accounts.add_tab_account");
+      this.DeleteAccountToolStripMenuItem1.Text = Local.GetValue("accounts.delete_account");
+      this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts.drop_to_excel");
+      this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts.drop_selected_hierarchy_to_excel");
       this.HelpToolStripMenuItem.Text = Local.GetValue("general.help");
     }
 
@@ -216,31 +216,31 @@ namespace FBI.MVC.View
 
       //Formula Type
       ListItem l_inputListItem = new ListItem();
-      l_inputListItem.Text = Local.GetValue("accounts_edition.formula_type_input");
+      l_inputListItem.Text = Local.GetValue("accounts.formula_type_input");
       l_inputListItem.Value = Account.FormulaTypes.HARD_VALUE_INPUT;
       this.FormulaTypeComboBox.Items.Add(l_inputListItem);
       this.m_formulasTypesIdItemDict[(Account.FormulaTypes)l_inputListItem.Value] = l_inputListItem;
 
       ListItem l_formulaListItem = new ListItem();
-      l_formulaListItem.Text = Local.GetValue("accounts_edition.formula_type_formula");
+      l_formulaListItem.Text = Local.GetValue("accounts.formula_type_formula");
       l_formulaListItem.Value = Account.FormulaTypes.FORMULA;
       this.FormulaTypeComboBox.Items.Add(l_formulaListItem);
       this.m_formulasTypesIdItemDict[(Account.FormulaTypes)l_formulaListItem.Value] = l_formulaListItem;
 
       ListItem l_aggregationListItem = new ListItem();
-      l_aggregationListItem.Text = Local.GetValue("accounts_edition.formula_type_sub");
+      l_aggregationListItem.Text = Local.GetValue("accounts.formula_type_sub");
       l_aggregationListItem.Value = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS;
       this.FormulaTypeComboBox.Items.Add(l_aggregationListItem);
       this.m_formulasTypesIdItemDict[(Account.FormulaTypes)l_aggregationListItem.Value] = l_aggregationListItem;
 
       ListItem l_firstPeriodInputListItem = new ListItem();
-      l_firstPeriodInputListItem.Text = Local.GetValue("accounts_edition.formula_type_first");
+      l_firstPeriodInputListItem.Text = Local.GetValue("accounts.formula_type_first");
       l_firstPeriodInputListItem.Value = Account.FormulaTypes.FIRST_PERIOD_INPUT;
       this.FormulaTypeComboBox.Items.Add(l_firstPeriodInputListItem);
       this.m_formulasTypesIdItemDict[(Account.FormulaTypes)l_firstPeriodInputListItem.Value] = l_firstPeriodInputListItem;
 
       ListItem l_titleListItem = new ListItem();
-      l_titleListItem.Text = Local.GetValue("accounts_edition.formula_type_title");
+      l_titleListItem.Text = Local.GetValue("accounts.formula_type_title");
       l_titleListItem.Value = Account.FormulaTypes.TITLE;
       this.FormulaTypeComboBox.Items.Add(l_titleListItem);
       this.m_formulasTypesIdItemDict[(Account.FormulaTypes)l_titleListItem.Value] = l_titleListItem;
@@ -251,25 +251,25 @@ namespace FBI.MVC.View
 
       // Account Type
       ListItem l_monetaryFormatLI = new ListItem();
-      l_monetaryFormatLI.Text = Local.GetValue("accounts_edition.account_type_monetary");
+      l_monetaryFormatLI.Text = Local.GetValue("accounts.type_monetary");
       l_monetaryFormatLI.Value = Account.AccountType.MONETARY;
       this.TypeComboBox.Items.Add(l_monetaryFormatLI);
       this.m_formatsIdItemDict[(Account.AccountType)l_monetaryFormatLI.Value] = l_monetaryFormatLI;
 
       ListItem l_normalFormatLI = new ListItem();
-      l_normalFormatLI.Text = Local.GetValue("accounts_edition.account_type_number");
+      l_normalFormatLI.Text = Local.GetValue("accounts.type_number");
       l_normalFormatLI.Value = Account.AccountType.NUMBER;
       this.TypeComboBox.Items.Add(l_normalFormatLI);
       this.m_formatsIdItemDict[(Account.AccountType)l_normalFormatLI.Value] = l_normalFormatLI;
 
       ListItem l_percentageFormatLI = new ListItem();
-      l_percentageFormatLI.Text = Local.GetValue("accounts_edition.account_type_percentage");
+      l_percentageFormatLI.Text = Local.GetValue("accounts.type_percentage");
       l_percentageFormatLI.Value = Account.AccountType.PERCENTAGE;
       this.TypeComboBox.Items.Add(l_percentageFormatLI);
       this.m_formatsIdItemDict[(Account.AccountType)l_percentageFormatLI.Value] = l_percentageFormatLI;
 
       ListItem l_dateFormatLI = new ListItem();
-      l_dateFormatLI.Text = Local.GetValue("accounts_edition.account_type_date");
+      l_dateFormatLI.Text = Local.GetValue("accounts.type_date");
       l_dateFormatLI.Value = Account.AccountType.DATE_;
       this.TypeComboBox.Items.Add(l_dateFormatLI);
       this.m_formatsIdItemDict[(Account.AccountType)l_dateFormatLI.Value] = l_dateFormatLI;
@@ -280,13 +280,13 @@ namespace FBI.MVC.View
 
       // Currencies Conversion
       ListItem l_averageRateLI = new ListItem();
-      l_averageRateLI.Text = Local.GetValue("accounts_edition.currencies_type_average");
+      l_averageRateLI.Text = Local.GetValue("accounts.currencies_type_average");
       l_averageRateLI.Value = Account.ConversionOptions.AVERAGE_RATE;
       this.CurrencyConversionComboBox.Items.Add(l_averageRateLI);
       this.m_currenciesConversionIdItemDict[(Account.ConversionOptions)l_averageRateLI.Value] = l_averageRateLI;
 
       ListItem l_endOfPeriodRateLI = new ListItem();
-      l_endOfPeriodRateLI.Text = Local.GetValue("accounts_edition.currencies_type_end");
+      l_endOfPeriodRateLI.Text = Local.GetValue("accounts.currencies_type_end");
       l_endOfPeriodRateLI.Value = Account.ConversionOptions.END_OF_PERIOD_RATE;
       this.CurrencyConversionComboBox.Items.Add(l_endOfPeriodRateLI);
       this.m_currenciesConversionIdItemDict[(Account.ConversionOptions)l_endOfPeriodRateLI.Value] = l_endOfPeriodRateLI;
@@ -297,19 +297,19 @@ namespace FBI.MVC.View
 
       // Consolidation Option
       ListItem l_aggregatedLI = new ListItem();
-      l_aggregatedLI.Text = Local.GetValue("accounts_edition.consolidation_type_aggregated");
+      l_aggregatedLI.Text = Local.GetValue("accounts.consolidation_type_aggregated");
       l_aggregatedLI.Value = Account.ConsolidationOptions.AGGREGATION;
       this.ConsolidationOptionComboBox.Items.Add(l_aggregatedLI);
       this.m_consoOptionIdItemDict[(Account.ConsolidationOptions)l_aggregatedLI.Value] = l_aggregatedLI;
 
       ListItem l_recomputedLI = new ListItem();
-      l_recomputedLI.Text = Local.GetValue("accounts_edition.consolidation_type_recomputed");
+      l_recomputedLI.Text = Local.GetValue("accounts.consolidation_type_recomputed");
       l_recomputedLI.Value = Account.ConsolidationOptions.RECOMPUTATION;
       this.ConsolidationOptionComboBox.Items.Add(l_recomputedLI);
       this.m_consoOptionIdItemDict[(Account.ConsolidationOptions)l_recomputedLI.Value] = l_recomputedLI;
 
       ListItem l_noneLI = new ListItem();
-      l_noneLI.Text = Local.GetValue("accounts_edition.consolidation_type_none");
+      l_noneLI.Text = Local.GetValue("accounts.consolidation_type_none");
       l_noneLI.Value = Account.ConsolidationOptions.NONE;
       this.ConsolidationOptionComboBox.Items.Add(l_noneLI);
       this.m_consoOptionIdItemDict[(Account.ConsolidationOptions)l_noneLI.Value] = l_noneLI;
@@ -338,9 +338,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != ErrorMessage.SUCCESS)
-        {
-          MessageBox.Show(Local.GetValue("accounts_edition.msg_error_creation"));
-        }
+          MessageBox.Show(Local.GetValue("accounts.error.create") + "\r\n" + Error.GetMessage(p_status));
       }
     }
 
@@ -395,7 +393,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          MessageBox.Show(Local.GetValue("acounts_edition.msg_error_update"));
+          MessageBox.Show(Local.GetValue("accounts.error.update"));
         }
       }
     }
@@ -474,11 +472,11 @@ namespace FBI.MVC.View
     {
       if (this.m_formulaTextBox.Text == "")
       {
-        if (MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_empty"), Local.GetValue("general.accounts"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+        if (MessageBox.Show(Local.GetValue("accounts.msg_formula_empty"), Local.GetValue("general.accounts"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
           return;
       }
       else
-        if (MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), Local.GetValue("general.accounts"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+        if (MessageBox.Show(Local.GetValue("accounts.msg_formula_validation_confirmation"), Local.GetValue("general.accounts"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
           return;
       if (m_currentNode != null)
       {
@@ -528,18 +526,18 @@ namespace FBI.MVC.View
     {
       m_isEditingFormulaFlag = false;
 
-      string l_nameAccount = Interaction.InputBox(Local.GetValue("accounts_edition.msg_new_tab_name"),
-                                                 Local.GetValue("accounts_edition.title_new_tab_name"), "");
+      string l_nameAccount = Interaction.InputBox(Local.GetValue("accounts.msg_new_tab_name"),
+                                                 Local.GetValue("accounts.title_new_tab_name"), "");
       if (l_nameAccount != "")
       {
         if (this.m_controller.AccountNameCheck(l_nameAccount))
           this.m_controller.CreateAccount(0, l_nameAccount, Account.AccountProcess.FINANCIAL, Account.FormulaTypes.TITLE, "", Account.AccountType.DATE_, Account.ConsolidationOptions.AGGREGATION,
             Account.PeriodAggregationOptions.AVERAGE_PERIOD, "t", (UInt32)Account.FormulaTypes.TITLE, this.m_accountTV.Nodes.Count);
         else
-          MessageBox.Show(Local.GetValue("accounts_edition.msg_error_create"));
+          MessageBox.Show(Local.GetValue("accounts.error.create"));
       }
       else
-        MessageBox.Show(Local.GetValue("accounts_edition.msg_error_create"));
+        MessageBox.Show(Local.GetValue("accounts.error.create"));
     }
 
     private void OnSaveDescriptionBTClick(object p_sender, EventArgs p_e)
@@ -751,13 +749,13 @@ namespace FBI.MVC.View
           {
             if (l_value != Account.FormulaTypes.HARD_VALUE_INPUT || l_value != Account.FormulaTypes.FIRST_PERIOD_INPUT)
             {
-              string l_result = PasswordBox.Open(Local.GetValue("accounts_edition.msg_password_required"),
+              string l_result = PasswordBox.Open(Local.GetValue("accounts.msg_password_required"),
                 Local.GetValue("cateories.accpunts"));
 
               if (l_result == PasswordBox.Canceled || l_result != Addin.Password)
               {
                 if (l_result != PasswordBox.Canceled)
-                  MessageBox.Show(Local.GetValue("accounts_edition.msg_incorrect_password"), Local.GetValue("general.accounts"),
+                  MessageBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.m_controller.UpdateAccount(l_currentAccount);
                 return;
@@ -865,7 +863,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          MessageBox.Show(Local.GetValue("accounts_edition.msg_error_creation"));
+          MessageBox.Show(Local.GetValue("accounts.error.creation"));
         }
       }
     }

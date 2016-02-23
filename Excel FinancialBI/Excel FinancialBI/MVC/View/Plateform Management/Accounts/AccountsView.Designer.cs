@@ -222,7 +222,7 @@ namespace FBI.MVC.View
       this.SaveDescriptionBT.RoundedCornersMask = ((byte)(15));
       this.SaveDescriptionBT.Size = new System.Drawing.Size(280, 43);
       this.SaveDescriptionBT.TabIndex = 7;
-      this.SaveDescriptionBT.Text = "[accounts_edition.save_description]";
+      this.SaveDescriptionBT.Text = "[accounts.save_description]";
       this.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.SaveDescriptionBT.UseVisualStyleBackColor = true;
       this.SaveDescriptionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
@@ -712,14 +712,14 @@ namespace FBI.MVC.View
       this.CreateANewAccountToolStripMenuItem.Image = global::FBI.Properties.Resources.Financial_BI_dark_blue_add;
       this.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem";
       this.CreateANewAccountToolStripMenuItem.Size = new System.Drawing.Size(377, 30);
-      this.CreateANewAccountToolStripMenuItem.Text = "[accounts_edition.new_account]";
+      this.CreateANewAccountToolStripMenuItem.Text = "[accounts.new_account]";
       // 
       // CreateANewCategoryToolStripMenuItem
       // 
       this.CreateANewCategoryToolStripMenuItem.Image = global::FBI.Properties.Resources.favicon_81_;
       this.CreateANewCategoryToolStripMenuItem.Name = "CreateANewCategoryToolStripMenuItem";
       this.CreateANewCategoryToolStripMenuItem.Size = new System.Drawing.Size(377, 30);
-      this.CreateANewCategoryToolStripMenuItem.Text = "[accounts_edition.new_tab_account]";
+      this.CreateANewCategoryToolStripMenuItem.Text = "[accounts.new_tab_account]";
       // 
       // ToolStripSeparator2
       // 
@@ -732,7 +732,7 @@ namespace FBI.MVC.View
       this.DeleteAccountToolStripMenuItem1.Image = global::FBI.Properties.Resources.imageres_891;
       this.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1";
       this.DeleteAccountToolStripMenuItem1.Size = new System.Drawing.Size(377, 30);
-      this.DeleteAccountToolStripMenuItem1.Text = "[accounts_edition.delete_account]";
+      this.DeleteAccountToolStripMenuItem1.Text = "[accounts.delete_account]";
       // 
       // DropHierarchyToExcelToolStripMenuItem1
       // 
@@ -748,14 +748,14 @@ namespace FBI.MVC.View
       this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = global::FBI.Properties.Resources.Excel_dark_24_24;
       this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem";
       this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = new System.Drawing.Size(500, 30);
-      this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "[accounts_edition.drop_to_excel]";
+      this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "[accounts.drop_to_excel]";
       // 
       // DropSelectedAccountHierarchyToExcelToolStripMenuItem
       // 
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = global::FBI.Properties.Resources.Excel_Green_32x32;
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem";
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = new System.Drawing.Size(500, 30);
-      this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "[accounts_edition.drop_selected_hierarchy_to_excel]";
+      this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "[accounts.drop_selected_hierarchy_to_excel]";
       // 
       // HelpToolStripMenuItem
       // 

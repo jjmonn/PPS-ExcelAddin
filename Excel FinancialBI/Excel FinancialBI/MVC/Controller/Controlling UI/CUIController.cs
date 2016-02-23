@@ -64,7 +64,7 @@ namespace FBI.MVC.Controller
       }
 
       ComputeConfig l_config = new ComputeConfig();
-      ComputeRequest l_request = new ComputeRequest();
+      LegacyComputeRequest l_request = new LegacyComputeRequest();
       Version l_version = VersionModel.Instance.GetValue(LeftPaneController.GetVersions()[0]);
 
       l_config.BaseTimeConfig = l_version.TimeConfiguration;
@@ -91,13 +91,13 @@ namespace FBI.MVC.Controller
         return (false);
       ResultController.LoadDGV(l_config);
       if (l_request.IsDiff)
-        ComputeModel.Instance.Compute(l_request);
+        LegacyComputeModel.Instance.Compute(l_request);
       else
-        ComputeModel.Instance.ComputeDiff(l_request);
+        LegacyComputeModel.Instance.ComputeDiff(l_request);
       return (true);
     }
 
-    bool CheckRequest(ComputeRequest p_request)
+    bool CheckRequest(AComputeRequest p_request)
     {
       if (p_request.NbPeriods <= 1)
       {

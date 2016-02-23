@@ -17,12 +17,13 @@ namespace FBI.MVC.Model.CRUD
   {
     public SafeDictionary<ResultKey, double> Values { get; private set; }
     public UInt32 VersionId { get; set; }
-    ComputeRequest m_request;
+    public UInt32 EntityId { get; set; }
+    public bool IsDiff { get; private set; }
+    public Tuple<VersionKey, VersionKey> VersionDiff { get; private set; }
+    AComputeRequest m_request;
     Version m_version;
     List<Int32> m_periodList;
     List<Int32> m_aggregationPeriodList;
-    public bool IsDiff { get; private set; }
-    public Tuple<VersionKey, VersionKey> VersionDiff { get; private set; }
 
     ComputeResult()
     {
@@ -30,10 +31,25 @@ namespace FBI.MVC.Model.CRUD
       IsDiff = false;
     }
 
-    public static ComputeResult BuildComputeResult(ComputeRequest p_request, ByteBuffer p_packet, UInt32 p_versionId)
+    public static ComputeResult BuildComputeResult(LegacyComputeRequest p_request, ByteBuffer p_packet, UInt32 p_versionId)
+    {
+      ComputeResult l_result = BaseBuildComputeResult(p_request, p_packet, p_versionId, p_request.EntityId);
+      l_result.FillResultData(p_packet);
+      return (l_result);
+    }
+
+    public static ComputeResult BuildSourcedComputeResult(SourcedComputeRequest p_request, ByteBuffer p_packet, UInt32 p_entityId)
+    {
+      ComputeResult l_result = BaseBuildComputeResult(p_request, p_packet, p_request.VersionId, p_entityId);
+      l_result.FillEntityData(p_packet, "", "");
+      return (l_result);
+    }
+
+    static ComputeResult BaseBuildComputeResult(AComputeRequest p_request, ByteBuffer p_packet, UInt32 p_versionId, UInt32 p_entityId)
     {
       ComputeResult l_result = new ComputeResult();
 
+      l_result.EntityId = p_entityId;
       l_result.VersionId = p_versionId;
       l_result.m_request = p_request;
       l_result.m_version = VersionModel.Instance.GetValue(l_result.VersionId);
@@ -44,7 +60,6 @@ namespace FBI.MVC.Model.CRUD
         l_result.m_aggregationPeriodList = PeriodModel.GetPeriodList((Int32)p_request.StartPeriod, (Int32)p_request.NbPeriods, l_aggregationTimeConfig);
       else
         l_result.m_aggregationPeriodList = new List<Int32>();
-      l_result.FillResultData(p_packet);
       return (l_result);
     }
 

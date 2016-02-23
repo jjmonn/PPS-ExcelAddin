@@ -59,7 +59,7 @@ namespace FBI.MVC.View
 
     public void SuscribeEvents()
     {
-      ComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
+      LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
       m_refreshButton.MouseDown += OnRefreshButtonMouseDown;
       m_versionComparisonButton.MouseDown += OnVersionComparisionButtonMouseDown;
       m_versionSwitchButton.MouseDown += OnVersionSwitchButtonMouseDown;
@@ -100,7 +100,7 @@ namespace FBI.MVC.View
       this.Text = Local.GetValue("CUI.financials");
     }
 
-    void OnComputeResult(ErrorMessage p_status, ComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
+    void OnComputeResult(ErrorMessage p_status, AComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
       if (p_status == ErrorMessage.SUCCESS && p_result != null)
         m_controller.ResultController.DisplayResult(p_result);

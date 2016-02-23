@@ -154,7 +154,7 @@ namespace FBI.MVC.View
 
     Int32 GetNbPeriod(Int32 p_nbPeriod, TimeConfig p_config, TimeConfig p_baseConfig)
     {
-      if ((int)p_config >= (int)p_baseConfig)
+      if ((int)p_config == (int)p_baseConfig)
         return (p_nbPeriod);
       switch (p_config)
       {

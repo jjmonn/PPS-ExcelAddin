@@ -23,7 +23,7 @@ namespace FBI.MVC.View
       VLabel1.Text = Local.GetValue("general.account");
       VLabel2.Text = Local.GetValue("general.formula");
       VLabel3.Text = Local.GetValue("general.description");
-      VLabel4.Text = Local.GetValue("accounts_edition.account_type");
+      VLabel4.Text = Local.GetValue("accounts.type");
     }
 
     private void ReportUploadAccountInfoSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)

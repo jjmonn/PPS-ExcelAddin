@@ -69,16 +69,16 @@ namespace FBI.MVC.View
 
     private void ComboBoxInit()
     {
-      InitCBListItem<AxisElem>(Local.GetValue("CUI.adjustment"), AxisType.Entities);
-      InitCBListItem<Filter>(Local.GetValue("CUI.adjustment_cat"), AxisType.Adjustment);
-      InitCBListItem<AxisElem>(Local.GetValue("CUI.product"), AxisType.Product);
-      InitCBListItem<Filter>(Local.GetValue("CUI.product_cat"), AxisType.Product);
-      InitCBListItem<AxisElem>(Local.GetValue("CUI.client"), AxisType.Client);
-      InitCBListItem<Filter>(Local.GetValue("CUI.client_cat"), AxisType.Client);
-      InitCBListItem<Filter>(Local.GetValue("CUI.employee_cat"), AxisType.Employee);
-      InitCBListItem<Filter>(Local.GetValue("CUI.entity_cat"), AxisType.Entities);
-      InitCBListItem<Version>(Local.GetValue("CUI.versions"));
-      InitCBListItem<Currency>(Local.GetValue("CUI.currencies"));
+      InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.adjustment"), AxisType.Entities);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.adjustment_cat"), AxisType.Adjustment);
+      InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.product"), AxisType.Product);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.product_cat"), AxisType.Product);
+      InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.client"), AxisType.Client);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.client_cat"), AxisType.Client);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.employee_cat"), AxisType.Employee);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.entity_cat"), AxisType.Entities);
+      InitCBListItem<Version>(Local.GetValue("CUI.dimension.versions"));
+      InitCBListItem<Currency>(Local.GetValue("CUI.dimension.currencies"));
 
       SelectionCB.DropDownList = true;
     }

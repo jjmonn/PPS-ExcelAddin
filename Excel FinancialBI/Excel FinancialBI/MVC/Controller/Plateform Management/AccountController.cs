@@ -78,25 +78,25 @@ namespace FBI.MVC.Controller
         string l_msg = "";
         foreach (string l_account in l_dependantAccounts)
           l_msg += " - " + l_account + "\n\r";
-        MessageBox.Show(Local.GetValue("accounts_edition.msg_dependant_accounts") + "\n\r" +
+        MessageBox.Show(Local.GetValue("accounts.msg_dependant_accounts") + "\n\r" +
                      l_msg + "\n\r" +
-                     Local.GetValue("accounts_edition.msg_formula_to_be_changed"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                     Local.GetValue("accounts.msg_formula_to_be_changed"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
       }
       else
       {
-        string l_result = PasswordBox.Open(Local.GetValue("accounts_edition.msg_account_deletion1") + "\n\r" + "\n"
-          + Local.GetValue("accounts_edition.msg_account_deletion4")
-          , Local.GetValue("accounts_edition.msg_account_deletion_confirmation"));
+        string l_result = PasswordBox.Open(Local.GetValue("accounts.msg_account_deletion1") + "\n\r" + "\n"
+          + Local.GetValue("accounts.msg_account_deletion4")
+          , Local.GetValue("accounts.msg_account_deletion_confirmation"));
 
         if (l_result != PasswordBox.Canceled && l_result == Addin.Password)
         {
-          if (MessageBox.Show(Local.GetValue("accounts_edition.msg_account_deletion3") + "\n\r" + "\n"
-          + Local.GetValue("accounts_edition.msg_account_deletion2"),
-            Local.GetValue("accounts_edition.msg_account_deletion_confirmation"), MessageBoxButtons.YesNo) == DialogResult.Yes)
+          if (MessageBox.Show(Local.GetValue("accounts.msg_account_deletion3") + "\n\r" + "\n"
+          + Local.GetValue("accounts.msg_account_deletion2"),
+            Local.GetValue("accounts.msg_account_deletion_confirmation"), MessageBoxButtons.YesNo) == DialogResult.Yes)
             this.DeleteAccount((UInt32)p_node.Value);
         }
         else if (l_result != PasswordBox.Canceled)
-          MessageBox.Show(Local.GetValue("accounts_edition.msg_incorrect_password"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 

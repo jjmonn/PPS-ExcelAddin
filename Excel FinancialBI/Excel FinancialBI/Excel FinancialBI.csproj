@@ -282,6 +282,7 @@
     <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
+    <Compile Include="MVC\Model\AComputeModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
     <Compile Include="MVC\Model\AxisFilterModel.cs" />
     <Compile Include="MVC\Model\AxisOwnerModel.cs" />
@@ -306,7 +307,7 @@
     <Compile Include="MVC\Model\CRUD\Commit.cs" />
     <Compile Include="MVC\Model\CRUD\CommitLog.cs" />
     <Compile Include="MVC\Model\CRUD\ComputeConfig.cs" />
-    <Compile Include="MVC\Model\CRUD\ComputeRequest.cs" />
+    <Compile Include="MVC\Model\CRUD\AComputeRequest.cs" />
     <Compile Include="MVC\Model\CRUD\ComputeResult.cs" />
     <Compile Include="MVC\Model\CRUD\CRUDAction.cs" />
     <Compile Include="MVC\Model\CRUD\CUIDimensionConf.cs" />
@@ -326,6 +327,8 @@
     <Compile Include="MVC\Model\CRUD\GlobalFactData.cs" />
     <Compile Include="MVC\Model\CRUD\GlobalFactVersion.cs" />
     <Compile Include="MVC\Model\CRUD\Group.cs" />
+    <Compile Include="MVC\Model\CRUD\LegacyComputeRequest.cs" />
+    <Compile Include="MVC\Model\CRUD\SourcedComputeRequest.cs" />
     <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsManager.cs" />
     <Compile Include="MVC\Model\Facts Edition\IEditedFactsManager.cs" />
     <Compile Include="MVC\Model\CRUD\User.cs" />
@@ -354,6 +357,7 @@
     <Compile Include="MVC\Model\PeriodModel.cs" />
     <Compile Include="MVC\Model\RatesVersionModel.cs" />
     <Compile Include="MVC\Model\CRUD\ResultKey.cs" />
+    <Compile Include="MVC\Model\SourcedComputeModel.cs" />
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />

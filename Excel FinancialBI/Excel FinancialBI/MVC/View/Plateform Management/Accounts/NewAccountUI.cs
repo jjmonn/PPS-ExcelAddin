@@ -70,17 +70,17 @@ namespace FBI.MVC.View
     {
       this.CancelBT.Text = Local.GetValue("general.cancel");
       this.CreateAccountBT.Text = Local.GetValue("general.create");
-      this.m_accountNameLabel.Text = Local.GetValue("accounts_edition.account_name");
-      this.m_accountParentLabel.Text = Local.GetValue("accounts_edition.account_parent");
-      this.m_formulaTypeLabel.Text = Local.GetValue("accounts_edition.formula_type");
-      this.m_formatLabel.Text = Local.GetValue("accounts_edition.account_format");
-      this.m_recomputeRadioButton.Text = Local.GetValue("accounts_edition.recomputation");
-      this.m_aggregationRadioButton.Text = Local.GetValue("accounts_edition.aggregation");
-      this.m_consolidationOptionLabel.Text = Local.GetValue("accounts_edition.consolidation_option");
-      this.m_endOfPeriodRadioButton.Text = Local.GetValue("accounts_edition.end_of_period_rate");
-      this.m_averageRateRadioButton.Text = Local.GetValue("accounts_edition.average_rate");
-      this.m_conversionOptionLabel.Text = Local.GetValue("accounts_edition.currencies_conversion");
-      this.Text = Local.GetValue("accounts_edition.title_new_account");
+      this.m_accountNameLabel.Text = Local.GetValue("accounts.name");
+      this.m_accountParentLabel.Text = Local.GetValue("accounts.parent");
+      this.m_formulaTypeLabel.Text = Local.GetValue("accounts.formula_type");
+      this.m_formatLabel.Text = Local.GetValue("accounts.format");
+      this.m_recomputeRadioButton.Text = Local.GetValue("accounts.recomputation");
+      this.m_aggregationRadioButton.Text = Local.GetValue("accounts.aggregation");
+      this.m_consolidationOptionLabel.Text = Local.GetValue("accounts.consolidation_option");
+      this.m_endOfPeriodRadioButton.Text = Local.GetValue("accounts.end_of_period_rate");
+      this.m_averageRateRadioButton.Text = Local.GetValue("accounts.average_rate");
+      this.m_conversionOptionLabel.Text = Local.GetValue("accounts.currencies_conversion");
+      this.Text = Local.GetValue("accounts.title_new_account");
     }
 
     private void ComboBoxesInit()
@@ -138,7 +138,7 @@ namespace FBI.MVC.View
             }
             else
             {
-              MessageBox.Show(Local.GetValue("accounts_edition.msg_select_parent_account"), Local.GetValue("general.accounts"),
+              MessageBox.Show(Local.GetValue("accounts.msg_select_parent_account"), Local.GetValue("general.accounts"),
                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
               return;
             }
@@ -169,7 +169,7 @@ namespace FBI.MVC.View
         }
       }
       else
-        MessageBox.Show(Local.GetValue("accounts_edition.msg_name_empty"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Local.GetValue("accounts.msg_name_empty"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 
     private void OnCancelClick(object p_sender, EventArgs p_e)
