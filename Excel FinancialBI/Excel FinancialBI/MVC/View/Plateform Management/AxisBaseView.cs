@@ -135,6 +135,8 @@ namespace FBI.MVC.View
       MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = null;
       ComboBoxEditor l_cbEditor = null;
 
+      if (l_filterValue == null)
+        return;
       if (l_filterValue.ParentId == 0)
         l_filterValueDic = FilterValueModel.Instance.GetDictionary(p_axisFilter.FilterId);
       else
