@@ -81,7 +81,13 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != ErrorMessage.SUCCESS)
+        {
           IsLoading = false;
+          if (p_status == ErrorMessage.PERMISSION_DENIED)
+            MessageBox.Show(Local.GetValue("connection.error.wrong_credentials"));
+          else if (p_status != ErrorMessage.SUCCESS)
+            MessageBox.Show(Error.GetMessage(p_status));
+        }
       }
     }
 

@@ -19,7 +19,23 @@
       <string name="currencies">Devises</string>
       <string name="versions">Versions</string>
       <string name="week">Semaines</string>
+      <string name="month">Mois</string>
+      <string name="day">Jours</string>
+      <string name="year">Années</string>
     </category>
+    
+    <category name="error">
+      <string name="system">Une erreur est survenue au cours du calcul. Veuillez contacter votre administrateur si le problème persiste.</string>
+      <string name="out_of_memory">Impossible de charger toutes les données, requête trop complexe.</string>
+      <string name="invalid_entity">Resultat reçu sur une entitée invalide.</string>
+      <string name="invalid_version">Resultat reçu sur une version invalide.</string>
+      <string name="unknown_version">Version inconnue.</string>
+      <string name="multiversion_no_sort">Plusieurs versions séléctionnées, vous devez ajouter l'élément Versions à votre décomposition.</string>
+      <string name="no_version_selected">Vous devez selectionner au moins une version.</string>
+      <string name="period_range">Période invalide.</string>
+      <string name="version_process_invalid">Une ou plusieurs version(s) selectionnée(s) n'est pas compatible avec votre processus (Financier / Ressources Humaines)</string>
+    </category>
+    
     <string name="adjust_columns_size">Ajuster la largeur des colonnes</string>
     <string name="automatic_columns_adjustment">Ajustement automatique de la largeur des colones</string>
     <string name="charts">Graphiques</string>
@@ -32,26 +48,13 @@
     <string name="drop_on_excel_tooltip">Copie des données dans Excel </string>
     <string name="drop_on_excel_visible_part">Envoyer uniquement les données affichées dans Excel</string>
     <string name="entities_selection">Selection de l'entité</string>
-    <string name="entity">Entité</string>
     <string name="error_complexity">La requête demandée est trop complexe.</string>
     <string name="expand_all">Tout dégrouper</string>
     <string name="fields_choice">Choisissez les dimensions à ajouter au rapport:</string>
     <string name="financials">Etats Financiers</string>
     <string name="log">Historique</string>
     <string name="main_menu">Menu principal</string>
-    <string name="msg_currency_selection">Vous devez sélectionner une devise.</string>
-    <string name="msg_error_system">Une erreur est survenue au cours du calcul. Veuillez contacter votre administrateur si le problème persiste.</string>
-    <string name="msg_out_of_memory">Impossible de charger toutes les données, requête trop complexe.</string>
-    <string name="msg_permission_denied">Vous n'êtes pas autorisé à effectuer ce calcul.</string>
-    <string name="msg_return_invalid_entity">Resultat reçu sur une entitée invalide.</string>
-    <string name="msg_return_invalid_version">Resultat reçu sur une version invalide.</string>
-    <string name="msg_specify_dimension_account">Comptes</string>
-    <string name="msg_specify_dimension_client_or_entities">Business Unit ou Client</string>
-    <string name="msg_specify_dimension_periods1">Périodes (Années ou Mois)</string>
-    <string name="msg_specify_dimension_periods2">Périodes (Semaines ou Jours)</string>
-    <string name="msg_specify_dimensions1">Vous devez préciser les dimensions suivantes</string>
-    <string name="need_one_version">Au moins une version doit être sélectionné.</string>
-    <string name="no_entity_selected">Une entité doit être selectionnée.</string>
+    <string name="not_deletable_dimension">Vous ne pouvez pas supprimer cette dimension.</string>
     <string name="performance_review">Revue de performances</string>
     <string name="performance_review_tooltip">Fonctionnalités de comparaisons de versions</string>
     <string name="refresh">Rafraichir</string>
@@ -80,9 +83,9 @@
     <string name="user_id">Identifiant</string>
     <string name="password">Mot de passe</string>
     <string name="connection">Connection</string>
-	<string name="msg_version_mismatch">Votre version de Financial BI n'est pas à jour. Veuillez redémarrer Excel.</string>
-	<string name="msg_auth_request_default">Le serveur a refusé votre demande d'authentification.</string>
-    <string name="msg_wrong_credentials">L'identifiant ou le mot de passe est incorrect.</string>
+    <category name="error">
+      <string name="wrong_credentials">L'identifiant ou le mot de passe est incorrect.</string>
+    </category>
   </category>
 
   <category name="accounts">
@@ -136,7 +139,7 @@
     <string name="parent_entity_selection">Selectionnez l'entité parente</string>
     <string name="new_entity">Nouvelle Entité Légale</string>
 
-     <string name="parent_client">Client Parent</string>
+    <string name="parent_client">Client Parent</string>
     <string name="parent_client_selection">Selectionnez le Client parent</string>
     <string name="new_client">Nouveau Client</string>
 
@@ -151,60 +154,52 @@
     <string name="parent_employee">Employé parent</string>
     <string name="parent_employee_selection">Selectionnez l'employé parent</string>
     <string name="new_employee">Nouvel employé</string>
-    
-    <!--messages-->
-    <string name="msg_selection1">Une entité doit être sélectionnée.</string>
-    <string name="msg_name1">Entrez le nom de la nouvelle entité :</string>
-    <string name="msg_delete11">Attention, vous êtes sur le point de supprimer l'entité </string>
-    <string name="msg_delete21">Cette entité et toutes les sous entités vont être supprimées, est-ce que vous confirmez ?</string>
-    <string name="title_delete_confirmation1">Confirmation de la suppression d'entités</string>
 
-    <string name="msg_selection2">Un client doit être sélectionné.</string>
-    <string name="msg_name2">Entrez le nom du nouveau client :</string>
-    <string name="msg_delete12">Attention, vous êtes sur le point de supprimer le client </string>
-    <string name="msg_delete22">Ce client et tous ses sous clients vont être supprimés, est-ce que vous confirmez ?</string>
-    <string name="title_delete_confirmation2">Confirmation de la suppression de clients</string>
+    <category name="message">
+      <string name="selection1">Une entité doit être sélectionnée.</string>
+      <string name="name1">Entrez le nom de la nouvelle entité :</string>
+      <string name="delete11">Attention, vous êtes sur le point de supprimer l'entité </string>
+      <string name="delete21">Cette entité et toutes les sous entités vont être supprimées, est-ce que vous confirmez ?</string>
+      <string name="title_delete_confirmation1">Confirmation de la suppression d'entités</string>
 
-    <string name="msg_selection3">Un produit doit être sélectionné.</string>
-    <string name="msg_name3">Entrez le nom du nouveau produit :</string>
-    <string name="msg_delete13">Attention, vous êtes sur le point de supprimer le produit </string>
-    <string name="msg_delete23">Ce produit et tous ses sous produits vont être supprimés, est-ce que vous confirmez ?</string>
-    <string name="title_delete_confirmation3">Confirmation de la suppression de produits</string>
+      <string name="selection2">Un client doit être sélectionné.</string>
+      <string name="name2">Entrez le nom du nouveau client :</string>
+      <string name="delete12">Attention, vous êtes sur le point de supprimer le client </string>
+      <string name="delete22">Ce client et tous ses sous clients vont être supprimés, est-ce que vous confirmez ?</string>
+      <string name="title_delete_confirmation2">Confirmation de la suppression de clients</string>
 
-    <string name="msg_selection4">Un ajustement doit être sélectionné.</string>
-    <string name="msg_name4">Entrez le nom du nouveau ajustement :</string>
-    <string name="msg_delete14">Attention, vous êtes sur le point de supprimer le ajustement </string>
-    <string name="msg_delete24">Ce ajustement et tous ses sous ajustements vont être supprimés, est-ce que vous confirmez ?</string>
-    <string name="title_delete_confirmation4">Confirmation de la suppression de ajustements</string>
+      <string name="selection3">Un produit doit être sélectionné.</string>
+      <string name="name3">Entrez le nom du nouveau produit :</string>
+      <string name="delete13">Attention, vous êtes sur le point de supprimer le produit </string>
+      <string name="delete23">Ce produit et tous ses sous produits vont être supprimés, est-ce que vous confirmez ?</string>
+      <string name="title_delete_confirmation3">Confirmation de la suppression de produits</string>
 
-    <string name="msg_selection5">Un employé doit être sélectionné.</string>
-    <string name="msg_name5">Entrez le nom du nouveau employé :</string>
-    <string name="msg_delete15">Attention, vous êtes sur le point de supprimer le employé </string>
-    <string name="msg_delete25">Ce employé et tous ses sous employés vont être supprimés, est-ce que vous confirmez ?</string>
-    <string name="title_delete_confirmation5">Confirmation de la suppression de employés</string>
+      <string name="selection4">Un ajustement doit être sélectionné.</string>
+      <string name="name4">Entrez le nom du nouveau ajustement :</string>
+      <string name="delete14">Attention, vous êtes sur le point de supprimer le ajustement </string>
+      <string name="delete24">Ce ajustement et tous ses sous ajustements vont être supprimés, est-ce que vous confirmez ?</string>
+      <string name="title_delete_confirmation4">Confirmation de la suppression de ajustements</string>
 
-    <string name="msg_currency_not_found1">Devise </string>
-    <string name="msg_currency_not_found2"> non enregistrée.</string>
-    <string name="msg_select_currency">Une devise doit être sélectionnée.</string>
+      <string name="selection5">Un employé doit être sélectionné.</string>
+      <string name="name5">Entrez le nom du nouveau employé :</string>
+      <string name="delete15">Attention, vous êtes sur le point de supprimer le employé </string>
+      <string name="delete25">Ce employé et tous ses sous employés vont être supprimés, est-ce que vous confirmez ?</string>
+      <string name="title_delete_confirmation5">Confirmation de la suppression de employés</string>
+
+      <string name="currency_not_found1">Devise </string>
+      <string name="currency_not_found2"> non enregistrée.</string>
+      <string name="select_currency">Une devise doit être sélectionnée.</string>
+    </category>
 
   </category>
    
   <category name="axis">
-
-    <!--messages-->
-    <string name="msg_unable_create">Impossible de créer cet élément</string>
-    <string name="msg_unable_update">Impossible de modifier cet élément</string>
-    <string name="msg_enter_name">Entrez le nouveau nom :</string>
-    <string name="msg_axis_creation">Création</string>
-    <string name="msg_axis_delete1">Attention, vous allez supprimer cet élément. </string>
-    <string name="msg_axis_delete2">Cet élément et tous les éléments qu'il contient vont êter supprimés, confirmez vous ?</string>
-    <string name="msg_deletion_confirmation">Confirmation de la suppression d'un élément.</string>
-    <string name="msg_select_axis">Un élément doit être sélectionné pour pouvoir être supprimé.</string>
-    <string name="msg_filter_value_not_found">La valeur n'a pas pu être trouvée.</string>
-    <string name="msg_entity_axis_owner_selection">Une entité input doit être sélectionée pour pouvoir créer un employé.</string>
-    <string name="msg_entity_axis_owner_not_allowed">Cette entité n'est pas un éditable. Les employés peuvennt uniquement être créés sous une entité éditable.</string>
-    <string name="msg_invalid_name">Ce nom n'est pas valide. Il est déjà utilisé ou bien contient des caractères interdits. Essayez avec un autre nom.</string>
-    
+    <string name="rename">Renommer l'element.</string>
+    <category name="error">
+      <string name="axis_type_invalid">Type d'axe invalide.</string>
+      <string name="not_found">Element introuvable.</string>
+      <string name="owner_not_found">Impossible de trouver l'entité associée.</string>
+    </category>
   </category>
 
   <category name="filters">
@@ -481,6 +476,11 @@
   </category>
 
   <category name="general">
+    
+    <category name="error">
+      <string name="version_mismatch">Votre version de Financial BI n'est pas à jour. Veuillez redémarrer Excel.</string>
+    </category>
+    
     <string name="edition">Edition</string>
     <string name="initializing">Initialisation ...</string>
     <string name="formula">Formule</string>
