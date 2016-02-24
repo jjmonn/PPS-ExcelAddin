@@ -149,6 +149,7 @@ namespace FBI.MVC.View
 
     private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
     {
+      Addin.Disconnect();
       if (Addin.Connect(m_userNameTextBox.Text, m_passwordTextBox.Text) == false)
       {
         this.BackgroundWorker1.CancelAsync();

@@ -77,7 +77,7 @@ namespace FBI.Utils
               case "category":
                 if (insideCategory <= 0)
                   Debug.WriteLine("Local file is bad formated: closing tag </category> without matching <category> at line " + reader.LineNumber + ". Abort loading.");
-                currentPath = RemoveLastPathElem(ref currentPath);
+                currentPath = RemoveLastPathElem(currentPath);
                 insideCategory -= 1;
                 break;
               case "string":
@@ -117,22 +117,13 @@ namespace FBI.Utils
       }
     }
 
-    private static string RemoveLastPathElem(ref string p_path)
+    private static string RemoveLastPathElem(string p_path)
     {
-      Int32 newEnd = p_path.Length;
+      Int32 newEnd = p_path.LastIndexOf('.');
       string newPath = "";
 
-      for (Int32 i = 0; i <= p_path.Length - 1; i++)
-      {
-        if ((p_path[p_path.Length - i - 1] == '.'))
-        {
-          newEnd = p_path.Length - i - 1;
-        }
-      }
       for (Int32 i = 0; i <= newEnd - 1; i++)
-      {
         newPath += p_path[i];
-      }
       return newPath;
     }
 

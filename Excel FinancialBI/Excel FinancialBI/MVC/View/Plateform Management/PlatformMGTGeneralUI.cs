@@ -65,8 +65,6 @@ namespace FBI.MVC.View
       this.GroupsBT.Text = Local.GetValue("GeneralEditionUI.users_groups");
       this.GroupsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_users_groups");
       this.Text = Local.GetValue("GeneralEditionUI.platform_config");
-
-
     }
 
     private void SubscribeEvents()
