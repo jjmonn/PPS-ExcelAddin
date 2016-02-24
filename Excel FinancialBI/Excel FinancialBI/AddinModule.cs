@@ -17,8 +17,11 @@ namespace FBI
   [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("ExcelFinancialBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
   {
+    private AddinModuleController m_controller;
+
     public AddinModule()
     {
+      VIBlend.Utilities.Licensing.LicenseContent = "0g0g635756920818516203geeae134609ccc047560baf100768868d8abc|P20sP8MuxE14HfXpiO3X3PueOBIpfMynKjd9/ifkWaAwYrH/u0NNk7rqh77rOQs3OmrTem7ghz4hnkVM+Bdu9Fzt6u6rne35u/o5JPTC00BzjTUNUXP7f/xplMNliHELbbHfixl1O/3/E6uDNHDVKJc6sRHHTOYPBnao09omX4s=";
       Application.EnableVisualStyles();
       InitializeComponent();
       // Please add any initialization code to the AddinInitialize event handler
@@ -32,7 +35,9 @@ namespace FBI
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
       Addin.Main();
-      SubmissionModeRibbon.Visible = false;
+      m_controller = new AddinModuleController(this);
+      m_financialSubmissionRibbon.Visible = false;
+      m_RHSubmissionRibbon.Visible = false;
       fbiRibbonChangeState(false);
       SuscribeEvents();
       MultilanguageSetup();
@@ -146,13 +151,13 @@ namespace FBI
       }
     }
 
-    public ReportUploadEntitySelectionSidePane ReportUploadEntitySelectionSidePane
+    public ReportUploadSidePane ReportUploadEntitySelectionSidePane
     {
       get
       {
         if (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance != null)
-          return (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance as ReportUploadEntitySelectionSidePane);
-        return (ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance() as ReportUploadEntitySelectionSidePane);
+          return (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance as ReportUploadSidePane);
+        return (ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance() as ReportUploadSidePane);
       }
     }
 
@@ -207,22 +212,17 @@ namespace FBI
 
     private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-        Version l_version = VersionModel.Instance.GetValue(FBI.Properties.Settings.Default.version_id);
-        if (l_version == null)
-        {
-            MessageBox.Show("versions.select_version");
-            return;
-        }
-        Excel.Worksheet l_worksheet = this.ExcelApp.ActiveSheet as Excel.Worksheet;   
-        Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
-        if (l_process == Account.AccountProcess.FINANCIAL)
-        {
-            FactsEditionController l_factsEditionController = new FactsEditionController(l_process, l_version, l_worksheet);
-        }
-        else
-        {
-            // TO DO : launch snapshot RH selection Controller (to be implemented)
-        }
+      Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
+      if (l_process == Account.AccountProcess.FINANCIAL)
+      {
+        if (m_controller.LaunchSnapshot(l_process, false) == false)
+          MessageBox.Show(m_controller.Error);
+      }
+      else
+      {
+        if (m_controller.LaunchRHSnapshotView() == false)
+          MessageBox.Show(m_controller.Error);
+      }
     }
 
     private void m_directoryRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -232,6 +232,8 @@ namespace FBI
 
     private void m_reportUploadRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
+      // Passer par le controller !!!!!!!!! TO DO 
+
       Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
       ReportUploadEntitySelectionSidePane.LoadView(l_process);
       ReportUploadEntitySelectionSidePane.Show();
@@ -331,6 +333,46 @@ namespace FBI
     public void SetProcessCaption(string p_process)
     {
       m_processRibbonButton.Caption = p_process;
+    }
+
+    private void m_PDCSubmissionButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCAutocommitButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCSUbmissionStatusButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCSubmissionCancelButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCSumbissionExitButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCRefreshSnapthshotButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCConsultantRangeEditButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCPeriodsRangeEditButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
     }
 
 

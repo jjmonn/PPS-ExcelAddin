@@ -10,7 +10,7 @@ namespace FBI.MVC.Model.CRUD
 
   public class Fact : CRUDEntity, IComparable
   {
-    public UInt32 Id { get; private set; }
+    public UInt32 Id { get; protected set; }
     public UInt32 EntityId { get; set; }
     public UInt32 AccountId { get; set; }
     public UInt32 Period { get; set; }

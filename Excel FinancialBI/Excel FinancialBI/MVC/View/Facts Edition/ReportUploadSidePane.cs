@@ -15,7 +15,7 @@ namespace FBI.MVC.View
   using VIBlend.WinForms.Controls;
   using FBI.MVC.Controller;
 
-  public partial class ReportUploadEntitySelectionSidePane : AddinExpress.XL.ADXExcelTaskPane
+  public partial class ReportUploadSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
     public bool m_shown { set; get; }
     FbiTreeView<AxisElem> m_entitiesTreeview;
@@ -23,7 +23,7 @@ namespace FBI.MVC.View
     Account.AccountProcess m_process;
     PeriodRangeSelectionController m_periodRangeSelectionController;
 
-    public ReportUploadEntitySelectionSidePane()
+    public ReportUploadSidePane()
     {
       InitializeComponent();
       this.ADXBeforeTaskPaneShow += new AddinExpress.XL.ADXBeforeTaskPaneShowEventHandler(this.ReportUploadEntitySelectionSidePane_ADXBeforeTaskPaneShow);
@@ -103,7 +103,7 @@ namespace FBI.MVC.View
     {
       if (e.KeyChar == (char)Keys.Return)
       {
-        ReportBuilder l_reportBuilder = new ReportBuilder(FBI.Properties.Settings.Default.version_id);
+        ReportUploadController l_reportBuilder = new ReportUploadController(FBI.Properties.Settings.Default.version_id);
         bool l_inputsValids = l_reportBuilder.CanLaunchReport(m_entitiesTreeview.SelectedNode, m_process, m_accountSelectionComboBox.SelectedItem, m_periodRangeSelectionController.GetPeriodList());
         if (l_inputsValids)
         {

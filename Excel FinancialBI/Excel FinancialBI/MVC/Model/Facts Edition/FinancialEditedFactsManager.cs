@@ -13,14 +13,16 @@ namespace FBI.MVC.Model
 
   class FinancialEditedFactsManager : IEditedFactsManager
   {
-    MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact> m_editedFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact>();
-    MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact> m_outputFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, PeriodDimension>, EditedFact>();
+    MultiIndexDictionary<Range, DimensionKey, EditedFact> m_editedFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFact>();
+    SafeDictionary<DimensionKey, Fact> m_facts = new SafeDictionary<DimensionKey, Fact>();
+    MultiIndexDictionary<Range, DimensionKey, EditedFact> m_outputFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFact>();
     Dimensions m_dimensions = null;
     List<int> m_inputsRequestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
     List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
     Worksheet m_worksheet;
     public bool m_autoCommit {set; get;}
+    private bool m_updateCellsOnDownload;
 
     public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
@@ -45,12 +47,11 @@ namespace FBI.MVC.Model
           EditedFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
           {
-            Tuple<AxisElem, Account, PeriodDimension> l_tuple = new Tuple<AxisElem, Account, PeriodDimension>(l_editedFact.m_entity, l_editedFact.m_account, l_editedFact.m_period);
-            Account.FormulaTypes l_formulaType = l_editedFact.m_account.FormulaType;
+            Account.FormulaTypes l_formulaType = l_editedFact.Account.FormulaType;
             if (l_formulaType == Account.FormulaTypes.HARD_VALUE_INPUT || l_formulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
-              m_editedFacts.Set(l_factCell, l_tuple, l_editedFact);
+              m_editedFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
             else
-              m_outputFacts.Set(l_factCell, l_tuple, l_editedFact);
+              m_outputFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
           }
         }
       }
@@ -75,8 +76,13 @@ namespace FBI.MVC.Model
     }
 
 
-    public void DownloadFacts(Version p_version, List<Int32> p_periodsList)
+    public void DownloadFacts(UInt32 p_versionId, List<Int32> p_periodsList, bool p_updateCells)
     {
+      // flush m_editedFacts ?
+      // flush m_facts ?
+      // flush m_outputsFacts ?
+
+      m_updateCellsOnDownload = p_updateCells;
       List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
       Int32 l_startPeriod = p_periodsList.ElementAt(0);
       Int32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count);
@@ -92,10 +98,9 @@ namespace FBI.MVC.Model
           //    - all accounts
           //    - filter on client, product, adjustment and employee
           //
-          m_inputsRequestIdList.Add(FactsModel.Instance.GetFact(l_editedFact.m_account.Id, l_entity.Id, (UInt32)AxisType.Employee, p_version.Id, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
+          m_inputsRequestIdList.Add(FactsModel.Instance.GetFact(l_editedFact.Account.Id, l_entity.Id, (UInt32)AxisType.Employee, p_versionId, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
         }
       }
-
     }
 
     private void AfterFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
@@ -106,7 +111,7 @@ namespace FBI.MVC.Model
         // Attention : pour l'instant la méthode n'est pas adaptée: nécessité de filtrer sur les
         // clients, produits, ajustement et employé pour financial
         //
-        if (FillEditedFacts(p_fact_list) != true)
+        if (FillFactsDictionnaries(p_fact_list) != true)
         {
           FactsDownloaded(false);
           FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
@@ -127,21 +132,16 @@ namespace FBI.MVC.Model
       }
     }
 
-    private bool FillEditedFacts(List<Fact> p_factsList)
+    private bool FillFactsDictionnaries(List<Fact> p_factsList)
     {
       foreach (Fact l_fact in p_factsList)
       {
-        Account l_account = AccountModel.Instance.GetValue(l_fact.AccountId);
-        AxisElem l_entity = AxisElemModel.Instance.GetValue(AxisType.Entities, l_fact.EntityId);
-        PeriodDimension l_period = new PeriodDimension(l_fact.Period);
-
-        if (l_account == null || l_entity == null || l_period == null)
-          return false;
-
-        Tuple<AxisElem, Account, PeriodDimension> l_factTuple = new Tuple<AxisElem, Account, PeriodDimension>(l_entity, l_account, l_period);
-        EditedFact l_EditedFact = m_editedFacts[l_factTuple];
+        DimensionKey l_dimensionKey = new DimensionKey(l_fact.EntityId, l_fact.AccountId, (UInt32)AxisType.Employee, (Int32)l_fact.Period);
+        EditedFact l_EditedFact = m_editedFacts[l_dimensionKey];
         if (l_EditedFact != null)
-          l_EditedFact.UpdateFactValue(l_fact.Value);
+          l_EditedFact.UpdateFact(l_fact);
+        else
+          m_facts[l_dimensionKey] = l_fact;  // Fact not on worksheet, saved as fact
       }
       return true;
     }
@@ -163,14 +163,6 @@ namespace FBI.MVC.Model
         l_outputFact.UpdateCellValue();
       }
       FactsDownloaded(true);
-    }
-
-    public void IdentifyDifferences()
-    {
-      foreach (EditedFact l_editedFact in m_editedFacts.Values)
-      {
-        l_editedFact.IsDifferent();
-      }
     }
 
     public void UpdateWorksheetInputs()
