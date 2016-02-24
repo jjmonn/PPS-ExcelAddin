@@ -15,7 +15,7 @@ namespace FBI.MVC.Controller
   using Forms;
 
 
-  class ReportBuilder
+  class ReportUploadController
   {
     Version m_version;
     AxisElem m_entity;
@@ -25,7 +25,7 @@ namespace FBI.MVC.Controller
     List<Int32> m_periodList;
 
 
-    public ReportBuilder(UInt32 p_versionId)
+    public ReportUploadController(UInt32 p_versionId)
     {
       m_version = VersionModel.Instance.GetValue(p_versionId);
     }

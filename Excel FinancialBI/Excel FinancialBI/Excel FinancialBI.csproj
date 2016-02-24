@@ -252,13 +252,15 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\AddinModuleController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
-    <Compile Include="MVC\Controller\Facts Edition\ReportBuilder.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\ReportUploadController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
@@ -313,6 +315,7 @@
     <Compile Include="MVC\Model\CRUD\CUIDimensionConf.cs" />
     <Compile Include="MVC\Model\CRUD\Currency.cs" />
     <Compile Include="MVC\Model\CRUD\DimensionElem.cs" />
+    <Compile Include="MVC\Model\CRUD\DimensionKey.cs" />
     <Compile Include="MVC\Model\CRUD\EntityCurrency.cs" />
     <Compile Include="MVC\Model\CRUD\EntityDistribution.cs" />
     <Compile Include="MVC\Model\CRUD\ExchangeRate.cs" />
@@ -341,8 +344,8 @@
     <Compile Include="MVC\Model\FactLogModel.cs" />
     <Compile Include="MVC\Model\Facts Edition\Dimension.cs" />
     <Compile Include="MVC\Controller\Facts Edition\Dimensions.cs" />
-    <Compile Include="MVC\Model\Facts Edition\EditedFact.cs" />
-    <Compile Include="MVC\Model\Facts Edition\PeriodDimension.cs" />
+    <Compile Include="MVC\Model\CRUD\EditedFact.cs" />
+    <Compile Include="MVC\Model\CRUD\PeriodDimension.cs" />
     <Compile Include="MVC\Model\Facts Edition\RHEditedFactsManager.cs" />
     <Compile Include="MVC\Controller\Facts Edition\WorksheetAnalyzer.cs" />
     <Compile Include="MVC\Model\FactsModel.cs" />
@@ -610,17 +613,17 @@
     <Compile Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.Designer.cs">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.cs">
+    <Compile Include="MVC\View\Facts Edition\ReportUploadSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.Designer.cs">
-      <DependentUpon>ReportUploadEntitySelectionSidePane.cs</DependentUpon>
+    <Compile Include="MVC\View\Facts Edition\ReportUploadSidePane.Designer.cs">
+      <DependentUpon>ReportUploadSidePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.cs">
+    <Compile Include="MVC\View\Facts Edition\RHSnapshotLaunchView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.Designer.cs">
-      <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
+    <Compile Include="MVC\View\Facts Edition\RHSnapshotLaunchView.Designer.cs">
+      <DependentUpon>RHSnapshotLaunchView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Facts Edition\StatusReportInterfaceUI.cs">
       <SubType>Form</SubType>
@@ -814,11 +817,11 @@
     <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.resx">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.resx">
-      <DependentUpon>ReportUploadEntitySelectionSidePane.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadSidePane.resx">
+      <DependentUpon>ReportUploadSidePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.resx">
-      <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Facts Edition\RHSnapshotLaunchView.resx">
+      <DependentUpon>RHSnapshotLaunchView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Facts Edition\StatusReportInterfaceUI.resx">
       <DependentUpon>StatusReportInterfaceUI.cs</DependentUpon>

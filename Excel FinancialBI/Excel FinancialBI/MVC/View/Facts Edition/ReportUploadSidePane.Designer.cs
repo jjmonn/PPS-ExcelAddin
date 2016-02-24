@@ -1,6 +1,6 @@
 namespace FBI.MVC.View
 {
-    public partial class ReportUploadEntitySelectionSidePane
+    public partial class ReportUploadSidePane
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace FBI.MVC.View
         private void InitializeComponent()
         {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportUploadEntitySelectionSidePane));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportUploadSidePane));
       this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_entitySelectionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_periodsSelectionLabel = new VIBlend.WinForms.Controls.vLabel();

@@ -16,27 +16,28 @@ namespace FBI.MVC.Controller
   {
     IEditedFactsManager m_editedFactsManager;
     Account.AccountProcess m_process;
-    Account m_RHAccount;
+   // Account m_RHAccount;
     Dimensions m_dimensions;
     WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     Worksheet m_worksheet;
     List<Int32> m_periodsList;
-    Version m_version;
+    UInt32 m_versionId;
 
-    public FactsEditionController(Account.AccountProcess p_process, Version p_version, Worksheet p_worksheet)
+    public FactsEditionController(Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, bool p_updateCells, List<Int32> p_periodsList = null)
     {
-      m_version = p_version;
+      m_versionId = p_versionId;
       m_worksheet = p_worksheet;
-      m_dimensions = new Dimensions(m_version.Id);
+      m_dimensions = new Dimensions(m_versionId);
       m_process = p_process;
-     
+      m_periodsList = p_periodsList;
+
       if (p_process == Account.AccountProcess.FINANCIAL)
         m_editedFactsManager = new FinancialEditedFactsManager();
       else
         m_editedFactsManager = new RHEditedFactsManager();
 
       EventsSubsription();
-      Launch();
+      Launch(p_updateCells);
     }
 
     private void EventsSubsription()
@@ -50,7 +51,7 @@ namespace FBI.MVC.Controller
 
       // TO DO : implement events from worksheet !
 
-    private bool Launch()
+    private bool Launch(bool p_updateCells)
     {
       // Before = sidepane -> ask to choose a range
       // TO DO : RH process ->
@@ -67,9 +68,9 @@ namespace FBI.MVC.Controller
           return false;
 
         m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet);
-        if (m_version != null && m_periodsList.Count > 0)
+        if (m_versionId != 0 && m_periodsList.Count > 0)
         {
-          m_editedFactsManager.DownloadFacts(m_version, m_periodsList);
+          m_editedFactsManager.DownloadFacts(m_versionId, m_periodsList, p_updateCells);
           return true;
         }
         else
@@ -101,13 +102,12 @@ namespace FBI.MVC.Controller
         // close current instances
         // find a way to close this instance
 
-
     }
       
-    public void UpdateWorksheetInputs()
-    {
-      m_editedFactsManager.UpdateWorksheetInputs();
-    }
+    //public void UpdateWorksheetInputs()
+    //{
+    //  m_editedFactsManager.UpdateWorksheetInputs();
+    //}
 
     public void UpdateWorksheetOutputs()
     {
@@ -127,6 +127,9 @@ namespace FBI.MVC.Controller
 
       // if cell belongs to output
       //   -> cancel modification and put back the output value 
+
+      // TO DO  : antiduplicate system (au préalable -> comparaison des strings)
+   
 
     }
 
@@ -148,7 +151,6 @@ namespace FBI.MVC.Controller
     private void OnFactsDownloaded(bool p_sucess)
     {
       // Attention : below : directement géré dans les FactsEditionManager ?
-      m_editedFactsManager.IdentifyDifferences();
     }
 
     

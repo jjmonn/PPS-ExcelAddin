@@ -14,14 +14,15 @@ namespace FBI.MVC.Model
 
   class RHEditedFactsManager : IEditedFactsManager
   {
-    MultiIndexDictionary<Range, Tuple<AxisElem, Account, AxisElem, PeriodDimension>, EditedFact> m_RHEditedFacts = new MultiIndexDictionary<Range, Tuple<AxisElem, Account, AxisElem, PeriodDimension>, EditedFact>();
+    MultiIndexDictionary<Range, DimensionKey, EditedFact> m_RHEditedFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFact>();
     Dimensions m_dimensions = null;
     List<int> m_requestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
     List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
     Worksheet m_worksheet;
     public bool m_autoCommit { set; get; }
- 
+    private bool m_updateCellsOnDownload;
+
     public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
@@ -44,8 +45,7 @@ namespace FBI.MVC.Model
           EditedFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
           {
-            Tuple<AxisElem, Account, AxisElem, PeriodDimension> l_tuple = new Tuple<AxisElem, Account, AxisElem, PeriodDimension>(l_editedFact.m_entity, l_editedFact.m_account,l_editedFact.m_employee, l_editedFact.m_period);
-            m_RHEditedFacts.Set(l_factCell, l_tuple, l_editedFact);
+            m_RHEditedFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId,l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
           }
         }
       }
@@ -70,9 +70,10 @@ namespace FBI.MVC.Model
       return new EditedFact(l_account, l_entity, null, l_period, p_cell, Account.AccountProcess.RH);
     }
 
-    public void DownloadFacts(Version p_version, List<Int32> p_periodsList)
+    public void DownloadFacts(UInt32 p_versionId, List<Int32> p_periodsList, bool p_updateCells)
     {
       // TO DO : Log and Check Download time
+      m_updateCellsOnDownload = p_updateCells;
       AxisElem l_entity = m_dimensions.m_entities.UniqueValue as AxisElem;
       List<Account> l_accountsList = m_dimensions.GetAccountsList();
       List<AxisElem> l_employeesList = m_dimensions.GetAxisElemList(DimensionType.EMPLOYEE);
@@ -85,7 +86,7 @@ namespace FBI.MVC.Model
       {
         foreach (AxisElem l_employee in l_employeesList)
         {
-            m_requestIdList.Add(FactsModel.Instance.GetFact(l_account.Id, l_entity.Id, l_employee.Id, p_version.Id, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
+            m_requestIdList.Add(FactsModel.Instance.GetFact(l_account.Id, l_entity.Id, l_employee.Id, p_versionId, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
         }
       }
     }
@@ -120,46 +121,46 @@ namespace FBI.MVC.Model
     {
       foreach (Fact l_fact in p_factsList)
       {
-        Account l_account = AccountModel.Instance.GetValue(l_fact.AccountId);
-        AxisElem l_entity = AxisElemModel.Instance.GetValue(AxisType.Entities, l_fact.EntityId);
-        AxisElem l_employee = AxisElemModel.Instance.GetValue(AxisType.Employee, l_fact.EmployeeId);
-        PeriodDimension l_period = new PeriodDimension(l_fact.Period);
-
-        if (l_account == null || l_entity == null || l_employee == null)
-          return false;
-
-        Tuple<AxisElem, Account, AxisElem, PeriodDimension> l_factTuple = new Tuple<AxisElem, Account, AxisElem, PeriodDimension>(l_entity, l_account, l_employee, l_period);
-        EditedFact l_RHEditedFact = m_RHEditedFacts[l_factTuple];
+        DimensionKey l_dimensionKey = new DimensionKey(l_fact.EntityId, l_fact.AccountId, l_fact.EmployeeId, (Int32)l_fact.Period);
+        EditedFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
         if (l_RHEditedFact != null)
-          l_RHEditedFact.UpdateFactValue(l_fact.ClientId);
+        {
+          l_RHEditedFact.UpdateFact(l_fact);
+          if (m_updateCellsOnDownload)
+            SetInputCellValue(l_RHEditedFact, l_fact.ClientId);
+        }
       }
       return true;
     }
 
-    public void IdentifyDifferences()
+    private void SetInputCellValue(EditedFact p_RHEditedFact, UInt32 p_clientId)
     {
-      foreach (EditedFact l_editedFact in m_RHEditedFacts.Values)
-      {
-        l_editedFact.IsDifferent();
-      }
-
+      AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, p_clientId);
+      if (l_client == null)
+        return;
+      p_RHEditedFact.Cell.Value2 = l_client.Name;
+      p_RHEditedFact.SetEditedRHValue(p_clientId);
     }
 
-    public void UpdateWorksheetInputs()
-    {
-      foreach (EditedFact l_editedFact in m_RHEditedFacts.Values)
-      {
-        l_editedFact.UpdateCellValue();
-      }
-    }
+    //public void UpdateWorksheetInputs()
+    //{
+    //  foreach (EditedFact l_editedFact in m_RHEditedFacts.Values)
+    //  {
+    //    l_editedFact.UpdateCellValue();
+    //  }
+    //}
 
     public void CommitDifferences()
     {
-      // TO DO
-      // Loop through facts : if to be commited  add to update list
-      // Send EditedFacts or RHEditedFacts to the model  
+      List<Fact> m_factsToBeCommitted = new List<Fact>();
+      foreach (EditedFact l_RHEditedFact in m_RHEditedFacts.Values)
+      {
+        if (l_RHEditedFact.CellStatus == CellStatus.DifferentInput)
+          m_factsToBeCommitted.Add(l_RHEditedFact);
+      }
 
-      // RH Process : Antiduplicate system
+      // TO DO
+      // RH Process : Antiduplicate system + Create New clients
 
       // associate updates to cells
       // ready to listen server answer

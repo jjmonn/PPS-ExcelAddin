@@ -40,12 +40,10 @@ namespace FBI.MVC.Model
       return (l_obj.Id == Id);
     }
 
-    public override int GetHashCode()
+    public override Int32 GetHashCode()
     {
-      return base.GetHashCode();
+      return (Int32)Id;
     }
-
-
 
     public static bool operator ==(PeriodDimension a, PeriodDimension b)
     {
