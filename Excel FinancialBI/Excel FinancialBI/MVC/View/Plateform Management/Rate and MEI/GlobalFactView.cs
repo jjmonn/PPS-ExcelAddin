@@ -178,7 +178,7 @@ namespace FBI.MVC.View
 
     void OnNewFactClick(object p_sender, EventArgs p_e)
     {
-      string l_result = Interaction.InputBox(Local.GetValue("gfact.new"));
+      string l_result = Interaction.InputBox(Local.GetValue("global_facts.new_global_fact"));
       GlobalFact l_gfact = new GlobalFact();
 
       if (l_result == "")

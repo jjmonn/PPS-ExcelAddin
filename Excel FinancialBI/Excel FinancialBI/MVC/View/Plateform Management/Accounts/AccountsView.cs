@@ -95,9 +95,7 @@ namespace FBI.MVC.View
       AccountModel.Instance.CreationEvent += OnAccountModelCreation;
       AccountModel.Instance.DeleteEvent += OnModelDelete;
 
-      GlobalFactModel.Instance.UpdateEvent += OnGlobalFactModelUpdate;
       GlobalFactModel.Instance.ReadEvent += OnGlobalFactModelRead;
-      GlobalFactModel.Instance.CreationEvent += OnGlobalFactModelCreation;
       GlobalFactModel.Instance.DeleteEvent += OnGlobalFactModelDelete;
 
       this.AddCategoryToolStripMenuItem.Click += OnAddCategoryClick;
@@ -410,7 +408,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          MessageBox.Show(Local.GetValue("global_facts.msg_error_creation"));
+          MessageBox.Show(Error.GetMessage(p_status));
           return;
         }
         vTreeNode l_toDelete = this.m_accountTV.FindNode(p_id);
@@ -750,7 +748,7 @@ namespace FBI.MVC.View
             if (l_value != Account.FormulaTypes.HARD_VALUE_INPUT || l_value != Account.FormulaTypes.FIRST_PERIOD_INPUT)
             {
               string l_result = PasswordBox.Open(Local.GetValue("accounts.msg_password_required"),
-                Local.GetValue("cateories.accpunts"));
+                Local.GetValue("general.accounts"));
 
               if (l_result == PasswordBox.Canceled || l_result != Addin.Password)
               {
@@ -787,33 +785,13 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
-        {
-          MessageBox.Show(Local.GetValue("global_facts.msg_error_delete"));
           return;
-        }
         vTreeNode l_toDelete = this.m_globalFactsTV.FindNode(p_id);
         if (l_toDelete == this.m_globalFactsTV.SelectedNode)
           this.m_globalFactsTV.SelectedNode = null;
         if (l_toDelete != null)
           if (l_toDelete.Parent == null)
             this.m_globalFactsTV.Nodes.Remove(l_toDelete);
-      }
-    }
-
-    delegate void OnGlobalFactModelCreation_delegate(ErrorMessage p_status, uint p_id);
-    private void OnGlobalFactModelCreation(ErrorMessage p_status, uint p_id)
-    {
-      if (InvokeRequired)
-      {
-        OnGlobalFactModelCreation_delegate func = new OnGlobalFactModelCreation_delegate(OnGlobalFactModelCreation);
-        Invoke(func, p_status, p_id);
-      }
-      else
-      {
-        if (p_status != Network.ErrorMessage.SUCCESS)
-        {
-          MessageBox.Show(Local.GetValue("global_facts.msg_error_creation"));
-        }
       }
     }
 
@@ -828,42 +806,20 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != ErrorMessage.SUCCESS)
+          return;
+        if (this.m_globalFactsTV.FindNode(p_attributes.Id) != null)
         {
-          MessageBox.Show(Local.GetValue("global_facts.msg_unknown"));
+          vTreeNode l_oldNode = this.m_globalFactsTV.FindNode(p_attributes.Id);
+          l_oldNode.Text = p_attributes.Name;
+          l_oldNode.ImageIndex = (Int32)p_attributes.Image;
         }
         else
         {
-          if (this.m_globalFactsTV.FindNode(p_attributes.Id) != null)
-          {
-            vTreeNode l_oldNode = this.m_globalFactsTV.FindNode(p_attributes.Id);
-            l_oldNode.Text = p_attributes.Name;
-            l_oldNode.ImageIndex = (Int32)p_attributes.Image;
-          }
-          else
-          {
-            vTreeNode l_node = new vTreeNode();
-            l_node.Value = p_attributes.Id;
-            l_node.Text = p_attributes.Name;
-            l_node.ImageIndex = (Int32)p_attributes.Image;
-            this.m_globalFactsTV.Nodes.Add(l_node);
-          }
-        }
-      }
-    }
-
-    delegate void OnGlobalFactModelUpdate_delegate(ErrorMessage p_status, uint p_id);
-    private void OnGlobalFactModelUpdate(ErrorMessage p_status, uint p_id)
-    {
-      if (InvokeRequired)
-      {
-        OnGlobalFactModelUpdate_delegate func = new OnGlobalFactModelUpdate_delegate(OnGlobalFactModelUpdate);
-        Invoke(func, p_status, p_id);
-      }
-      else
-      {
-        if (p_status != Network.ErrorMessage.SUCCESS)
-        {
-          MessageBox.Show(Local.GetValue("accounts.error.creation"));
+          vTreeNode l_node = new vTreeNode();
+          l_node.Value = p_attributes.Id;
+          l_node.Text = p_attributes.Name;
+          l_node.ImageIndex = (Int32)p_attributes.Image;
+          this.m_globalFactsTV.Nodes.Add(l_node);
         }
       }
     }

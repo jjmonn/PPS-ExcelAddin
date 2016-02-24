@@ -212,13 +212,12 @@
     <string name="new_category">Nouvelle catégorie</string>
     <string name="new_value">Nouvelle valeur</string>
     <string name="edit_structure">Editer la structure</string>
-    <string name="create_category_under_category">Créer une nouvelle catégorie sous la catégorie sélectionée</string>
+    <string name="delete_category">Supprimer la catégorie</string>
+    <string name="create_sub_category">Créer une nouvelle catégorie sous la catégorie sélectionée</string>
   
     <!--messages-->
     <string name="msg_new_category_name">Entrez le nom de la nouvelle catégorie :</string>
-    <string name="msg_name_used">Ce nom est déjà utiilisé ou contient des caractères interdits.</string>
-    <string name="msg_select_category">Une catégorie doit être sélectionnée pour pouvoir ajouter une valeur.</string>
-
+    <string name="msg_new_value_name">Entrez le nom de la nouvelle valeur :</string>
 
   </category>
 
@@ -226,10 +225,6 @@
 
     <!--edition-->
     <string name="accounts">Comptes</string>
-    <string name="entities_filters">Catégories des Entités</string>
-    <string name="clients_filters">Catégories des Clients</string>
-    <string name="products_filters">Catégories des Produits</string>
-    <string name="adjustments_filters">Catégories des Ajustements</string>
     <string name="entities">Entités légales</string>
     <string name="categories">Catégories</string>
     <string name="exchange_rates">Taux de change</string>
@@ -252,23 +247,13 @@
   </category>
 
   <category name="currencies">
-
-    <!--edition-->
     <string name="set_main_currency">Définir comme devise principale</string>
-    <string name="display_rates">Afficher les taux de change pour cette version</string>
-    <string name="import">Importer depuis Excel</string>
-
-    <!--messages-->
-    <string name="msg_select_currency">Une devise doit être sélectionnée.</string>
-
   </category>
 
   <category name="versions">
     <string name="select_version">Sélectionnez une version</string>
     <string name="new_version">Nouvelle Version</string>
     <string name="new_folder">Nouveau Dossier</string>
-    <string name="version">Version</string>
-    <string name="version_copy_title">Copie de version</string>
 
     <string name="add_version">Ajouter une version</string>
     <string name="add_folder">Ajouter un dossier</string>
@@ -276,15 +261,8 @@
 
     <!--messages-->
     <string name="msg_folder_name">Entrez le nom du nouveau dossier</string>
-    <string name="msg_folder_under_folder">Un dossier ne peut pas être ajouté sous une version.</string>
-    <string name="msg_version_under_folder">Une version peut uniquement être ajoutée sous un dossier.</string>
-    <string name="msg_delete1">Attention, vous allez effacer la version </string>
-    <string name="msg_delete2">Cette version/ dossier et tout ce qu'elle/ il contient va être supprimé.</string>
-    <string name="title_delete_confirmation">Confirmation de la suppression de Versions</string>
+    <string name="msg_new_name">Entrez le nouveau nom</string>
 
-    <string name="rates_version_not_selected">Une version des taux de change doit être sélectionnée.</string>
-    <string name="gfacts_version_not_selected">Une version des indicateurs macro economiques doit être sélectionnée.</string>
- 
     <category name="error">
       <string name="rates_version_not_selected">Veuillez sélectioner une version des taux de change.</string>
       <string name="gfacts_version_not_selected">Veuillez sélectioner une version des indicateurs macro économiques.</string>
@@ -296,7 +274,6 @@
   </category>
 
   <category name="process">
-    <string name="select_process">Selectionez un processus</string>
     <string name="process_rh">Processus RH</string>
     <string name="process_financial">Processus Financier</string>
     <string name="process_selection">Selection du Process</string>
@@ -350,11 +327,8 @@
   </category>
 
   <category name="global_facts">
-    <string name="new">Créer un nouvel indicateur macro économique</string>
     <string name="new_global_fact">Nouvel Indicateur Macro Economique</string>
     <string name="new_version">Nouvelle version des Indicateurs Macro Economiques</string>
-    <string name="msg_name_already_taken">Ce nom est déjà utilisé pour un autre indicateur macro économique ou un compte.</string>
-    <string name="display_version">Afficher les indicateurs macro économiques</string>
   </category>
 
   <category name="facts_versions">
@@ -367,39 +341,22 @@
     <string name="nb_days">Nombre de jours</string>
     <string name="copy_from">Créer une copie de</string>
     <string name="starting_period">Période de départ</string>
-	<string name="starting_month">Mois de départ</string>
+	  <string name="starting_month">Mois de départ</string>
     <string name="period_config">Configuration des périodes (annuel ou mensuel)</string>
     <string name="version_name">Nom de la version</string>
     <string name="version_new">Nouvelle Version</string>
-    <string name="msg_config_selection">La configuration des périodes doit être indiquée.</string>
-    <string name="msg_starting_period">L'année de départ doit être indiquée.</string>
-    <string name="msg_select_rates_version">Une version de Taux de change soit être sélectionnée.</string>
-    <string name="msg_select_global_facts_version">Une version des Indicateurs Macro Economique doit être sélectionnée.</string>
-    <string name="msg_rates_version_mismatch">Cette version des taux de change n'est pas compatible avec les périodes indiquées.</string>
-    <string name="msg_cannot_use_global_fact_folder"> est un dossier et ne peut pas être utilisé commme version des indicateurs macro économiques.</string>
-    <string name="msg_cannot_use_exchange_rates_folder"> est un dossier et ne peut pas être utilisé commme version des taux de change.</string>
-    <string name="msg_fact_version_mismatch">Cette version des indicateurs macro économiques n'est pas compatible avec les périodes indiquées.</string>
-
     <string name="global_facts_version">Version des Indicateurs Macro Economiques</string>
     <string name="version_locked">Verrouillée</string>
     <string name="locked_date">Date de verrouillage</string>
     <string name="creation_date">Date de création</string>
     <string name="version_not_locked">Version non verrouillée</string>
-    <string name="msg_delete_successful">Cette version a été supprimée avec succès.</string>
-    <string name="msg_is_folder"> est un dossier.</string>
-    <string name="msg_folder_name">Entrez le nom du nouveau dossier : </string>
-    <string name="msg_new_version_name">Entrez le nom de la nouvelle version : </string>
-    <string name="msg_invalid_name">Ce nom n'est pas valide. Il est déjà utilisé ou bien contient des caractères interdits. Essayez avec un autre nom.</string>
-    <string name="msg_select_version_or_folder">Sélectionez une version ou dossier.</string>
-	<string name="msg_need_starting_month">Veuillez sélectionner un mois de départ.</string>
-	<string name="msg_error_create">Impossible de créer la version</string>
-	<string name="msg_error_copy">Impossible de créér une copie de cette version</string>
-	<string name="msg_error_update">Impossible de modifier la version</string>
-	<string name="msg_error_delete">Impossible de supprimer la version</string>
-	<string name="msg_invalid_attribute">Attribut(s) invalide(s).</string>
-	<string name="msg_not_found">La version spécifiée est introuvable.</string>
-	<string name="msg_system">Erreur système. Veuillez contacter un administrateur.</string>
-	<string name="msg_unknown">Erreur inconnue. Veuillez contacter un administrateur.</string>
+    <category name="error">
+      <string name="create">Impossible de créer la version</string>
+      <string name="copy">Impossible de créér une copie de cette version</string>
+      <string name="update">Impossible de modifier la version</string>
+      <string name="delete">Impossible de supprimer la version</string>
+      <string name="unknown_version">Version inconnue</string>
+    </category>
   </category>
   
   <category name="period">
@@ -435,7 +392,6 @@
     <string name="msg_invalid_version">La version sélectionnée n'est pas valide (dossier) ou bien aucune version n'est sélectionnée.</string>
     <string name="msg_period_selection">Merci de sélectionner une période (Une version doit être sélectionnée avant de pouvoir choisir  une période).</string>
     <string name="msg_invalid_filter"> est un filtre invalide.</string>
-
   </category>
 
   <category name="settings">
@@ -463,90 +419,83 @@
     <string name="msg_excel_reboot">Excel doit être redémarré afin de prendre en compte la sélection de la langue.</string>
   </category>
 
-
   <category name="allocationKeys">
-
     <string name="repartition_column_name">Pourcentage de répartition (%)</string>
     <string name="msg_percentageOver100">Le pourcentage total ne peut pas excéder 100 %.</string>
     <string name="msg_error_update">La clé de répartition n'a pas pu être mise à jour.</string>
     <string name="msg_invalid_percentage">La clé de répartition doit être comprise entre 0% et 100%.</string>
-    <string name="msg_not_input_account">Les clés d'allocation peuvent seulement être éditées sur les comptes de type "Input" ou "Input sur la première période".</string>
-
-
   </category>
 
   <category name="general">
-    
     <category name="error">
       <string name="version_mismatch">Votre version de Financial BI n'est pas à jour. Veuillez redémarrer Excel.</string>
     </category>
-    
-    <string name="edition">Edition</string>
-    <string name="initializing">Initialisation ...</string>
-    <string name="formula">Formule</string>
-    <string name="week">Semaine</string>
     <string name="account">Compte</string>
-    <string name="description">Description</string>
-    <string name="entity">Entity</string>
-    <string name="client">Client</string>
-    <string name="product">Product</string>
-    <string name="version">Version</string>
-    <string name="adjustment">Adjustment</string>
-    <string name="employee">Employé</string>
-    <string name="periods">Périodes</string>
     <string name="accounts">Comptes</string>
-    <string name="Entities">Entités</string>
-
-    <string name="couleur">Couleur</string>
-    <string name="validate">Valider</string>
-    <string name="type">Type</string>
-    <string name="save">Enregistrer</string>
-    <string name="cancel">Annuler</string>
-    <string name="help">Aide</string>
-    <string name="create">Créer</string>
-    <string name="copy">Copier</string>
-    <string name="name">Nom</string>
-    <string name="delete">Supprimer</string>
-    <string name="rename">Renommer</string>
-    <string name="expand_all">Tout dégrouper</string>
-    <string name="collapse_all">Tout grouper</string>
-
-    <string name="copy_down">Copy value down</string>
-    <string name="drop_on_excel">Drop on Excel</string>
-    <string name="menu">Menu</string>
-    <string name="accounts">Comptes</string>
-    <string name="entities">Entités</string>
-    <string name="clients">Clients</string>
-    <string name="products">Produits</string>
-    <string name="adjustments">Ajustements</string>
-    <string name="versions">Versions</string>
-    <string name="currencies">Devises</string>
-    <string name="employees">Employés</string>
-    <string name="days">Jours</string>
-    <string name="weeks">Semaines</string>
-    <string name="years">Années</string>
-    <string name="months">Mois</string>
-
-    <string name="entities_filters">Filtres entités légales</string>
-    <string name="clients_filters">Filtres clients</string>
-    <string name="products_filters">Filtres produits</string>
-    <string name="adjustments_filters">Filtres ajustements</string>
-    <string name="employees_filters">Filtres employés</string>
-    
-    <string name="economic_indicators">Indicateurs Macro Economiques</string>
-    <string name="msg_name_exceed1">Le nom ne peut pas excéder </string>
-    <string name="msg_name_exceed2"> charactères</string>
     <string name="auto_resize_columns">Ajuster automatiquement la largeur des colonnes</string>
+    <string name="cancel">Annuler</string>
+    <string name="clients">Clients</string>
+    <string name="clients_filters">Catégories de clients</string>
+    <string name="adjustment">Ajustements</string>
+    <string name="adjustment_filters">Catégorie d'ajustements</string>
+    <string name="collapse_all">Tout grouper</string>
+    <string name="copy">Copier</string>
+    <string name="copy_down">Copier les valeurs vers le bas</string>
+    <string name="drop_on_excel">Transferer vers excel</string>
+    <string name="color">Couleur</string>
+    <string name="create">Créer</string>
+    <string name="create_sub_category">Créer une sous catégorie</string>
+    <string name="currencies">Devises</string>
     <string name="currency">Devise</string>
-
-    <string name="macro_economic_indicator">Indicateur Macro Economique</string>
+    <string name="delete">Supprimer</string>
+    <string name="description">Description</string>
+    <string name="drop_on_excel">Transferer vers excel</string>
+    <string name="economic_indicators">Indicateurs Macro Economiques</string>
+    <string name="edition">Edition</string>
+    <string name="employees">Employées</string>
+    <string name="employee_filters">Catégories d'employées</string>
+    <string name="entities">Entités</string>
+    <string name="entities_filters">Catégories d'entités</string>
+    <string name="entity">Entité</string>
+    <string name="expand_all">Tout dégrouper</string>
+    <string name="formula">Formule</string>
+    <string name="group">Groupe</string>
+    <string name="help">Aide</string>
+    <string name="initializing">Initialisation ...</string>
+    <string name="invalid_password">Mot de passe incorrect</string>
     <string name="log">Historique</string>
+    <string name="macro_economic_indicator">Indicateur Macro Economique</string>
+    <string name="name">Nom</string>
+    <string name="password">Mot de passe</string>
+    <string name="period">Période</string>
+    <string name="product">Produits</string>
+    <string name="product_cat">Catégories de produits</string>
+    <string name="rename">Renommer</string>
+    <string name="save">Enregistrer</string>
+    <string name="select_version">Selectionner la version</string>
+    <string name="type">Type</string>
+    <string name="validate">Valider</string>
+    <string name="version">Version</string>
+    <string name="versions">Versions</string>
+    <string name="week">Semaine</string>
+  </category>
 
+  <category name="entity">
+    <category name="error">
+      <string name="entity_not_found">Entité introuvable.</string>
+      <string name="currency_not_found">Devise introuvable.</string>
+    </category>
+  </category>
+
+  <category name="gfactdata">
+    <category name="error">
+      <string name="gfact_not_found">MEI introuvable.</string>
+      <string name="version_not_found">Version introuvable.</string>
+    </category>
   </category>
 
   <category name="updater">
 	<string name="update_success">Financial BI has been updated, please restart Excel.</string>
-	<string name="update_launch_fail">Unable to install update of Financial BI. Please contact your administrator.</string>
 	<string name="update_dl_fail">Unable to download update of Financial BI. Please contact your administrator.</string>
   </category>
 

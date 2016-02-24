@@ -54,7 +54,7 @@ namespace FBI.MVC.View
 
       this.m_addFilter.Text = Local.GetValue("general.create");
       this.m_deleteFilter.Text = Local.GetValue("general.delete");
-      this.m_createSubCategory.Text = Local.GetValue("general.create_category_under_category");
+      this.m_createSubCategory.Text = Local.GetValue("general.create_sub_category");
       this.m_renameButton.Text = Local.GetValue("general.rename");
       this.m_deleteButton.Text = Local.GetValue("general.delete");
       this.Text = Local.GetValue("filters.title_filters_structure");

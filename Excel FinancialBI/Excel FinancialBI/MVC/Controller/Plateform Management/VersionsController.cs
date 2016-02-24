@@ -134,7 +134,7 @@ namespace FBI.MVC.Controller
     {
       if (VersionModel.Instance.GetValue(p_versionId) == null)
       {
-        Error = Local.GetValue("general.version.unknown_version");
+        Error = Local.GetValue("facts_versions.unknown_version");
         return (false);
       }
       VersionModel.Instance.Delete(p_versionId);

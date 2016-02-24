@@ -242,7 +242,7 @@ namespace FBI.MVC.View
     private void AfterCreate(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_create"), p_status);
+        DisplayErrorMessage(Local.GetValue("facts_versions.error.create"), p_status);
     }
 
     private void AfterDelete(ErrorMessage p_status, UInt32 p_id)
@@ -252,42 +252,24 @@ namespace FBI.MVC.View
         DeleteNode(p_id);
       }
       else
-        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_delete"), p_status);
+        DisplayErrorMessage(Local.GetValue("facts_versions.error.delete"), p_status);
     }
 
     private void AfterUpdate(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_update"), p_status);
+        DisplayErrorMessage(Local.GetValue("facts_versions.error.update"), p_status);
     }
 
     private void AfterCopy(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_copy"), p_status);
+        DisplayErrorMessage(Local.GetValue("facts_versions.error.copy"), p_status);
     }
 
     void DisplayErrorMessage(string p_message, ErrorMessage p_status)
     {
-      p_message += ": ";
-
-      switch (p_status)
-      {
-        case ErrorMessage.SUCCESS:
-          return;
-        case ErrorMessage.NOT_FOUND:
-          p_message += Local.GetValue("facts_versions.msg_not_found");
-          break;
-        case ErrorMessage.SYSTEM:
-          p_message += Local.GetValue("facts_versions.msg_system");
-          break;
-        case ErrorMessage.INVALID_ATTRIBUTE:
-          p_message = Local.GetValue("facts_versions.msg_invalid_attribute");
-          break;
-        default:
-          p_message += Local.GetValue("facts_versions.msg_unknown");
-          break;
-      }
+      p_message += ": " + Error.GetMessage(p_status);
       MessageBox.Show(p_message);
     }
 
