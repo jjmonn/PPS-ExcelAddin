@@ -16,7 +16,7 @@ namespace FBI.MVC.Model
     bool m_autoCommit { set; get; }
     event OnFactsDownloaded FactsDownloaded;
 
-    void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet);
+    void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, UInt32 p_RHAccountId = 0);
 
     void DownloadFacts(UInt32 p_versionId, List<Int32> p_periodList, bool p_updateCells);
 

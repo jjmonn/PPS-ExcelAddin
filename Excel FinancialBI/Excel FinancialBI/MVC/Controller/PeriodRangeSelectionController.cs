@@ -9,7 +9,7 @@ namespace FBI.MVC.Controller
   using Model;
   using View;
 
-  class PeriodRangeSelectionController : IController
+  public class PeriodRangeSelectionController : IController
   {
     public string Error { get; set; }
     PeriodRangeSelectionControl m_view;

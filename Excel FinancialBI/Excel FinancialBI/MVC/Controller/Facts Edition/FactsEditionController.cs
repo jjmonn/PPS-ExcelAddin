@@ -16,20 +16,21 @@ namespace FBI.MVC.Controller
   {
     IEditedFactsManager m_editedFactsManager;
     Account.AccountProcess m_process;
-   // Account m_RHAccount;
+    UInt32 m_RHAccountId;
     Dimensions m_dimensions;
     WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     Worksheet m_worksheet;
     List<Int32> m_periodsList;
     UInt32 m_versionId;
 
-    public FactsEditionController(Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, bool p_updateCells, List<Int32> p_periodsList = null)
+    public FactsEditionController(Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, bool p_updateCells, List<Int32> p_periodsList = null, UInt32 p_RHAccountId = 0)
     {
       m_versionId = p_versionId;
       m_worksheet = p_worksheet;
-      m_dimensions = new Dimensions(m_versionId);
+      m_dimensions = new Dimensions(m_versionId, p_periodsList);
       m_process = p_process;
       m_periodsList = p_periodsList;
+      m_RHAccountId = p_RHAccountId;
 
       if (p_process == Account.AccountProcess.FINANCIAL)
         m_editedFactsManager = new FinancialEditedFactsManager();
@@ -53,11 +54,8 @@ namespace FBI.MVC.Controller
 
     private bool Launch(bool p_updateCells)
     {
-      // Before = sidepane -> ask to choose a range
-      // TO DO : RH process ->
-     //   take RH Account as param
-  
-      // TO DO: Clean current status, higlights and so on
+      // TO DO: Compatibilité resfresh
+      // Clean current status, higlights and so on
       // Check that a version is selected first
 
       if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
@@ -67,7 +65,7 @@ namespace FBI.MVC.Controller
         if (m_dimensions.IsValid() == false)
           return false;
 
-        m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet);
+        m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet, m_versionId, m_RHAccountId);
         if (m_versionId != 0 && m_periodsList.Count > 0)
         {
           m_editedFactsManager.DownloadFacts(m_versionId, m_periodsList, p_updateCells);

@@ -10,7 +10,7 @@ namespace FBI.MVC.Model
   using Utils;
   using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
-
+  using System.Reflection;
 
   class WorksheetAnalyzer
   {
@@ -18,17 +18,19 @@ namespace FBI.MVC.Model
     Dimensions m_dimensions;
     Range m_lastCell;
     public String Error { get; private set; }
-    
+
 
     public bool WorksheetScreenshot(Range p_range)
     {
       m_range = p_range;
       m_lastCell = GetRealLastCell(m_range);
-      Error = Local.GetValue("");
       if (m_lastCell != null)
         return (true);
       else
+      {
+        Error = Local.GetValue("upload.msg_empty_worksheet");
         return (false);
+      }
     }
 
     public void Snapshot(Dimensions p_dimensions, List<UInt32> p_periodsList = null)
@@ -38,9 +40,8 @@ namespace FBI.MVC.Model
     }
 
     private void DimensionsIdentificationProcess()
-    {    
+    {
       Range l_cell;
-
       for (UInt32 l_rowIndex = 1; l_rowIndex <= m_lastCell.Row; l_rowIndex++)
       {
         for (UInt32 l_columnIndex = 1; l_columnIndex <= m_lastCell.Column; l_columnIndex++)
@@ -55,14 +56,20 @@ namespace FBI.MVC.Model
           if (Convert.ToBoolean(l_cell.EntireRow.Hidden) == true || Convert.ToBoolean(l_cell.EntireColumn.Hidden) == true)
             continue;
 
+          if (l_cell.Value == null)
+            continue;
+
           if (l_cell.Value.GetType() == typeof(DateTime))
             m_dimensions.RegisterPeriod(l_cell);
           else
-            m_dimensions.DimensionsIdentify(l_cell);
+          {
+            if (l_cell.Value2.GetType() == typeof(string))
+              m_dimensions.DimensionsIdentify(l_cell);
+          }
         }
       }
     }
-  
+
     private Range GetRangeFromRowAndColumn(Int32 p_rowIndex, Int32 p_columnIndex)
     {
       return (Range)m_range.Cells[p_rowIndex, p_columnIndex];
@@ -74,8 +81,18 @@ namespace FBI.MVC.Model
       long lRealLastColumn = 0;
       try
       {
-        lRealLastRow = p_range.Cells.Find("*", p_range.Cells[1, 1], null, null, XlSearchOrder.xlByRows, XlSearchDirection.xlPrevious).Row;
-        lRealLastColumn = p_range.Cells.Find("*", p_range.Cells[1, 1], null, null, XlSearchOrder.xlByColumns, XlSearchDirection.xlPrevious).Column;
+        p_range.Cells.Find("value", Type.Missing, XlFindLookIn.xlValues, XlLookAt.xlPart, XlSearchOrder.xlByRows, XlSearchDirection.xlNext, false, false, false);
+
+        // Find the last real row
+        lRealLastRow = p_range.Cells.Find("*", System.Reflection.Missing.Value,
+        Missing.Value, Missing.Value, XlSearchOrder.xlByRows, XlSearchDirection.xlPrevious, false, Missing.Value, Missing.Value).Row;
+
+        // Find the last real column
+        lRealLastColumn = p_range.Cells.Find("*", System.Reflection.Missing.Value,
+        Missing.Value, System.Reflection.Missing.Value, XlSearchOrder.xlByColumns, XlSearchDirection.xlPrevious, false, Missing.Value, Missing.Value).Column;
+
+        //lRealLastRow = p_range.Cells.Find("*", p_range.Cells[1, 1], Type.Missing, XlFindLookIn.xlValues,XlLookAt.xlWhole, XlSearchOrder.xlByRows, XlSearchDirection.xlPrevious).Row;
+        //lRealLastColumn = p_range.Cells.Find("*", p_range.Cells[1, 1], null, null, XlSearchOrder.xlByColumns, XlSearchDirection.xlPrevious).Column;
         return p_range.Cells[lRealLastRow, lRealLastColumn] as Range;
       }
       catch (Exception ex)

@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="version_id" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">12</Value>
     </Setting>
     <Setting Name="tablesFontSize" Type="System.String" Scope="User">
       <Value Profile="(Default)">8</Value>

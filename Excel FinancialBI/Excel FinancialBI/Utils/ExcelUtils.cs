@@ -9,6 +9,7 @@ namespace FBI.Utils
   using Microsoft.Office.Interop.Excel;
   using VIBlend.WinForms.Controls;
   using Forms;
+  using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
 
   class ExcelUtils
@@ -61,7 +62,7 @@ namespace FBI.Utils
       return false;
     }
 
-    public static void WriteAccountsFromTreeView(FbiTreeView<Account> p_accountsTreeview, Range p_range, List<Int32> p_periodsList = null)
+    public static void WriteAccountsFromTreeView(FbiTreeView<Account> p_accountsTreeview, Range p_range, List<Int32> p_periodsList, TimeConfig p_timeConfig)
     {
 	    int IndentLevel = 0;
 	    foreach (vTreeNode Node in p_accountsTreeview.Nodes) {
@@ -69,8 +70,7 @@ namespace FBI.Utils
 		    p_range = p_range.Offset[1, 0];
 		    p_range.Value = Node.Text;
 
-        WritePeriodsOnWorksheet(p_range, p_periodsList);
-
+        WritePeriodsOnWorksheet(p_range, p_periodsList, p_timeConfig);
 		    p_range = p_range.Offset[1, 0];
 
 		    foreach (vTreeNode childNode in Node.Nodes) {
@@ -80,7 +80,7 @@ namespace FBI.Utils
 	    p_range.Columns.AutoFit();
     }
     
-    public static void WritePeriodsOnWorksheet(Range p_destinationCell, List<Int32> p_periodsList)
+    public static void WritePeriodsOnWorksheet(Range p_destinationCell, List<Int32> p_periodsList, TimeConfig p_timeConfig)
     {
       if (p_periodsList == null)
         return;
@@ -88,7 +88,7 @@ namespace FBI.Utils
       Int32 i = 0;
       foreach (Int32 l_periodAsInt in p_periodsList)
       {
-        p_destinationCell.Offset[0, 1 + i].Value = DateTime.FromOADate(l_periodAsInt).ToString("Short Date");
+        p_destinationCell.Offset[0, 1 + i].Value = PeriodModel.GetFormatedDate(l_periodAsInt, p_timeConfig);
         i = i + 1;
       }
     }

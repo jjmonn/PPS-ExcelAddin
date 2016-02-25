@@ -23,11 +23,13 @@ namespace FBI.MVC.Model
     Worksheet m_worksheet;
     public bool m_autoCommit {set; get;}
     private bool m_updateCellsOnDownload;
+    UInt32 m_versionId;
 
-    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, UInt32 p_RHAccountId = 0)
     {
       m_worksheet = p_worksheet;
       m_dimensions = p_dimensions;
+      m_versionId = p_versionId;
       Dimension<CRUDEntity> l_vertical = p_dimensions.m_dimensions[p_dimensions.m_orientation.Vertical];
       Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
       Dimension<CRUDEntity> l_tabDimension = p_dimensions.m_dimensions[p_dimensions.m_orientation.TabDimension];
@@ -62,17 +64,21 @@ namespace FBI.MVC.Model
                                         Dimension<CRUDEntity> p_fixedDimension,
                                         Range p_cell)
     {
-      Account l_account = null;
-      AxisElem l_entity = null;
+      UInt32 l_accountId = 0;
+      UInt32 l_entityId = 0;
+      UInt32 l_clientId = (UInt32)AxisType.Client;
+      UInt32 l_productId = (UInt32)AxisType.Product;
+      UInt32 l_adjustmentId = (UInt32)AxisType.Adjustment;
+      UInt32 l_employeeId = (UInt32)AxisType.Employee;
       PeriodDimension l_period = null;
 
-      Dimensions.SetDimensionValue(p_dimension1, p_dimensionValue1, l_account, l_entity, null, l_period);
-      Dimensions.SetDimensionValue(p_dimension2, p_dimensionValue2, l_account, l_entity, null, l_period);
-      Dimensions.SetDimensionValue(p_fixedDimension, p_fixedDimension.UniqueValue, l_account, l_entity, null, l_period);
+      Dimensions.SetDimensionValue(p_dimension1, p_dimensionValue1, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      Dimensions.SetDimensionValue(p_dimension2, p_dimensionValue2, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      Dimensions.SetDimensionValue(p_fixedDimension, p_fixedDimension.UniqueValue, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
 
-      if (l_account == null || l_entity == null || l_period == null)
+      if (l_accountId == 0 || l_entityId == 0 || l_period == null)
         return null;
-      return new EditedFact(l_account, l_entity, null, l_period, p_cell, Account.AccountProcess.FINANCIAL);
+      return new EditedFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell, Account.AccountProcess.FINANCIAL);
     }
 
 

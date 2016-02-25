@@ -92,19 +92,19 @@ namespace FBI.MVC.Model.CRUD
         return 1;
     }
 
-    public override bool Equals(object p_obj)
-    {
-      if (p_obj.GetType() != this.GetType())
-        return (false);
-      AxisElem l_obj = p_obj as AxisElem;
+    //public override bool Equals(object p_obj)
+    //{
+    //  if (p_obj.GetType() != this.GetType())
+    //    return (false);
+    //  AxisElem l_obj = p_obj as AxisElem;
 
-      return (l_obj.Id == Id);
-    }
+    //  return (l_obj.Id == Id);
+    //}
 
-    public override Int32 GetHashCode()
-    {
-      return (Int32)Id;
-    }
+    //public override Int32 GetHashCode()
+    //{
+    //  return (Int32)Id;
+    //}
 
   }
 }

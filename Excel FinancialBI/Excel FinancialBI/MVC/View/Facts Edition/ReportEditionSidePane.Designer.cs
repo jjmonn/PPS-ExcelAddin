@@ -1,6 +1,6 @@
 namespace FBI.MVC.View
 {
-    public partial class ReportUploadSidePane
+    public partial class ReportEditionSidePane
     {
         /// <summary>
         /// Required designer variable.
@@ -30,17 +30,17 @@ namespace FBI.MVC.View
         private void InitializeComponent()
         {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportUploadSidePane));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportEditionSidePane));
       this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_entitySelectionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_periodsSelectionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_accountSelectionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_accountSelectionComboBox = new VIBlend.WinForms.Controls.vComboBox();
       this.m_validateButton = new VIBlend.WinForms.Controls.vButton();
-      this.m_periodsSelectionPanel = new System.Windows.Forms.Panel();
-      this.m_entitiesImageList = new System.Windows.Forms.ImageList(this.components);
-      this.m_treeviewPanel = new System.Windows.Forms.Panel();
       this.m_buttonsImageList = new System.Windows.Forms.ImageList(this.components);
+      this.m_periodsSelectionPanel = new System.Windows.Forms.Panel();
+      this.m_treeviewPanel = new System.Windows.Forms.Panel();
+      this.m_entitiesImageList = new System.Windows.Forms.ImageList(this.components);
       this.TableLayoutPanel1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -160,6 +160,13 @@ namespace FBI.MVC.View
       this.m_validateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_validateButton.UseVisualStyleBackColor = false;
       this.m_validateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+
+      // 
+      // m_buttonsImageList
+      // 
+      this.m_buttonsImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_buttonsImageList.ImageStream")));
+      this.m_buttonsImageList.TransparentColor = System.Drawing.Color.Transparent;
+      this.m_buttonsImageList.Images.SetKeyName(0, "1420498403_340208.ico");
       // 
       // m_periodsSelectionPanel
       // 
@@ -169,13 +176,6 @@ namespace FBI.MVC.View
       this.m_periodsSelectionPanel.Size = new System.Drawing.Size(252, 197);
       this.m_periodsSelectionPanel.TabIndex = 8;
       // 
-      // m_entitiesImageList
-      // 
-      this.m_entitiesImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_entitiesImageList.ImageStream")));
-      this.m_entitiesImageList.TransparentColor = System.Drawing.Color.Transparent;
-      this.m_entitiesImageList.Images.SetKeyName(0, "favicon(81) (1).ico");
-      this.m_entitiesImageList.Images.SetKeyName(1, "elements_branch.ico");
-      // 
       // m_treeviewPanel
       // 
       this.m_treeviewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -184,20 +184,21 @@ namespace FBI.MVC.View
       this.m_treeviewPanel.Size = new System.Drawing.Size(252, 501);
       this.m_treeviewPanel.TabIndex = 9;
       // 
-      // m_buttonsImageList
+      // m_entitiesImageList
       // 
-      this.m_buttonsImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_buttonsImageList.ImageStream")));
-      this.m_buttonsImageList.TransparentColor = System.Drawing.Color.Transparent;
-      this.m_buttonsImageList.Images.SetKeyName(0, "1420498403_340208.ico");
+      this.m_entitiesImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_entitiesImageList.ImageStream")));
+      this.m_entitiesImageList.TransparentColor = System.Drawing.Color.Transparent;
+      this.m_entitiesImageList.Images.SetKeyName(0, "favicon(81) (1).ico");
+      this.m_entitiesImageList.Images.SetKeyName(1, "elements_branch.ico");
       // 
-      // ReportUploadEntitySelectionSidePane
+      // ReportEditionSidePane
       // 
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(258, 876);
       this.Controls.Add(this.TableLayoutPanel1);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Location = new System.Drawing.Point(0, 0);
-      this.Name = "ReportUploadEntitySelectionSidePane";
+      this.Name = "ReportEditionSidePane";
       this.Text = "Data Edition";
       this.TableLayoutPanel1.ResumeLayout(false);
       this.ResumeLayout(false);

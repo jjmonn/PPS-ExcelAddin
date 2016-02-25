@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -15,25 +16,32 @@ namespace FBI.MVC.View
   using VIBlend.WinForms.Controls;
   using FBI.MVC.Controller;
 
-  public partial class ReportUploadSidePane : AddinExpress.XL.ADXExcelTaskPane
+  public partial class ReportEditionSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
     public bool m_shown { set; get; }
     FbiTreeView<AxisElem> m_entitiesTreeview;
-//    ReportBuilder m_controller;
+    ReportEditionController m_controller;
     Account.AccountProcess m_process;
     PeriodRangeSelectionController m_periodRangeSelectionController;
 
-    public ReportUploadSidePane()
+    public ReportEditionSidePane()
     {
       InitializeComponent();
       this.ADXBeforeTaskPaneShow += new AddinExpress.XL.ADXBeforeTaskPaneShowEventHandler(this.ReportUploadEntitySelectionSidePane_ADXBeforeTaskPaneShow);
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReportUploadEntitySelectionSidePane_FormClosing);
+      this.m_validateButton.Click += new System.EventHandler(this.m_validateButton_Click);
       MultilangueSetup();
     }
-  
-    public void LoadView(Account.AccountProcess p_process)
+
+    public void SetController(ReportEditionController p_controller)
+    {
+      m_controller = p_controller;
+    }
+
+    public void LoadView(Account.AccountProcess p_process, PeriodRangeSelectionController p_periodRangeController)
     {
       m_shown = true;
+      m_periodRangeSelectionController = p_periodRangeController;
       m_process = p_process;
       InitCommonProcessComponents();
       if (m_process == Account.AccountProcess.RH)
@@ -62,39 +70,37 @@ namespace FBI.MVC.View
     }
 
     private void SetRHComponentVisible(bool p_visible)
-     {
-       this.m_accountSelectionLabel.Visible = p_visible;
-       this.m_accountSelectionComboBox.Visible = p_visible;
-       this.m_periodsSelectionLabel.Visible = p_visible;
-     }
+    {
+      this.m_accountSelectionLabel.Visible = p_visible;
+      this.m_accountSelectionComboBox.Visible = p_visible;
+      this.m_periodsSelectionLabel.Visible = p_visible;
+    }
 
     private void InitRHProcessComponents()
     {
-      if (m_periodRangeSelectionController == null)
-      {
-        m_periodRangeSelectionController = new PeriodRangeSelectionController(FBI.Properties.Settings.Default.version_id);
-        PeriodRangeSelectionControl l_periodRangeSelectionControl = m_periodRangeSelectionController.View as PeriodRangeSelectionControl;
-        m_periodsSelectionPanel.Controls.Add(l_periodRangeSelectionControl);
-        l_periodRangeSelectionControl.Dock = DockStyle.Fill;
-      }
-      InitRHAccountsCombobox();
+      PeriodRangeSelectionControl l_periodRangeSelectionControl = m_periodRangeSelectionController.View as PeriodRangeSelectionControl;
+      m_periodsSelectionPanel.Controls.Add(l_periodRangeSelectionControl);
+      l_periodRangeSelectionControl.Dock = DockStyle.Fill;
+      InitRHAccountsCombobox(m_accountSelectionComboBox);
       SetRHComponentVisible(true);
     }
 
-    private void InitRHAccountsCombobox()
+    public static void InitRHAccountsCombobox(vComboBox p_comboBox)
     {
-      m_accountSelectionComboBox.Items.Clear();
+      p_comboBox.Items.Clear();
       foreach (Account l_account in AccountModel.Instance.GetDictionary().Values)
       {
         if (l_account.Process == Account.AccountProcess.RH)
         {
           if (l_account.FormulaType == Account.FormulaTypes.HARD_VALUE_INPUT || l_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
           {
-          ListItem l_listItem = new ListItem();
-          l_listItem.Text = l_account.Name;
-          l_listItem.Value = l_account.Id;
-          m_accountSelectionComboBox.Items.Add(l_listItem);
+            ListItem l_listItem = new ListItem();
+            l_listItem.Text = l_account.Name;
+            l_listItem.Value = l_account.Id;
+            p_comboBox.Items.Add(l_listItem);
           }
+          if (p_comboBox.Items.Count > 0)
+            p_comboBox.SelectedItem = p_comboBox.Items.ElementAt(0);
         }
       }
     }
@@ -103,17 +109,21 @@ namespace FBI.MVC.View
     {
       if (e.KeyChar == (char)Keys.Return)
       {
-        ReportUploadController l_reportBuilder = new ReportUploadController(FBI.Properties.Settings.Default.version_id);
-        bool l_inputsValids = l_reportBuilder.CanLaunchReport(m_entitiesTreeview.SelectedNode, m_process, m_accountSelectionComboBox.SelectedItem, m_periodRangeSelectionController.GetPeriodList());
-        if (l_inputsValids)
-        {
-          bool l_reportResult = l_reportBuilder.CreateReport();
-          if (l_reportResult)
+        LaunchReportCreation();
+      }
+    }
 
-            // TO DO : launch snapshot
-            //.Addin.AssociateReportUploadControler(true, p_periodList, p_RHaccountName);
-            return;
-        }
+    private void m_validateButton_Click(object sender, EventArgs e)
+    {
+      LaunchReportCreation();
+    }
+
+    private void LaunchReportCreation()
+    {
+      if (m_controller.CanLaunchReport(m_entitiesTreeview.SelectedNode, m_accountSelectionComboBox.SelectedItem, m_periodRangeSelectionController.GetPeriodList()))
+      {
+        if (m_controller.CreateReport() == false)
+          MessageBox.Show(m_controller.Error);
       }
     }
 
@@ -124,7 +134,7 @@ namespace FBI.MVC.View
 
     private void ReportUploadEntitySelectionSidePane_FormClosing(object sender, FormClosingEventArgs e)
     {
-       this.Hide();
+      this.Hide();
       e.Cancel = true;
     }
 

@@ -114,7 +114,7 @@ namespace FBI.MVC.Model
         case CRUD.TimeConfig.WEEK:
           return Utils.Local.GetValue("general.week") + " " + GetWeekNumberFromDateId(p_period) + ", " + DateTime.FromOADate(p_period).ToString("yyyy");
         case CRUD.TimeConfig.DAYS:
-          return DateTime.FromOADate(p_period).ToLongDateString();
+          return DateTime.FromOADate(p_period).ToString("d"); // format to be set in settings
           //return DateTime.FromOADate(p_period).ToString("MMMM dd, yyyy");
       }
       return (DateTime.FromOADate(p_period).ToShortDateString());
