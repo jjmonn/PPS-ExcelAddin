@@ -6,6 +6,7 @@
  
   <category name="CUI">
     <category name="dimension">
+      <string name="account">Comptes</string>
       <string name="client">Clients</string>
       <string name="client_cat">Catégories de clients</string>
       <string name="adjustment">Ajustements</string>
@@ -17,7 +18,7 @@
       <string name="product">Produit</string>
       <string name="product_cat">Catégories de produit</string>
       <string name="currencies">Devises</string>
-      <string name="versions">Versions</string>
+      <string name="version">Versions</string>
       <string name="week">Semaines</string>
       <string name="month">Mois</string>
       <string name="day">Jours</string>
@@ -82,7 +83,7 @@
   <category name="connection">
     <string name="user_id">Identifiant</string>
     <string name="password">Mot de passe</string>
-    <string name="connection">Connection</string>
+    <string name="connection">Connexion</string>
     <category name="error">
       <string name="wrong_credentials">L'identifiant ou le mot de passe est incorrect.</string>
     </category>
@@ -96,6 +97,20 @@
     <string name="information">Informations sur le compte</string>
     <string name="name">Nom du compte</string>
     <string name="formula_type">Type de formule</string>
+    <string name="formula_type_input">Input</string>
+    <string name="formula_type_formula">Formula</string>
+    <string name="formula_type_sub">Aggregation de comptes</string>
+    <string name="formula_type_title">Titre</string>
+    <string name="formula_type_first">Compte de bilan</string>
+    <string name="type_monetary">Monétaire</string>
+    <string name="type_number">Nombre</string>
+    <string name="type_percentage">Pourcentage</string>
+    <string name="type_date">Date</string>
+    <string name="currencies_type_average">Moyenne</string>
+    <string name="currencies_type_end">Fin de période</string>
+    <string name="consolidation_type_aggregated">Aggrégé</string>
+    <string name="consolidation_type_recomputed">Recalculé</string>
+    <string name="consolidation_type_none">Aucune</string>
     <string name="type">Type de compte</string>
     <string name="consolidation_option">Option de consolidation</string>
     <string name="currencies_conversion">Conversion devise</string>
@@ -350,6 +365,7 @@
     <string name="locked_date">Date de verrouillage</string>
     <string name="creation_date">Date de création</string>
     <string name="version_not_locked">Version non verrouillée</string>
+    <string name="version_copy_title">Copie d'une version</string>
     <category name="error">
       <string name="create">Impossible de créer la version</string>
       <string name="copy">Impossible de créér une copie de cette version</string>
@@ -436,8 +452,8 @@
     <string name="cancel">Annuler</string>
     <string name="clients">Clients</string>
     <string name="clients_filters">Catégories de clients</string>
-    <string name="adjustment">Ajustements</string>
-    <string name="adjustment_filters">Catégorie d'ajustements</string>
+    <string name="adjustments">Ajustements</string>
+    <string name="adjustments_filters">Catégorie d'ajustements</string>
     <string name="collapse_all">Tout grouper</string>
     <string name="copy">Copier</string>
     <string name="copy_down">Copier les valeurs vers le bas</string>
@@ -451,13 +467,14 @@
     <string name="description">Description</string>
     <string name="drop_on_excel">Transferer vers excel</string>
     <string name="economic_indicators">Indicateurs Macro Economiques</string>
-    <string name="edition">Edition</string>
+    <string name="edition">Rapport</string>
     <string name="employees">Employées</string>
-    <string name="employee_filters">Catégories d'employées</string>
+    <string name="employees_filters">Catégories d'employées</string>
     <string name="entities">Entités</string>
     <string name="entities_filters">Catégories d'entités</string>
     <string name="entity">Entité</string>
     <string name="expand_all">Tout dégrouper</string>
+    <string name="data_visualization">Visualisation de données</string>
     <string name="formula">Formule</string>
     <string name="group">Groupe</string>
     <string name="help">Aide</string>
@@ -468,16 +485,24 @@
     <string name="name">Nom</string>
     <string name="password">Mot de passe</string>
     <string name="period">Période</string>
-    <string name="product">Produits</string>
-    <string name="product_cat">Catégories de produits</string>
+    <string name="platform_management">Gestion de l'organisation</string>
+    <string name="products">Produits</string>
+    <string name="products_filters">Catégories de produits</string>
     <string name="rename">Renommer</string>
+    <string name="refresh">Rafraichir</string>
     <string name="save">Enregistrer</string>
     <string name="select_version">Selectionner la version</string>
+    <string name="select_process">Selectionner le processus</string>
     <string name="type">Type</string>
     <string name="validate">Valider</string>
     <string name="version">Version</string>
     <string name="versions">Versions</string>
+    <string name="visualization">Visualisation</string>
+    <string name="settings">Parametres</string>
+    <string name="configuration">Configuration</string>
     <string name="week">Semaine</string>
+    <string name="snapshot">Snapshot</string>
+    <string name="upload">Edition</string>
   </category>
 
   <category name="entity">

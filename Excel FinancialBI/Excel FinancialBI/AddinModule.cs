@@ -39,10 +39,30 @@ namespace FBI
       m_financialSubmissionRibbon.Visible = false;
       m_RHSubmissionRibbon.Visible = false;
       fbiRibbonChangeState(false);
-      SubscribeEvents();
+      SuscribeEvents();
+      MultilanguageSetup();
     }
 
-    private void SubscribeEvents()
+    private void MultilanguageSetup()
+    {
+      m_connectionGroup.Caption = Local.GetValue("connection.connection");
+      m_connectionButton.Caption = Local.GetValue("connection.connection");
+      m_versionGroup.Caption = Local.GetValue("general.version");
+      m_versionRibbonButton.Caption = Local.GetValue("general.select_version");
+      m_processRibbonButton.Caption = Local.GetValue("general.select_process");
+      m_uploadGroup.Caption = Local.GetValue("general.upload");
+      m_snapshotRibbonSplitButton.Caption = Local.GetValue("general.snapshot");
+      m_reportUploadRibbonButton.Caption = Local.GetValue("general.edition");
+      m_submissionsTrackingRibbonButton.Caption = Local.GetValue("submissionsFollowUp.submissions_tracking");
+      m_CUIRibbonButton.Caption = Local.GetValue("general.data_visualization");
+      m_refreshRibbonButton.Caption = Local.GetValue("general.refresh");
+      m_platformManagementButton.Caption = Local.GetValue("general.platform_management");
+      m_visualizationGroup.Caption = Local.GetValue("general.visualization");
+      m_settingsRibbonButton.Caption = Local.GetValue("general.settings");
+      m_configurationGroup.Caption = Local.GetValue("general.configuration");
+    }
+
+    void SuscribeEvents()
     {
       Addin.InitializationEvent += OnAddinInitializationEvent;
       Addin.ConnectionStateEvent += OnConnectionEvent;

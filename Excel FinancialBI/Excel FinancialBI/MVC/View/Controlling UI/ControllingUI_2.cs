@@ -80,9 +80,9 @@ namespace FBI.MVC.View
       this.SelectAllToolStripMenuItem1.Text = Local.GetValue("CUI.select_all");
       this.UnselectAllToolStripMenuItem1.Text = Local.GetValue("CUI.unselect_all");
 
-      this.m_currencyLabel.Text = Local.GetValue("CUI.currency");
-      this.m_versionLabel.Text = Local.GetValue("CUI.version");
-      this.m_entityLabel.Text = Local.GetValue("CUI.entity");
+      this.m_currencyLabel.Text = Local.GetValue("general.currency");
+      this.m_versionLabel.Text = Local.GetValue("general.version");
+      this.m_entityLabel.Text = Local.GetValue("general.entity");
 
       this.MainMenu.Text = Local.GetValue("CUI.main_menu");
       this.m_refreshButton.Text = Local.GetValue("CUI.refresh");
