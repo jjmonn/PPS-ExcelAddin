@@ -26,7 +26,7 @@ namespace FBI.MVC.Model
         {
           T tmp_crud = Build(p_packet) as T;
 
-          m_CRUDDic.Set(tmp_crud.Id, tmp_crud.Name, tmp_crud);
+          m_CRUDDic.Set(tmp_crud.Id, tmp_crud.Name.ToLower(), tmp_crud);
         }
 
         IsInit = true;
@@ -45,7 +45,7 @@ namespace FBI.MVC.Model
       {
         T tmp_crud = Build(p_packet) as T;
 
-        m_CRUDDic.Set(tmp_crud.Id, tmp_crud.Name, tmp_crud);
+        m_CRUDDic.Set(tmp_crud.Id, tmp_crud.Name.ToLower(), tmp_crud);
         RaiseReadEvent(p_packet.GetError(), tmp_crud);
       }
       else
@@ -86,6 +86,7 @@ namespace FBI.MVC.Model
     {
       if (p_name == null)
         return null;
+      p_name = p_name.ToLower();
       return m_CRUDDic[p_name];
     }
 

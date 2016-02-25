@@ -18,24 +18,22 @@ namespace FBI.MVC.Controller
     public string Error { get; set;}
     private UInt32 m_versionId;
 
-    public RHSnapshotLaunchController(UInt32 p_versionId)
+    public RHSnapshotLaunchController(UInt32 p_versionId, AddinModuleController p_addinModuleController)
     {
       m_versionId = p_versionId;
+      m_addinModuleController = p_addinModuleController;
       m_view = new RHSnapshotLaunchView();
       m_view.SetController(this);
-      LoadView();
-    }
-
-    public void LoadView()
-    {
       m_view.LoadView(m_versionId);
+      m_view.Show();
     }
 
     public bool LaunchSnapshot(List<Int32> p_periodsList, UInt32 p_accountId)
     {
+      // TO DO
       // check period list
       // check p_account_id
-      m_addinModuleController.LaunchSnapshot(Account.AccountProcess.RH, false);
+      m_addinModuleController.LaunchRHSnapshot(false, m_versionId, p_periodsList, p_accountId);
       return true;
     }
 

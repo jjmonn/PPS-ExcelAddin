@@ -1,5 +1,5 @@
 ﻿using System;
-//using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +14,11 @@ namespace FBI.MVC.Controller
   using Microsoft.Office.Interop.Excel;
   using Utils;
 
-  class AddinModuleController
+  public class AddinModuleController
   {
     private AddinModule m_view;
     private FactsEditionController m_factsEditionController;
-    private ReportUploadController m_reportUploadController;
+   // private ReportEditionController m_reportUploadController;
     public string Error { get; set; }
     // SidePanesControllers
 
@@ -29,37 +29,83 @@ namespace FBI.MVC.Controller
 
     public bool LaunchRHSnapshotView()
     {
-      UInt32 l_versionId = GetCurrentVersion();
-      if (l_versionId != 0)
+      Version l_version = GetCurrentVersion();
+      if (l_version != null)
       {
-        RHSnapshotLaunchController l_RHSnapshotController = new RHSnapshotLaunchController(l_versionId);
+        RHSnapshotLaunchController l_RHSnapshotController = new RHSnapshotLaunchController(l_version.Id, this);
         return true;
       }
       else
         return false;
     }
 
-    public bool LaunchSnapshot(Account.AccountProcess p_process, bool p_updateCells)
+    public bool LaunchFinancialSnapshot(bool p_updateCells)
     {
-      UInt32 l_versionId = GetCurrentVersion();
-      if (l_versionId != 0)
+      Version l_version = GetCurrentVersion();
+      if (l_version != null)
       {
-        m_factsEditionController = new FactsEditionController(p_process, l_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_updateCells);
+        m_factsEditionController = new FactsEditionController(Account.AccountProcess.FINANCIAL, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet, p_updateCells, null, 0);
         return true;
       }
       else
         return false;
     }
 
-    private UInt32 GetCurrentVersion()
+    public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
+    {
+        m_factsEditionController = new FactsEditionController(Account.AccountProcess.RH, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_updateCells, p_periodsList, p_RHAccount);
+        return false;
+    }
+
+    public bool LaunchReportEdition()
+    {
+      Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
+      Version l_version = GetCurrentVersion();
+      
+      /////////////////////////
+      // STUB !!! 
+      l_version = VersionModel.Instance.GetValue(12);
+      /////////////////////////
+      if (l_version != null)
+      {
+        ReportEditionController l_reportEditionController = new ReportEditionController(l_process, l_version, this, m_view.ReportUploadEntitySelectionSidePane);
+        return true;
+      }
+      else
+      {
+        Error = "";
+        return false;
+      }
+    }
+
+    private Version GetCurrentVersion()
     {
       Version l_version = VersionModel.Instance.GetValue(FBI.Properties.Settings.Default.version_id);
       if (l_version == null)
       {
         Error = Local.GetValue("versions.select_version");
-        return 0;
+        return null;
       }
-      return l_version.Id;  
+      return l_version;  
+    }
+
+    public bool RHFactsSubmission()
+    {
+      if (m_factsEditionController == null)
+      {
+        Error = Local.GetValue("upload.edition_ended");
+        m_view.m_RHSubmissionRibbon.Visible = false;
+        return false;
+      }
+      m_factsEditionController.CommitFacts();
+      return true;
+    }
+
+
+    public void SetExcelInteractionState(bool p_state)
+    {
+      AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
+      AddinModule.CurrentInstance.ExcelApp.ScreenUpdating = p_state; 
     }
 
   }

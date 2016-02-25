@@ -259,7 +259,7 @@
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
-    <Compile Include="MVC\Controller\Facts Edition\ReportUploadController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
@@ -613,11 +613,11 @@
     <Compile Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.Designer.cs">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\ReportUploadSidePane.cs">
+    <Compile Include="MVC\View\Facts Edition\ReportEditionSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\ReportUploadSidePane.Designer.cs">
-      <DependentUpon>ReportUploadSidePane.cs</DependentUpon>
+    <Compile Include="MVC\View\Facts Edition\ReportEditionSidePane.Designer.cs">
+      <DependentUpon>ReportEditionSidePane.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Facts Edition\RHSnapshotLaunchView.cs">
       <SubType>Form</SubType>
@@ -817,8 +817,8 @@
     <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.resx">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadSidePane.resx">
-      <DependentUpon>ReportUploadSidePane.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Facts Edition\ReportEditionSidePane.resx">
+      <DependentUpon>ReportEditionSidePane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Facts Edition\RHSnapshotLaunchView.resx">
       <DependentUpon>RHSnapshotLaunchView.cs</DependentUpon>

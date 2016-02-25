@@ -159,7 +159,6 @@
       this.m_connectionButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_connectionButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_connectionButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_connectionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_connectionButton_OnClick);
       // 
       // m_mainRibbonImageList
       // 
@@ -196,7 +195,6 @@
       this.m_versionRibbonButton.Id = "adxRibbonButton_6cfcb8ebcb194f86a9b5b938a4d5161a";
       this.m_versionRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_versionRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_versionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_versionRibbonButton_OnClick);
       // 
       // m_processRibbonButton
       // 
@@ -221,7 +219,6 @@
       this.m_financialProcessRibbonButton.Id = "adxRibbonButton_a77bbbc9cdd344fcb5b7e1651689bb4a";
       this.m_financialProcessRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_financialProcessRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_financialProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialProcessRibbonButton_OnClick);
       // 
       // m_RHProcessRibbonButton
       // 
@@ -229,7 +226,6 @@
       this.m_RHProcessRibbonButton.Id = "adxRibbonButton_c5e2cabc5bd44fbc85a297f95569b467";
       this.m_RHProcessRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_RHProcessRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_RHProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_RHProcessRibbonButton_OnClick);
       // 
       // m_uploadGroup
       // 
@@ -250,7 +246,6 @@
       this.m_snapshotRibbonSplitButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_snapshotRibbonSplitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_snapshotRibbonSplitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_snapshotRibbonSplitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_snapshotRibbonSplitButton_OnClick);
       // 
       // adxRibbonMenu1
       // 
@@ -266,7 +261,6 @@
       this.m_directoryRibbonButton.Id = "adxRibbonButton_3c5c89ebdd9a4ea595bbc1e5a46be7ed";
       this.m_directoryRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_directoryRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_directoryRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_directoryRibbonButton_OnClick);
       // 
       // m_reportUploadRibbonButton
       // 
@@ -277,7 +271,6 @@
       this.m_reportUploadRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_reportUploadRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_reportUploadRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_reportUploadRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_reportUploadRibbonButton_OnClick);
       // 
       // m_visualizationGroup
       // 
@@ -299,7 +292,6 @@
       this.m_CUIRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_CUIRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_CUIRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_CUIRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_CUIRibbonButton_OnClick);
       // 
       // m_submissionsTrackingRibbonButton
       // 
@@ -310,7 +302,6 @@
       this.m_submissionsTrackingRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_submissionsTrackingRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_submissionsTrackingRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_submissionsTrackingRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_submissionsTrackingRibbonButton_OnClick);
       // 
       // m_fbiRibbonButton
       // 
@@ -322,7 +313,6 @@
       this.m_fbiRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_fbiRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_fbiRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_fbiRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_fbiRibbonButton_OnClick);
       // 
       // adxRibbonMenu2
       // 
@@ -338,7 +328,6 @@
       this.m_fbiBreakLinksRibbonButton.Id = "adxRibbonButton_42d2a242746f4962b9e5764c52ecad18";
       this.m_fbiBreakLinksRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_fbiBreakLinksRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_fbiBreakLinksRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_fbiBreakLinksRibbonButton_OnClick);
       // 
       // m_refreshRibbonButton
       // 
@@ -350,7 +339,6 @@
       this.m_refreshRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_refreshRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_refreshRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_refreshRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_refreshRibbonButton_OnClick);
       // 
       // adxRibbonMenu3
       // 
@@ -372,7 +360,6 @@
       this.m_resfreshSelectionRibbonButton.ImageList = this.m_mainRibbonImageList;
       this.m_resfreshSelectionRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_resfreshSelectionRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_resfreshSelectionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_resfreshSelectionRibbonButton_OnClick);
       // 
       // m_refreshWorksheetRibbonButton
       // 
@@ -382,7 +369,6 @@
       this.m_refreshWorksheetRibbonButton.ImageList = this.m_mainRibbonImageList;
       this.m_refreshWorksheetRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_refreshWorksheetRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_refreshWorksheetRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_refreshWorksheetRibbonButton_OnClick);
       // 
       // m_refreshWorkbookRibbonButton
       // 
@@ -391,7 +377,6 @@
       this.m_refreshWorkbookRibbonButton.ImageList = this.m_mainRibbonImageList;
       this.m_refreshWorkbookRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_refreshWorkbookRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_refreshWorkbookRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_refreshWorkbookRibbonButton_OnClick);
       // 
       // adxRibbonMenuSeparator1
       // 
@@ -405,7 +390,6 @@
       this.m_autoRefreshRibbonChackBox.Id = "adxRibbonCheckBox_986328ffc6074da4baef7fef5a55785c";
       this.m_autoRefreshRibbonChackBox.Pressed = true;
       this.m_autoRefreshRibbonChackBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_autoRefreshRibbonChackBox.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_autoRefreshRibbonChackBox_OnClick);
       // 
       // m_configurationGroup
       // 
@@ -425,7 +409,6 @@
       this.m_platformManagementButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_platformManagementButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_platformManagementButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_platformManagementButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_platformManagementButton_OnClick);
       // 
       // m_settingsRibbonButton
       // 
@@ -436,7 +419,6 @@
       this.m_settingsRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_settingsRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_settingsRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_settingsRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_settingsRibbonButton_OnClick);
       // 
       // SubmissionRibbonIL
       // 
@@ -522,7 +504,7 @@
       this.ReportUploadEntitySelectionSidePaneItem.AlwaysShowHeader = true;
       this.ReportUploadEntitySelectionSidePaneItem.CloseButton = true;
       this.ReportUploadEntitySelectionSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left;
-      this.ReportUploadEntitySelectionSidePaneItem.TaskPaneClassName = "FBI.MVC.View.ReportUploadSidePane";
+      this.ReportUploadEntitySelectionSidePaneItem.TaskPaneClassName = "FBI.MVC.View.ReportEditionSidePane";
       this.ReportUploadEntitySelectionSidePaneItem.UseOfficeThemeForBackground = true;
       // 
       // m_financialSubmissionRibbon
@@ -557,7 +539,6 @@
       this.m_financialSubmissionSubmitButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_financialSubmissionSubmitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_financialSubmissionSubmitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_financialSubmissionSubmitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialSubmissionSubmitButton_OnClick);
       // 
       // AdxRibbonSeparator4
       // 
@@ -574,7 +555,6 @@
       this.m_financialSubmissionAutoCommitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_financialSubmissionAutoCommitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       this.m_financialSubmissionAutoCommitButton.ToggleButton = true;
-      this.m_financialSubmissionAutoCommitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialSubmissionAutoCommitButton_OnClick);
       // 
       // AdxRibbonSeparator6
       // 
@@ -848,7 +828,6 @@
       this.CloseBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.CloseBT.ScreenTip = "Close the current Entity Editor";
       this.CloseBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.CloseBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.CloseBT_OnClick);
       // 
       // m_RHSubmissionRibbon
       // 
@@ -882,7 +861,6 @@
       this.m_PDCSubmissionButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCSubmissionButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_PDCSubmissionButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_PDCSubmissionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCSubmissionButton_OnClick);
       // 
       // AdxRibbonSeparator2
       // 
@@ -899,7 +877,6 @@
       this.m_PDCAutocommitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_PDCAutocommitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       this.m_PDCAutocommitButton.ToggleButton = true;
-      this.m_PDCAutocommitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCAutocommitButton_OnClick);
       // 
       // AdxRibbonSeparator3
       // 
@@ -912,7 +889,6 @@
       this.m_PDCSUbmissionStatusButton.Id = "adxRibbonButton_83d245af23e34559ab274b13e9a52e0d";
       this.m_PDCSUbmissionStatusButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCSUbmissionStatusButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_PDCSUbmissionStatusButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCSUbmissionStatusButton_OnClick);
       // 
       // m_PDCSubmissionCancelButton
       // 
@@ -922,7 +898,6 @@
       this.m_PDCSubmissionCancelButton.ImageList = this.SubmissionRibbonIL;
       this.m_PDCSubmissionCancelButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCSubmissionCancelButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_PDCSubmissionCancelButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCSubmissionCancelButton_OnClick);
       // 
       // AdxRibbonRHInformationGroup
       // 
@@ -1039,7 +1014,6 @@
       this.m_PDCRefreshSnapthshotButton.ImageList = this.m_mainRibbonImageList;
       this.m_PDCRefreshSnapthshotButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCRefreshSnapthshotButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_PDCRefreshSnapthshotButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCRefreshSnapthshotButton_OnClick);
       // 
       // m_PDCConsultantRangeEditButton
       // 
@@ -1047,7 +1021,6 @@
       this.m_PDCConsultantRangeEditButton.Id = "adxRibbonButton_d24e5ee960704f1e9ca2612d5eebfa54";
       this.m_PDCConsultantRangeEditButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCConsultantRangeEditButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_PDCConsultantRangeEditButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCConsultantRangeEditButton_OnClick);
       // 
       // m_PDCPeriodsRangeEditButton
       // 
@@ -1055,7 +1028,6 @@
       this.m_PDCPeriodsRangeEditButton.Id = "adxRibbonButton_ab9e3107c41a4638be170f1f98a20b71";
       this.m_PDCPeriodsRangeEditButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCPeriodsRangeEditButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_PDCPeriodsRangeEditButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCPeriodsRangeEditButton_OnClick);
       // 
       // AdxRibbonRHExitGroup
       // 
@@ -1075,7 +1047,6 @@
       this.m_PDCSumbissionExitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor";
       this.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.m_PDCSumbissionExitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCSumbissionExitButton_OnClick);
       // 
       // AddinModule
       // 

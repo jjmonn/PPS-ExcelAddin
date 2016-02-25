@@ -29,10 +29,10 @@ namespace FBI.MVC.Model
 
   class Dimensions
   {
-    List<DateTime> m_periodsDatesList = new List<DateTime>();
+    List<Int32> m_periodsDatesList = new List<Int32>();
 
     public Orientation m_orientation { private set; get; }
-    public SafeDictionary<DimensionType, Dimension<CRUDEntity>> m_dimensions;
+    public SafeDictionary<DimensionType, Dimension<CRUDEntity>> m_dimensions = new SafeDictionary<DimensionType,Dimension<CRUDEntity>>();
     public Dimension<CRUDEntity> m_periods { get { return (m_dimensions[DimensionType.PERIOD]); } }
     public Dimension<CRUDEntity> m_accounts { get { return (m_dimensions[DimensionType.ACCOUNT]); } }
     public Dimension<CRUDEntity> m_entities { get { return (m_dimensions[DimensionType.ENTITY]); } }
@@ -47,8 +47,7 @@ namespace FBI.MVC.Model
       if (p_periodsList == null)
         p_periodsList = PeriodModel.GetPeriodsList(p_versionId);
 
-      foreach (UInt32 periodId in p_periodsList)
-        m_periodsDatesList.Add(DateTime.FromOADate(periodId));
+      m_periodsDatesList = p_periodsList;
     }
 
     #region Dimensions identification methods
@@ -63,31 +62,28 @@ namespace FBI.MVC.Model
 
     private void DimensionsIdentifyFinancial(Range p_cell)
     {
-      if (p_cell.Value2.GetType() == typeof(string))
-      {
-        if (RegisterAccount(p_cell) == true)
-          return;
-        if (RegisterEntity(p_cell) == true)
-          return;
-      }
+      if (RegisterAccount(p_cell) == true)
+        return;
+      if (RegisterEntity(p_cell) == true)
+        return;
     }
 
     private void DimensionsIdentifyRH(Range p_cell)
     {
-      if (p_cell.Value2.GetType() == typeof(string))
-      {
-        if (RegisterEmployee(p_cell) == true)
-          return;
-        if (RegisterEntity(p_cell) == true)
-          return;
-      }
-    }
+      if (RegisterEmployee(p_cell) == true)
+        return;
+      if (m_entities.m_values.Count > 0) // only register the first entity found
+        return;
+      if (RegisterEntity(p_cell) == true)
+      return;
+  }
 
     public bool RegisterPeriod(Range p_cell)
     {
       UInt32 l_periodAsInt = Convert.ToUInt32(Convert.ToDateTime((p_cell).Value).ToOADate());
       PeriodDimension l_period = new PeriodDimension(l_periodAsInt);
-      if (m_periodsDatesList.Contains(Convert.ToDateTime(p_cell.Value)) && !m_periods.m_values.Values.Contains(l_period))
+      Int32 test = (Int32)Convert.ToDateTime(p_cell.Value).ToOADate();
+      if (m_periodsDatesList.Contains((Int32)Convert.ToDateTime(p_cell.Value).ToOADate()))
         return m_periods.AddValue(p_cell, l_period); ;
       return false;
     }
@@ -314,20 +310,20 @@ namespace FBI.MVC.Model
 
     #endregion
 
-    public static void SetDimensionValue(Dimension<CRUDEntity> p_dimension, CRUDEntity p_value, Account p_account, AxisElem p_entity, AxisElem p_employee, PeriodDimension p_period)
+    public static void SetDimensionValue(Dimension<CRUDEntity> p_dimension, CRUDEntity p_value, ref UInt32 p_accountId, ref UInt32 p_entityId, ref UInt32 p_employeeId, ref PeriodDimension p_period)
     {
       switch (p_dimension.m_dimensionType)
       {
         case DimensionType.ACCOUNT:
-          p_account = p_value as Account;
+          p_accountId = p_value.Id;
           break;
 
         case DimensionType.ENTITY:
-          p_entity = p_value as AxisElem;
+          p_entityId = p_value.Id;
           break;
 
         case DimensionType.EMPLOYEE:
-          p_employee = p_value as AxisElem;
+          p_employeeId = p_value.Id;
           break;
 
         case DimensionType.PERIOD:

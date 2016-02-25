@@ -16,11 +16,13 @@ namespace FBI.MVC.View
   using FBI;
   using Utils;
   using VIBlend.WinForms.Controls;
+  using FBI.MVC.View;
 
   public partial class RHSnapshotLaunchView : Form, IView
   {
     RHSnapshotLaunchController m_controller;
     PeriodRangeSelectionController m_periodRangeSelectionController;
+
 
     public RHSnapshotLaunchView()
     {
@@ -49,7 +51,7 @@ namespace FBI.MVC.View
     public void LoadView(UInt32 p_versionId)
     {
       LoadPeriodsSelectionControl(p_versionId);
-      LoadRHAccountsSelectionComboBox();
+      ReportEditionSidePane.InitRHAccountsCombobox(m_accountSelectionComboBox);
     }
 
     private void LoadPeriodsSelectionControl(UInt32 p_versionId)
@@ -60,21 +62,6 @@ namespace FBI.MVC.View
       l_periodRangeSelectionView.Dock = DockStyle.Fill;
     }
 
-    private void LoadRHAccountsSelectionComboBox()
-    {
-      foreach (Account l_account in AccountModel.Instance.GetDictionary().Values)
-      {
-        if (l_account.Process == Account.AccountProcess.RH && l_account.FormulaType == Account.FormulaTypes.HARD_VALUE_INPUT)
-        {
-          ListItem l_item = new ListItem();
-          l_item.Value = l_account.Id;
-          l_item.Text = l_account.Name;
-        }
-      }
-      if (m_accountSelectionComboBox.Items.Count > 0)
-        m_accountSelectionComboBox.SelectedItem = m_accountSelectionComboBox.Items.ElementAt(0);
-    }
-   
     private void m_validateButton_Click(object sender, EventArgs e)
     {
       if (m_controller.LaunchSnapshot(m_periodRangeSelectionController.GetPeriodList(), (UInt32)m_accountSelectionComboBox.SelectedItem.Value) == false)

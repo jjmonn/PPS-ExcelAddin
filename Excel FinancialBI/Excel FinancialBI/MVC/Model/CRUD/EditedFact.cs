@@ -26,28 +26,48 @@ namespace FBI.MVC.Model
     public AxisElem Entity { get { return AxisElemModel.Instance.GetValue(AxisType.Entities, this.EntityId); } }
     public AxisElem Employee { get { return AxisElemModel.Instance.GetValue(AxisType.Employee, this.EmployeeId); } }
     public PeriodDimension PeriodDimension { get; private set;}
-    UInt32 m_editedClientId;
-    double m_editedValue;
+    public UInt32 EditedClientId {get; set;}
+    public double EditedValue {get; set;}
     public Range Cell { get; private set;}
     public CellStatus CellStatus { get; private set;}
     public event CellValueChangedEventHandler OnCellValueChanged;
 
-    public EditedFact(Account p_account, AxisElem p_entity, AxisElem p_employee, PeriodDimension p_period, Range p_cell, Account.AccountProcess p_process)
+    public EditedFact(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId, UInt32 p_employeeId, UInt32 p_versionId, PeriodDimension p_period, Range p_cell, Account.AccountProcess p_process)
     {
       Cell = p_cell;
       m_process = p_process; 
       PeriodDimension = p_period;
 
-      this.AccountId = Account.Id;
-      this.EntityId = Entity.Id;
+      this.AccountId = p_accountId;
+      this.EntityId = p_entityId;
+      this.ClientId = p_clientId;
+      this.ProductId = p_productId;
+      this.AdjustmentId = p_adjustmentId;
+      this.EmployeeId = p_employeeId;
       this.Period = PeriodDimension.Id;
-      this.EmployeeId = Employee.Id;
+      this.VersionId = p_versionId;
+
+      if (m_process == CRUD.Account.AccountProcess.FINANCIAL)
+        EditedValue = Convert.ToDouble(Cell.Value2);
+      else
+        EditedClientId = GetCellClientId(); 
+    }
+ 
+    public void UpdateFact(Fact p_fact)
+    {
+      Id = p_fact.Id;
+      Value = p_fact.Value;
+      ClientId = p_fact.ClientId;
+    
+      if (m_process == CRUD.Account.AccountProcess.FINANCIAL)
+        SetCellStatusFinancial();
+      else
+        SetCellStatusRH();
     }
 
-    public void SetEditedFinancialValue(double p_value)
+    public void SetCellStatusFinancial()
     {
-      m_editedValue = p_value;
-      if (m_editedValue != this.Value)
+      if (EditedValue != this.Value)
       {
         if (Account.FormulaType == CRUD.Account.FormulaTypes.HARD_VALUE_INPUT || Account.FormulaType == CRUD.Account.FormulaTypes.FIRST_PERIOD_INPUT)
         {
@@ -67,10 +87,9 @@ namespace FBI.MVC.Model
       }
     }
 
-    public void SetEditedRHValue(UInt32 p_clientId)
+    private void SetCellStatusRH()
     {
-      m_editedClientId = p_clientId;
-      if (m_editedClientId != this.ClientId)
+      if (EditedClientId != this.ClientId)
       {
         CellStatus = Model.CellStatus.DifferentInput;
         OnCellValueChanged(Cell, Model.CellStatus.DifferentInput);
@@ -82,15 +101,6 @@ namespace FBI.MVC.Model
       }
     }
 
-    public void UpdateFact(Fact p_fact)
-    {
-      Id = p_fact.Id;
-      Value = p_fact.Value;
-      EmployeeId = p_fact.EmployeeId;
-      SetEditedFinancialValue(p_fact.Value);
-      SetEditedRHValue(p_fact.EmployeeId);
-    }
-
     // Below : not here -> View
     public void UpdateCellValue()
     {
@@ -99,6 +109,38 @@ namespace FBI.MVC.Model
       // Event ->  event for highlighter - update cells color on worksheet 
     }
 
-    
+    // Below : attention valeur invalide traitée comme 0 ? + ce code doit-il être ici ?
+    private double GetFactValue()
+    {
+      if (Cell.Value2 == null)
+        return 0;
+      double l_doubleValue;
+      if (Cell.Value2.GetType() == typeof(string))
+      {
+        if (Double.TryParse(Cell.Value2 as string, out l_doubleValue))
+          return l_doubleValue;
+        else return 0;
+      }
+      return 0;
+    }
+
+    // Attention : traitement des valeurs invalides ? + ce code doit-il être ici ?
+    private UInt32 GetCellClientId()
+    {
+      if (Cell.Value2 == null)
+        return 0;
+      if (Cell.Value2.GetType() == typeof(string))
+      {
+        AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, Cell.Value2 as string);
+        if (l_client == null)
+          return 0;
+        return l_client.Id;
+      }
+      return 0;
+    }
+
+    // BEFORE COMMIT : set clientId or Value to the editedvalue
+
+
   }
 }

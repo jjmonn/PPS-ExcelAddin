@@ -18,21 +18,24 @@ namespace FBI.MVC.Model
     Dimensions m_dimensions = null;
     List<int> m_requestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
-    List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
     Worksheet m_worksheet;
     public bool m_autoCommit { set; get; }
     private bool m_updateCellsOnDownload;
+    UInt32 m_RHAccountId;
+    UInt32 m_versionId;
 
-    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet)
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, UInt32 p_RHAccountId)
     {
       m_worksheet = p_worksheet;
       m_dimensions = p_dimensions;
+      m_versionId = p_versionId;
+      m_RHAccountId = p_RHAccountId;
       Dimension<CRUDEntity> l_vertical = p_dimensions.m_dimensions[p_dimensions.m_orientation.Vertical];
       Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
 
       CreateEditedFacts(l_vertical, l_horitontal, p_dimensions.m_entities);
-   
-      // Once facts registered clean dimensions and put them into a safe dictionary ?
+  
+      // TO DO : Once facts registered clean dimensions and put them into a safe dictionary ?
     }
 
     private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)
@@ -44,9 +47,7 @@ namespace FBI.MVC.Model
           Range l_factCell = m_worksheet.Cells[l_rowsKeyPair.Key.Row, l_columnsKeyPair.Key.Column] as Range;
           EditedFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
-          {
             m_RHEditedFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId,l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
-          }
         }
       }
     }
@@ -56,18 +57,21 @@ namespace FBI.MVC.Model
                                         Dimension<CRUDEntity> p_fixedDimension,
                                         Range p_cell)
     {
-      Account l_account = null;
-      AxisElem l_entity = null;
-      AxisElem l_employee = null;
+      UInt32 l_accountId = m_RHAccountId;
+      UInt32 l_entityId = 0;
+      UInt32 l_clientId = (UInt32)AxisType.Client;
+      UInt32 l_productId = (UInt32)AxisType.Product;
+      UInt32 l_adjustmentId = (UInt32)AxisType.Adjustment;
+      UInt32 l_employeeId = 0;
       PeriodDimension l_period = null;
 
-      Dimensions.SetDimensionValue(p_dimension1, p_dimensionValue1, l_account, l_entity, l_employee, l_period);
-      Dimensions.SetDimensionValue(p_dimension2, p_dimensionValue2, l_account, l_entity, l_employee, l_period);
-      Dimensions.SetDimensionValue(p_fixedDimension, p_fixedDimension.UniqueValue, l_account, l_entity, l_employee, l_period);
+      Dimensions.SetDimensionValue(p_dimension1, p_dimensionValue1, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      Dimensions.SetDimensionValue(p_dimension2, p_dimensionValue2, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      Dimensions.SetDimensionValue(p_fixedDimension, p_fixedDimension.UniqueValue, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
 
-      if (l_account == null || l_entity == null || l_period == null)
+      if (l_employeeId == 0 || l_entityId == 0 || l_period == null)
         return null;
-      return new EditedFact(l_account, l_entity, null, l_period, p_cell, Account.AccountProcess.RH);
+      return new EditedFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell, Account.AccountProcess.RH);
     }
 
     public void DownloadFacts(UInt32 p_versionId, List<Int32> p_periodsList, bool p_updateCells)
@@ -78,16 +82,13 @@ namespace FBI.MVC.Model
       List<Account> l_accountsList = m_dimensions.GetAccountsList();
       List<AxisElem> l_employeesList = m_dimensions.GetAxisElemList(DimensionType.EMPLOYEE);
       Int32 l_startPeriod = p_periodsList.ElementAt(0);
-      Int32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count);
+      Int32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count-1);
 
       FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
       m_requestIdList.Clear();
-      foreach (Account l_account in l_accountsList)
+      foreach (AxisElem l_employee in l_employeesList)
       {
-        foreach (AxisElem l_employee in l_employeesList)
-        {
-            m_requestIdList.Add(FactsModel.Instance.GetFact(l_account.Id, l_entity.Id, l_employee.Id, p_versionId, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
-        }
+        m_requestIdList.Add(FactsModel.Instance.GetFact(m_RHAccountId, l_entity.Id, l_employee.Id, p_versionId, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
       }
     }
 
@@ -139,7 +140,7 @@ namespace FBI.MVC.Model
       if (l_client == null)
         return;
       p_RHEditedFact.Cell.Value2 = l_client.Name;
-      p_RHEditedFact.SetEditedRHValue(p_clientId);
+      p_RHEditedFact.EditedClientId = p_clientId;
     }
 
     //public void UpdateWorksheetInputs()
