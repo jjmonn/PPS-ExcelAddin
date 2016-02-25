@@ -109,6 +109,11 @@ namespace FBI
 
     }
 
+    public static void Disconnect()
+    {
+      m_networkLauncher.Stop();
+    }
+
     public static bool Connect(string p_userName, string p_password)
     {
       bool result;

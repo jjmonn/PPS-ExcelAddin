@@ -57,8 +57,15 @@ namespace FBI.MVC.Model
 
     public void OnComputeResult(ByteBuffer p_packet)
     {
+      if (p_packet.GetError() != ErrorMessage.SUCCESS)
+      {
+        ComputeCompleteEvent(p_packet.GetError(), null, null);
+        return;
+      }
       Int32 l_requestId = p_packet.GetRequestId();
       Tuple<AComputeRequest, List<Int32>> l_requestTuple = FindComputeRequest(l_requestId);
+      if (l_requestTuple == null)
+        return;
       LegacyComputeRequest l_request = l_requestTuple.Item1 as LegacyComputeRequest;
       List<Int32> l_requestIdList = l_requestTuple.Item2;
       ComputeResult l_result = null;
