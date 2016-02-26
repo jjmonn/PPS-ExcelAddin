@@ -191,71 +191,71 @@ Friend Class ReportUploadWorksheetsEventHandler
 
         Dim modelUpdateFlag As Boolean = False
         Dim dependents_cells As Excel.Range = Nothing
-        Dim entityName As New String("")
         If m_reportUploadController.m_isUpdating = False AndAlso m_disableWSChangeFlag = False Then
 
             For Each cell As Excel.Range In p_target.Cells
+                Dim entityName = m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
                 If CellBelongsToFinancialDimensionsDefinition(cell.Address) Then Continue For
 
-                Dim intersect = GlobalVariables.APPS.Intersect(cell, m_reportUploadController.datamodificationtracker.m_dataSetRegion)
-                If Not intersect Is Nothing Then
+                ' Put back the real output value in case the output has been overwritten
+                On Error Resume Next
+                Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, m_reportUploadController.DataModificationTracker.m_outputsRegion)
+                If Not intersectOutput Is Nothing Then
+                    m_disableWSChangeFlag = True
+                    SetDatsetCellValue(GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName), _
+                                       entityName, _
+                                       m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                                       m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
+                    m_disableWSChangeFlag = False
+                Else
 
-                    entityName = m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
-                    If IsNumeric(cell.Value) Then
-                        If m_reportUploadController.AcquisitionModel.CheckIfFPICalculatedItem(m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
-                                                                    m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_period) = False Then
+                    Dim intersect = GlobalVariables.APPS.Intersect(cell, m_reportUploadController.DataModificationTracker.m_dataSetRegion)
+                    If Not intersect Is Nothing Then
 
-                            ' Cell modification registration
-                            modelUpdateFlag = True
-                            m_reportUploadController.UpdateModelFromExcelUpdate(entityName, _
-                                                                                   m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
-                                                                                   m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_period, _
-                                                                                   cell.Value2, _
-                                                                                   cell.Address)
+                        'entityName = m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
+                        If IsNumeric(cell.Value) Then
+                            If m_reportUploadController.AcquisitionModel.CheckIfFPICalculatedItem(m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                                                                        m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period) = False Then
 
-                            ' Register modification in dependant cells
-                            On Error Resume Next
-                            dependents_cells = cell.Dependents
-                            If Not dependents_cells Is Nothing Then
-                                For Each dependant_cell As Excel.Range In dependents_cells
-                                    intersect = GlobalVariables.APPS.Intersect(dependant_cell, m_reportUploadController.datamodificationtracker.m_dataSetRegion)
-                                    If Not intersect Is Nothing Then
-                                        m_reportUploadController.UpdateModelFromExcelUpdate(m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_entityName, _
-                                                                                               m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_accountName, _
-                                                                                               m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_period, _
-                                                                                               dependant_cell.Value2, _
-                                                                                               dependant_cell.Address)
-                                    End If
-                                Next
+                                ' Cell modification registration
+                                modelUpdateFlag = True
+                                m_reportUploadController.UpdateModelFromExcelUpdate(entityName, _
+                                                                                       m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                                                                                       m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period, _
+                                                                                       cell.Value2, _
+                                                                                       cell.Address)
+
+                                ' Register modification in dependant cells
+                                On Error Resume Next
+                                dependents_cells = cell.Dependents
+                                If Not dependents_cells Is Nothing Then
+                                    For Each dependant_cell As Excel.Range In dependents_cells
+                                        intersect = GlobalVariables.APPS.Intersect(dependant_cell, m_reportUploadController.DataModificationTracker.m_dataSetRegion)
+                                        If Not intersect Is Nothing Then
+                                            m_reportUploadController.UpdateModelFromExcelUpdate(m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_entityName, _
+                                                                                                   m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_accountName, _
+                                                                                                   m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_period, _
+                                                                                                   dependant_cell.Value2, _
+                                                                                                   dependant_cell.Address)
+                                        End If
+                                    Next
+                                End If
+                                If m_reportUploadController.m_autoCommitFlag = True Then m_reportUploadController.DataSubmission()
+                            Else
+                                ' First period input formula type : output period
+                                m_disableWSChangeFlag = True
+                                SetDatsetCellValue(GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName), _
+                                                   entityName, _
+                                                   m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                                                   m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
+                                m_disableWSChangeFlag = False
                             End If
-                            If m_reportUploadController.m_autoCommitFlag = True Then m_reportUploadController.DataSubmission()
                         Else
-                            ' First period input formula type : output period
+                            ' Put back the former value in case invalid input has been given (eg. string, ...)
                             m_disableWSChangeFlag = True
-                            SetDatsetCellValue(GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName), _
-                                               entityName, _
-                                               m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
-                                               m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_period)
+                            cell.Value = m_reportUploadController.DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_value
                             m_disableWSChangeFlag = False
                         End If
-                    Else
-                        ' Put back the former value in case invalid input has been given (eg. string, ...)
-                        m_disableWSChangeFlag = True
-                        cell.Value = m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_value
-                        m_disableWSChangeFlag = False
-                    End If
-                Else
-                    ' Put back the real output value in case the output has been overwritten
-                    On Error Resume Next
-                    entityName = m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
-                    Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, m_reportUploadController.datamodificationtracker.m_outputsRegion)
-                    If Not intersectOutput Is Nothing Then
-                        m_disableWSChangeFlag = True
-                        SetDatsetCellValue(GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName), _
-                                           entityName, _
-                                           m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
-                                           m_reportUploadController.Dataset.m_datasetCellDimensionsDictionary(cell.Address).m_period)
-                        m_disableWSChangeFlag = False
                     End If
                 End If
             Next

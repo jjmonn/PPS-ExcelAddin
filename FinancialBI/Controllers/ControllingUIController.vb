@@ -807,7 +807,7 @@ Friend Class ControllingUIController
 
     End Sub
 
-    Private Sub SetVersionsComparisonCellsValues(ByRef p_versionid As Int32, _
+    Private Sub SetVersionsComparisonCellsValues(ByRef p_versionid As String, _
                                                  ByRef p_token As String, _
                                                  ByVal args As CellValueNeededEventArgs)
 
