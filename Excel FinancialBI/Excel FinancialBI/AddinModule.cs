@@ -36,6 +36,7 @@ namespace FBI
     {
       Addin.Main();
       m_controller = new AddinModuleController(this);
+
       m_financialSubmissionRibbon.Visible = false;
       m_RHSubmissionRibbon.Visible = false;
       fbiRibbonChangeState(false);
@@ -338,7 +339,7 @@ namespace FBI
 
     private void CloseBT_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      m_controller.CloseEditionMode();
     }
 
     #endregion
@@ -367,7 +368,7 @@ namespace FBI
 
     private void m_PDCSumbissionExitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      m_controller.CloseEditionMode();
     }
 
     private void m_PDCRefreshSnapthshotButton_OnClick(object sender, IRibbonControl control, bool pressed)

@@ -8,6 +8,7 @@ namespace FBI.MVC.Model
 {
   using Microsoft.Office.Interop.Excel;
   using FBI.MVC.Model.CRUD;
+  using FBI.MVC.View;
   using Network;
   using Utils;
 
@@ -25,7 +26,7 @@ namespace FBI.MVC.Model
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
 
-    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, UInt32 p_RHAccountId = 0)
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, UInt32 p_RHAccountId = 0)
     {
       m_worksheet = p_worksheet;
       m_dimensions = p_dimensions;
@@ -34,12 +35,12 @@ namespace FBI.MVC.Model
       Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
       Dimension<CRUDEntity> l_tabDimension = p_dimensions.m_dimensions[p_dimensions.m_orientation.TabDimension];
 
-      CreateEditedFacts(l_vertical, l_horitontal, l_tabDimension);
+      CreateEditedFacts(l_vertical, l_horitontal, l_tabDimension, p_rangeHighlighter);
 
       // TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
     }
 
-    private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)
+    private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension, RangeHighlighter p_rangeHighlighter)
     {
       foreach (KeyValuePair<Range, CRUDEntity> l_rowsKeyPair in p_rowsDimension.m_values)
       {
@@ -49,6 +50,9 @@ namespace FBI.MVC.Model
           EditedFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
           {
+            // Set Edited Value     
+            l_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
+      
             Account.FormulaTypes l_formulaType = l_editedFact.Account.FormulaType;
             if (l_formulaType == Account.FormulaTypes.HARD_VALUE_INPUT || l_formulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
               m_editedFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
@@ -166,16 +170,31 @@ namespace FBI.MVC.Model
       //
       foreach (EditedFact l_outputFact in m_editedFacts.Values)
       {
-        l_outputFact.UpdateCellValue();
+        //l_outputFact.UpdateCellValue();
       }
       FactsDownloaded(true);
+    }
+
+    public bool UpdateEditedValues(Range p_cell)
+    {
+      if (m_editedFacts.ContainsKey(p_cell))
+      {
+
+        return true;
+      }
+      if (m_outputFacts.ContainsKey(p_cell))
+      {
+
+        return true;
+      }
+      return false;
     }
 
     public void UpdateWorksheetInputs()
     {
       foreach (EditedFact l_editedFact in m_editedFacts.Values)
       {
-        l_editedFact.UpdateCellValue();
+       // l_editedFact.UpdateCellValue();
       }
     }
 

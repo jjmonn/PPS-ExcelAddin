@@ -101,11 +101,19 @@ namespace FBI.MVC.Controller
       return true;
     }
 
-
     public void SetExcelInteractionState(bool p_state)
     {
       AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
       AddinModule.CurrentInstance.ExcelApp.ScreenUpdating = p_state; 
+    }
+
+    public void CloseEditionMode()
+    {
+      if (m_factsEditionController != null)
+      {
+        m_factsEditionController.CloseInstance();
+        m_factsEditionController = null;
+      }
     }
 
   }

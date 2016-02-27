@@ -10,7 +10,7 @@ namespace FBI.MVC.Model
   using CRUD;
   using Network;
   using Utils;
-
+  using FBI.MVC.View;
 
   class RHEditedFactsManager : IEditedFactsManager
   {
@@ -23,8 +23,14 @@ namespace FBI.MVC.Model
     private bool m_updateCellsOnDownload;
     UInt32 m_RHAccountId;
     UInt32 m_versionId;
+    List<string> m_factsTagList;
 
-    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, UInt32 p_RHAccountId)
+    public RHEditedFactsManager()
+    {
+      m_factsTagList = Enum.GetNames(typeof(FactTag.TagType)).ToList();
+    }
+
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, UInt32 p_RHAccountId)
     {
       m_worksheet = p_worksheet;
       m_dimensions = p_dimensions;
@@ -33,12 +39,12 @@ namespace FBI.MVC.Model
       Dimension<CRUDEntity> l_vertical = p_dimensions.m_dimensions[p_dimensions.m_orientation.Vertical];
       Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
 
-      CreateEditedFacts(l_vertical, l_horitontal, p_dimensions.m_entities);
+      CreateEditedFacts(l_vertical, l_horitontal, p_dimensions.m_entities, p_rangeHighlighter);
   
       // TO DO : Once facts registered clean dimensions and put them into a safe dictionary ?
     }
 
-    private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)
+    private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension, RangeHighlighter p_rangeHighlighter)
     {
       foreach (KeyValuePair<Range, CRUDEntity> l_rowsKeyPair in p_rowsDimension.m_values)
       {
@@ -47,7 +53,12 @@ namespace FBI.MVC.Model
           Range l_factCell = m_worksheet.Cells[l_rowsKeyPair.Key.Row, l_columnsKeyPair.Key.Column] as Range;
           EditedFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
-            m_RHEditedFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId,l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
+          {
+            l_editedFact.EditedClientId = GetClientIdFromCell(l_factCell);
+            l_editedFact.EditedFactType = GetTagTypeFromCell(l_factCell);
+            l_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
+            m_RHEditedFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
+          }
         }
       }
     }
@@ -59,7 +70,7 @@ namespace FBI.MVC.Model
     {
       UInt32 l_accountId = m_RHAccountId;
       UInt32 l_entityId = 0;
-      UInt32 l_clientId = (UInt32)AxisType.Client;
+      UInt32 l_clientId = 0;
       UInt32 l_productId = (UInt32)AxisType.Product;
       UInt32 l_adjustmentId = (UInt32)AxisType.Adjustment;
       UInt32 l_employeeId = 0;
@@ -127,21 +138,74 @@ namespace FBI.MVC.Model
         if (l_RHEditedFact != null)
         {
           l_RHEditedFact.UpdateFact(l_fact);
-          if (m_updateCellsOnDownload)
-            SetInputCellValue(l_RHEditedFact, l_fact.ClientId);
-        }
+          FactTag l_factTag = FactTagModel.Instance.GetValue(l_fact.Id);
+          l_RHEditedFact.ModelFactTag = l_factTag;
+          if (m_updateCellsOnDownload == true)
+            l_RHEditedFact.SetEditedClient(l_fact.ClientId);
+
+            l_RHEditedFact.Cell.Value2 = GetClientString(l_RHEditedFact, l_fact.ClientId, l_factTag.Tag);
+         }
       }
       return true;
     }
 
-    private void SetInputCellValue(EditedFact p_RHEditedFact, UInt32 p_clientId)
+    public bool UpdateEditedValues(Range p_cell)
     {
-      AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, p_clientId);
-      if (l_client == null)
-        return;
-      p_RHEditedFact.Cell.Value2 = l_client.Name;
-      p_RHEditedFact.EditedClientId = p_clientId;
+      if( m_RHEditedFacts.ContainsKey(p_cell))
+      {
+        GetClientString(m_RHEditedFacts[p_cell], GetClientIdFromCell(p_cell), GetTagTypeFromCell(p_cell));
+        
+        return true;
+      }
+      else
+        return false;
     }
+
+    private string GetClientString(EditedFact p_editedFact, UInt32 p_clientId, FactTag.TagType p_factType)
+    {
+      if (p_factType != null)
+        return m_factsTagList.ElementAt((Int32)p_factType);
+      else
+      {
+        AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, p_clientId);
+        if (l_client != null)
+          return l_client.Name;
+      }
+      return "";
+    }
+
+    private UInt32 GetClientIdFromCell(Range p_cell)
+    {
+      if (p_cell.Value2 == null)
+        return 0;
+      if (p_cell.Value2.GetType() == typeof(string))
+      {
+        AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, p_cell.Value2 as string);
+        if (l_client != null)
+          return l_client.Id;
+      }
+      return 0;
+    }
+
+    private FactTag.TagType GetTagTypeFromCell(Range p_cell)
+    {
+      if (p_cell.Value2 == null)
+        return FactTag.TagType.NONE;
+      if (m_factsTagList.Contains(p_cell.Value2 as string))
+      {
+        return (FactTag.TagType)m_factsTagList.FindIndex(x => x.StartsWith(p_cell.Value2 as string));
+      }
+      return FactTag.TagType.NONE;
+    }
+
+    //private string GetFactTagStringFromFactId(UInt32 p_factId)
+    //{
+    //  FactTag l_factTag = FactTagModel.Instance.GetValue(p_factId);
+    //  if (l_factTag != null)
+    //    return (FactTag.TagType)l_factTag.Tag; 
+    //  else
+    //    return FactTag.TagType.NONE;
+    //}
 
     //public void UpdateWorksheetInputs()
     //{
@@ -167,6 +231,8 @@ namespace FBI.MVC.Model
       // ready to listen server answer
       //   -> update cells color on worksheet if success
     }
+
+    
 
   }
 }

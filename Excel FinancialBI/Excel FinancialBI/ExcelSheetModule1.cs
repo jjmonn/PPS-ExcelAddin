@@ -6,6 +6,7 @@ using AddinExpress.MSO;
 namespace FBI
 {
   using Microsoft.Office.Interop.Excel;
+  using FBI.MVC.Controller;
 
   //public delegate void OnWorksheetChange(Range p_range);
   //public delegate void OnSelectionChange(Range p_range);
@@ -18,13 +19,14 @@ namespace FBI
   [GuidAttribute("43EE4272-0525-47BA-93CF-DDFB4A423F19"), ProgId("FBI.ExcelSheetModule1")]
   public partial class ExcelSheetModule1 : AddinExpress.MSO.ADXExcelSheetModule
   {
-    //public event OnWorksheetChange Worksheet_Changed;
-    //public event OnSelectionChange Worksheet_SelectionChanged;
-    //public event BeforeRightClick Worksheet_BeforeRightClick;
 
-    public ExcelSheetModule1()
+    private FactsEditionController m_factsEditionController;
+
+
+    public ExcelSheetModule1(FactsEditionController p_factsEditionController)
     {
       InitializeComponent();
+      m_factsEditionController = p_factsEditionController;
       SubsribeEvents();
     }
 
@@ -33,6 +35,13 @@ namespace FBI
       this.SelectionChange += new AddinExpress.MSO.ADXExcelSelectionChange_EventHandler(this.ExcelSheetModule1_SelectionChange);
       this.BeforeRightClick += new AddinExpress.MSO.ADXExcelBeforeRightClick_EventHandler(this.ExcelSheetModule1_BeforeRightClick);
       this.Change += new AddinExpress.MSO.ADXExcelChange_EventHandler(this.ExcelSheetModule1_Change);
+    }
+
+    public void UnSubsribeEvents()
+    {
+      this.SelectionChange -= new AddinExpress.MSO.ADXExcelSelectionChange_EventHandler(this.ExcelSheetModule1_SelectionChange);
+      this.BeforeRightClick -= new AddinExpress.MSO.ADXExcelBeforeRightClick_EventHandler(this.ExcelSheetModule1_BeforeRightClick);
+      this.Change -= new AddinExpress.MSO.ADXExcelChange_EventHandler(this.ExcelSheetModule1_Change);
     }
 
     #region Add-in Express automatic code
@@ -52,12 +61,10 @@ namespace FBI
     {
       try
       {
-        // TO DO : send action to the addin.cs or addinFactsEdition.cs
-
         Range l_range = target as Range;
         if (l_range == null)
           return;
-        // Worksheet_Changed(target as Range);
+        m_factsEditionController.OnWorksheetChanged(l_range);
       }
       catch
       {

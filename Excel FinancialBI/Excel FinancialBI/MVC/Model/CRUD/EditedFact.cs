@@ -30,7 +30,10 @@ namespace FBI.MVC.Model
     public double EditedValue {get; set;}
     public Range Cell { get; private set;}
     public CellStatus CellStatus { get; private set;}
+    public FactTag.TagType EditedFactType;
+    public FactTag ModelFactTag {get; set;}
     public event CellValueChangedEventHandler OnCellValueChanged;
+
 
     public EditedFact(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId, UInt32 p_employeeId, UInt32 p_versionId, PeriodDimension p_period, Range p_cell, Account.AccountProcess p_process)
     {
@@ -46,26 +49,38 @@ namespace FBI.MVC.Model
       this.EmployeeId = p_employeeId;
       this.Period = PeriodDimension.Id;
       this.VersionId = p_versionId;
+      this.EditedFactType = FactTag.TagType.NONE;
+      this.ModelFactTag = null;
 
       if (m_process == CRUD.Account.AccountProcess.FINANCIAL)
         EditedValue = Convert.ToDouble(Cell.Value2);
-      else
-        EditedClientId = GetCellClientId(); 
     }
- 
+
+    public void SetEditedClient(UInt32 p_clientId)
+    {
+      EditedClientId = p_clientId;
+      SetCellStatusRH();
+    }
+
+    public void SetEditedFactType(FactTag.TagType p_tagType)
+    {
+
+
+    }
+
     public void UpdateFact(Fact p_fact)
     {
       Id = p_fact.Id;
       Value = p_fact.Value;
       ClientId = p_fact.ClientId;
-    
+       
       if (m_process == CRUD.Account.AccountProcess.FINANCIAL)
         SetCellStatusFinancial();
       else
         SetCellStatusRH();
     }
 
-    public void SetCellStatusFinancial()
+    private void SetCellStatusFinancial()
     {
       if (EditedValue != this.Value)
       {
@@ -90,28 +105,48 @@ namespace FBI.MVC.Model
     private void SetCellStatusRH()
     {
       if (EditedClientId != this.ClientId)
-      {
-        CellStatus = Model.CellStatus.DifferentInput;
-        OnCellValueChanged(Cell, Model.CellStatus.DifferentInput);
-      }
+        SetCellStatusToDifferent();
       else
+        SetCellStatusToEqual();
+
+      if (ModelFactTag == null)
       {
-        CellStatus = Model.CellStatus.Equal;
-        OnCellValueChanged(Cell, Model.CellStatus.Equal);
+        if (EditedFactType == FactTag.TagType.NONE)
+          SetCellStatusToEqual();
+        else
+          SetCellStatusToDifferent();
+        return;
       }
+      if (EditedFactType != ModelFactTag.Tag)
+        SetCellStatusToDifferent();
+      else
+        SetCellStatusToEqual();
     }
+
+    private void SetCellStatusToDifferent()
+    {
+      CellStatus = Model.CellStatus.DifferentInput;
+      OnCellValueChanged(Cell, Model.CellStatus.DifferentInput);
+    }
+
+    private void SetCellStatusToEqual()
+    {
+      CellStatus = Model.CellStatus.Equal;
+      OnCellValueChanged(Cell, Model.CellStatus.Equal);
+    }
+
 
     // Below : not here -> View
-    public void UpdateCellValue()
-    {
-      Cell.Value2 = this.Value;
-      // checker à quel moment c'est appelé
-      // Event ->  event for highlighter - update cells color on worksheet 
-    }
+    //public void UpdateCellValue()
+    //{
+    //  Cell.Value2 = this.Value;
+    //  // checker à quel moment c'est appelé
+    //  // Event ->  event for highlighter - update cells color on worksheet 
+    //}
 
-    // Below : attention valeur invalide traitée comme 0 ? + ce code doit-il être ici ?
-    private double GetFactValue()
+    private double GetFactValue() 
     {
+      // below : goes into controller
       if (Cell.Value2 == null)
         return 0;
       double l_doubleValue;
@@ -124,23 +159,10 @@ namespace FBI.MVC.Model
       return 0;
     }
 
-    // Attention : traitement des valeurs invalides ? + ce code doit-il être ici ?
-    private UInt32 GetCellClientId()
-    {
-      if (Cell.Value2 == null)
-        return 0;
-      if (Cell.Value2.GetType() == typeof(string))
-      {
-        AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, Cell.Value2 as string);
-        if (l_client == null)
-          return 0;
-        return l_client.Id;
-      }
-      return 0;
-    }
-
+    
     // BEFORE COMMIT : set clientId or Value to the editedvalue
-
+    // create FactTag also !!
+    
 
   }
 }
