@@ -117,5 +117,10 @@ namespace FBI.Utils
       }
     }
 
+    public static Range GetRange(string p_address, Worksheet p_worksheet)
+    {
+      return p_worksheet.Cells[p_address] as Range;
+    }
+
   }
 }

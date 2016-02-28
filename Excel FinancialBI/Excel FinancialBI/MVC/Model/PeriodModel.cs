@@ -12,8 +12,7 @@ namespace FBI.MVC.Model
   using Utils;
   using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
-  using CRUD;
-
+ 
   class PeriodModel
   {
     #region "Instance Variables"
@@ -514,6 +513,12 @@ namespace FBI.MVC.Model
       return l_resultPeriods;
     }
 
+    public static Int32 GetDayMinus3Weeks(Int32 p_dayId)
+    {
+      DateTime l_date = DateTime.FromOADate(p_dayId);
+      l_date = l_date.AddDays(-3 * m_nbDaysInWeek);
+      return (Int32)l_date.ToOADate();
+    }
 
     public static string GetDateAsStringWeekFormat(DateTime p_date)
     {

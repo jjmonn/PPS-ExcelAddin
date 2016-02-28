@@ -18,6 +18,7 @@ namespace FBI
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
   {
     private AddinModuleController m_controller;
+    public ExcelWorksheetEvents WorksheetEvents { private set; get; }
 
     public AddinModule()
     {
@@ -42,6 +43,11 @@ namespace FBI
       fbiRibbonChangeState(false);
       SuscribeEvents();
       MultilanguageSetup();
+    }
+
+    private void AddinModule_AddinStartupComplete(object sender, EventArgs e)
+    {
+      WorksheetEvents = new ExcelWorksheetEvents(this);
     }
 
     private void MultilanguageSetup()
@@ -407,7 +413,6 @@ namespace FBI
     }
 
    
-
 
   }
 }

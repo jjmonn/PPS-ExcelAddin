@@ -33,8 +33,16 @@ namespace FBI.MVC.Controller
       // TO DO
       // check period list
       // check p_account_id
-      m_addinModuleController.LaunchRHSnapshot(false, m_versionId, p_periodsList, p_accountId);
-      return true;
+      if (m_addinModuleController.LaunchRHSnapshot(false, m_versionId, p_periodsList, p_accountId))
+      {
+        m_view.Close();
+        return true;
+      }
+      else
+      {
+        // TO DO : display addinmodule error message
+        return false;
+      }
     }
 
   }

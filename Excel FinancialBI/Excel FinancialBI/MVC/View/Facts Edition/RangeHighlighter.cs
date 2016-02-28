@@ -10,73 +10,104 @@ namespace FBI.MVC.View
   using FBI.MVC.Model;
   using Microsoft.Office.Interop.Excel;
   using System.Drawing;
+  using Utils;
 
   class RangeHighlighter
   {
     FactsEditionController m_factsEditionController;
-    Color INPUT_RED = Color.Red;
-    Color OUTPUT_RED = Color.LightSalmon;
-    Color SUCCESS_COMMIT = Color.Green;
-    SafeDictionary<Range, Color> m_originalCellsColor = new SafeDictionary<Range, Color>();
+    Int32 DIMENSIONS_COLORS = Color.FromArgb(215, 239, 253).ToArgb();
+    SafeDictionary<Range, Object> m_originalCellsColor = new SafeDictionary<Range, Object>();
 
     public RangeHighlighter(FactsEditionController p_factsEditionController)
     {
       m_factsEditionController = p_factsEditionController;
     }
 
-    public void FillCellColor(Range p_cell, CellStatus p_status)
+    public void FillCellColor(Range p_cell, EditedFactStatus p_status)
     {
+      if (p_cell == null)
+        return;
+
       switch (p_status)
       {
-        case CellStatus.DifferentInput:
+        case EditedFactStatus.DifferentInput:
           FillInputCellRed(p_cell);
           break;
 
-        case CellStatus.DifferentOutput :
+        case EditedFactStatus.DifferentOutput :
           FillOutputCellRed(p_cell);
           break;
 
-        case CellStatus.Equal :
-          ClearFillColor(p_cell);
+        case EditedFactStatus.InputEqual :
+          FillInputsBaseColor(p_cell);
           break;
+
+        case EditedFactStatus.FactTagEqual :
+          FillInputsBaseColor(p_cell);
+          break;
+
+        case EditedFactStatus.FactTagDifferent :
+          FillInputCellRed(p_cell);
+          break;
+
       }
+    }
+
+    public void FillDimensionColor(Range p_cell)
+    {
+      if (p_cell == null)
+        return;
+      RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionDimensionsFill;
+    }
+
+    public void FillInputsBaseColor(Range p_cell)
+    {
+      if (p_cell == null)
+        return;
+      RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputsFillColor;
     }
 
     private void FillInputCellRed(Range p_cell)
     {
-      p_cell.Interior.Color = INPUT_RED;
       RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputsRedFill;
     }
 
     private void FillOutputCellRed(Range p_cell)
     {
-      p_cell.Interior.Color = OUTPUT_RED;
       RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionOutputsRedFill;
     }
 
+    // equal input vs equal output
     private void ClearFillColor(Range p_cell)
     {
-      p_cell.Interior.Color = Color.Transparent;
       RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Color.Transparent;
     }
 
     public void FillCellGreen(Range p_cell)
     {
-      p_cell.Interior.Color = SUCCESS_COMMIT;
+      if (p_cell == null)
+        return;
+
       RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputCommitedFill;
     }
 
     private void RegisterCellOriginalFill(Range p_cell)
     {
       if (!m_originalCellsColor.ContainsKey(p_cell)) // only add if color has not been yet changed
       {
-        m_originalCellsColor.Add(p_cell, (Color)p_cell.Interior.Color); 
+        m_originalCellsColor.Add(p_cell, p_cell.Interior.Color); 
       }
     }
 
     public void RevertToOriginalColors()
     {
-      foreach (KeyValuePair<Range, Color> l_keyPair in m_originalCellsColor)
+      foreach (KeyValuePair<Range, Object> l_keyPair in m_originalCellsColor)
       {
         l_keyPair.Key.Interior.Color = l_keyPair.Value;
       }

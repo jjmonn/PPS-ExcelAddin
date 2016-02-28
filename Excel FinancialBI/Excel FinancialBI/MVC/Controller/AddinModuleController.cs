@@ -18,6 +18,7 @@ namespace FBI.MVC.Controller
   {
     private AddinModule m_view;
     private FactsEditionController m_factsEditionController;
+  
    // private ReportEditionController m_reportUploadController;
     public string Error { get; set; }
     // SidePanesControllers
@@ -44,8 +45,8 @@ namespace FBI.MVC.Controller
       Version l_version = GetCurrentVersion();
       if (l_version != null)
       {
-        m_factsEditionController = new FactsEditionController(Account.AccountProcess.FINANCIAL, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet, p_updateCells, null, 0);
-        return true;
+        m_factsEditionController = new FactsEditionController(this, Account.AccountProcess.FINANCIAL, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet, null, 0);
+        return m_factsEditionController.Launch(p_updateCells);
       }
       else
         return false;
@@ -53,8 +54,8 @@ namespace FBI.MVC.Controller
 
     public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
     {
-        m_factsEditionController = new FactsEditionController(Account.AccountProcess.RH, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_updateCells, p_periodsList, p_RHAccount);
-        return false;
+        m_factsEditionController = new FactsEditionController(this, Account.AccountProcess.RH, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
+        return m_factsEditionController.Launch(p_updateCells);
     }
 
     public bool LaunchReportEdition()
@@ -78,16 +79,18 @@ namespace FBI.MVC.Controller
       }
     }
 
-    private Version GetCurrentVersion()
+    public bool AssociateExcelWorksheetEvents(Worksheet p_worksheet)
     {
-      Version l_version = VersionModel.Instance.GetValue(FBI.Properties.Settings.Default.version_id);
-      if (l_version == null)
+      if (p_worksheet != null && m_factsEditionController != null)
       {
-        Error = Local.GetValue("versions.select_version");
-        return null;
+        m_view.WorksheetEvents.ConnectTo(p_worksheet, true);
+        m_view.WorksheetEvents.SetController(m_factsEditionController);
+        return true;
       }
-      return l_version;  
-    }
+      else
+        m_view.WorksheetEvents.RemoveConnection();
+      return false;
+     }
 
     public bool RHFactsSubmission()
     {
@@ -101,7 +104,7 @@ namespace FBI.MVC.Controller
       return true;
     }
 
-    public void SetExcelInteractionState(bool p_state)
+    public static void SetExcelInteractionState(bool p_state)
     {
       AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
       AddinModule.CurrentInstance.ExcelApp.ScreenUpdating = p_state; 
@@ -111,10 +114,25 @@ namespace FBI.MVC.Controller
     {
       if (m_factsEditionController != null)
       {
+        m_view.WorksheetEvents.RemoveConnection();
         m_factsEditionController.CloseInstance();
         m_factsEditionController = null;
       }
     }
 
+    #region Utils
+
+    private Version GetCurrentVersion()
+    {
+      Version l_version = VersionModel.Instance.GetValue(FBI.Properties.Settings.Default.version_id);
+      if (l_version == null)
+      {
+        Error = Local.GetValue("versions.select_version");
+        return null;
+      }
+      return l_version;
+    }
+
+    #endregion
   }
 }

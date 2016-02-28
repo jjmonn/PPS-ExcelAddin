@@ -53,28 +53,27 @@ namespace FBI.MVC.Model
       return requestId;
     }
 
-    void UpdateList(List<Fact> factsValues, List<string> cellsAddresses)
+    public void UpdateList(SafeDictionary<string, Fact> p_factsCommitDict)
     {
       ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(ClientMessage.CMSG_UPDATE_FACT_LIST));
 
-      packet.AssignRequestId();
-      packet.WriteInt32(factsValues.Count);
-      foreach (Fact fact_value in factsValues)
+      Int32 l_requestId = packet.AssignRequestId();
+      m_requestIdCommitDic.Add(l_requestId, p_factsCommitDict.Keys.ToList<string>());
+      packet.WriteInt32(p_factsCommitDict.Values.Count);
+      foreach (Fact fact_value in p_factsCommitDict.Values)
         fact_value.Dump(packet, false);
       packet.Release();
       NetworkManager.Send(packet);
     }
 
-    Int32 Delete(Fact p_fact)
+    public Int32 Delete(Fact p_fact)
     {
-
       ByteBuffer l_packet = new ByteBuffer(Convert.ToUInt16(ClientMessage.CMSG_DELETE_FACT));
       Int32 l_requestId = l_packet.AssignRequestId();
       l_packet.WriteUint32(p_fact.Id);
       l_packet.Release();
       NetworkManager.Send(l_packet);
       return l_requestId;
-
     }
 
     private void UpdateListAnswer(ByteBuffer packet)

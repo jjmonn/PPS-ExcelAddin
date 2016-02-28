@@ -1053,6 +1053,7 @@
       this.AddinName = "FinancialBI";
       this.SupportedApps = AddinExpress.MSO.ADXOfficeHostApp.ohaExcel;
       this.AddinInitialize += new AddinExpress.MSO.ADXEvents_EventHandler(this.AddinModule_AddinInitialize);
+      this.AddinStartupComplete += new AddinExpress.MSO.ADXEvents_EventHandler(this.AddinModule_AddinStartupComplete);
 
     }
     #endregion

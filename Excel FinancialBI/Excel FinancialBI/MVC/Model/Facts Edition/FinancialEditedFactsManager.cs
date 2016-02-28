@@ -14,13 +14,14 @@ namespace FBI.MVC.Model
 
   class FinancialEditedFactsManager : IEditedFactsManager
   {
-    MultiIndexDictionary<Range, DimensionKey, EditedFact> m_editedFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFact>();
+    MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact> m_editedFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact>();
     SafeDictionary<DimensionKey, Fact> m_facts = new SafeDictionary<DimensionKey, Fact>();
-    MultiIndexDictionary<Range, DimensionKey, EditedFact> m_outputFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFact>();
+    MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact> m_outputFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact>();
     Dimensions m_dimensions = null;
     List<int> m_inputsRequestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
-    List<EditedFact> m_factsToBeCommitted = new List<EditedFact>(); // ? to be confirmed
+    public event FactsCommitError OnCommitError;
+    List<EditedFinancialFact> m_factsToBeCommitted = new List<EditedFinancialFact>(); // ? to be confirmed
     Worksheet m_worksheet;
     public bool m_autoCommit {set; get;}
     private bool m_updateCellsOnDownload;
@@ -40,6 +41,15 @@ namespace FBI.MVC.Model
       // TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
     }
 
+    public void Dispose()
+    {
+      //FactsModel.Instance.UpdateEvent -= AfterFactsCommit;
+      // dispose edited facts
+      m_editedFacts.Clear();
+      m_outputFacts.Clear();
+      // EMPTY dictionnaries etc.
+    }
+
     private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension, RangeHighlighter p_rangeHighlighter)
     {
       foreach (KeyValuePair<Range, CRUDEntity> l_rowsKeyPair in p_rowsDimension.m_values)
@@ -47,7 +57,7 @@ namespace FBI.MVC.Model
         foreach (KeyValuePair<Range, CRUDEntity> l_columnsKeyPair in p_columnsDimension.m_values)
         {
           Range l_factCell = m_worksheet.Cells[l_rowsKeyPair.Key.Row, l_columnsKeyPair.Key.Column] as Range;
-          EditedFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
+          EditedFinancialFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
           {
             // Set Edited Value     
@@ -63,7 +73,7 @@ namespace FBI.MVC.Model
       }
     }
 
-    private EditedFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1,
+    private EditedFinancialFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1,
                                         Dimension<CRUDEntity> p_dimension2, CRUDEntity p_dimensionValue2,
                                         Dimension<CRUDEntity> p_fixedDimension,
                                         Range p_cell)
@@ -82,7 +92,7 @@ namespace FBI.MVC.Model
 
       if (l_accountId == 0 || l_entityId == 0 || l_period == null)
         return null;
-      return new EditedFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell, Account.AccountProcess.FINANCIAL);
+      return new EditedFinancialFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell);
     }
 
 
@@ -99,7 +109,7 @@ namespace FBI.MVC.Model
 
       FactsModel.Instance.ReadEvent += AfterFinancialInputDownloaded;
       m_inputsRequestIdList.Clear();
-      foreach (EditedFact l_editedFact in m_editedFacts.Values)
+      foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
       {
         foreach (AxisElem l_entity in l_entitiesList)
         {
@@ -147,9 +157,9 @@ namespace FBI.MVC.Model
       foreach (Fact l_fact in p_factsList)
       {
         DimensionKey l_dimensionKey = new DimensionKey(l_fact.EntityId, l_fact.AccountId, (UInt32)AxisType.Employee, (Int32)l_fact.Period);
-        EditedFact l_EditedFact = m_editedFacts[l_dimensionKey];
+        EditedFinancialFact l_EditedFact = m_editedFacts[l_dimensionKey];
         if (l_EditedFact != null)
-          l_EditedFact.UpdateFact(l_fact);
+          l_EditedFact.UpdateFinancialFact(l_fact);
         else
           m_facts[l_dimensionKey] = l_fact;  // Fact not on worksheet, saved as fact
       }
@@ -168,7 +178,7 @@ namespace FBI.MVC.Model
       //
       // TO DO : if success save values into facts
       //
-      foreach (EditedFact l_outputFact in m_editedFacts.Values)
+      foreach (EditedFinancialFact l_outputFact in m_editedFacts.Values)
       {
         //l_outputFact.UpdateCellValue();
       }
@@ -192,13 +202,13 @@ namespace FBI.MVC.Model
 
     public void UpdateWorksheetInputs()
     {
-      foreach (EditedFact l_editedFact in m_editedFacts.Values)
+      foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
       {
        // l_editedFact.UpdateCellValue();
       }
     }
 
-    public void CommitDifferences()
+    public void Commit()
     {
       // TO DO
       // Loop through facts : if to be commited  add to update list

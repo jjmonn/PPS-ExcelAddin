@@ -410,48 +410,48 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("PowderBlue")]
-        public global::System.Drawing.Color snapshotInputsBackColor {
+        public global::System.Drawing.Color FactsEditionInputsFillColor {
             get {
-                return ((global::System.Drawing.Color)(this["snapshotInputsBackColor"]));
+                return ((global::System.Drawing.Color)(this["FactsEditionInputsFillColor"]));
             }
             set {
-                this["snapshotInputsBackColor"] = value;
+                this["FactsEditionInputsFillColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Navy")]
-        public global::System.Drawing.Color snapshotInputsTextColor {
+        public global::System.Drawing.Color FactsEditionInputsTextColor {
             get {
-                return ((global::System.Drawing.Color)(this["snapshotInputsTextColor"]));
+                return ((global::System.Drawing.Color)(this["FactsEditionInputsTextColor"]));
             }
             set {
-                this["snapshotInputsTextColor"] = value;
+                this["FactsEditionInputsTextColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public global::System.Drawing.Color snapshotOutputsBackColor {
+        public global::System.Drawing.Color FactsEditionOutputsBackColor {
             get {
-                return ((global::System.Drawing.Color)(this["snapshotOutputsBackColor"]));
+                return ((global::System.Drawing.Color)(this["FactsEditionOutputsBackColor"]));
             }
             set {
-                this["snapshotOutputsBackColor"] = value;
+                this["FactsEditionOutputsBackColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public global::System.Drawing.Color snapshotOutputsTextColor {
+        public global::System.Drawing.Color FactsEditionOutputsTextColor {
             get {
-                return ((global::System.Drawing.Color)(this["snapshotOutputsTextColor"]));
+                return ((global::System.Drawing.Color)(this["FactsEditionOutputsTextColor"]));
             }
             set {
-                this["snapshotOutputsTextColor"] = value;
+                this["FactsEditionOutputsTextColor"] = value;
             }
         }
         
@@ -860,6 +860,66 @@ namespace FBI.Properties {
             }
             set {
                 this["language"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("223, 106, 120")]
+        public global::System.Drawing.Color FactsEditionInputsRedFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionInputsRedFill"]));
+            }
+            set {
+                this["FactsEditionInputsRedFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255, 192, 192")]
+        public global::System.Drawing.Color FactsEditionOutputsRedFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionOutputsRedFill"]));
+            }
+            set {
+                this["FactsEditionOutputsRedFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("102, 199, 150")]
+        public global::System.Drawing.Color FactsEditionInputCommitedFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionInputCommitedFill"]));
+            }
+            set {
+                this["FactsEditionInputCommitedFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("207, 237, 222")]
+        public global::System.Drawing.Color FactsEditionOutputCommitedFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionOutputCommitedFill"]));
+            }
+            set {
+                this["FactsEditionOutputCommitedFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PaleTurquoise")]
+        public global::System.Drawing.Color FactsEditionDimensionsFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionDimensionsFill"]));
+            }
+            set {
+                this["FactsEditionDimensionsFill"] = value;
             }
         }
     }
