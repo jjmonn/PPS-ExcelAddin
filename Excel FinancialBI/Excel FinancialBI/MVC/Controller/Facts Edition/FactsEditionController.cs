@@ -64,7 +64,7 @@ namespace FBI.MVC.Controller
         m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet, m_versionId, m_rangeHighlighter ,m_RHAccountId);
         if (m_versionId != 0 && m_periodsList.Count > 0)
         {
-          m_editedFactsManager.DownloadFacts(m_versionId, m_periodsList, p_updateCells);
+          m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells);
           ActivateFactEditionRibbon();
           return true;
         }
@@ -73,6 +73,7 @@ namespace FBI.MVC.Controller
       }
       return false;
     }
+
 
     private void ActivateFactEditionRibbon()
     {
@@ -142,9 +143,14 @@ namespace FBI.MVC.Controller
       m_editedFactsManager.m_autoCommit = p_value; 
     }
 
-    private void OnFactsDownloaded(bool p_sucess)
+    private void OnFactsDownloaded(bool p_success)
     {
-      m_addinModuleController.AssociateExcelWorksheetEvents(m_worksheet);
+      if (p_success == true)
+        m_addinModuleController.AssociateExcelWorksheetEvents(m_worksheet);
+      else
+      {
+        // exit mode
+      }
     }
 
     private void OnCommitError(string p_address, ErrorMessage p_error)

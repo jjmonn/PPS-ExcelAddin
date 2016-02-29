@@ -33,6 +33,7 @@ namespace FBI.MVC.Controller
       // TO DO
       // check period list
       // check p_account_id
+      m_view.Hide();
       if (m_addinModuleController.LaunchRHSnapshot(false, m_versionId, p_periodsList, p_accountId))
       {
         m_view.Close();

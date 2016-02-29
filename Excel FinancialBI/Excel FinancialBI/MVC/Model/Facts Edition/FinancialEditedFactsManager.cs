@@ -12,6 +12,7 @@ namespace FBI.MVC.Model
   using Network;
   using Utils;
 
+ 
   class FinancialEditedFactsManager : IEditedFactsManager
   {
     MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact> m_editedFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact>();
@@ -26,6 +27,7 @@ namespace FBI.MVC.Model
     public bool m_autoCommit {set; get;}
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
+    private List<Int32> m_periodsList;
 
     public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, UInt32 p_RHAccountId = 0)
     {
@@ -95,13 +97,13 @@ namespace FBI.MVC.Model
       return new EditedFinancialFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell);
     }
 
-
-    public void DownloadFacts(UInt32 p_versionId, List<Int32> p_periodsList, bool p_updateCells)
+    public void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells)
     {
       // flush m_editedFacts ?
       // flush m_facts ?
       // flush m_outputsFacts ?
 
+      m_periodsList = p_periodsList;
       m_updateCellsOnDownload = p_updateCells;
       List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
       Int32 l_startPeriod = p_periodsList.ElementAt(0);
@@ -118,7 +120,7 @@ namespace FBI.MVC.Model
           //    - all accounts
           //    - filter on client, product, adjustment and employee
           //
-          m_inputsRequestIdList.Add(FactsModel.Instance.GetFact(l_editedFact.Account.Id, l_entity.Id, (UInt32)AxisType.Employee, p_versionId, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
+          m_inputsRequestIdList.Add(FactsModel.Instance.GetFact(l_editedFact.Account.Id, l_entity.Id, (UInt32)AxisType.Employee, m_versionId, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
         }
       }
     }
@@ -139,10 +141,7 @@ namespace FBI.MVC.Model
         m_inputsRequestIdList.Remove(p_requestId);
         if (m_inputsRequestIdList.Count == 0)
         {
-          //
-          // TO DO : raise facts downloaded event or Outputs computation (SOURCED_COMPUTE)
-          //
-          FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
+          ComputeOutputs();
         }
       }
       else
@@ -152,6 +151,9 @@ namespace FBI.MVC.Model
       }
     }
 
+
+    // TO DO : must update worksheet flag
+    //
     private bool FillFactsDictionnaries(List<Fact> p_factsList)
     {
       foreach (Fact l_fact in p_factsList)
@@ -162,8 +164,39 @@ namespace FBI.MVC.Model
           l_EditedFact.UpdateFinancialFact(l_fact);
         else
           m_facts[l_dimensionKey] = l_fact;  // Fact not on worksheet, saved as fact
+      // if must update worksheet
+        // update cell Value2
+      
       }
       return true;
+    }
+
+    public void ComputeOutputs()
+    {
+      FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
+      SourcedComputeModel.Instance.ComputeCompleteEvent += AfterFinancialOutputsComputed;
+      SourcedComputeRequest l_sourcedComputeRequest = new SourcedComputeRequest();
+      l_sourcedComputeRequest.VersionId = m_versionId;
+
+      List<Fact> l_factsList = new List<Fact>();
+      foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
+      {
+        l_factsList.Add(l_editedFact);
+      }
+      l_sourcedComputeRequest.FactList = l_factsList;
+
+      List<UInt32> l_entitiesList = new List<UInt32>(); 
+      foreach (AxisElem l_entity in m_dimensions.m_entities.m_values.Values)
+      {
+        l_entitiesList.Add(l_entity.Id);
+      }
+      l_sourcedComputeRequest.EntityList = l_entitiesList;
+     
+      /////
+      // must fill accounts list ?
+      /////
+
+      SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest);
     }
 
     public void UpdateWorkSheetOutputs()
@@ -173,16 +206,17 @@ namespace FBI.MVC.Model
       
     }
 
-    private void AfterFinancialOutputsComputed(bool p_success)
+    private void AfterFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
-      //
-      // TO DO : if success save values into facts
-      //
-      foreach (EditedFinancialFact l_outputFact in m_editedFacts.Values)
+      if (p_status == ErrorMessage.SUCCESS)
       {
-        //l_outputFact.UpdateCellValue();
+
       }
-      FactsDownloaded(true);
+      else
+      {
+        // Exit financial edition mode ?
+        FactsDownloaded(false);
+      }
     }
 
     public bool UpdateEditedValues(Range p_cell)
@@ -220,6 +254,27 @@ namespace FBI.MVC.Model
     }
 
     // TO DO : After commit event
+
+
+    #region Utils
+
+    //private double GetFactValue() 
+    //{
+    //  // below : goes into controller
+    //  if (Cell.Value2 == null)
+    //    return 0;
+    //  double l_doubleValue;
+    //  if (Cell.Value2.GetType() == typeof(string))
+    //  {
+    //    if (Double.TryParse(Cell.Value2 as string, out l_doubleValue))
+    //      return l_doubleValue;
+    //    else return 0;
+    //  }
+    //  return 0;
+    //}
+
+    #endregion
+
 
   }
 }

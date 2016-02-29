@@ -116,7 +116,7 @@ namespace FBI.MVC.Model
       return new EditedRHFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell);
     }
 
-    public void DownloadFacts(UInt32 p_versionId, List<Int32> p_periodsList, bool p_updateCells)
+    public void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells)
     {
       AddinModuleController.SetExcelInteractionState(false);
       // TO DO : Log and Check Download time
@@ -130,7 +130,7 @@ namespace FBI.MVC.Model
       m_requestIdList.Clear();
       foreach (AxisElem l_employee in l_employeesList)
       {
-        m_requestIdList.Add(FactsModel.Instance.GetFact(m_RHAccountId, l_entity.Id, l_employee.Id, p_versionId, (UInt32)l_startPeriod, (UInt32)p_periodsList.ElementAt(p_periodsList.Count - 1)));
+        m_requestIdList.Add(FactsModel.Instance.GetFact(m_RHAccountId, l_entity.Id, l_employee.Id, m_versionId, (UInt32)l_startPeriod, (UInt32)p_periodsList.ElementAt(p_periodsList.Count - 1)));
       }
     }
 
@@ -262,6 +262,7 @@ namespace FBI.MVC.Model
           l_factsTagCommitDict.Add(l_RHEditedFact.EditedFactTag);
         }
       }
+      AddinModuleController.SetExcelInteractionState(false);
       FactsModel.Instance.UpdateList(l_factsCommitDict);
       FactTagModel.Instance.UpdateList(l_factsTagCommitDict);
     }
@@ -298,7 +299,7 @@ namespace FBI.MVC.Model
         foreach (KeyValuePair<string, ErrorMessage> l_addressMessagePair in p_resultsDict)
         {
           EditedRHFact l_editedFact = m_RHEditedFacts[l_addressMessagePair.Key];
-          if (l_addressMessagePair.Value == ErrorMessage.SUCCESS)
+          if (l_editedFact != null && l_addressMessagePair.Value == ErrorMessage.SUCCESS)
             m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
           else
           {
@@ -314,6 +315,7 @@ namespace FBI.MVC.Model
         // Create after commit event intercepted by the view -> only if commit fails
         // set commit status in the ribbon as well
       }
+      AddinModuleController.SetExcelInteractionState(true);
     }
 
     private void AfterFactDelete(ErrorMessage p_status, Int32 p_requestId)
@@ -335,7 +337,7 @@ namespace FBI.MVC.Model
 
     private void AfterFactTagsCommit(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
     {
-
+      AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
       {
         foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
@@ -346,7 +348,9 @@ namespace FBI.MVC.Model
               m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
             else
             {
-              l_editedFact.ModelFactTag.Tag = FactTagModel.Instance.GetValue(l_editedFact.Id).Tag;
+              FactTag l_modelFactTag = FactTagModel.Instance.GetValue(l_editedFact.Id);
+              if (l_modelFactTag != null)
+                l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
               OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
             }
           }
@@ -357,6 +361,7 @@ namespace FBI.MVC.Model
         // Create after commit event intercepted by the view -> only if commit fails
         // set commit status in the ribbon as well
       }
+      AddinModuleController.SetExcelInteractionState(true);
     }
 
     #region Utils

@@ -16,7 +16,7 @@ namespace FBI.MVC.Model.CRUD
 
     public SourcedComputeRequest()
     {
-      EntityList = new List<uint>();
+      EntityList = new List<UInt32>();
       FactList = new List<Fact>();
     }
 

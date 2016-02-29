@@ -55,20 +55,5 @@ namespace FBI.MVC.Model.CRUD
     }
 
 
-    //private double GetFactValue() 
-    //{
-    //  // below : goes into controller
-    //  if (Cell.Value2 == null)
-    //    return 0;
-    //  double l_doubleValue;
-    //  if (Cell.Value2.GetType() == typeof(string))
-    //  {
-    //    if (Double.TryParse(Cell.Value2 as string, out l_doubleValue))
-    //      return l_doubleValue;
-    //    else return 0;
-    //  }
-    //  return 0;
-    //}
-
   }
 }

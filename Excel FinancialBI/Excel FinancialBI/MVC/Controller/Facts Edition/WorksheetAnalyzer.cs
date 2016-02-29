@@ -9,20 +9,28 @@ namespace FBI.MVC.Model
   using Microsoft.Office.Interop.Excel;
   using Utils;
   using FBI.MVC.Model;
+  using FBI.MVC.Controller;
   using FBI.MVC.Model.CRUD;
   using System.Reflection;
+  using System.ComponentModel;
+  using FBI.MVC.View;
 
-  class WorksheetAnalyzer
+  class WorksheetAnalyzer : IProgressBarController
   {
     Range m_range;
     Dimensions m_dimensions;
+    public string Error { get; set; }
+    public IView View { get{ return m_progressBarView;} }
     Range m_lastCell;
-    public String Error { get; private set; }
+    ProgressBarView m_progressBarView;
+    BackgroundWorker m_snapshotBackgroundWorker;
 
 
     public bool WorksheetScreenshot(Range p_range)
     {
       m_range = p_range;
+      m_progressBarView = new ProgressBarView(false);
+      m_progressBarView.SetController(this);
       m_lastCell = GetRealLastCell(m_range);
       if (m_lastCell != null)
         return (true);
@@ -36,10 +44,24 @@ namespace FBI.MVC.Model
     public void Snapshot(Dimensions p_dimensions, List<UInt32> p_periodsList = null)
     {
       m_dimensions = p_dimensions;
-      DimensionsIdentificationProcess();
+
+      //m_progressBarView.SetupProgressBar(m_lastCell.Row);
+      //m_progressBarView.Show();
+
+      //m_snapshotBackgroundWorker = new BackgroundWorker();
+      //m_snapshotBackgroundWorker.DoWork += SnapshotBackgroundWorker_DoWork;
+      //m_snapshotBackgroundWorker.RunWorkerCompleted += SnapshotBackgroundWorker_RunWorkerCompleted;
+      //m_snapshotBackgroundWorker.ProgressChanged += SnapshotBackgroundWorker_ReportProgress;
+      //m_snapshotBackgroundWorker.WorkerReportsProgress = true;
+      //m_snapshotBackgroundWorker.WorkerSupportsCancellation = true;
+      //m_snapshotBackgroundWorker.RunWorkerAsync();
+
+      SnapshotBackgroundWorker_DoWork();
     }
 
-    private void DimensionsIdentificationProcess()
+    #region Snapshot backgroundworker
+
+    private void SnapshotBackgroundWorker_DoWork()//object sender, DoWorkEventArgs e)
     {
       Range l_cell;
       for (UInt32 l_rowIndex = 1; l_rowIndex <= m_lastCell.Row; l_rowIndex++)
@@ -67,8 +89,44 @@ namespace FBI.MVC.Model
               m_dimensions.DimensionsIdentify(l_cell);
           }
         }
+     //   m_snapshotBackgroundWorker.ReportProgress(1);
       }
     }
+
+    private delegate void ReportProgress_Delegate(object sender, ProgressChangedEventArgs e);
+    private void SnapshotBackgroundWorker_ReportProgress(object sender, ProgressChangedEventArgs e)
+    {
+       if (m_progressBarView.InvokeRequired)
+      {
+        ReportProgress_Delegate MyDelegate = new ReportProgress_Delegate(SnapshotBackgroundWorker_ReportProgress);
+        m_progressBarView.Invoke(MyDelegate, new object[] { sender, e});
+      }
+      else
+        m_progressBarView.AddProgress(1);
+    }
+
+    private delegate void RunWorkerCompleted_Delegate(object sender, RunWorkerCompletedEventArgs e);
+    private void SnapshotBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    {
+      if (m_progressBarView.InvokeRequired)
+      {
+        RunWorkerCompleted_Delegate MyDelegate = new RunWorkerCompleted_Delegate(SnapshotBackgroundWorker_RunWorkerCompleted);
+        m_progressBarView.Invoke(MyDelegate, new object[] { sender, e });
+      }
+      else
+      {
+        m_progressBarView.SetToMaxProgress();
+        m_progressBarView.Hide();
+      }
+    }
+
+    public void Cancel()
+    {
+      m_snapshotBackgroundWorker.CancelAsync();
+
+    }
+
+    #endregion
 
     private Range GetRangeFromRowAndColumn(Int32 p_rowIndex, Int32 p_columnIndex)
     {

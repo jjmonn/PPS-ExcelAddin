@@ -264,6 +264,7 @@
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
+    <Compile Include="MVC\Controller\IProgressBarController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
@@ -642,6 +643,12 @@
     <Compile Include="MVC\View\Facts Edition\UnReferencedClientsUI.Designer.cs">
       <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\ProgressBarView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\ProgressBarView.Designer.cs">
+      <DependentUpon>ProgressBarView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\ReportsDesignerUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -830,6 +837,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Facts Edition\UnReferencedClientsUI.resx">
       <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\ProgressBarView.resx">
+      <DependentUpon>ProgressBarView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\ReportsDesignerUI.resx">
       <DependentUpon>ReportsDesignerUI.cs</DependentUpon>
