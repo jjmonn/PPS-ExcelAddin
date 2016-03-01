@@ -35,7 +35,7 @@ namespace FBI.MVC.Model
         {
           T tmp_filter = Build(p_packet) as T;
 
-          m_CRUDDic[tmp_filter.Axis].Set(tmp_filter.Id, tmp_filter.Name, tmp_filter);
+          m_CRUDDic[tmp_filter.Axis].Set(tmp_filter.Id, tmp_filter.Name.ToLower(), tmp_filter);
         }
         IsInit = true;
         RaiseObjectInitializedEvent(p_packet.GetError(), typeof(T));
@@ -53,7 +53,7 @@ namespace FBI.MVC.Model
       {
         T tmp_filter = Build(p_packet) as T;
 
-        m_CRUDDic[tmp_filter.Axis].Set(tmp_filter.Id, tmp_filter.Name, tmp_filter);
+        m_CRUDDic[tmp_filter.Axis].Set(tmp_filter.Id, tmp_filter.Name.ToLower(), tmp_filter);
         RaiseReadEvent(p_packet.GetError(), tmp_filter);
       }
       else
@@ -85,7 +85,7 @@ namespace FBI.MVC.Model
     {
       if (m_CRUDDic.ContainsKey(p_axis) == false)
         return null;
-      return (m_CRUDDic[p_axis][p_name]);
+      return (m_CRUDDic[p_axis][p_name.ToLower()]);
     }
 
     public T GetValue(AxisType p_axis, UInt32 p_id)

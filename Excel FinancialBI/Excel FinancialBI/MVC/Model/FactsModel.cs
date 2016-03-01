@@ -17,7 +17,7 @@ namespace FBI.MVC.Model
     public event UpdateEventHandler UpdateEvent;
     public delegate void UpdateEventHandler(ErrorMessage p_status, Dictionary<string, ErrorMessage> p_resultsDict);
     public event DeleteEventHandler DeleteEvent;
-    public delegate void DeleteEventHandler(ErrorMessage p_status, Int32 p_requestId);
+    public delegate void DeleteEventHandler(ErrorMessage p_status, UInt32 p_factId);
     public event ReadEventHandler ReadEvent;
     public delegate void ReadEventHandler(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list);
     private SafeDictionary<Int32, List<string>> m_requestIdCommitDic = new SafeDictionary<Int32, List<string>>();
@@ -53,21 +53,21 @@ namespace FBI.MVC.Model
       return requestId;
     }
 
-    void UpdateList(List<Fact> factsValues, List<string> cellsAddresses)
+    public void UpdateList(SafeDictionary<string, Fact> p_factsCommitDict)
     {
       ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(ClientMessage.CMSG_UPDATE_FACT_LIST));
 
-      packet.AssignRequestId();
-      packet.WriteInt32(factsValues.Count);
-      foreach (Fact fact_value in factsValues)
+      Int32 l_requestId = packet.AssignRequestId();
+      m_requestIdCommitDic.Add(l_requestId, p_factsCommitDict.Keys.ToList<string>());
+      packet.WriteInt32(p_factsCommitDict.Values.Count);
+      foreach (Fact fact_value in p_factsCommitDict.Values)
         fact_value.Dump(packet, false);
       packet.Release();
       NetworkManager.Send(packet);
     }
 
-    void Delete(Fact p_fact)
+    public void Delete(Fact p_fact)
     {
-
       ByteBuffer l_packet = new ByteBuffer(Convert.ToUInt16(ClientMessage.CMSG_DELETE_FACT));
       l_packet.WriteUint32(p_fact.Id);
       l_packet.Release();
@@ -122,15 +122,8 @@ namespace FBI.MVC.Model
 
     private void DeleteFactAnswer(ByteBuffer packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
-      {
-        Int32 l_requestId = packet.GetRequestId();
-        if (DeleteEvent != null)
-          DeleteEvent(packet.GetError(), l_requestId);
-      }
-      else
-        if (DeleteEvent != null)
-          DeleteEvent(packet.GetError(), 0);
+      if (DeleteEvent != null)
+        DeleteEvent(packet.GetError(), packet.ReadUint32());
     }
   }
 }

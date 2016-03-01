@@ -9,25 +9,33 @@ namespace FBI.MVC.Controller
   using Microsoft.Office.Interop.Excel;
   using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
+  using FBI.MVC.View;
   using Utils;
   using VIBlend.WinForms.Controls;
+  using Network;
 
   public class FactsEditionController
   {
-    IEditedFactsManager m_editedFactsManager;
-    Account.AccountProcess m_process;
-    UInt32 m_RHAccountId;
-    Dimensions m_dimensions;
-    WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
-    Worksheet m_worksheet;
-    List<Int32> m_periodsList;
-    UInt32 m_versionId;
+    private AddinModuleController m_addinModuleController;
+    private IEditedFactsManager m_editedFactsManager;
+ //   private ExcelWorksheetEvents m_ExcelSheetEvents;
+    private RangeHighlighter m_rangeHighlighter;
+    private Account.AccountProcess m_process;
+    private UInt32 m_RHAccountId;
+    private Dimensions m_dimensions;
+    private WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
+    private Worksheet m_worksheet;
+    private List<Int32> m_periodsList;
+    private UInt32 m_versionId;
 
-    public FactsEditionController(Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, bool p_updateCells, List<Int32> p_periodsList = null, UInt32 p_RHAccountId = 0)
+
+    public FactsEditionController(AddinModuleController p_addinModuleController, Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null, UInt32 p_RHAccountId = 0)
     {
+      m_addinModuleController = p_addinModuleController;
       m_versionId = p_versionId;
       m_worksheet = p_worksheet;
       m_dimensions = new Dimensions(m_versionId, p_periodsList);
+      m_rangeHighlighter = new RangeHighlighter(this);
       m_process = p_process;
       m_periodsList = p_periodsList;
       m_RHAccountId = p_RHAccountId;
@@ -35,28 +43,16 @@ namespace FBI.MVC.Controller
       if (p_process == Account.AccountProcess.FINANCIAL)
         m_editedFactsManager = new FinancialEditedFactsManager();
       else
-        m_editedFactsManager = new RHEditedFactsManager();
+        m_editedFactsManager = new RHEditedFactsManager(p_periodsList);
 
-      EventsSubsription();
-      Launch(p_updateCells);
-    }
-
-    private void EventsSubsription()
-    {
       m_editedFactsManager.FactsDownloaded += OnFactsDownloaded;
-   
-      // attention cet event sera lancé après chaque calcul pour le financier (outputs) -> créer un autre event
-      // TO DO : recreate ribbons !
-
+      m_editedFactsManager.OnCommitError -= OnCommitError;
     }
 
-      // TO DO : implement events from worksheet !
-
-    private bool Launch(bool p_updateCells)
+    public bool Launch(bool p_updateCells)
     {
       // TO DO: Compatibilité resfresh
       // Clean current status, higlights and so on
-      // Check that a version is selected first
 
       if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
       {
@@ -65,10 +61,11 @@ namespace FBI.MVC.Controller
         if (m_dimensions.IsValid() == false)
           return false;
 
-        m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet, m_versionId, m_RHAccountId);
+        m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet, m_versionId, m_rangeHighlighter ,m_RHAccountId);
         if (m_versionId != 0 && m_periodsList.Count > 0)
         {
-          m_editedFactsManager.DownloadFacts(m_versionId, m_periodsList, p_updateCells);
+          m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells);
+          ActivateFactEditionRibbon();
           return true;
         }
         else
@@ -77,49 +74,50 @@ namespace FBI.MVC.Controller
       return false;
     }
 
-    private void OnFactsEditionInitialized()
-    {
-        // show corresponding ribbon
-        if (m_process == Account.AccountProcess.FINANCIAL)
-        {
-            AddinModule.CurrentInstance.m_financialbiRibbon.Visible = true;
-            // TO DO subsribe to events
-        }
-        else
-        {
-           // AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = true;
-           // subsribe to events
-        }
-        
-    }
 
+    private void ActivateFactEditionRibbon()
+    {
+      if (m_process == Account.AccountProcess.FINANCIAL)
+      {
+        AddinModule.CurrentInstance.m_financialSubmissionRibbon.Visible = true;
+        AddinModule.CurrentInstance.m_financialSubmissionRibbon.Activate();
+      }
+      else
+      {
+        AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = true;
+        AddinModule.CurrentInstance.m_RHSubmissionRibbon.Activate();
+      }
+    }
+  
     public void CloseInstance()
     {
-        // TO DO Hide corresponding ribbon
-        // unsuscribe from event
-        // close current instances
-        // find a way to close this instance
+      m_rangeHighlighter.RevertToOriginalColors();
+      m_editedFactsManager.FactsDownloaded -= OnFactsDownloaded;
+      m_editedFactsManager.OnCommitError -= OnCommitError;
 
+      // TO DO : Close current instances
+      m_editedFactsManager.Dispose();
+
+
+      AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = false;
+      AddinModule.CurrentInstance.m_financialSubmissionRibbon.Visible = false;
     }
-      
-    //public void UpdateWorksheetInputs()
-    //{
-    //  m_editedFactsManager.UpdateWorksheetInputs();
-    //}
-
+ 
     public void UpdateWorksheetOutputs()
     {
       ((FinancialEditedFactsManager)m_editedFactsManager).UpdateWorkSheetOutputs();
     }
 
-    private void OnWorksheetChange()
+    public void OnWorksheetChange(Range p_cell)
     {
-      // TO DO
+    
+      if (m_editedFactsManager.UpdateEditedValues(p_cell))
+        return;
 
-      // if cell belongs to edited fact
-      //   -> update edited fact status ()
-      //      if financial -> launch compute at the end of the cells range loop
-      
+
+      // if financial -> launch compute at the end of the cells range loop
+      // financial -> dependant cells
+
       // if cell belongs to dimension
       //   -> cancel modification and put back the dimension value
 
@@ -128,17 +126,16 @@ namespace FBI.MVC.Controller
 
       // TO DO  : antiduplicate system (au préalable -> comparaison des strings)
    
-
     }
 
-    private void BeforeRightClick()
+    public void BeforeRightClick()
     {
       // TO DO
     }
 
     public void CommitFacts()
     {
-      m_editedFactsManager.CommitDifferences();
+      m_editedFactsManager.Commit();
     }
 
     public void SetAutoCommit(bool p_value)
@@ -146,11 +143,23 @@ namespace FBI.MVC.Controller
       m_editedFactsManager.m_autoCommit = p_value; 
     }
 
-    private void OnFactsDownloaded(bool p_sucess)
+    private void OnFactsDownloaded(bool p_success)
     {
-      // Attention : below : directement géré dans les FactsEditionManager ?
+      if (p_success == true)
+        m_addinModuleController.AssociateExcelWorksheetEvents(m_worksheet);
+      else
+      {
+        // exit mode
+      }
     }
 
-    
+    private void OnCommitError(string p_address, ErrorMessage p_error)
+    {
+       // TO DO
+      // write in commit log
+    }
+   
+    // Commit failed as whole method -> view message box
+
   }
 }

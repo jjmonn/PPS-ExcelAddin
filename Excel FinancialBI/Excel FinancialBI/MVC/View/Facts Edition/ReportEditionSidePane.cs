@@ -122,7 +122,9 @@ namespace FBI.MVC.View
     {
       if (m_controller.CanLaunchReport(m_entitiesTreeview.SelectedNode, m_accountSelectionComboBox.SelectedItem, m_periodRangeSelectionController.GetPeriodList()))
       {
-        if (m_controller.CreateReport() == false)
+        if (m_controller.CreateReport() == true)
+          this.Hide();
+        else
           MessageBox.Show(m_controller.Error);
       }
     }

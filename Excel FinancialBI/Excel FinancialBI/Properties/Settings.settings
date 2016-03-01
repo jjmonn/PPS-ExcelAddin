@@ -98,16 +98,16 @@
     <Setting Name="detailBackColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">192, 255, 255</Value>
     </Setting>
-    <Setting Name="snapshotInputsBackColor" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="FactsEditionInputsFillColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">PowderBlue</Value>
     </Setting>
-    <Setting Name="snapshotInputsTextColor" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="FactsEditionInputsTextColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Navy</Value>
     </Setting>
-    <Setting Name="snapshotOutputsBackColor" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="FactsEditionOutputsBackColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">White</Value>
     </Setting>
-    <Setting Name="snapshotOutputsTextColor" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="FactsEditionOutputsTextColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Black</Value>
     </Setting>
     <Setting Name="currentCurrency" Type="System.UInt32" Scope="User">
@@ -211,6 +211,21 @@
     </Setting>
     <Setting Name="language" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="FactsEditionInputsRedFill" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">223, 106, 120</Value>
+    </Setting>
+    <Setting Name="FactsEditionOutputsRedFill" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">255, 192, 192</Value>
+    </Setting>
+    <Setting Name="FactsEditionInputCommitedFill" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">102, 199, 150</Value>
+    </Setting>
+    <Setting Name="FactsEditionOutputCommitedFill" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">207, 237, 222</Value>
+    </Setting>
+    <Setting Name="FactsEditionDimensionsFill" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">PaleTurquoise</Value>
     </Setting>
   </Settings>
 </SettingsFile>

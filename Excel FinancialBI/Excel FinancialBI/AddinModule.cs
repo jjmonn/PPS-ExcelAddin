@@ -18,6 +18,7 @@ namespace FBI
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
   {
     private AddinModuleController m_controller;
+    public ExcelWorksheetEvents WorksheetEvents { private set; get; }
 
     public AddinModule()
     {
@@ -36,11 +37,17 @@ namespace FBI
     {
       Addin.Main();
       m_controller = new AddinModuleController(this);
+
       m_financialSubmissionRibbon.Visible = false;
       m_RHSubmissionRibbon.Visible = false;
       fbiRibbonChangeState(false);
       SuscribeEvents();
       MultilanguageSetup();
+    }
+
+    private void AddinModule_AddinStartupComplete(object sender, EventArgs e)
+    {
+      WorksheetEvents = new ExcelWorksheetEvents(this);
     }
 
     private void MultilanguageSetup()
@@ -338,7 +345,7 @@ namespace FBI
 
     private void CloseBT_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      m_controller.CloseEditionMode();
     }
 
     #endregion
@@ -367,7 +374,7 @@ namespace FBI
 
     private void m_PDCSumbissionExitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      m_controller.CloseEditionMode();
     }
 
     private void m_PDCRefreshSnapthshotButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -406,7 +413,6 @@ namespace FBI
     }
 
    
-
 
   }
 }

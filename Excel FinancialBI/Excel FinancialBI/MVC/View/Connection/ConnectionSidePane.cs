@@ -146,7 +146,6 @@ namespace FBI.MVC.View
 
     #region Connection background worker
 
-
     private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
     {
       Addin.Disconnect();

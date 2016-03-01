@@ -36,10 +36,18 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="AddinExpress.Install.2005, Version=5.2.2024.2005, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="AddinExpress.MSO.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL">
-      <Private>False</Private>
+    <Reference Include="AddinExpress.MSO.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.MSO.2005.dll</HintPath>
     </Reference>
-    <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.XL.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.XL.2005.dll</HintPath>
+    </Reference>
+    <Reference Include="AddinExpress.XL.2005.Design, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.XL.2005.Design.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zlib">
       <HintPath>dependencies\Ionic.Zlib.dll</HintPath>
     </Reference>
@@ -231,12 +239,7 @@
     <Compile Include="AddinModule.Designer.cs">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExcelSheetModule1.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ExcelSheetModule1.Designer.cs">
-      <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
-    </Compile>
+    <Compile Include="ExcelWorksheetEvents.cs" />
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -261,6 +264,7 @@
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
+    <Compile Include="MVC\Controller\IProgressBarController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
@@ -289,6 +293,7 @@
     <Compile Include="MVC\Model\AxisFilterModel.cs" />
     <Compile Include="MVC\Model\AxisOwnerModel.cs" />
     <Compile Include="MVC\Model\Base\AxedCRUDModel.cs" />
+    <Compile Include="MVC\Model\Base\EditedFactBase.cs" />
     <Compile Include="MVC\Model\Base\ICRUDModel.cs" />
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
@@ -316,6 +321,7 @@
     <Compile Include="MVC\Model\CRUD\Currency.cs" />
     <Compile Include="MVC\Model\CRUD\DimensionElem.cs" />
     <Compile Include="MVC\Model\CRUD\DimensionKey.cs" />
+    <Compile Include="MVC\Model\CRUD\EditedFinancialFact.cs" />
     <Compile Include="MVC\Model\CRUD\EntityCurrency.cs" />
     <Compile Include="MVC\Model\CRUD\EntityDistribution.cs" />
     <Compile Include="MVC\Model\CRUD\ExchangeRate.cs" />
@@ -344,7 +350,7 @@
     <Compile Include="MVC\Model\FactLogModel.cs" />
     <Compile Include="MVC\Model\Facts Edition\Dimension.cs" />
     <Compile Include="MVC\Controller\Facts Edition\Dimensions.cs" />
-    <Compile Include="MVC\Model\CRUD\EditedFact.cs" />
+    <Compile Include="MVC\Model\CRUD\EditedRHFact.cs" />
     <Compile Include="MVC\Model\CRUD\PeriodDimension.cs" />
     <Compile Include="MVC\Model\Facts Edition\RHEditedFactsManager.cs" />
     <Compile Include="MVC\Controller\Facts Edition\WorksheetAnalyzer.cs" />
@@ -637,6 +643,12 @@
     <Compile Include="MVC\View\Facts Edition\UnReferencedClientsUI.Designer.cs">
       <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\ProgressBarView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\ProgressBarView.Designer.cs">
+      <DependentUpon>ProgressBarView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\ReportsDesignerUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -705,9 +717,6 @@
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExcelSheetModule1.resx">
-      <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
       <DependentUpon>CommitFollowUpView.cs</DependentUpon>
@@ -828,6 +837,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Facts Edition\UnReferencedClientsUI.resx">
       <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\ProgressBarView.resx">
+      <DependentUpon>ProgressBarView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\ReportsDesignerUI.resx">
       <DependentUpon>ReportsDesignerUI.cs</DependentUpon>

@@ -9,7 +9,6 @@ namespace FBI.Utils
 {
   class FbiAccountFormat
   {
-    public string name;
     public Color textColor;
     public Color backColor;
     public Color bordersColor;
