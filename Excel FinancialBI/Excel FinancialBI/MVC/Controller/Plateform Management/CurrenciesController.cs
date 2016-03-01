@@ -36,8 +36,10 @@ namespace FBI.MVC.Controller
       l_currency.InUse = p_inUse;
       l_currency.Name = p_name;
       l_currency.Symbol = p_symbol;
-      CurrencyModel.Instance.Update(l_currency);
-      return (true);
+      if (CurrencyModel.Instance.Update(l_currency))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
   }
 }

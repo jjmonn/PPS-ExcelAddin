@@ -250,7 +250,7 @@ namespace FBI.MVC.View
     void OnUserModelUpdateEvent(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != Network.ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     #endregion
@@ -293,7 +293,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
-          MessageBox.Show(Error.GetMessage(p_status));
+          Forms.MsgBox.Show(Error.GetMessage(p_status));
       }
     }
 
@@ -308,7 +308,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
-          MessageBox.Show(Error.GetMessage(p_status));
+          Forms.MsgBox.Show(Error.GetMessage(p_status));
         SetEntities(UserModel.Instance.GetValue(m_userClicked));
         m_userDGV.Refresh();
         if (m_displayEntities)
@@ -327,7 +327,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
-          MessageBox.Show(Error.GetMessage(p_status));
+          Forms.MsgBox.Show(Error.GetMessage(p_status));
       }
     }
 

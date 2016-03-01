@@ -99,12 +99,12 @@ namespace FBI.MVC.View
     {
       if (m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode == null)
       {
-        MessageBox.Show(Local.GetValue("versions.error.rates_version_not_selected"));
+        Forms.MsgBox.Show(Local.GetValue("versions.error.rates_version_not_selected"));
         return;
       }
       if (m_factsVersionVTreeviewbox.TreeView.SelectedNode == null)
       {
-        MessageBox.Show(Local.GetValue("versions.error.gfacts_version_not_selected"));
+        Forms.MsgBox.Show(Local.GetValue("versions.error.gfacts_version_not_selected"));
         return;
       }
       Version l_version = new Version();
@@ -121,7 +121,7 @@ namespace FBI.MVC.View
       l_version.CreatedAt = DateTime.Now.ToShortDateString();
       if (m_controller.Create(l_version) == false)
       {
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
       }
       else
         this.Hide();

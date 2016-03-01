@@ -41,8 +41,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("entity.error.currency_not_found");
         return (false);
       }
-      EntityCurrencyModel.Instance.Update(p_entityCurrency);
-      return (true);
+      if (EntityCurrencyModel.Instance.Update(p_entityCurrency))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
   }
 }

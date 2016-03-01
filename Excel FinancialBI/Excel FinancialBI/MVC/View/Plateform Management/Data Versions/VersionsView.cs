@@ -270,7 +270,7 @@ namespace FBI.MVC.View
     void DisplayErrorMessage(string p_message, ErrorMessage p_status)
     {
       p_message += ": " + Error.GetMessage(p_status);
-      MessageBox.Show(p_message);
+      Forms.MsgBox.Show(p_message);
     }
 
     #endregion
@@ -409,7 +409,7 @@ namespace FBI.MVC.View
           l_versionCopy.RateVersionId = l_ratesVersionId;
           if (m_controller.Update(l_versionCopy) == false)
           {
-            MessageBox.Show(m_controller.Error);
+            Forms.MsgBox.Show(m_controller.Error);
             m_isDisplaying = true;
             SetExchangeVersion(l_version);
             m_isDisplaying = false;
@@ -431,7 +431,7 @@ namespace FBI.MVC.View
           l_versionCopy.GlobalFactVersionId = l_gfactsVersionId;
           if (m_controller.Update(l_versionCopy) == false)
           {
-            MessageBox.Show(m_controller.Error);
+            Forms.MsgBox.Show(m_controller.Error);
             m_isDisplaying = true;
             SetGlobalFactsVersion(l_version);
             m_isDisplaying = false;
@@ -489,13 +489,13 @@ namespace FBI.MVC.View
       l_newFolderVersion.IsFolder = true;
       l_newFolderVersion.ParentId = m_controller.SelectedVersion;
       if (m_controller.Create(l_newFolderVersion) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     private void DeleteVersion(UInt32 p_versionId)
     {
       if (m_controller.Delete(p_versionId) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     private void RenameVersion(UInt32 p_versionId)
@@ -508,7 +508,7 @@ namespace FBI.MVC.View
         l_version = l_version.Clone();
         l_version.Name = Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
         if (m_controller.Update(l_version) == false)
-          MessageBox.Show(m_controller.Error);
+          Forms.MsgBox.Show(m_controller.Error);
       }
     }
 
@@ -525,7 +525,7 @@ namespace FBI.MVC.View
       else
         l_version.LockDate = "";
       if (m_controller.Update(l_version) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
   }

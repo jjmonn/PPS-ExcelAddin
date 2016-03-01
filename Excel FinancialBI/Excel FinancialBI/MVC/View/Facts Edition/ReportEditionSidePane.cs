@@ -125,7 +125,7 @@ namespace FBI.MVC.View
         if (m_controller.CreateReport() == true)
           this.Hide();
         else
-          MessageBox.Show(m_controller.Error);
+          Forms.MsgBox.Show(m_controller.Error);
       }
     }
 

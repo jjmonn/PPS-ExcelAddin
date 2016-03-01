@@ -30,11 +30,10 @@ namespace FBI.MVC.Model
       if (p_request.Versions.Count > 2)
         return (false);
       p_request.IsDiff = true;
-      Compute(p_request);
-      return (true);
+      return Compute(p_request);
     }
 
-    public void Compute(LegacyComputeRequest p_request)
+    public bool Compute(LegacyComputeRequest p_request)
     {
       ByteBuffer[] l_packetList = new ByteBuffer[p_request.Versions.Count];
       List<Int32> l_requestIdList = new List<int>();
@@ -51,8 +50,10 @@ namespace FBI.MVC.Model
       {
         p_request.Dump(l_packetList[i], p_request.Versions[i]);
         l_packetList[i].Release();
-        NetworkManager.Send(l_packetList[i]);
+        if (NetworkManager.Send(l_packetList[i]) == false)
+          return (false);
       }
+      return (true);
     }
 
     public void OnComputeResult(ByteBuffer p_packet)

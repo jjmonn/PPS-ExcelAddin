@@ -91,13 +91,13 @@ namespace FBI.MVC.View
           m_dgv.DeleteRow(p_id);
           break;
         case ErrorMessage.PERMISSION_DENIED:
-          MessageBox.Show(Local.GetValue("general.error.permission_denied"));
+          Forms.MsgBox.Show(Local.GetValue("general.error.permission_denied"));
           break;
         case ErrorMessage.NOT_FOUND:
-          MessageBox.Show(Local.GetValue("general.error.not_found"));
+          Forms.MsgBox.Show(Local.GetValue("general.error.not_found"));
           break;
         default:
-          MessageBox.Show(Local.GetValue("general.error.system"));
+          Forms.MsgBox.Show(Local.GetValue("general.error.system"));
           break;
       }
     }
@@ -156,13 +156,13 @@ namespace FBI.MVC.View
             UpdateOrAddCurrencyRow(p_attributes);
             break;
           case ErrorMessage.PERMISSION_DENIED:
-            MessageBox.Show(Local.GetValue("general.error.permission_denied"));
+            Forms.MsgBox.Show(Local.GetValue("general.error.permission_denied"));
             break;
           case ErrorMessage.NOT_FOUND:
-            MessageBox.Show(Local.GetValue("general.error.not_found"));
+            Forms.MsgBox.Show(Local.GetValue("general.error.not_found"));
             break;
           default:
-            MessageBox.Show(Local.GetValue("general.error.system"));
+            Forms.MsgBox.Show(Local.GetValue("general.error.system"));
             break;
         }
       }

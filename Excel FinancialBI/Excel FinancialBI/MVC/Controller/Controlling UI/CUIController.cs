@@ -91,10 +91,15 @@ namespace FBI.MVC.Controller
         return (false);
       ResultController.LoadDGV(l_config);
       if (l_request.IsDiff)
-        LegacyComputeModel.Instance.Compute(l_request);
+      {
+        if (LegacyComputeModel.Instance.Compute(l_request))
+          return (true);
+      }
       else
-        LegacyComputeModel.Instance.ComputeDiff(l_request);
-      return (true);
+        if (LegacyComputeModel.Instance.ComputeDiff(l_request))
+          return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     bool CheckRequest(AComputeRequest p_request)

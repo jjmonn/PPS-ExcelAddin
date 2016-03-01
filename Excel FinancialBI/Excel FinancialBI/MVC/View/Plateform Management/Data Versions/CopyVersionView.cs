@@ -78,7 +78,7 @@ namespace FBI.MVC.View
        l_newVersion.CreatedAt = DateTime.Now.ToShortDateString();
        if (m_controller.Create(l_newVersion) == false)
        {
-         MessageBox.Show(m_controller.Error);
+         Forms.MsgBox.Show(m_controller.Error);
         return;
        }
        this.Hide();

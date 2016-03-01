@@ -94,7 +94,7 @@ namespace FBI.MVC.View
       l_axisOwner = l_axisOwner.Clone();
       l_axisOwner.OwnerId = l_entity.Id;
       if (m_controller.UpdateAxisOwner(l_axisOwner) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnNodeSelect(object p_sender, vTreeViewMouseEventArgs p_args)
@@ -132,7 +132,7 @@ namespace FBI.MVC.View
     {
       if (p_status != ErrorMessage.SUCCESS)
       {
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
         return;
       }
       AxisOwner l_axisOwner = new AxisOwner();
@@ -140,7 +140,7 @@ namespace FBI.MVC.View
       l_axisOwner.Id = p_id;
       l_axisOwner.OwnerId = m_controller.SelectedEntity;
       if (m_controller.CreateAxisOwner(l_axisOwner) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     delegate void OnModelReadAxisOwner_delegate(ErrorMessage p_status, AxisOwner p_axisOwner);
@@ -170,13 +170,13 @@ namespace FBI.MVC.View
     void OnModelCreateAxisOwner(ErrorMessage p_status, UInt32 p_axisOwnerId)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     void OnModelUpdateAxisOwner(ErrorMessage p_status, UInt32 p_axisOwnerId)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     #endregion

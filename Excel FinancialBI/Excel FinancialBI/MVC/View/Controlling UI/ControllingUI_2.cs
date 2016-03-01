@@ -15,6 +15,7 @@ namespace FBI.MVC.View
   using Network;
   using Model;
   using Model.CRUD;
+  using Forms;
 
   public partial class ControllingUI_2 : Form, IView
   {
@@ -105,7 +106,7 @@ namespace FBI.MVC.View
       if (p_status == ErrorMessage.SUCCESS && p_result != null)
         m_controller.ResultController.DisplayResult(p_result);
       else
-        MessageBox.Show(Error.GetMessage(p_status));
+        MsgBox.Show(Error.GetMessage(p_status));
     }
 
     void OnRefreshButtonMouseDown(object sender, MouseEventArgs e)

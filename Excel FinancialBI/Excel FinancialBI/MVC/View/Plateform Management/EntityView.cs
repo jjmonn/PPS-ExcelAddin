@@ -91,7 +91,7 @@ namespace FBI.MVC.View
       l_entity = l_entity.Clone();
       l_entity.CurrencyId = l_currency.Id;
       if (m_controller.UpdateEntityCurrency(l_entity) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnDGVDropItem(HierarchyItem p_origin, HierarchyItem p_dest, DragEventArgs p_args)
@@ -106,7 +106,7 @@ namespace FBI.MVC.View
       l_originAxis = l_originAxis.Clone();
       l_originAxis.ParentId = l_destAxis.Id;
       if (m_controller.UpdateAxisElem(l_originAxis) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
   }
 }

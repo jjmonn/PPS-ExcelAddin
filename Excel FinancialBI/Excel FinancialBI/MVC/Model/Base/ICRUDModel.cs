@@ -118,35 +118,33 @@ namespace FBI.MVC.Model
       CreationEvent(p_packet.GetError(), p_packet.ReadUint32());
   }
 
-	protected virtual void List()
+	protected virtual bool List()
 	{
 		ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(ListCMSG));
 		packet.Release();
-		NetworkManager.Send(packet);
+		return NetworkManager.Send(packet);
 	}
 
 
-	public virtual void Create(T p_crud)
+  public virtual bool Create(T p_crud)
 	{
 		ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(CreateCMSG));
 		p_crud.Dump(packet, false);
 		packet.Release();
-		NetworkManager.Send(packet);
-
+		return NetworkManager.Send(packet);
 	}
 
 
-  public virtual void Update(T p_crud)
+  public virtual bool Update(T p_crud)
 	{
 		ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(UpdateCMSG));
 		p_crud.Dump(packet, true);
 		packet.Release();
-		NetworkManager.Send(packet);
-
+		return NetworkManager.Send(packet);
 	}
 
 
-  public virtual void UpdateList(List<T> p_crudList)
+  public virtual bool UpdateList(List<T> p_crudList)
 	{
 		ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(UpdateListCMSG));
 
@@ -157,16 +155,15 @@ namespace FBI.MVC.Model
 			l_crud.Dump(packet, true);
 		}
 		packet.Release();
-		NetworkManager.Send(packet);
+		return NetworkManager.Send(packet);
 	}
 
-  public virtual void Delete(UInt32 p_id)
+  public virtual bool Delete(UInt32 p_id)
 	{
 		ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(DeleteCMSG));
 		packet.WriteUint32(p_id);
 		packet.Release();
-		NetworkManager.Send(packet);
-
+		return NetworkManager.Send(packet);
 	}
 	#endregion
 

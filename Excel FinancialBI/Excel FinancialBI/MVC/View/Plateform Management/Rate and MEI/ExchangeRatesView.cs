@@ -93,7 +93,7 @@ namespace FBI.MVC.View
 
       if (l_monthList == null)
       {
-        MessageBox.Show(Local.GetValue("exchange_rate_version.error.not_found"));
+        Forms.MsgBox.Show(Local.GetValue("exchange_rate_version.error.not_found"));
         return;
       }
       InitPeriods(l_monthList);
@@ -140,13 +140,13 @@ namespace FBI.MVC.View
     void OnModelUpdateRate(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     void OnModelDeleteRate(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     #endregion

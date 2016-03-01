@@ -65,7 +65,7 @@ namespace FBI.MVC.View
     private void m_validateButton_Click(object sender, EventArgs e)
     {
       if (m_controller.LaunchSnapshot(m_periodRangeSelectionController.GetPeriodList(), (UInt32)m_accountSelectionComboBox.SelectedItem.Value) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
   
   }

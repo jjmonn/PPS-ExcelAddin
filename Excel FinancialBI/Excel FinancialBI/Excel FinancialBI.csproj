@@ -249,6 +249,7 @@
     <Compile Include="Forms\FbiFilterHierarchyTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\FbiMsgBox.cs" />
     <Compile Include="Forms\FbiToolStripMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -298,7 +299,7 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
-    <Compile Include="MVC\Model\ComputeModel.cs" />
+    <Compile Include="MVC\Model\LegacyComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElem.cs" />

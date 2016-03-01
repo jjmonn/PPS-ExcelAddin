@@ -63,58 +63,78 @@ namespace FBI.MVC.Controller
 
     #region Server
 
-    public void UpdateAccount(Account p_account)
+    public bool UpdateAccount(Account p_account)
     {
-      if (p_account != null)
-        AccountModel.Instance.Update(p_account);
+      if (CheckAccountValidity(p_account) == false)
+      {
+        Error = Local.GetValue("accounts.error.update") + ": " + Error;
+        return (false);
+      }
+      if (AccountModel.Instance.Update(p_account) == false)
+      {
+        Error = Local.GetValue("accounts.error.update") + ": " + Local.GetValue("general.error.system");
+        return (false);
+      }
+      return (true);
     }
 
-    public void DeleteAccount(vTreeNode p_node)
+    public bool DeleteAccount(UInt32 p_id)
     {
-      List<String> l_dependantAccounts = this.ExistingDependantAccounts(p_node);
+      List<Account> l_dependantAccounts = AccountModel.Instance.GetChildren(p_id);
 
       if (l_dependantAccounts.Count > 0)
       {
         string l_msg = "";
-        foreach (string l_account in l_dependantAccounts)
-          l_msg += " - " + l_account + "\n\r";
-        MessageBox.Show(Local.GetValue("accounts.msg_dependant_accounts") + "\n\r" +
-                     l_msg + "\n\r" +
-                     Local.GetValue("accounts.msg_formula_to_be_changed"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        foreach (Account l_account in l_dependantAccounts)
+          l_msg += " - " + l_account.Name + "\n\r";
+        Error = Local.GetValue("accounts.msg_dependant_accounts") + "\n\r" + l_msg + "\n\r" + Local.GetValue("accounts.msg_formula_to_be_changed");
       }
-      else
-      {
-        string l_result = PasswordBox.Open(Local.GetValue("accounts.msg_account_deletion1") + "\n\r" + "\n"
-          + Local.GetValue("accounts.msg_account_deletion4")
-          , Local.GetValue("accounts.msg_account_deletion_confirmation"));
-
-        if (l_result != PasswordBox.Canceled && l_result == Addin.Password)
-        {
-          if (MessageBox.Show(Local.GetValue("accounts.msg_account_deletion3") + "\n\r" + "\n"
-          + Local.GetValue("accounts.msg_account_deletion2"),
-            Local.GetValue("accounts.msg_account_deletion_confirmation"), MessageBoxButtons.YesNo) == DialogResult.Yes)
-            this.DeleteAccount((UInt32)p_node.Value);
-        }
-        else if (l_result != PasswordBox.Canceled)
-          MessageBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-    }
-
-    public void DeleteAccount(UInt32 p_id)
-    {
-      if (AccountModel.Instance.GetValue(p_id) != null)
-        AccountModel.Instance.Delete(p_id);
-      else
+      else if (AccountModel.Instance.GetValue(p_id) == null)
+        Error = Local.GetValue("general.error.not_found");
+      else if (AccountModel.Instance.Delete(p_id) == false)
         Error = Local.GetValue("general.error.system");
+      else
+        return (true);
+      return (false);
     }
 
-    public void CreateAccount(Account p_account)
+    public bool CheckAccountValidity(Account p_account)
     {
-      if (p_account != null)
-        AccountModel.Instance.Create(p_account);
+      if (p_account == null)
+        Error = Local.GetValue("general.error.system");
+      else if (IsNameValid(p_account.Name) == false)
+        return (false);
+      else if (p_account.ParentId != 0 && AccountModel.Instance.GetValue(p_account.ParentId) == null)
+        Error = Local.GetValue("general.error.invalid_attribute");
+      else if (Enum.IsDefined(typeof(Account.AccountProcess), p_account.Process) == false)
+        Error = Local.GetValue("general.error.invalid_attribute");
+      else if (Enum.IsDefined(typeof(Account.AccountType), p_account.Type) == false)
+        Error = Local.GetValue("general.error.invalid_attribute");
+      else if (Enum.IsDefined(typeof(Account.ConsolidationOptions), p_account.ConsolidationOptionId) == false)
+        Error = Local.GetValue("general.error.invalid_attribute");
+      else
+        return (true);
+      return (false);
     }
 
-    public void CreateAccount(UInt32 p_parentId, string p_name, Account.AccountProcess p_process, Account.FormulaTypes p_formulaType, string p_formula,
+    public bool CreateAccount(Account p_account)
+    {
+      if (CheckAccountValidity(p_account) == false)
+      {
+        Error = Local.GetValue("accounts.error.create") + ": " + Error;
+        return (false);
+      }
+      else if (AccountModel.Instance.GetValue(p_account.Name) != null)
+        Error = Local.GetValue("general.error.name_already_used");
+      else if (AccountModel.Instance.Create(p_account) == false)
+        Error = Local.GetValue("general.error.system");
+      else
+        return (true);
+      Error = Local.GetValue("accounts.error.create") + ": " + Error;
+      return (false);
+    }
+
+    public bool CreateAccount(UInt32 p_parentId, string p_name, Account.AccountProcess p_process, Account.FormulaTypes p_formulaType, string p_formula,
       Account.AccountType p_type, Account.ConsolidationOptions p_consolidationOptionId, Account.PeriodAggregationOptions p_periodAggregationOptionId,
       string p_formatId, UInt32 p_image, Int32 p_itemPosition)
     {
@@ -131,38 +151,12 @@ namespace FBI.MVC.Controller
       l_new.FormatId = p_formatId;
       l_new.Image = p_image;
       l_new.ItemPosition = p_itemPosition;
-      this.CreateAccount(l_new);
+      return CreateAccount(l_new);
     }
 
     #endregion
 
     #region Check
-
-    public bool AccountNameCheck(string p_accountName)
-    {
-      if (p_accountName == "" || !this.IsNameValid(p_accountName) || AccountModel.Instance.GetValue(p_accountName) != null ||
-        StringUtils.ContainChars(p_accountName, ACCOUNTS_FORBIDDEN_CHARACTERS))
-        return (false);
-     return (true);
-    }
-
-    public List<string> ExistingDependantAccounts(vTreeNode p_node)
-    {
-      List<string> l_dependantAccounts = new List<string>();
-      List<UInt32> l_accountKeyList = FbiTreeView<Account>.GetNodesIdsUint(p_node);
-
-      l_accountKeyList.Reverse();
-
-      List<UInt32> l_dependantAccountsId = this.DependenciesLoopCheck(l_accountKeyList);
-
-      foreach (UInt32 l_dependantAccountId in l_dependantAccountsId)
-      {
-        Account l_account = AccountModel.Instance.GetValue(l_dependantAccountId);
-        if (l_account != null)
-          l_dependantAccounts.Add(l_account.Name);
-      }
-      return (l_dependantAccounts);
-    }
 
     private List<UInt32> DependenciesLoopCheck(List<UInt32> p_accountKeyList)
     {

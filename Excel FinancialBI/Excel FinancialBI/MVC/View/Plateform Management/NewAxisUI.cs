@@ -120,7 +120,7 @@ namespace FBI.MVC.View
       l_newElem.ParentId = l_parentAxisId;
       l_newElem.AllowEdition = true;
       if (m_controller.CreateAxisElem(l_newElem) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
       Hide();
     }
   }

@@ -99,7 +99,7 @@ namespace FBI.MVC.View
 
       if (l_monthList == null)
       {
-        MessageBox.Show(Local.GetValue("exchange_rate_version.error.not_found"));
+        Forms.MsgBox.Show(Local.GetValue("exchange_rate_version.error.not_found"));
         return;
       }
       InitPeriods(l_monthList);
@@ -185,13 +185,13 @@ namespace FBI.MVC.View
         return;
       l_gfact.Name = l_result;
       if (m_controller.CreateGFact(l_gfact) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnDeleteFactClick(object p_sender, EventArgs p_e)
     {
       if (m_controller.DeleteGFact(m_selectedFact) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnRenameFactClick(object p_sender, EventArgs p_e)
@@ -206,7 +206,7 @@ namespace FBI.MVC.View
         return;
       l_gfact.Name = l_result;
       if (m_controller.UpdateGFact(l_gfact) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     #endregion
@@ -234,13 +234,13 @@ namespace FBI.MVC.View
     void OnModelUpdateGFactData(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     void OnModelDeleteGFactData(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     delegate void OnModelReadGFact_delegate(ErrorMessage p_status, GlobalFact p_gfact);
@@ -271,20 +271,20 @@ namespace FBI.MVC.View
           m_dgv.Refresh();
         }
         else
-          MessageBox.Show(Error.GetMessage(p_status));
+          Forms.MsgBox.Show(Error.GetMessage(p_status));
       }
     }
 
     void OnModelCreateGFact(ErrorMessage p_status, UInt32 p_gfactId)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     void OnModelUpdateGFact(ErrorMessage p_status, UInt32 p_gfactId)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
     
     #endregion

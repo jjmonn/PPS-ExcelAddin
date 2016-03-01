@@ -22,7 +22,7 @@ namespace FBI.MVC.Model
       NetworkManager.SetCallback((UInt16)ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, OnSourcedComputeResult);
     }
 
-    public void Compute(SourcedComputeRequest p_request)
+    public bool Compute(SourcedComputeRequest p_request)
     {
       ByteBuffer[] l_packetList = new ByteBuffer[p_request.EntityList.Count];
       List<Int32> l_requestIdList = new List<int>();
@@ -39,8 +39,10 @@ namespace FBI.MVC.Model
       {
         p_request.Dump(l_packetList[i], p_request.EntityList[i]);
         l_packetList[i].Release();
-        NetworkManager.Send(l_packetList[i]);
+        if (NetworkManager.Send(l_packetList[i]) == false)
+          return (false);
       }
+      return (true);
     }
 
     void OnSourcedComputeResult(ByteBuffer p_packet)

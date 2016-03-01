@@ -117,19 +117,21 @@ namespace FBI.Network
       return (System.Text.Encoding.UTF8.GetString(answer) == "READY");
     }
 
-    public static void Send(ByteBuffer p_data)
+    public static bool Send(ByteBuffer p_data)
     {
       if (m_Sock.Connected == false)
-        return;
+        return false;
       try
       {
         m_StreamSSL.Write(p_data.GetBuffer(), 0, (int)p_data.Length);
         m_StreamSSL.Flush();
+        return (true);
       }
       catch (Exception e)
       {
         m_Sock.Close();
         System.Diagnostics.Debug.WriteLine(e.Message);
+        return (false);
       }
     }
 

@@ -84,9 +84,9 @@ namespace FBI.MVC.View
         {
           IsLoading = false;
           if (p_status == ErrorMessage.PERMISSION_DENIED)
-            MessageBox.Show(Local.GetValue("connection.error.wrong_credentials"));
+            Forms.MsgBox.Show(Local.GetValue("connection.error.wrong_credentials"));
           else if (p_status != ErrorMessage.SUCCESS)
-            MessageBox.Show(Error.GetMessage(p_status));
+            Forms.MsgBox.Show(Error.GetMessage(p_status));
         }
       }
     }
@@ -152,7 +152,7 @@ namespace FBI.MVC.View
       if (Addin.Connect(m_userNameTextBox.Text, m_passwordTextBox.Text) == false)
       {
         this.BackgroundWorker1.CancelAsync();
-        MessageBox.Show(Local.GetValue("connection.msg_wrong_credentials"));     // TO DO: procedure
+        Forms.MsgBox.Show(Local.GetValue("connection.msg_wrong_credentials"));     // TO DO: procedure
       }
       else
       {

@@ -39,21 +39,34 @@ namespace FBI.MVC.Controller
 
     #region Server
 
-    public void UpdateUser(User p_user)
+    public bool UpdateUser(User p_user)
     {
       if (p_user != null)
-        UserModel.Instance.Update(p_user);
+      {
+        if (IsNameValid(p_user.Name) == false)
+          return (false);
+        if (UserModel.Instance.Update(p_user))
+          return (true);
+      }
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
-    public void DeleteUserAllowed(UInt32 p_id, UInt32 p_userId, UInt32 p_entityId)
+    public bool DeleteUserAllowed(UInt32 p_id, UInt32 p_userId, UInt32 p_entityId)
     {
-      UserAllowedEntityModel.Instance.Delete(p_id, p_userId, p_entityId);
+      if (UserAllowedEntityModel.Instance.Delete(p_id, p_userId, p_entityId))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
-    public void CreateUserAllowed(UserAllowedEntity p_userAllowed)
+    public bool CreateUserAllowed(UserAllowedEntity p_userAllowed)
     {
       if (p_userAllowed != null)
-        UserAllowedEntityModel.Instance.Create(p_userAllowed);
+        if (UserAllowedEntityModel.Instance.Create(p_userAllowed))
+          return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     #endregion

@@ -112,8 +112,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.name_in_use");
         return false;
       }
-      VersionModel.Instance.Create(p_version);
-      return (true);
+      if (VersionModel.Instance.Create(p_version))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool Update(Version p_version)
@@ -126,8 +128,10 @@ namespace FBI.MVC.Controller
       }
       if (IsVersionValid(p_version) == false)
         return (false);
-      VersionModel.Instance.Update(p_version);
-      return (true);
+      if (VersionModel.Instance.Update(p_version))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool Delete(UInt32 p_versionId)
@@ -137,8 +141,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("facts_versions.unknown_version");
         return (false);
       }
-      VersionModel.Instance.Delete(p_versionId);
-      return (true);
+      if (VersionModel.Instance.Delete(p_versionId))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public void ShowNewVersionView(UInt32 p_parentVersionId)

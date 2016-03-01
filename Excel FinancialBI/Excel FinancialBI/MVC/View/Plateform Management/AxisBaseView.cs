@@ -225,18 +225,18 @@ namespace FBI.MVC.View
 
       if (l_axisItem == null)
       {
-        MessageBox.Show(Local.GetValue("axis.error.not_found"));
+        Forms.MsgBox.Show(Local.GetValue("axis.error.not_found"));
         return;
       }
       string l_result = PasswordBox.Open(Local.GetValue("axis.creation_confirm"));
 
       if (l_result != PasswordBox.Canceled && l_result != Addin.Password)
       {
-        MessageBox.Show(Local.GetValue("general.invalid_password"));
+        Forms.MsgBox.Show(Local.GetValue("general.invalid_password"));
         return;
       }
       if (l_result != PasswordBox.Canceled && m_controller.Delete(l_axisItem) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     private void OnClickCreate(object sender, EventArgs e)
@@ -364,7 +364,7 @@ namespace FBI.MVC.View
             m_dgv.Refresh();
             break;
           default:
-            MessageBox.Show(Error.GetMessage(p_status));
+            Forms.MsgBox.Show(Error.GetMessage(p_status));
             break;
         }
       }
@@ -410,7 +410,7 @@ namespace FBI.MVC.View
           DesactivateUnallowed();
         }
         else
-          MessageBox.Show(Local.GetValue("general.error.system"));
+          Forms.MsgBox.Show(Local.GetValue("general.error.system"));
       }
     }
 
