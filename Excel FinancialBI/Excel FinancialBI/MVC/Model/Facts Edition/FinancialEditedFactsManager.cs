@@ -120,7 +120,7 @@ namespace FBI.MVC.Model
           //    - all accounts
           //    - filter on client, product, adjustment and employee
           //
-          m_inputsRequestIdList.Add(FactsModel.Instance.GetFact(l_editedFact.Account.Id, l_entity.Id, (UInt32)AxisType.Employee, m_versionId, (UInt32)l_startPeriod, (UInt32)l_endPeriod));
+          //m_inputsRequestIdList.Add(FactsModel.Instance.GetFactFinancial());
         }
       }
     }

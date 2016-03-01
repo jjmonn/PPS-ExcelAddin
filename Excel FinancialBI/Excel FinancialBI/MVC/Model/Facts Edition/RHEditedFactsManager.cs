@@ -128,10 +128,8 @@ namespace FBI.MVC.Model
 
       FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
       m_requestIdList.Clear();
-      foreach (AxisElem l_employee in l_employeesList)
-      {
-        m_requestIdList.Add(FactsModel.Instance.GetFact(m_RHAccountId, l_entity.Id, l_employee.Id, m_versionId, (UInt32)l_startPeriod, (UInt32)p_periodsList.ElementAt(p_periodsList.Count - 1)));
-      }
+
+      m_requestIdList.Add(FactsModel.Instance.GetFactRH(m_RHAccountId, l_entity.Id, l_employeesList, m_versionId, (UInt32)l_startPeriod, (UInt32)p_periodsList.ElementAt(p_periodsList.Count - 1)));
     }
 
     private void AfterRHFactsDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
