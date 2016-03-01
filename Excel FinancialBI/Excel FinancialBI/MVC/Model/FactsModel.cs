@@ -65,16 +65,13 @@ namespace FBI.MVC.Model
       NetworkManager.Send(packet);
     }
 
-    Int32 Delete(Fact p_fact)
+    void Delete(Fact p_fact)
     {
 
       ByteBuffer l_packet = new ByteBuffer(Convert.ToUInt16(ClientMessage.CMSG_DELETE_FACT));
-      Int32 l_requestId = l_packet.AssignRequestId();
       l_packet.WriteUint32(p_fact.Id);
       l_packet.Release();
       NetworkManager.Send(l_packet);
-      return l_requestId;
-
     }
 
     private void UpdateListAnswer(ByteBuffer packet)

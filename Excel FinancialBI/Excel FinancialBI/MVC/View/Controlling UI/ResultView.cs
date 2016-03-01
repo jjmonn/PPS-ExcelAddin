@@ -68,6 +68,8 @@ namespace FBI.MVC.View
       foreach (Account l_account in l_accountList.Values)
         if (l_account.FormulaType == Account.FormulaTypes.TITLE && l_account.ParentId == 0)
         {
+          if (l_account.Process != (Account.AccountProcess)Properties.Settings.Default.processId)
+            continue;
           vTabPage l_tab = new vTabPage(l_account.Name);
           DGV l_dgv = new DGV();
 
