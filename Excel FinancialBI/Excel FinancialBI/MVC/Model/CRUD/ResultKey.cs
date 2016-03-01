@@ -57,22 +57,28 @@ namespace FBI.MVC.Model.CRUD
 
     public override bool Equals(object p_obj)
     {
-      ResultKey l_obj = (ResultKey)p_obj;
+      lock (m_key)
+      {
+        ResultKey l_obj = (ResultKey)p_obj;
 
-      if (l_obj.GetHashCode() == GetHashCode())
-        if (l_obj.m_key.Item1 == m_key.Item1)
-          if (l_obj.m_key.Item2 == m_key.Item2)
-            if (l_obj.m_key.Item3 == m_key.Item3)
-              if (l_obj.m_key.Item4 == m_key.Item4)
-                if (l_obj.m_key.Item5 == m_key.Item5)
-                  if (l_obj.m_key.Item6 == m_key.Item6)
-                    return (l_obj.m_key.Item7 == m_key.Item7);
-      return (false);
+        if (l_obj.GetHashCode() == GetHashCode())
+          if (l_obj.m_key.Item1 == m_key.Item1)
+            if (l_obj.m_key.Item2 == m_key.Item2)
+              if (l_obj.m_key.Item3 == m_key.Item3)
+                if (l_obj.m_key.Item4 == m_key.Item4)
+                  if (l_obj.m_key.Item5 == m_key.Item5)
+                    if (l_obj.m_key.Item6 == m_key.Item6)
+                      return (l_obj.m_key.Item7 == m_key.Item7);
+        return (false);
+      }
     }
 
     public override int GetHashCode()
     {
-      return m_key.GetHashCode();
+      lock (m_key)
+      {
+        return m_key.GetHashCode();
+      }
     }
 
     public static ResultKey operator +(ResultKey p_a, ResultKey p_b)

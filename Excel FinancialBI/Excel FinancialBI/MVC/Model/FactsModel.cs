@@ -17,7 +17,7 @@ namespace FBI.MVC.Model
     public event UpdateEventHandler UpdateEvent;
     public delegate void UpdateEventHandler(ErrorMessage p_status, Dictionary<string, ErrorMessage> p_resultsDict);
     public event DeleteEventHandler DeleteEvent;
-    public delegate void DeleteEventHandler(ErrorMessage p_status, Int32 p_requestId);
+    public delegate void DeleteEventHandler(ErrorMessage p_status, UInt32 p_factId);
     public event ReadEventHandler ReadEvent;
     public delegate void ReadEventHandler(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list);
     private SafeDictionary<Int32, List<string>> m_requestIdCommitDic = new SafeDictionary<Int32, List<string>>();
@@ -34,23 +34,43 @@ namespace FBI.MVC.Model
       NetworkManager.RemoveCallback((UInt16)ServerMessage.SMSG_DELETE_FACT_ANSWER, DeleteFactAnswer);
     }
 
-    public Int32 GetFact(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_employeeId, UInt32 p_versionId, UInt32 p_startPeriod, UInt32 p_endPeriod)
+    public Int32 GetFactRH(UInt32 p_accountId, UInt32 p_entityId, List<AxisElem> p_employeeList, UInt32 p_versionId, UInt32 p_startPeriod, UInt32 p_endPeriod)
     {
 
       NetworkManager.SetCallback((UInt16)ServerMessage.SMSG_GET_FACT_ANSWER, GetFactAnswer);
-      ByteBuffer packet = new ByteBuffer((UInt16)ClientMessage.CMSG_GET_FACT);
-      Int32 requestId = packet.AssignRequestId();
+      ByteBuffer l_packet = new ByteBuffer((UInt16)ClientMessage.CMSG_GET_FACT);
+      Int32 l_requestId = l_packet.AssignRequestId();
 
-      packet.WriteUint32(p_accountId);
-      packet.WriteUint32(p_employeeId);
-      packet.WriteUint32(p_versionId);
-      packet.WriteUint32(p_startPeriod);
-      packet.WriteUint32(p_endPeriod);
-      packet.WriteUint32(p_entityId);
+      l_packet.WriteUint8((byte)Account.AccountProcess.RH);
+      l_packet.WriteUint32(p_accountId);
+      l_packet.WriteUint32((UInt32)p_employeeList.Count);
+      foreach (AxisElem l_employee in p_employeeList)
+        l_packet.WriteUint32(l_employee.Id);
+      l_packet.WriteUint32(p_versionId);
+      l_packet.WriteUint32(p_startPeriod);
+      l_packet.WriteUint32(p_endPeriod);
+      l_packet.WriteUint32(p_entityId);
 
-      packet.Release();
-      NetworkManager.Send(packet);
-      return requestId;
+      l_packet.Release();
+      NetworkManager.Send(l_packet);
+      return l_requestId;
+    }
+
+    public Int32 GetFactFinancial(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    {
+      ByteBuffer l_packet = new ByteBuffer((UInt16)ClientMessage.CMSG_GET_FACT);
+      Int32 l_requestId = l_packet.AssignRequestId();
+
+      l_packet.WriteUint8((byte)Account.AccountProcess.FINANCIAL);
+      l_packet.WriteUint32(p_entityId);
+      l_packet.WriteUint32(p_versionId);
+      l_packet.WriteUint32(p_clientId);
+      l_packet.WriteUint32(p_productId);
+      l_packet.WriteUint32(p_adjustmentId);
+
+      l_packet.Release();
+      NetworkManager.Send(l_packet);
+      return (l_requestId);
     }
 
     public void UpdateList(SafeDictionary<string, Fact> p_factsCommitDict)
@@ -66,14 +86,12 @@ namespace FBI.MVC.Model
       NetworkManager.Send(packet);
     }
 
-    public Int32 Delete(Fact p_fact)
+    public void Delete(Fact p_fact)
     {
       ByteBuffer l_packet = new ByteBuffer(Convert.ToUInt16(ClientMessage.CMSG_DELETE_FACT));
-      Int32 l_requestId = l_packet.AssignRequestId();
       l_packet.WriteUint32(p_fact.Id);
       l_packet.Release();
       NetworkManager.Send(l_packet);
-      return l_requestId;
     }
 
     private void UpdateListAnswer(ByteBuffer packet)
@@ -124,15 +142,8 @@ namespace FBI.MVC.Model
 
     private void DeleteFactAnswer(ByteBuffer packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
-      {
-        Int32 l_requestId = packet.GetRequestId();
-        if (DeleteEvent != null)
-          DeleteEvent(packet.GetError(), l_requestId);
-      }
-      else
-        if (DeleteEvent != null)
-          DeleteEvent(packet.GetError(), 0);
+      if (DeleteEvent != null)
+        DeleteEvent(packet.GetError(), packet.ReadUint32());
     }
   }
 }

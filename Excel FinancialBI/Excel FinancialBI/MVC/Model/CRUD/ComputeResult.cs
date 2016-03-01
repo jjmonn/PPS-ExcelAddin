@@ -60,6 +60,9 @@ namespace FBI.MVC.Model.CRUD
         l_result.m_aggregationPeriodList = PeriodModel.GetPeriodList((Int32)p_request.StartPeriod, (Int32)p_request.NbPeriods, l_aggregationTimeConfig);
       else
         l_result.m_aggregationPeriodList = new List<Int32>();
+
+      Int32 l_nbValues = p_packet.ReadInt32();
+      l_result.Values = new SafeDictionary<ResultKey, double>(l_nbValues);
       return (l_result);
     }
 

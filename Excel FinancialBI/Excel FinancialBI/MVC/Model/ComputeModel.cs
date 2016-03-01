@@ -60,6 +60,10 @@ namespace FBI.MVC.Model
       if (p_packet.GetError() != ErrorMessage.SUCCESS)
       {
         ComputeCompleteEvent(p_packet.GetError(), null, null);
+        m_requestAxisList.Clear();
+        m_requestList.Clear();
+        m_requestList.Clear();
+        m_toDiffList.Clear();
         return;
       }
       Int32 l_requestId = p_packet.GetRequestId();

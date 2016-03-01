@@ -31,7 +31,7 @@ namespace FBI.MVC.Model
     List<string> m_clientsToBeCreated = new List<string>();
     private List<Int32> m_periodsList;
     SafeDictionary<DimensionKey, Fact> m_previousWeeksFacts = new SafeDictionary<DimensionKey, Fact>();
-    SafeDictionary<Int32, EditedRHFact> m_requestIdDeletedFacts = new SafeDictionary<int, EditedRHFact>();
+    SafeDictionary<UInt32, EditedRHFact> m_factIdDeletedFacts = new SafeDictionary<UInt32, EditedRHFact>();
 
     public RHEditedFactsManager(List<Int32> p_periodsList)
     {
@@ -128,10 +128,8 @@ namespace FBI.MVC.Model
 
       FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
       m_requestIdList.Clear();
-      foreach (AxisElem l_employee in l_employeesList)
-      {
-        m_requestIdList.Add(FactsModel.Instance.GetFact(m_RHAccountId, l_entity.Id, l_employee.Id, m_versionId, (UInt32)l_startPeriod, (UInt32)p_periodsList.ElementAt(p_periodsList.Count - 1)));
-      }
+
+      m_requestIdList.Add(FactsModel.Instance.GetFactRH(m_RHAccountId, l_entity.Id, l_employeesList, m_versionId, (UInt32)l_startPeriod, (UInt32)p_periodsList.ElementAt(p_periodsList.Count - 1)));
     }
 
     private void AfterRHFactsDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
@@ -256,7 +254,10 @@ namespace FBI.MVC.Model
             // définir les règles sur papier au préalable !
             l_RHEditedFact.ClientId = l_RHEditedFact.EditedClientId;
             if (l_RHEditedFact.EditedClientId == 0)
-              m_requestIdDeletedFacts.Add(FactsModel.Instance.Delete(l_RHEditedFact), l_RHEditedFact);
+            {
+              m_factIdDeletedFacts.Add(l_RHEditedFact.Id, l_RHEditedFact);
+              FactsModel.Instance.Delete(l_RHEditedFact);
+            }
             else
               l_factsCommitDict.Add(l_RHEditedFact.Cell.Address, l_RHEditedFact);
           }
@@ -324,11 +325,11 @@ namespace FBI.MVC.Model
       AddinModuleController.SetExcelInteractionState(true);
     }
 
-    private void AfterFactDelete(ErrorMessage p_status, Int32 p_requestId)
+    private void AfterFactDelete(ErrorMessage p_status, UInt32 p_factId)
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
-        EditedRHFact l_editedFact = m_requestIdDeletedFacts[p_requestId];
+        EditedRHFact l_editedFact = m_factIdDeletedFacts[p_factId];
         if (l_editedFact == null)
           return;
         m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
@@ -338,7 +339,7 @@ namespace FBI.MVC.Model
         // put back edited client to fact Client Id value
         // Log commit error
       }
-      m_requestIdDeletedFacts.Remove(p_requestId);   
+      m_factIdDeletedFacts.Remove(p_factId);   
     }
 
     private void AfterFactTagsCommit(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)

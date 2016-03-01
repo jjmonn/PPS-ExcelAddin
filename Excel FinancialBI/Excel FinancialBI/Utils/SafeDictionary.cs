@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 public class SafeDictionary<TKey, TValue> : Dictionary<TKey, TValue>
 {
+  public SafeDictionary()
+  {
+
+  }
+
+  public SafeDictionary(int p_capacity) : base(p_capacity)
+  {
+
+  }
+
   new public TValue this[TKey key] 
   {
     get
