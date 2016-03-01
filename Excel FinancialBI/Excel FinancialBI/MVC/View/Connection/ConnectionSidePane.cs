@@ -152,7 +152,7 @@ namespace FBI.MVC.View
       if (Addin.Connect(m_userNameTextBox.Text, m_passwordTextBox.Text) == false)
       {
         this.BackgroundWorker1.CancelAsync();
-        Forms.MsgBox.Show(Local.GetValue("connection.msg_wrong_credentials"));     // TO DO: procedure
+        Forms.MsgBox.Show(Local.GetValue("connection.error.connection_refused"));
       }
       else
       {
