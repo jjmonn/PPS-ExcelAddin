@@ -237,6 +237,10 @@ namespace FBI.MVC.Model
       {
         if (l_RHEditedFact.EditedFactTag.Tag != FactTag.TagType.NONE)
         {
+          // Attention
+          // CD : value  = 0, client = CD ?
+
+          // règle CP -> autres règles -> va dans editedFactRH
           UInt32 l_lastAllocatedClient = GetLastAllocatedClient(l_RHEditedFact);
           if (l_lastAllocatedClient != l_RHEditedFact.ClientId)
           {
@@ -248,6 +252,8 @@ namespace FBI.MVC.Model
         {
           if (l_RHEditedFact.EditedFactStatus == EditedFactStatus.DifferentInput)
           {
+            // attention en fonction de la valeur du client la valeur change -> Va dans EditedFactRH !
+            // définir les règles sur papier au préalable !
             l_RHEditedFact.ClientId = l_RHEditedFact.EditedClientId;
             if (l_RHEditedFact.EditedClientId == 0)
               m_requestIdDeletedFacts.Add(FactsModel.Instance.Delete(l_RHEditedFact), l_RHEditedFact);
