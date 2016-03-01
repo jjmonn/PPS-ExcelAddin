@@ -19,7 +19,7 @@ namespace FBI.MVC.View
   using FBI.Network;
   using Microsoft.VisualBasic;
 
-  public partial class VersionsView : UserControl, IView
+  public partial class VersionsView : UserControl, IPlatformMgtView
   {
     private VersionsController m_controller;
     private FbiTreeView<Version> m_versionsTreeview;
@@ -106,6 +106,15 @@ namespace FBI.MVC.View
       this.m_deleteRCMButton.Click += new System.EventHandler(this.OnClickDelete);
 
       Addin.SuscribeAutoLock(this);
+    }
+
+    public void CloseView()
+    {
+      VersionModel.Instance.CreationEvent -= AfterCreate;
+      VersionModel.Instance.ReadEvent -= AfterRead;
+      VersionModel.Instance.UpdateEvent -= AfterUpdate;
+      VersionModel.Instance.CopyEvent -= AfterCopy;
+      VersionModel.Instance.DeleteEvent -= AfterDelete;
     }
 
     private void MultilanguageSetup()

@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using FBI.Forms;
   using Network;
 
-  public partial class AxisBaseView<TControllerType> : UserControl, IView where TControllerType : class, IAxisController
+  public partial class AxisBaseView<TControllerType> : UserControl, IPlatformMgtView where TControllerType : class, IAxisController
   {
     protected FbiDataGridView m_dgv = new FbiDataGridView();
     protected TControllerType m_controller;
@@ -97,6 +97,13 @@ namespace FBI.MVC.View
       m_createNewAxisElemMenuTop.Click += OnClickCreate;
       m_deleteAxisElemMenuTop.Click += OnClickDelete;
       Addin.SuscribeAutoLock(this);
+    }
+
+    public virtual void CloseView()
+    {
+      AxisElemModel.Instance.ReadEvent -= OnModelRead;
+      AxisElemModel.Instance.DeleteEvent -= OnModelDelete;
+      AxisFilterModel.Instance.ReadEvent -= OnModelReadAxisFilter;
     }
 
     #endregion

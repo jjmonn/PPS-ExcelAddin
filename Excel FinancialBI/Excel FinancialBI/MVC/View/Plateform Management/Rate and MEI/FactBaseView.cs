@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using Utils;
   using Network;
 
-  public abstract partial class FactBaseView<TVersion, TControllerType> : UserControl, IView
+  public abstract partial class FactBaseView<TVersion, TControllerType> : UserControl, IPlatformMgtView
     where TVersion : BaseVersion, NamedHierarchyCRUDEntity, new()
     where TControllerType : IFactBaseController<TVersion>
   {
@@ -105,6 +105,14 @@ namespace FBI.MVC.View
       m_versionModel.CreationEvent += OnModelCreateVersion;
       m_versionModel.DeleteEvent += OnModelDeleteVersion;
       Addin.SuscribeAutoLock(this);
+    }
+
+    public virtual void CloseView()
+    {
+      m_versionModel.ReadEvent -= OnModelReadVersion;
+      m_versionModel.UpdateEvent -= OnModelUpdateVersion;
+      m_versionModel.CreationEvent -= OnModelCreateVersion;
+      m_versionModel.DeleteEvent -= OnModelDeleteVersion;
     }
 
     #region User Callback

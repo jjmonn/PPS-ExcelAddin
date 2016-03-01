@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using Utils;
   using Network;
 
-  public partial class UsersView : UserControl, IView
+  public partial class UsersView : UserControl, IPlatformMgtView
   {
     enum Column
     {
@@ -75,6 +75,16 @@ namespace FBI.MVC.View
       UserAllowedEntityModel.Instance.CreationEvent += OnUserAllowedModelCreationEvent;
       m_userDGV.CellMouseDown += OnCellMouseDown;
       Addin.SuscribeAutoLock(this);
+    }
+
+    public void CloseView()
+    {
+      UserModel.Instance.UpdateEvent -= OnUserModelUpdateEvent;
+      UserModel.Instance.ReadEvent -= OnUserModelReadEvent;
+      UserAllowedEntityModel.Instance.UpdateEvent -= OnUserAllowedModelUpdateEvent;
+      UserAllowedEntityModel.Instance.ReadEvent -= OnUserAllowedModelReadEvent;
+      UserAllowedEntityModel.Instance.DeleteEvent -= OnUserAllowedModelDeleteEvent;
+      UserAllowedEntityModel.Instance.CreationEvent -= OnUserAllowedModelCreationEvent;
     }
 
     void EntitiesTVInit()

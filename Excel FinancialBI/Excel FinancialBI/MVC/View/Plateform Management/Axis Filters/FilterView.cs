@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Network;
 
-  public partial class FilterView : UserControl, IView
+  public partial class FilterView : UserControl, IPlatformMgtView
   {
     private FbiFilterHierarchyTreeView m_tree;
     private FilterController m_controller;
@@ -95,6 +95,14 @@ namespace FBI.MVC.View
       FilterValueModel.Instance.DeleteEvent += OnModelDelete;
       FilterValueModel.Instance.UpdateEvent += OnModelUpdate;
       Addin.SuscribeAutoLock(this);
+    }
+
+    public void CloseView()
+    {
+      FilterValueModel.Instance.ReadEvent -= OnModelRead;
+      FilterValueModel.Instance.CreationEvent -= OnModelCreate;
+      FilterValueModel.Instance.DeleteEvent -= OnModelDelete;
+      FilterValueModel.Instance.UpdateEvent -= OnModelUpdate;
     }
 
     private void OnTreeNodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)

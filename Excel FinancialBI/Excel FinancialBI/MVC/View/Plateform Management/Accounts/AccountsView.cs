@@ -22,7 +22,7 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Utils.BNF;
 
-  public partial class AccountsView : UserControl, IView
+  public partial class AccountsView : UserControl, IPlatformMgtView
   {
 
     #region Variables
@@ -113,7 +113,17 @@ namespace FBI.MVC.View
 
       m_accountTV.MouseDown += OnAccountsTreeviewMouseDown;
       m_accountTV.NodeDropped += OnAccountsTreeviewNodeDropped;
+    }
 
+    public void CloseView()
+    {
+      AccountModel.Instance.UpdateEvent -= OnModelUpdate;
+      AccountModel.Instance.ReadEvent -= OnModelRead;
+      AccountModel.Instance.CreationEvent -= OnAccountModelCreation;
+      AccountModel.Instance.DeleteEvent -= OnModelDelete;
+
+      GlobalFactModel.Instance.ReadEvent -= OnGlobalFactModelRead;
+      GlobalFactModel.Instance.DeleteEvent -= OnGlobalFactModelDelete;
     }
 
     private void DefineUIPermissions()

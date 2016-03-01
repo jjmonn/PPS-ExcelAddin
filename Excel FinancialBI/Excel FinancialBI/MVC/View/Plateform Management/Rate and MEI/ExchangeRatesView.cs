@@ -51,6 +51,15 @@ namespace FBI.MVC.View
       ExchangeRateModel.Instance.DeleteEvent += OnModelDeleteRate;
     }
 
+    public override void CloseView()
+    {
+      base.CloseView();
+      ExchangeRateModel.Instance.ReadEvent -= OnModelReadRate;
+      ExchangeRateModel.Instance.UpdateEvent -= OnModelUpdateRate;
+      ExchangeRateModel.Instance.CreationEvent -= OnModelUpdateRate;
+      ExchangeRateModel.Instance.DeleteEvent -= OnModelDeleteRate;
+    }
+
     #region Initialize
 
     void InitPeriods(List<Int32> p_monthList)

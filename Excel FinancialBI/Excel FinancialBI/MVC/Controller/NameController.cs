@@ -12,7 +12,7 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
 
-  public abstract class NameController<T> : BasePlatformMgtComponent<T>, IController where T : ContainerControl, IView
+  public abstract class NameController<T> : BasePlatformMgtComponent<T>, IController where T : ContainerControl, IPlatformMgtView
   {
     public string Error { get; set; }
     public abstract IView View { get; }
