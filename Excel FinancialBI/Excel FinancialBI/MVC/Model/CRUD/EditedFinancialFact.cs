@@ -31,7 +31,7 @@ namespace FBI.MVC.Model.CRUD
     public void UpdateFinancialFact(Fact p_fact)
     {
       UpdateFactBase(p_fact);
-
+      Value = p_fact.Value;
       ClientId = p_fact.ClientId;
       SetFactValueStatus();
     }

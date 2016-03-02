@@ -31,7 +31,7 @@ namespace FBI.MVC.Model
     List<string> m_clientsToBeCreated = new List<string>();
     private List<Int32> m_periodsList;
     SafeDictionary<DimensionKey, Fact> m_previousWeeksFacts = new SafeDictionary<DimensionKey, Fact>();
-    SafeDictionary<UInt32, EditedRHFact> m_factIdDeletedFacts = new SafeDictionary<UInt32, EditedRHFact>();
+    SafeDictionary<UInt32, EditedRHFact> m_IdEditedFactDict = new SafeDictionary<UInt32, EditedRHFact>();
 
     public RHEditedFactsManager(List<Int32> p_periodsList)
     {
@@ -40,14 +40,18 @@ namespace FBI.MVC.Model
 
       FactsModel.Instance.UpdateEvent += AfterFactsCommit;
       FactsModel.Instance.DeleteEvent += AfterFactDelete;
+      FactTagModel.Instance.CreationEvent += AfterFactTagCreate;
       FactTagModel.Instance.UpdateListEvent += AfterFactTagsCommit;
+      FactTagModel.Instance.DeleteEvent += AfterFactTagDelete;
     }
 
     public void Dispose()
     {
       FactsModel.Instance.UpdateEvent -= AfterFactsCommit;
       FactsModel.Instance.DeleteEvent -= AfterFactDelete;
+      FactTagModel.Instance.CreationEvent -= AfterFactTagCreate;
       FactTagModel.Instance.UpdateListEvent -= AfterFactTagsCommit;
+      FactTagModel.Instance.DeleteEvent -= AfterFactTagDelete;
       // dispose edited facts
       m_RHEditedFacts.Clear();
       // EMPTY dictionnaries etc.
@@ -230,73 +234,95 @@ namespace FBI.MVC.Model
       }
 
       SafeDictionary<string, Fact> l_factsCommitDict = new SafeDictionary<string, Fact>();
-      List<FactTag> l_factsTagCommitDict = new List<FactTag>();
+      List<FactTag> l_factsTagCommitList = new List<FactTag>();
       foreach (EditedRHFact l_RHEditedFact in m_RHEditedFacts.Values)
       {
         if (l_RHEditedFact.EditedFactTag.Tag != FactTag.TagType.NONE)
-        {
-          // Attention
-          // CD : value  = 0, client = CD ?
-
-          // règle CP -> autres règles -> va dans editedFactRH
-          UInt32 l_lastAllocatedClient = GetLastAllocatedClient(l_RHEditedFact);
-          if (l_lastAllocatedClient != l_RHEditedFact.ClientId)
-          {
-            l_RHEditedFact.ClientId = l_lastAllocatedClient;
-            l_factsCommitDict.Add(l_RHEditedFact.Cell.Address, l_RHEditedFact);
-          }
-        }
+          ClientAllocationFromTagType(l_RHEditedFact, l_factsCommitDict);
         else
-        {
-          if (l_RHEditedFact.EditedFactStatus == EditedFactStatus.DifferentInput)
-          {
-            // attention en fonction de la valeur du client la valeur change -> Va dans EditedFactRH !
-            // définir les règles sur papier au préalable !
-            l_RHEditedFact.ClientId = l_RHEditedFact.EditedClientId;
-            if (l_RHEditedFact.EditedClientId == 0)
-            {
-              m_factIdDeletedFacts.Add(l_RHEditedFact.Id, l_RHEditedFact);
-              FactsModel.Instance.Delete(l_RHEditedFact);
-            }
-            else
-              l_factsCommitDict.Add(l_RHEditedFact.Cell.Address, l_RHEditedFact);
-          }
-        }
+          RegularClientAllocation(l_RHEditedFact, l_factsCommitDict);
 
         if (l_RHEditedFact.EditedFactTag.Tag != l_RHEditedFact.ModelFactTag.Tag)
-        {
-          l_RHEditedFact.ModelFactTag.Tag = l_RHEditedFact.EditedFactTag.Tag;
-          l_factsTagCommitDict.Add(l_RHEditedFact.EditedFactTag);
-        }
+          FactTagAllocation(l_RHEditedFact, l_factsTagCommitList);
       }
       AddinModuleController.SetExcelInteractionState(false);
       FactsModel.Instance.UpdateList(l_factsCommitDict);
-      FactTagModel.Instance.UpdateList(l_factsTagCommitDict);
+      FactTagModel.Instance.UpdateList(l_factsTagCommitList);
     }
+
+    private void ClientAllocationFromTagType(EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
+    {
+      switch (p_editedFact.EditedFactTag.Tag)
+      {
+        case FactTag.TagType.CP:
+          UInt32 l_lastAllocatedClient = GetLastAllocatedClient(p_editedFact);
+          if (l_lastAllocatedClient != p_editedFact.ClientId)
+          {
+            p_editedFact.ClientId = l_lastAllocatedClient;
+            p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
+          }
+          break;
+
+        case FactTag.TagType.FER:
+          
+          // insert into legal holiday
+
+          break;
+
+        default:
+          p_editedFact.ClientId = (UInt32)AxisType.Client;
+          p_editedFact.Value = 0;
+          p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
+          break;
+      }
+    }
+
+    private void RegularClientAllocation(EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
+    {
+      if (p_editedFact.EditedFactStatus == EditedFactStatus.DifferentInput)
+      {
+        p_editedFact.ClientId = p_editedFact.EditedClientId;
+        p_editedFact.Value = 1;
+        if (p_editedFact.EditedClientId == 0)
+        {
+          m_IdEditedFactDict.Add(p_editedFact.Id, p_editedFact);
+          FactsModel.Instance.Delete(p_editedFact);
+        }
+        else
+          p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
+      }
+    }
+
+    private void FactTagAllocation(EditedRHFact p_RHEditedFact, List<FactTag> p_factsTagCommitList)
+    {
+      m_IdEditedFactDict.Add(p_RHEditedFact.Id, p_RHEditedFact);
+      p_RHEditedFact.ModelFactTag.Tag = p_RHEditedFact.EditedFactTag.Tag;
+      FactTag l_factTag = FactTagModel.Instance.GetValue(p_RHEditedFact.Id);
+
+      if (l_factTag != null)
+      {
+        if (p_RHEditedFact.EditedFactTag.Tag == FactTag.TagType.NONE)
+        {
+          p_RHEditedFact.ClientId = p_RHEditedFact.EditedClientId;
+          FactsModel.Instance.Delete(p_RHEditedFact);
+          FactTagModel.Instance.Delete(l_factTag.Id);
+        }
+        else
+          p_factsTagCommitList.Add(p_RHEditedFact.EditedFactTag);
+      }
+      else
+        FactTagModel.Instance.Create(p_RHEditedFact.EditedFactTag);
+    }
+
 
     private void LaunchClientsAutoCreation()
     {
       // TO DO
       // launch clients autocreation controller
-    }
+    } 
 
-    private UInt32 GetLastAllocatedClient(EditedRHFact p_editedFact)
-    {
-      for (Int32 l_period = (Int32)p_editedFact.Period; l_period > m_periodsList.ElementAt(0); l_period -= 1)
-      {
-        DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
-        EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
-        if (l_RHEditedFact != null && l_RHEditedFact.ClientId != 0)
-          return l_RHEditedFact.ClientId;
-        else
-        {
-          Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
-          if (l_fact != null && l_fact.ClientId != 0)
-            return l_fact.ClientId;
-        }
-      }
-      return (UInt32)AxisType.Client;
-    }
+
+    #region After commits events
 
     private void AfterFactsCommit(ErrorMessage p_status, Dictionary<string, ErrorMessage> p_resultsDict)
     {
@@ -329,29 +355,44 @@ namespace FBI.MVC.Model
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
-        EditedRHFact l_editedFact = m_factIdDeletedFacts[p_factId];
-        if (l_editedFact == null)
-          return;
-        m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+        EditedRHFact l_editedFact = m_IdEditedFactDict[p_factId];
+        if (l_editedFact != null)
+          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
       }
       else
       {
         // put back edited client to fact Client Id value
         // Log commit error
       }
-      m_factIdDeletedFacts.Remove(p_factId);   
+      m_IdEditedFactDict.Remove(p_factId);
     }
+
+    private void AfterFactTagCreate(ErrorMessage status, UInt32 id)
+    {
+      EditedRHFact l_editedFact = m_IdEditedFactDict[id];
+      if (l_editedFact != null)
+      {
+        if (status == ErrorMessage.SUCCESS)
+          FillSingleCell(l_editedFact.Cell, EditedFactStatus.InputEqual);
+        else
+          l_editedFact.ModelFactTag.Tag = FactTag.TagType.NONE;
+        m_IdEditedFactDict.Remove(id);
+      }
+    }
+
+    // use single Fact Tag Update ?
 
     private void AfterFactTagsCommit(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
     {
       AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
       {
-        foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
+        foreach (KeyValuePair<UInt32, bool> l_result in p_updateResults)
         {
-          if (p_updateResults.ContainsKey(l_editedFact.Id))
+          EditedRHFact l_editedFact = m_IdEditedFactDict[l_result.Key];
+          if (l_editedFact != null)
           {
-            if (p_updateResults[l_editedFact.Id] == true)
+            if (l_result.Value == true)
               m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
             else
             {
@@ -360,6 +401,7 @@ namespace FBI.MVC.Model
                 l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
               OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
             }
+            m_IdEditedFactDict.Remove(l_result.Key);
           }
         }
       }
@@ -370,6 +412,28 @@ namespace FBI.MVC.Model
       }
       AddinModuleController.SetExcelInteractionState(true);
     }
+
+    private void AfterFactTagDelete(ErrorMessage status, UInt32 id)
+    {
+      EditedRHFact l_editedFact = m_IdEditedFactDict[id];
+      if (l_editedFact != null)
+      {
+        if (status == ErrorMessage.SUCCESS)
+          FillSingleCell(l_editedFact.Cell, EditedFactStatus.InputEqual);
+        else
+        {
+          FactTag l_factTag = FactTagModel.Instance.GetValue(id);
+          if (l_factTag != null)
+          {
+            l_editedFact.ModelFactTag.Tag = l_factTag.Tag;
+            FillSingleCell(l_editedFact.Cell, EditedFactStatus.DifferentInput);
+          }
+        }
+        m_IdEditedFactDict.Remove(id);
+      }
+    }
+
+    #endregion
 
     #region Utils
 
@@ -416,6 +480,32 @@ namespace FBI.MVC.Model
         return (FactTag.TagType)m_factsTagList.FindIndex(x => x.StartsWith(p_cell.Value2 as string));
       }
       return FactTag.TagType.NONE;
+    }
+
+    private UInt32 GetLastAllocatedClient(EditedRHFact p_editedFact)
+    {
+      for (Int32 l_period = (Int32)p_editedFact.Period; l_period > m_periodsList.ElementAt(0); l_period -= 1)
+      {
+        DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
+        EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
+        if (l_RHEditedFact != null && l_RHEditedFact.ClientId != 0)
+          return l_RHEditedFact.ClientId;
+        else
+        {
+          Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
+          if (l_fact != null && l_fact.ClientId != 0)
+            return l_fact.ClientId;
+        }
+      }
+      // Commit status could be orange when last allocated client is default 
+      return (UInt32)AxisType.Client;
+    }
+
+    private void FillSingleCell(Range p_cell, EditedFactStatus p_status)
+    {
+      AddinModuleController.SetExcelInteractionState(false);
+      m_rangeHighlighter.FillCellColor(p_cell, p_status);
+      AddinModuleController.SetExcelInteractionState(true);
     }
 
     #endregion

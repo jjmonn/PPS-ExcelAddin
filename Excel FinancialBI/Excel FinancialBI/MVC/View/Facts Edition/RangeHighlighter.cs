@@ -69,8 +69,11 @@ namespace FBI.MVC.View
       p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputsFillColor;
     }
 
-    private void FillInputCellRed(Range p_cell)
+    public void FillInputCellRed(Range p_cell)
     {
+      if (p_cell == null)
+        return;
+
       RegisterCellOriginalFill(p_cell);
       p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputsRedFill;
     }

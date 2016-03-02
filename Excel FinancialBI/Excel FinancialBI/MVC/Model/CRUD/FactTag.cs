@@ -14,6 +14,7 @@ namespace FBI.MVC.Model.CRUD
     {
       NONE = 0,
       CP,
+      FER,
       CD,
       RI,
       RD,

@@ -53,7 +53,6 @@ namespace FBI.MVC.Model
     protected void UpdateFactBase(Fact p_fact)
     {
       Id = p_fact.Id;
-      Value = p_fact.Value;
       ClientId = p_fact.ClientId;
       ProductId = p_fact.ProductId;
       AdjustmentId = p_fact.AdjustmentId;

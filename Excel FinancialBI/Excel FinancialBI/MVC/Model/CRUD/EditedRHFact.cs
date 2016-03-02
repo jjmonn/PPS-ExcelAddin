@@ -30,6 +30,7 @@ namespace FBI.MVC.Model
       this.EditedFactTag = l_factTag;
       this.ModelFactTag = new FactTag();
       this.ModelFactTag.Tag = FactTag.TagType.NONE;
+      Value = 1;
       m_address = Cell.Address;
       EditedFactTagStatus = EditedFactStatus.FactTagEqual;   
     }
@@ -57,6 +58,11 @@ namespace FBI.MVC.Model
 
     public void SetCellStatusRH()
     {
+      if (EditedFactTag.Tag != FactTag.TagType.NONE && EditedFactTag.Tag == ModelFactTag.Tag)
+      {
+        SetFactTagDifferenceStatus();
+        return;
+      }
       if (EditedClientId != ClientId && EditedFactTag.Tag == ModelFactTag.Tag)  
       {
         SetClientDifferenceStatus();
