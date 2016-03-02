@@ -22,7 +22,7 @@ namespace FBI.MVC.Controller
   };
 
   public abstract class FactBaseController<TView, TVersion> : NameController<TView>, IFactBaseController<TVersion>
-    where TView : ContainerControl, IView
+    where TView : ContainerControl, IPlatformMgtView
     where TVersion : BaseVersion, NamedCRUDEntity, new()
   {
     public override IView View { get { return (m_view); } }

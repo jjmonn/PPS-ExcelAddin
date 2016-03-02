@@ -61,6 +61,17 @@ namespace FBI.MVC.View
       GlobalFactModel.Instance.DeleteEvent += OnModelDeleteGFact;
     }
 
+    public override void CloseView()
+    {
+      base.CloseView();
+      GlobalFactDataModel.Instance.ReadEvent -= OnModelReadGFactData;
+      GlobalFactDataModel.Instance.UpdateEvent -= OnModelUpdateGFactData;
+      GlobalFactDataModel.Instance.CreationEvent -= OnModelUpdateGFactData;
+      GlobalFactDataModel.Instance.DeleteEvent -= OnModelDeleteGFactData;
+      GlobalFactModel.Instance.ReadEvent -= OnModelReadGFact;
+      GlobalFactModel.Instance.DeleteEvent -= OnModelDeleteGFact;
+    }
+
     #region Initialize
 
     void InitPeriods(List<Int32> p_monthList)

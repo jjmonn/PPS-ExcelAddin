@@ -49,7 +49,7 @@ namespace FBI.MVC.View
       SuscribeEvents();
     }
 
-    public void SuscribeEvents()
+    void SuscribeEvents()
     {
       m_dgv.MouseDown += OnDGVMouseDown;
       m_entitiesTV.NodeMouseDown += OnNodeSelect;
@@ -58,6 +58,15 @@ namespace FBI.MVC.View
       AxisOwnerModel.Instance.ReadEvent += OnModelReadAxisOwner;
       AxisOwnerModel.Instance.CreationEvent += OnModelCreateAxisOwner;
       AxisOwnerModel.Instance.UpdateEvent += OnModelUpdateAxisOwner;
+    }
+
+    public override void CloseView()
+    {
+      base.CloseView();
+      AxisElemModel.Instance.CreationEvent -= OnModelCreateAxisElem;
+      AxisOwnerModel.Instance.ReadEvent -= OnModelReadAxisOwner;
+      AxisOwnerModel.Instance.CreationEvent -= OnModelCreateAxisOwner;
+      AxisOwnerModel.Instance.UpdateEvent -= OnModelUpdateAxisOwner;
     }
     
     #region User Callback

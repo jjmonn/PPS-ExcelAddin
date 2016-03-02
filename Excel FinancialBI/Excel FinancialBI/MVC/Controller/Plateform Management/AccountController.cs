@@ -16,7 +16,6 @@ namespace FBI.MVC.Controller
 
   class AccountController : NameController<AccountsView>
   {
-
     #region Variables
 
     public override IView View { get { return (m_view); } }

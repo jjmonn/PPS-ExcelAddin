@@ -90,6 +90,15 @@ namespace FBI.MVC.View
       Addin.SuscribeAutoLock(this);
     }
 
+    protected override void OnClosed(EventArgs e)
+    {
+      base.OnClosed(e);
+      FilterModel.Instance.ReadEvent -= OnModelRead;
+      FilterModel.Instance.CreationEvent -= OnModelCreate;
+      FilterModel.Instance.DeleteEvent -= OnModelDelete;
+      FilterModel.Instance.UpdateEvent -= OnModelUpdate;
+    }
+
     #region Utils
 
     private bool HasChild()

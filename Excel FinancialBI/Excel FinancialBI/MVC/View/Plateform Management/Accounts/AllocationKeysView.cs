@@ -19,7 +19,7 @@ namespace FBI.MVC.View
   using Forms;
   using Utils;
 
-  public partial class AllocationKeysView : Form, IView
+  public partial class AllocationKeysView : Form, IPlatformMgtView
   {
 
     #region Variables
@@ -66,6 +66,12 @@ namespace FBI.MVC.View
       EntityDistributionModel.Instance.ReadEvent += OnModelRead;
       EntityDistributionModel.Instance.UpdateEvent += OnModelUpdate;
       Addin.SuscribeAutoLock(this);
+    }
+
+    public void CloseView()
+    {
+      EntityDistributionModel.Instance.ReadEvent -= OnModelRead;
+      EntityDistributionModel.Instance.UpdateEvent -= OnModelUpdate;
     }
 
     private void DGVInit()

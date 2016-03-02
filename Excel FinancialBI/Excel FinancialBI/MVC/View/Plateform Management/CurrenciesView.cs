@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using Network;
   
 
-  public partial class CurrenciesView : UserControl, IView
+  public partial class CurrenciesView : UserControl, IPlatformMgtView
   {
     FbiDataGridView m_dgv = new FbiDataGridView();
     CurrenciesController m_controller;
@@ -80,6 +80,12 @@ namespace FBI.MVC.View
       CurrencyModel.Instance.ReadEvent += OnModelRead;
       CurrencyModel.Instance.DeleteEvent += OnModelDelete;
       Addin.SuscribeAutoLock(this);
+    }
+
+    public void CloseView()
+    {
+      CurrencyModel.Instance.ReadEvent -= OnModelRead;
+      CurrencyModel.Instance.DeleteEvent -= OnModelDelete;
     }
 
     delegate void OnModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);

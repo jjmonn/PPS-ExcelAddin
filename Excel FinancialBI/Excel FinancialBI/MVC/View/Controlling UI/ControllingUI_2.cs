@@ -31,7 +31,6 @@ namespace FBI.MVC.View
     public ControllingUI_2()
     {
       InitializeComponent();
-      
     }
 
     public void SetController(IController p_controller)
@@ -65,6 +64,12 @@ namespace FBI.MVC.View
       m_versionComparisonButton.MouseDown += OnVersionComparisionButtonMouseDown;
       m_versionSwitchButton.MouseDown += OnVersionSwitchButtonMouseDown;
       m_hideVersionButton.MouseDown += OnHideVersionButtonMouseDown;
+    }
+
+    override protected void OnClosed(EventArgs e)
+    {
+      base.OnClosed(e);
+      LegacyComputeModel.Instance.ComputeCompleteEvent -= OnComputeResult;
     }
 
     private void MultilangueSetup()

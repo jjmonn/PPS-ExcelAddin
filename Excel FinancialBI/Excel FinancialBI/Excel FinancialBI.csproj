@@ -442,6 +442,7 @@
     <Compile Include="MVC\View\GenericView.Designer.cs">
       <DependentUpon>GenericView.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\IPlateformMgtView.cs" />
     <Compile Include="MVC\View\LogView.cs">
       <SubType>Form</SubType>
     </Compile>

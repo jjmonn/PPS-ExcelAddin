@@ -24,7 +24,7 @@ namespace FBI.MVC.Controller
   }
 
   public abstract class AxisBaseController<TView, TController> : NameController<TView>, IAxisController 
-    where TView : ContainerControl, IView
+    where TView : ContainerControl, IPlatformMgtView
     where TController : class, IAxisController
   {
     public override IView View { get { return (m_view); } }
