@@ -229,6 +229,8 @@
     <string name="new_value">Nouvelle valeur</string>
     <string name="edit_structure">Editer la structure</string>
     <string name="delete_category">Supprimer la catégorie</string>
+    <string name="msg_delete_category">Supprimer la catégorie</string>
+    <string name="confirmation_delete">Etes-vous sûr ?</string>
     <string name="create_sub_category">Créer une nouvelle catégorie sous la catégorie sélectionée</string>
   
     <!--messages-->
