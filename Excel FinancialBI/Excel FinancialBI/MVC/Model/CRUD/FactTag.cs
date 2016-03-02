@@ -14,11 +14,25 @@ namespace FBI.MVC.Model.CRUD
     {
       NONE = 0,
       CP,
+      RTT,
+      Abs,
+      ALD,
       FER,
       CD,
+      FF,
       RI,
+      CT,
+      FC,
+      NF,
+      IC,
+      D,
+      A,
+      E,
+      S,
       RD,
-      RG
+      RG,
+      IT,
+      SST
     }
 
     public UInt32 Id { get; set; }

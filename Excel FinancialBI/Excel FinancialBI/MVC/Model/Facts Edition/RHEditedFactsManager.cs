@@ -255,18 +255,19 @@ namespace FBI.MVC.Model
       switch (p_editedFact.EditedFactTag.Tag)
       {
         case FactTag.TagType.CP:
-          UInt32 l_lastAllocatedClient = GetLastAllocatedClient(p_editedFact);
-          if (l_lastAllocatedClient != p_editedFact.ClientId)
-          {
-            p_editedFact.ClientId = l_lastAllocatedClient;
-            p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
-          }
+          AllocateToLastAllocatedClient(p_editedFact, p_factsCommitDict);
+          break;
+
+        case FactTag.TagType.RTT:
+          AllocateToLastAllocatedClient(p_editedFact, p_factsCommitDict);
+          break;
+
+        case FactTag.TagType.Abs:
+          AllocateToLastAllocatedClient(p_editedFact, p_factsCommitDict);
           break;
 
         case FactTag.TagType.FER:
-          
-          // insert into legal holiday
-
+          // TO DO: Insert into legal holiday
           break;
 
         default:
@@ -274,6 +275,16 @@ namespace FBI.MVC.Model
           p_editedFact.Value = 0;
           p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
           break;
+      }
+    }
+
+    private void AllocateToLastAllocatedClient(EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
+    {
+      UInt32 l_lastAllocatedClient = GetLastAllocatedClient(p_editedFact);
+      if (l_lastAllocatedClient != p_editedFact.ClientId)
+      {
+        p_editedFact.ClientId = l_lastAllocatedClient;
+        p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
       }
     }
 
