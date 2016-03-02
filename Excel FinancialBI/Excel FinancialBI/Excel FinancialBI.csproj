@@ -299,6 +299,7 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
     <Compile Include="MVC\Model\LegacyComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
@@ -368,6 +369,7 @@
     <Compile Include="MVC\Model\RatesVersionModel.cs" />
     <Compile Include="MVC\Model\CRUD\ResultKey.cs" />
     <Compile Include="MVC\Model\SourcedComputeModel.cs" />
+    <Compile Include="MVC\Model\LegalHolidayModel.cs" />
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />

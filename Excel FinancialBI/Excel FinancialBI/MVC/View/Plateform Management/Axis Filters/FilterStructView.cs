@@ -265,7 +265,7 @@ namespace FBI.MVC.View
     delegate void OnModelRead_delegate(ErrorMessage p_status, Filter p_attributes);
     void OnModelRead(Network.ErrorMessage p_status, Filter p_attributes)
     {
-      if (InvokeRequired)
+      if (m_tree.InvokeRequired)
       {
         OnModelRead_delegate func = new OnModelRead_delegate(OnModelRead);
         Invoke(func, p_status, p_attributes);
