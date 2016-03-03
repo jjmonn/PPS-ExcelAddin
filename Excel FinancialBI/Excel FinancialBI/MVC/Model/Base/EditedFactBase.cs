@@ -18,7 +18,8 @@ namespace FBI.MVC.Model
     FactTagEqual,
     FactTagDifferent,
     LegalHolidayEqual,
-    LegalHolidayDifferent
+    LegalHolidayDifferent,
+    Committed
   }
 
   public delegate void CellValueChangedEventHandler(Range p_cell, EditedFactStatus p_status);

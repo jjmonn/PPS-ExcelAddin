@@ -100,7 +100,7 @@ namespace FBI.MVC.Model
       {
         Int32 requestId = packet.GetRequestId();
         SafeDictionary<string, ErrorMessage> resultsDict = new SafeDictionary<string, ErrorMessage>();
-        UInt32 l_Id = packet.ReadUint32();
+        packet.ReadUint32();
         if (m_requestIdCommitDic.ContainsKey(requestId))
         {
           foreach (string cell_address in m_requestIdCommitDic[requestId])

@@ -171,7 +171,7 @@ namespace FBI.MVC.Model
         LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(l_editedFact.EmployeeId, l_editedFact.Period);
         if (l_legalHoliday != null)
         {
-          l_editedFact.ModelLegalHoliday = l_legalHoliday;
+          l_editedFact.ModelLegalHoliday.Id = l_legalHoliday.Id;
           l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.FER;
           l_editedFact.ClientId = 0;
           l_editedFact.ModelFactTag.Tag = FactTag.TagType.NONE;
@@ -224,7 +224,7 @@ namespace FBI.MVC.Model
         else
           l_previousWeeksFacts.Add(l_dimensionKey, l_fact);
       }
-      m_factsCommit = new FactsRHCommit(m_RHEditedFacts, l_previousWeeksFacts, l_IdEditedFactDict, m_periodsList, m_rangeHighlighter);
+      m_factsCommit = new FactsRHCommit(m_RHEditedFacts, l_previousWeeksFacts, l_IdEditedFactDict, m_periodsList, m_rangeHighlighter, m_RHAccountId, m_versionId);
       return true;
     }
 
