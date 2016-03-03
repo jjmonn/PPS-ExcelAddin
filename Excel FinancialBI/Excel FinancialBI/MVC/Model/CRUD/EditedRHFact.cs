@@ -61,6 +61,13 @@ namespace FBI.MVC.Model
       ModelLegalHoliday.Tag = LegalHolidayTag.NONE;
     }
 
+    public void SetId(UInt32 p_id)
+    {
+      Id = p_id;
+      EditedFactTag.Id = p_id;
+      ModelFactTag.Id = p_id;
+    }
+
     public void SetEditedClient(UInt32 p_clientId)
     {
       EditedClientId = p_clientId;
@@ -93,7 +100,8 @@ namespace FBI.MVC.Model
     public void UpdateRHFactModels(Fact p_fact, FactTag p_factTag, LegalHoliday p_legalHoliday)
     {
       UpdateFactBase(p_fact);
-    
+      SetId(p_fact.Id);
+
       if (p_factTag != null)
         ModelFactTag.Tag = p_factTag.Tag;
 

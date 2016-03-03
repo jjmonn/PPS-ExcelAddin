@@ -58,6 +58,10 @@ namespace FBI.MVC.View
           FillInputCellRed(p_cell);
           break;
 
+        case EditedFactStatus.Committed:
+          FillCellGreen(p_cell);
+          break;
+
       }
     }
 
