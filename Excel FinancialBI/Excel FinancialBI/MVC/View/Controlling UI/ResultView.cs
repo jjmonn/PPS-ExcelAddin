@@ -118,7 +118,8 @@ namespace FBI.MVC.View
             }
           }
         }
-        RemoveOrphanDimensions();
+        if (m_computeConfig.Request.Process == Account.AccountProcess.RH)
+          RemoveOrphanDimensions();
       }
     }
 
@@ -344,6 +345,8 @@ namespace FBI.MVC.View
     {
       foreach (ResultKey l_rowKey in p_dgv.Rows.Keys)
       {
+        if (l_rowKey.ContainClientSort() == false)
+          continue;
         bool hasData = false;
 
         foreach (ResultKey l_columnKey in p_dgv.Columns.Keys)
@@ -365,6 +368,8 @@ namespace FBI.MVC.View
     {
       foreach (ResultKey l_columnKey in p_dgv.Columns.Keys)
       {
+        if (l_columnKey.ContainClientSort() == false)
+          continue;
         bool hasData = false;
 
         foreach (ResultKey l_rowKey in p_dgv.Rows.Keys)

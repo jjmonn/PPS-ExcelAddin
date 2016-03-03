@@ -114,5 +114,10 @@ namespace FBI.MVC.Model.CRUD
       key += p_value.ToString();
       return (key);
     }
+
+    public bool ContainClientSort()
+    {
+      return (m_key.Item2.Contains("#t" + ((byte)AxisType.Client).ToString()));
+    }
   }
 }
