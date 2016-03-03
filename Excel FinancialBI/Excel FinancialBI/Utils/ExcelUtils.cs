@@ -19,10 +19,18 @@ namespace FBI.Utils
     public static Range CreateReceptionWS(string p_name, string[] p_headerNamesArray, string[] p_headerValuesArray)
     {
       Workbook l_workbook =   AddinModule.CurrentInstance.ExcelApp.ActiveWorkbook;
-	    Worksheet l_worksheet = (Worksheet) AddinModule.CurrentInstance.ExcelApp.Worksheets.Add();
-      RenammeWorksheet(l_worksheet, l_workbook, p_name);
-	    AddinModule.CurrentInstance.ExcelApp.ActiveWindow.DisplayGridlines = false;
-	    return FillHeader(l_worksheet, p_headerNamesArray, p_headerValuesArray);	
+      try
+      {
+        Worksheet l_worksheet = (Worksheet)AddinModule.CurrentInstance.ExcelApp.Worksheets.Add();
+        RenammeWorksheet(l_worksheet, l_workbook, p_name);
+        AddinModule.CurrentInstance.ExcelApp.ActiveWindow.DisplayGridlines = false;
+        return FillHeader(l_worksheet, p_headerNamesArray, p_headerValuesArray);
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("Excel error during worksheet insertion " + e.Message);
+        return null;
+      }
     }
 
     private static void RenammeWorksheet(Worksheet p_worksheet, Workbook p_workbook, string p_name)

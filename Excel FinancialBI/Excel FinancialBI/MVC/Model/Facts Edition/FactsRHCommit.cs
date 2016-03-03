@@ -184,162 +184,6 @@ namespace FBI.MVC.Model
         AddToLegalHolidayDeleteDictIfExists(p_editedFact);
     }
  
-
-    #region After commits events
-
-    private void AfterFactsCommit(ErrorMessage p_status, Dictionary<string, ErrorMessage> p_resultsDict)
-    {
-      if (p_status == ErrorMessage.SUCCESS)
-      {
-        AddinModuleController.SetExcelInteractionState(false);
-        foreach (KeyValuePair<string, ErrorMessage> l_addressMessagePair in p_resultsDict)
-        {
-          EditedRHFact l_editedFact = m_RHEditedFacts[l_addressMessagePair.Key];
-          if (l_editedFact != null && l_addressMessagePair.Value == ErrorMessage.SUCCESS)
-          {
-            m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-          }
-          else
-          {
-            // put back model value for ClientId, quid fact not accessible in server answer, to be modified
-            OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value);
-          }
-        }
-        AddinModuleController.SetExcelInteractionState(true);
-      }
-      else
-      {
-        // Create after commit event intercepted by the view -> only if commit fails
-        // set commit status in the ribbon as well
-      }
-      AddinModuleController.SetExcelInteractionState(true);
-    }
-
-    private void AfterFactDelete(ErrorMessage p_status, UInt32 p_factId)
-    {
-      if (p_status == ErrorMessage.SUCCESS)
-      {
-        EditedRHFact l_editedFact = m_IdEditedFactDict[p_factId];
-        if (l_editedFact != null)
-          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-      }
-      else
-      {
-        // put back edited client to fact Client Id value
-        // Log commit error
-      }
-    }
-
-    private void AfterFactTagCreate(ErrorMessage status, UInt32 id)
-    {
-      EditedRHFact l_editedFact = m_IdEditedFactDict[id];
-      if (l_editedFact != null)
-      {
-        if (status == ErrorMessage.SUCCESS)
-          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-        else
-        {
-          l_editedFact.ModelFactTag.Tag = FactTag.TagType.NONE;
-          // log commit error to view
-        }
-      }
-    }
-
-    // use single Fact Tag Update ?
-
-    private void AfterFactTagsCommit(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
-    {
-      AddinModuleController.SetExcelInteractionState(false);
-      if (p_status == ErrorMessage.SUCCESS)
-      {
-        foreach (KeyValuePair<UInt32, bool> l_result in p_updateResults)
-        {
-          EditedRHFact l_editedFact = m_IdEditedFactDict[l_result.Key];
-          if (l_editedFact != null)
-          {
-            if (l_result.Value == true)
-              m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-            else
-            {
-              FactTag l_modelFactTag = FactTagModel.Instance.GetValue(l_editedFact.Id);
-              if (l_modelFactTag != null)
-                l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
-              OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
-            }
-          }
-        }
-      }
-      else
-      {
-        // Create after commit event intercepted by the view -> only if commit fails
-        // set commit status in the ribbon as well
-      }
-      AddinModuleController.SetExcelInteractionState(true);
-    }
-
-    private void AfterFactTagDelete(ErrorMessage status, UInt32 id)
-    {
-      EditedRHFact l_editedFact = m_IdEditedFactDict[id];
-      if (l_editedFact != null)
-      {
-        if (status == ErrorMessage.SUCCESS)
-          SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputEqual);
-        else
-        {
-          FactTag l_factTag = FactTagModel.Instance.GetValue(id);
-          if (l_factTag != null)
-          {
-            l_editedFact.ModelFactTag.Tag = l_factTag.Tag;
-            SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputDifferent);
-          }
-        }
-      }
-    }
-
-    private void AfterLegalHolidayRead(ErrorMessage status, LegalHoliday p_legalHoliday)
-    {
-      if (status == ErrorMessage.SUCCESS)
-      {
-        LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(p_legalHoliday.Id);
-        if (l_legalHoliday == null)
-          return;
-
-        EditedRHFact l_editedFact = GetEditedFact(l_legalHoliday.EmployeeId, (Int32)l_legalHoliday.Period);
-          if (l_editedFact == null)
-            return;
-
-          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-        l_editedFact.ModelLegalHoliday.Id = l_legalHoliday.Id;
-        l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.FER;
-        l_editedFact.EditedLegalHoliday.Id = l_legalHoliday.Id;
-        l_editedFact.EditedLegalHoliday.Tag = LegalHolidayTag.FER;
-      }
-      else
-      {
-         // Log commit error in view
-      }
-    }
-
-    private void AfterLegalHolidayDelete(ErrorMessage status, UInt32 id)
-    {
-      if (status == ErrorMessage.SUCCESS)
-      {
-        EditedRHFact l_editedFact = m_legalHolidayDeleteDictIdEditedFact[id];
-        if (l_editedFact == null)
-          return;
-
-        m_rangeHighlighter.FillCellColor(l_editedFact.Cell, EditedFactStatus.Committed);
-        l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.NONE;       
-      }
-      else
-      {
-         // Log commit error to view
-      }
-      m_legalHolidayDeleteDictIdEditedFact.Remove(id);
-    }
-
-    #endregion
-
     private void CreateOrInsertLegalHoliday(EditedRHFact p_editedFact)
     {
       LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(p_editedFact.EmployeeId, p_editedFact.Period);
@@ -359,7 +203,6 @@ namespace FBI.MVC.Model
       }
      }
 
-   
     private void DeleteLegalHolidays()
     {
       foreach (UInt32 l_legalHolidayId in m_legalHolidayDeleteDictIdEditedFact.Keys)
@@ -378,49 +221,7 @@ namespace FBI.MVC.Model
       // TO DO
       // launch clients autocreation controller
     }
-
-    #region Utils
-
-    public UInt32 GetLastAllocatedClient(EditedRHFact p_editedFact)
-    {
-      for (Int32 l_period = (Int32)p_editedFact.Period; l_period > m_periodsList.ElementAt(0); l_period -= 1)
-      {
-        DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
-        EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
-        if (l_RHEditedFact != null && l_RHEditedFact.ClientId != 0)
-          return l_RHEditedFact.ClientId;
-        else
-        {
-          Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
-          if (l_fact != null && l_fact.ClientId != 0)
-            return l_fact.ClientId;
-        }
-      }
-      // Commit status could be orange when last allocated client is default 
-      return (UInt32)AxisType.Client;
-    }
-
-    private void SetSingleCellFillColor(Range p_cell, EditedFactStatus p_status)
-    {
-      AddinModuleController.SetExcelInteractionState(false);
-      m_rangeHighlighter.FillCellColor(p_cell, p_status);
-      AddinModuleController.SetExcelInteractionState(true);
-    }
-
-    private EditedRHFact GetEditedFact(UInt32 p_employeeId, Int32 p_period)
-    {
-      foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
-      {
-        if (l_editedFact.EmployeeId == p_employeeId && l_editedFact.Period == p_period)
-          return l_editedFact;
-      }
-      return null;
-    }
-
-  
-
-    #endregion
-
+    
     #region FactTags Creation
    
      private void CreateFactTags()
@@ -503,6 +304,202 @@ namespace FBI.MVC.Model
 
     #endregion
 
+    #region After commits events
+
+    private void AfterFactsCommit(ErrorMessage p_status, Dictionary<string, ErrorMessage> p_resultsDict)
+    {
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        AddinModuleController.SetExcelInteractionState(false);
+        foreach (KeyValuePair<string, ErrorMessage> l_addressMessagePair in p_resultsDict)
+        {
+          EditedRHFact l_editedFact = m_RHEditedFacts[l_addressMessagePair.Key];
+          if (l_editedFact != null && l_addressMessagePair.Value == ErrorMessage.SUCCESS)
+          {
+            m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+          }
+          else
+          {
+            // put back model value for ClientId, quid fact not accessible in server answer, to be modified
+            OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value);
+          }
+        }
+        AddinModuleController.SetExcelInteractionState(true);
+      }
+      else
+      {
+        // Create after commit event intercepted by the view -> only if commit fails
+        // set commit status in the ribbon as well
+      }
+      AddinModuleController.SetExcelInteractionState(true);
+    }
+
+    private void AfterFactDelete(ErrorMessage p_status, UInt32 p_factId)
+    {
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        EditedRHFact l_editedFact = m_IdEditedFactDict[p_factId];
+        if (l_editedFact != null)
+          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+      }
+      else
+      {
+        // put back edited client to fact Client Id value
+        // Log commit error
+      }
+    }
+
+    private void AfterFactTagCreate(ErrorMessage status, UInt32 id)
+    {
+      AddinModuleController.SetExcelInteractionState(false);
+      EditedRHFact l_editedFact = m_IdEditedFactDict[id];
+      if (l_editedFact != null)
+      {
+        if (status == ErrorMessage.SUCCESS)
+          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+        else
+        {
+          l_editedFact.ModelFactTag.Tag = FactTag.TagType.NONE;
+          // log commit error to view
+        }
+      }
+      AddinModuleController.SetExcelInteractionState(true);
+    }
+
+    // use single Fact Tag Update ?
+
+    private void AfterFactTagsCommit(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
+    {
+      AddinModuleController.SetExcelInteractionState(false);
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        foreach (KeyValuePair<UInt32, bool> l_result in p_updateResults)
+        {
+          EditedRHFact l_editedFact = m_IdEditedFactDict[l_result.Key];
+          if (l_editedFact != null)
+          {
+            if (l_result.Value == true)
+              m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+            else
+            {
+              FactTag l_modelFactTag = FactTagModel.Instance.GetValue(l_editedFact.Id);
+              if (l_modelFactTag != null)
+                l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
+              OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
+            }
+          }
+        }
+      }
+      else
+      {
+        // Create after commit event intercepted by the view -> only if commit fails
+        // set commit status in the ribbon as well
+      }
+      AddinModuleController.SetExcelInteractionState(true);
+    }
+
+    private void AfterFactTagDelete(ErrorMessage status, UInt32 id)
+    {
+      EditedRHFact l_editedFact = m_IdEditedFactDict[id];
+      if (l_editedFact != null)
+      {
+        if (status == ErrorMessage.SUCCESS)
+          SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputEqual);
+        else
+        {
+          FactTag l_factTag = FactTagModel.Instance.GetValue(id);
+          if (l_factTag != null)
+          {
+            l_editedFact.ModelFactTag.Tag = l_factTag.Tag;
+            SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputDifferent);
+          }
+        }
+      }
+    }
+
+    private void AfterLegalHolidayRead(ErrorMessage status, LegalHoliday p_legalHoliday)
+    {
+      if (status == ErrorMessage.SUCCESS)
+      {
+        LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(p_legalHoliday.Id);
+        if (l_legalHoliday == null)
+          return;
+
+        EditedRHFact l_editedFact = GetEditedFact(l_legalHoliday.EmployeeId, (Int32)l_legalHoliday.Period);
+        if (l_editedFact == null)
+          return;
+
+        m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+        l_editedFact.ModelLegalHoliday.Id = l_legalHoliday.Id;
+        l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.FER;
+        l_editedFact.EditedLegalHoliday.Id = l_legalHoliday.Id;
+        l_editedFact.EditedLegalHoliday.Tag = LegalHolidayTag.FER;
+      }
+      else
+      {
+        // Log commit error in view
+      }
+    }
+
+    private void AfterLegalHolidayDelete(ErrorMessage status, UInt32 id)
+    {
+      if (status == ErrorMessage.SUCCESS)
+      {
+        EditedRHFact l_editedFact = m_legalHolidayDeleteDictIdEditedFact[id];
+        if (l_editedFact == null)
+          return;
+
+        m_rangeHighlighter.FillCellColor(l_editedFact.Cell, EditedFactStatus.Committed);
+        l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.NONE;
+      }
+      else
+      {
+        // Log commit error to view
+      }
+      m_legalHolidayDeleteDictIdEditedFact.Remove(id);
+    }
+
+    #endregion
+
+    #region Utils
+
+    public UInt32 GetLastAllocatedClient(EditedRHFact p_editedFact)
+    {
+      for (Int32 l_period = (Int32)p_editedFact.Period; l_period > m_periodsList.ElementAt(0); l_period -= 1)
+      {
+        DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
+        EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
+        if (l_RHEditedFact != null && l_RHEditedFact.ClientId != 0)
+          return l_RHEditedFact.ClientId;
+        else
+        {
+          Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
+          if (l_fact != null && l_fact.ClientId != 0)
+            return l_fact.ClientId;
+        }
+      }
+      // Commit status could be orange when last allocated client is default 
+      return (UInt32)AxisType.Client;
+    }
+
+    private void SetSingleCellFillColor(Range p_cell, EditedFactStatus p_status)
+    {
+      AddinModuleController.SetExcelInteractionState(false);
+      m_rangeHighlighter.FillCellColor(p_cell, p_status);
+      AddinModuleController.SetExcelInteractionState(true);
+    }
+
+    private EditedRHFact GetEditedFact(UInt32 p_employeeId, Int32 p_period)
+    {
+      foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
+      {
+        if (l_editedFact.EmployeeId == p_employeeId && l_editedFact.Period == p_period)
+          return l_editedFact;
+      }
+      return null;
+    }
+
+    #endregion
 
   }
 }
