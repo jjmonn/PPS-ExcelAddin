@@ -747,6 +747,9 @@
     <EmbeddedResource Include="MVC\View\Controlling UI\CUI2VisualizationContainer.resx">
       <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\ResultView.resx">
+      <DependentUpon>ResultView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\FBIFunctionUI.resx">
       <DependentUpon>FBIFunctionUI.cs</DependentUpon>
     </EmbeddedResource>
