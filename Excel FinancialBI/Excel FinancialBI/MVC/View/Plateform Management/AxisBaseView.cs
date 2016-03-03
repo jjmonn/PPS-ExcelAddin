@@ -26,11 +26,11 @@ namespace FBI.MVC.View
     protected TControllerType m_controller;
     bool m_cellModif = false;
     RightManager m_rightMgr = new RightManager();
+    HierarchyItem m_hoveredRow = null;
 
     public AxisBaseView()
     {
       InitializeComponent();
-      m_dgv.ContextMenuStrip = m_axisRightClickMenu;
     }
 
     public virtual void SetController(IController p_controller)
@@ -96,6 +96,7 @@ namespace FBI.MVC.View
       m_renameAxisElemMenu.Click += OnClickRename;
       m_createNewAxisElemMenuTop.Click += OnClickCreate;
       m_deleteAxisElemMenuTop.Click += OnClickDelete;
+      m_dgv.MouseClick += OnDGVMouseClick;
       Addin.SuscribeAutoLock(this);
     }
 
@@ -194,6 +195,18 @@ namespace FBI.MVC.View
 
     #region User Callback
 
+    void OnDGVMouseClick(object p_sender, MouseEventArgs p_args)
+    {
+      if (p_args.Button == MouseButtons.Right)
+      {
+        Point l_location = PointToScreen(p_args.Location);
+
+        l_location.Y += 30;
+        m_hoveredRow = m_dgv.HitTestRow(p_args.Location);
+        m_axisRightClickMenu.Show(l_location);
+      }
+    }
+
     private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
     {
       if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_AXIS) == false)
@@ -224,7 +237,7 @@ namespace FBI.MVC.View
 
     private void OnClickDelete(object p_sender, EventArgs p_e)
     {
-      HierarchyItem l_row = m_dgv.HoveredRow;
+      HierarchyItem l_row = m_hoveredRow;
 
       if (l_row == null || l_row.ItemValue == null)
         return;
@@ -248,10 +261,10 @@ namespace FBI.MVC.View
 
     private void OnClickCreate(object sender, EventArgs e)
     {
-      HierarchyItem row = m_dgv.HoveredRow;
+      HierarchyItem l_row = m_hoveredRow;
 
-      if (row != null)
-        m_controller.ShowNewAxisUI((UInt32)row.ItemValue);
+      if (l_row != null)
+        m_controller.ShowNewAxisUI((UInt32)l_row.ItemValue);
       else
         m_controller.ShowNewAxisUI();
     }

@@ -23,6 +23,8 @@ namespace FBI.Forms
     protected SafeDictionary<KeyType, HierarchyItem> m_columnsDic = new SafeDictionary<KeyType, HierarchyItem>();
     protected const Int32 COLUMNS_WIDTH = 150;
     public GridCell HoveredCell { get; private set; }
+    HierarchyItem m_hoveredColumn = null;
+    HierarchyItem m_hoveredRow = null;
     protected string m_cellValue = null;
     protected bool m_validated = false;
     public event CellEventHandler CellChangedAndValidated;
@@ -47,8 +49,10 @@ namespace FBI.Forms
     {
       get
       {
-        if (HoveredCell == null)
+        if (m_hoveredColumn == null && HoveredCell == null)
           return (null);
+        if (m_hoveredColumn != null)
+          return (m_hoveredColumn);
         return (HoveredCell.ColumnItem);
       }
     }
@@ -57,8 +61,10 @@ namespace FBI.Forms
     {
       get
       {
-        if (HoveredCell == null)
+        if (m_hoveredRow == null && HoveredCell == null)
           return (null);
+        if (m_hoveredRow != null)
+          return (m_hoveredRow);
         return (HoveredCell.RowItem);
       }
     }
@@ -102,7 +108,6 @@ namespace FBI.Forms
       CellValueChanged += OnCellChanged;
     }
 
-
     void InitDGVDisplay()
     {
       Dock = System.Windows.Forms.DockStyle.Fill;
@@ -116,6 +121,26 @@ namespace FBI.Forms
       FilterDisplayMode = FilterDisplayMode.Custom;
       //RowsHierarchy.AllowDragDrop = true;
       AllowDragDropIndication = true;
+    }
+
+    public HierarchyItem HitTestRow(Point p_point)
+    {
+      HierarchyItem l_row = RowsHierarchy.HitTest(p_point);
+
+      if (l_row == null)
+        if (HoveredCell != null)
+          return (HoveredCell.RowItem);
+      return (l_row);
+    }
+
+    public HierarchyItem HitTestColumn(Point p_point)
+    {
+      HierarchyItem l_column = ColumnsHierarchy.HitTest(p_point);
+
+      if (l_column == null)
+        if (HoveredCell != null)
+          return (HoveredCell.ColumnItem);
+      return (l_column);
     }
 
     public bool AllowDragAndDrop
