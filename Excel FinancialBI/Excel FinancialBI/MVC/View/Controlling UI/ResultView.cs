@@ -118,6 +118,8 @@ namespace FBI.MVC.View
             }
           }
         }
+        if (m_computeConfig.Request.Process == Account.AccountProcess.RH)
+          RemoveOrphanDimensions();
       }
     }
 
@@ -177,7 +179,7 @@ namespace FBI.MVC.View
 
     #region Builders
 
-    private void PeriodBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf, 
+    private void PeriodBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
       DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
     {
       PeriodConf l_conf = p_conf as PeriodConf;
@@ -194,7 +196,7 @@ namespace FBI.MVC.View
 
         ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, l_date, 0);
         HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_formatedDate);
-        
+
         if (l_newItem != null)
         {
           if (p_conf.Child != null && p_conf.Child.ModelType == typeof(PeriodModel))
@@ -246,7 +248,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void AxisElemBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf, 
+    private void AxisElemBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
       DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
     {
       AxisElemConf l_conf = p_conf as AxisElemConf;
@@ -264,7 +266,7 @@ namespace FBI.MVC.View
           continue;
 
         ResultKey l_key;
-        
+
         if (l_conf.AxisTypeId == AxisType.Entities)
           l_key = p_parentKey + new ResultKey(0, "", ResultKey.GetSortKey(true, l_conf.AxisTypeId, l_elem.Id), 0, 0, 0);
         else
@@ -275,7 +277,7 @@ namespace FBI.MVC.View
 
         l_childAxisConf.ParentId = l_elem.Id;
         l_childAxisConf.Child = l_conf.Child;
-        AxisElemBuilder(p_dgv, p_tabId, l_childAxisConf, p_dimension, 
+        AxisElemBuilder(p_dgv, p_tabId, l_childAxisConf, p_dimension,
           (l_newItem != null) ? l_newItem.Items : p_parent, (l_conf.AxisTypeId == AxisType.Entities) ? l_key : p_parentKey);
 
         if (l_newItem != null)
@@ -283,7 +285,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void FilterValueBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf, 
+    private void FilterValueBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
       DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
     {
       FilterConf l_conf = p_conf as FilterConf;
@@ -302,7 +304,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void AccountBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf, 
+    private void AccountBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
       DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
     {
       List<Account> l_accountList = AccountModel.Instance.GetChildren(p_tabId);
@@ -323,5 +325,68 @@ namespace FBI.MVC.View
 
     #endregion
 
+    #region Clean
+
+    void RemoveOrphanDimensions()
+    {
+      foreach (vTabPage l_tab in m_tabCtrl.TabPages)
+      {
+        if (l_tab.Controls.Count > 0)
+        {
+          DGV l_dgv = l_tab.Controls[0] as DGV;
+
+          RemoveOrphanColumns(l_dgv);
+          RemoveOrphanRows(l_dgv);
+        }
+      }
+    }
+
+    void RemoveOrphanRows(DGV p_dgv)
+    {
+      foreach (ResultKey l_rowKey in p_dgv.Rows.Keys)
+      {
+        if (l_rowKey.ContainClientSort() == false)
+          continue;
+        bool hasData = false;
+
+        foreach (ResultKey l_columnKey in p_dgv.Columns.Keys)
+        {
+          object l_value = p_dgv.GetCellValue(l_rowKey, l_columnKey);
+
+          if ((l_value != null && (double)l_value != 0.0))
+          {
+            hasData = true;
+            break;
+          }
+        }
+        if (!hasData)
+          p_dgv.DeleteRow(l_rowKey);
+      }
+    }
+
+    void RemoveOrphanColumns(DGV p_dgv)
+    {
+      foreach (ResultKey l_columnKey in p_dgv.Columns.Keys)
+      {
+        if (l_columnKey.ContainClientSort() == false)
+          continue;
+        bool hasData = false;
+
+        foreach (ResultKey l_rowKey in p_dgv.Rows.Keys)
+        {
+          object l_value = p_dgv.GetCellValue(l_rowKey, l_columnKey);
+
+          if ((l_value != null && (double)l_value != 0.0))
+          {
+            hasData = true;
+            break;
+          }
+        }
+        if (!hasData)
+          p_dgv.DeleteColumn(l_columnKey);
+      }
+    }
+
+    #endregion
   }
 }

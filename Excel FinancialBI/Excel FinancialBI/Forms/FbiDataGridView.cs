@@ -242,6 +242,13 @@ namespace FBI.Forms
       return (this.CellsArea.GetCellValue(row, column));
     }
 
+    public bool HasChild(Dimension p_dim, KeyType p_key)
+    {
+      HierarchyItem l_item = (p_dim == Dimension.ROW) ? m_rowsDic[p_key] : m_columnsDic[p_key];
+
+      return (l_item != null && l_item.Items.Count > 0);
+    }
+
     void OnCellValidating(object p_sender, CellEventArgs p_args)
     {
       m_cellValue = p_args.Cell.FormattedText;
