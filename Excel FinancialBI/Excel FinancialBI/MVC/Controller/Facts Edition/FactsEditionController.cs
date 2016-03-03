@@ -110,8 +110,8 @@ namespace FBI.MVC.Controller
 
     public void OnWorksheetChange(Range p_cell)
     {
-    
-      if (m_editedFactsManager.UpdateEditedValues(p_cell))
+
+      if (m_editedFactsManager.UpdateEditedValueAndTag(p_cell))
         return;
 
 

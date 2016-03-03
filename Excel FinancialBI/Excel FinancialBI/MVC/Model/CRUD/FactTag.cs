@@ -17,7 +17,6 @@ namespace FBI.MVC.Model.CRUD
       RTT,
       Abs,
       ALD,
-      FER,
       CD,
       FF,
       RI,

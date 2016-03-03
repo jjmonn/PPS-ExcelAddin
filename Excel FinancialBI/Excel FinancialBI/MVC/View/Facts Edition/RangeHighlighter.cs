@@ -30,11 +30,11 @@ namespace FBI.MVC.View
 
       switch (p_status)
       {
-        case EditedFactStatus.DifferentInput:
+        case EditedFactStatus.InputDifferent:
           FillInputCellRed(p_cell);
           break;
 
-        case EditedFactStatus.DifferentOutput :
+        case EditedFactStatus.OutputDifferent :
           FillOutputCellRed(p_cell);
           break;
 
@@ -47,6 +47,14 @@ namespace FBI.MVC.View
           break;
 
         case EditedFactStatus.FactTagDifferent :
+          FillInputCellRed(p_cell);
+          break;
+
+        case EditedFactStatus.LegalHolidayEqual:
+          FillInputsBaseColor(p_cell);
+          break;
+
+        case EditedFactStatus.LegalHolidayDifferent:
           FillInputCellRed(p_cell);
           break;
 

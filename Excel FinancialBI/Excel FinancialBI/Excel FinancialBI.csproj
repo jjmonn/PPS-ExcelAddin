@@ -300,6 +300,7 @@
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
     <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
+    <Compile Include="MVC\Model\Facts Edition\FactsRHCommit.cs" />
     <Compile Include="MVC\Model\LegacyComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />

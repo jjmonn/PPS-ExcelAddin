@@ -13,10 +13,12 @@ namespace FBI.MVC.Model
   {
     InputEqual = 0,
     OutputEqual,
-    DifferentInput,
-    DifferentOutput,
+    InputDifferent,
+    OutputDifferent,
     FactTagEqual,
-    FactTagDifferent
+    FactTagDifferent,
+    LegalHolidayEqual,
+    LegalHolidayDifferent
   }
 
   public delegate void CellValueChangedEventHandler(Range p_cell, EditedFactStatus p_status);

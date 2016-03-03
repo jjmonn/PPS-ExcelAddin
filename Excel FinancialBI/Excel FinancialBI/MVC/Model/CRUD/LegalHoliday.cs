@@ -8,12 +8,19 @@ namespace FBI.MVC.Model.CRUD
 {
  using Network;
 
+  public enum LegalHolidayTag
+  {
+    NONE = 0,
+    FER
+  }
+
   class LegalHoliday : CRUDEntity
   {
-    public UInt32 Id { get; private set; }
+    public UInt32 Id { get; set; }
     public UInt32 EmployeeId { get; set; }
     public UInt32 Period { get; set; }
     public UInt32 Image { get; set; }
+    public LegalHolidayTag Tag { get; set; }
 
     public LegalHoliday() { }
     private LegalHoliday(UInt32 p_id)
@@ -23,12 +30,12 @@ namespace FBI.MVC.Model.CRUD
 
     public static LegalHoliday BuildLegalHoliday(ByteBuffer p_packet)
     {
-      LegalHoliday l_entity = new LegalHoliday(p_packet.ReadUint32());
+      LegalHoliday l_legalHoliday = new LegalHoliday(p_packet.ReadUint32());
 
-      l_entity.EmployeeId = p_packet.ReadUint32();
-      l_entity.Period = p_packet.ReadUint32();
+      l_legalHoliday.EmployeeId = p_packet.ReadUint32();
+      l_legalHoliday.Period = p_packet.ReadUint32();
 
-      return (l_entity);
+      return (l_legalHoliday);
     }
 
     public void Dump(ByteBuffer p_packet, bool p_includeId)

@@ -100,6 +100,7 @@ namespace FBI.MVC.Model
         if (lhDic.ContainsKey(Id))
         {
           lhDic.RemovePrimary(Id);
+          m_legalHolidayDic.Remove(Id);
           break;
         }
       }

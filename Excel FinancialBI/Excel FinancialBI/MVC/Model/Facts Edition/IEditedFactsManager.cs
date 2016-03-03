@@ -27,7 +27,7 @@ namespace FBI.MVC.Model
 
     void DownloadFacts(List<Int32> p_periodList, bool p_updateCells);
 
-    bool UpdateEditedValues(Range p_cell);
+    bool UpdateEditedValueAndTag(Range p_cell);
     
     //void UpdateWorksheetInputs();
 
