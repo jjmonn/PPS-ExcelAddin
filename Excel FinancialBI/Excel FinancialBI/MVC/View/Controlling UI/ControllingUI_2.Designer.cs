@@ -43,7 +43,6 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.SelectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.UnselectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
-      this.m_progressBar = new VIBlend.WinForms.Controls.vProgressBar();
       this.m_DGVsControlTab = new VIBlend.WinForms.Controls.vTabControl();
       this.ButtonsImageList = new System.Windows.Forms.ImageList(this.components);
       this.MenuImageList = new System.Windows.Forms.ImageList(this.components);
@@ -143,39 +142,25 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
             | System.Windows.Forms.AnchorStyles.Right)));
       this.SplitContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
       this.SplitContainer1.Location = new System.Drawing.Point(0, 4);
-      this.SplitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.SplitContainer1.Margin = new System.Windows.Forms.Padding(4);
       this.SplitContainer1.Name = "SplitContainer1";
       // 
       // SplitContainer1.Panel2
       // 
-      this.SplitContainer1.Panel2.Controls.Add(this.m_progressBar);
       this.SplitContainer1.Panel2.Controls.Add(this.m_DGVsControlTab);
       this.SplitContainer1.Size = new System.Drawing.Size(1148, 501);
       this.SplitContainer1.SplitterDistance = 212;
       this.SplitContainer1.SplitterWidth = 5;
       this.SplitContainer1.TabIndex = 8;
       // 
-      // m_progressBar
-      // 
-      this.m_progressBar.BackColor = System.Drawing.Color.Transparent;
-      this.m_progressBar.Location = new System.Drawing.Point(363, 382);
-      this.m_progressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-      this.m_progressBar.Name = "m_progressBar";
-      this.m_progressBar.RoundedCornersMask = ((byte)(15));
-      this.m_progressBar.Size = new System.Drawing.Size(363, 22);
-      this.m_progressBar.TabIndex = 3;
-      this.m_progressBar.Text = "VProgressBar1";
-      this.m_progressBar.Value = 0;
-      this.m_progressBar.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
       // m_DGVsControlTab
       // 
       this.m_DGVsControlTab.AllowAnimations = true;
       this.m_DGVsControlTab.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_DGVsControlTab.Location = new System.Drawing.Point(0, 0);
-      this.m_DGVsControlTab.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.m_DGVsControlTab.Margin = new System.Windows.Forms.Padding(4);
       this.m_DGVsControlTab.Name = "m_DGVsControlTab";
-      this.m_DGVsControlTab.Padding = new System.Windows.Forms.Padding(0, 31, 0, 0);
+      this.m_DGVsControlTab.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
       this.m_DGVsControlTab.Size = new System.Drawing.Size(931, 501);
       this.m_DGVsControlTab.TabAlignment = VIBlend.WinForms.Controls.vTabPageAlignment.Top;
       this.m_DGVsControlTab.TabIndex = 0;
@@ -206,7 +191,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
             | System.Windows.Forms.AnchorStyles.Right)));
       this.SplitContainer2.BackColor = System.Drawing.Color.Transparent;
       this.SplitContainer2.Location = new System.Drawing.Point(0, 76);
-      this.SplitContainer2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.SplitContainer2.Margin = new System.Windows.Forms.Padding(4);
       this.SplitContainer2.Name = "SplitContainer2";
       // 
       // SplitContainer2.Panel1
@@ -229,7 +214,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.Panel1.Controls.Add(this.MainMenu);
       this.Panel1.Dock = System.Windows.Forms.DockStyle.Top;
       this.Panel1.Location = new System.Drawing.Point(0, 0);
-      this.Panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.Panel1.Margin = new System.Windows.Forms.Padding(4);
       this.Panel1.Name = "Panel1";
       this.Panel1.Size = new System.Drawing.Size(1448, 75);
       this.Panel1.TabIndex = 9;
@@ -243,7 +228,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.VersionTB.DefaultText = "";
       this.VersionTB.Enabled = false;
       this.VersionTB.Location = new System.Drawing.Point(1239, 6);
-      this.VersionTB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.VersionTB.Margin = new System.Windows.Forms.Padding(4);
       this.VersionTB.MaxLength = 32767;
       this.VersionTB.Name = "VersionTB";
       this.VersionTB.PasswordChar = '\0';
@@ -264,7 +249,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.CurrencyTB.DefaultText = "";
       this.CurrencyTB.Enabled = false;
       this.CurrencyTB.Location = new System.Drawing.Point(1067, 6);
-      this.CurrencyTB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.CurrencyTB.Margin = new System.Windows.Forms.Padding(4);
       this.CurrencyTB.MaxLength = 32767;
       this.CurrencyTB.Name = "CurrencyTB";
       this.CurrencyTB.PasswordChar = '\0';
@@ -285,7 +270,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.EntityTB.DefaultText = "";
       this.EntityTB.Enabled = false;
       this.EntityTB.Location = new System.Drawing.Point(796, 6);
-      this.EntityTB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.EntityTB.Margin = new System.Windows.Forms.Padding(4);
       this.EntityTB.MaxLength = 32767;
       this.EntityTB.Name = "EntityTB";
       this.EntityTB.PasswordChar = '\0';
@@ -490,8 +475,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
 	public VIBlend.WinForms.Controls.vTextBox EntityTB;
   public System.Windows.Forms.ImageList ExpansionImageList;
 	public System.Windows.Forms.ToolStripMenuItem ChartBT;
-	public System.Windows.Forms.ToolStripMenuItem DropOnlyTheVisibleItemsOnExcelToolStripMenuItem;
-	public VIBlend.WinForms.Controls.vProgressBar m_progressBar;
+  public System.Windows.Forms.ToolStripMenuItem DropOnlyTheVisibleItemsOnExcelToolStripMenuItem;
 }
 
 }
