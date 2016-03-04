@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,26 @@ namespace FBI.Utils
       List<string> l_list = new List<string>();
       foreach (string l_string in p_stringArray)
       {
-        l_list.Add(l_string.ToLower());
+        l_list.Add(StringUtils.RemoveDiacritics(l_string));
       }
       return l_list;
+    }
+
+    public static string RemoveDiacritics(string text)
+    {
+      var normalizedString = text.Normalize(NormalizationForm.FormD);
+      var stringBuilder = new StringBuilder();
+
+      foreach (var c in normalizedString)
+      {
+        var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+        if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+        {
+          stringBuilder.Append(c);
+        }
+      }
+
+      return stringBuilder.ToString().Normalize(NormalizationForm.FormC).ToLower();
     }
 
   }

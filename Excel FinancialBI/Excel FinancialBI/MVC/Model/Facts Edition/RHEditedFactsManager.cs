@@ -31,7 +31,7 @@ namespace FBI.MVC.Model
     UInt32 m_versionId;
     List<string> m_factsTagList;
     List<string> m_legalHolidayTagList;
-    List<string> m_clientsToBeCreated = new List<string>();
+    SafeDictionary<string, EditedRHFact> m_clientsToBeCreated = new SafeDictionary<string, EditedRHFact>();
     private List<Int32> m_periodsList;
     FactsRHCommit m_factsCommit;
 
@@ -45,7 +45,7 @@ namespace FBI.MVC.Model
 
     public void Dispose()
     {
-
+      // TO DO
       // dispose edited facts
       m_RHEditedFacts.Clear();
       // EMPTY dictionnaries etc.
@@ -84,6 +84,8 @@ namespace FBI.MVC.Model
 
     private void InitializeEditedFact(EditedRHFact p_editedFact, RangeHighlighter p_rangeHighlighter)
     {
+      m_RHEditedFacts.Set(p_editedFact.Cell.Address, new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, (Int32)p_editedFact.Period), p_editedFact);
+
       p_rangeHighlighter.FillInputsBaseColor(p_editedFact.Cell);
       p_editedFact.EditedClientId = GetClientIdFromCell(p_editedFact.Cell);
       p_editedFact.EditedFactTag.Tag = GetTagTypeFromCell(p_editedFact.Cell);
@@ -91,7 +93,6 @@ namespace FBI.MVC.Model
 
       p_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
       p_editedFact.SetCellStatusRH();
-      m_RHEditedFacts.Set(p_editedFact.Cell.Address, new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, (Int32)p_editedFact.Period), p_editedFact);
     }
 
     private EditedRHFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1,
@@ -209,7 +210,7 @@ namespace FBI.MVC.Model
           EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
           if (l_RHEditedFact != null)
           {
-            l_IdEditedFactDict.Add(l_fact.Id, l_RHEditedFact);
+            l_IdEditedFactDict[l_fact.Id] = l_RHEditedFact;
             FactTag l_factTag = FactTagModel.Instance.GetValue(l_fact.Id);
             LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(l_fact.EmployeeId, l_fact.Period);
             l_RHEditedFact.UpdateRHFactModels(l_fact, l_factTag, l_legalHoliday);
@@ -223,7 +224,7 @@ namespace FBI.MVC.Model
           }
         }
         else
-          l_previousWeeksFacts.Add(l_dimensionKey, l_fact);
+          l_previousWeeksFacts[l_dimensionKey] = l_fact;
       }
       m_factsCommit = new FactsRHCommit(m_RHEditedFacts, l_previousWeeksFacts, l_IdEditedFactDict, m_periodsList, m_rangeHighlighter, m_RHAccountId, m_versionId);
       return true;
@@ -235,7 +236,7 @@ namespace FBI.MVC.Model
       if (l_editedFact == null)
         return false;
       
-      UInt32 l_clientId = GetClientIdFromCell(p_cell);
+      UInt32 l_clientId = (UInt32)GetClientIdFromCell(p_cell);
       FactTag.TagType l_tagType = GetTagTypeFromCell(p_cell);
       LegalHolidayTag l_legalHolidayTag = GetLegalHolidayTagFromCell(p_cell);
       
@@ -248,23 +249,31 @@ namespace FBI.MVC.Model
     public void Commit()
     {
       if (m_factsCommit != null)
+      {
+        // TO DO
+        // Antiduplicate system
+
+        List<string> l_clientsToBeCreated = GetClientsToBeCreatedList();
+        if (l_clientsToBeCreated.Count > 0)
+        {
+          UnreferencedClientsController l_unreferencedClientsController = new UnreferencedClientsController(l_clientsToBeCreated);
+          l_unreferencedClientsController.OnClientsCreated += AfterUndefinedClientsCreated;
+          return;
+        }
         m_factsCommit.Commit();
+      }
       else
       {
         // TO DO : report error
       }
     }
 
-    // TO DO
-    // Antiduplicate system
+    private void AfterUndefinedClientsCreated(bool p_status)
+    {
+      if (p_status == true)
+        Commit();
+    }
 
-    // put before calling commit ?
-    //if (m_clientsToBeCreated.Count > 0)
-    //{
-    //  LaunchClientsAutoCreation();
-    //  return;
-    //}
-  
     #region Utils
 
     private string GetClientString(EditedRHFact p_editedFact, UInt32 p_clientId, FactTag p_factTag)
@@ -283,7 +292,7 @@ namespace FBI.MVC.Model
       return "";
     }
 
-    private UInt32 GetClientIdFromCell(Range p_cell)
+    private Int32 GetClientIdFromCell(Range p_cell)
     {
       if (p_cell.Value2 == null)
         return 0;
@@ -291,12 +300,17 @@ namespace FBI.MVC.Model
       {
         AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, p_cell.Value2 as string);
         if (l_client != null)
-          return l_client.Id;
+          return (Int32)l_client.Id;
         else
         {
-          string l_value = p_cell.Value2 as string;
-          if (m_factsTagList.Contains(l_value.ToLower()) == false)
-             m_clientsToBeCreated.Add(p_cell.Value2 as string);
+          string l_value = StringUtils.RemoveDiacritics(p_cell.Value2 as string);
+          if (m_factsTagList.Contains(l_value) == false && m_legalHolidayTagList.Contains(l_value) == false)
+          {
+            EditedRHFact l_editedFact = m_RHEditedFacts[p_cell.Address];
+            if (l_editedFact != null)
+              m_clientsToBeCreated[p_cell.Value2 as string] = l_editedFact;
+            return -1;
+          }
         }
       }
       return 0;
@@ -307,10 +321,10 @@ namespace FBI.MVC.Model
       if (p_cell.Value2 == null)
         return FactTag.TagType.NONE;
 
-      string l_value = p_cell.Value2 as string;
-      if (m_factsTagList.Contains(l_value.ToLower()))
+      string l_value = StringUtils.RemoveDiacritics(p_cell.Value2 as string);
+      if (m_factsTagList.Contains(l_value))
       {
-        return (FactTag.TagType)m_factsTagList.FindIndex(x => x.StartsWith(l_value.ToLower()));
+        return (FactTag.TagType)m_factsTagList.FindIndex(x => x.StartsWith(l_value));
       }
       return FactTag.TagType.NONE;
     }
@@ -320,15 +334,32 @@ namespace FBI.MVC.Model
       if (p_cell.Value2 == null)
         return LegalHolidayTag.NONE;
 
-      string l_value = p_cell.Value2 as string;
-      if (m_legalHolidayTagList.Contains(l_value.ToLower()))
+      string l_value = StringUtils.RemoveDiacritics(p_cell.Value2 as string);
+      if (m_legalHolidayTagList.Contains(l_value))
       {
-        return (LegalHolidayTag)m_legalHolidayTagList.FindIndex(x => x.StartsWith(l_value.ToLower()));
+        return (LegalHolidayTag)m_legalHolidayTagList.FindIndex(x => x.StartsWith(l_value));
       }
 
       return LegalHolidayTag.NONE;
     }
-  
+
+    private List<string> GetClientsToBeCreatedList()
+    {
+      SafeDictionary<string, EditedRHFact> l_newClientsToBeCreated = new SafeDictionary<string, EditedRHFact>();
+
+      for (UInt32 l_iterator = 0; l_iterator < m_clientsToBeCreated.Keys.Count; l_iterator += 1)
+      {
+        string l_undefinedClient = m_clientsToBeCreated.ElementAt(0).Key;
+        AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, l_undefinedClient);
+        EditedRHFact l_editedFact = m_clientsToBeCreated.ElementAt((Int32)l_iterator).Value;
+
+        if (l_client == null && l_editedFact.EditedClientId == -1)
+          l_newClientsToBeCreated[l_undefinedClient] = l_editedFact; 
+        }
+      m_clientsToBeCreated = l_newClientsToBeCreated;
+      return l_newClientsToBeCreated.Keys.ToList<string>();
+    }
+
     #endregion
 
   }

@@ -122,7 +122,7 @@ namespace FBI.MVC.Model
         default:
           p_editedFact.ClientId = (UInt32)AxisType.Client;
           p_editedFact.Value = 0;
-          p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
+          p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
           break;
       }
     }
@@ -133,7 +133,7 @@ namespace FBI.MVC.Model
       if (l_lastAllocatedClient != p_editedFact.ClientId)
       {
         p_editedFact.ClientId = l_lastAllocatedClient;
-        p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
+        p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
       }
     }
 
@@ -141,13 +141,13 @@ namespace FBI.MVC.Model
     {
       if (p_editedFact.EditedClientId != p_editedFact.ClientId)
       {
-        p_editedFact.ClientId = p_editedFact.EditedClientId;
+        p_editedFact.ClientId = (UInt32)p_editedFact.EditedClientId;
         p_editedFact.Value = 1;
 
         if (p_editedFact.EditedClientId == 0)
            FactsModel.Instance.Delete(p_editedFact);
         else
-          p_factsCommitDict.Add(p_editedFact.Cell.Address, p_editedFact);
+          p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
       }
     }
 
@@ -160,7 +160,7 @@ namespace FBI.MVC.Model
       {
         if (p_editedFact.EditedFactTag.Tag == FactTag.TagType.NONE)
         {
-          p_editedFact.ClientId = p_editedFact.EditedClientId;
+          p_editedFact.ClientId = (UInt32)p_editedFact.EditedClientId;
           FactsModel.Instance.Delete(p_editedFact);
           FactTagModel.Instance.Delete(l_factTag.Id);
         }
@@ -201,7 +201,7 @@ namespace FBI.MVC.Model
       if (l_legalHoliday != null)
       {
         if (m_legalHolidayDeleteDictIdEditedFact.ContainsKey(l_legalHoliday.Id) == false)
-          m_legalHolidayDeleteDictIdEditedFact.Add(l_legalHoliday.Id, p_editedFact);
+          m_legalHolidayDeleteDictIdEditedFact[l_legalHoliday.Id] = p_editedFact;
       }
      }
 
@@ -211,17 +211,6 @@ namespace FBI.MVC.Model
       {
         LegalHolidayModel.Instance.Delete(l_legalHolidayId);
       }
-    }
-
-
-    // TO DO : CLIENTS AUTO CREATE
-      //
-    //
-
-    private void LaunchClientsAutoCreation()
-    {
-      // TO DO
-      // launch clients autocreation controller
     }
     
     #region FactTags Creation
