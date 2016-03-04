@@ -52,17 +52,17 @@ namespace FBI.MVC.View
       this.m_formulaTextBox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_validateFormulaButton = new VIBlend.WinForms.Controls.vButton();
       this.m_accountInformationGroupbox = new System.Windows.Forms.GroupBox();
-      this.ProcessComboBox = new VIBlend.WinForms.Controls.vComboBox();
+      this.ProcessCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_ProcessLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.ConsolidationOptionComboBox = new VIBlend.WinForms.Controls.vComboBox();
-      this.CurrencyConversionComboBox = new VIBlend.WinForms.Controls.vComboBox();
+      this.ConsolidationOptionCB = new VIBlend.WinForms.Controls.vComboBox();
+      this.CurrencyCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_accountNameLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_accountFormulaTypeLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_accountTypeLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_accountConsolidationOptionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_accountCurrenciesConversionLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.FormulaTypeComboBox = new VIBlend.WinForms.Controls.vComboBox();
-      this.TypeComboBox = new VIBlend.WinForms.Controls.vComboBox();
+      this.FormulaTypeCB = new VIBlend.WinForms.Controls.vComboBox();
+      this.TypeCB = new VIBlend.WinForms.Controls.vComboBox();
       this.Name_TB = new VIBlend.WinForms.Controls.vTextBox();
       this.GlobalFactsPanel = new System.Windows.Forms.Panel();
       this.m_globalFactsLabel = new VIBlend.WinForms.Controls.vLabel();
@@ -334,17 +334,17 @@ namespace FBI.MVC.View
       // 
       // m_accountInformationGroupbox
       // 
-      this.m_accountInformationGroupbox.Controls.Add(this.ProcessComboBox);
+      this.m_accountInformationGroupbox.Controls.Add(this.ProcessCB);
       this.m_accountInformationGroupbox.Controls.Add(this.m_ProcessLabel);
-      this.m_accountInformationGroupbox.Controls.Add(this.ConsolidationOptionComboBox);
-      this.m_accountInformationGroupbox.Controls.Add(this.CurrencyConversionComboBox);
+      this.m_accountInformationGroupbox.Controls.Add(this.ConsolidationOptionCB);
+      this.m_accountInformationGroupbox.Controls.Add(this.CurrencyCB);
       this.m_accountInformationGroupbox.Controls.Add(this.m_accountNameLabel);
       this.m_accountInformationGroupbox.Controls.Add(this.m_accountFormulaTypeLabel);
       this.m_accountInformationGroupbox.Controls.Add(this.m_accountTypeLabel);
       this.m_accountInformationGroupbox.Controls.Add(this.m_accountConsolidationOptionLabel);
       this.m_accountInformationGroupbox.Controls.Add(this.m_accountCurrenciesConversionLabel);
-      this.m_accountInformationGroupbox.Controls.Add(this.FormulaTypeComboBox);
-      this.m_accountInformationGroupbox.Controls.Add(this.TypeComboBox);
+      this.m_accountInformationGroupbox.Controls.Add(this.FormulaTypeCB);
+      this.m_accountInformationGroupbox.Controls.Add(this.TypeCB);
       this.m_accountInformationGroupbox.Controls.Add(this.Name_TB);
       this.m_accountInformationGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_accountInformationGroupbox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -357,23 +357,23 @@ namespace FBI.MVC.View
       // 
       // ProcessComboBox
       // 
-      this.ProcessComboBox.BackColor = System.Drawing.Color.White;
-      this.ProcessComboBox.DisplayMember = "";
-      this.ProcessComboBox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.ProcessComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.ProcessComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.ProcessComboBox.DropDownWidth = 465;
-      this.ProcessComboBox.Location = new System.Drawing.Point(242, 120);
-      this.ProcessComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-      this.ProcessComboBox.Name = "ProcessComboBox";
-      this.ProcessComboBox.RoundedCornersMaskListItem = ((byte)(15));
-      this.ProcessComboBox.Size = new System.Drawing.Size(465, 34);
-      this.ProcessComboBox.TabIndex = 33;
-      this.ProcessComboBox.UseThemeBackColor = false;
-      this.ProcessComboBox.UseThemeDropDownArrowColor = true;
-      this.ProcessComboBox.ValueMember = "";
-      this.ProcessComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      this.ProcessComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.ProcessCB.BackColor = System.Drawing.Color.White;
+      this.ProcessCB.DisplayMember = "";
+      this.ProcessCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.ProcessCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.ProcessCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.ProcessCB.DropDownWidth = 465;
+      this.ProcessCB.Location = new System.Drawing.Point(242, 120);
+      this.ProcessCB.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.ProcessCB.Name = "ProcessComboBox";
+      this.ProcessCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.ProcessCB.Size = new System.Drawing.Size(465, 34);
+      this.ProcessCB.TabIndex = 33;
+      this.ProcessCB.UseThemeBackColor = false;
+      this.ProcessCB.UseThemeDropDownArrowColor = true;
+      this.ProcessCB.ValueMember = "";
+      this.ProcessCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.ProcessCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // m_ProcessLabel
       // 
@@ -394,43 +394,43 @@ namespace FBI.MVC.View
       // 
       // ConsolidationOptionComboBox
       // 
-      this.ConsolidationOptionComboBox.BackColor = System.Drawing.Color.White;
-      this.ConsolidationOptionComboBox.DisplayMember = "";
-      this.ConsolidationOptionComboBox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.ConsolidationOptionComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.ConsolidationOptionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.ConsolidationOptionComboBox.DropDownWidth = 465;
-      this.ConsolidationOptionComboBox.Location = new System.Drawing.Point(240, 365);
-      this.ConsolidationOptionComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-      this.ConsolidationOptionComboBox.Name = "ConsolidationOptionComboBox";
-      this.ConsolidationOptionComboBox.RoundedCornersMaskListItem = ((byte)(15));
-      this.ConsolidationOptionComboBox.Size = new System.Drawing.Size(465, 34);
-      this.ConsolidationOptionComboBox.TabIndex = 32;
-      this.ConsolidationOptionComboBox.UseThemeBackColor = false;
-      this.ConsolidationOptionComboBox.UseThemeDropDownArrowColor = true;
-      this.ConsolidationOptionComboBox.ValueMember = "";
-      this.ConsolidationOptionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      this.ConsolidationOptionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.ConsolidationOptionCB.BackColor = System.Drawing.Color.White;
+      this.ConsolidationOptionCB.DisplayMember = "";
+      this.ConsolidationOptionCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.ConsolidationOptionCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.ConsolidationOptionCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.ConsolidationOptionCB.DropDownWidth = 465;
+      this.ConsolidationOptionCB.Location = new System.Drawing.Point(240, 365);
+      this.ConsolidationOptionCB.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.ConsolidationOptionCB.Name = "ConsolidationOptionComboBox";
+      this.ConsolidationOptionCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.ConsolidationOptionCB.Size = new System.Drawing.Size(465, 34);
+      this.ConsolidationOptionCB.TabIndex = 32;
+      this.ConsolidationOptionCB.UseThemeBackColor = false;
+      this.ConsolidationOptionCB.UseThemeDropDownArrowColor = true;
+      this.ConsolidationOptionCB.ValueMember = "";
+      this.ConsolidationOptionCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.ConsolidationOptionCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // CurrencyConversionComboBox
       // 
-      this.CurrencyConversionComboBox.BackColor = System.Drawing.Color.White;
-      this.CurrencyConversionComboBox.DisplayMember = "";
-      this.CurrencyConversionComboBox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.CurrencyConversionComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.CurrencyConversionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.CurrencyConversionComboBox.DropDownWidth = 465;
-      this.CurrencyConversionComboBox.Location = new System.Drawing.Point(242, 303);
-      this.CurrencyConversionComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-      this.CurrencyConversionComboBox.Name = "CurrencyConversionComboBox";
-      this.CurrencyConversionComboBox.RoundedCornersMaskListItem = ((byte)(15));
-      this.CurrencyConversionComboBox.Size = new System.Drawing.Size(465, 34);
-      this.CurrencyConversionComboBox.TabIndex = 46;
-      this.CurrencyConversionComboBox.UseThemeBackColor = false;
-      this.CurrencyConversionComboBox.UseThemeDropDownArrowColor = true;
-      this.CurrencyConversionComboBox.ValueMember = "";
-      this.CurrencyConversionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      this.CurrencyConversionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.CurrencyCB.BackColor = System.Drawing.Color.White;
+      this.CurrencyCB.DisplayMember = "";
+      this.CurrencyCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.CurrencyCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.CurrencyCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.CurrencyCB.DropDownWidth = 465;
+      this.CurrencyCB.Location = new System.Drawing.Point(242, 303);
+      this.CurrencyCB.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.CurrencyCB.Name = "CurrencyConversionComboBox";
+      this.CurrencyCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.CurrencyCB.Size = new System.Drawing.Size(465, 34);
+      this.CurrencyCB.TabIndex = 46;
+      this.CurrencyCB.UseThemeBackColor = false;
+      this.CurrencyCB.UseThemeDropDownArrowColor = true;
+      this.CurrencyCB.ValueMember = "";
+      this.CurrencyCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.CurrencyCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // m_accountNameLabel
       // 
@@ -519,43 +519,43 @@ namespace FBI.MVC.View
       // 
       // FormulaTypeComboBox
       // 
-      this.FormulaTypeComboBox.BackColor = System.Drawing.Color.White;
-      this.FormulaTypeComboBox.DisplayMember = "";
-      this.FormulaTypeComboBox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.FormulaTypeComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.FormulaTypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.FormulaTypeComboBox.DropDownWidth = 465;
-      this.FormulaTypeComboBox.Location = new System.Drawing.Point(242, 180);
-      this.FormulaTypeComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-      this.FormulaTypeComboBox.Name = "FormulaTypeComboBox";
-      this.FormulaTypeComboBox.RoundedCornersMaskListItem = ((byte)(15));
-      this.FormulaTypeComboBox.Size = new System.Drawing.Size(465, 34);
-      this.FormulaTypeComboBox.TabIndex = 32;
-      this.FormulaTypeComboBox.UseThemeBackColor = false;
-      this.FormulaTypeComboBox.UseThemeDropDownArrowColor = true;
-      this.FormulaTypeComboBox.ValueMember = "";
-      this.FormulaTypeComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      this.FormulaTypeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.FormulaTypeCB.BackColor = System.Drawing.Color.White;
+      this.FormulaTypeCB.DisplayMember = "";
+      this.FormulaTypeCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.FormulaTypeCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.FormulaTypeCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.FormulaTypeCB.DropDownWidth = 465;
+      this.FormulaTypeCB.Location = new System.Drawing.Point(242, 180);
+      this.FormulaTypeCB.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.FormulaTypeCB.Name = "FormulaTypeComboBox";
+      this.FormulaTypeCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.FormulaTypeCB.Size = new System.Drawing.Size(465, 34);
+      this.FormulaTypeCB.TabIndex = 32;
+      this.FormulaTypeCB.UseThemeBackColor = false;
+      this.FormulaTypeCB.UseThemeDropDownArrowColor = true;
+      this.FormulaTypeCB.ValueMember = "";
+      this.FormulaTypeCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.FormulaTypeCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // TypeComboBox
       // 
-      this.TypeComboBox.BackColor = System.Drawing.Color.White;
-      this.TypeComboBox.DisplayMember = "";
-      this.TypeComboBox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.TypeComboBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.TypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.TypeComboBox.DropDownWidth = 465;
-      this.TypeComboBox.Location = new System.Drawing.Point(242, 240);
-      this.TypeComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-      this.TypeComboBox.Name = "TypeComboBox";
-      this.TypeComboBox.RoundedCornersMaskListItem = ((byte)(15));
-      this.TypeComboBox.Size = new System.Drawing.Size(465, 34);
-      this.TypeComboBox.TabIndex = 31;
-      this.TypeComboBox.UseThemeBackColor = false;
-      this.TypeComboBox.UseThemeDropDownArrowColor = true;
-      this.TypeComboBox.ValueMember = "";
-      this.TypeComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      this.TypeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.TypeCB.BackColor = System.Drawing.Color.White;
+      this.TypeCB.DisplayMember = "";
+      this.TypeCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.TypeCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.TypeCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.TypeCB.DropDownWidth = 465;
+      this.TypeCB.Location = new System.Drawing.Point(242, 240);
+      this.TypeCB.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.TypeCB.Name = "TypeComboBox";
+      this.TypeCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.TypeCB.Size = new System.Drawing.Size(465, 34);
+      this.TypeCB.TabIndex = 31;
+      this.TypeCB.UseThemeBackColor = false;
+      this.TypeCB.UseThemeDropDownArrowColor = true;
+      this.TypeCB.ValueMember = "";
+      this.TypeCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.TypeCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // Name_TB
       // 
@@ -823,15 +823,15 @@ namespace FBI.MVC.View
     public System.Windows.Forms.ToolStripMenuItem DropSelectedAccountHierarchyToExcelToolStripMenuItem;
     public System.Windows.Forms.ToolStripMenuItem HelpToolStripMenuItem;
     public System.Windows.Forms.GroupBox m_accountDescriptionGroupbox;
-    public VIBlend.WinForms.Controls.vComboBox FormulaTypeComboBox;
-    public VIBlend.WinForms.Controls.vComboBox TypeComboBox;
+    public VIBlend.WinForms.Controls.vComboBox FormulaTypeCB;
+    public VIBlend.WinForms.Controls.vComboBox TypeCB;
     public VIBlend.WinForms.Controls.vLabel m_accountConsolidationOptionLabel;
     public VIBlend.WinForms.Controls.vLabel m_accountCurrenciesConversionLabel;
     public VIBlend.WinForms.Controls.vLabel m_accountNameLabel;
     public VIBlend.WinForms.Controls.vLabel m_accountFormulaTypeLabel;
     public VIBlend.WinForms.Controls.vLabel m_accountTypeLabel;
-    public VIBlend.WinForms.Controls.vComboBox ConsolidationOptionComboBox;
-    public VIBlend.WinForms.Controls.vComboBox CurrencyConversionComboBox;
+    public VIBlend.WinForms.Controls.vComboBox ConsolidationOptionCB;
+    public VIBlend.WinForms.Controls.vComboBox CurrencyCB;
     public System.Windows.Forms.Panel GlobalFactsPanel;
     public VIBlend.WinForms.Controls.vLabel m_globalFactsLabel;
     public System.Windows.Forms.SplitContainer SplitContainer2;
@@ -847,7 +847,7 @@ namespace FBI.MVC.View
     public VIBlend.WinForms.Controls.vButton m_formulaEditionButton;
 
     public VIBlend.WinForms.Controls.vButton m_cancelFormulaEditionButton;
-    public VIBlend.WinForms.Controls.vComboBox ProcessComboBox;
+    public VIBlend.WinForms.Controls.vComboBox ProcessCB;
     public VIBlend.WinForms.Controls.vLabel m_ProcessLabel;
   }
 }
