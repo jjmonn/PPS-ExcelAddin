@@ -86,8 +86,10 @@ namespace FBI.MVC.Model
         if (l_RHEditedFact.EditedFactTag.Tag != l_RHEditedFact.ModelFactTag.Tag)
           FactTagCommit(l_RHEditedFact, l_factsTagCommitList);
       }
-      AddinModuleController.SetExcelInteractionState(false);
-      
+     
+      // AddinModuleController.SetExcelInteractionState(false);
+      // TO DO : circular progress : self threaded UI with 
+
       if (l_factsCommitDict.Count > 0)
         FactsModel.Instance.UpdateList(l_factsCommitDict);
       
@@ -419,6 +421,7 @@ namespace FBI.MVC.Model
 
     private void AfterLegalHolidayRead(ErrorMessage status, LegalHoliday p_legalHoliday)
     {
+
       if (status == ErrorMessage.SUCCESS)
       {
         LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(p_legalHoliday.Id);
@@ -439,6 +442,7 @@ namespace FBI.MVC.Model
       {
         // Log commit error in view
       }
+
     }
 
     private void AfterLegalHolidayDelete(ErrorMessage status, UInt32 id)

@@ -38,8 +38,8 @@ namespace FBI.MVC.Model
 
     public RHEditedFactsManager(List<Int32> p_periodsList)
     {
-      m_factsTagList = Enum.GetNames(typeof(FactTag.TagType)).ToList();
-      m_legalHolidayTagList = Enum.GetNames(typeof(LegalHolidayTag)).ToList();
+      m_factsTagList =  StringUtils.ToLowerStringList(Enum.GetNames(typeof(FactTag.TagType)));
+      m_legalHolidayTagList = StringUtils.ToLowerStringList(Enum.GetNames(typeof(LegalHolidayTag)));
       m_periodsList = p_periodsList;
     }
 
@@ -87,7 +87,8 @@ namespace FBI.MVC.Model
       p_rangeHighlighter.FillInputsBaseColor(p_editedFact.Cell);
       p_editedFact.EditedClientId = GetClientIdFromCell(p_editedFact.Cell);
       p_editedFact.EditedFactTag.Tag = GetTagTypeFromCell(p_editedFact.Cell);
-      // legal holiday setup ?
+      p_editedFact.EditedLegalHoliday.Tag = GetLegalHolidayTagFromCell(p_editedFact.Cell);
+
       p_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
       p_editedFact.SetCellStatusRH();
       m_RHEditedFacts.Set(p_editedFact.Cell.Address, new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, (Int32)p_editedFact.Period), p_editedFact);
@@ -179,7 +180,7 @@ namespace FBI.MVC.Model
           if (m_updateCellsOnDownload == true)
           {
             l_editedFact.SetEditedLegalHoliday(LegalHolidayTag.FER);
-            l_editedFact.Cell.Value2 = m_legalHolidayTagList[(Int32)LegalHolidayTag.FER];
+            l_editedFact.Cell.Value2 = m_legalHolidayTagList[(Int32)LegalHolidayTag.FER].ToUpper();
           }
         }
       }
@@ -272,7 +273,7 @@ namespace FBI.MVC.Model
       if (p_factTag != null)
         l_tag = p_factTag.Tag;
       if (l_tag != FactTag.TagType.NONE)
-        return m_factsTagList.ElementAt((Int32)l_tag);
+        return m_factsTagList.ElementAt((Int32)l_tag).ToUpper();
       else
       {
         AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, p_clientId);
@@ -293,7 +294,8 @@ namespace FBI.MVC.Model
           return l_client.Id;
         else
         {
-          if (m_factsTagList.Contains(p_cell.Value2 as string) == false)
+          string l_value = p_cell.Value2 as string;
+          if (m_factsTagList.Contains(l_value.ToLower()) == false)
              m_clientsToBeCreated.Add(p_cell.Value2 as string);
         }
       }
@@ -304,9 +306,11 @@ namespace FBI.MVC.Model
     {
       if (p_cell.Value2 == null)
         return FactTag.TagType.NONE;
-      if (m_factsTagList.Contains(p_cell.Value2 as string))
+
+      string l_value = p_cell.Value2 as string;
+      if (m_factsTagList.Contains(l_value.ToLower()))
       {
-        return (FactTag.TagType)m_factsTagList.FindIndex(x => x.StartsWith(p_cell.Value2 as string));
+        return (FactTag.TagType)m_factsTagList.FindIndex(x => x.StartsWith(l_value.ToLower()));
       }
       return FactTag.TagType.NONE;
     }
@@ -315,9 +319,11 @@ namespace FBI.MVC.Model
     {
       if (p_cell.Value2 == null)
         return LegalHolidayTag.NONE;
-      if (m_legalHolidayTagList.Contains(p_cell.Value2 as string))
+
+      string l_value = p_cell.Value2 as string;
+      if (m_legalHolidayTagList.Contains(l_value.ToLower()))
       {
-        return (LegalHolidayTag)m_legalHolidayTagList.FindIndex(x => x.StartsWith(p_cell.Value2 as string));
+        return (LegalHolidayTag)m_legalHolidayTagList.FindIndex(x => x.StartsWith(l_value.ToLower()));
       }
 
       return LegalHolidayTag.NONE;
