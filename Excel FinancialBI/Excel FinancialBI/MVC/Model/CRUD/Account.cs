@@ -55,7 +55,7 @@ namespace FBI.MVC.Model.CRUD
       MONETARY = 1,
       NUMBER,
       PERCENTAGE,
-      DATE_
+      DATE
     }
 
     public enum FormulaTypesLookUpOption

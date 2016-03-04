@@ -26,6 +26,8 @@ namespace FBI.MVC.View
 
     SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView> m_selectionTVList = new SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView>();
     SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>> m_TVFormatData = new SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>>();
+    int m_SPDistance = 250;
+    bool m_filterPaneOpen = true;
 
     #endregion
 
@@ -204,6 +206,23 @@ namespace FBI.MVC.View
       return (l_tv);
     }
 
+    private void OnFilterPanelCollapseClick(object p_sender, EventArgs p_e)
+    {
+      if (p_sender.GetType() == typeof(vButton))
+      {
+        vButton l_button = p_sender as vButton;
+        l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
+      }
+      if (m_filterPaneOpen)
+      {
+        m_SPDistance = SplitContainer.SplitterDistance;
+        SplitContainer.SplitterDistance = SplitContainer.Height;
+      }
+      else
+        SplitContainer.SplitterDistance = m_SPDistance;
+      m_filterPaneOpen = !m_filterPaneOpen;
+    }
+
     void OnSelectAllButtonClick(object p_sender, EventArgs p_e)
     {
       AFbiTreeView l_tv = GetTVFromToolStripMenuItem(p_sender);
@@ -314,6 +333,5 @@ namespace FBI.MVC.View
     }
 
     #endregion
-
   }
 }

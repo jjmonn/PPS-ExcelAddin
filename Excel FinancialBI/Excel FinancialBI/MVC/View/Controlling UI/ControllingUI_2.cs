@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
 {
@@ -23,6 +24,8 @@ namespace FBI.MVC.View
     #region Variables
 
     private CUIController m_controller = null;
+    bool m_leftPaneOpen = true;
+    int m_leftPaneSize = 230;
 
     #endregion
 
