@@ -25,6 +25,7 @@ namespace FBI
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
     public static string UserName { get; private set; }
     public static string Password { get; private set; }
+    public static dynamic HostApplication { get; set; }
 
     static void SelectLanguage()
     {
@@ -122,7 +123,7 @@ namespace FBI
       Password = p_password;
       UserModel.Instance.CurrentUserName = UserName;
       m_networkLauncher = new NetworkLauncher();
-      if ((result = m_networkLauncher.Launch("192.168.1.11", 4242, OnDisconnect)) == true)
+      if ((result = m_networkLauncher.Launch("192.168.1.50", 4242, OnDisconnect)) == true)
         Authenticator.Instance.AskAuthentication(UserName, Password);
       if (ConnectionStateEvent != null)
         ConnectionStateEvent(result);
@@ -164,6 +165,5 @@ namespace FBI
         p_control.Enabled = p_connected;
       }
     }
-
   }
 }

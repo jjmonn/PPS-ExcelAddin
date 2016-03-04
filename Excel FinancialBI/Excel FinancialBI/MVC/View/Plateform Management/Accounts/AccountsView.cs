@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
-
+using Microsoft.Office.Interop.Excel;
 using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
@@ -115,6 +115,7 @@ namespace FBI.MVC.View
 
       m_accountTV.MouseDown += OnAccountsTreeviewMouseDown;
       m_accountTV.NodeDropped += OnAccountsTreeviewNodeDropped;
+      m_dropToExcelRightClickMenu.Click += OnDropSelectedAccountToExcel;
     }
 
     public void CloseView()
@@ -204,7 +205,7 @@ namespace FBI.MVC.View
       AddSubAccountToolStripMenuItem.Text = Local.GetValue("accounts.new_account");
       AddCategoryToolStripMenuItem.Text = Local.GetValue("accounts.add_tab_account");
       DeleteAccountToolStripMenuItem.Text = Local.GetValue("accounts.delete_account");
-      DropHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts.drop_to_excel");
+      m_dropToExcelRightClickMenu.Text = Local.GetValue("accounts.drop_to_excel");
       NewToolStripMenuItem.Text = Local.GetValue("general.account");
       CreateANewAccountToolStripMenuItem.Text = Local.GetValue("accounts.new_account");
       CreateANewCategoryToolStripMenuItem.Text = Local.GetValue("accounts.add_tab_account");
@@ -417,6 +418,44 @@ namespace FBI.MVC.View
 
     #region Click
 
+    private Range GetActiveCell()
+    {
+      Worksheet l_activeWS = Addin.HostApplication.ActiveSheet;
+      Range l_RNG = Addin.HostApplication.ActiveCell;
+      DialogResult l_response = default(DialogResult);
+
+      if (l_RNG == null)
+        MessageBox.Show(Local.GetValue("accounts.msg_destination_cell_not_valid"));
+      else
+      {
+        l_response = MessageBox.Show(Local.GetValue("accounts.msg_accounts_drop") + l_RNG.Address, "", MessageBoxButtons.OKCancel);
+        if (l_response == DialogResult.OK)
+          return (l_RNG);
+      }
+      return (null);
+    }
+
+    private void OnDropSelectedAccountToExcel(object p_sender, EventArgs p_e)
+    {
+      if (m_accountTV.SelectedNode == null)
+        return;
+      Range l_RNG = GetActiveCell();
+      int l_indentLevel = 0;
+
+      if (l_RNG != null)
+        if (WorksheetWriter.WriteAccount(m_accountTV.SelectedNode, ref l_RNG, ref l_indentLevel) == false)
+          MessageBox.Show(Local.GetValue("accounts.error.drop_failed"));
+    }
+
+    private void OnDropAllAccountOnExcel(object p_sender, EventArgs p_e)
+    {
+      Range l_RNG = GetActiveCell();
+
+      if (l_RNG != null)
+        if (WorksheetWriter.WriteAccountsFromTreeView(m_accountTV, l_RNG) == false)
+          MessageBox.Show(Local.GetValue("accounts.error.drop_failed"));
+    }
+
     private void OnAllocationKeyButtonClick(object p_sender, EventArgs p_e)
     {
       if (m_accountTV.SelectedNode != null)
@@ -599,8 +638,8 @@ namespace FBI.MVC.View
 
     private void OnAccountsTreeviewMouseDown(object p_sender, MouseEventArgs p_e)
     {
-      if (m_accountTV.FindAtPosition(new Point(p_e.X, p_e.Y)) != null)
-        m_currentNode = m_accountTV.FindAtPosition(new Point(p_e.X, p_e.Y));
+      if (m_accountTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y)) != null)
+        m_currentNode = m_accountTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y));
       if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
         m_accountTV.DoDragDrop(m_currentNode, DragDropEffects.Move);
     }

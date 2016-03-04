@@ -146,6 +146,7 @@
       <string name="create">Impossible de créer le compte.</string>
       <string name="update">Impossible de modifier le compte.</string>
       <string name="delete">Impossible de supprimer le compte.</string>
+      <string name="drop_failed">L'envoie des comptes vers Excel a échoué.</string>
     </category>
   </category>
 
