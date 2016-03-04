@@ -15,5 +15,16 @@ namespace FBI.Utils
           return (true);
       return (false);
     }
+
+    public static List<string> ToLowerStringList(string[] p_stringArray)
+    {
+      List<string> l_list = new List<string>();
+      foreach (string l_string in p_stringArray)
+      {
+        l_list.Add(l_string.ToLower());
+      }
+      return l_list;
+    }
+
   }
 }

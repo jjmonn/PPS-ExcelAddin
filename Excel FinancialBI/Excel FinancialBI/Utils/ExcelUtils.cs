@@ -35,16 +35,21 @@ namespace FBI.Utils
 
     private static void RenammeWorksheet(Worksheet p_worksheet, Workbook p_workbook, string p_name)
     {
-      if (p_name.Length < EXCEL_SHEET_NAME_MAX_LENGHT && CheckIfWorkbookContainsWorksheetName(p_workbook, p_name) == false)
+      try
       {
-        p_worksheet.Name = p_name;
-	    } else {
-        p_name = p_name.Substring(0, EXCEL_SHEET_NAME_MAX_LENGHT);
-        if (CheckIfWorkbookContainsWorksheetName(p_workbook, p_name) == false)
-        {
+        if (p_name.Length < EXCEL_SHEET_NAME_MAX_LENGHT && CheckIfWorkbookContainsWorksheetName(p_workbook, p_name) == false)
           p_worksheet.Name = p_name;
-		    }
-	    }
+        else
+        {
+          p_name = p_name.Substring(0, EXCEL_SHEET_NAME_MAX_LENGHT);
+          if (CheckIfWorkbookContainsWorksheetName(p_workbook, p_name) == false)
+            p_worksheet.Name = p_name;
+        }
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("Could not renamme worksheet " + e.Message);
+      }
     }
 
     private static Range FillHeader(Worksheet p_worksheet, string[] p_headerNamesArray, string[] p_headerValuesArray)
@@ -96,7 +101,8 @@ namespace FBI.Utils
       Int32 i = 0;
       foreach (Int32 l_periodAsInt in p_periodsList)
       {
-        p_destinationCell.Offset[0, 1 + i].Value = PeriodModel.GetFormatedDate(l_periodAsInt, p_timeConfig);
+        string l_date =  DateTime.FromOADate(l_periodAsInt).ToString("MM/dd/yyyy");
+        p_destinationCell.Offset[0, 1 + i].Value = l_date;  //PeriodModel.GetFormatedDate(l_periodAsInt, p_timeConfig);
         i = i + 1;
       }
     }
