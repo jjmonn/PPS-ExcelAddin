@@ -288,6 +288,7 @@
       <string name="time_config_not_supported">Cette configuration de périodes n'existe pas. Veuillez contacter votre administrateur Financial BI.</string>
       <string name="cannot_copy_folder">Un dossier ne peut pas être copié.</string>
       <string name="no_selected_version">Veuillez sélectioner une version.</string>
+      <string name="cannot_select_folder">Vous ne pouvez pas sélectionner un dossier.</string>
     </category>
     
   </category>

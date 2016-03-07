@@ -26,6 +26,7 @@ namespace FBI
     public static string UserName { get; private set; }
     public static string Password { get; private set; }
     public static dynamic HostApplication { get; set; }
+    public static AddinModule AddinModule { get; set; }
 
     static void SelectLanguage()
     {
@@ -93,22 +94,6 @@ namespace FBI
     {
       InitModels();
       SelectLanguage();
-      SetCurrentProcessId(Settings.Default.processId);
-    }
-
-    public static void SetCurrentProcessId(int p_processId)
-    {
-      Settings.Default.processId = (int)p_processId;
-      Settings.Default.Save();
-      if (p_processId == (int)Account.AccountProcess.FINANCIAL)
-      {
-        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_financial"));
-      }
-      else
-      {
-        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_rh"));
-      }
-
     }
 
     public static void Disconnect()
@@ -124,7 +109,7 @@ namespace FBI
       Password = p_password;
       UserModel.Instance.CurrentUserName = UserName;
       m_networkLauncher = new NetworkLauncher();
-      if ((result = m_networkLauncher.Launch("192.168.1.50", 4242, OnDisconnect)) == true)
+      if ((result = m_networkLauncher.Launch("192.168.1.11", 4242, OnDisconnect)) == true)
         Authenticator.Instance.AskAuthentication(UserName, Password);
       if (ConnectionStateEvent != null)
         ConnectionStateEvent(result);
@@ -164,6 +149,46 @@ namespace FBI
       else
       {
         p_control.Enabled = p_connected;
+      }
+    }
+
+    public static UInt32 VersionId
+    {
+      get { return (Properties.Settings.Default.version_id); }
+      set
+      {
+        string l_name = VersionModel.Instance.GetValueName(value);
+
+        if (l_name == "")
+          l_name = Local.GetValue("general.select_version");
+        AddinModule.m_versionRibbonButton.Caption = l_name;
+        Properties.Settings.Default.version_id = value;
+        Properties.Settings.Default.Save();
+      }
+    }
+
+    public static Account.AccountProcess Process
+    {
+      get { return ((Account.AccountProcess)Properties.Settings.Default.processId); }
+      set
+      {
+        string l_name;
+
+        switch (value)
+        {
+          case Account.AccountProcess.RH:
+            l_name = Local.GetValue("process.process_rh");
+            break;
+          case Account.AccountProcess.FINANCIAL:
+            l_name = Local.GetValue("process.process_financial");
+            break;
+          default:
+            l_name = Local.GetValue("process.select_process");
+            break;
+        }
+        AddinModule.m_processRibbonButton.Caption = l_name;
+        Properties.Settings.Default.processId = (Int32)value;
+        Properties.Settings.Default.Save();
       }
     }
   }

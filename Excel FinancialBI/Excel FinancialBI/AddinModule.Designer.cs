@@ -1061,7 +1061,6 @@
     private AddinExpress.MSO.ADXRibbonGroup m_connectionGroup;
     private AddinExpress.MSO.ADXRibbonButton m_connectionButton;
     private AddinExpress.MSO.ADXRibbonGroup m_versionGroup;
-    private AddinExpress.MSO.ADXRibbonButton m_versionRibbonButton;
     private AddinExpress.MSO.ADXRibbonGroup m_uploadGroup;
     private AddinExpress.MSO.ADXRibbonSplitButton m_snapshotRibbonSplitButton;
     private AddinExpress.MSO.ADXRibbonMenu adxRibbonMenu1;
@@ -1093,7 +1092,6 @@
     public AddinExpress.XL.ADXExcelTaskPanesCollectionItem ReportUploadAccountInfoSidePaneItem;
     private AddinExpress.MSO.ADXExcelAppEvents adxExcelAppEvents1;
     public AddinExpress.XL.ADXExcelTaskPanesCollectionItem ReportUploadEntitySelectionSidePaneItem;
-    private AddinExpress.MSO.ADXRibbonSplitButton m_processRibbonButton;
     private AddinExpress.MSO.ADXRibbonMenu adxRibbonMenu4;
     private AddinExpress.MSO.ADXRibbonButton m_financialProcessRibbonButton;
     private AddinExpress.MSO.ADXRibbonButton m_RHProcessRibbonButton;
@@ -1164,6 +1162,8 @@
     private AddinExpress.MSO.ADXRibbonButton m_PDCPeriodsRangeEditButton;
     private AddinExpress.MSO.ADXRibbonButton m_PDCSumbissionExitButton;
     private AddinExpress.MSO.ADXRibbonGroup AdxRibbonRHExitGroup;
+    internal AddinExpress.MSO.ADXRibbonButton m_versionRibbonButton;
+    internal AddinExpress.MSO.ADXRibbonSplitButton m_processRibbonButton;
     
 
   }
