@@ -22,7 +22,7 @@ namespace FBI.Utils
       List<string> l_list = new List<string>();
       foreach (string l_string in p_stringArray)
       {
-        l_list.Add(StringUtils.RemoveDiacritics(l_string));
+        l_list.Add(StringUtils.RemoveDiacritics(l_string).ToLower());
       }
       return l_list;
     }

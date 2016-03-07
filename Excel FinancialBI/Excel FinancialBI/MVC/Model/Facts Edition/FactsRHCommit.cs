@@ -277,11 +277,11 @@ namespace FBI.MVC.Model
           FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
           CreateFactTags();
         }
-        else
-        {
-          ReportCommitErrorOnFactTagsCommit();
-          FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
-        }
+      }
+      else
+      {
+        // Report facts download error
+        FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
       }
     }
 
@@ -342,7 +342,9 @@ namespace FBI.MVC.Model
 
     private void AfterFactTagCreate(ErrorMessage status, UInt32 id)
     {
-      AddinModuleController.SetExcelInteractionState(false);
+    // TO DO : update list
+      // Excel interaction false nécessaire
+      //  AddinModuleController.SetExcelInteractionState(false);
       EditedRHFact l_editedFact = m_IdEditedFactDict[id];
       if (l_editedFact != null)
       {
@@ -354,7 +356,7 @@ namespace FBI.MVC.Model
           // log commit error to view
         }
       }
-      AddinModuleController.SetExcelInteractionState(true);
+  //    AddinModuleController.SetExcelInteractionState(true);
     }
 
     // use single Fact Tag Update ?
