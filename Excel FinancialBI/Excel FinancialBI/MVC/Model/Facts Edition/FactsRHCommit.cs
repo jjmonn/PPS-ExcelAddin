@@ -297,22 +297,22 @@ namespace FBI.MVC.Model
 
     #region After commits events
 
-    private void AfterFactsCommit(ErrorMessage p_status, Dictionary<string, ErrorMessage> p_resultsDict)
+    private void AfterFactsCommit(ErrorMessage p_status, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
         AddinModuleController.SetExcelInteractionState(false);
-        foreach (KeyValuePair<string, ErrorMessage> l_addressMessagePair in p_resultsDict)
+        foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_addressMessagePair in p_resultsDict)
         {
           EditedRHFact l_editedFact = m_RHEditedFacts[l_addressMessagePair.Key];
-          if (l_editedFact != null && l_addressMessagePair.Value == ErrorMessage.SUCCESS)
+          if (l_editedFact != null && l_addressMessagePair.Value.Item2 == ErrorMessage.SUCCESS)
           {
             m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
           }
           else
           {
             // put back model value for ClientId, quid fact not accessible in server answer, to be modified
-            OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value);
+            OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
           }
         }
         AddinModuleController.SetExcelInteractionState(true);

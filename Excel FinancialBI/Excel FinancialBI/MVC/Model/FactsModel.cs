@@ -15,7 +15,7 @@ namespace FBI.MVC.Model
     static FactsModel s_instance = new FactsModel();
     public static FactsModel Instance { get { return (s_instance); } }
     public event UpdateEventHandler UpdateEvent;
-    public delegate void UpdateEventHandler(ErrorMessage p_status, Dictionary<string, ErrorMessage> p_resultsDict);
+    public delegate void UpdateEventHandler(ErrorMessage p_status, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict);
     public event DeleteEventHandler DeleteEvent;
     public delegate void DeleteEventHandler(ErrorMessage p_status, UInt32 p_factId);
     public event ReadEventHandler ReadEvent;
@@ -99,14 +99,14 @@ namespace FBI.MVC.Model
       if (packet.GetError() == ErrorMessage.SUCCESS)
       {
         Int32 requestId = packet.GetRequestId();
-        SafeDictionary<string, ErrorMessage> resultsDict = new SafeDictionary<string, ErrorMessage>();
+        SafeDictionary<string, Tuple<UInt32, ErrorMessage>> resultsDict = new SafeDictionary<string, Tuple<UInt32, ErrorMessage>>();
         packet.ReadUint32();
         if (m_requestIdCommitDic.ContainsKey(requestId))
         {
           foreach (string cell_address in m_requestIdCommitDic[requestId])
           {
             packet.ReadUint32();
-            resultsDict.Add(cell_address, (ErrorMessage)packet.ReadUint8());
+            resultsDict.Add(cell_address, new Tuple<UInt32, ErrorMessage>(packet.ReadUint32(), (ErrorMessage)packet.ReadUint8()));
           }
           m_requestIdCommitDic.Remove(requestId);
         }
