@@ -67,28 +67,25 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.MainTableLayout.Controls.Add(this.Panel1, 0, 0);
       this.MainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
       this.MainTableLayout.Location = new System.Drawing.Point(0, 0);
-      this.MainTableLayout.Margin = new System.Windows.Forms.Padding(4);
       this.MainTableLayout.Name = "MainTableLayout";
       this.MainTableLayout.RowCount = 2;
-      this.MainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+      this.MainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
       this.MainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.MainTableLayout.Size = new System.Drawing.Size(360, 826);
+      this.MainTableLayout.Size = new System.Drawing.Size(270, 671);
       this.MainTableLayout.TabIndex = 3;
       // 
       // SplitContainer
       // 
       this.SplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.SplitContainer.Location = new System.Drawing.Point(4, 35);
-      this.SplitContainer.Margin = new System.Windows.Forms.Padding(4);
+      this.SplitContainer.Location = new System.Drawing.Point(3, 28);
       this.SplitContainer.Name = "SplitContainer";
       this.SplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
       // 
       // SplitContainer.Panel2
       // 
       this.SplitContainer.Panel2.Controls.Add(this.m_selectionTableLayout);
-      this.SplitContainer.Size = new System.Drawing.Size(352, 787);
-      this.SplitContainer.SplitterDistance = 365;
-      this.SplitContainer.SplitterWidth = 5;
+      this.SplitContainer.Size = new System.Drawing.Size(264, 640);
+      this.SplitContainer.SplitterDistance = 296;
       this.SplitContainer.TabIndex = 1;
       // 
       // m_selectionTableLayout
@@ -98,19 +95,18 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.m_selectionTableLayout.Controls.Add(this.TableLayoutPanel2, 0, 0);
       this.m_selectionTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_selectionTableLayout.Location = new System.Drawing.Point(0, 0);
-      this.m_selectionTableLayout.Margin = new System.Windows.Forms.Padding(4);
       this.m_selectionTableLayout.Name = "m_selectionTableLayout";
       this.m_selectionTableLayout.RowCount = 2;
-      this.m_selectionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+      this.m_selectionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
       this.m_selectionTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.m_selectionTableLayout.Size = new System.Drawing.Size(352, 417);
+      this.m_selectionTableLayout.Size = new System.Drawing.Size(264, 340);
       this.m_selectionTableLayout.TabIndex = 0;
       // 
       // TableLayoutPanel2
       // 
       this.TableLayoutPanel2.ColumnCount = 2;
       this.TableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.TableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 33F));
+      this.TableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
       this.TableLayoutPanel2.Controls.Add(this.SelectionCB, 0, 0);
       this.TableLayoutPanel2.Controls.Add(this.CollapseSelectionBT, 1, 0);
       this.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -119,7 +115,7 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.TableLayoutPanel2.Name = "TableLayoutPanel2";
       this.TableLayoutPanel2.RowCount = 1;
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.TableLayoutPanel2.Size = new System.Drawing.Size(352, 31);
+      this.TableLayoutPanel2.Size = new System.Drawing.Size(264, 25);
       this.TableLayoutPanel2.TabIndex = 1;
       // 
       // SelectionCB
@@ -130,12 +126,11 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.SelectionCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.SelectionCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.SelectionCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.SelectionCB.DropDownWidth = 311;
-      this.SelectionCB.Location = new System.Drawing.Point(4, 4);
-      this.SelectionCB.Margin = new System.Windows.Forms.Padding(4);
+      this.SelectionCB.DropDownWidth = 233;
+      this.SelectionCB.Location = new System.Drawing.Point(3, 3);
       this.SelectionCB.Name = "SelectionCB";
       this.SelectionCB.RoundedCornersMaskListItem = ((byte)(15));
-      this.SelectionCB.Size = new System.Drawing.Size(311, 23);
+      this.SelectionCB.Size = new System.Drawing.Size(233, 19);
       this.SelectionCB.TabIndex = 0;
       this.SelectionCB.Text = "[CUI.selection]";
       this.SelectionCB.UseThemeBackColor = false;
@@ -151,12 +146,11 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.CollapseSelectionBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.CollapseSelectionBT.ImageKey = "minus";
       this.CollapseSelectionBT.ImageList = this.ExpansionImageList;
-      this.CollapseSelectionBT.Location = new System.Drawing.Point(323, 4);
-      this.CollapseSelectionBT.Margin = new System.Windows.Forms.Padding(4);
+      this.CollapseSelectionBT.Location = new System.Drawing.Point(242, 3);
       this.CollapseSelectionBT.Name = "CollapseSelectionBT";
       this.CollapseSelectionBT.PaintBorder = false;
       this.CollapseSelectionBT.RoundedCornersMask = ((byte)(15));
-      this.CollapseSelectionBT.Size = new System.Drawing.Size(25, 23);
+      this.CollapseSelectionBT.Size = new System.Drawing.Size(19, 19);
       this.CollapseSelectionBT.TabIndex = 1;
       this.CollapseSelectionBT.Text = " ";
       this.CollapseSelectionBT.UseVisualStyleBackColor = false;
@@ -177,16 +171,15 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.Panel1.Location = new System.Drawing.Point(0, 0);
       this.Panel1.Margin = new System.Windows.Forms.Padding(0);
       this.Panel1.Name = "Panel1";
-      this.Panel1.Size = new System.Drawing.Size(360, 31);
+      this.Panel1.Size = new System.Drawing.Size(270, 25);
       this.Panel1.TabIndex = 2;
       // 
       // m_entitySelectionLabel
       // 
       this.m_entitySelectionLabel.AutoSize = true;
-      this.m_entitySelectionLabel.Location = new System.Drawing.Point(4, 6);
-      this.m_entitySelectionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.m_entitySelectionLabel.Location = new System.Drawing.Point(3, 5);
       this.m_entitySelectionLabel.Name = "m_entitySelectionLabel";
-      this.m_entitySelectionLabel.Size = new System.Drawing.Size(151, 17);
+      this.m_entitySelectionLabel.Size = new System.Drawing.Size(115, 13);
       this.m_entitySelectionLabel.TabIndex = 0;
       this.m_entitySelectionLabel.Text = "[CUI.entities_selection]";
       this.m_entitySelectionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -219,29 +212,28 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
             this.SelectAllToolStripMenuItem,
             this.UnselectAllToolStripMenuItem});
       this.m_rightClickMenu.Name = "periodsRightClickMenu";
-      this.m_rightClickMenu.Size = new System.Drawing.Size(197, 56);
+      this.m_rightClickMenu.Size = new System.Drawing.Size(166, 48);
       // 
       // SelectAllToolStripMenuItem
       // 
       this.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem";
-      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
       this.SelectAllToolStripMenuItem.Text = "[CUI.select_all]";
       // 
       // UnselectAllToolStripMenuItem
       // 
       this.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem";
-      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(196, 26);
+      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
       this.UnselectAllToolStripMenuItem.Text = "[CUI.unselect_all]";
       // 
       // CUI2LeftPane
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
       this.Controls.Add(this.MainTableLayout);
-      this.Margin = new System.Windows.Forms.Padding(4);
       this.Name = "CUI2LeftPane";
-      this.Size = new System.Drawing.Size(360, 826);
+      this.Size = new System.Drawing.Size(270, 671);
       this.MainTableLayout.ResumeLayout(false);
       this.SplitContainer.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).EndInit();
