@@ -265,6 +265,7 @@
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\UnreferencedClientsController.cs" />
     <Compile Include="MVC\Controller\IProgressBarController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
@@ -300,6 +301,7 @@
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
     <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
+    <Compile Include="MVC\Model\Facts Edition\FactsRHCommit.cs" />
     <Compile Include="MVC\Model\LegacyComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
@@ -717,6 +719,7 @@
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\TreeNode.cs" />
     <Compile Include="Utils\TreeviewUtils.cs" />
+    <Compile Include="Utils\WorksheetWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
@@ -745,6 +748,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\CUI2VisualizationContainer.resx">
       <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\ResultView.resx">
+      <DependentUpon>ResultView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\FBIFunctionUI.resx">
       <DependentUpon>FBIFunctionUI.cs</DependentUpon>

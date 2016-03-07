@@ -35,6 +35,7 @@ namespace FBI
 
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
+      Addin.HostApplication = HostApplication;
       Addin.Main();
       m_controller = new AddinModuleController(this);
 

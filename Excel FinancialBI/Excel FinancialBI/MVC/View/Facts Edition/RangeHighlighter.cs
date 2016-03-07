@@ -30,11 +30,11 @@ namespace FBI.MVC.View
 
       switch (p_status)
       {
-        case EditedFactStatus.DifferentInput:
+        case EditedFactStatus.InputDifferent:
           FillInputCellRed(p_cell);
           break;
 
-        case EditedFactStatus.DifferentOutput :
+        case EditedFactStatus.OutputDifferent :
           FillOutputCellRed(p_cell);
           break;
 
@@ -48,6 +48,18 @@ namespace FBI.MVC.View
 
         case EditedFactStatus.FactTagDifferent :
           FillInputCellRed(p_cell);
+          break;
+
+        case EditedFactStatus.LegalHolidayEqual:
+          FillInputsBaseColor(p_cell);
+          break;
+
+        case EditedFactStatus.LegalHolidayDifferent:
+          FillInputCellRed(p_cell);
+          break;
+
+        case EditedFactStatus.Committed:
+          FillCellGreen(p_cell);
           break;
 
       }
@@ -69,8 +81,11 @@ namespace FBI.MVC.View
       p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputsFillColor;
     }
 
-    private void FillInputCellRed(Range p_cell)
+    public void FillInputCellRed(Range p_cell)
     {
+      if (p_cell == null)
+        return;
+
       RegisterCellOriginalFill(p_cell);
       p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputsRedFill;
     }

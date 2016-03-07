@@ -31,7 +31,7 @@ namespace FBI.MVC.Model.CRUD
     public void UpdateFinancialFact(Fact p_fact)
     {
       UpdateFactBase(p_fact);
-
+      Value = p_fact.Value;
       ClientId = p_fact.ClientId;
       SetFactValueStatus();
     }
@@ -41,14 +41,14 @@ namespace FBI.MVC.Model.CRUD
       if (Account.FormulaType == CRUD.Account.FormulaTypes.HARD_VALUE_INPUT || Account.FormulaType == CRUD.Account.FormulaTypes.FIRST_PERIOD_INPUT)
       {
         if (EditedValue != this.Value)
-          SetFactStatus(EditedFactStatus.DifferentInput);
+          SetFactStatus(EditedFactStatus.InputDifferent);
         else
           SetFactStatus(EditedFactStatus.InputEqual);
       }
       else
       {
         if (EditedValue != this.Value)
-          SetFactStatus(EditedFactStatus.DifferentOutput);
+          SetFactStatus(EditedFactStatus.OutputDifferent);
         else
           SetFactStatus(EditedFactStatus.OutputEqual);
       }

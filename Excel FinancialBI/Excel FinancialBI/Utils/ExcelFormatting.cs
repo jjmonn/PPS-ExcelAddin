@@ -117,7 +117,7 @@ namespace FBI.Utils
                 row.Cells.NumberFormat = "#,##0.00";
                 // further evolution set unit ?
                 break;
-              case Account.AccountType.DATE_:
+              case Account.AccountType.DATE:
                 row.Cells.NumberFormat = "d-mmm-yy";
                 // d-mmm-yy
                 break;

@@ -26,6 +26,8 @@ namespace FBI.MVC.View
 
     SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView> m_selectionTVList = new SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView>();
     SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>> m_TVFormatData = new SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>>();
+    int m_SPDistance = 250;
+    bool m_filterPaneOpen = true;
 
     #endregion
 
@@ -57,6 +59,8 @@ namespace FBI.MVC.View
     {
       m_selectionTVList[new Tuple<AxisType, Type>((AxisType)0, typeof(Version))].NodeChecked += OnVersionSelect;
       SelectionCB.SelectedItemChanged += OnSelectionCBSelectedItemChanged;
+      UnselectAllToolStripMenuItem.Click += OnUnSelectAllButtonClick;
+      SelectAllToolStripMenuItem.Click += OnSelectAllButtonClick;
     }
 
     private void MultilangueSetup()
@@ -169,6 +173,7 @@ namespace FBI.MVC.View
         FormatTV(p_tv, m_TVFormatData[p_key]);
       if (p_control != null)
         p_control.Add(p_tv);
+      p_tv.ContextMenuStrip = m_rightClickMenu;
     }
 
     void FormatTV(AFbiTreeView p_tv, Tuple<bool, bool, UInt32> p_format)
@@ -188,6 +193,53 @@ namespace FBI.MVC.View
     #endregion
 
     #region Event
+
+    AFbiTreeView GetTVFromToolStripMenuItem(object p_sender)
+    {
+      if (p_sender.GetType() != typeof(ToolStripMenuItem))
+        return null;
+      ToolStripMenuItem l_item = p_sender as ToolStripMenuItem;
+      ContextMenuStrip l_menu = l_item.Owner as ContextMenuStrip;
+      if (l_menu.SourceControl.GetType().IsSubclassOf(typeof(AFbiTreeView)) == false)
+        return null;
+      AFbiTreeView l_tv = l_menu.SourceControl as AFbiTreeView;
+      return (l_tv);
+    }
+
+    private void OnFilterPanelCollapseClick(object p_sender, EventArgs p_e)
+    {
+      if (p_sender.GetType() == typeof(vButton))
+      {
+        vButton l_button = p_sender as vButton;
+        l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
+      }
+      if (m_filterPaneOpen)
+      {
+        m_SPDistance = SplitContainer.SplitterDistance;
+        SplitContainer.SplitterDistance = SplitContainer.Height;
+      }
+      else
+        SplitContainer.SplitterDistance = m_SPDistance;
+      m_filterPaneOpen = !m_filterPaneOpen;
+    }
+
+    void OnSelectAllButtonClick(object p_sender, EventArgs p_e)
+    {
+      AFbiTreeView l_tv = GetTVFromToolStripMenuItem(p_sender);
+
+      if (l_tv != null)
+        foreach (vTreeNode l_node in l_tv.GetNodes())
+          l_node.Checked = CheckState.Checked;
+    }
+
+    void OnUnSelectAllButtonClick(object p_sender, EventArgs p_e)
+    {
+      AFbiTreeView l_tv = GetTVFromToolStripMenuItem(p_sender);
+
+      if (l_tv != null)
+        foreach (vTreeNode l_node in l_tv.GetNodes())
+          l_node.Checked = CheckState.Unchecked;
+    }
 
     void OnVersionSelect(object p_sender, vTreeViewEventArgs p_e)
     {
@@ -281,6 +333,5 @@ namespace FBI.MVC.View
     }
 
     #endregion
-
   }
 }

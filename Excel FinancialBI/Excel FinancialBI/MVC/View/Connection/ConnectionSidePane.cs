@@ -140,6 +140,7 @@ namespace FBI.MVC.View
     private void m_cancelButton_Click(object sender, EventArgs e)
     {
       IsLoading = false;
+      Addin.Disconnect();
     }
 
     #endregion

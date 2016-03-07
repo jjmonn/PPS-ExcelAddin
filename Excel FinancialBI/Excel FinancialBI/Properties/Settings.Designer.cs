@@ -12,7 +12,7 @@ namespace FBI.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -38,9 +38,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("8")]
-        public string tablesFontSize {
+        public double tablesFontSize {
             get {
-                return ((string)(this["tablesFontSize"]));
+                return ((double)(this["tablesFontSize"]));
             }
             set {
                 this["tablesFontSize"] = value;
@@ -50,9 +50,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("8.5")]
-        public string dgvFontSize {
+        public double dgvFontSize {
             get {
-                return ((string)(this["dgvFontSize"]));
+                return ((double)(this["dgvFontSize"]));
             }
             set {
                 this["dgvFontSize"] = value;
@@ -74,9 +74,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public string controllingUIResizeTofitGrid {
+        public bool controllingUIResizeTofitGrid {
             get {
-                return ((string)(this["controllingUIResizeTofitGrid"]));
+                return ((bool)(this["controllingUIResizeTofitGrid"]));
             }
             set {
                 this["controllingUIResizeTofitGrid"] = value;

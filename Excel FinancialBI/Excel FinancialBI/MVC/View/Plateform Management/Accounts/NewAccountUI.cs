@@ -85,17 +85,17 @@ namespace FBI.MVC.View
 
     private void ComboBoxesInit()
     {
-      foreach (ListItem l_item in m_view.TypeComboBox.Items)
+      foreach (ListItem l_item in m_view.TypeCB.Items)
         TypeComboBox.Items.Add(l_item);
       TypeComboBox.SelectedIndex = 0;
       TypeComboBox.DropDownList = true;
 
-      foreach (ListItem l_item in m_view.ProcessComboBox.Items)
+      foreach (ListItem l_item in m_view.ProcessCB.Items)
         ProcessComboBox.Items.Add(l_item);
       ProcessComboBox.SelectedIndex = 0;
       ProcessComboBox.DropDownList = true;
 
-      foreach (ListItem l_item in m_view.FormulaTypeComboBox.Items)
+      foreach (ListItem l_item in m_view.FormulaTypeCB.Items)
         FormulaComboBox.Items.Add(l_item);
       FormulaComboBox.SelectedIndex = 0;
       FormulaComboBox.DropDownList = true;

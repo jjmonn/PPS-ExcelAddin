@@ -219,7 +219,7 @@ namespace FBI.MVC.Model
       }
     }
 
-    public bool UpdateEditedValues(Range p_cell)
+    public bool UpdateEditedValueAndTag(Range p_cell)
     {
       if (m_editedFacts.ContainsKey(p_cell))
       {

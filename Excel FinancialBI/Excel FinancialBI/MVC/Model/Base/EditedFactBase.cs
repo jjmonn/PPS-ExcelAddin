@@ -13,10 +13,13 @@ namespace FBI.MVC.Model
   {
     InputEqual = 0,
     OutputEqual,
-    DifferentInput,
-    DifferentOutput,
+    InputDifferent,
+    OutputDifferent,
     FactTagEqual,
-    FactTagDifferent
+    FactTagDifferent,
+    LegalHolidayEqual,
+    LegalHolidayDifferent,
+    Committed
   }
 
   public delegate void CellValueChangedEventHandler(Range p_cell, EditedFactStatus p_status);
@@ -53,7 +56,6 @@ namespace FBI.MVC.Model
     protected void UpdateFactBase(Fact p_fact)
     {
       Id = p_fact.Id;
-      Value = p_fact.Value;
       ClientId = p_fact.ClientId;
       ProductId = p_fact.ProductId;
       AdjustmentId = p_fact.AdjustmentId;

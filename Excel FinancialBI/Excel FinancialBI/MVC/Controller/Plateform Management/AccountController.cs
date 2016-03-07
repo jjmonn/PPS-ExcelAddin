@@ -62,6 +62,12 @@ namespace FBI.MVC.Controller
 
     #region Server
 
+    public bool UpdateAccountList(List<Account> p_accountList)
+    {
+      AccountModel.Instance.UpdateList(p_accountList);
+      return (true);
+    }
+
     public bool UpdateAccount(Account p_account)
     {
       if (CheckAccountValidity(p_account) == false)

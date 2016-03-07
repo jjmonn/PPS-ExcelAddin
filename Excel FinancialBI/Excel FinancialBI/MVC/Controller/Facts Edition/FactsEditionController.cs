@@ -74,7 +74,6 @@ namespace FBI.MVC.Controller
       return false;
     }
 
-
     private void ActivateFactEditionRibbon()
     {
       if (m_process == Account.AccountProcess.FINANCIAL)
@@ -110,8 +109,8 @@ namespace FBI.MVC.Controller
 
     public void OnWorksheetChange(Range p_cell)
     {
-    
-      if (m_editedFactsManager.UpdateEditedValues(p_cell))
+
+      if (m_editedFactsManager.UpdateEditedValueAndTag(p_cell))
         return;
 
 
