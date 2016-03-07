@@ -128,7 +128,7 @@
     <string name="msg_account_deletion3">Ce compte et tous les comptes de sa hiérarchie vont être supprimés.</string>
     <string name="msg_account_deletion_confirmation">Confirmation de la suppression de comptes.</string>
     <string name="msg_destination_cell_not_valid">Une cellue doit être sélectionnée dans Excel pour pouvoir envoyer la hiérarchie des comptes sur la feuille.</string>
-    <string name="msg_accounts_drop">La hiérarchie des comptes va être envoyée.</string>
+    <string name="msg_accounts_drop">La hiérarchie des comptes va être envoyée: </string>
     <string name="title_formula_validation_confirmation">Confirmation de l'édition de la formule</string>
     <string name="msg_password_required">Modifier le type de formule de ce compte pourrait entraîner la perte de données, confirmez vous la conversion de ce compte en formule.</string>
     <string name="msg_new_tab_name">Nom du nouveau rapport: </string>
@@ -146,6 +146,7 @@
       <string name="create">Impossible de créer le compte.</string>
       <string name="update">Impossible de modifier le compte.</string>
       <string name="delete">Impossible de supprimer le compte.</string>
+      <string name="drop_failed">L'envoie des comptes vers Excel a échoué.</string>
     </category>
   </category>
 
@@ -287,6 +288,7 @@
       <string name="time_config_not_supported">Cette configuration de périodes n'existe pas. Veuillez contacter votre administrateur Financial BI.</string>
       <string name="cannot_copy_folder">Un dossier ne peut pas être copié.</string>
       <string name="no_selected_version">Veuillez sélectioner une version.</string>
+      <string name="cannot_select_folder">Vous ne pouvez pas sélectionner un dossier.</string>
     </category>
     
   </category>
@@ -539,7 +541,6 @@
 	<string name="update_dl_fail">Unable to download update of Financial BI. Please contact your administrator.</string>
   </category>
 
-
   <category name="clientAutoCreation">
     <string name="unerefenced_clients">Clients non enregistrés</string>
     <string name="create_all">Creer</string>
@@ -550,7 +551,6 @@
     <string name="resume_data_sumbission">Reprendre la soumission</string>
     <string name="msg_all_clients_must_be_treated">Tous les clients doivent être remplacés ou créés pour pouvoir reprendre la soumission.</string>
   </category>
-
 
   <category name="submissionsFollowUp">
     <string name="submissions_tracking">Suivi des Soumissions</string>
@@ -566,8 +566,3 @@
   </category>
 
 </category>
-
-
-<!-- 
-  Category name: forbidden character: '.'
--->

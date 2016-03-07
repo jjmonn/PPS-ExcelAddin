@@ -35,6 +35,8 @@ namespace FBI
 
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
+      Addin.HostApplication = HostApplication;
+      Addin.AddinModule = this;
       Addin.Main();
       m_controller = new AddinModuleController(this);
 
@@ -43,6 +45,7 @@ namespace FBI
       fbiRibbonChangeState(false);
       SuscribeEvents();
       MultilanguageSetup();
+      Addin.Process = (Account.AccountProcess)Properties.Settings.Default.processId;
     }
 
     private void AddinModule_AddinStartupComplete(object sender, EventArgs e)
@@ -239,17 +242,17 @@ namespace FBI
 
     private void m_financialProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      Addin.SetCurrentProcessId((int)Account.AccountProcess.FINANCIAL);
+      Addin.Process = Account.AccountProcess.FINANCIAL;
     }
 
     private void m_RHProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      Addin.SetCurrentProcessId((int)Account.AccountProcess.RH);
+      Addin.Process = Account.AccountProcess.RH;
     }
 
     private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
+      Account.AccountProcess l_process = Addin.Process;
       if (l_process == Account.AccountProcess.FINANCIAL)
       {
         if (m_controller.LaunchFinancialSnapshot(false) == false)
@@ -397,6 +400,7 @@ namespace FBI
     void OnAddinInitializationEvent()
     {
       fbiRibbonChangeState(true);
+      Addin.VersionId = Properties.Settings.Default.version_id;
     }
 
     private void OnConnectionEvent(bool p_connected)
@@ -411,9 +415,6 @@ namespace FBI
     {
       m_processRibbonButton.Caption = p_process;
     }
-
-   
-
   }
 }
 

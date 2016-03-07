@@ -53,6 +53,67 @@ namespace FBI.MVC.View
       m_builderList.Add(typeof(AxisElemModel), AxisElemBuilder);
       m_builderList.Add(typeof(FilterModel), FilterValueBuilder);
       m_builderList.Add(typeof(AccountModel), AccountBuilder);
+      MultilanguageSetup();
+      SuscribeEvents();
+    }
+
+    void MultilanguageSetup()
+    {
+      ExpandAllRightClick.Text = Local.GetValue("CUI.expand_all");
+      CollapseAllRightClick.Text = Local.GetValue("CUI.collapse_all");
+      LogRightClick.Text = Local.GetValue("CUI.log");
+      DGVFormatsButton.Text = Local.GetValue("CUI.display_options");
+      ColumnsAutoSize.Text = Local.GetValue("CUI.adjust_columns_size");
+      ColumnsAutoFitBT.Text = Local.GetValue("CUI.automatic_columns_adjustment");
+    }
+
+    void SuscribeEvents()
+    {
+      ExpandAllRightClick.Click += OnExpandAllClick;
+      CollapseAllRightClick.Click += OnCollapseAllClick;
+      ColumnsAutoSize.Click += OnColumnAutoSizeClick;
+      ColumnsAutoFitBT.Click += OnAutoFitClick;
+    }
+
+    #endregion
+
+    #region User Callbacks
+
+    void OnExpandAllClick(object p_sender, EventArgs p_e)
+    {
+      if (m_tabCtrl.SelectedTab == null || m_tabCtrl.SelectedTab.Controls.Count <= 0)
+        return;
+      DGV l_dgv = m_tabCtrl.SelectedTab.Controls[0] as DGV;
+
+      l_dgv.ColumnsHierarchy.ExpandAllItems();
+      l_dgv.RowsHierarchy.ExpandAllItems();
+    }
+
+    void OnCollapseAllClick(object p_sender, EventArgs p_e)
+    {
+      if (m_tabCtrl.SelectedTab == null || m_tabCtrl.SelectedTab.Controls.Count <= 0)
+        return;
+      DGV l_dgv = m_tabCtrl.SelectedTab.Controls[0] as DGV;
+
+      l_dgv.ColumnsHierarchy.CollapseAllItems();
+      l_dgv.RowsHierarchy.CollapseAllItems();
+    }
+
+    void OnColumnAutoSizeClick(object p_sender, EventArgs p_e)
+    {
+      if (m_tabCtrl.SelectedTab == null || m_tabCtrl.SelectedTab.Controls.Count <= 0)
+        return;
+      DGV l_dgv = m_tabCtrl.SelectedTab.Controls[0] as DGV;
+
+      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      l_dgv.Refresh();
+      l_dgv.Select();
+    }
+
+    void OnAutoFitClick(object p_sender, EventArgs p_e)
+    {
+      Properties.Settings.Default.controllingUIResizeTofitGrid = ColumnsAutoFitBT.Checked;
+      Properties.Settings.Default.Save();
     }
 
     #endregion
@@ -73,6 +134,7 @@ namespace FBI.MVC.View
           vTabPage l_tab = new vTabPage(l_account.Name);
           DGV l_dgv = new DGV();
 
+          l_dgv.ContextMenuStrip = m_dgvMenu;
           l_tab.Controls.Add(l_dgv);
           m_tabCtrl.TabPages.Add(l_tab);
           l_dgv.Dock = DockStyle.Fill;
@@ -120,6 +182,15 @@ namespace FBI.MVC.View
         }
         if (m_computeConfig.Request.Process == Account.AccountProcess.RH)
           RemoveOrphanDimensions();
+        foreach (vTabPage l_tab in m_tabCtrl.TabPages)
+        {
+          if (l_tab.Controls.Count > 0)
+          {
+            DGV l_dgv = l_tab.Controls[0] as DGV;
+            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+            l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+          }
+        }
       }
     }
 

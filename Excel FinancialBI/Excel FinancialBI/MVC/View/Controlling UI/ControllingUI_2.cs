@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
 {
@@ -23,6 +24,8 @@ namespace FBI.MVC.View
     #region Variables
 
     private CUIController m_controller = null;
+    bool m_leftPaneOpen = true;
+    int m_leftPaneSize = 230;
 
     #endregion
 
@@ -77,12 +80,6 @@ namespace FBI.MVC.View
       this.RefreshRightClick.Text = Local.GetValue("CUI.refresh");
       this.SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all");
       this.UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all");
-      this.ExpandAllRightClick.Text = Local.GetValue("CUI.expand_all");
-      this.CollapseAllRightClick.Text = Local.GetValue("CUI.collapse_all");
-      this.LogRightClick.Text = Local.GetValue("CUI.log");
-      this.DGVFormatsButton.Text = Local.GetValue("CUI.display_options");
-      this.ColumnsAutoSize.Text = Local.GetValue("CUI.adjust_columns_size");
-      this.ColumnsAutoFitBT.Text = Local.GetValue("CUI.automatic_columns_adjustment");
       this.SelectAllToolStripMenuItem1.Text = Local.GetValue("CUI.select_all");
       this.UnselectAllToolStripMenuItem1.Text = Local.GetValue("CUI.unselect_all");
 

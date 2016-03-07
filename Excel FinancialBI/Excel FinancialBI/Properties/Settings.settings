@@ -5,16 +5,16 @@
     <Setting Name="version_id" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">12</Value>
     </Setting>
-    <Setting Name="tablesFontSize" Type="System.String" Scope="User">
+    <Setting Name="tablesFontSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">8</Value>
     </Setting>
-    <Setting Name="dgvFontSize" Type="System.String" Scope="User">
+    <Setting Name="dgvFontSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">8.5</Value>
     </Setting>
     <Setting Name="user" Type="System.String" Scope="User">
       <Value Profile="(Default)">root</Value>
     </Setting>
-    <Setting Name="controllingUIResizeTofitGrid" Type="System.String" Scope="User">
+    <Setting Name="controllingUIResizeTofitGrid" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="titleFontColor" Type="System.Drawing.Color" Scope="User">

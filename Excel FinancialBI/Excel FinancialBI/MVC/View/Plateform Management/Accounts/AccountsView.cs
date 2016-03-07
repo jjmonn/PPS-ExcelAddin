@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
-
+using Microsoft.Office.Interop.Excel;
 using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
@@ -27,25 +27,26 @@ namespace FBI.MVC.View
 
     #region Variables
 
-    private RightManager m_rightMgr = new RightManager();
+    RightManager m_rightMgr = new RightManager();
 
-    private AccountController m_controller = null;
-    private FbiTreeView<Account> m_accountTV = null;
-    private FbiTreeView<GlobalFact> m_globalFactsTV = null;
-    private vTreeNode m_currentNode = null;
+    AccountController m_controller = null;
+    FbiTreeView<Account> m_accountTV = null;
+    FbiTreeView<GlobalFact> m_globalFactsTV = null;
+    vTreeNode m_currentNode = null;
 
-    private SafeDictionary<Account.FormulaTypes, ListItem> m_formulasTypesIdItemDict = new SafeDictionary<Account.FormulaTypes, ListItem>();
-    private SafeDictionary<Account.AccountType, ListItem> m_formatsIdItemDict = new SafeDictionary<Account.AccountType, ListItem>();
-    private SafeDictionary<Account.ConversionOptions, ListItem> m_currenciesConversionIdItemDict = new SafeDictionary<Account.ConversionOptions, ListItem>();
-    private SafeDictionary<Account.ConsolidationOptions, ListItem> m_consoOptionIdItemDict = new SafeDictionary<Account.ConsolidationOptions, ListItem>();
-    private SafeDictionary<Account.AccountProcess, ListItem> m_processIdItemDict = new SafeDictionary<Account.AccountProcess, ListItem>();
-    private bool m_dragAndDropFlag = false;
-    private bool m_isDisplayingAccountFlag = false;
-    private bool m_isEditingFormulaFlag = false;
-    private string m_saveFormula = "";
+    SafeDictionary<Account.FormulaTypes, ListItem> m_formulaTypeItemDict = new SafeDictionary<Account.FormulaTypes, ListItem>();
+    SafeDictionary<Account.AccountType, ListItem> m_formatsIdItemDict = new SafeDictionary<Account.AccountType, ListItem>();
+    SafeDictionary<Account.ConversionOptions, ListItem> m_currencyItemDict = new SafeDictionary<Account.ConversionOptions, ListItem>();
+    SafeDictionary<Account.ConsolidationOptions, ListItem> m_consoOptionItemDict = new SafeDictionary<Account.ConsolidationOptions, ListItem>();
+    SafeDictionary<Account.AccountProcess, ListItem> m_processIdItemDict = new SafeDictionary<Account.AccountProcess, ListItem>();
+    bool m_dragAndDropFlag = false;
+    bool m_isDisplayingAccountFlag = false;
+    bool m_isEditingFormulaFlag = false;
+    string m_saveFormula = "";
 
-    private SimpleBnf m_bnf = new SimpleBnf();
-    private FbiGrammar m_grammar = new FbiGrammar();
+    SimpleBnf m_bnf = new SimpleBnf();
+    FbiGrammar m_grammar = new FbiGrammar();
+    SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
 
     #endregion
 
@@ -67,16 +68,16 @@ namespace FBI.MVC.View
       {
         m_accountTV = new FbiTreeView<Account>(AccountModel.Instance.GetDictionary(), null, true);
         m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary());
+
+        AccountsTVInit();
+        GlobalFactsTVInit();
+        ComboBoxesInit();
       }
       catch (Exception e)
       {
         Forms.MsgBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.Message + e.StackTrace);
       }
-
-      AccountsTVInit();
-      GlobalFactsTVInit();
-      ComboBoxesInit();
 
       SuscribeEvents();
 
@@ -85,6 +86,7 @@ namespace FBI.MVC.View
       
       MultilangueSetup();
       SetFormulaEditionState(false);
+      
     }
 
     private void SuscribeEvents()
@@ -113,6 +115,7 @@ namespace FBI.MVC.View
 
       m_accountTV.MouseDown += OnAccountsTreeviewMouseDown;
       m_accountTV.NodeDropped += OnAccountsTreeviewNodeDropped;
+      m_dropToExcelRightClickMenu.Click += OnDropSelectedAccountToExcel;
     }
 
     public void CloseView()
@@ -124,18 +127,38 @@ namespace FBI.MVC.View
 
       GlobalFactModel.Instance.ReadEvent -= OnGlobalFactModelRead;
       GlobalFactModel.Instance.DeleteEvent -= OnGlobalFactModelDelete;
+      SendUpdatePosition();
+    }
+
+    void SendUpdatePosition()
+    {
+      List<Account> l_updatedAccountList = new List<Account>();
+
+      foreach (KeyValuePair<UInt32, Int32> l_pair in m_updatedAccountPos)
+      {
+        Account l_account = AccountModel.Instance.GetValue(l_pair.Key);
+
+        if (l_account == null || l_account.ItemPosition == l_pair.Value)
+          continue;
+        l_account = l_account.Clone();
+        l_account.ItemPosition = l_pair.Value;
+        l_updatedAccountList.Add(l_account);
+      }
+      if (l_updatedAccountList.Count > 0)
+        if (m_controller.UpdateAccountList(l_updatedAccountList) == false)
+          MsgBox.Show(m_controller.Error);
     }
 
     private void DefineUIPermissions()
     {
       m_rightMgr[SaveDescriptionBT] = Group.Permission.EDIT_ACCOUNT;
       m_rightMgr[Name_TB] = Group.Permission.EDIT_ACCOUNT;
-      m_rightMgr[ProcessComboBox] = Group.Permission.EDIT_ACCOUNT;
-      m_rightMgr[FormulaTypeComboBox] = Group.Permission.EDIT_ACCOUNT;
-      m_rightMgr[TypeComboBox] = Group.Permission.EDIT_ACCOUNT;
-      m_rightMgr[CurrencyConversionComboBox] = Group.Permission.EDIT_ACCOUNT;
+      m_rightMgr[ProcessCB] = Group.Permission.EDIT_ACCOUNT;
+      m_rightMgr[FormulaTypeCB] = Group.Permission.EDIT_ACCOUNT;
+      m_rightMgr[TypeCB] = Group.Permission.EDIT_ACCOUNT;
+      m_rightMgr[CurrencyCB] = Group.Permission.EDIT_ACCOUNT;
       m_rightMgr[m_descriptionTextBox] = Group.Permission.EDIT_ACCOUNT;
-      m_rightMgr[ConsolidationOptionComboBox] = Group.Permission.EDIT_ACCOUNT;
+      m_rightMgr[ConsolidationOptionCB] = Group.Permission.EDIT_ACCOUNT;
       m_rightMgr[AddSubAccountToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
       m_rightMgr[AddCategoryToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
       m_rightMgr[DeleteAccountToolStripMenuItem] = Group.Permission.DELETE_ACCOUNT;
@@ -182,7 +205,7 @@ namespace FBI.MVC.View
       AddSubAccountToolStripMenuItem.Text = Local.GetValue("accounts.new_account");
       AddCategoryToolStripMenuItem.Text = Local.GetValue("accounts.add_tab_account");
       DeleteAccountToolStripMenuItem.Text = Local.GetValue("accounts.delete_account");
-      DropHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts.drop_to_excel");
+      m_dropToExcelRightClickMenu.Text = Local.GetValue("accounts.drop_to_excel");
       NewToolStripMenuItem.Text = Local.GetValue("general.account");
       CreateANewAccountToolStripMenuItem.Text = Local.GetValue("accounts.new_account");
       CreateANewCategoryToolStripMenuItem.Text = Local.GetValue("accounts.add_tab_account");
@@ -203,128 +226,44 @@ namespace FBI.MVC.View
       m_globalFactsTV.MouseDoubleClick += OnGlobalFactsTVMouseDoubleClick;
     }
 
+    void AddListItem<T>(vComboBox p_cb, SafeDictionary<T, ListItem> p_collection, string p_local, T p_value)
+    {
+      ListItem l_item = new ListItem();
+      l_item.Text = Local.GetValue(p_local);
+      l_item.Value = p_value;
+      p_cb.Items.Add(l_item);
+      p_collection[p_value] = l_item;
+      p_cb.SelectedIndex = 0;
+      p_cb.DropDownList = true;
+    }
+
     private void ComboBoxesInit()
     {
-      //Process
-      ListItem l_financialListItem = new ListItem();
-      l_financialListItem.Text = Local.GetValue("process.process_financial");
-      l_financialListItem.Value = Account.AccountProcess.FINANCIAL;
-      ProcessComboBox.Items.Add(l_financialListItem);
-      m_processIdItemDict[(Account.AccountProcess)l_financialListItem.Value] = l_financialListItem;
+      AddListItem(ProcessCB, m_processIdItemDict, "process.process_financial", Account.AccountProcess.FINANCIAL);
+      AddListItem(ProcessCB, m_processIdItemDict, "process.process_rh", Account.AccountProcess.RH);
+      ProcessCB.SelectedItemChanged += OnProcessCBSelectedItemChanged;
 
-      ListItem l_rhListItem = new ListItem();
-      l_rhListItem.Text = Local.GetValue("process.process_rh");
-      l_rhListItem.Value = Account.AccountProcess.RH;
-      ProcessComboBox.Items.Add(l_rhListItem);
-      m_processIdItemDict[(Account.AccountProcess)l_rhListItem.Value] = l_rhListItem;
+      AddListItem(FormulaTypeCB, m_formulaTypeItemDict, "accounts.formula_type_input", Account.FormulaTypes.HARD_VALUE_INPUT);
+      AddListItem(FormulaTypeCB, m_formulaTypeItemDict, "accounts.formula_type_formula", Account.FormulaTypes.FORMULA);
+      AddListItem(FormulaTypeCB, m_formulaTypeItemDict, "accounts.formula_type_sub", Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS);
+      AddListItem(FormulaTypeCB, m_formulaTypeItemDict, "accounts.formula_type_first", Account.FormulaTypes.FIRST_PERIOD_INPUT);
+      AddListItem(FormulaTypeCB, m_formulaTypeItemDict, "accounts.formula_type_title", Account.FormulaTypes.TITLE);
+      FormulaTypeCB.SelectedItemChanged += OnFormulaTypeCBSelectedItemChanged;
 
-      ProcessComboBox.SelectedIndex = 0;
-      ProcessComboBox.DropDownList = true;
-      ProcessComboBox.SelectedItemChanged += OnProcessComboBoxSelectedItemChanged;
+      AddListItem(TypeCB, m_formatsIdItemDict, "accounts.type_monetary", Account.AccountType.MONETARY);
+      AddListItem(TypeCB, m_formatsIdItemDict, "accounts.type_number", Account.AccountType.NUMBER);
+      AddListItem(TypeCB, m_formatsIdItemDict, "accounts.type_percentage", Account.AccountType.PERCENTAGE);
+      AddListItem(TypeCB, m_formatsIdItemDict, "accounts.type_date", Account.AccountType.DATE);
+      TypeCB.SelectedItemChanged += OnTypeCBSelectedItemChanged;
 
-      //Formula Type
-      ListItem l_inputListItem = new ListItem();
-      l_inputListItem.Text = Local.GetValue("accounts.formula_type_input");
-      l_inputListItem.Value = Account.FormulaTypes.HARD_VALUE_INPUT;
-      FormulaTypeComboBox.Items.Add(l_inputListItem);
-      m_formulasTypesIdItemDict[(Account.FormulaTypes)l_inputListItem.Value] = l_inputListItem;
+      AddListItem(CurrencyCB, m_currencyItemDict, "accounts.currencies_type_average", Account.ConversionOptions.AVERAGE_RATE);
+      AddListItem(CurrencyCB, m_currencyItemDict, "accounts.currencies_type_end", Account.ConversionOptions.END_OF_PERIOD_RATE);
+      CurrencyCB.SelectedItemChanged += OnCurrencyCBSelectedItemChanged;
 
-      ListItem l_formulaListItem = new ListItem();
-      l_formulaListItem.Text = Local.GetValue("accounts.formula_type_formula");
-      l_formulaListItem.Value = Account.FormulaTypes.FORMULA;
-      FormulaTypeComboBox.Items.Add(l_formulaListItem);
-      m_formulasTypesIdItemDict[(Account.FormulaTypes)l_formulaListItem.Value] = l_formulaListItem;
-
-      ListItem l_aggregationListItem = new ListItem();
-      l_aggregationListItem.Text = Local.GetValue("accounts.formula_type_sub");
-      l_aggregationListItem.Value = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS;
-      FormulaTypeComboBox.Items.Add(l_aggregationListItem);
-      m_formulasTypesIdItemDict[(Account.FormulaTypes)l_aggregationListItem.Value] = l_aggregationListItem;
-
-      ListItem l_firstPeriodInputListItem = new ListItem();
-      l_firstPeriodInputListItem.Text = Local.GetValue("accounts.formula_type_first");
-      l_firstPeriodInputListItem.Value = Account.FormulaTypes.FIRST_PERIOD_INPUT;
-      FormulaTypeComboBox.Items.Add(l_firstPeriodInputListItem);
-      m_formulasTypesIdItemDict[(Account.FormulaTypes)l_firstPeriodInputListItem.Value] = l_firstPeriodInputListItem;
-
-      ListItem l_titleListItem = new ListItem();
-      l_titleListItem.Text = Local.GetValue("accounts.formula_type_title");
-      l_titleListItem.Value = Account.FormulaTypes.TITLE;
-      FormulaTypeComboBox.Items.Add(l_titleListItem);
-      m_formulasTypesIdItemDict[(Account.FormulaTypes)l_titleListItem.Value] = l_titleListItem;
-
-      FormulaTypeComboBox.SelectedIndex = 0;
-      FormulaTypeComboBox.DropDownList = true;
-      FormulaTypeComboBox.SelectedItemChanged += OnFormulaTypeComboBoxSelectedItemChanged;
-
-      // Account Type
-      ListItem l_monetaryFormatLI = new ListItem();
-      l_monetaryFormatLI.Text = Local.GetValue("accounts.type_monetary");
-      l_monetaryFormatLI.Value = Account.AccountType.MONETARY;
-      TypeComboBox.Items.Add(l_monetaryFormatLI);
-      m_formatsIdItemDict[(Account.AccountType)l_monetaryFormatLI.Value] = l_monetaryFormatLI;
-
-      ListItem l_normalFormatLI = new ListItem();
-      l_normalFormatLI.Text = Local.GetValue("accounts.type_number");
-      l_normalFormatLI.Value = Account.AccountType.NUMBER;
-      TypeComboBox.Items.Add(l_normalFormatLI);
-      m_formatsIdItemDict[(Account.AccountType)l_normalFormatLI.Value] = l_normalFormatLI;
-
-      ListItem l_percentageFormatLI = new ListItem();
-      l_percentageFormatLI.Text = Local.GetValue("accounts.type_percentage");
-      l_percentageFormatLI.Value = Account.AccountType.PERCENTAGE;
-      TypeComboBox.Items.Add(l_percentageFormatLI);
-      m_formatsIdItemDict[(Account.AccountType)l_percentageFormatLI.Value] = l_percentageFormatLI;
-
-      ListItem l_dateFormatLI = new ListItem();
-      l_dateFormatLI.Text = Local.GetValue("accounts.type_date");
-      l_dateFormatLI.Value = Account.AccountType.DATE_;
-      TypeComboBox.Items.Add(l_dateFormatLI);
-      m_formatsIdItemDict[(Account.AccountType)l_dateFormatLI.Value] = l_dateFormatLI;
-
-      TypeComboBox.SelectedIndex = 0;
-      TypeComboBox.DropDownList = true;
-      TypeComboBox.SelectedItemChanged += OnTypeComboBoxSelectedItemChanged;
-
-      // Currencies Conversion
-      ListItem l_averageRateLI = new ListItem();
-      l_averageRateLI.Text = Local.GetValue("accounts.currencies_type_average");
-      l_averageRateLI.Value = Account.ConversionOptions.AVERAGE_RATE;
-      CurrencyConversionComboBox.Items.Add(l_averageRateLI);
-      m_currenciesConversionIdItemDict[(Account.ConversionOptions)l_averageRateLI.Value] = l_averageRateLI;
-
-      ListItem l_endOfPeriodRateLI = new ListItem();
-      l_endOfPeriodRateLI.Text = Local.GetValue("accounts.currencies_type_end");
-      l_endOfPeriodRateLI.Value = Account.ConversionOptions.END_OF_PERIOD_RATE;
-      CurrencyConversionComboBox.Items.Add(l_endOfPeriodRateLI);
-      m_currenciesConversionIdItemDict[(Account.ConversionOptions)l_endOfPeriodRateLI.Value] = l_endOfPeriodRateLI;
-
-      CurrencyConversionComboBox.SelectedIndex = 0;
-      CurrencyConversionComboBox.DropDownList = true;
-      CurrencyConversionComboBox.SelectedItemChanged += OnCurrencyConversionComboBoxSelectedItemChanged;
-
-      // Consolidation Option
-      ListItem l_aggregatedLI = new ListItem();
-      l_aggregatedLI.Text = Local.GetValue("accounts.consolidation_type_aggregated");
-      l_aggregatedLI.Value = Account.ConsolidationOptions.AGGREGATION;
-      ConsolidationOptionComboBox.Items.Add(l_aggregatedLI);
-      m_consoOptionIdItemDict[(Account.ConsolidationOptions)l_aggregatedLI.Value] = l_aggregatedLI;
-
-      ListItem l_recomputedLI = new ListItem();
-      l_recomputedLI.Text = Local.GetValue("accounts.consolidation_type_recomputed");
-      l_recomputedLI.Value = Account.ConsolidationOptions.RECOMPUTATION;
-      ConsolidationOptionComboBox.Items.Add(l_recomputedLI);
-      m_consoOptionIdItemDict[(Account.ConsolidationOptions)l_recomputedLI.Value] = l_recomputedLI;
-
-      ListItem l_noneLI = new ListItem();
-      l_noneLI.Text = Local.GetValue("accounts.consolidation_type_none");
-      l_noneLI.Value = Account.ConsolidationOptions.NONE;
-      ConsolidationOptionComboBox.Items.Add(l_noneLI);
-      m_consoOptionIdItemDict[(Account.ConsolidationOptions)l_noneLI.Value] = l_noneLI;
-
-      ConsolidationOptionComboBox.SelectedIndex = 0;
-      ConsolidationOptionComboBox.DropDownList = true;
-      ConsolidationOptionComboBox.SelectedItemChanged += OnConsolidationOptionComboBoxSelectedItemChanged;
+      AddListItem(ConsolidationOptionCB, m_consoOptionItemDict, "accounts.consolidation_type_aggregated", Account.ConsolidationOptions.AGGREGATION);
+      AddListItem(ConsolidationOptionCB, m_consoOptionItemDict, "accounts.consolidation_type_recomputed", Account.ConsolidationOptions.RECOMPUTATION);
+      AddListItem(ConsolidationOptionCB, m_consoOptionItemDict, "accounts.consolidation_type_none", Account.ConsolidationOptions.NONE);
+      ConsolidationOptionCB.SelectedItemChanged += OnConsolidationOptionCBSelectedItemChanged;
     }
 
     #endregion
@@ -479,6 +418,44 @@ namespace FBI.MVC.View
 
     #region Click
 
+    private Range GetActiveCell()
+    {
+      Worksheet l_activeWS = Addin.HostApplication.ActiveSheet;
+      Range l_RNG = Addin.HostApplication.ActiveCell;
+      DialogResult l_response = default(DialogResult);
+
+      if (l_RNG == null)
+        MessageBox.Show(Local.GetValue("accounts.msg_destination_cell_not_valid"));
+      else
+      {
+        l_response = MessageBox.Show(Local.GetValue("accounts.msg_accounts_drop") + l_RNG.Address, "", MessageBoxButtons.OKCancel);
+        if (l_response == DialogResult.OK)
+          return (l_RNG);
+      }
+      return (null);
+    }
+
+    private void OnDropSelectedAccountToExcel(object p_sender, EventArgs p_e)
+    {
+      if (m_accountTV.SelectedNode == null)
+        return;
+      Range l_RNG = GetActiveCell();
+      int l_indentLevel = 0;
+
+      if (l_RNG != null)
+        if (WorksheetWriter.WriteAccount(m_accountTV.SelectedNode, ref l_RNG, ref l_indentLevel) == false)
+          MessageBox.Show(Local.GetValue("accounts.error.drop_failed"));
+    }
+
+    private void OnDropAllAccountOnExcel(object p_sender, EventArgs p_e)
+    {
+      Range l_RNG = GetActiveCell();
+
+      if (l_RNG != null)
+        if (WorksheetWriter.WriteAccountsFromTreeView(m_accountTV, l_RNG) == false)
+          MessageBox.Show(Local.GetValue("accounts.error.drop_failed"));
+    }
+
     private void OnAllocationKeyButtonClick(object p_sender, EventArgs p_e)
     {
       if (m_accountTV.SelectedNode != null)
@@ -547,7 +524,7 @@ namespace FBI.MVC.View
 
       string l_nameAccount = Interaction.InputBox(Local.GetValue("accounts.msg_new_tab_name"),
                                                  Local.GetValue("accounts.title_new_tab_name"), "");
-      if (m_controller.CreateAccount(0, l_nameAccount, Account.AccountProcess.FINANCIAL, Account.FormulaTypes.TITLE, "", Account.AccountType.DATE_, Account.ConsolidationOptions.AGGREGATION,
+      if (m_controller.CreateAccount(0, l_nameAccount, Account.AccountProcess.FINANCIAL, Account.FormulaTypes.TITLE, "", Account.AccountType.DATE, Account.ConsolidationOptions.AGGREGATION,
         Account.PeriodAggregationOptions.AVERAGE_PERIOD, "t", (UInt32)Account.FormulaTypes.TITLE, m_accountTV.Nodes.Count) == false)
         MsgBox.Show(m_controller.Error);
     }
@@ -582,6 +559,23 @@ namespace FBI.MVC.View
       }
     }
 
+    void MoveAccount(vTreeNode p_node1, vTreeNode p_node2)
+    {
+      if (p_node1 == null || p_node2 == null)
+        return;
+      Account l_account = AccountModel.Instance.GetValue((UInt32)p_node1.Value);
+      Account l_account2 = AccountModel.Instance.GetValue((UInt32)p_node2.Value);
+
+      if (l_account != null && l_account2 != null)
+      {
+        Int32 l_prevPos = (m_updatedAccountPos.ContainsKey(l_account.Id)) ? m_updatedAccountPos[l_account.Id] : l_account.ItemPosition;
+        Int32 l_prevPos2 = (m_updatedAccountPos.ContainsKey(l_account2.Id)) ? m_updatedAccountPos[l_account2.Id] : l_account2.ItemPosition;
+
+        m_updatedAccountPos[l_account.Id] = l_prevPos2;
+        m_updatedAccountPos[l_account2.Id] = l_prevPos;
+      }
+    }
+
     private void OnAccountTVKeyDown(object p_sender, KeyEventArgs p_e)
     {
       switch (p_e.KeyCode)
@@ -589,15 +583,23 @@ namespace FBI.MVC.View
         case Keys.Down:
           if (p_e.Control == true)
           {
-            m_accountTV.MoveNodeDown(m_accountTV.SelectedNode);
             m_currentNode = m_accountTV.SelectedNode;
+            if (m_currentNode != null)
+            {
+              MoveAccount(m_currentNode, m_currentNode.NextSiblingNode);
+              m_accountTV.MoveNodeDown(m_currentNode);
+            }
           }
           break;
         case Keys.Up:
           if (p_e.Control == true)
           {
-            m_accountTV.MoveNodeUp(m_accountTV.SelectedNode);
             m_currentNode = m_accountTV.SelectedNode;
+            if (m_currentNode != null)
+            {
+              MoveAccount(m_currentNode, m_currentNode.PrevSiblingNode);
+              m_accountTV.MoveNodeUp(m_currentNode);
+            }
           }
           break;
         case Keys.Delete:
@@ -636,8 +638,8 @@ namespace FBI.MVC.View
 
     private void OnAccountsTreeviewMouseDown(object p_sender, MouseEventArgs p_e)
     {
-      if (m_accountTV.FindAtPosition(new Point(p_e.X, p_e.Y)) != null)
-        m_currentNode = m_accountTV.FindAtPosition(new Point(p_e.X, p_e.Y));
+      if (m_accountTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y)) != null)
+        m_currentNode = m_accountTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y));
       if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
         m_accountTV.DoDragDrop(m_currentNode, DragDropEffects.Move);
     }
@@ -676,7 +678,7 @@ namespace FBI.MVC.View
 
     #region ComboBox
 
-    private void OnProcessComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    private void OnProcessCBSelectedItemChanged(object p_sender, EventArgs p_e)
     {
       if (m_isDisplayingAccountFlag == false && m_currentNode != null)
       {
@@ -692,7 +694,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void OnTypeComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    private void OnTypeCBSelectedItemChanged(object p_sender, EventArgs p_e)
     {
       if (m_currentNode == null)
         return;
@@ -710,17 +712,17 @@ namespace FBI.MVC.View
       }
       if ((Account.AccountType)((vComboBox)p_sender).SelectedItem.Value == Account.AccountType.MONETARY)
       {
-        CurrencyConversionComboBox.Visible = true;
+        CurrencyCB.Visible = true;
         m_accountCurrenciesConversionLabel.Visible = true;
       }
       else
       {
-        CurrencyConversionComboBox.Visible = false;
+        CurrencyCB.Visible = false;
         m_accountCurrenciesConversionLabel.Visible = false;
       }
     }
 
-    private void OnCurrencyConversionComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    private void OnCurrencyCBSelectedItemChanged(object p_sender, EventArgs p_e)
     {
       if (m_isDisplayingAccountFlag == false && m_currentNode != null)
       {
@@ -736,7 +738,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void OnConsolidationOptionComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    private void OnConsolidationOptionCBSelectedItemChanged(object p_sender, EventArgs p_e)
     {
       if (m_isDisplayingAccountFlag == false && m_currentNode != null)
       {
@@ -752,7 +754,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void OnFormulaTypeComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    private void OnFormulaTypeCBSelectedItemChanged(object p_sender, EventArgs p_e)
     {
       if (m_isDisplayingAccountFlag == false && m_currentNode != null)
       {
@@ -895,14 +897,14 @@ namespace FBI.MVC.View
         if (m_processIdItemDict.ContainsKey(l_account.Process))
         {
           ListItem l_processLI = m_processIdItemDict[l_account.Process];
-          ProcessComboBox.SelectedItem = l_processLI;
+          ProcessCB.SelectedItem = l_processLI;
         }
 
         //Formula Type
-        if (m_formulasTypesIdItemDict.ContainsKey(l_account.FormulaType))
+        if (m_formulaTypeItemDict.ContainsKey(l_account.FormulaType))
         {
-          ListItem l_formulaTypeLI = m_formulasTypesIdItemDict[l_account.FormulaType];
-          FormulaTypeComboBox.SelectedItem = l_formulaTypeLI;
+          ListItem l_formulaTypeLI = m_formulaTypeItemDict[l_account.FormulaType];
+          FormulaTypeCB.SelectedItem = l_formulaTypeLI;
 
           bool l_isRootAccount = false;
           if (m_currentNode.Parent == null)
@@ -916,22 +918,22 @@ namespace FBI.MVC.View
         if (m_formatsIdItemDict.ContainsKey(l_account.Type))
         {
           ListItem l_formatLI = m_formatsIdItemDict[l_account.Type];
-          TypeComboBox.SelectedItem = l_formatLI;
+          TypeCB.SelectedItem = l_formatLI;
           if ((Account.AccountType)l_formatLI.Value == Account.AccountType.MONETARY)
           {
-            if (m_currenciesConversionIdItemDict.ContainsKey(l_account.ConversionOptionId))
+            if (m_currencyItemDict.ContainsKey(l_account.ConversionOptionId))
             {
-              ListItem conversionLI = m_currenciesConversionIdItemDict[l_account.ConversionOptionId];
-              CurrencyConversionComboBox.SelectedItem = conversionLI;
+              ListItem conversionLI = m_currencyItemDict[l_account.ConversionOptionId];
+              CurrencyCB.SelectedItem = conversionLI;
             }
           }
         }
 
         //Consolidation
-        if (m_consoOptionIdItemDict.ContainsKey(l_account.ConsolidationOptionId))
+        if (m_consoOptionItemDict.ContainsKey(l_account.ConsolidationOptionId))
         {
-          ListItem consolidationLI = m_consoOptionIdItemDict[l_account.ConsolidationOptionId];
-          ConsolidationOptionComboBox.SelectedItem = consolidationLI;
+          ListItem consolidationLI = m_consoOptionItemDict[l_account.ConsolidationOptionId];
+          ConsolidationOptionCB.SelectedItem = consolidationLI;
         }
 
         // Formula TB
@@ -952,7 +954,7 @@ namespace FBI.MVC.View
     private void SetEnableStatusEdition(Boolean p_status, Boolean p_isRootAccount, Account p_account)
     {
       if (p_isRootAccount == true)
-        FormulaTypeComboBox.Enabled = false;
+        FormulaTypeCB.Enabled = false;
       if (p_account != null)
       {
         if (p_account.FormulaType == Account.FormulaTypes.FORMULA || p_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
@@ -969,16 +971,16 @@ namespace FBI.MVC.View
     {
       SaveDescriptionBT.Enabled = p_uiState;
       Name_TB.Enabled = p_uiState;
-      ProcessComboBox.Enabled = p_uiState;
-      FormulaTypeComboBox.Enabled = p_uiState;
-      TypeComboBox.Enabled = p_uiState;
-      CurrencyConversionComboBox.Enabled = p_uiState;
+      ProcessCB.Enabled = p_uiState;
+      FormulaTypeCB.Enabled = p_uiState;
+      TypeCB.Enabled = p_uiState;
+      CurrencyCB.Enabled = p_uiState;
       m_descriptionTextBox.Enabled = p_uiState;
       if (p_uiState == true)
         m_descriptionTextBox.BackColor = Color.White;
       else
         m_descriptionTextBox.BackColor = Color.LightGray;
-      ConsolidationOptionComboBox.Enabled = p_uiState;
+      ConsolidationOptionCB.Enabled = p_uiState;
       m_validateFormulaButton.Enabled = p_uiState;
     }
 

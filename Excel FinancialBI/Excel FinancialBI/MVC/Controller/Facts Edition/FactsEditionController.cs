@@ -74,7 +74,6 @@ namespace FBI.MVC.Controller
       return false;
     }
 
-
     private void ActivateFactEditionRibbon()
     {
       if (m_process == Account.AccountProcess.FINANCIAL)

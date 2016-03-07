@@ -37,7 +37,7 @@ namespace FBI.Forms
         return (null);
       foreach (T l_item in p_items.Values)
         l_dic[l_item.Id] = new TreeNode<UInt32>(l_item.Id);
-      foreach (HierarchyCRUDEntity l_item in p_items.Values)
+      foreach (HierarchyCRUDEntity l_item in p_items.SortedValues)
       {
         if (l_dic.ContainsKey(l_item.Id) && l_dic.ContainsKey(l_item.ParentId))
           l_dic[l_item.ParentId].AddChild(l_dic[l_item.Id]);

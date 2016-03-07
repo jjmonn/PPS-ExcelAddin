@@ -14,7 +14,7 @@ namespace FBI.Network
     public static Authenticator Instance { get { return (s_instance); } }
     public static string Username { get; private set; }
     static string m_password;
-    public const string FBIVersionId = "1.0.1";
+    public const string FBIVersionId = "1.0.3";
     public static event AuthenticationEventHandler AuthenticationEvent;
     public delegate void AuthenticationEventHandler(ErrorMessage p_status);
 

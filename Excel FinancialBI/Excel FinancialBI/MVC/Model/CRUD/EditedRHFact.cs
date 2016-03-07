@@ -12,7 +12,7 @@ namespace FBI.MVC.Model
   
   class EditedRHFact : EditedFactBase
   {
-    public UInt32 EditedClientId {get; set;}
+    public Int32 EditedClientId {get; set;}
     public FactTag EditedFactTag;
     public FactTag ModelFactTag {get; set;}
     public LegalHoliday EditedLegalHoliday {get; set;}
@@ -70,7 +70,7 @@ namespace FBI.MVC.Model
 
     public void SetEditedClient(UInt32 p_clientId)
     {
-      EditedClientId = p_clientId;
+      EditedClientId = (Int32)p_clientId;
       EditedLegalHoliday.Tag = LegalHolidayTag.NONE;
       EditedFactTag.Tag = FactTag.TagType.NONE;
       SetCellStatusRH();
