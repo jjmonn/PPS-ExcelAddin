@@ -25,13 +25,13 @@ namespace FBI.MVC.View
     {
       InitializeComponent();
    
-      EventsSubscribtion();
+      SuscribeEvents();
       SetupMultilangue();
       IsLoading = false;
       ConnectionBT.Visible = true;
     }
 
-    private void EventsSubscribtion()
+    private void SuscribeEvents()
     {
       Authenticator.AuthenticationEvent += OnAuthentification;
       Addin.InitializationEvent += OnInitComplete;
