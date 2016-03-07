@@ -178,12 +178,19 @@ namespace FBI.MVC.View
                 l_dgv.FillField(l_rowKey, l_columnKey, l_value);
               }
             }
-            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
-            l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
           }
         }
         if (m_computeConfig.Request.Process == Account.AccountProcess.RH)
           RemoveOrphanDimensions();
+        foreach (vTabPage l_tab in m_tabCtrl.TabPages)
+        {
+          if (l_tab.Controls.Count > 0)
+          {
+            DGV l_dgv = l_tab.Controls[0] as DGV;
+            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+            l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+          }
+        }
       }
     }
 
