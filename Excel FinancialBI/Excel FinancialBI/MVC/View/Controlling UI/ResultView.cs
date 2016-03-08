@@ -73,11 +73,29 @@ namespace FBI.MVC.View
       CollapseAllRightClick.Click += OnCollapseAllClick;
       ColumnsAutoSize.Click += OnColumnAutoSizeClick;
       ColumnsAutoFitBT.Click += OnAutoFitClick;
+      LogRightClick.Click += OnLogClick;
     }
 
     #endregion
 
     #region User Callbacks
+
+    void OnLogClick(object p_sender, EventArgs p_e)
+    {
+      if (m_tabCtrl.SelectedTab == null || m_tabCtrl.SelectedTab.Controls.Count <= 0)
+        return;
+      DGV l_dgv = m_tabCtrl.SelectedTab.Controls[0] as DGV;
+      HierarchyItem l_row = l_dgv.HoveredRow;
+      HierarchyItem l_column = l_dgv.HoveredColumn;
+
+      if (l_row == null || l_column == null)
+        return;
+      ResultKey l_key = l_dgv.HierarchyItems[l_row] + l_dgv.HierarchyItems[l_column];
+
+      if (m_controller.ShowLog((l_key.EntityId == 0)
+        ? m_computeConfig.Request.EntityId : l_key.EntityId, l_key.VersionId, l_key.AccountId, (UInt32)l_key.Period) == false)
+        MessageBox.Show(m_controller.Error);
+    }
 
     void OnExpandAllClick(object p_sender, EventArgs p_e)
     {
@@ -180,7 +198,7 @@ namespace FBI.MVC.View
             }
           }
         }
-        if (m_computeConfig.Request.Process == Account.AccountProcess.RH)
+       if (m_computeConfig.Request.Process == Account.AccountProcess.RH)
           RemoveOrphanDimensions();
         foreach (vTabPage l_tab in m_tabCtrl.TabPages)
         {
@@ -416,7 +434,7 @@ namespace FBI.MVC.View
     {
       foreach (ResultKey l_rowKey in p_dgv.Rows.Keys)
       {
-        if (l_rowKey.ContainClientSort() == false)
+        if (l_rowKey.IsClientSort() == false)
           continue;
         bool hasData = false;
 
@@ -439,7 +457,7 @@ namespace FBI.MVC.View
     {
       foreach (ResultKey l_columnKey in p_dgv.Columns.Keys)
       {
-        if (l_columnKey.ContainClientSort() == false)
+        if (l_columnKey.IsClientSort() == false)
           continue;
         bool hasData = false;
 

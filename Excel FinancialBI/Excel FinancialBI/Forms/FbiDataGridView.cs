@@ -21,6 +21,7 @@ namespace FBI.Forms
 
     protected SafeDictionary<KeyType, HierarchyItem> m_rowsDic = new SafeDictionary<KeyType, HierarchyItem>();
     protected SafeDictionary<KeyType, HierarchyItem> m_columnsDic = new SafeDictionary<KeyType, HierarchyItem>();
+    protected SafeDictionary<HierarchyItem, KeyType> m_hierarchyItemDic = new SafeDictionary<HierarchyItem, KeyType>();
     protected const Int32 COLUMNS_WIDTH = 150;
     public GridCell HoveredCell { get; private set; }
     HierarchyItem m_hoveredColumn = null;
@@ -43,6 +44,11 @@ namespace FBI.Forms
     public SafeDictionary<KeyType, HierarchyItem> Columns
     {
       get { return (m_columnsDic); }
+    }
+
+    public SafeDictionary<HierarchyItem, KeyType> HierarchyItems
+    {
+      get { return (m_hierarchyItemDic); }
     }
 
     public HierarchyItem HoveredColumn
@@ -306,6 +312,7 @@ namespace FBI.Forms
         l_item = new HierarchyItem();
         l_dimensionDic[p_key] = l_item;
       }
+      m_hierarchyItemDic[l_item] = p_key;
       l_item.ItemValue = p_key;
       l_item.Caption = p_name;
       l_item.Width = COLUMNS_WIDTH;
@@ -392,6 +399,7 @@ namespace FBI.Forms
       l_dim.ItemValue = p_id;
       l_dim.Caption = p_name;
       l_dim.Width = p_width;
+      m_hierarchyItemDic[l_dim] = p_id;
       return (l_dim);
     }
   }

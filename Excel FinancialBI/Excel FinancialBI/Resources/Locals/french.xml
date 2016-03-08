@@ -565,4 +565,18 @@
     <string name=""></string>
   </category>
 
+  <category name="log">
+    <string name="username">Utilisateur</string>
+    <string name="date">Date</string>
+    <string name="client">Client</string>
+    <string name="product">Produit</string>
+    <string name="adjustment">Ajustement</string>
+    <string name="value">Valeur</string>
+    <category name="error">
+      <string name="entity_must_be_editable">L'entité sélectionnée ne doit pas être parente.</string>
+      <string name="account_must_be_input">Le compte sélectionné doit être de type Input.</string>
+      <string name="no_period">Période non définie.</string>
+    </category>
+  </category>
+
 </category>

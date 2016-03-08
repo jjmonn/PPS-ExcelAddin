@@ -267,6 +267,7 @@
     <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\UnreferencedClientsController.cs" />
     <Compile Include="MVC\Controller\IProgressBarController.cs" />
+    <Compile Include="MVC\Controller\LogController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
