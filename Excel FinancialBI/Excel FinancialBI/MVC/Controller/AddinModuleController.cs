@@ -46,16 +46,16 @@ namespace FBI.MVC.Controller
       if (l_version != null)
       {
         m_factsEditionController = new FactsEditionController(this, Account.AccountProcess.FINANCIAL, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet, null, 0);
-        return m_factsEditionController.Launch(p_updateCells);
+        return m_factsEditionController.Launch(p_updateCells, true);
       }
       else
         return false;
     }
 
-    public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
+    public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId,  bool p_displayInitialDifferences, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
     {
         m_factsEditionController = new FactsEditionController(this, Account.AccountProcess.RH, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
-        return m_factsEditionController.Launch(p_updateCells);
+        return m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences);
     }
 
     public bool LaunchReportEdition()
@@ -107,7 +107,7 @@ namespace FBI.MVC.Controller
     public static void SetExcelInteractionState(bool p_state)
     {
       AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
-      AddinModule.CurrentInstance.ExcelApp.ScreenUpdating = p_state; 
+      //AddinModule.CurrentInstance.ExcelApp.ScreenUpdating = p_state; 
     }
 
     public void CloseEditionMode()
