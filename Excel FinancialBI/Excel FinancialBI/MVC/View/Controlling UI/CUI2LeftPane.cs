@@ -47,11 +47,10 @@ namespace FBI.MVC.View
     {
       if ((Account.AccountProcess)Properties.Settings.Default.processId == Account.AccountProcess.RH)
         InitPeriodRangeSelection();
+      MultilangueSetup();
       TreeViewInit();
       ComboBoxInit();
 
-      MultilangueSetup();
-      HideAllTV();
       SuscribeEvents();
     }
 
@@ -81,9 +80,9 @@ namespace FBI.MVC.View
       InitCBListItem<Filter>(Local.GetValue("CUI.dimension.client_cat"), AxisType.Client);
       InitCBListItem<Filter>(Local.GetValue("CUI.dimension.employee_cat"), AxisType.Employee);
       InitCBListItem<Filter>(Local.GetValue("CUI.dimension.entity_cat"), AxisType.Entities);
-      InitCBListItem<Version>(Local.GetValue("CUI.dimension.versions"));
+      SelectionCB.SelectedItem = InitCBListItem<Version>(Local.GetValue("CUI.dimension.versions"));
       InitCBListItem<Currency>(Local.GetValue("CUI.dimension.currencies"));
-
+       
       SelectionCB.DropDownList = true;
     }
 
@@ -99,7 +98,7 @@ namespace FBI.MVC.View
       InitFilterTV(AxisType.Employee);
       InitTVAxisElem(AxisElemModel.Instance, AxisType.Adjustment);
       InitFilterTV(AxisType.Adjustment);
-      InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, false, true);
+      InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, true, true);
       InitTV(CurrencyModel.Instance, m_selectionTableLayout.Controls, false, Properties.Settings.Default.currentCurrency, false, true);
     }
 
@@ -114,13 +113,14 @@ namespace FBI.MVC.View
       l_view.BorderStyle = BorderStyle.FixedSingle;
     }
 
-    void InitCBListItem<T>(string p_text, AxisType p_axis = (AxisType)0)
+    ListItem InitCBListItem<T>(string p_text, AxisType p_axis = (AxisType)0)
       where T : class, NamedCRUDEntity
     {
       ListItem l_listItem = new ListItem();
       l_listItem.Text = p_text;
       l_listItem.Value = new Tuple<AxisType, Type>(p_axis, typeof(T));
       SelectionCB.Items.Add(l_listItem);
+      return (l_listItem);
     }
 
     #region Initialize TV

@@ -55,7 +55,8 @@ namespace FBI.MVC.View
       l_leftPane.Dock = DockStyle.Fill;
       l_rightPane.Dock = DockStyle.Fill;
       l_resultView.Dock = DockStyle.Fill;
-      
+
+      BusinessControlToolStripMenuItem.Enabled = false;
       this.Show();
       SuscribeEvents();
     }
@@ -84,7 +85,6 @@ namespace FBI.MVC.View
       this.UnselectAllToolStripMenuItem1.Text = Local.GetValue("CUI.unselect_all");
 
       this.m_currencyLabel.Text = Local.GetValue("general.currency");
-      this.m_versionLabel.Text = Local.GetValue("general.version");
       this.m_entityLabel.Text = Local.GetValue("general.entity");
 
       this.MainMenu.Text = Local.GetValue("CUI.main_menu");
@@ -103,12 +103,33 @@ namespace FBI.MVC.View
       this.Text = Local.GetValue("CUI.financials");
     }
 
+    delegate void OnComputeResult_delegate(ErrorMessage p_status, AComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result);
     void OnComputeResult(ErrorMessage p_status, AComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
-      if (p_status == ErrorMessage.SUCCESS && p_result != null)
-        m_controller.ResultController.DisplayResult(p_result);
+      if (InvokeRequired)
+      {
+        OnComputeResult_delegate func = new OnComputeResult_delegate(OnComputeResult);
+        Invoke(func, p_status, p_request, p_result);
+      }
       else
-        MsgBox.Show(Error.GetMessage(p_status));
+      {
+        if (p_status == ErrorMessage.SUCCESS && p_result != null)
+        {
+          LegacyComputeRequest l_request = p_request as LegacyComputeRequest;
+
+          if (l_request != null)
+          {
+            BusinessControlToolStripMenuItem.Enabled = l_request.IsDiff;
+            CurrencyTB.Text = CurrencyModel.Instance.GetValueName(l_request.CurrencyId);
+            EntityTB.Text = AxisElemModel.Instance.GetValueName(l_request.EntityId);
+          }
+          else
+            BusinessControlToolStripMenuItem.Enabled = false;
+          m_controller.ResultController.DisplayResult(p_result);
+        }
+        else
+          MsgBox.Show(Error.GetMessage(p_status));
+      }
     }
 
     void OnRefreshButtonMouseDown(object sender, MouseEventArgs e)

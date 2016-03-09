@@ -92,11 +92,11 @@ namespace FBI.MVC.Controller
       ResultController.LoadDGV(l_config);
       if (l_request.IsDiff)
       {
-        if (LegacyComputeModel.Instance.Compute(l_request))
+        if (LegacyComputeModel.Instance.ComputeDiff(l_request))
           return (true);
       }
       else
-        if (LegacyComputeModel.Instance.ComputeDiff(l_request))
+        if (LegacyComputeModel.Instance.Compute(l_request))
           return (true);
       Error = Local.GetValue("general.error.system");
       return (false);

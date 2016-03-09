@@ -48,6 +48,7 @@ namespace FBI.MVC.View
       Controls.Add(m_tabCtrl);
       m_tabCtrl.Dock = DockStyle.Fill;
 
+      LogRightClick.Visible = (Addin.Process == Account.AccountProcess.FINANCIAL);
       m_builderList.Add(typeof(PeriodModel), PeriodBuilder);
       m_builderList.Add(typeof(VersionModel), VersionBuilder);
       m_builderList.Add(typeof(AxisElemModel), AxisElemBuilder);
