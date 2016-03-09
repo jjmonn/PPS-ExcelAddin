@@ -63,6 +63,7 @@ namespace FBI.MVC.View
       m_serverAddressTB.Text = Settings.Default.serverIp;
       m_portTB.Text = Settings.Default.port_number.ToString();
       m_userTB.Text = Settings.Default.user;
+      SuscribeEvents();
     }
   }
 }
