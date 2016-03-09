@@ -322,13 +322,12 @@ namespace FBI
 
     private void m_platformManagementButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      // if connected
       new PlatformMgtController();
     }
 
     private void m_settingsRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      
+      new SettingsController();
     }
 
     #endregion
