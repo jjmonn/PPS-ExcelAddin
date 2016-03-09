@@ -41,6 +41,7 @@ namespace FBI.MVC.View
       this.Text = Local.GetValue("upload.periods_selection");
       m_validateButton.Text = Local.GetValue("general.validate");
       m_accountSelectionLabel.Text = Local.GetValue("upload.accounts_selection");
+      m_displayInitialDifferencesCheckbox.Text = Local.GetValue("upload.display_initial_differences");
     }
 
     public void SetController(IController p_controller)
@@ -64,7 +65,7 @@ namespace FBI.MVC.View
 
     private void m_validateButton_Click(object sender, EventArgs e)
     {
-      if (m_controller.LaunchSnapshot(m_periodRangeSelectionController.GetPeriodList(), (UInt32)m_accountSelectionComboBox.SelectedItem.Value) == false)
+      if (m_controller.LaunchSnapshot(m_periodRangeSelectionController.GetPeriodList(), (UInt32)m_accountSelectionComboBox.SelectedItem.Value, m_displayInitialDifferencesCheckbox.Checked) == false)
         Forms.MsgBox.Show(m_controller.Error);
     }
   

@@ -29,7 +29,7 @@ namespace FBI.MVC.Model
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
 
-    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, UInt32 p_RHAccountId = 0)
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
     {
       m_worksheet = p_worksheet;
       m_dimensions = p_dimensions;

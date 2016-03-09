@@ -29,6 +29,9 @@ namespace FBI.Utils
 
     public static string RemoveDiacritics(string text)
     {
+      if (text == null)
+        return "";
+
       var normalizedString = text.Normalize(NormalizationForm.FormD);
       var stringBuilder = new StringBuilder();
 

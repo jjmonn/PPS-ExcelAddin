@@ -312,6 +312,7 @@
     <string name="report_as_of">Rapport du </string>
     <string name="folder_snapshot">Snapshot d'un Dossier</string>
     <string name="worksheet_name">Nom de la Feuille</string>
+    <string name="display_initial_differences">Display initial differences</string>
 
     <string name="msg_empty_worksheet">La feuille est vide.</string>
     <string name="msg_selection_instruction">Selectionnez les plage correspondant aux entités, comptes et périodes</string>

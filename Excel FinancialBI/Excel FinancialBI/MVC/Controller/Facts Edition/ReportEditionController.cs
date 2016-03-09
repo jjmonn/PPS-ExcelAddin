@@ -117,7 +117,7 @@ namespace FBI.MVC.Controller
       {
         l_result = InputReportCreationProcessRH(l_entityCurrency);
         if (l_result)
-          m_addinModuleController.LaunchRHSnapshot(true, m_version.Id, m_periodList, m_RHAccount.Id);
+          m_addinModuleController.LaunchRHSnapshot(true, m_version.Id, true, m_periodList, m_RHAccount.Id);
         AddinModuleController.SetExcelInteractionState(true);
         return l_result;
       }

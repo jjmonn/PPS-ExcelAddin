@@ -28,13 +28,13 @@ namespace FBI.MVC.Controller
       m_view.Show();
     }
 
-    public bool LaunchSnapshot(List<Int32> p_periodsList, UInt32 p_accountId)
+    public bool LaunchSnapshot(List<Int32> p_periodsList, UInt32 p_accountId, bool p_displayInitialDifferences)
     {
       // TO DO
       // check period list
       // check p_account_id
       m_view.Hide();
-      if (m_addinModuleController.LaunchRHSnapshot(false, m_versionId, p_periodsList, p_accountId))
+      if (m_addinModuleController.LaunchRHSnapshot(false, m_versionId, p_displayInitialDifferences, p_periodsList, p_accountId))
       {
         m_view.Close();
         return true;

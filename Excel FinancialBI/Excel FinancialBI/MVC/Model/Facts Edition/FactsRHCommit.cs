@@ -155,24 +155,26 @@ namespace FBI.MVC.Model
       if (p_status == ErrorMessage.SUCCESS)
       {
         AddinModuleController.SetExcelInteractionState(false);
-        foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_addressMessagePair in p_resultsDict)
+        lock (m_RHEditedFacts)
         {
-          UInt32 l_factId = l_addressMessagePair.Value.Item1;
-          EditedRHFact l_editedFact = m_RHEditedFacts[l_addressMessagePair.Key];
-          if (l_editedFact != null && l_addressMessagePair.Value.Item2 == ErrorMessage.SUCCESS)
+          foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_addressMessagePair in p_resultsDict)
           {
-            l_editedFact.SetId(l_factId);
-            m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+            UInt32 l_factId = l_addressMessagePair.Value.Item1;
+            EditedRHFact l_editedFact = m_RHEditedFacts[l_addressMessagePair.Key];
+            if (l_editedFact != null && l_addressMessagePair.Value.Item2 == ErrorMessage.SUCCESS)
+            {
+              l_editedFact.SetId(l_factId);
+              m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+            }
+            else
+            {
+              // put back model value for ClientId, quid : information not available anymore ..
+            //  OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
+            }
           }
-          else
-          {
-            // put back model value for ClientId, quid : information not available anymore ..
-            OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
-          }
+          FactTagCommitAndCreate();
+          AddinModuleController.SetExcelInteractionState(true);
         }
-        FactTagCommitAndCreate();
-
-        AddinModuleController.SetExcelInteractionState(true);
       }
       else
       {
@@ -186,9 +188,12 @@ namespace FBI.MVC.Model
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
-        EditedRHFact l_editedFact = m_IdEditedFactDict[p_factId];
-        if (l_editedFact != null)
-          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+        lock (m_IdEditedFactDict)
+        {
+          EditedRHFact l_editedFact = m_IdEditedFactDict[p_factId];
+          if (l_editedFact != null)
+            m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+        }
       }
       else
       {
@@ -250,16 +255,6 @@ namespace FBI.MVC.Model
       m_factTagsCreateList.Clear();
     }
 
-    private bool IsFactTagCreateListValid()
-    {
-      foreach (EditedRHFact l_editedFact in m_factTagsCreateList)
-      {
-        if (l_editedFact.EditedFactTag.Id == 0)
-          return false;
-      }
-      return true;
-    }
-
     private void AfterFactTagCreate(ErrorMessage status, UInt32 id)
     {
       // TO DO : update list
@@ -280,25 +275,28 @@ namespace FBI.MVC.Model
     }
 
     // use single Fact Tag Update ?
-    
+
     private void AfterFactTagsCommit(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
     {
       AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
       {
-        foreach (KeyValuePair<UInt32, bool> l_result in p_updateResults)
+        lock (m_IdEditedFactDict)
         {
-          EditedRHFact l_editedFact = m_IdEditedFactDict[l_result.Key];
-          if (l_editedFact != null)
+          foreach (KeyValuePair<UInt32, bool> l_result in p_updateResults)
           {
-            if (l_result.Value == true)
-              m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-            else
+            EditedRHFact l_editedFact = m_IdEditedFactDict[l_result.Key];
+            if (l_editedFact != null)
             {
-              FactTag l_modelFactTag = FactTagModel.Instance.GetValue(l_editedFact.Id);
-              if (l_modelFactTag != null)
-                l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
-              OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
+              if (l_result.Value == true)
+                m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+              else
+              {
+                FactTag l_modelFactTag = FactTagModel.Instance.GetValue(l_editedFact.Id);
+                if (l_modelFactTag != null)
+                  l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
+                OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
+              }
             }
           }
         }
@@ -313,72 +311,35 @@ namespace FBI.MVC.Model
 
     private void AfterFactTagDelete(ErrorMessage status, UInt32 id)
     {
-      EditedRHFact l_editedFact = m_IdEditedFactDict[id];
-      if (l_editedFact != null)
+      lock (m_IdEditedFactDict)
       {
-        if (status == ErrorMessage.SUCCESS)
-          SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputEqual);
-        else
+        EditedRHFact l_editedFact = m_IdEditedFactDict[id];
+        if (l_editedFact != null)
         {
-          FactTag l_factTag = FactTagModel.Instance.GetValue(id);
-          if (l_factTag != null)
+          if (status == ErrorMessage.SUCCESS)
+            SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputEqual);
+          else
           {
-            l_editedFact.ModelFactTag.Tag = l_factTag.Tag;
-            SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputDifferent);
+            FactTag l_factTag = FactTagModel.Instance.GetValue(id);
+            if (l_factTag != null)
+            {
+              l_editedFact.ModelFactTag.Tag = l_factTag.Tag;
+              SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputDifferent);
+            }
           }
         }
       }
     }
 
-    //private void DownloadFactsForFactTagsCreation()
-    //{
-    //  m_requestIdList.Clear();
-    //  if (m_periodsList.Count == 0)
-    //    return;
-
-    //  FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
-    //  foreach (EditedRHFact l_editedFact in m_factTagsCreateList)
-    //  {
-    //    List<AxisElem> l_employeesList = new List<AxisElem>();
-    //    l_employeesList.Add(l_editedFact.Employee);
-    //    m_requestIdList.Add(FactsModel.Instance.GetFactRH(m_RHAccountId, l_editedFact.EntityId, l_employeesList, m_versionId, (UInt32)m_periodsList.ElementAt(0), (UInt32)m_periodsList.ElementAt(m_periodsList.Count - 1)));
-    //  }
-    //}
-
-    //private void AfterRHFactsDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
-    //{
-    //  if (p_status == ErrorMessage.SUCCESS)
-    //  {
-    //    foreach(Fact l_fact in p_fact_list)
-    //    {
-    //      DimensionKey l_dimensionKey = new DimensionKey(l_fact.EntityId, l_fact.AccountId, l_fact.EmployeeId, (Int32)l_fact.Period);
-    //       EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
-    //       if (l_RHEditedFact != null)
-    //       {
-    //         l_RHEditedFact.SetId(l_fact.Id);
-    //       }
-    //    }
-    //    m_requestIdList.Remove(p_requestId);
-    //    if (m_requestIdList.Count == 0)
-    //    {
-    //      FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
-    //      CreateFactTags();
-    //    }
-    //  }
-    //  else
-    //  {
-    //    // Report facts download error
-    //    FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
-    //  }
-    //}
-
-    //private void ReportCommitErrorOnFactTagsCommit()
-    //{
-    //  foreach (EditedRHFact l_editedFact in m_factTagsCreateList)
-    //  {
-    //    OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM);
-    //  }
-    //}
+    private bool IsFactTagCreateListValid()
+    {
+      foreach (EditedRHFact l_editedFact in m_factTagsCreateList)
+      {
+        if (l_editedFact.EditedFactTag.Id == 0)
+          return false;
+      }
+      return true;
+    }
 
     #endregion
 
