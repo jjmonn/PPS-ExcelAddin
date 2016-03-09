@@ -226,7 +226,7 @@ namespace FBI.MVC.Model
     private void FactTagCommitAndCreate()
     {
       if (m_factsTagCommitList.Count > 0)
-        FactTagModel.Instance.UpdateList(m_factsTagCommitList);
+        FactTagModel.Instance.UpdateList(m_factsTagCommitList, CRUDAction.UPDATE);
 
       if (m_factTagsCreateList.Count > 0)
         CreateFactTags();
@@ -280,18 +280,18 @@ namespace FBI.MVC.Model
     }
 
     // use single Fact Tag Update ?
-    
-    private void AfterFactTagsCommit(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
+
+    private void AfterFactTagsCommit(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
     {
       AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
       {
-        foreach (KeyValuePair<UInt32, bool> l_result in p_updateResults)
+        foreach (KeyValuePair<UInt32, ErrorMessage> l_result in p_updateResults[CRUDAction.UPDATE])
         {
           EditedRHFact l_editedFact = m_IdEditedFactDict[l_result.Key];
           if (l_editedFact != null)
           {
-            if (l_result.Value == true)
+            if (l_result.Value == ErrorMessage.SUCCESS)
               m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
             else
             {

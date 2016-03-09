@@ -30,7 +30,7 @@ namespace FBI.MVC.Model
 	public event DeleteEventHandler DeleteEvent;
 	public delegate void DeleteEventHandler(ErrorMessage status, UInt32 id);
 	public event UpdateListEventHandler UpdateListEvent;
-	public delegate void UpdateListEventHandler(ErrorMessage status, Dictionary<UInt32, bool> updateResults);
+  public delegate void UpdateListEventHandler(ErrorMessage status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> updateResults);
 
 	protected ServerMessage CreateSMSG;
 	protected ServerMessage ReadSMSG;
@@ -90,20 +90,22 @@ namespace FBI.MVC.Model
   {
     if (p_packet.GetError() == ErrorMessage.SUCCESS)
     {
-      SafeDictionary<UInt32, bool> resultList = new SafeDictionary<UInt32, bool>();
+      SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> l_resultList =
+        new SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>>();
       Int32 nbResult = p_packet.ReadInt32();
 
       for (Int32 i = 1; i <= nbResult; i++)
       {
+        CRUDAction l_action = (CRUDAction)p_packet.ReadUint8();
         UInt32 id = p_packet.ReadUint32();
-        if ((resultList.ContainsKey(id)))
-          resultList[id] = p_packet.ReadBool();
-        else
-          resultList.Add(id, p_packet.ReadBool());
+        bool l_success = p_packet.ReadBool();
+        ErrorMessage l_error = (ErrorMessage)p_packet.ReadUint32();
+
+        l_resultList[l_action][id] = l_error;
       }
 
       if (UpdateListEvent != null)
-        UpdateListEvent(p_packet.GetError(), resultList);
+        UpdateListEvent(p_packet.GetError(), l_resultList);
     }
     else
     {
@@ -144,15 +146,15 @@ namespace FBI.MVC.Model
 	}
 
 
-  public virtual bool UpdateList(List<T> p_crudList)
+  public virtual bool UpdateList(List<T> p_crudList, CRUDAction p_action)
 	{
 		ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(UpdateListCMSG));
 
 		packet.WriteInt32(p_crudList.Count);
 		foreach (T l_crud in p_crudList)
     {
-			packet.WriteUint8((byte)CRUDAction.UPDATE);
-			l_crud.Dump(packet, true);
+			packet.WriteUint8((byte)p_action);
+			l_crud.Dump(packet, p_action != CRUDAction.CREATE);
 		}
 		packet.Release();
 		return NetworkManager.Send(packet);
@@ -171,86 +173,86 @@ namespace FBI.MVC.Model
 
   private void ReadAnswer_Intern(ByteBuffer p_packet)
   {
-    /*try
-    {*/
+    try
+    {
       ReadAnswer(p_packet);
-   /* }
+    }
     catch (Exception ex)
     {
       Debug.WriteLine("ReadAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("ReadAnswer: " + ex.InnerException.Message);
-    }*/
+    }
   }
 
   private void UpdateAnswer_Intern(ByteBuffer p_packet)
   {
-   /* try
-    {*/
+    try
+    {
       UpdateAnswer(p_packet);
-   /* }
+    }
     catch (Exception ex)
     {
       Debug.WriteLine("UpdateAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("UpdateAnswer: " + ex.InnerException.Message);
-    }*/
+    }
   }
 
   private void UpdateListAnswer_Intern(ByteBuffer p_packet)
   {
-  /*  try
-    {*/
+    try
+    {
       UpdateListAnswer(p_packet);
-  /*  }
+    }
     catch (Exception ex)
     {
       Debug.WriteLine("UpdateListAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("UpdateListAnswer: " + ex.InnerException.Message);
-    }*/
+    }
   }
 
   private void CreateAnswer_Intern(ByteBuffer p_packet)
   {
- /*   try
-    {*/
+    try
+    {
       CreateAnswer(p_packet);
- /*   }
+    }
     catch (Exception ex)
     {
       Debug.WriteLine("CreateAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("CreateAnswer: " + ex.InnerException.Message);
-    }*/
+    }
   }
 
   private void DeleteAnswer_Intern(ByteBuffer p_packet)
   {
-/*    try
-    {*/
+    try
+    {
       DeleteAnswer(p_packet);
-  /*  }
+    }
     catch (Exception ex)
     {
       Debug.WriteLine("DeleteAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("DeleteAnswer: " + ex.InnerException.Message);
-    }*/
+    }
   }
 
   private void ListAnswer_Intern(ByteBuffer p_packet)
   {
-   /* try
-    {*/
+    try
+    {
       ListAnswer(p_packet);
-/*    }
+    }
     catch (Exception ex)
     {
       Debug.WriteLine("ListAnswer: " + ex.Message);
       if ((ex.InnerException != null))
         Debug.WriteLine("ListAnswer: " + ex.InnerException.Message);
-    }*/
+    }
   }
 
 	#endregion
@@ -287,7 +289,7 @@ namespace FBI.MVC.Model
 			UpdateEvent(p_status, p_id);
 	}
 
-	protected void RaiseUpdateListEvent(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
+  protected void RaiseUpdateListEvent(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
 	{
 		if (UpdateListEvent != null)
 			UpdateListEvent(p_status, p_updateResults);
