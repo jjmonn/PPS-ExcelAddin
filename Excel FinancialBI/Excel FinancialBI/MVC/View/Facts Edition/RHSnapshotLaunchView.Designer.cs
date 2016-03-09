@@ -39,6 +39,7 @@ partial class RHSnapshotLaunchView : System.Windows.Forms.Form
       this.m_periodSelectionPanel = new System.Windows.Forms.Panel();
       this.m_accountSelectionComboBox = new VIBlend.WinForms.Controls.vComboBox();
       this.m_accountSelectionLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.m_displayInitialDifferencesCheckbox = new VIBlend.WinForms.Controls.vCheckBox();
       this.SuspendLayout();
       // 
       // m_validateButton
@@ -49,7 +50,7 @@ partial class RHSnapshotLaunchView : System.Windows.Forms.Form
       this.m_validateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_validateButton.ImageKey = "1420498403_340208.ico";
       this.m_validateButton.ImageList = this.ImageList1;
-      this.m_validateButton.Location = new System.Drawing.Point(304, 187);
+      this.m_validateButton.Location = new System.Drawing.Point(304, 223);
       this.m_validateButton.Name = "m_validateButton";
       this.m_validateButton.RoundedCornersMask = ((byte)(15));
       this.m_validateButton.Size = new System.Drawing.Size(91, 24);
@@ -108,11 +109,25 @@ partial class RHSnapshotLaunchView : System.Windows.Forms.Form
       this.m_accountSelectionLabel.UseMnemonics = true;
       this.m_accountSelectionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
+      // m_displayInitialDifferencesCheckbox
+      // 
+      this.m_displayInitialDifferencesCheckbox.BackColor = System.Drawing.Color.Transparent;
+      this.m_displayInitialDifferencesCheckbox.Checked = true;
+      this.m_displayInitialDifferencesCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.m_displayInitialDifferencesCheckbox.Location = new System.Drawing.Point(152, 182);
+      this.m_displayInitialDifferencesCheckbox.Name = "m_displayInitialDifferencesCheckbox";
+      this.m_displayInitialDifferencesCheckbox.Size = new System.Drawing.Size(243, 24);
+      this.m_displayInitialDifferencesCheckbox.TabIndex = 7;
+      this.m_displayInitialDifferencesCheckbox.Text = "Display initial differences";
+      this.m_displayInitialDifferencesCheckbox.UseVisualStyleBackColor = false;
+      this.m_displayInitialDifferencesCheckbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
       // RHSnapshotLaunchView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(407, 223);
+      this.ClientSize = new System.Drawing.Size(409, 259);
+      this.Controls.Add(this.m_displayInitialDifferencesCheckbox);
       this.Controls.Add(this.m_accountSelectionLabel);
       this.Controls.Add(this.m_accountSelectionComboBox);
       this.Controls.Add(this.m_periodSelectionPanel);
@@ -128,6 +143,7 @@ partial class RHSnapshotLaunchView : System.Windows.Forms.Form
 	public System.Windows.Forms.Panel m_periodSelectionPanel;
 	public VIBlend.WinForms.Controls.vComboBox m_accountSelectionComboBox;
 	public VIBlend.WinForms.Controls.vLabel m_accountSelectionLabel;
+  private VIBlend.WinForms.Controls.vCheckBox m_displayInitialDifferencesCheckbox;
 }
 
 }

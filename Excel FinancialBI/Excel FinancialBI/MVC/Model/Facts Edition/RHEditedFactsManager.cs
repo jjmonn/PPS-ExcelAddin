@@ -34,6 +34,7 @@ namespace FBI.MVC.Model
     SafeDictionary<string, EditedRHFact> m_clientsToBeCreated = new SafeDictionary<string, EditedRHFact>();
     private List<Int32> m_periodsList;
     FactsRHCommit m_factsCommit;
+    bool m_displayInitialDifferences;
 
 
     public RHEditedFactsManager(List<Int32> p_periodsList)
@@ -51,13 +52,15 @@ namespace FBI.MVC.Model
       // EMPTY dictionnaries etc.
     }
 
-    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, UInt32 p_RHAccountId)
+    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId)
     {
       m_worksheet = p_worksheet;
       m_dimensions = p_dimensions;
       m_rangeHighlighter = p_rangeHighlighter;
       m_versionId = p_versionId;
       m_RHAccountId = p_RHAccountId;
+      m_displayInitialDifferences = p_displayInitialDifferences;
+
       Dimension<CRUDEntity> l_vertical = p_dimensions.m_dimensions[p_dimensions.m_orientation.Vertical];
       Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
 
@@ -189,12 +192,15 @@ namespace FBI.MVC.Model
 
     private void SetEditedFactsStatus()
     {
-      AddinModuleController.SetExcelInteractionState(false);
-      foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
+      if (m_displayInitialDifferences == true)
       {
-        l_editedFact.SetCellStatusRH();
+        AddinModuleController.SetExcelInteractionState(false);
+        foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
+        {
+          l_editedFact.SetCellStatusRH();
+        }
+        AddinModuleController.SetExcelInteractionState(true);
       }
-      AddinModuleController.SetExcelInteractionState(true);
     }
 
     private bool FillEditedFacts(List<Fact> p_factsList)
@@ -304,6 +310,9 @@ namespace FBI.MVC.Model
         else
         {
           string l_value = StringUtils.RemoveDiacritics(p_cell.Value2 as string);
+          if (l_value == "") 
+            return 0;
+
           if (m_factsTagList.Contains(l_value) == false && m_legalHolidayTagList.Contains(l_value) == false)
           {
             EditedRHFact l_editedFact = m_RHEditedFacts[p_cell.Address];
@@ -322,6 +331,9 @@ namespace FBI.MVC.Model
         return FactTag.TagType.NONE;
 
       string l_value = StringUtils.RemoveDiacritics(p_cell.Value2 as string);
+      if (l_value == "")
+        return FactTag.TagType.NONE;
+
       if (m_factsTagList.Contains(l_value))
       {
         return (FactTag.TagType)m_factsTagList.FindIndex(x => x.StartsWith(l_value));
@@ -335,10 +347,11 @@ namespace FBI.MVC.Model
         return LegalHolidayTag.NONE;
 
       string l_value = StringUtils.RemoveDiacritics(p_cell.Value2 as string);
+      if (l_value == "")
+        return LegalHolidayTag.NONE;
+      
       if (m_legalHolidayTagList.Contains(l_value))
-      {
         return (LegalHolidayTag)m_legalHolidayTagList.FindIndex(x => x.StartsWith(l_value));
-      }
 
       return LegalHolidayTag.NONE;
     }

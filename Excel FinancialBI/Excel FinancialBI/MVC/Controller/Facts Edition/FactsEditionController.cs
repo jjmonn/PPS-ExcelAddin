@@ -49,7 +49,7 @@ namespace FBI.MVC.Controller
       m_editedFactsManager.OnCommitError -= OnCommitError;
     }
 
-    public bool Launch(bool p_updateCells)
+    public bool Launch(bool p_updateCells, bool p_displayInitialDifferences)
     {
       // TO DO: Compatibilité resfresh
       // Clean current status, higlights and so on
@@ -61,7 +61,7 @@ namespace FBI.MVC.Controller
         if (m_dimensions.IsValid() == false)
           return false;
 
-        m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet, m_versionId, m_rangeHighlighter ,m_RHAccountId);
+        m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet, m_versionId, m_rangeHighlighter, p_displayInitialDifferences, m_RHAccountId);
         if (m_versionId != 0 && m_periodsList.Count > 0)
         {
           m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells);
