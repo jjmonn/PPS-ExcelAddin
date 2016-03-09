@@ -197,7 +197,7 @@
     <Setting Name="chart4Title" Type="System.String" Scope="User">
       <Value Profile="(Default)">Ratios Financiers (%)</Value>
     </Setting>
-    <Setting Name="port_number" Type="System.Int32" Scope="User">
+    <Setting Name="port_number" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">4242</Value>
     </Setting>
     <Setting Name="serverIp" Type="System.String" Scope="User">

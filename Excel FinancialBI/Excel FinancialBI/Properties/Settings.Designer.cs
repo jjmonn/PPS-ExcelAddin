@@ -806,9 +806,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("4242")]
-        public int port_number {
+        public ushort port_number {
             get {
-                return ((int)(this["port_number"]));
+                return ((ushort)(this["port_number"]));
             }
             set {
                 this["port_number"] = value;

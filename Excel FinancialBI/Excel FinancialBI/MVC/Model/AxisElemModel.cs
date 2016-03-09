@@ -36,6 +36,15 @@ namespace FBI.MVC.Model
       InitCallbacks();
     }
 
+    public string GetValueName(UInt32 p_id)
+    {
+      AxisElem l_axisElem = GetValue(p_id);
+
+      if (l_axisElem == null)
+        return ("");
+      return (l_axisElem.Name);
+    }
+
     #region Utilities
 
     public UInt32 CountChildren(AxisType p_axis, UInt32 p_id)

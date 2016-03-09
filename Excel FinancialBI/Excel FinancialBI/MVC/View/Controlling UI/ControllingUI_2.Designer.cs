@@ -48,12 +48,10 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.MenuImageList = new System.Windows.Forms.ImageList(this.components);
       this.SplitContainer2 = new System.Windows.Forms.SplitContainer();
       this.Panel1 = new System.Windows.Forms.Panel();
-      this.VersionTB = new VIBlend.WinForms.Controls.vTextBox();
+      this.m_entityLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.m_currencyLabel = new VIBlend.WinForms.Controls.vLabel();
       this.CurrencyTB = new VIBlend.WinForms.Controls.vTextBox();
       this.EntityTB = new VIBlend.WinForms.Controls.vTextBox();
-      this.m_currencyLabel = new System.Windows.Forms.Label();
-      this.m_versionLabel = new System.Windows.Forms.Label();
-      this.m_entityLabel = new System.Windows.Forms.Label();
       this.MainMenu = new System.Windows.Forms.MenuStrip();
       this.ExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.DropOnExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -147,8 +145,8 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // SplitContainer1.Panel2
       // 
       this.SplitContainer1.Panel2.Controls.Add(this.m_DGVsControlTab);
-      this.SplitContainer1.Size = new System.Drawing.Size(602, 387);
-      this.SplitContainer1.SplitterDistance = 111;
+      this.SplitContainer1.Size = new System.Drawing.Size(782, 474);
+      this.SplitContainer1.SplitterDistance = 144;
       this.SplitContainer1.TabIndex = 8;
       // 
       // m_DGVsControlTab
@@ -157,8 +155,8 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_DGVsControlTab.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_DGVsControlTab.Location = new System.Drawing.Point(0, 0);
       this.m_DGVsControlTab.Name = "m_DGVsControlTab";
-      this.m_DGVsControlTab.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-      this.m_DGVsControlTab.Size = new System.Drawing.Size(487, 387);
+      this.m_DGVsControlTab.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
+      this.m_DGVsControlTab.Size = new System.Drawing.Size(634, 474);
       this.m_DGVsControlTab.TabAlignment = VIBlend.WinForms.Controls.vTabPageAlignment.Top;
       this.m_DGVsControlTab.TabIndex = 0;
       this.m_DGVsControlTab.TabsAreaBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
@@ -193,45 +191,57 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // SplitContainer2.Panel1
       // 
       this.SplitContainer2.Panel1.Controls.Add(this.SplitContainer1);
-      this.SplitContainer2.Size = new System.Drawing.Size(761, 393);
-      this.SplitContainer2.SplitterDistance = 605;
+      this.SplitContainer2.Size = new System.Drawing.Size(988, 480);
+      this.SplitContainer2.SplitterDistance = 785;
       this.SplitContainer2.TabIndex = 8;
       // 
       // Panel1
       // 
       this.Panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
-      this.Panel1.Controls.Add(this.VersionTB);
+      this.Panel1.Controls.Add(this.m_entityLabel);
+      this.Panel1.Controls.Add(this.m_currencyLabel);
       this.Panel1.Controls.Add(this.CurrencyTB);
       this.Panel1.Controls.Add(this.EntityTB);
-      this.Panel1.Controls.Add(this.m_currencyLabel);
-      this.Panel1.Controls.Add(this.m_versionLabel);
-      this.Panel1.Controls.Add(this.m_entityLabel);
       this.Panel1.Controls.Add(this.MainMenu);
       this.Panel1.Dock = System.Windows.Forms.DockStyle.Top;
       this.Panel1.Location = new System.Drawing.Point(0, 0);
       this.Panel1.Name = "Panel1";
-      this.Panel1.Size = new System.Drawing.Size(761, 61);
+      this.Panel1.Size = new System.Drawing.Size(988, 61);
       this.Panel1.TabIndex = 9;
       // 
-      // VersionTB
+      // m_entityLabel
       // 
-      this.VersionTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.VersionTB.BackColor = System.Drawing.Color.White;
-      this.VersionTB.BoundsOffset = new System.Drawing.Size(1, 1);
-      this.VersionTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
-      this.VersionTB.DefaultText = "";
-      this.VersionTB.Enabled = false;
-      this.VersionTB.Location = new System.Drawing.Point(604, 5);
-      this.VersionTB.MaxLength = 32767;
-      this.VersionTB.Name = "VersionTB";
-      this.VersionTB.PasswordChar = '\0';
-      this.VersionTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
-      this.VersionTB.SelectionLength = 0;
-      this.VersionTB.SelectionStart = 0;
-      this.VersionTB.Size = new System.Drawing.Size(154, 23);
-      this.VersionTB.TabIndex = 6;
-      this.VersionTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-      this.VersionTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_entityLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_entityLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_entityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_entityLabel.Ellipsis = false;
+      this.m_entityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_entityLabel.Location = new System.Drawing.Point(615, 9);
+      this.m_entityLabel.Multiline = true;
+      this.m_entityLabel.Name = "m_entityLabel";
+      this.m_entityLabel.Size = new System.Drawing.Size(69, 18);
+      this.m_entityLabel.TabIndex = 7;
+      this.m_entityLabel.Text = "Entity";
+      this.m_entityLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_entityLabel.UseMnemonics = true;
+      this.m_entityLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_currencyLabel
+      // 
+      this.m_currencyLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_currencyLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_currencyLabel.Ellipsis = false;
+      this.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_currencyLabel.Location = new System.Drawing.Point(832, 9);
+      this.m_currencyLabel.Multiline = true;
+      this.m_currencyLabel.Name = "m_currencyLabel";
+      this.m_currencyLabel.Size = new System.Drawing.Size(69, 18);
+      this.m_currencyLabel.TabIndex = 6;
+      this.m_currencyLabel.Text = "Currency";
+      this.m_currencyLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_currencyLabel.UseMnemonics = true;
+      this.m_currencyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // CurrencyTB
       // 
@@ -241,7 +251,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.CurrencyTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.CurrencyTB.DefaultText = "";
       this.CurrencyTB.Enabled = false;
-      this.CurrencyTB.Location = new System.Drawing.Point(475, 5);
+      this.CurrencyTB.Location = new System.Drawing.Point(907, 5);
       this.CurrencyTB.MaxLength = 32767;
       this.CurrencyTB.Name = "CurrencyTB";
       this.CurrencyTB.PasswordChar = '\0';
@@ -261,7 +271,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.EntityTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.EntityTB.DefaultText = "";
       this.EntityTB.Enabled = false;
-      this.EntityTB.Location = new System.Drawing.Point(272, 5);
+      this.EntityTB.Location = new System.Drawing.Point(690, 5);
       this.EntityTB.MaxLength = 32767;
       this.EntityTB.Name = "EntityTB";
       this.EntityTB.PasswordChar = '\0';
@@ -272,36 +282,6 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.EntityTB.TabIndex = 4;
       this.EntityTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
       this.EntityTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_currencyLabel
-      // 
-      this.m_currencyLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.m_currencyLabel.AutoSize = true;
-      this.m_currencyLabel.Location = new System.Drawing.Point(414, 9);
-      this.m_currencyLabel.Name = "m_currencyLabel";
-      this.m_currencyLabel.Size = new System.Drawing.Size(75, 13);
-      this.m_currencyLabel.TabIndex = 3;
-      this.m_currencyLabel.Text = "[CUI.currency]";
-      // 
-      // m_versionLabel
-      // 
-      this.m_versionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.m_versionLabel.AutoSize = true;
-      this.m_versionLabel.Location = new System.Drawing.Point(550, 9);
-      this.m_versionLabel.Name = "m_versionLabel";
-      this.m_versionLabel.Size = new System.Drawing.Size(68, 13);
-      this.m_versionLabel.TabIndex = 2;
-      this.m_versionLabel.Text = "[CUI.version]";
-      // 
-      // m_entityLabel
-      // 
-      this.m_entityLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.m_entityLabel.AutoSize = true;
-      this.m_entityLabel.Location = new System.Drawing.Point(230, 9);
-      this.m_entityLabel.Name = "m_entityLabel";
-      this.m_entityLabel.Size = new System.Drawing.Size(59, 13);
-      this.m_entityLabel.TabIndex = 1;
-      this.m_entityLabel.Text = "[CUI.entity]";
       // 
       // MainMenu
       // 
@@ -409,11 +389,11 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
       this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.ClientSize = new System.Drawing.Size(761, 453);
+      this.ClientSize = new System.Drawing.Size(988, 540);
       this.Controls.Add(this.Panel1);
       this.Controls.Add(this.SplitContainer2);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.Margin = new System.Windows.Forms.Padding(2);
       this.Name = "ControllingUI_2";
       this.Text = "[CUI.financials]";
       this.EntitiesRCMenu.ResumeLayout(false);
@@ -453,16 +433,14 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
 	public System.Windows.Forms.ToolStripMenuItem m_versionSwitchButton;
 	public System.Windows.Forms.ToolStripMenuItem m_hideVersionButton;
 	public System.Windows.Forms.ToolStripMenuItem ExcelToolStripMenuItem;
-	public System.Windows.Forms.ToolStripMenuItem DropOnExcelToolStripMenuItem;
-	public System.Windows.Forms.Label m_currencyLabel;
-	public System.Windows.Forms.Label m_versionLabel;
-	public System.Windows.Forms.Label m_entityLabel;
-	public VIBlend.WinForms.Controls.vTextBox VersionTB;
+  public System.Windows.Forms.ToolStripMenuItem DropOnExcelToolStripMenuItem;
 	public VIBlend.WinForms.Controls.vTextBox CurrencyTB;
 	public VIBlend.WinForms.Controls.vTextBox EntityTB;
   public System.Windows.Forms.ImageList ExpansionImageList;
 	public System.Windows.Forms.ToolStripMenuItem ChartBT;
   public System.Windows.Forms.ToolStripMenuItem DropOnlyTheVisibleItemsOnExcelToolStripMenuItem;
+  private VIBlend.WinForms.Controls.vLabel m_currencyLabel;
+  private VIBlend.WinForms.Controls.vLabel m_entityLabel;
 }
 
 }
