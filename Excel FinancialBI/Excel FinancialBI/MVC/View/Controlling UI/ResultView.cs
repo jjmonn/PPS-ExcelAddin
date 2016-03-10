@@ -253,9 +253,9 @@ namespace FBI.MVC.View
       switch (p_config)
       {
         case TimeConfig.WEEK:
-          return (p_nbPeriod / 7);
+          return ((Int32)Math.Ceiling(p_nbPeriod / 7.0));
         case TimeConfig.YEARS:
-          return (p_nbPeriod / 12);
+          return ((Int32)Math.Ceiling(p_nbPeriod / 12.0));
       }
       return (p_nbPeriod);
     }

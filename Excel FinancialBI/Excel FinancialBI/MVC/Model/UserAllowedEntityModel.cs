@@ -45,7 +45,7 @@ namespace FBI.MVC.Model
       return (false);
     }
 
-    public override bool UpdateList(List<UserAllowedEntity> p_crudList)
+    public override bool UpdateList(List<UserAllowedEntity> p_crudList, CRUDAction p_action)
     {
       return (false);
     }

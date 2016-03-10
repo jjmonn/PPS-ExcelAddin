@@ -64,7 +64,7 @@ namespace FBI.MVC.Controller
 
     public bool UpdateAccountList(List<Account> p_accountList)
     {
-      AccountModel.Instance.UpdateList(p_accountList);
+      AccountModel.Instance.UpdateList(p_accountList, CRUDAction.UPDATE);
       return (true);
     }
 

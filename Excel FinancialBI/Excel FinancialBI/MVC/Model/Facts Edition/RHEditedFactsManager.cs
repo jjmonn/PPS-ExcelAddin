@@ -95,7 +95,7 @@ namespace FBI.MVC.Model
       p_editedFact.EditedLegalHoliday.Tag = GetLegalHolidayTagFromCell(p_editedFact.Cell);
 
       p_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
-      p_editedFact.SetCellStatusRH();
+     // p_editedFact.SetCellStatusRH();
     }
 
     private EditedRHFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1,
