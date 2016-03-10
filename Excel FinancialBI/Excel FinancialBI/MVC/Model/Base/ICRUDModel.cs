@@ -154,7 +154,10 @@ namespace FBI.MVC.Model
 		foreach (T l_crud in p_crudList)
     {
 			packet.WriteUint8((byte)p_action);
-			l_crud.Dump(packet, p_action != CRUDAction.CREATE);
+      if (p_action == CRUDAction.DELETE)
+        packet.WriteUint32(l_crud.Id);
+      else
+			  l_crud.Dump(packet, p_action != CRUDAction.CREATE);
 		}
 		packet.Release();
 		return NetworkManager.Send(packet);
