@@ -47,24 +47,24 @@ namespace FBI.MVC.Model
       m_RHAccountId = p_RHAccountId;
       m_versionId = p_versionId;
 
-      FactsModel.Instance.UpdateEvent += AfterFactsCommit;
-      FactsModel.Instance.DeleteEvent += AfterFactDelete;
-      FactTagModel.Instance.CreationEvent += AfterFactTagCreate;
-      FactTagModel.Instance.UpdateListEvent += AfterFactTagsCommit;
-      FactTagModel.Instance.DeleteEvent += AfterFactTagDelete;
-      LegalHolidayModel.Instance.ReadEvent += AfterLegalHolidayRead;
-      LegalHolidayModel.Instance.DeleteEvent += AfterLegalHolidayDelete;
+      FactsModel.Instance.UpdateEvent += OnFactsCommit;
+      FactsModel.Instance.DeleteEvent += OnFactDelete;
+      FactTagModel.Instance.CreationEvent += OnFactTagCreate;
+      FactTagModel.Instance.UpdateListEvent += OnFactTagsUpdate;
+      FactTagModel.Instance.DeleteEvent += OnFactTagDelete;
+      LegalHolidayModel.Instance.ReadEvent += OnLegalHolidayRead;
+      LegalHolidayModel.Instance.DeleteEvent += OnLegalHolidayDelete;
     }
 
     public void Dispose()
     {
-      FactsModel.Instance.UpdateEvent -= AfterFactsCommit;
-      FactsModel.Instance.DeleteEvent -= AfterFactDelete;
-      FactTagModel.Instance.CreationEvent -= AfterFactTagCreate;
-      FactTagModel.Instance.UpdateListEvent -= AfterFactTagsCommit;
-      FactTagModel.Instance.DeleteEvent -= AfterFactTagDelete;
-      LegalHolidayModel.Instance.ReadEvent -= AfterLegalHolidayRead;
-      LegalHolidayModel.Instance.DeleteEvent -= AfterLegalHolidayDelete;
+      FactsModel.Instance.UpdateEvent -= OnFactsCommit;
+      FactsModel.Instance.DeleteEvent -= OnFactDelete;
+      FactTagModel.Instance.CreationEvent -= OnFactTagCreate;
+      FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdate;
+      FactTagModel.Instance.DeleteEvent -= OnFactTagDelete;
+      LegalHolidayModel.Instance.ReadEvent -= OnLegalHolidayRead;
+      LegalHolidayModel.Instance.DeleteEvent -= OnLegalHolidayDelete;
     }
 
     public void Commit()
@@ -119,9 +119,12 @@ namespace FBI.MVC.Model
           break;
 
         default:
-          p_editedFact.ClientId = (UInt32)AxisType.Client;
-          p_editedFact.Value = 0;
-          p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
+          if (p_editedFact.EditedFactTag.Tag != p_editedFact.ModelFactTag.Tag)
+          {
+            p_editedFact.ClientId = (UInt32)AxisType.Client;
+            p_editedFact.Value = 0;
+            p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
+          }
           break;
       }
     }
@@ -150,7 +153,7 @@ namespace FBI.MVC.Model
       }
     }
 
-    private void AfterFactsCommit(ErrorMessage p_status, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
+    private void OnFactsCommit(ErrorMessage p_status, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
@@ -165,6 +168,7 @@ namespace FBI.MVC.Model
             {
               l_editedFact.SetId(l_factId);
               m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+              m_IdEditedFactDict[l_factId] = l_editedFact; ;
             }
             else
             {
@@ -172,7 +176,18 @@ namespace FBI.MVC.Model
             //  OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
             }
           }
-          FactTagCommitAndCreate();
+          if (m_factsTagCommitList != null && m_factTagsCreateList != null)
+          {
+            lock (m_factsTagCommitList)
+            {
+              lock (m_factTagsCreateList)
+              {
+                FactTagCommitAndCreate();
+              }
+            }
+          }
+          else
+            System.Diagnostics.Debug.WriteLine("On facts commit : m_factsTagCommitList or m_fatcTagsCreate list == null");
           AddinModuleController.SetExcelInteractionState(true);
         }
       }
@@ -184,7 +199,7 @@ namespace FBI.MVC.Model
       AddinModuleController.SetExcelInteractionState(true);
     }
 
-    private void AfterFactDelete(ErrorMessage p_status, UInt32 p_factId)
+    private void OnFactDelete(ErrorMessage p_status, UInt32 p_factId)
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
@@ -193,6 +208,7 @@ namespace FBI.MVC.Model
           EditedRHFact l_editedFact = m_IdEditedFactDict[p_factId];
           if (l_editedFact != null)
             m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+          m_IdEditedFactDict.Remove(p_factId);
         }
       }
       else
@@ -230,10 +246,10 @@ namespace FBI.MVC.Model
 
     private void FactTagCommitAndCreate()
     {
-      if (m_factsTagCommitList.Count > 0)
+      if (m_factsTagCommitList != null && m_factsTagCommitList.Count > 0)
         FactTagModel.Instance.UpdateList(m_factsTagCommitList);
 
-      if (m_factTagsCreateList.Count > 0)
+      if (m_factTagsCreateList != null && m_factTagsCreateList.Count > 0)
         CreateFactTags();
     }
 
@@ -255,7 +271,7 @@ namespace FBI.MVC.Model
       m_factTagsCreateList.Clear();
     }
 
-    private void AfterFactTagCreate(ErrorMessage status, UInt32 id)
+    private void OnFactTagCreate(ErrorMessage status, UInt32 id)
     {
       // TO DO : update list
       // Excel interaction false nécessaire
@@ -274,9 +290,7 @@ namespace FBI.MVC.Model
       //    AddinModuleController.SetExcelInteractionState(true);
     }
 
-    // use single Fact Tag Update ?
-
-    private void AfterFactTagsCommit(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
+    private void OnFactTagsUpdate(ErrorMessage p_status, Dictionary<UInt32, bool> p_updateResults)
     {
       AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
@@ -309,7 +323,7 @@ namespace FBI.MVC.Model
       AddinModuleController.SetExcelInteractionState(true);
     }
 
-    private void AfterFactTagDelete(ErrorMessage status, UInt32 id)
+    private void OnFactTagDelete(ErrorMessage status, UInt32 id)
     {
       lock (m_IdEditedFactDict)
       {
@@ -385,7 +399,7 @@ namespace FBI.MVC.Model
       }
     }
 
-    private void AfterLegalHolidayRead(ErrorMessage status, LegalHoliday p_legalHoliday)
+    private void OnLegalHolidayRead(ErrorMessage status, LegalHoliday p_legalHoliday)
     {
 
       if (status == ErrorMessage.SUCCESS)
@@ -411,22 +425,28 @@ namespace FBI.MVC.Model
 
     }
 
-    private void AfterLegalHolidayDelete(ErrorMessage status, UInt32 id)
+    private void OnLegalHolidayDelete(ErrorMessage status, UInt32 id)
     {
-      if (status == ErrorMessage.SUCCESS)
-      {
-        EditedRHFact l_editedFact = m_legalHolidayDeleteDictIdEditedFact[id];
-        if (l_editedFact == null)
-          return;
+      if (m_legalHolidayDeleteDictIdEditedFact == null)
+        return;
 
-        m_rangeHighlighter.FillCellColor(l_editedFact.Cell, EditedFactStatus.Committed);
-        l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.NONE;
-      }
-      else
+      lock (m_legalHolidayDeleteDictIdEditedFact)
       {
-        // Log commit error to view
+        if (status == ErrorMessage.SUCCESS)
+        {
+          EditedRHFact l_editedFact = m_legalHolidayDeleteDictIdEditedFact[id];
+          if (l_editedFact == null)
+            return;
+
+          m_rangeHighlighter.FillCellColor(l_editedFact.Cell, EditedFactStatus.Committed);
+          l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.NONE;
+        }
+        else
+        {
+          // Log commit error to view
+        }
+        m_legalHolidayDeleteDictIdEditedFact.Remove(id);
       }
-      m_legalHolidayDeleteDictIdEditedFact.Remove(id);
     }
 
     #endregion
