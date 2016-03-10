@@ -48,6 +48,20 @@ namespace FBI.MVC.Model
       return (Delete(l_lh.EmployeeId, l_lh.Period));
     }
 
+    public override bool UpdateList(List<LegalHoliday> p_crudList, CRUDAction p_action)
+    {
+      ByteBuffer l_packet = new ByteBuffer(Convert.ToUInt16(UpdateListCMSG));
+
+      l_packet.WriteInt32(p_crudList.Count);
+      foreach (LegalHoliday l_crud in p_crudList)
+      {
+        l_packet.WriteUint8((byte)p_action);
+        l_crud.Dump(l_packet, false);
+      }
+      l_packet.Release();
+      return NetworkManager.Send(l_packet);
+    }
+
     public bool Delete(UInt32 p_employeeId, UInt32 p_period)
     {
       ByteBuffer packet = new ByteBuffer((UInt16)DeleteCMSG);
