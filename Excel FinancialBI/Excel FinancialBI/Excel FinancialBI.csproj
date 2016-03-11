@@ -261,6 +261,7 @@
     <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUIVisualizationController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
@@ -413,17 +414,11 @@
     <Compile Include="MVC\View\Controlling UI\CUI2VisualisationChartsSettings.Designer.cs">
       <DependentUpon>CUI2VisualisationChartsSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Controlling UI\CUI2Visualization.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Controlling UI\CUI2Visualization.Designer.cs">
-      <DependentUpon>CUI2Visualization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.cs">
+    <Compile Include="MVC\View\Controlling UI\CUIVisualization.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.Designer.cs">
-      <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
+    <Compile Include="MVC\View\Controlling UI\CUIVisualization.Designer.cs">
+      <DependentUpon>CUIVisualization.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Facts Edition\RangeHighlighter.cs" />
     <Compile Include="MVC\View\Controlling UI\ResultView.cs">
@@ -751,11 +746,8 @@
     <EmbeddedResource Include="MVC\View\Controlling UI\CUI2VisualisationChartsSettings.resx">
       <DependentUpon>CUI2VisualisationChartsSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2Visualization.resx">
-      <DependentUpon>CUI2Visualization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2VisualizationContainer.resx">
-      <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Controlling UI\CUIVisualization.resx">
+      <DependentUpon>CUIVisualization.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\ResultView.resx">
       <DependentUpon>ResultView.cs</DependentUpon>
