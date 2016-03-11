@@ -101,6 +101,9 @@ namespace FBI.MVC.Model
         bool l_success = p_packet.ReadBool();
         ErrorMessage l_error = (ErrorMessage)p_packet.ReadUint32();
 
+        if (l_resultList.ContainsKey(l_action) == false)
+          l_resultList[l_action]= new SafeDictionary<UInt32, ErrorMessage>();
+    
         l_resultList[l_action][id] = l_error;
       }
 
