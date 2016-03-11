@@ -127,6 +127,47 @@ namespace FBI.MVC.Model.CRUD
       return (true);
     }
 
+    public bool IsSort(bool p_isAxis, AxisType p_axis, UInt32 p_id = 0)
+    {
+      string l_findStr = ((p_isAxis) ? "#t" : "#f") + ((byte)p_axis).ToString();
+
+      if (p_id != 0)
+        l_findStr += "v" + p_id.ToString();
+      if (SortHash.Contains(l_findStr) == false)
+        return (false);
+      if (SortHash.LastIndexOf("#") != SortHash.LastIndexOf(l_findStr))
+        return (false);
+      return (true);
+    }
+
+    public Tuple<bool, AxisType, UInt32> LastSort
+    {
+      get
+      {
+        bool l_isAxis;
+        Int32 l_axisType;
+        UInt32 l_id;
+
+        Int32 l_beginPos = SortHash.LastIndexOf('#');
+
+        if (l_beginPos < 0 || l_beginPos == SortHash.Length)
+          return (null);
+        string l_str = SortHash.Substring(l_beginPos + 1);
+        l_isAxis = (l_str[0] == 't');
+        
+        Int32 l_endPos = l_str.IndexOf('v');
+        if (l_endPos < 0 || l_endPos == SortHash.Length)
+          return (null);
+        l_str = l_str.Substring(1, l_endPos - 1);
+        if (Int32.TryParse(l_str, out l_axisType) == false)
+          return (null);
+        l_str = l_str.Substring(l_endPos + 1);
+        if (UInt32.TryParse(l_str, out l_id) == false)
+          return (null);
+        return (new Tuple<bool, AxisType, TabKey>(l_isAxis, (AxisType)l_axisType, l_id));
+      }
+    }
+
     public UInt32 EntityId
     {
       get
