@@ -61,7 +61,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_versionSwitchButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_hideVersionButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_refreshButton = new System.Windows.Forms.ToolStripMenuItem();
-      this.ChartBT = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_chartBT = new System.Windows.Forms.ToolStripMenuItem();
       this.ExpansionImageList = new System.Windows.Forms.ImageList(this.components);
       this.EntitiesRCMenu.SuspendLayout();
       this.PeriodsRCMenu.SuspendLayout();
@@ -291,11 +291,11 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
             this.ExcelToolStripMenuItem,
             this.BusinessControlToolStripMenuItem,
             this.m_refreshButton,
-            this.ChartBT});
+            this.m_chartBT});
       this.MainMenu.Location = new System.Drawing.Point(0, 0);
       this.MainMenu.Name = "MainMenu";
       this.MainMenu.ShowItemToolTips = true;
-      this.MainMenu.Size = new System.Drawing.Size(454, 55);
+      this.MainMenu.Size = new System.Drawing.Size(546, 55);
       this.MainMenu.TabIndex = 0;
       this.MainMenu.Text = "[CUI.main_menu]";
       // 
@@ -367,14 +367,14 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_refreshButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       this.m_refreshButton.ToolTipText = "[CUI.refresh_tooltip]";
       // 
-      // ChartBT
+      // m_chartBT
       // 
-      this.ChartBT.Image = ((System.Drawing.Image)(resources.GetObject("ChartBT.Image")));
-      this.ChartBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-      this.ChartBT.Name = "ChartBT";
-      this.ChartBT.Size = new System.Drawing.Size(81, 51);
-      this.ChartBT.Text = "[CUI.charts]";
-      this.ChartBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+      this.m_chartBT.Image = ((System.Drawing.Image)(resources.GetObject("m_chartBT.Image")));
+      this.m_chartBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+      this.m_chartBT.Name = "m_chartBT";
+      this.m_chartBT.Size = new System.Drawing.Size(81, 51);
+      this.m_chartBT.Text = "[CUI.charts]";
+      this.m_chartBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       // 
       // ExpansionImageList
       // 
@@ -437,7 +437,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
 	public VIBlend.WinForms.Controls.vTextBox CurrencyTB;
 	public VIBlend.WinForms.Controls.vTextBox EntityTB;
   public System.Windows.Forms.ImageList ExpansionImageList;
-	public System.Windows.Forms.ToolStripMenuItem ChartBT;
+	public System.Windows.Forms.ToolStripMenuItem m_chartBT;
   public System.Windows.Forms.ToolStripMenuItem DropOnlyTheVisibleItemsOnExcelToolStripMenuItem;
   private VIBlend.WinForms.Controls.vLabel m_currencyLabel;
   private VIBlend.WinForms.Controls.vLabel m_entityLabel;

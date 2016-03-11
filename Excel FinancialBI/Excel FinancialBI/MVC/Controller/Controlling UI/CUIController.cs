@@ -22,6 +22,7 @@ namespace FBI.MVC.Controller
     public CUILeftPaneController LeftPaneController { get; set; }
     public CUIRightPaneController RightPaneController { get; set; }
     public ResultController ResultController { get; set; }
+    public CUIVisualizationController VisualizationController { get; set; }
 
     public IView View { get { return (m_view); } }
     public string Error { get; set; }
@@ -162,6 +163,11 @@ namespace FBI.MVC.Controller
         return (false);
       }
       return (true);
+    }
+
+    public void ShowCharts()
+    {
+      VisualizationController = new CUIVisualizationController();
     }
   }
 }

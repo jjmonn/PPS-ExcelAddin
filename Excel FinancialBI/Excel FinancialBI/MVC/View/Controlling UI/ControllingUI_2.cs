@@ -68,6 +68,7 @@ namespace FBI.MVC.View
       m_versionComparisonButton.MouseDown += OnVersionComparisionButtonMouseDown;
       m_versionSwitchButton.MouseDown += OnVersionSwitchButtonMouseDown;
       m_hideVersionButton.MouseDown += OnHideVersionButtonMouseDown;
+      m_chartBT.MouseDown += OnChartButtonMouseDown;
     }
 
     override protected void OnClosed(EventArgs e)
@@ -99,7 +100,7 @@ namespace FBI.MVC.View
       this.m_versionSwitchButton.Text = Local.GetValue("CUI.switch_versions");
       this.m_hideVersionButton.Text = Local.GetValue("CUI.take_off_comparison");
       this.m_refreshButton.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
-      this.ChartBT.Text = Local.GetValue("CUI.charts");
+      this.m_chartBT.Text = Local.GetValue("CUI.charts");
       this.Text = Local.GetValue("CUI.financials");
     }
 
@@ -135,6 +136,11 @@ namespace FBI.MVC.View
     void OnRefreshButtonMouseDown(object sender, MouseEventArgs e)
     {
       m_controller.Compute();
+    }
+
+    void OnChartButtonMouseDown(object sender, MouseEventArgs e)
+    {
+      m_controller.ShowCharts();
     }
 
     void OnVersionComparisionButtonMouseDown(object sender, MouseEventArgs e)
