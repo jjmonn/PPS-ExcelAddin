@@ -41,16 +41,16 @@ namespace FBI.MVC.Model.CRUD
       if (Account.FormulaType == CRUD.Account.FormulaTypes.HARD_VALUE_INPUT || Account.FormulaType == CRUD.Account.FormulaTypes.FIRST_PERIOD_INPUT)
       {
         if (EditedValue != this.Value)
-          SetFactStatus(EditedFactStatus.InputDifferent);
+          RaiseStatusEvent(EditedFactStatus.InputDifferent);
         else
-          SetFactStatus(EditedFactStatus.InputEqual);
+          RaiseStatusEvent(EditedFactStatus.InputEqual);
       }
       else
       {
         if (EditedValue != this.Value)
-          SetFactStatus(EditedFactStatus.OutputDifferent);
+          RaiseStatusEvent(EditedFactStatus.OutputDifferent);
         else
-          SetFactStatus(EditedFactStatus.OutputEqual);
+          RaiseStatusEvent(EditedFactStatus.OutputEqual);
       }
     }
 

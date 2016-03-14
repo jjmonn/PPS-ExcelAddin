@@ -115,16 +115,21 @@ namespace FBI.MVC.View
     private void RegisterCellOriginalFill(Range p_cell)
     {
       if (!m_originalCellsColor.ContainsKey(p_cell)) // only add if color has not been yet changed
-      {
         m_originalCellsColor.Add(p_cell, p_cell.Interior.Color); 
-      }
     }
 
     public void RevertToOriginalColors()
     {
       foreach (KeyValuePair<Range, Object> l_keyPair in m_originalCellsColor)
       {
-        l_keyPair.Key.Interior.Color = l_keyPair.Value;
+        try
+        {
+          l_keyPair.Key.Interior.Color = l_keyPair.Value;
+        }
+        catch (Exception e)
+        {
+          System.Diagnostics.Debug.WriteLine("revert to original color: " + e.Message);
+        }
       }
       m_originalCellsColor.Clear();
     }

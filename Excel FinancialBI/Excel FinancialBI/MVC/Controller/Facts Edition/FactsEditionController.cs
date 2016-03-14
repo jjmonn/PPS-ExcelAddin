@@ -27,7 +27,8 @@ namespace FBI.MVC.Controller
     private Worksheet m_worksheet;
     private List<Int32> m_periodsList;
     private UInt32 m_versionId;
-
+    private bool m_autoCommit;
+ 
 
     public FactsEditionController(AddinModuleController p_addinModuleController, Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null, UInt32 p_RHAccountId = 0)
     {
@@ -124,7 +125,10 @@ namespace FBI.MVC.Controller
       //   -> cancel modification and put back the output value 
 
       // TO DO  : antiduplicate system (au préalable -> comparaison des strings)
-   
+
+      if (m_autoCommit == true)
+        m_editedFactsManager.Commit();
+
     }
 
     public void BeforeRightClick()
@@ -139,7 +143,7 @@ namespace FBI.MVC.Controller
 
     public void SetAutoCommit(bool p_value)
     {
-      m_editedFactsManager.m_autoCommit = p_value; 
+      m_autoCommit = p_value; 
     }
 
     private void OnFactsDownloaded(bool p_success)

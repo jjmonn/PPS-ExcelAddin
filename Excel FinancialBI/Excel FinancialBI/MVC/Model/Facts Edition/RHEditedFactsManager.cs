@@ -25,7 +25,6 @@ namespace FBI.MVC.Model
     public event OnFactsDownloaded FactsDownloaded;
     public event FactsCommitError OnCommitError;
     Worksheet m_worksheet;
-    public bool m_autoCommit { set; get; }
     private bool m_updateCellsOnDownload;
     UInt32 m_RHAccountId;
     UInt32 m_versionId;
@@ -89,7 +88,7 @@ namespace FBI.MVC.Model
     {
       m_RHEditedFacts.Set(p_editedFact.Cell.Address, new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, (Int32)p_editedFact.Period), p_editedFact);
 
-      p_rangeHighlighter.FillInputsBaseColor(p_editedFact.Cell);
+    //  p_rangeHighlighter.FillInputsBaseColor(p_editedFact.Cell);
       p_editedFact.EditedClientId = GetClientIdFromCell(p_editedFact.Cell);
       p_editedFact.EditedFactTag.Tag = GetTagTypeFromCell(p_editedFact.Cell);
       p_editedFact.EditedLegalHoliday.Tag = GetLegalHolidayTagFromCell(p_editedFact.Cell);
@@ -183,7 +182,7 @@ namespace FBI.MVC.Model
     
           if (m_updateCellsOnDownload == true)
           {
-            l_editedFact.SetEditedLegalHoliday(LegalHolidayTag.FER);
+            l_editedFact.SetEditedLegalHoliday(LegalHolidayTag.FER, false);
             l_editedFact.Cell.Value2 = m_legalHolidayTagList[(Int32)LegalHolidayTag.FER].ToUpper();
           }
         }
@@ -222,9 +221,9 @@ namespace FBI.MVC.Model
             l_RHEditedFact.UpdateRHFactModels(l_fact, l_factTag, l_legalHoliday);
             if (m_updateCellsOnDownload == true)
             {
-              l_RHEditedFact.SetEditedClient(l_fact.ClientId);
+              l_RHEditedFact.SetEditedClient(l_fact.ClientId, false);
               if (l_factTag != null)
-                l_RHEditedFact.SetEditedFactType(l_factTag.Tag);
+                l_RHEditedFact.SetEditedFactType(l_factTag.Tag, false);
               l_RHEditedFact.Cell.Value2 = GetClientString(l_RHEditedFact, l_fact.ClientId, l_factTag);
             }
           }
@@ -246,9 +245,10 @@ namespace FBI.MVC.Model
       FactTag.TagType l_tagType = GetTagTypeFromCell(p_cell);
       LegalHolidayTag l_legalHolidayTag = GetLegalHolidayTagFromCell(p_cell);
       
-      l_editedFact.SetEditedClient(l_clientId);
-      l_editedFact.SetEditedFactType(l_tagType);
-      l_editedFact.SetEditedLegalHoliday(l_legalHolidayTag);
+      
+      l_editedFact.SetEditedClient(l_clientId, false);
+      l_editedFact.SetEditedFactType(l_tagType, false);
+      l_editedFact.SetEditedLegalHoliday(l_legalHolidayTag, true);
       return true;
     }
 

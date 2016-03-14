@@ -23,9 +23,9 @@ namespace FBI.MVC.Model
     SafeDictionary<UInt32, EditedRHFact> m_IdEditedFactDict;
     List<Int32> m_periodsList;
     RangeHighlighter m_rangeHighlighter;
-    List<FactTag> m_factTagsCreateList;
-    List<FactTag> m_factsTagUpdateList;
-    List<LegalHoliday> m_legalHolidaysCreateList;
+    SafeDictionary<CRUDAction, List<FactTag>> m_factTagCommitDict = new SafeDictionary<CRUDAction, List<FactTag>>();
+    SafeDictionary<CRUDAction, List<LegalHoliday>> m_LegalHolidayCommitDict = new SafeDictionary<CRUDAction, List<LegalHoliday>>();
+    SafeDictionary<UInt32, Fact> m_deleteFactsDict;
     SafeDictionary<UInt32, EditedRHFact> m_legalHolidayDeleteDictIdEditedFact;
     public event FactsCommitError OnCommitError;
     List<int> m_requestIdList = new List<int>();
@@ -48,12 +48,11 @@ namespace FBI.MVC.Model
       m_RHAccountId = p_RHAccountId;
       m_versionId = p_versionId;
 
+    
       FactsModel.Instance.UpdateEvent += OnFactsUpdate;
       FactsModel.Instance.DeleteEvent += OnFactDelete;
       FactTagModel.Instance.UpdateListEvent += OnFactTagsUpdate;
-      FactTagModel.Instance.DeleteEvent += OnFactTagDelete;
       LegalHolidayModel.Instance.UpdateListEvent += OnLegalHolidayUpdate;
-      LegalHolidayModel.Instance.DeleteEvent += OnLegalHolidayDelete;
     }
 
     public void Dispose()
@@ -61,23 +60,24 @@ namespace FBI.MVC.Model
       FactsModel.Instance.UpdateEvent -= OnFactsUpdate;
       FactsModel.Instance.DeleteEvent -= OnFactDelete;
       FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdate;
-      FactTagModel.Instance.DeleteEvent -= OnFactTagDelete;
       LegalHolidayModel.Instance.UpdateListEvent -= OnLegalHolidayUpdate;
-      LegalHolidayModel.Instance.DeleteEvent -= OnLegalHolidayDelete;
     }
 
     public void Commit()
     {
+      m_deleteFactsDict = new SafeDictionary<uint, Fact>();
       SafeDictionary<string, Fact> l_factsCommitDict = new SafeDictionary<string, Fact>();
-      m_factsTagUpdateList = new List<FactTag>();
-      m_factTagsCreateList = new List<FactTag>();
+      m_factTagCommitDict[CRUDAction.CREATE] = new List<FactTag>();
+      m_factTagCommitDict[CRUDAction.UPDATE] = new List<FactTag>();
+      m_factTagCommitDict[CRUDAction.DELETE] = new List<FactTag>();
+      m_LegalHolidayCommitDict[CRUDAction.CREATE] = new List<LegalHoliday>();
+      m_LegalHolidayCommitDict[CRUDAction.DELETE] = new List<LegalHoliday>();
       m_legalHolidayDeleteDictIdEditedFact = new SafeDictionary<UInt32, EditedRHFact>();
-      m_legalHolidaysCreateList = new List<LegalHoliday>();
-
+      
       foreach (EditedRHFact l_RHEditedFact in m_RHEditedFacts.Values)
       {
         if (l_RHEditedFact.EditedLegalHoliday.Tag != l_RHEditedFact.ModelLegalHoliday.Tag)
-          LegalHolidayCommit(l_RHEditedFact);
+          LegalHolidayCommitListFilling(l_RHEditedFact);
 
         if (l_RHEditedFact.EditedFactTag.Tag != FactTag.TagType.NONE)
           ClientAllocationFromTagType(l_RHEditedFact, l_factsCommitDict);
@@ -90,14 +90,15 @@ namespace FBI.MVC.Model
 
       // AddinModuleController.SetExcelInteractionState(false);
       // TO DO : circular progress : self threaded UI with 
+      if (m_deleteFactsDict.Count > 0)
+        FactsDelete();
 
       if (l_factsCommitDict.Count > 0)
         FactsModel.Instance.UpdateList(l_factsCommitDict);
       else
         FactTagCommit();
-     
-      if (m_legalHolidayDeleteDictIdEditedFact.Count > 0)
-        DeleteLegalHolidays();
+
+      LegalHolidaysCommit();
     }
 
     #region Facts Commit
@@ -147,10 +148,19 @@ namespace FBI.MVC.Model
         p_editedFact.Value = 1;
 
         if (p_editedFact.EditedClientId == 0)
-          FactsModel.Instance.Delete(p_editedFact);
+          m_deleteFactsDict[p_editedFact.Id] = p_editedFact;
         else
           p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
       }
+    }
+
+    private void FactsDelete()
+    {
+      foreach (KeyValuePair<UInt32, Fact> l_pair in m_deleteFactsDict)
+      {
+        FactsModel.Instance.Delete(l_pair.Value);
+      }
+      m_deleteFactsDict.Clear();
     }
 
     private void OnFactsUpdate(ErrorMessage p_status, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
@@ -173,17 +183,14 @@ namespace FBI.MVC.Model
             else
             {
               // put back model value for ClientId, quid : information not available anymore ..
-            //  OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
+              //  OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
             }
           }
-          if (m_factsTagUpdateList != null && m_factTagsCreateList != null)
+          if (m_factTagCommitDict != null)
           {
-            lock (m_factsTagUpdateList)
+            lock (m_factTagCommitDict)
             {
-              lock (m_factTagsCreateList)
-              {
-                FactTagCommit();
-              }
+              FactTagCommit();
             }
           }
           else
@@ -232,31 +239,26 @@ namespace FBI.MVC.Model
         if (p_editedFact.EditedFactTag.Tag == FactTag.TagType.NONE)
         {
           p_editedFact.ClientId = (UInt32)p_editedFact.EditedClientId;
-          FactsModel.Instance.Delete(p_editedFact);
-          FactTagModel.Instance.Delete(l_factTag.Id);
+          //m_deleteFactsDict[p_editedFact.Id] = p_editedFact;
+
+          m_factTagCommitDict[CRUDAction.DELETE].Add(p_editedFact.EditedFactTag);
         }
         else
-          m_factsTagUpdateList.Add(p_editedFact.EditedFactTag);
+          m_factTagCommitDict[CRUDAction.UPDATE].Add(p_editedFact.EditedFactTag);
       }
       else
-      {
-        m_factTagsCreateList.Add(p_editedFact.EditedFactTag);
-      }
+        m_factTagCommitDict[CRUDAction.CREATE].Add(p_editedFact.EditedFactTag);
     }
 
     private void FactTagCommit()
     {
-      if (m_factsTagUpdateList.Count > 0)
-        FactTagModel.Instance.UpdateList(m_factsTagUpdateList, CRUDAction.UPDATE);
-
-      if (m_factTagsCreateList != null && m_factTagsCreateList.Count > 0)
+      foreach (KeyValuePair<CRUDAction, List<FactTag>> l_CRUDActionList in m_factTagCommitDict)
       {
-        if (IsFactTagCreateListValid() == false)
+        if (l_CRUDActionList.Value.Count > 0)
         {
-          System.Diagnostics.Debug.WriteLine("Could not create fact tags : corresponding facts not created/ updated on client.");
-          return;
+          FactTagModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
+          l_CRUDActionList.Value.Clear();
         }
-        FactTagModel.Instance.UpdateList(m_factTagsCreateList, CRUDAction.CREATE);
       }
     }
 
@@ -298,73 +300,38 @@ namespace FBI.MVC.Model
       AddinModuleController.SetExcelInteractionState(true);
     }
 
-    private void OnFactTagDelete(ErrorMessage status, UInt32 id)
-    {
-      lock (m_IdEditedFactDict)
-      {
-        EditedRHFact l_editedFact = m_IdEditedFactDict[id];
-        if (l_editedFact != null)
-        {
-          if (status == ErrorMessage.SUCCESS)
-            SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputEqual);
-          else
-          {
-            FactTag l_factTag = FactTagModel.Instance.GetValue(id);
-            if (l_factTag != null)
-            {
-              l_editedFact.ModelFactTag.Tag = l_factTag.Tag;
-              SetSingleCellFillColor(l_editedFact.Cell, EditedFactStatus.InputDifferent);
-            }
-          }
-        }
-      }
-    }
-
-    // A voir si on enlève normalement ok
-    private bool IsFactTagCreateListValid()
-    {
-      foreach (FactTag l_factTag in m_factTagsCreateList)
-      {
-        if (l_factTag.Id == 0)
-          return false;
-      }
-      return true;
-    }
-
     #endregion
 
     #region Legal holiday
 
-    private void LegalHolidayCommit(EditedRHFact p_editedFact)
+    private void LegalHolidayCommitListFilling(EditedRHFact p_editedFact)
     {
+      LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(p_editedFact.EmployeeId, p_editedFact.Period);
+
       if (p_editedFact.EditedLegalHoliday.Tag == LegalHolidayTag.FER)
       {
         if (p_editedFact.ClientId != 0)
-          FactsModel.Instance.Delete(p_editedFact);
+          m_deleteFactsDict[p_editedFact.Id] = p_editedFact;
 
-        LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(p_editedFact.EmployeeId, p_editedFact.Period);
         if (l_legalHoliday == null)
-          m_legalHolidaysCreateList.Add(p_editedFact.EditedLegalHoliday);
+          m_LegalHolidayCommitDict[CRUDAction.CREATE].Add(p_editedFact.EditedLegalHoliday);
       }
       else
-        AddToLegalHolidayDeleteDictIfExists(p_editedFact);
-    }
-
-    private void AddToLegalHolidayDeleteDictIfExists(EditedRHFact p_editedFact)
-    {
-      LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(p_editedFact.EmployeeId, p_editedFact.Period);
-      if (l_legalHoliday != null)
       {
-        if (m_legalHolidayDeleteDictIdEditedFact.ContainsKey(l_legalHoliday.Id) == false)
+        if (l_legalHoliday != null && m_legalHolidayDeleteDictIdEditedFact.ContainsKey(l_legalHoliday.Id) == false)
+        {
           m_legalHolidayDeleteDictIdEditedFact[l_legalHoliday.Id] = p_editedFact;
+          m_LegalHolidayCommitDict[CRUDAction.DELETE].Add(p_editedFact.EditedLegalHoliday);
+        }
       }
     }
 
-    private void DeleteLegalHolidays()
+    private void LegalHolidaysCommit()
     {
-      foreach (UInt32 l_legalHolidayId in m_legalHolidayDeleteDictIdEditedFact.Keys)
+      foreach (KeyValuePair<CRUDAction, List<LegalHoliday>> l_CRUDActionList in m_LegalHolidayCommitDict)
       {
-        LegalHolidayModel.Instance.Delete(l_legalHolidayId);
+        if (l_CRUDActionList.Value.Count > 0)
+          LegalHolidayModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
       }
     }
 
@@ -372,54 +339,69 @@ namespace FBI.MVC.Model
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
-        foreach (KeyValuePair<UInt32, ErrorMessage> l_result in p_updateResults[CRUDAction.CREATE])
-        {
-          if (l_result.Value == ErrorMessage.SUCCESS)
-          {
-            LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(l_result.Key);
-            if (l_legalHoliday == null)
-              return;
-
-            EditedRHFact l_editedFact = GetEditedFact(l_legalHoliday.EmployeeId, (Int32)l_legalHoliday.Period);
-            if (l_editedFact == null)
-              return;
-
-            m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-            l_editedFact.ModelLegalHoliday.Id = l_legalHoliday.Id;
-            l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.FER;
-            l_editedFact.EditedLegalHoliday.Id = l_legalHoliday.Id;
-            l_editedFact.EditedLegalHoliday.Tag = LegalHolidayTag.FER;
-          }
-        }
+        if (p_updateResults[CRUDAction.CREATE] != null)
+          OnLegalHolidayCreate(p_updateResults[CRUDAction.CREATE]);
+        
+        if (p_updateResults[CRUDAction.DELETE] != null)
+          OnLegalHolidayDelete(p_updateResults[CRUDAction.DELETE]);
       }
       else
       {
         // Log commit error in view
       }
-
     }
 
-    private void OnLegalHolidayDelete(ErrorMessage status, UInt32 id)
+    private void OnLegalHolidayCreate(SafeDictionary<UInt32, ErrorMessage> p_createResults)
+    {
+      foreach (KeyValuePair<UInt32, ErrorMessage> l_result in p_createResults)
+      {
+        if (l_result.Value == ErrorMessage.SUCCESS)
+        {
+          LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(l_result.Key);
+          if (l_legalHoliday == null)
+            return;
+
+          EditedRHFact l_editedFact = GetEditedFact(l_legalHoliday.EmployeeId, (Int32)l_legalHoliday.Period);
+          if (l_editedFact == null)
+            return;
+
+          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+          l_editedFact.ModelLegalHoliday.Id = l_legalHoliday.Id;
+          l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.FER;
+          l_editedFact.EditedLegalHoliday.Id = l_legalHoliday.Id;
+          l_editedFact.EditedLegalHoliday.Tag = LegalHolidayTag.FER;
+        }
+        else
+        {
+          // TO DO: Log error
+        }
+      }
+    }
+
+    private void OnLegalHolidayDelete(SafeDictionary<UInt32, ErrorMessage> p_deleteResults)
     {
       if (m_legalHolidayDeleteDictIdEditedFact == null)
         return;
 
       lock (m_legalHolidayDeleteDictIdEditedFact)
       {
-        if (status == ErrorMessage.SUCCESS)
+        foreach (KeyValuePair<UInt32, ErrorMessage> l_result in p_deleteResults)
         {
-          EditedRHFact l_editedFact = m_legalHolidayDeleteDictIdEditedFact[id];
-          if (l_editedFact == null)
-            return;
+          if (l_result.Value == ErrorMessage.SUCCESS)
+          {
+            EditedRHFact l_editedFact = m_legalHolidayDeleteDictIdEditedFact[l_result.Key];
+            if (l_editedFact == null)
+              return;
 
-          m_rangeHighlighter.FillCellColor(l_editedFact.Cell, EditedFactStatus.Committed);
-          l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.NONE;
+            m_rangeHighlighter.FillCellColor(l_editedFact.Cell, EditedFactStatus.Committed);
+            l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.NONE;
+          }
+          else
+          {
+            // TO DO: Log commit error to view
+          }
+          m_legalHolidayDeleteDictIdEditedFact.Remove(l_result.Key);
         }
-        else
-        {
-          // Log commit error to view
-        }
-        m_legalHolidayDeleteDictIdEditedFact.Remove(id);
       }
     }
 

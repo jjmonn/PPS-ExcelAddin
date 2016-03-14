@@ -19,8 +19,6 @@ namespace FBI.MVC.Model
     public LegalHoliday ModelLegalHoliday {get; set;}
     private string m_address;
 
-    public EditedFactStatus EditedFactTagStatus { get; private set; }
-    public EditedFactStatus EditedLegalHolidayStatus { get; private set; }
 
     public EditedRHFact(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId, 
                         UInt32 p_employeeId, UInt32 p_versionId, PeriodDimension p_period, Range p_cell) 
@@ -29,10 +27,8 @@ namespace FBI.MVC.Model
     {   
       Value = 1;
       m_address = Cell.Address;
-      EditedFactTagStatus = EditedFactStatus.FactTagEqual;
       InitFactTag();
       InitLegalHoliday();
-      EditedLegalHolidayStatus = Model.EditedFactStatus.FactTagEqual;
     }
 
     private void InitFactTag()
@@ -68,21 +64,25 @@ namespace FBI.MVC.Model
       ModelFactTag.Id = p_id;
     }
 
-    public void SetEditedClient(UInt32 p_clientId)
+    public void SetEditedClient(UInt32 p_clientId, bool p_setCellStatus)
     {
       EditedClientId = (Int32)p_clientId;
       EditedLegalHoliday.Tag = LegalHolidayTag.NONE;
       EditedFactTag.Tag = FactTag.TagType.NONE;
-      SetCellStatusRH();
+   
+      if (p_setCellStatus == true)
+        SetCellStatusRH();
     }
 
-    public void SetEditedFactType(FactTag.TagType p_tagType)
+    public void SetEditedFactType(FactTag.TagType p_tagType , bool p_setCellStatus)
     {
       EditedFactTag.Tag = p_tagType;
-      SetCellStatusRH();
+
+      if (p_setCellStatus == true)
+        SetCellStatusRH();
     }
 
-    public void SetEditedLegalHoliday(LegalHolidayTag p_legalHolidayTag)
+    public void SetEditedLegalHoliday(LegalHolidayTag p_legalHolidayTag, bool p_setCellStatus)
     {
        if (p_legalHolidayTag == LegalHolidayTag.FER)
       {
@@ -91,10 +91,10 @@ namespace FBI.MVC.Model
         EditedFactTag.Tag = FactTag.TagType.NONE;
       }
       else
-      {
         EditedLegalHoliday.Tag = LegalHolidayTag.NONE;
-      }
-      SetCellStatusRH();
+       
+      if (p_setCellStatus == true)
+         SetCellStatusRH();
     }
 
     public void UpdateRHFactModels(Fact p_fact, FactTag p_factTag, LegalHoliday p_legalHoliday)
@@ -118,62 +118,43 @@ namespace FBI.MVC.Model
       }
     }
 
-    public void SetCellStatusRH()
+    public EditedFactStatus SetCellStatusRH()
     {
-      SetLegalHolidayDifferenceStatus();
       if (EditedLegalHoliday.Tag == LegalHolidayTag.FER || ModelLegalHoliday.Tag == LegalHolidayTag.FER)
-        return;
+        return RaiseStatusEvent(SetLegalHolidayDifferenceStatus());
 
-      // Fact Tag and CLient difference are Exclusive
       if (EditedFactTag.Tag != FactTag.TagType.NONE && EditedFactTag.Tag == ModelFactTag.Tag)
-      {
-        SetFactTagDifferenceStatus();
-        return;
-      }
+        return RaiseStatusEvent(SetFactTagDifferenceStatus());
+      
       if (EditedClientId != ClientId && EditedFactTag.Tag == ModelFactTag.Tag)  
-      {
-        SetClientDifferenceStatus();
-        return;
-      }
-      SetFactTagDifferenceStatus();
+        return RaiseStatusEvent(SetClientDifferenceStatus());
+      
+      return RaiseStatusEvent(SetFactTagDifferenceStatus());
     }
 
-    private void SetClientDifferenceStatus()
+    private EditedFactStatus SetClientDifferenceStatus()
     {
       if (EditedClientId != this.ClientId)
-        SetFactStatus(EditedFactStatus.InputDifferent);
+        return EditedFactStatus.InputDifferent;
       else
-        SetFactStatus(EditedFactStatus.InputEqual);
+        return EditedFactStatus.InputEqual;
     }
 
-    private void SetFactTagDifferenceStatus()
+    private EditedFactStatus SetFactTagDifferenceStatus()
     {
       if (EditedFactTag.Tag != ModelFactTag.Tag)
-        SetFactStatus(EditedFactStatus.FactTagDifferent);
+        return EditedFactStatus.FactTagDifferent;
       else
-        SetFactStatus(EditedFactStatus.FactTagEqual);
+        return EditedFactStatus.FactTagEqual;
     }
 
-    private void SetLegalHolidayDifferenceStatus()
+    private EditedFactStatus SetLegalHolidayDifferenceStatus()
     {
       if (EditedLegalHoliday.Tag == ModelLegalHoliday.Tag)
-        SetLegalHolidayStatus(EditedFactStatus.LegalHolidayEqual);
+        return EditedFactStatus.LegalHolidayEqual;
       else
-        SetLegalHolidayStatus(EditedFactStatus.LegalHolidayDifferent);
+        return EditedFactStatus.LegalHolidayDifferent;
     }
-
-    private void SetLegalHolidayStatus(EditedFactStatus p_editedFactTagStatus)
-    {
-      EditedLegalHolidayStatus = p_editedFactTagStatus;
-      RaiseEditedFactSatus(p_editedFactTagStatus);
-    }
-
-    private void SetFactTagStatus(EditedFactStatus p_editedFactTagStatus)
-    {
-      EditedFactTagStatus = p_editedFactTagStatus;
-      RaiseEditedFactSatus(p_editedFactTagStatus);
-    }
-
   
   }
 }

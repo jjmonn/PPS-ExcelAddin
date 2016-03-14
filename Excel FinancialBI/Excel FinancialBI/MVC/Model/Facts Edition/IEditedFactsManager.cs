@@ -21,8 +21,6 @@ namespace FBI.MVC.Model
 
     void Dispose();
 
-    bool m_autoCommit { set; get; }
-
     void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0);
 
     void DownloadFacts(List<Int32> p_periodList, bool p_updateCells);

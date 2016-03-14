@@ -32,7 +32,7 @@ namespace FBI.MVC.Model
     public AxisElem Employee { get { return AxisElemModel.Instance.GetValue(AxisType.Employee, this.EmployeeId); } }
     public PeriodDimension PeriodDimension { get; protected set; }
 
-    public EditedFactStatus EditedFactStatus { get; protected set; }
+ //   public EditedFactStatus EditedFactStatus { get; protected set; }
     public event CellValueChangedEventHandler OnCellValueChanged;
 
 
@@ -50,7 +50,7 @@ namespace FBI.MVC.Model
       this.Period = PeriodDimension.Id;
       this.VersionId = p_versionId;
 
-      EditedFactStatus = EditedFactStatus.InputEqual;
+  //    EditedFactStatus = EditedFactStatus.InputEqual;
     }
 
     protected void UpdateFactBase(Fact p_fact)
@@ -60,16 +60,13 @@ namespace FBI.MVC.Model
       ProductId = p_fact.ProductId;
       AdjustmentId = p_fact.AdjustmentId;
     }
-    
-    protected void SetFactStatus(EditedFactStatus p_status)
-    {
-      EditedFactStatus = p_status;
-      RaiseEditedFactSatus(p_status);
-    }
 
-    protected void RaiseEditedFactSatus(EditedFactStatus p_status)
+    protected EditedFactStatus RaiseStatusEvent(EditedFactStatus p_status)
     {
-      OnCellValueChanged(Cell, p_status);
+      if (OnCellValueChanged != null)
+        OnCellValueChanged(Cell, p_status);
+      
+      return p_status;
     }
 
   }

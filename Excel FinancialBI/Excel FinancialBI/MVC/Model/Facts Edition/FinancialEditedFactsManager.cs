@@ -24,7 +24,6 @@ namespace FBI.MVC.Model
     public event FactsCommitError OnCommitError;
     List<EditedFinancialFact> m_factsToBeCommitted = new List<EditedFinancialFact>(); // ? to be confirmed
     Worksheet m_worksheet;
-    public bool m_autoCommit {set; get;}
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
