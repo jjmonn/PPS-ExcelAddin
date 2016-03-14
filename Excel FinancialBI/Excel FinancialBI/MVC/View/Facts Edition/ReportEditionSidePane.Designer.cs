@@ -160,7 +160,6 @@ namespace FBI.MVC.View
       this.m_validateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_validateButton.UseVisualStyleBackColor = false;
       this.m_validateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-
       // 
       // m_buttonsImageList
       // 

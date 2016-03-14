@@ -34,9 +34,6 @@ namespace FBI.MVC.View
 	{
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CUIVisualization));
-      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-      System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-      System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
       this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.Panel1 = new System.Windows.Forms.Panel();
       this.m_refreshButton = new VIBlend.WinForms.Controls.vButton();
@@ -54,13 +51,10 @@ namespace FBI.MVC.View
       this.m_panelRightClick = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_horizontalSplitBT = new System.Windows.Forms.ToolStripMenuItem();
       this.m_splitVerticalBT = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
       this.TableLayoutPanel1.SuspendLayout();
       this.Panel1.SuspendLayout();
-      this.panel2.SuspendLayout();
       this.m_chartsRightClickMenu.SuspendLayout();
       this.m_panelRightClick.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.m_chart)).BeginInit();
       this.SuspendLayout();
       // 
       // TableLayoutPanel1
@@ -240,7 +234,6 @@ namespace FBI.MVC.View
       // 
       // panel2
       // 
-      this.panel2.Controls.Add(this.m_chart);
       this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
       this.panel2.Location = new System.Drawing.Point(3, 28);
       this.panel2.Name = "panel2";
@@ -289,24 +282,6 @@ namespace FBI.MVC.View
       this.m_splitVerticalBT.Size = new System.Drawing.Size(155, 22);
       this.m_splitVerticalBT.Text = "Split Vertical";
       // 
-      // m_chart
-      // 
-      chartArea1.Name = "ChartArea1";
-      this.m_chart.ChartAreas.Add(chartArea1);
-      this.m_chart.Dock = System.Windows.Forms.DockStyle.Fill;
-      legend1.Name = "Legend1";
-      this.m_chart.Legends.Add(legend1);
-      this.m_chart.Location = new System.Drawing.Point(0, 0);
-      this.m_chart.Name = "m_chart";
-      this.m_chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
-      series1.ChartArea = "ChartArea1";
-      series1.Legend = "Legend1";
-      series1.Name = "Series1";
-      this.m_chart.Series.Add(series1);
-      this.m_chart.Size = new System.Drawing.Size(682, 349);
-      this.m_chart.TabIndex = 0;
-      this.m_chart.Text = "chart1";
-      // 
       // CUIVisualization
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -316,10 +291,8 @@ namespace FBI.MVC.View
       this.Name = "CUIVisualization";
       this.TableLayoutPanel1.ResumeLayout(false);
       this.Panel1.ResumeLayout(false);
-      this.panel2.ResumeLayout(false);
       this.m_chartsRightClickMenu.ResumeLayout(false);
       this.m_panelRightClick.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.m_chart)).EndInit();
       this.ResumeLayout(false);
 
   }
@@ -341,7 +314,6 @@ namespace FBI.MVC.View
   public VIBlend.WinForms.Controls.vLabel m_entityLabel;
   private System.Windows.Forms.Panel panel2;
   private System.Windows.Forms.ToolStripMenuItem m_splitVerticalBT;
-  private System.Windows.Forms.DataVisualization.Charting.Chart m_chart;
 }
 
 }

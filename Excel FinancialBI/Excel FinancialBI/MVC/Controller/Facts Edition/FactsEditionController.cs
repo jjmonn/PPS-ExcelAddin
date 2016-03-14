@@ -17,12 +17,12 @@ namespace FBI.MVC.Controller
   public class FactsEditionController
   {
     private AddinModuleController m_addinModuleController;
-    private IEditedFactsManager m_editedFactsManager;
+    private IEditedFactsModel m_editedFactsManager;
  //   private ExcelWorksheetEvents m_ExcelSheetEvents;
     private RangeHighlighter m_rangeHighlighter;
     private Account.AccountProcess m_process;
     private UInt32 m_RHAccountId;
-    private Dimensions m_dimensions;
+    private WorksheetAreaController m_areaController;
     private WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     private Worksheet m_worksheet;
     private List<Int32> m_periodsList;
@@ -35,16 +35,16 @@ namespace FBI.MVC.Controller
       m_addinModuleController = p_addinModuleController;
       m_versionId = p_versionId;
       m_worksheet = p_worksheet;
-      m_dimensions = new Dimensions(m_versionId, p_periodsList);
+      m_areaController = new WorksheetAreaController(m_versionId, p_periodsList);
       m_rangeHighlighter = new RangeHighlighter(this);
       m_process = p_process;
       m_periodsList = p_periodsList;
       m_RHAccountId = p_RHAccountId;
 
       if (p_process == Account.AccountProcess.FINANCIAL)
-        m_editedFactsManager = new FinancialEditedFactsManager();
+        m_editedFactsManager = new FinancialEditedFactsModel();
       else
-        m_editedFactsManager = new RHEditedFactsManager(p_periodsList);
+        m_editedFactsManager = new RHEditedFactsModel(p_periodsList);
 
       m_editedFactsManager.FactsDownloaded += OnFactsDownloaded;
       m_editedFactsManager.OnCommitError -= OnCommitError;
@@ -57,12 +57,12 @@ namespace FBI.MVC.Controller
 
       if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
       {
-        m_worksheetAnalyzer.Snapshot(m_dimensions);
-        m_dimensions.DefineOrientation(m_process);
-        if (m_dimensions.IsValid() == false)
+        m_worksheetAnalyzer.Snapshot(m_areaController);
+        m_areaController.DefineOrientation(m_process);
+        if (m_areaController.IsValid() == false)
           return false;
 
-        m_editedFactsManager.RegisterEditedFacts(m_dimensions, m_worksheet, m_versionId, m_rangeHighlighter, p_displayInitialDifferences, m_RHAccountId);
+        m_editedFactsManager.RegisterEditedFacts(m_areaController, m_worksheet, m_versionId, m_rangeHighlighter, p_displayInitialDifferences, m_RHAccountId);
         if (m_versionId != 0 && m_periodsList.Count > 0)
         {
           m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells);
@@ -107,7 +107,7 @@ namespace FBI.MVC.Controller
  
     public void UpdateWorksheetOutputs()
     {
-      ((FinancialEditedFactsManager)m_editedFactsManager).UpdateWorkSheetOutputs();
+      ((FinancialEditedFactsModel)m_editedFactsManager).UpdateWorkSheetOutputs();
     }
 
     public void OnWorksheetChange(Range p_cell)

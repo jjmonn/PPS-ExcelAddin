@@ -48,7 +48,6 @@ namespace FBI.MVC.Model
       m_RHAccountId = p_RHAccountId;
       m_versionId = p_versionId;
 
-    
       FactsModel.Instance.UpdateEvent += OnFactsUpdate;
       FactsModel.Instance.DeleteEvent += OnFactDelete;
       FactTagModel.Instance.UpdateListEvent += OnFactTagsUpdate;

@@ -63,10 +63,6 @@ namespace FBI.MVC.Controller
       Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
       Version l_version = GetCurrentVersion();
       
-      /////////////////////////
-      // STUB !!! 
-      l_version = VersionModel.Instance.GetValue(12);
-      /////////////////////////
       if (l_version != null)
       {
         ReportEditionController l_reportEditionController = new ReportEditionController(l_process, l_version, this, m_view.ReportUploadEntitySelectionSidePane);
@@ -74,7 +70,7 @@ namespace FBI.MVC.Controller
       }
       else
       {
-        Error = "";
+        Error = Local.GetValue("general.error.no_version_selected");
         return false;
       }
     }

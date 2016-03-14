@@ -345,8 +345,8 @@
     <Compile Include="MVC\Model\CRUD\Group.cs" />
     <Compile Include="MVC\Model\CRUD\LegacyComputeRequest.cs" />
     <Compile Include="MVC\Model\CRUD\SourcedComputeRequest.cs" />
-    <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsManager.cs" />
-    <Compile Include="MVC\Model\Facts Edition\IEditedFactsManager.cs" />
+    <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsModel.cs" />
+    <Compile Include="MVC\Model\Facts Edition\IEditedFactsModel.cs" />
     <Compile Include="MVC\Model\CRUD\User.cs" />
     <Compile Include="MVC\Model\CRUD\UserAllowedEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Version.cs" />
@@ -356,10 +356,10 @@
     <Compile Include="MVC\Model\ExchangeRateModel.cs" />
     <Compile Include="MVC\Model\FactLogModel.cs" />
     <Compile Include="MVC\Model\Facts Edition\Dimension.cs" />
-    <Compile Include="MVC\Controller\Facts Edition\Dimensions.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\WorksheetAreaController.cs" />
     <Compile Include="MVC\Model\CRUD\EditedRHFact.cs" />
     <Compile Include="MVC\Model\CRUD\PeriodDimension.cs" />
-    <Compile Include="MVC\Model\Facts Edition\RHEditedFactsManager.cs" />
+    <Compile Include="MVC\Model\Facts Edition\RHEditedFactsModel.cs" />
     <Compile Include="MVC\Controller\Facts Edition\WorksheetAnalyzer.cs" />
     <Compile Include="MVC\Model\FactsModel.cs" />
     <Compile Include="MVC\Model\FactTagModel.cs" />

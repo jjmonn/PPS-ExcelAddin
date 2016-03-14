@@ -16,10 +16,10 @@ namespace FBI.MVC.Model
 
 //  public delegate void FactsCommitError(string p_address, ErrorMessage p_error);
 
-  class RHEditedFactsManager : IEditedFactsManager
+  class RHEditedFactsModel : IEditedFactsModel
   {
     MultiIndexDictionary<string, DimensionKey, EditedRHFact> m_RHEditedFacts = new MultiIndexDictionary<string, DimensionKey, EditedRHFact>();
-    Dimensions m_dimensions = null;
+    WorksheetAreaController m_areaController = null;
     RangeHighlighter m_rangeHighlighter;
     List<int> m_requestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
@@ -36,7 +36,7 @@ namespace FBI.MVC.Model
     bool m_displayInitialDifferences;
 
 
-    public RHEditedFactsManager(List<Int32> p_periodsList)
+    public RHEditedFactsModel(List<Int32> p_periodsList)
     {
       m_factsTagList =  StringUtils.ToLowerStringList(Enum.GetNames(typeof(FactTag.TagType)));
       m_legalHolidayTagList = StringUtils.ToLowerStringList(Enum.GetNames(typeof(LegalHolidayTag)));
@@ -51,19 +51,19 @@ namespace FBI.MVC.Model
       // EMPTY dictionnaries etc.
     }
 
-    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId)
+    public void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId)
     {
       m_worksheet = p_worksheet;
-      m_dimensions = p_dimensions;
+      m_areaController = p_dimensions;
       m_rangeHighlighter = p_rangeHighlighter;
       m_versionId = p_versionId;
       m_RHAccountId = p_RHAccountId;
       m_displayInitialDifferences = p_displayInitialDifferences;
 
-      Dimension<CRUDEntity> l_vertical = p_dimensions.m_dimensions[p_dimensions.m_orientation.Vertical];
-      Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
+      Dimension<CRUDEntity> l_vertical = p_dimensions.Dimensions[p_dimensions.Orientation.Vertical];
+      Dimension<CRUDEntity> l_horitontal = p_dimensions.Dimensions[p_dimensions.Orientation.Horizontal];
 
-      CreateEditedFacts(l_vertical, l_horitontal, p_dimensions.m_entities, p_rangeHighlighter);
+      CreateEditedFacts(l_vertical, l_horitontal, p_dimensions.Entities, p_rangeHighlighter);
 
       // TO DO : Once facts registered clean dimensions and put them into a safe dictionary ?
     }
@@ -110,9 +110,9 @@ namespace FBI.MVC.Model
       UInt32 l_employeeId = 0;
       PeriodDimension l_period = null;
 
-      Dimensions.SetDimensionValue(p_dimension1, p_dimensionValue1, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
-      Dimensions.SetDimensionValue(p_dimension2, p_dimensionValue2, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
-      Dimensions.SetDimensionValue(p_fixedDimension, p_fixedDimension.UniqueValue, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      WorksheetAreaController.SetDimensionValue(p_dimension1, p_dimensionValue1, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      WorksheetAreaController.SetDimensionValue(p_dimension2, p_dimensionValue2, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      WorksheetAreaController.SetDimensionValue(p_fixedDimension, p_fixedDimension.UniqueValue, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
 
       if (l_employeeId == 0 || l_entityId == 0 || l_period == null)
         return null;
@@ -125,9 +125,9 @@ namespace FBI.MVC.Model
       m_updateCellsOnDownload = p_updateCells;
       DownloadLegalHolidays();
 
-      AxisElem l_entity = m_dimensions.m_entities.UniqueValue as AxisElem;
-      List<Account> l_accountsList = m_dimensions.GetAccountsList();
-      List<AxisElem> l_employeesList = m_dimensions.GetAxisElemList(DimensionType.EMPLOYEE);
+      AxisElem l_entity = m_areaController.Entities.UniqueValue as AxisElem;
+      List<Account> l_accountsList = m_areaController.GetAccountsList();
+      List<AxisElem> l_employeesList = m_areaController.GetAxisElemList(DimensionType.EMPLOYEE);
       Int32 l_startPeriod = PeriodModel.GetDayMinus3Weeks(p_periodsList.ElementAt(0));      // Download 3 weeks more for fact CP tag type purpose
 
       FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
