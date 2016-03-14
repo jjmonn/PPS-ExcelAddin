@@ -18,7 +18,7 @@ namespace FBI.MVC.Model
   class WorksheetAnalyzer : IProgressBarController
   {
     Range m_range;
-    Dimensions m_dimensions;
+    WorksheetAreaController m_dimensions;
     public string Error { get; set; }
     public IView View { get{ return m_progressBarView;} }
     Range m_lastCell;
@@ -41,7 +41,7 @@ namespace FBI.MVC.Model
       }
     }
 
-    public void Snapshot(Dimensions p_dimensions, List<UInt32> p_periodsList = null)
+    public void Snapshot(WorksheetAreaController p_dimensions, List<UInt32> p_periodsList = null)
     {
       m_dimensions = p_dimensions;
 

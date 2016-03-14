@@ -463,6 +463,7 @@
       <string name="name_empty">Nom vide.</string>
       <string name="name_too_long">Nom trop long.</string>
       <string name="invalid_name">Nom invalide.</string>
+      <string name="no_version_selected">Aucune version n'est selectionnée.</string>
     </category>
     <string name="account">Compte</string>
     <string name="accounts">Comptes</string>

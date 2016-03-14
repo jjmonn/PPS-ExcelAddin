@@ -27,22 +27,22 @@ namespace FBI.MVC.Model
     }
   };
 
-  class Dimensions
+  class WorksheetAreaController
   {
     List<Int32> m_periodsDatesList = new List<Int32>();
 
-    public Orientation m_orientation { private set; get; }
-    public SafeDictionary<DimensionType, Dimension<CRUDEntity>> m_dimensions = new SafeDictionary<DimensionType,Dimension<CRUDEntity>>();
-    public Dimension<CRUDEntity> m_periods { get { return (m_dimensions[DimensionType.PERIOD]); } }
-    public Dimension<CRUDEntity> m_accounts { get { return (m_dimensions[DimensionType.ACCOUNT]); } }
-    public Dimension<CRUDEntity> m_entities { get { return (m_dimensions[DimensionType.ENTITY]); } }
-    public Dimension<CRUDEntity> m_employees { get { return (m_dimensions[DimensionType.EMPLOYEE]); } }
-    public Account.AccountProcess m_process { get; private set; }
+    public Orientation Orientation { private set; get; }
+    public SafeDictionary<DimensionType, Dimension<CRUDEntity>> Dimensions = new SafeDictionary<DimensionType,Dimension<CRUDEntity>>();
+    public Dimension<CRUDEntity> Periods { get { return (Dimensions[DimensionType.PERIOD]); } }
+    public Dimension<CRUDEntity> Accounts { get { return (Dimensions[DimensionType.ACCOUNT]); } }
+    public Dimension<CRUDEntity> Entities { get { return (Dimensions[DimensionType.ENTITY]); } }
+    public Dimension<CRUDEntity> Employees { get { return (Dimensions[DimensionType.EMPLOYEE]); } }
+    public Account.AccountProcess Process { get; private set; }
 
-    public Dimensions(UInt32 p_versionId, List<Int32> p_periodsList = null)
+    public WorksheetAreaController(UInt32 p_versionId, List<Int32> p_periodsList = null)
     {
       foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
-        m_dimensions[l_dim] = new Dimension<CRUDEntity>(l_dim);
+        Dimensions[l_dim] = new Dimension<CRUDEntity>(l_dim);
 
       if (p_periodsList == null)
         p_periodsList = PeriodModel.GetPeriodsList(p_versionId);
@@ -54,7 +54,7 @@ namespace FBI.MVC.Model
 
     public void DimensionsIdentify(Range p_cell)
     {
-      if (m_process == Account.AccountProcess.FINANCIAL)
+      if (Process == Account.AccountProcess.FINANCIAL)
         DimensionsIdentifyFinancial(p_cell);
       else
         DimensionsIdentifyRH(p_cell);
@@ -72,7 +72,7 @@ namespace FBI.MVC.Model
     {
       if (RegisterEmployee(p_cell) == true)
         return;
-      if (m_entities.m_values.Count > 0) // only register the first entity found
+      if (Entities.m_values.Count > 0) // only register the first entity found
         return;
       if (RegisterEntity(p_cell) == true)
       return;
@@ -84,7 +84,7 @@ namespace FBI.MVC.Model
       PeriodDimension l_period = new PeriodDimension(l_periodAsInt);
       Int32 test = (Int32)Convert.ToDateTime(p_cell.Value).ToOADate();
       if (m_periodsDatesList.Contains((Int32)Convert.ToDateTime(p_cell.Value).ToOADate()))
-        return m_periods.AddValue(p_cell, l_period); ;
+        return Periods.AddValue(p_cell, l_period); ;
       return false;
     }
 
@@ -94,7 +94,7 @@ namespace FBI.MVC.Model
 
       if (l_account == null)
         return (false);
-      return m_accounts.AddValue(p_cell, l_account);
+      return Accounts.AddValue(p_cell, l_account);
     }
 
     private bool RegisterEntity(Range p_cell)
@@ -103,7 +103,7 @@ namespace FBI.MVC.Model
 
       if (l_entity == null)
         return (false);
-      return m_entities.AddValue(p_cell, l_entity);
+      return Entities.AddValue(p_cell, l_entity);
     }
 
     public bool RegisterEmployee(Range p_cell)
@@ -112,14 +112,14 @@ namespace FBI.MVC.Model
 
       if (l_employee == null)
         return (false);
-      return m_employees.AddValue(p_cell, l_employee);
+      return Employees.AddValue(p_cell, l_employee);
     }
 
     #endregion
 
     public bool IsValid()
     {
-      return (m_orientation.IsValid);
+      return (Orientation.IsValid);
     }
 
     #region Orientation definition
@@ -127,20 +127,20 @@ namespace FBI.MVC.Model
     public bool DefineOrientation(Account.AccountProcess p_process)
     {
       DefineDimensionsAlignments();
-      m_orientation = new Orientation();
+      Orientation = new Orientation();
 
-      if (m_periods.m_snapshotResult == SnapshotResult.EMPTY || m_entities.m_snapshotResult == SnapshotResult.EMPTY)
+      if (Periods.m_snapshotResult == SnapshotResult.EMPTY || Entities.m_snapshotResult == SnapshotResult.EMPTY)
         return (false);
 
       switch (p_process)
       {
         case Account.AccountProcess.FINANCIAL:
-          if (m_accounts.m_snapshotResult == SnapshotResult.EMPTY)
+          if (Accounts.m_snapshotResult == SnapshotResult.EMPTY)
             return (false);
           return SetFinancialDimensionsOrientation();
 
         case Account.AccountProcess.RH:
-          if (m_employees.m_snapshotResult == SnapshotResult.EMPTY)
+          if (Employees.m_snapshotResult == SnapshotResult.EMPTY)
             return (false);
           else
             return SetRHDimensionsOrientation();
@@ -153,28 +153,28 @@ namespace FBI.MVC.Model
 
     private void DefineDimensionsAlignments()
     {
-      foreach (Dimension<CRUDEntity> l_dimension in m_dimensions.Values)
+      foreach (Dimension<CRUDEntity> l_dimension in Dimensions.Values)
         l_dimension.SetAlignment();
     }
 
     private bool SetFinancialDimensionsOrientation()
     {
-      switch (String.Concat(m_periods.m_snapshotResult, m_accounts.m_snapshotResult, m_entities.m_snapshotResult))
+      switch (String.Concat(Periods.m_snapshotResult, Accounts.m_snapshotResult, Entities.m_snapshotResult))
       {
         case "111":
           SetDimensionsAlignmentCaseOneFact();
           break;
 
         case "112":
-          SetDimensionsAlignmentCellsOtherCases(m_entities, m_accounts, m_periods);
+          SetDimensionsAlignmentCellsOtherCases(Entities, Accounts, Periods);
           break;
 
         case "121":
-          SetDimensionsAlignmentCellsOtherCases(m_accounts, m_entities, m_periods);
+          SetDimensionsAlignmentCellsOtherCases(Accounts, Entities, Periods);
           break;
 
         case "211":
-          SetDimensionsAlignmentCellsOtherCases(m_periods, m_entities, m_accounts);
+          SetDimensionsAlignmentCellsOtherCases(Periods, Entities, Accounts);
           break;
       }
       return DefineGlobalOrientation();
@@ -182,7 +182,7 @@ namespace FBI.MVC.Model
 
     private bool SetRHDimensionsOrientation()
     {
-      switch (String.Concat(m_periods.m_snapshotResult, m_employees.m_snapshotResult))
+      switch (String.Concat(Periods.m_snapshotResult, Employees.m_snapshotResult))
       {
         case "11":
           // One Period One Entity
@@ -191,12 +191,12 @@ namespace FBI.MVC.Model
 
         case "12":
           // One period Several Entities
-          SetDimensionsAlignmentCellsOtherCases(m_entities, m_periods);
+          SetDimensionsAlignmentCellsOtherCases(Entities, Periods);
           break;
 
         case "21":
           // Several Periods One Entity
-          SetDimensionsAlignmentCellsOtherCases(m_periods, m_entities);
+          SetDimensionsAlignmentCellsOtherCases(Periods, Entities);
           break;
       }
       return DefineGlobalOrientation();
@@ -204,7 +204,7 @@ namespace FBI.MVC.Model
 
     DimensionType FindDimension(Range p_cell)
     {
-      foreach (KeyValuePair<DimensionType, Dimension<CRUDEntity>> l_pair in m_dimensions)
+      foreach (KeyValuePair<DimensionType, Dimension<CRUDEntity>> l_pair in Dimensions)
         if (p_cell == l_pair.Value.UniqueCell)
           return (l_pair.Key);
       return (DimensionType.UNDEFINED);
@@ -212,7 +212,7 @@ namespace FBI.MVC.Model
 
     void InitDimensions()
     {
-      foreach (Dimension<CRUDEntity> l_dimension in m_dimensions.Values)
+      foreach (Dimension<CRUDEntity> l_dimension in Dimensions.Values)
         l_dimension.m_alignment = Alignment.UNDEFINED;
     }
 
@@ -231,8 +231,8 @@ namespace FBI.MVC.Model
       if (l_maxRightCell.Row == l_maxBelowCell.Row || l_maxRightCell.Column == l_maxBelowCell.Column ||
         l_dimensionHorizontal == DimensionType.UNDEFINED || l_dimensionVertical == DimensionType.UNDEFINED)
         return;
-      m_dimensions[l_dimensionVertical].m_alignment = Alignment.VERTICAL;
-      m_dimensions[l_dimensionHorizontal].m_alignment = Alignment.HORIZONTAL;
+      Dimensions[l_dimensionVertical].m_alignment = Alignment.VERTICAL;
+      Dimensions[l_dimensionHorizontal].m_alignment = Alignment.HORIZONTAL;
     }
 
     private void SetDimensionsAlignmentCellsOtherCases(Dimension<CRUDEntity> p_definedDimension, Dimension<CRUDEntity> p_dimension1, Dimension<CRUDEntity> p_dimension2)
@@ -269,7 +269,7 @@ namespace FBI.MVC.Model
 
     DimensionType FindDimensionOriented(Alignment p_orientation)
     {
-      foreach (KeyValuePair<DimensionType, Dimension<CRUDEntity>> l_pair in m_dimensions)
+      foreach (KeyValuePair<DimensionType, Dimension<CRUDEntity>> l_pair in Dimensions)
         if (l_pair.Value.m_alignment == p_orientation)
           return (l_pair.Key);
       return (DimensionType.UNDEFINED);
@@ -277,7 +277,7 @@ namespace FBI.MVC.Model
 
     DimensionType FindTabDimension()
     {
-      foreach (KeyValuePair<DimensionType, Dimension<CRUDEntity>> l_pair in m_dimensions)
+      foreach (KeyValuePair<DimensionType, Dimension<CRUDEntity>> l_pair in Dimensions)
         if (l_pair.Value.m_alignment == Alignment.UNDEFINED && l_pair.Value.m_values.Count == 1)
           return (l_pair.Key);
       return (DimensionType.UNDEFINED);
@@ -285,26 +285,28 @@ namespace FBI.MVC.Model
 
     private bool DefineGlobalOrientation()
     {
-      m_orientation = new Orientation(FindDimensionOriented(Alignment.VERTICAL), FindDimensionOriented(Alignment.HORIZONTAL), FindTabDimension());
-      return (m_orientation.IsValid);
+      Orientation = new Orientation(FindDimensionOriented(Alignment.VERTICAL), FindDimensionOriented(Alignment.HORIZONTAL), FindTabDimension());
+      return (Orientation.IsValid);
     }
 
     private void SetCellsMaxsBelowAndRight(Range p_maxRightCell, Range p_maxBelowCell)
     {
       SafeDictionary<Range, Int32> l_rightCellsDict = new SafeDictionary<Range, Int32>();
-      l_rightCellsDict.Add(m_periods.m_values.ElementAt(0).Key, m_periods.CellColumnIndex);
-      l_rightCellsDict.Add(m_accounts.m_values.ElementAt(0).Key, m_accounts.CellColumnIndex);
-      l_rightCellsDict.Add(m_entities.m_values.ElementAt(0).Key, m_entities.CellColumnIndex);
-      l_rightCellsDict.Add(m_employees.m_values.ElementAt(0).Key, m_employees.CellColumnIndex);
-      IOrderedEnumerable<KeyValuePair<Range, Int32>> l_columnsSortedDict = from entry in l_rightCellsDict orderby entry.Value ascending select entry;
+      l_rightCellsDict.Add(Periods.m_values.ElementAt(0).Key, Periods.CellColumnIndex);
+      l_rightCellsDict.Add(Accounts.m_values.ElementAt(0).Key, Accounts.CellColumnIndex);
+      l_rightCellsDict.Add(Entities.m_values.ElementAt(0).Key, Entities.CellColumnIndex);
+      l_rightCellsDict.Add(Employees.m_values.ElementAt(0).Key, Employees.CellColumnIndex);
+      IOrderedEnumerable<KeyValuePair<Range, Int32>> l_columnsSortedDict =
+        from entry in l_rightCellsDict orderby entry.Value ascending select entry;
       p_maxRightCell = l_columnsSortedDict.ElementAt(0).Key;
 
       SafeDictionary<Range, Int32> l_belowCellsDict = new SafeDictionary<Range, Int32>();
-      l_belowCellsDict.Add(m_periods.m_values.ElementAt(0).Key, m_periods.CellColumnIndex);
-      l_belowCellsDict.Add(m_accounts.m_values.ElementAt(0).Key, m_accounts.CellColumnIndex);
-      l_belowCellsDict.Add(m_entities.m_values.ElementAt(0).Key, m_entities.CellColumnIndex);
-      l_belowCellsDict.Add(m_employees.m_values.ElementAt(0).Key, m_employees.CellColumnIndex);
-      IOrderedEnumerable<KeyValuePair<Range, Int32>> l_rowsSortedDict = from entry in l_belowCellsDict orderby entry.Value ascending select entry;
+      l_belowCellsDict.Add(Periods.m_values.ElementAt(0).Key, Periods.CellColumnIndex);
+      l_belowCellsDict.Add(Accounts.m_values.ElementAt(0).Key, Accounts.CellColumnIndex);
+      l_belowCellsDict.Add(Entities.m_values.ElementAt(0).Key, Entities.CellColumnIndex);
+      l_belowCellsDict.Add(Employees.m_values.ElementAt(0).Key, Employees.CellColumnIndex);
+      IOrderedEnumerable<KeyValuePair<Range, Int32>> l_rowsSortedDict =
+        from entry in l_belowCellsDict orderby entry.Value ascending select entry;
       p_maxBelowCell = l_rowsSortedDict.ElementAt(0).Key;
     }
 
@@ -335,7 +337,7 @@ namespace FBI.MVC.Model
     public List<Account> GetAccountsList()
     {
       List<Account> l_list = new List<Account>();
-      foreach (CRUDEntity l_account in m_accounts.m_values.Values)
+      foreach (CRUDEntity l_account in Accounts.m_values.Values)
         l_list.Add(l_account as Account);
       return l_list;
     }
@@ -344,22 +346,18 @@ namespace FBI.MVC.Model
     {
       List<AxisElem> l_list = new List<AxisElem>();
       Dimension<CRUDEntity> l_dimension;
+
       switch (l_dimensionType)
       {
         case DimensionType.EMPLOYEE:
-          l_dimension = m_employees;
+          l_dimension = Employees;
           break;
         case DimensionType.ENTITY:
-          l_dimension = m_entities;
+          l_dimension = Entities;
           break;
         default:
-          l_dimension = null;
-          break;
+          return l_list;
       }
-
-      if (l_dimension == null)
-        return l_list;
-
       foreach (CRUDEntity l_item in l_dimension.m_values.Values)
         l_list.Add(l_item as AxisElem);
       return l_list;

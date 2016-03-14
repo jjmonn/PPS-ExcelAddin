@@ -56,8 +56,7 @@ namespace FBI.MVC.Controller
         return (false);
        
       if (m_process == Account.AccountProcess.RH)
-        return AreRHInputsValid(p_RHAccountItem, p_periodList);
-
+        return (AreRHInputsValid(p_RHAccountItem, p_periodList));
       return (true);
     }
 
@@ -72,7 +71,7 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-    public bool AreRHInputsValid(ListItem p_RHAccountItem, List<Int32> p_periodList)
+    bool AreRHInputsValid(ListItem p_RHAccountItem, List<Int32> p_periodList)
     {
       if (p_RHAccountItem == null)
       {

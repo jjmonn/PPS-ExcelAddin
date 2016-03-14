@@ -13,12 +13,12 @@ namespace FBI.MVC.Model
   using Utils;
 
  
-  class FinancialEditedFactsManager : IEditedFactsManager
+  class FinancialEditedFactsModel : IEditedFactsModel
   {
     MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact> m_editedFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact>();
     SafeDictionary<DimensionKey, Fact> m_facts = new SafeDictionary<DimensionKey, Fact>();
     MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact> m_outputFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact>();
-    Dimensions m_dimensions = null;
+    WorksheetAreaController m_dimensions = null;
     List<int> m_inputsRequestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
     public event FactsCommitError OnCommitError;
@@ -28,14 +28,14 @@ namespace FBI.MVC.Model
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
 
-    public void RegisterEditedFacts(Dimensions p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
+    public void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
     {
       m_worksheet = p_worksheet;
       m_dimensions = p_dimensions;
       m_versionId = p_versionId;
-      Dimension<CRUDEntity> l_vertical = p_dimensions.m_dimensions[p_dimensions.m_orientation.Vertical];
-      Dimension<CRUDEntity> l_horitontal = p_dimensions.m_dimensions[p_dimensions.m_orientation.Horizontal];
-      Dimension<CRUDEntity> l_tabDimension = p_dimensions.m_dimensions[p_dimensions.m_orientation.TabDimension];
+      Dimension<CRUDEntity> l_vertical = p_dimensions.Dimensions[p_dimensions.Orientation.Vertical];
+      Dimension<CRUDEntity> l_horitontal = p_dimensions.Dimensions[p_dimensions.Orientation.Horizontal];
+      Dimension<CRUDEntity> l_tabDimension = p_dimensions.Dimensions[p_dimensions.Orientation.TabDimension];
 
       CreateEditedFacts(l_vertical, l_horitontal, l_tabDimension, p_rangeHighlighter);
 
@@ -87,9 +87,9 @@ namespace FBI.MVC.Model
       UInt32 l_employeeId = (UInt32)AxisType.Employee;
       PeriodDimension l_period = null;
 
-      Dimensions.SetDimensionValue(p_dimension1, p_dimensionValue1, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
-      Dimensions.SetDimensionValue(p_dimension2, p_dimensionValue2, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
-      Dimensions.SetDimensionValue(p_fixedDimension, p_fixedDimension.UniqueValue, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      WorksheetAreaController.SetDimensionValue(p_dimension1, p_dimensionValue1, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      WorksheetAreaController.SetDimensionValue(p_dimension2, p_dimensionValue2, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
+      WorksheetAreaController.SetDimensionValue(p_fixedDimension, p_fixedDimension.UniqueValue, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
 
       if (l_accountId == 0 || l_entityId == 0 || l_period == null)
         return null;
@@ -185,7 +185,7 @@ namespace FBI.MVC.Model
       l_sourcedComputeRequest.FactList = l_factsList;
 
       List<UInt32> l_entitiesList = new List<UInt32>(); 
-      foreach (AxisElem l_entity in m_dimensions.m_entities.m_values.Values)
+      foreach (AxisElem l_entity in m_dimensions.Entities.m_values.Values)
       {
         l_entitiesList.Add(l_entity.Id);
       }

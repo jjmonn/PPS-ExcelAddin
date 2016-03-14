@@ -74,6 +74,7 @@ namespace FBI.MVC.View
       this.m_accountSelectionLabel.Visible = p_visible;
       this.m_accountSelectionComboBox.Visible = p_visible;
       this.m_periodsSelectionLabel.Visible = p_visible;
+      m_periodsSelectionPanel.Visible = p_visible;
     }
 
     private void InitRHProcessComponents()
