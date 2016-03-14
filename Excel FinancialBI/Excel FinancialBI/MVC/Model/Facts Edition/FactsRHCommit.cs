@@ -331,7 +331,10 @@ namespace FBI.MVC.Model
       foreach (KeyValuePair<CRUDAction, List<LegalHoliday>> l_CRUDActionList in m_LegalHolidayCommitDict)
       {
         if (l_CRUDActionList.Value.Count > 0)
+        {
           LegalHolidayModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
+          l_CRUDActionList.Value.Clear();
+        }
       }
     }
 

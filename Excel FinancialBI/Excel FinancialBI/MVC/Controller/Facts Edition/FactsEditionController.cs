@@ -67,6 +67,7 @@ namespace FBI.MVC.Controller
         {
           m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells);
           ActivateFactEditionRibbon();
+          AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
           return true;
         }
         else
@@ -92,6 +93,7 @@ namespace FBI.MVC.Controller
     public void CloseInstance()
     {
       m_rangeHighlighter.RevertToOriginalColors();
+      AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
       m_editedFactsManager.FactsDownloaded -= OnFactsDownloaded;
       m_editedFactsManager.OnCommitError -= OnCommitError;
 
@@ -110,7 +112,6 @@ namespace FBI.MVC.Controller
 
     public void OnWorksheetChange(Range p_cell)
     {
-
       if (m_editedFactsManager.UpdateEditedValueAndTag(p_cell))
         return;
 

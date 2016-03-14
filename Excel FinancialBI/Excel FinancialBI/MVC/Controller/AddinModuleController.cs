@@ -107,6 +107,7 @@ namespace FBI.MVC.Controller
     public static void SetExcelInteractionState(bool p_state)
     {
       AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
+      System.Diagnostics.Debug.WriteLine("Excel interaction set to " + p_state.ToString());
       //AddinModule.CurrentInstance.ExcelApp.ScreenUpdating = p_state; 
     }
 
