@@ -12,7 +12,8 @@ namespace FBI.MVC.Model
   using Utils;
   using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
- 
+
+
   class PeriodModel
   {
     #region "Instance Variables"
@@ -391,14 +392,14 @@ namespace FBI.MVC.Model
     #endregion
 
     #region "Days interface"
-    // To be checked 
+    
     static public List<Int32> GetDaysList(Int32 p_startDayId, Int32 p_nbDays)
     {
       List<Int32> l_daysList = new List<Int32>();
-      for (Int32 i = 0; i <= p_nbDays - 1; i++)
+
+      for (Int32 l_dayId = p_startDayId; l_dayId <= p_startDayId + p_nbDays - 1; l_dayId++)
       {
-        l_daysList.Add(p_startDayId);
-        p_startDayId += 1;
+        l_daysList.Add(l_dayId);
       }
       return (l_daysList);
 
@@ -525,6 +526,14 @@ namespace FBI.MVC.Model
       Int32 l_period = (Int32)p_date.ToOADate();
       string l_weekString = Local.GetValue("general.week");
       return l_weekString + PeriodModel.GetWeekNumberFromDateId(l_period) + ", " + DateTime.FromOADate(l_period).Year;
+    }
+
+    public static List<DayOfWeek> GetWeekEndDays()
+    {
+      List<DayOfWeek> l_weekEndDays = new List<DayOfWeek>();
+      l_weekEndDays.Add(DayOfWeek.Saturday);
+      l_weekEndDays.Add(DayOfWeek.Sunday);
+      return l_weekEndDays;
     }
 
     #endregion
