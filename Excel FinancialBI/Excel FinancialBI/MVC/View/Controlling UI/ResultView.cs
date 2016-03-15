@@ -285,9 +285,12 @@ namespace FBI.MVC.View
       l_periodList = (l_conf.IsSubPeriod) ? PeriodModel.GetSubPeriods(l_conf.ParentType, l_conf.ParentPeriod) :
         PeriodModel.GetPeriodList(l_startPeriod,
         GetNbPeriod(m_computeConfig.Request.NbPeriods, l_conf.PeriodType, m_computeConfig.BaseTimeConfig), l_conf.PeriodType);
+      bool l_includeWeekEnds = l_conf.PeriodType != TimeConfig.DAYS || Properties.Settings.Default.includeWeekEnds;
 
       foreach (int l_date in l_periodList)
       {
+        if (l_includeWeekEnds == false && PeriodModel.IsWeekEnd(l_date))
+          continue;
         l_formatedDate = PeriodModel.GetFormatedDate(l_date, l_conf.PeriodType);
 
         ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, l_date, 0);

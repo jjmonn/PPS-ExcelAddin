@@ -81,7 +81,7 @@ namespace FBI.MVC.Controller
 
     public List<Int32> GetPeriodRange(DateTime p_startDate, DateTime p_endDate)
     {
-      bool l_includeWeekEnds = Properties.Settings.Default.inlcudeWeekEnds;
+      bool l_includeWeekEnds = Properties.Settings.Default.includeWeekEnds;
       List<Int32> l_periodsRange = new List<Int32>();
       List<DayOfWeek> l_weekEndDays = PeriodModel.GetWeekEndDays();
 

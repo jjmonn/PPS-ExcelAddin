@@ -227,7 +227,7 @@
     <Setting Name="FactsEditionDimensionsFill" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">PaleTurquoise</Value>
     </Setting>
-    <Setting Name="inlcudeWeekEnds" Type="System.Boolean" Scope="User">
+    <Setting Name="includeWeekEnds" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
