@@ -43,7 +43,6 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.SelectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.UnselectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
-      this.m_DGVsControlTab = new VIBlend.WinForms.Controls.vTabControl();
       this.ButtonsImageList = new System.Windows.Forms.ImageList(this.components);
       this.MenuImageList = new System.Windows.Forms.ImageList(this.components);
       this.SplitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -67,7 +66,6 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.PeriodsRCMenu.SuspendLayout();
       this.AdjustmentsRCMenu.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
-      this.SplitContainer1.Panel2.SuspendLayout();
       this.SplitContainer1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer2)).BeginInit();
       this.SplitContainer2.Panel1.SuspendLayout();
@@ -82,13 +80,13 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.EntitiesRCMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RefreshRightClick});
       this.EntitiesRCMenu.Name = "ContextMenuStripEntitiesNodes";
-      this.EntitiesRCMenu.Size = new System.Drawing.Size(145, 30);
+      this.EntitiesRCMenu.Size = new System.Drawing.Size(159, 30);
       // 
       // RefreshRightClick
       // 
       this.RefreshRightClick.Image = ((System.Drawing.Image)(resources.GetObject("RefreshRightClick.Image")));
       this.RefreshRightClick.Name = "RefreshRightClick";
-      this.RefreshRightClick.Size = new System.Drawing.Size(144, 26);
+      this.RefreshRightClick.Size = new System.Drawing.Size(158, 26);
       this.RefreshRightClick.Text = "[CUI.refresh]";
       // 
       // PeriodsRCMenu
@@ -98,18 +96,18 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
             this.SelectAllToolStripMenuItem,
             this.UnselectAllToolStripMenuItem});
       this.PeriodsRCMenu.Name = "periodsRightClickMenu";
-      this.PeriodsRCMenu.Size = new System.Drawing.Size(166, 48);
+      this.PeriodsRCMenu.Size = new System.Drawing.Size(182, 52);
       // 
       // SelectAllToolStripMenuItem
       // 
       this.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem";
-      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
       this.SelectAllToolStripMenuItem.Text = "[CUI.select_all]";
       // 
       // UnselectAllToolStripMenuItem
       // 
       this.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem";
-      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
       this.UnselectAllToolStripMenuItem.Text = "[CUI.unselect_all]";
       // 
       // AdjustmentsRCMenu
@@ -119,18 +117,18 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
             this.SelectAllToolStripMenuItem1,
             this.UnselectAllToolStripMenuItem1});
       this.AdjustmentsRCMenu.Name = "AdjustmentsRCM";
-      this.AdjustmentsRCMenu.Size = new System.Drawing.Size(166, 48);
+      this.AdjustmentsRCMenu.Size = new System.Drawing.Size(182, 52);
       // 
       // SelectAllToolStripMenuItem1
       // 
       this.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1";
-      this.SelectAllToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
+      this.SelectAllToolStripMenuItem1.Size = new System.Drawing.Size(181, 24);
       this.SelectAllToolStripMenuItem1.Text = "[CUI.select_all]";
       // 
       // UnselectAllToolStripMenuItem1
       // 
       this.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1";
-      this.UnselectAllToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
+      this.UnselectAllToolStripMenuItem1.Size = new System.Drawing.Size(181, 24);
       this.UnselectAllToolStripMenuItem1.Text = "[CUI.unselect_all]";
       // 
       // SplitContainer1
@@ -138,31 +136,12 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.SplitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.SplitContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
+      this.SplitContainer1.BackColor = System.Drawing.SystemColors.Control;
       this.SplitContainer1.Location = new System.Drawing.Point(0, 3);
       this.SplitContainer1.Name = "SplitContainer1";
-      // 
-      // SplitContainer1.Panel2
-      // 
-      this.SplitContainer1.Panel2.Controls.Add(this.m_DGVsControlTab);
       this.SplitContainer1.Size = new System.Drawing.Size(782, 474);
       this.SplitContainer1.SplitterDistance = 144;
       this.SplitContainer1.TabIndex = 8;
-      // 
-      // m_DGVsControlTab
-      // 
-      this.m_DGVsControlTab.AllowAnimations = true;
-      this.m_DGVsControlTab.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.m_DGVsControlTab.Location = new System.Drawing.Point(0, 0);
-      this.m_DGVsControlTab.Name = "m_DGVsControlTab";
-      this.m_DGVsControlTab.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
-      this.m_DGVsControlTab.Size = new System.Drawing.Size(634, 474);
-      this.m_DGVsControlTab.TabAlignment = VIBlend.WinForms.Controls.vTabPageAlignment.Top;
-      this.m_DGVsControlTab.TabIndex = 0;
-      this.m_DGVsControlTab.TabsAreaBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
-      this.m_DGVsControlTab.TabsInitialOffset = 5;
-      this.m_DGVsControlTab.TitleHeight = 25;
-      this.m_DGVsControlTab.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // ButtonsImageList
       // 
@@ -285,6 +264,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // 
       // MainMenu
       // 
+      this.MainMenu.BackColor = System.Drawing.SystemColors.Control;
       this.MainMenu.Dock = System.Windows.Forms.DockStyle.None;
       this.MainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
       this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -295,7 +275,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.MainMenu.Location = new System.Drawing.Point(0, 0);
       this.MainMenu.Name = "MainMenu";
       this.MainMenu.ShowItemToolTips = true;
-      this.MainMenu.Size = new System.Drawing.Size(546, 55);
+      this.MainMenu.Size = new System.Drawing.Size(607, 59);
       this.MainMenu.TabIndex = 0;
       this.MainMenu.Text = "[CUI.main_menu]";
       // 
@@ -307,7 +287,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.ExcelToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("ExcelToolStripMenuItem.Image")));
       this.ExcelToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem";
-      this.ExcelToolStripMenuItem.Size = new System.Drawing.Size(124, 51);
+      this.ExcelToolStripMenuItem.Size = new System.Drawing.Size(141, 55);
       this.ExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]";
       this.ExcelToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       this.ExcelToolStripMenuItem.ToolTipText = "[CUI.drop_on_excel_tooltip]";
@@ -315,13 +295,13 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // DropOnExcelToolStripMenuItem
       // 
       this.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem";
-      this.DropOnExcelToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+      this.DropOnExcelToolStripMenuItem.Size = new System.Drawing.Size(294, 24);
       this.DropOnExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]";
       // 
       // DropOnlyTheVisibleItemsOnExcelToolStripMenuItem
       // 
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Name = "DropOnlyTheVisibleItemsOnExcelToolStripMenuItem";
-      this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+      this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = new System.Drawing.Size(294, 24);
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = "Drop only the visible items on Excel";
       // 
       // BusinessControlToolStripMenuItem
@@ -333,7 +313,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.BusinessControlToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("BusinessControlToolStripMenuItem.Image")));
       this.BusinessControlToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.BusinessControlToolStripMenuItem.Name = "BusinessControlToolStripMenuItem";
-      this.BusinessControlToolStripMenuItem.Size = new System.Drawing.Size(156, 51);
+      this.BusinessControlToolStripMenuItem.Size = new System.Drawing.Size(177, 55);
       this.BusinessControlToolStripMenuItem.Text = "[CUI.performance_review]";
       this.BusinessControlToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       this.BusinessControlToolStripMenuItem.ToolTipText = "[CUI.performance_review_tooltip]";
@@ -341,19 +321,19 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // m_versionComparisonButton
       // 
       this.m_versionComparisonButton.Name = "m_versionComparisonButton";
-      this.m_versionComparisonButton.Size = new System.Drawing.Size(257, 22);
+      this.m_versionComparisonButton.Size = new System.Drawing.Size(287, 24);
       this.m_versionComparisonButton.Text = "[CUI.display_versions_comparison]";
       // 
       // m_versionSwitchButton
       // 
       this.m_versionSwitchButton.Name = "m_versionSwitchButton";
-      this.m_versionSwitchButton.Size = new System.Drawing.Size(257, 22);
+      this.m_versionSwitchButton.Size = new System.Drawing.Size(287, 24);
       this.m_versionSwitchButton.Text = "[CUI.switch_versions]";
       // 
       // m_hideVersionButton
       // 
       this.m_hideVersionButton.Name = "m_hideVersionButton";
-      this.m_hideVersionButton.Size = new System.Drawing.Size(257, 22);
+      this.m_hideVersionButton.Size = new System.Drawing.Size(287, 24);
       this.m_hideVersionButton.Text = "[CUI.take_off_comparison]";
       // 
       // m_refreshButton
@@ -362,7 +342,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_refreshButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.m_refreshButton.Name = "m_refreshButton";
       this.m_refreshButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
-      this.m_refreshButton.Size = new System.Drawing.Size(85, 51);
+      this.m_refreshButton.Size = new System.Drawing.Size(97, 55);
       this.m_refreshButton.Text = "[CUI.refresh]";
       this.m_refreshButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       this.m_refreshButton.ToolTipText = "[CUI.refresh_tooltip]";
@@ -372,7 +352,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_chartBT.Image = ((System.Drawing.Image)(resources.GetObject("m_chartBT.Image")));
       this.m_chartBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.m_chartBT.Name = "m_chartBT";
-      this.m_chartBT.Size = new System.Drawing.Size(81, 51);
+      this.m_chartBT.Size = new System.Drawing.Size(92, 55);
       this.m_chartBT.Text = "[CUI.charts]";
       this.m_chartBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       // 
@@ -387,7 +367,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
+      this.BackColor = System.Drawing.SystemColors.Control;
       this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
       this.ClientSize = new System.Drawing.Size(988, 540);
       this.Controls.Add(this.Panel1);
@@ -399,7 +379,6 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.EntitiesRCMenu.ResumeLayout(false);
       this.PeriodsRCMenu.ResumeLayout(false);
       this.AdjustmentsRCMenu.ResumeLayout(false);
-      this.SplitContainer1.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).EndInit();
       this.SplitContainer1.ResumeLayout(false);
       this.SplitContainer2.Panel1.ResumeLayout(false);
@@ -423,8 +402,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
 	public System.Windows.Forms.SplitContainer SplitContainer1;
 	public System.Windows.Forms.ImageList MenuImageList;
 	public System.Windows.Forms.SplitContainer SplitContainer2;
-	public System.Windows.Forms.ImageList ButtonsImageList;
-	public VIBlend.WinForms.Controls.vTabControl m_DGVsControlTab;
+  public System.Windows.Forms.ImageList ButtonsImageList;
 	public System.Windows.Forms.Panel Panel1;
 	public System.Windows.Forms.MenuStrip MainMenu;
 	public System.Windows.Forms.ToolStripMenuItem m_refreshButton;

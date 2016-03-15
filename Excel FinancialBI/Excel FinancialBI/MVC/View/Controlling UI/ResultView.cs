@@ -26,7 +26,7 @@ namespace FBI.MVC.View
   {
     vTabControl m_tabCtrl = new vTabControl();
     private delegate void DGVBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf, DGVDimension p_dimension,
-      HierarchyItemsCollection p_parent, ResultKey p_parentKey);
+    HierarchyItemsCollection p_parent, ResultKey p_parentKey);
     SafeDictionary<Type, DGVBuilder> m_builderList = new SafeDictionary<Type, DGVBuilder>();
     ComputeConfig m_computeConfig;
     ResultController m_controller;
@@ -45,6 +45,12 @@ namespace FBI.MVC.View
 
     public void LoadView()
     {
+      m_tabCtrl.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      m_tabCtrl.TitleHeight = 25;
+      m_tabCtrl.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      m_tabCtrl.TabsAreaBackColor = System.Drawing.SystemColors.Control;
+      m_tabCtrl.BackColor = System.Drawing.SystemColors.Control;
+
       Controls.Add(m_tabCtrl);
       m_tabCtrl.Dock = DockStyle.Fill;
 

@@ -179,7 +179,7 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.m_entitySelectionLabel.AutoSize = true;
       this.m_entitySelectionLabel.Location = new System.Drawing.Point(3, 5);
       this.m_entitySelectionLabel.Name = "m_entitySelectionLabel";
-      this.m_entitySelectionLabel.Size = new System.Drawing.Size(115, 13);
+      this.m_entitySelectionLabel.Size = new System.Drawing.Size(131, 15);
       this.m_entitySelectionLabel.TabIndex = 0;
       this.m_entitySelectionLabel.Text = "[CUI.entities_selection]";
       this.m_entitySelectionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -212,25 +212,25 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
             this.SelectAllToolStripMenuItem,
             this.UnselectAllToolStripMenuItem});
       this.m_rightClickMenu.Name = "periodsRightClickMenu";
-      this.m_rightClickMenu.Size = new System.Drawing.Size(166, 48);
+      this.m_rightClickMenu.Size = new System.Drawing.Size(182, 52);
       // 
       // SelectAllToolStripMenuItem
       // 
       this.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem";
-      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
       this.SelectAllToolStripMenuItem.Text = "[CUI.select_all]";
       // 
       // UnselectAllToolStripMenuItem
       // 
       this.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem";
-      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
       this.UnselectAllToolStripMenuItem.Text = "[CUI.unselect_all]";
       // 
       // CUI2LeftPane
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
+      this.BackColor = System.Drawing.SystemColors.Control;
       this.Controls.Add(this.MainTableLayout);
       this.Name = "CUI2LeftPane";
       this.Size = new System.Drawing.Size(270, 671);
