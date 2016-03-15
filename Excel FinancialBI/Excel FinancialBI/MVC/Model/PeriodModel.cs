@@ -83,7 +83,7 @@ namespace FBI.MVC.Model
         case CRUD.TimeConfig.WEEK:
           return GetWeekIDListFromWeeklyConfig(p_startPeriod, p_nbPeriod);
         case CRUD.TimeConfig.DAYS:
-          return GetDaysList(p_startPeriod, p_nbPeriod);
+          return GetDaysList(p_startPeriod, p_nbPeriod, true);
       }
       return new List<Int32>();
     }
@@ -393,12 +393,17 @@ namespace FBI.MVC.Model
 
     #region "Days interface"
     
-    static public List<Int32> GetDaysList(Int32 p_startDayId, Int32 p_nbDays)
+    static public List<Int32> GetDaysList(Int32 p_startDayId, Int32 p_nbDays, bool p_includeWeekEndsOption = false)
     {
+      bool l_includeWeekEnds = Properties.Settings.Default.inlcudeWeekEnds;
+      List<DayOfWeek> l_weekEndDays = PeriodModel.GetWeekEndDays();
       List<Int32> l_daysList = new List<Int32>();
 
       for (Int32 l_dayId = p_startDayId; l_dayId <= p_startDayId + p_nbDays - 1; l_dayId++)
       {
+        //if (p_includeWeekEndsOption == true && l_includeWeekEnds == false && l_weekEndDays.Contains(DateTime.FromOADate((double)l_dayId).DayOfWeek) == true)
+        //  continue;
+
         l_daysList.Add(l_dayId);
       }
       return (l_daysList);

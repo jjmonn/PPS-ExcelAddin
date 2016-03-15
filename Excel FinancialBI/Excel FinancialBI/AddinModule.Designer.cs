@@ -717,8 +717,8 @@
       this.SubmissionOptionsBT.Caption = " Options";
       this.SubmissionOptionsBT.Controls.Add(this.AdxRibbonMenu5);
       this.SubmissionOptionsBT.Id = "adxRibbonSplitButton_ed37a10f5b0a4990ad8f167982663559";
-      this.SubmissionOptionsBT.Image = 14;
-      this.SubmissionOptionsBT.ImageList = this.SubmissionRibbonIL;
+      this.SubmissionOptionsBT.Image = 11;
+      this.SubmissionOptionsBT.ImageList = this.m_mainRibbonImageList;
       this.SubmissionOptionsBT.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.SubmissionOptionsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.SubmissionOptionsBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
@@ -990,8 +990,8 @@
       this.m_PDCSubmissionOptionsButton.Caption = " Options";
       this.m_PDCSubmissionOptionsButton.Controls.Add(this.AdxRibbonRHMenu2);
       this.m_PDCSubmissionOptionsButton.Id = "adxRibbonSplitButton_ed37a10f5b0a4990ad8f16798266356";
-      this.m_PDCSubmissionOptionsButton.Image = 14;
-      this.m_PDCSubmissionOptionsButton.ImageList = this.SubmissionRibbonIL;
+      this.m_PDCSubmissionOptionsButton.Image = 11;
+      this.m_PDCSubmissionOptionsButton.ImageList = this.m_mainRibbonImageList;
       this.m_PDCSubmissionOptionsButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCSubmissionOptionsButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_PDCSubmissionOptionsButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
