@@ -78,11 +78,11 @@ namespace FBI.MVC.View
       if (m_editing)
         return;
       m_editing = true;
-      List<UInt32> l_list = SelectedFilterValues;
+      List<string> l_list = SelectedFilterValues;
 
       m_categoriesFilterTree.Text = "";
-      foreach (UInt32 l_fvId in l_list)
-        m_categoriesFilterTree.Text += FilterValueModel.Instance.GetValueName(l_fvId) + "; ";
+      foreach (string l_fv in l_list)
+        m_categoriesFilterTree.Text += l_fv + "; ";
       m_editing = false;
     }
 
@@ -95,11 +95,11 @@ namespace FBI.MVC.View
 
       if (l_tvBox == null)
         return;
-      List<UInt32> l_list = GetSelectedAxisElem(p_axis);
+      List<string> l_list = GetSelectedAxisElem(p_axis);
 
       l_tvBox.Text = "";
-      foreach (UInt32 l_elemId in l_list)
-        l_tvBox.Text += AxisElemModel.Instance.GetValueName(l_elemId) + "; ";
+      foreach (string l_elem in l_list)
+        l_tvBox.Text += l_elem + "; ";
       m_editing = false;
     }
 
@@ -144,64 +144,80 @@ namespace FBI.MVC.View
 
     #region Accessors
 
-    public List<UInt32> GetSelectedAxisElem(AxisType p_axis)
+    public string SelectedPeriod
+    {
+      get
+      {
+        return m_periodPicker.Value.Value.ToString("0:dd/MM/yyyy");
+      }
+    }
+
+    public List<string> GetSelectedAxisElem(AxisType p_axis)
     {
       vTreeView l_tv = m_axisElemTV[p_axis].TreeView;
-      List<UInt32> l_list = new List<uint>();
+      List<string> l_list = new List<string>();
 
       if (l_tv != null)
         foreach (vTreeNode l_node in l_tv.GetNodes())
           if (l_node.Checked == CheckState.Checked && l_node.ShowCheckBox)
-            l_list.Add((UInt32)l_node.Value);
+            l_list.Add(l_node.Text);
       return (l_list);
     }
 
-    public UInt32 SelectedVersion
+    public string SelectedVersion
     {
       get
       {
         vTreeNode l_node = m_versionTree.TreeView.SelectedNode;
 
         if (l_node == null)
-          return (0);
-        return ((UInt32)l_node.Value);
+          return ("");
+        return (l_node.Text);
       }
     }
 
-    public UInt32 SelectedAccount
+    public string SelectedAccount
     {
       get
       {
         vTreeNode l_node = m_accountTree.TreeView.SelectedNode;
 
         if (l_node == null)
-          return (0);
-        return ((UInt32)l_node.Value);
+          return ("");
+        return (l_node.Text);
       }
     }
 
-    public UInt32 SelectedEntity
+    public string SelectedEntity
     {
       get
       {
         vTreeNode l_node = m_entityTree.TreeView.SelectedNode;
 
         if (l_node == null)
-          return (0);
-        return ((UInt32)l_node.Value);
+          return ("");
+        return (l_node.Text);
       }
     }
 
-    public List<UInt32> SelectedFilterValues
+    public List<string> SelectedFilterValues
     {
       get
       {
-        List<UInt32> l_list = new List<uint>();
+        List<string> l_list = new List<string>();
 
         foreach (vTreeNode l_node in m_categoriesFilterTree.TreeView.GetNodes())
           if (l_node.Checked == CheckState.Checked && l_node.ShowCheckBox)
-            l_list.Add((UInt32)l_node.Value);
+            l_list.Add(l_node.Text);
         return (l_list);
+      }
+    }
+
+    public string SelectedCurrency
+    {
+      get
+      {
+        return (m_currencyCB.Text);
       }
     }
 
