@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace FBI.MVC.Model
 {
@@ -13,7 +14,7 @@ namespace FBI.MVC.Model
   abstract public class ICRUDModel<T> where T : class, CRUDEntity
   {
 
-	#region "Instance variables"
+	#region Instance variables
 
 	// Variables
 
@@ -175,7 +176,7 @@ namespace FBI.MVC.Model
 	}
 	#endregion
 
-	#region "Intern"
+	#region Intern
 
   private void ReadAnswer_Intern(ByteBuffer p_packet)
   {
@@ -263,13 +264,13 @@ namespace FBI.MVC.Model
 
 	#endregion
 
-	#region "Mappings"
+	#region Mappings
 
 	public abstract T GetValue(UInt32 p_id);
 
 	#endregion
 
-	#region "Events"
+	#region Events
 
   protected void RaiseObjectInitializedEvent(ErrorMessage p_status, Type p_type)
   {

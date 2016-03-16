@@ -267,6 +267,7 @@
     <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\UnreferencedClientsController.cs" />
+    <Compile Include="MVC\Controller\FBIFunctionController.cs" />
     <Compile Include="MVC\Controller\IProgressBarController.cs" />
     <Compile Include="MVC\Controller\LogController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
@@ -427,11 +428,11 @@
     <Compile Include="MVC\View\Controlling UI\ResultView.Designer.cs">
       <DependentUpon>ResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\FBIFunctionUI.cs">
+    <Compile Include="MVC\View\FBIFunctionView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\FBIFunctionUI.Designer.cs">
-      <DependentUpon>FBIFunctionUI.cs</DependentUpon>
+    <Compile Include="MVC\View\FBIFunctionView.Designer.cs">
+      <DependentUpon>FBIFunctionView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\FixDesigner\AxisBaseView.cs" />
     <Compile Include="MVC\View\FixDesigner\FactBaseView.cs" />
@@ -752,8 +753,8 @@
     <EmbeddedResource Include="MVC\View\Controlling UI\ResultView.resx">
       <DependentUpon>ResultView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\FBIFunctionUI.resx">
-      <DependentUpon>FBIFunctionUI.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\FBIFunctionView.resx">
+      <DependentUpon>FBIFunctionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\GenericView.resx">
       <DependentUpon>GenericView.cs</DependentUpon>
