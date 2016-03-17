@@ -330,6 +330,12 @@ namespace FBI
       new SettingsController();
     }
 
+    private void m_duplicatesFinderButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      DuplicatesUIDemo l_duplicatesUI = new DuplicatesUIDemo();
+      l_duplicatesUI.Show();
+    }
+
     #endregion
 
     #region Financial facts edition
@@ -414,6 +420,8 @@ namespace FBI
     {
       m_processRibbonButton.Caption = p_process;
     }
+
+ 
   }
 }
 
