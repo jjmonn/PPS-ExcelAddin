@@ -18,20 +18,10 @@ namespace FBI.MVC.Model.CRUD
       Abs,
       ALD,
       CD,
-      FF,
-      RI,
-      CT,
-      FC,
-      NF,
-      IC,
-      D,
-      A,
       E,
       S,
       RD,
-      RG,
-      IT,
-      SST
+      RG
     }
 
     public UInt32 Id { get; set; }

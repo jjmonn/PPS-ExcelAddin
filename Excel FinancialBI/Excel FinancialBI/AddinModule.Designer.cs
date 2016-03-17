@@ -130,6 +130,9 @@
       this.m_PDCPeriodsRangeEditButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonRHExitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_submissionControlButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
+      this.adxRibbonMenu6 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
+      this.m_duplicatesFinderButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
       // m_financialbiRibbon
       // 
@@ -276,9 +279,9 @@
       // 
       this.m_visualizationGroup.Caption = "Visualization";
       this.m_visualizationGroup.Controls.Add(this.m_CUIRibbonButton);
-      this.m_visualizationGroup.Controls.Add(this.m_submissionsTrackingRibbonButton);
       this.m_visualizationGroup.Controls.Add(this.m_fbiRibbonButton);
       this.m_visualizationGroup.Controls.Add(this.m_refreshRibbonButton);
+      this.m_visualizationGroup.Controls.Add(this.m_submissionControlButton);
       this.m_visualizationGroup.Id = "adxRibbonGroup_f70db40b70724aebb403638f3fcccbef";
       this.m_visualizationGroup.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_visualizationGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -1048,6 +1051,36 @@
       this.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor";
       this.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       // 
+      // m_submissionControlButton
+      // 
+      this.m_submissionControlButton.Caption = "Submissions Control";
+      this.m_submissionControlButton.Controls.Add(this.adxRibbonMenu6);
+      this.m_submissionControlButton.Id = "adxRibbonSplitButton_6fa21f44bd784c41bdfb5cb9bc46caf0";
+      this.m_submissionControlButton.Image = 9;
+      this.m_submissionControlButton.ImageList = this.m_mainRibbonImageList;
+      this.m_submissionControlButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_submissionControlButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_submissionControlButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
+      // 
+      // adxRibbonMenu6
+      // 
+      this.adxRibbonMenu6.Caption = "adxRibbonMenu6";
+      this.adxRibbonMenu6.Controls.Add(this.m_submissionsTrackingRibbonButton);
+      this.adxRibbonMenu6.Controls.Add(this.m_duplicatesFinderButton);
+      this.adxRibbonMenu6.Id = "adxRibbonMenu_18c93c5cbe6646998ab3b95ba444187f";
+      this.adxRibbonMenu6.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.adxRibbonMenu6.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      // 
+      // m_duplicatesFinderButton
+      // 
+      this.m_duplicatesFinderButton.Caption = "Duplicates Finder";
+      this.m_duplicatesFinderButton.Id = "adxRibbonButton_81e1b67840834125ba178a6fabdbb4cc";
+      this.m_duplicatesFinderButton.Image = 9;
+      this.m_duplicatesFinderButton.ImageList = this.SubmissionRibbonIL;
+      this.m_duplicatesFinderButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_duplicatesFinderButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_duplicatesFinderButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_duplicatesFinderButton_OnClick);
+      // 
       // AddinModule
       // 
       this.AddinName = "FinancialBI";
@@ -1164,6 +1197,9 @@
     private AddinExpress.MSO.ADXRibbonGroup AdxRibbonRHExitGroup;
     internal AddinExpress.MSO.ADXRibbonButton m_versionRibbonButton;
     internal AddinExpress.MSO.ADXRibbonSplitButton m_processRibbonButton;
+    private AddinExpress.MSO.ADXRibbonSplitButton m_submissionControlButton;
+    private AddinExpress.MSO.ADXRibbonMenu adxRibbonMenu6;
+    private AddinExpress.MSO.ADXRibbonButton m_duplicatesFinderButton;
     
 
   }

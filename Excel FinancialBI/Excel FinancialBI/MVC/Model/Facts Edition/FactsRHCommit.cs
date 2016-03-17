@@ -50,6 +50,7 @@ namespace FBI.MVC.Model
 
       FactsModel.Instance.UpdateEvent += OnFactsUpdate;
       FactsModel.Instance.DeleteEvent += OnFactDelete;
+      FactTagModel.Instance.CreationEvent += OnFactTagsCreate;
       FactTagModel.Instance.UpdateListEvent += OnFactTagsUpdate;
       LegalHolidayModel.Instance.UpdateListEvent += OnLegalHolidayUpdate;
     }
@@ -58,6 +59,7 @@ namespace FBI.MVC.Model
     {
       FactsModel.Instance.UpdateEvent -= OnFactsUpdate;
       FactsModel.Instance.DeleteEvent -= OnFactDelete;
+      FactTagModel.Instance.CreationEvent += OnFactTagsCreate;
       FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdate;
       LegalHolidayModel.Instance.UpdateListEvent -= OnLegalHolidayUpdate;
     }
@@ -255,10 +257,28 @@ namespace FBI.MVC.Model
       {
         if (l_CRUDActionList.Value.Count > 0)
         {
-          FactTagModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
+          if (l_CRUDActionList.Key == CRUDAction.CREATE)
+          {
+            foreach (FactTag l_factTag in l_CRUDActionList.Value)
+            {
+              FactTagModel.Instance.Create(l_factTag);
+            }
+          }
+          else
+            FactTagModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
           l_CRUDActionList.Value.Clear();
         }
       }
+    }
+
+    private void OnFactTagsCreate(ErrorMessage p_status, UInt32 p_id)
+    {
+      AddinModuleController.SetExcelInteractionState(false);
+      lock (m_IdEditedFactDict)
+      {
+        FactTagUpdate(p_status, p_id);
+      }
+      AddinModuleController.SetExcelInteractionState(true);
     }
 
     private void OnFactTagsUpdate(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
@@ -272,21 +292,7 @@ namespace FBI.MVC.Model
           {
             foreach (KeyValuePair<UInt32, ErrorMessage> l_idErrorMessage in l_result.Value)
             {
-              EditedRHFact l_editedFact = m_IdEditedFactDict[l_idErrorMessage.Key];
-              if (l_editedFact != null)
-              {
-                if (l_idErrorMessage.Value == ErrorMessage.SUCCESS)
-                  m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-                else
-                {
-                  FactTag l_modelFactTag = FactTagModel.Instance.GetValue(l_editedFact.Id);
-                  if (l_modelFactTag != null)
-                    l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
-
-                  if (OnCommitError != null)
-                    OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
-                }
-              }
+              FactTagUpdate(l_idErrorMessage.Value, l_idErrorMessage.Key);
             }
           }
         }
@@ -297,6 +303,25 @@ namespace FBI.MVC.Model
         // set commit status in the ribbon as well
       }
       AddinModuleController.SetExcelInteractionState(true);
+    }
+
+    private void FactTagUpdate(ErrorMessage p_status, UInt32 p_id)
+    {
+      EditedRHFact l_editedFact = m_IdEditedFactDict[p_id];
+      if (l_editedFact != null)
+      {
+        if (p_status == ErrorMessage.SUCCESS)
+          m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+        else
+        {
+          FactTag l_modelFactTag = FactTagModel.Instance.GetValue(l_editedFact.Id);
+          if (l_modelFactTag != null)
+            l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
+
+          if (OnCommitError != null)
+            OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
+        }
+      }
     }
 
     #endregion
