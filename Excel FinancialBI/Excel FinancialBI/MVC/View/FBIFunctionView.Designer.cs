@@ -35,7 +35,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FBIFunctionView));
       this.ButtonsIL = new System.Windows.Forms.ImageList(this.components);
-      this.validate_cmd = new VIBlend.WinForms.Controls.vButton();
+      this.m_validateButton = new VIBlend.WinForms.Controls.vButton();
       this.categoriesIL = new System.Windows.Forms.ImageList(this.components);
       this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_adjustmentTree = new VIBlend.WinForms.Controls.vTreeViewBox();
@@ -70,22 +70,22 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       // 
       // validate_cmd
       // 
-      this.validate_cmd.AllowAnimations = true;
-      this.validate_cmd.BackColor = System.Drawing.Color.Transparent;
-      this.validate_cmd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.validate_cmd.FlatAppearance.BorderSize = 0;
-      this.validate_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.validate_cmd.ImageKey = "submit 1 ok.ico";
-      this.validate_cmd.ImageList = this.ButtonsIL;
-      this.validate_cmd.Location = new System.Drawing.Point(379, 373);
-      this.validate_cmd.Name = "validate_cmd";
-      this.validate_cmd.RoundedCornersMask = ((byte)(15));
-      this.validate_cmd.Size = new System.Drawing.Size(114, 27);
-      this.validate_cmd.TabIndex = 10;
-      this.validate_cmd.Text = "Insert formula";
-      this.validate_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      this.validate_cmd.UseVisualStyleBackColor = true;
-      this.validate_cmd.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_validateButton.AllowAnimations = true;
+      this.m_validateButton.BackColor = System.Drawing.Color.Transparent;
+      this.m_validateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.m_validateButton.FlatAppearance.BorderSize = 0;
+      this.m_validateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_validateButton.ImageKey = "submit 1 ok.ico";
+      this.m_validateButton.ImageList = this.ButtonsIL;
+      this.m_validateButton.Location = new System.Drawing.Point(379, 373);
+      this.m_validateButton.Name = "validate_cmd";
+      this.m_validateButton.RoundedCornersMask = ((byte)(15));
+      this.m_validateButton.Size = new System.Drawing.Size(114, 27);
+      this.m_validateButton.TabIndex = 10;
+      this.m_validateButton.Text = "Insert formula";
+      this.m_validateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_validateButton.UseVisualStyleBackColor = true;
+      this.m_validateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // categoriesIL
       // 
@@ -446,7 +446,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(529, 422);
       this.Controls.Add(this.TableLayoutPanel1);
-      this.Controls.Add(this.validate_cmd);
+      this.Controls.Add(this.m_validateButton);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "FBIFunctionView";
@@ -455,7 +455,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.ResumeLayout(false);
 
 	}
-  public VIBlend.WinForms.Controls.vButton validate_cmd;
+  public VIBlend.WinForms.Controls.vButton m_validateButton;
 	public System.Windows.Forms.ImageList ButtonsIL;
 	public System.Windows.Forms.ImageList categoriesIL;
 	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;

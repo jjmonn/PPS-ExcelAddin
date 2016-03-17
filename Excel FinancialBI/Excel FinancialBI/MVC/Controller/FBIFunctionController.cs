@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI.MVC.Controller
 {
   using View;
   using Model.CRUD;
+  using Utils;
+  using Model;
 
-  class FBIFunctionController : IController
+  class FBIFunctionController : AFBIFunctionController
   {
     FBIFunctionView m_view;
-    public string Error { get; set; }
-    public IView View { get { return (m_view); } }
+    public override IView View { get { return (m_view); } }
 
     public FBIFunctionController()
     {
@@ -28,7 +30,7 @@ namespace FBI.MVC.Controller
       m_view.Show();
     }
 
-    public string Function
+    string Function
     {
       get
       {
@@ -40,7 +42,6 @@ namespace FBI.MVC.Controller
         l_func += "\"" + m_view.SelectedCurrency + "\";";
         l_func += "\"" + m_view.SelectedVersion + "\";";
 
-        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Entities)) + "\";";
         l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Client)) + "\";";
         l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Product)) + "\";";
         l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Adjustment)) + "\";";
@@ -49,6 +50,42 @@ namespace FBI.MVC.Controller
         l_func += ")";
         return (l_func);
       }
+    }
+
+    bool CheckFunctionValidity()
+    {
+      return (
+        IsValidEntity(m_view.SelectedEntity) &&
+        IsValidAccount(m_view.SelectedAccount) &&
+        IsValidCurrency(m_view.SelectedCurrency) &&
+        IsValidVersion(m_view.SelectedVersion) &&
+        IsValidAxisElemList(AxisType.Client, m_view.GetSelectedAxisElem(AxisType.Client)) &&
+        IsValidAxisElemList(AxisType.Product, m_view.GetSelectedAxisElem(AxisType.Product)) &&
+        IsValidAxisElemList(AxisType.Adjustment, m_view.GetSelectedAxisElem(AxisType.Adjustment)) &&
+        IsValidFilterValueList(m_view.SelectedFilterValues));
+    }
+
+    public bool SaveFunction()
+    {
+      if (CheckFunctionValidity() == false)
+        return (false);
+      Range l_cell = AddinModule.CurrentInstance.ExcelApp.ActiveCell;
+
+      if (l_cell == null)
+      {
+        Error = Local.GetValue("ppsbi.no_cell_selected");
+        return (false);
+      }
+      try
+      {
+        l_cell.Value = Function;
+      }
+      catch (Exception)
+      {
+        Error = Local.GetValue("general.error.system");
+        return (false);
+      }
+      return (true);
     }
 
     string GetListParameter(List<string> p_list)

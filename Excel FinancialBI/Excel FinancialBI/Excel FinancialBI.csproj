@@ -257,6 +257,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
+    <Compile Include="MVC\Controller\AFBIFunctionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
