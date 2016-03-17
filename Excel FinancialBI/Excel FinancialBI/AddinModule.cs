@@ -83,7 +83,7 @@ namespace FBI
       this.m_snapshotRibbonSplitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_snapshotRibbonSplitButton_OnClick);
       this.m_reportUploadRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_reportUploadRibbonButton_OnClick);
       this.m_CUIRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_CUIRibbonButton_OnClick);
-      this.m_fbiRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_fbiRibbonButton_OnClick);
+      this.m_fbiRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.OnFBIFunctionButtonClick);
       this.m_refreshRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_refreshRibbonButton_OnClick);
       this.m_resfreshSelectionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_resfreshSelectionRibbonButton_OnClick);
       this.m_refreshWorksheetRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_refreshWorksheetRibbonButton_OnClick);
@@ -285,9 +285,9 @@ namespace FBI
       new CommitFollowUpController();
     }
 
-    private void m_fbiRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    private void OnFBIFunctionButtonClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      new FBIFunctionController();
     }
 
     private void m_fbiBreakLinksRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)

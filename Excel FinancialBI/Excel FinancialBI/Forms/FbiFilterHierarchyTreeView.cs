@@ -26,14 +26,14 @@ namespace FBI.Forms
       this.Load();
     }
 
-    public override bool Load()
+    public static bool Load(vTreeNodeCollection p_nodes, MultiIndexDictionary<UInt32, string, Filter> p_dic)
     {
       SafeDictionary<UInt32, vTreeNode> l_dic;
 
       l_dic = new SafeDictionary<UInt32, vTreeNode>();
-      if (m_filters == null)
+      if (p_dic == null)
         return (false);
-      foreach (Filter l_filter in m_filters.SortedValues)
+      foreach (Filter l_filter in p_dic.SortedValues)
       {
         if (l_filter.ParentId == 0)
         {
@@ -41,14 +41,19 @@ namespace FBI.Forms
           l_node.Text = l_filter.Name;
           l_node.Value = l_filter.Id;
           l_node.Tag = l_filter.GetType();
-          if (!this.Generate(l_dic, l_filter.Id, l_node))
+          if (!Generate(l_dic, l_filter.Id, l_node))
             return (false);
-          this.Sort(l_dic, l_node);
-          this.Nodes.Add(l_node);
+          Sort(l_dic, l_node);
+          p_nodes.Add(l_node);
         }
       }
-      Loaded = true;
       return (true);
+    }
+
+    public override bool Load()
+    {
+      Loaded = Load(Nodes, m_filters);
+      return (Loaded);
     }
 
     public void GetAndAdd(NamedHierarchyCRUDEntity p_value, Type p_type)
@@ -69,7 +74,7 @@ namespace FBI.Forms
       l_newNode.ImageIndex = (int)p_value.Image;
     }
 
-    private bool Generate(SafeDictionary<UInt32, vTreeNode> p_dic, UInt32 p_filterRoot, vTreeNode p_root)
+    private static bool Generate(SafeDictionary<UInt32, vTreeNode> p_dic, UInt32 p_filterRoot, vTreeNode p_root)
     {
       MultiIndexDictionary<UInt32, string, Filter> l_childrenDic = new MultiIndexDictionary<UInt32, string, Filter>();
       FilterModel.Instance.GetChildrenDictionary(p_filterRoot, l_childrenDic);
@@ -94,7 +99,7 @@ namespace FBI.Forms
       return (true);
     }
 
-    private bool Sort(SafeDictionary<UInt32, vTreeNode> p_dic, vTreeNode p_root)
+    private static bool Sort(SafeDictionary<UInt32, vTreeNode> p_dic, vTreeNode p_root)
     {
       vTreeNode l_node;
       FilterValue l_val;

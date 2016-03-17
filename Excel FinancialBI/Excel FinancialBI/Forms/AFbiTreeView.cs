@@ -45,11 +45,17 @@ namespace FBI.Forms
       p_treeview.Dock = DockStyle.Fill;
     }
 
-    public void HideParentCheckBox()
+
+    public static void HideParentCheckBox(vTreeView p_tv)
     {
-      foreach (vTreeNode l_node in GetNodes())
+      foreach (vTreeNode l_node in p_tv.GetNodes())
         if (l_node.Nodes.Count != 0)
           l_node.ShowCheckBox = false;
+    }
+
+    public void HideParentCheckBox()
+    {
+      HideParentCheckBox(this);
     }
 
     public void CheckNode(UInt32 p_id)
@@ -57,10 +63,15 @@ namespace FBI.Forms
       CheckNode(this, p_id);
     }
 
+    public static void CheckAllParentNodes(vTreeView p_tv)
+    {
+      foreach (vTreeNode l_node in p_tv.Nodes)
+        l_node.Checked = CheckState.Checked;
+    }
+
     public void CheckAllParentNodes()
     {
-      foreach (vTreeNode l_node in Nodes)
-        l_node.Checked = CheckState.Checked;
+      CheckAllParentNodes(this);
     }
 
     public static void CheckNode(AFbiTreeView p_tv, UInt32 p_id)

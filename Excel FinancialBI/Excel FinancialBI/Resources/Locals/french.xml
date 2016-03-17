@@ -407,7 +407,7 @@
     <string name="categories_filter">Filtre sur les catégories</string>
     <string name="products_filter">Filtre produits</string>
     <string name="clients_filter">Filtre clients</string>
-    <string name="adjustment_filter">Filtre ajustements</string>
+    <string name="adjustments_filter">Filtre ajustements</string>
     <string name="title">Edition de la fonction Excel Financial BI</string>
     <string name="msg_entity_selection">Merci de sélectionner une entité.</string>
     <string name="msg_account_selection">Merci de sélectionner un compte.</string>
