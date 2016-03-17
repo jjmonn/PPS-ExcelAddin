@@ -39,6 +39,9 @@ namespace FBI.MVC.View
         case AxisType.Entities:
           FbiTreeView<AxisElem>.Load(m_parentAxisElemTreeviewBox.TreeView.Nodes, AxisElemModel.Instance.GetDictionary(m_controller.AxisType));
           break;
+        case AxisType.Client:
+          FbiTreeView<AxisElem>.Load(m_parentAxisElemTreeviewBox.TreeView.Nodes, AxisElemModel.Instance.GetDictionary(m_controller.AxisType));
+          break;
         default:
           m_parentAxisLabel.Visible = false;
           m_parentAxisElemTreeviewBox.Visible = false;

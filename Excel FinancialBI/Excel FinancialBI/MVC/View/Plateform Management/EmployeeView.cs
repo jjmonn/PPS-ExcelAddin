@@ -73,13 +73,14 @@ namespace FBI.MVC.View
 
     void OnDGVMouseDown(object p_sender, MouseEventArgs p_args)
     {
-      if (m_dgv.HoveredRow == null)
+      HierarchyItem l_row = (m_dgv.HoveredRow != null) ? m_dgv.HoveredRow : m_dgv.HitTestRow(p_args.Location);
+      if (l_row == null)
         return;
       if (p_args.Button == MouseButtons.Left)
         if (ModifierKeys.HasFlag(Keys.Control))
         {
-          m_dgv.DoDragDrop(m_dgv.HoveredRow, DragDropEffects.Move);
-          m_draggingRow = m_dgv.HoveredRow;
+          m_dgv.DoDragDrop(l_row, DragDropEffects.Move);
+          m_draggingRow = l_row;
         }
     }
 

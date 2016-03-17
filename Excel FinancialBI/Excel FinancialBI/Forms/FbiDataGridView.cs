@@ -24,8 +24,6 @@ namespace FBI.Forms
     protected SafeDictionary<HierarchyItem, KeyType> m_hierarchyItemDic = new SafeDictionary<HierarchyItem, KeyType>();
     protected const Int32 COLUMNS_WIDTH = 150;
     public GridCell HoveredCell { get; private set; }
-    HierarchyItem m_hoveredColumn = null;
-    HierarchyItem m_hoveredRow = null;
     protected string m_cellValue = null;
     protected bool m_validated = false;
     public event CellEventHandler CellChangedAndValidated;
@@ -55,10 +53,8 @@ namespace FBI.Forms
     {
       get
       {
-        if (m_hoveredColumn == null && HoveredCell == null)
+        if (HoveredCell == null)
           return (null);
-        if (m_hoveredColumn != null)
-          return (m_hoveredColumn);
         return (HoveredCell.ColumnItem);
       }
     }
@@ -67,10 +63,8 @@ namespace FBI.Forms
     {
       get
       {
-        if (m_hoveredRow == null && HoveredCell == null)
+        if (HoveredCell == null)
           return (null);
-        if (m_hoveredRow != null)
-          return (m_hoveredRow);
         return (HoveredCell.RowItem);
       }
     }
