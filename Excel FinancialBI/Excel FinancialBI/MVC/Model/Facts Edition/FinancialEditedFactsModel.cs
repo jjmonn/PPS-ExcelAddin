@@ -108,7 +108,7 @@ namespace FBI.MVC.Model
       Int32 l_startPeriod = p_periodsList.ElementAt(0);
       Int32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count);
 
-      FactsModel.Instance.ReadEvent += AfterFinancialInputDownloaded;
+      FactsModel.Instance.ReadEvent += OnFinancialInputDownloaded;
       m_inputsRequestIdList.Clear();
       foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
       {
@@ -124,7 +124,7 @@ namespace FBI.MVC.Model
       }
     }
 
-    private void AfterFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
+    private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
@@ -135,7 +135,7 @@ namespace FBI.MVC.Model
         if (FillFactsDictionnaries(p_fact_list) != true)
         {
           FactsDownloaded(false);
-          FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
+          FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
         }
         m_inputsRequestIdList.Remove(p_requestId);
         if (m_inputsRequestIdList.Count == 0)
@@ -146,7 +146,7 @@ namespace FBI.MVC.Model
       else
       {
         FactsDownloaded(false);
-        FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
+        FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
       }
     }
 
@@ -172,8 +172,8 @@ namespace FBI.MVC.Model
 
     public void ComputeOutputs()
     {
-      FactsModel.Instance.ReadEvent -= AfterFinancialInputDownloaded;
-      SourcedComputeModel.Instance.ComputeCompleteEvent += AfterFinancialOutputsComputed;
+      FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
+      SourcedComputeModel.Instance.ComputeCompleteEvent += OnFinancialOutputsComputed;
       SourcedComputeRequest l_sourcedComputeRequest = new SourcedComputeRequest();
       l_sourcedComputeRequest.VersionId = m_versionId;
 
@@ -205,7 +205,7 @@ namespace FBI.MVC.Model
       
     }
 
-    private void AfterFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
+    private void OnFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
