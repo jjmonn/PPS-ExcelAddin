@@ -88,11 +88,11 @@ namespace FBI.MVC.Controller
       DateTime l_date = p_startDate;
       while (l_date <= p_endDate)
       {
-        if (l_includeWeekEnds == false && l_weekEndDays.Contains(l_date.DayOfWeek) == true)
+      /*  if (l_includeWeekEnds == false && l_weekEndDays.Contains(l_date.DayOfWeek) == true)
         {
           l_date = l_date.AddDays(1);
           continue;
-        }
+        }*/
 
         l_periodsRange.Add((Int32)l_date.ToOADate());
         l_date = l_date.AddDays(1);
