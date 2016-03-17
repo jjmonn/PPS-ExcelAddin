@@ -51,6 +51,12 @@ namespace FBI.MVC.View
       DesactivateUnallowed();
       SuscribeEvents();
       MultiLangueSetup();
+      if (m_controller.AxisType == AxisType.Client || m_controller.AxisType == AxisType.Entities)
+      {
+        m_dgv.AllowDrop = true;
+        m_dgv.AllowDragAndDrop = true;
+        m_dgv.AllowDragDropIndication = true;
+      }
     }
 
     private void MultiLangueSetup()
@@ -98,6 +104,8 @@ namespace FBI.MVC.View
       m_deleteAxisElemMenuTop.Click += OnClickDelete;
       m_dgv.MouseClick += OnDGVMouseClick;
       Addin.SuscribeAutoLock(this);
+      if (m_controller.AxisType == AxisType.Client || m_controller.AxisType == AxisType.Entities)
+        m_dgv.Dropped += OnDGVDropItem;
     }
 
     public virtual void CloseView()
@@ -194,6 +202,21 @@ namespace FBI.MVC.View
     #endregion
 
     #region User Callback
+
+    void OnDGVDropItem(HierarchyItem p_origin, HierarchyItem p_dest, DragEventArgs p_args)
+    {
+      if (p_origin == null || p_dest == null)
+        return;
+      AxisElem l_originAxis = AxisElemModel.Instance.GetValue((UInt32)p_origin.ItemValue);
+      AxisElem l_destAxis = AxisElemModel.Instance.GetValue((UInt32)p_dest.ItemValue);
+
+      if (l_originAxis == null || l_destAxis == null)
+        return;
+      l_originAxis = l_originAxis.Clone();
+      l_originAxis.ParentId = l_destAxis.Id;
+      if (m_controller.UpdateAxisElem(l_originAxis) == false)
+        Forms.MsgBox.Show(m_controller.Error);
+    }
 
     void OnDGVMouseClick(object p_sender, MouseEventArgs p_args)
     {
