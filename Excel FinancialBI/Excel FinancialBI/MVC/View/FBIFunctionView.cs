@@ -29,21 +29,6 @@ namespace FBI.MVC.View
       m_axisElemTV = new SafeDictionary<AxisType, vTreeViewBox>();
     }
 
-    private void MultilangueSetup()
-    {
-      this.validate_cmd.Text = Local.GetValue("ppsbi.insert_formula");
-      this.m_categoryFilterLabel.Text = Local.GetValue("ppsbi.categories_filter");
-      this.m_productFilterLabel.Text = Local.GetValue("ppsbi.products_filter");
-      this.m_clientFilterLabel.Text = Local.GetValue("ppsbi.clients_filter");
-      this.m_versionLabel.Text = Local.GetValue("general.version");
-      this.m_currencyLabel.Text = Local.GetValue("general.currency");
-      this.m_entityLabel.Text = Local.GetValue("general.entity");
-      this.m_accountLabel.Text = Local.GetValue("general.account");
-      this.m_periodLabel.Text = Local.GetValue("general.period");
-      this.m_adjustmentFilterLabel.Text = Local.GetValue("ppsbi.adjustments_filter");
-      this.Text = Local.GetValue("ppsbi.title");
-    }
-
     public void SetController(IController p_controller)
     {
       m_controller = p_controller as FBIFunctionController;
@@ -57,8 +42,26 @@ namespace FBI.MVC.View
       SuscribeEvents();
     }
 
+    #region Initialize
+
+    private void MultilangueSetup()
+    {
+      this.m_validateButton.Text = Local.GetValue("ppsbi.insert_formula");
+      this.m_categoryFilterLabel.Text = Local.GetValue("ppsbi.categories_filter");
+      this.m_productFilterLabel.Text = Local.GetValue("ppsbi.products_filter");
+      this.m_clientFilterLabel.Text = Local.GetValue("ppsbi.clients_filter");
+      this.m_versionLabel.Text = Local.GetValue("general.version");
+      this.m_currencyLabel.Text = Local.GetValue("general.currency");
+      this.m_entityLabel.Text = Local.GetValue("general.entity");
+      this.m_accountLabel.Text = Local.GetValue("general.account");
+      this.m_periodLabel.Text = Local.GetValue("general.period");
+      this.m_adjustmentFilterLabel.Text = Local.GetValue("ppsbi.adjustments_filter");
+      this.Text = Local.GetValue("ppsbi.title");
+    }
+
     void SuscribeEvents()
     {
+      m_validateButton.Click += ValidateFormula;
       m_categoriesFilterTree.TextChanged += SetCategoriesText;
       m_categoriesFilterTree.TreeView.NodeChecked += SetCategoriesText;
       m_axisElemTV[AxisType.Client].TextChanged += SetClientText;
@@ -69,39 +72,6 @@ namespace FBI.MVC.View
       m_axisElemTV[AxisType.Adjustment].TreeView.NodeChecked += SetAdjustmentText;
     }
 
-    void SetClientText(object sender, EventArgs e) { SetAxisElemText(AxisType.Client); }
-    void SetProductText(object sender, EventArgs e) { SetAxisElemText(AxisType.Product); }
-    void SetAdjustmentText(object sender, EventArgs e) { SetAxisElemText(AxisType.Adjustment); }
-
-    void SetCategoriesText(object sender, EventArgs e)
-    {
-      if (m_editing)
-        return;
-      m_editing = true;
-      List<string> l_list = SelectedFilterValues;
-
-      m_categoriesFilterTree.Text = "";
-      foreach (string l_fv in l_list)
-        m_categoriesFilterTree.Text += l_fv + "; ";
-      m_editing = false;
-    }
-
-    void SetAxisElemText(AxisType p_axis)
-    {
-      if (m_editing)
-        return;
-      m_editing = true;
-      vTreeViewBox l_tvBox = m_axisElemTV[p_axis];
-
-      if (l_tvBox == null)
-        return;
-      List<string> l_list = GetSelectedAxisElem(p_axis);
-
-      l_tvBox.Text = "";
-      foreach (string l_elem in l_list)
-        l_tvBox.Text += l_elem + "; ";
-      m_editing = false;
-    }
 
     void InitTV()
     {
@@ -141,6 +111,52 @@ namespace FBI.MVC.View
       foreach (vTreeNode l_currentNode in l_node.Nodes)
         l_currentNode.ShowCheckBox = false;
     }
+
+    #endregion
+
+    #region User callbacks
+
+    void SetClientText(object p_sender, EventArgs e) { SetAxisElemText(AxisType.Client); }
+    void SetProductText(object p_sender, EventArgs e) { SetAxisElemText(AxisType.Product); }
+    void SetAdjustmentText(object p_sender, EventArgs e) { SetAxisElemText(AxisType.Adjustment); }
+
+    void SetCategoriesText(object p_sender, EventArgs e)
+    {
+      if (m_editing)
+        return;
+      m_editing = true;
+      List<string> l_list = SelectedFilterValues;
+
+      m_categoriesFilterTree.Text = "";
+      foreach (string l_fv in l_list)
+        m_categoriesFilterTree.Text += l_fv + "; ";
+      m_editing = false;
+    }
+
+    void SetAxisElemText(AxisType p_axis)
+    {
+      if (m_editing)
+        return;
+      m_editing = true;
+      vTreeViewBox l_tvBox = m_axisElemTV[p_axis];
+
+      if (l_tvBox == null)
+        return;
+      List<string> l_list = GetSelectedAxisElem(p_axis);
+
+      l_tvBox.Text = "";
+      foreach (string l_elem in l_list)
+        l_tvBox.Text += l_elem + "; ";
+      m_editing = false;
+    }
+
+    void ValidateFormula(object p_sender, EventArgs e)
+    {
+      if (m_controller.SaveFunction() == false)
+        MsgBox.Show(m_controller.Error);
+    }
+
+    #endregion
 
     #region Accessors
 
