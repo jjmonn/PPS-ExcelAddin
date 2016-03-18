@@ -14,7 +14,7 @@ namespace FBI
   using MVC.Controller;
   using Utils;
 
-  [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("ExcelFinancialBI.AddinModule")]
+  [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("FBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
   {
     private AddinModuleController m_controller;
@@ -35,6 +35,7 @@ namespace FBI
 
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
+      System.Diagnostics.Debug.WriteLine(AppDomain.CurrentDomain.ToString());
       Addin.HostApplication = HostApplication;
       Addin.AddinModule = this;
       Addin.Main();
@@ -416,11 +417,15 @@ namespace FBI
 
     #endregion
 
-    public void SetProcessCaption(string p_process)
+    internal void SetProcessCaption(string p_process)
     {
       m_processRibbonButton.Caption = p_process;
     }
 
+    public void PPSBI(object p_a, object p_b)
+    {
+
+    }
  
   }
 }

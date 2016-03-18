@@ -409,11 +409,14 @@
     <string name="clients_filter">Filtre clients</string>
     <string name="adjustments_filter">Filtre ajustements</string>
     <string name="title">Edition de la fonction Excel Financial BI</string>
-    <string name="msg_entity_selection">Merci de sélectionner une entité.</string>
-    <string name="msg_account_selection">Merci de sélectionner un compte.</string>
-    <string name="msg_invalid_version">La version sélectionnée n'est pas valide (dossier) ou bien aucune version n'est sélectionnée.</string>
-    <string name="msg_period_selection">Merci de sélectionner une période (Une version doit être sélectionnée avant de pouvoir choisir  une période).</string>
-    <string name="msg_invalid_filter"> est un filtre invalide.</string>
+    <category name="error">
+      <string name="invalid_entity">Entité sélectionnée invalide.</string>
+      <string name="invalid_account">Compte sélectionné invalide.</string>
+      <string name="invalid_currency">Devise sélectionnée invalide.</string>
+      <string name="invalid_version">Version sélectionnée invalide (Verifiez que la version selectionnée n'est pas un dossier)</string>
+      <string name="invalid_axis_elem">Filtre sélectionné invalide.</string>
+      <string name="invalid_filter_value">Catégorie sélectionnée invalide.</string>
+    </category>
   </category>
 
   <category name="settings">

@@ -32,7 +32,6 @@ Public Partial Class FinancialBIExcelFunctions
                         ByRef p_adjustmentsFilters As Object, _
                         ByRef p_categoriesFilters As Object) As Object
 
-
         If Me.HostApplication.COMAddIns.Item("FinancialBI.AddinModule").Object.ppsbi_refresh_flag = True Then
             Return Me.HostApplication.COMAddIns.Item("FinancialBI.AddinModule").Object.GetPPSBIResult(p_entityName, _
                                                                                                         p_accountName, _
