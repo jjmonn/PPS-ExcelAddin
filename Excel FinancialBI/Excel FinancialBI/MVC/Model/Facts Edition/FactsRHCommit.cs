@@ -50,16 +50,14 @@ namespace FBI.MVC.Model
 
       FactsModel.Instance.UpdateEvent += OnFactsUpdate;
       FactsModel.Instance.DeleteEvent += OnFactDelete;
-      FactTagModel.Instance.CreationEvent += OnFactTagsCreate;
       FactTagModel.Instance.UpdateListEvent += OnFactTagsUpdate;
       LegalHolidayModel.Instance.UpdateListEvent += OnLegalHolidayUpdate;
     }
 
-    public void Dispose()
+    ~FactsRHCommit()
     {
       FactsModel.Instance.UpdateEvent -= OnFactsUpdate;
       FactsModel.Instance.DeleteEvent -= OnFactDelete;
-      FactTagModel.Instance.CreationEvent += OnFactTagsCreate;
       FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdate;
       LegalHolidayModel.Instance.UpdateListEvent -= OnLegalHolidayUpdate;
     }
@@ -109,15 +107,23 @@ namespace FBI.MVC.Model
       switch (p_editedFact.EditedFactTag.Tag)
       {
         case FactTag.TagType.CP:
-          ClientAllocationFromLastAllocatedClient(p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
           break;
 
         case FactTag.TagType.RTT:
-          ClientAllocationFromLastAllocatedClient(p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
           break;
 
         case FactTag.TagType.Abs:
-          ClientAllocationFromLastAllocatedClient(p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
+          break;
+
+        case FactTag.TagType.E:
+          ClientAllocation(GetNextAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
+          break;
+
+        case FactTag.TagType.S :
+          ClientAllocation(GetPreviousDayAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
           break;
 
         default:
@@ -131,12 +137,11 @@ namespace FBI.MVC.Model
       }
     }
 
-    private void ClientAllocationFromLastAllocatedClient(EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
+    private void ClientAllocation(UInt32 p_clientId, EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
     {
-      UInt32 l_lastAllocatedClient = GetLastAllocatedClient(p_editedFact);
-      if (l_lastAllocatedClient != p_editedFact.ClientId)
+      if (p_clientId != p_editedFact.ClientId)
       {
-        p_editedFact.ClientId = l_lastAllocatedClient;
+        p_editedFact.ClientId = p_clientId;
         p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
       }
     }
@@ -255,30 +260,10 @@ namespace FBI.MVC.Model
     {
       foreach (KeyValuePair<CRUDAction, List<FactTag>> l_CRUDActionList in m_factTagCommitDict)
       {
-        if (l_CRUDActionList.Value.Count > 0)
-        {
-          if (l_CRUDActionList.Key == CRUDAction.CREATE)
-          {
-            foreach (FactTag l_factTag in l_CRUDActionList.Value)
-            {
-              FactTagModel.Instance.Create(l_factTag);
-            }
-          }
-          else
+      if (l_CRUDActionList.Value.Count > 0)
             FactTagModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
           l_CRUDActionList.Value.Clear();
-        }
       }
-    }
-
-    private void OnFactTagsCreate(ErrorMessage p_status, UInt32 p_id)
-    {
-      AddinModuleController.SetExcelInteractionState(false);
-      lock (m_IdEditedFactDict)
-      {
-        FactTagUpdate(p_status, p_id);
-      }
-      AddinModuleController.SetExcelInteractionState(true);
     }
 
     private void OnFactTagsUpdate(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
@@ -451,7 +436,54 @@ namespace FBI.MVC.Model
             return l_fact.ClientId;
         }
       }
-      // Commit status could be orange when last allocated client is default 
+      // TO DO :Commit status could be orange when last allocated client is default 
+      return (UInt32)AxisType.Client;
+    }
+
+    public UInt32 GetPreviousDayAllocatedClient(EditedRHFact p_editedFact)
+    {
+      DateTime l_date = DateTime.FromOADate((Int32)p_editedFact.Period);
+      List<DayOfWeek> l_weekEndDays = PeriodModel.GetWeekEndDays();
+      
+      l_date = l_date.AddDays(-1);
+      while (l_weekEndDays.Contains(l_date.DayOfWeek) == true)
+      {
+        l_date = l_date.AddDays(-1);
+      }
+      Int32 l_period = (Int32)l_date.ToOADate();
+      DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
+      EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
+
+      if (l_RHEditedFact != null && l_RHEditedFact.EditedClientId != 0)
+        return (UInt32)l_RHEditedFact.EditedClientId;
+      else
+      {
+        Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
+        if (l_fact != null && l_fact.ClientId != 0)
+          return l_fact.ClientId;
+      }
+      // TO DO :Commit status could be orange when last allocated client is default 
+      return (UInt32)AxisType.Client;
+    }
+
+    public UInt32 GetNextAllocatedClient(EditedRHFact p_editedFact)
+    {
+      DateTime l_date = DateTime.FromOADate((Int32)p_editedFact.Period);
+      List<DayOfWeek> l_weekEndDays = PeriodModel.GetWeekEndDays();
+
+      l_date = l_date.AddDays(1);
+      while (l_weekEndDays.Contains(l_date.DayOfWeek) == true)
+      {
+        l_date = l_date.AddDays(1);
+      }
+      Int32 l_period = (Int32)l_date.ToOADate();
+      DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
+      EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
+
+      if (l_RHEditedFact != null && l_RHEditedFact.EditedClientId != 0)
+        return (UInt32)l_RHEditedFact.EditedClientId;
+ 
+      // TO DO :Commit status could be orange when last allocated client is default 
       return (UInt32)AxisType.Client;
     }
 

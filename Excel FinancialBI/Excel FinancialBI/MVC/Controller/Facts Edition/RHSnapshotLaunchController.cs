@@ -8,6 +8,7 @@ namespace FBI.MVC.Controller
 {
   using FBI.MVC.View;
   using FBI.MVC.Model.CRUD;
+  using FBI.MVC.Model;
 
 
   class RHSnapshotLaunchController : IController
@@ -33,6 +34,10 @@ namespace FBI.MVC.Controller
       // TO DO
       // check period list
       // check p_account_id
+    
+      if (Properties.Settings.Default.includeWeekEnds == false)
+          p_periodsList = PeriodModel.FilterWeekEnds(p_periodsList);
+        
       m_view.Hide();
       if (m_addinModuleController.LaunchRHSnapshot(false, m_versionId, p_displayInitialDifferences, p_periodsList, p_accountId))
       {

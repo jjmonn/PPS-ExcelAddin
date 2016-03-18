@@ -42,7 +42,7 @@ namespace FBI.MVC.Model
       // TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
     }
 
-    public void Dispose()
+    ~FinancialEditedFactsModel()
     {
       //FactsModel.Instance.UpdateEvent -= AfterFactsCommit;
       // dispose edited facts

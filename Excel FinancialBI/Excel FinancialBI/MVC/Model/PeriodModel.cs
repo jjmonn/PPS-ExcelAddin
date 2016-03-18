@@ -542,6 +542,21 @@ namespace FBI.MVC.Model
       return l_weekEndDays;
     }
 
+    public static List<Int32> FilterWeekEnds(List<Int32> p_periodList)
+    {
+    //  bool l_includeWeekEnds = Properties.Settings.Default.includeWeekEnds;
+      List<DayOfWeek> l_weekEndDays = GetWeekEndDays();
+      List<Int32> l_filteredPeriodsList = new List<Int32>();
+
+      foreach (Int32 l_periodId in p_periodList)
+      {
+        if (l_weekEndDays.Contains(DateTime.FromOADate(l_periodId).DayOfWeek) == false)
+          l_filteredPeriodsList.Add(l_periodId);
+      }
+        return l_filteredPeriodsList;
+    }
+
+
     #endregion
   }
 }

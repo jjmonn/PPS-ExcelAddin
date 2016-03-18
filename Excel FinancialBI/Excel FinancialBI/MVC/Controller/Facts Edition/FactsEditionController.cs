@@ -98,9 +98,7 @@ namespace FBI.MVC.Controller
       m_editedFactsManager.OnCommitError -= OnCommitError;
 
       // TO DO : Close current instances
-      m_editedFactsManager.Dispose();
-
-
+      
       AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = false;
       AddinModule.CurrentInstance.m_financialSubmissionRibbon.Visible = false;
     }

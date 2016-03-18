@@ -92,8 +92,13 @@ namespace FBI.MVC.Controller
         return (false);
       }
       else
-        m_periodList = p_periodList;
-      return (true);
+      {
+        if (Properties.Settings.Default.includeWeekEnds == false)
+          m_periodList = PeriodModel.FilterWeekEnds(p_periodList);
+        else
+          m_periodList = p_periodList;
+      }
+        return (true);
     }
 
     public bool CreateReport()
