@@ -240,6 +240,12 @@
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
     <Compile Include="ExcelWorksheetEvents.cs" />
+    <Compile Include="FBIFunctionModule.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FBIFunctionModule.Designer.cs">
+      <DependentUpon>FBIFunctionModule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -197,6 +197,8 @@ namespace FBI.Network
 
     public static bool IsConnected()
     {
+      if (m_Sock == null)
+        return (false);
       try
       {
         return !(m_Sock.Poll(1, SelectMode.SelectRead) && m_Sock.Available == 0);
