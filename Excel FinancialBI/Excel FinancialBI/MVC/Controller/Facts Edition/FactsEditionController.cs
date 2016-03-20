@@ -47,7 +47,7 @@ namespace FBI.MVC.Controller
         m_editedFactsManager = new RHEditedFactsModel(p_periodsList);
 
       m_editedFactsManager.FactsDownloaded += OnFactsDownloaded;
-      m_editedFactsManager.OnCommitError -= OnCommitError;
+   //   m_editedFactsManager.OnCommitError -= OnCommitError;
     }
 
     public bool Launch(bool p_updateCells, bool p_displayInitialDifferences)
@@ -95,7 +95,7 @@ namespace FBI.MVC.Controller
       m_rangeHighlighter.RevertToOriginalColors();
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
       m_editedFactsManager.FactsDownloaded -= OnFactsDownloaded;
-      m_editedFactsManager.OnCommitError -= OnCommitError;
+ //     m_editedFactsManager.OnCommitError -= OnCommitError;
 
       // TO DO : Close current instances
       

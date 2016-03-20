@@ -31,6 +31,7 @@ namespace FBI.MVC.Model
     public AxisElem Entity { get { return AxisElemModel.Instance.GetValue(AxisType.Entities, this.EntityId); } }
     public AxisElem Employee { get { return AxisElemModel.Instance.GetValue(AxisType.Employee, this.EmployeeId); } }
     public PeriodDimension PeriodDimension { get; protected set; }
+    public double EditedValue { get; set; }
 
  //   public EditedFactStatus EditedFactStatus { get; protected set; }
     public event CellValueChangedEventHandler OnCellValueChanged;

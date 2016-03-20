@@ -99,6 +99,7 @@ namespace FBI.MVC.Model
 
     public void UpdateRHFactModels(Fact p_fact, FactTag p_factTag, LegalHoliday p_legalHoliday)
     {
+      Value = p_fact.Value;
       UpdateFactBase(p_fact);
       SetId(p_fact.Id);
 
@@ -121,15 +122,19 @@ namespace FBI.MVC.Model
     public EditedFactStatus SetCellStatusRH()
     {
       if (EditedLegalHoliday.Tag == LegalHolidayTag.FER || ModelLegalHoliday.Tag == LegalHolidayTag.FER)
-        return RaiseStatusEvent(SetLegalHolidayDifferenceStatus());
+        return SetLegalHolidayDifferenceStatus();
+      //return RaiseStatusEvent(SetLegalHolidayDifferenceStatus());
 
       if (EditedFactTag.Tag != FactTag.TagType.NONE && EditedFactTag.Tag == ModelFactTag.Tag)
-        return RaiseStatusEvent(SetFactTagDifferenceStatus());
-      
-      if (EditedClientId != ClientId && EditedFactTag.Tag == ModelFactTag.Tag)  
-        return RaiseStatusEvent(SetClientDifferenceStatus());
-      
-      return RaiseStatusEvent(SetFactTagDifferenceStatus());
+        return SetFactTagDifferenceStatus();
+      //return RaiseStatusEvent(SetFactTagDifferenceStatus());
+
+      if (EditedClientId != ClientId && EditedFactTag.Tag == ModelFactTag.Tag)
+        return SetClientDifferenceStatus();
+      //return RaiseStatusEvent(SetClientDifferenceStatus());
+
+      return SetFactTagDifferenceStatus();
+      //return RaiseStatusEvent(SetFactTagDifferenceStatus());
     }
 
     private EditedFactStatus SetClientDifferenceStatus()

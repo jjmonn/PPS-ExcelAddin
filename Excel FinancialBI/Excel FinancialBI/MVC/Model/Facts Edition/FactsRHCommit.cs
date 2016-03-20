@@ -14,6 +14,8 @@ namespace FBI.MVC.Model
   using FBI.MVC.Model;
   using FBI.MVC.Controller;
   using FBI.MVC.View;
+  
+  public delegate void FactsCommitError(string p_address, ErrorMessage p_error);
 
 
   class FactsRHCommit
@@ -123,11 +125,12 @@ namespace FBI.MVC.Model
           break;
 
         case FactTag.TagType.S :
-          ClientAllocation(GetPreviousDayAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
           break;
 
         default:
-          if (p_editedFact.EditedFactTag.Tag != p_editedFact.ModelFactTag.Tag)
+          if (p_editedFact.EditedFactTag.Tag != p_editedFact.ModelFactTag.Tag 
+              || p_editedFact.Value != 0)
           {
             p_editedFact.ClientId = (UInt32)AxisType.Client;
             p_editedFact.Value = 0;
@@ -139,9 +142,10 @@ namespace FBI.MVC.Model
 
     private void ClientAllocation(UInt32 p_clientId, EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
     {
-      if (p_clientId != p_editedFact.ClientId)
+      if (p_clientId != p_editedFact.ClientId || p_editedFact.EditedValue != p_editedFact.Value)
       {
         p_editedFact.ClientId = p_clientId;
+        p_editedFact.Value = p_editedFact.EditedValue;
         p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
       }
     }
@@ -183,8 +187,8 @@ namespace FBI.MVC.Model
             if (l_editedFact != null && l_addressMessagePair.Value.Item2 == ErrorMessage.SUCCESS)
             {
               l_editedFact.SetId(l_factId);
+              m_IdEditedFactDict[l_factId] = l_editedFact;
               m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
-              m_IdEditedFactDict[l_factId] = l_editedFact; ;
             }
             else
             {
@@ -349,6 +353,7 @@ namespace FBI.MVC.Model
 
     private void OnLegalHolidayUpdate(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
     {
+      AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
       {
         if (p_updateResults[CRUDAction.CREATE] != null)
@@ -361,6 +366,7 @@ namespace FBI.MVC.Model
       {
         // Log commit error in view
       }
+      AddinModuleController.SetExcelInteractionState(true);
     }
 
     private void OnLegalHolidayCreate(SafeDictionary<UInt32, ErrorMessage> p_createResults)
@@ -421,48 +427,71 @@ namespace FBI.MVC.Model
 
     #region Utils
 
+    //public UInt32 GetLastAllocatedClient(EditedRHFact p_editedFact)
+    //{
+    //  Int32 l_periodMinus3Weeks = PeriodModel.GetDayMinus3Weeks(m_periodsList.ElementAt(0));
+    //  for (Int32 l_period = (Int32)p_editedFact.Period; l_period >= l_periodMinus3Weeks; l_period -= 1)
+    //  {
+    //    l_period = (Int32)DateTime.FromOADate((double)l_period).AddDays(-1).ToOADate();  
+    //    DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
+    //    EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
+    //    if (l_RHEditedFact != null && l_RHEditedFact.ClientId != 0)
+    //    {
+    //      p_editedFact.EditedValue = l_RHEditedFact.Value;
+    //      return l_RHEditedFact.ClientId;
+    //    }
+    //    else
+    //    {
+    //      Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
+    //      if (l_fact != null && l_fact.ClientId != 0)
+    //      {
+    //        p_editedFact.EditedValue = l_fact.Value;
+    //        return l_fact.ClientId;
+    //      }
+    //    }
+    //  }
+    //  // TO DO :Commit status could be orange when last allocated client is default 
+    //  // TO DO : To be confirmed
+    //  p_editedFact.EditedValue = 0;
+    //  return (UInt32)AxisType.Client;
+    //}
+
     public UInt32 GetLastAllocatedClient(EditedRHFact p_editedFact)
     {
-      for (Int32 l_period = (Int32)p_editedFact.Period; l_period > m_periodsList.ElementAt(0); l_period -= 1)
+      // TO DO : a priori on ne remonte pas dans les 3 semaines : on doit regarder uniquement le jour avant/ quid week ends
+
+      Int32 l_periodMinus3Weeks = PeriodModel.GetDayMinus3Weeks(m_periodsList.ElementAt(0));
+      for (Int32 l_period = (Int32)p_editedFact.Period; l_period >= l_periodMinus3Weeks; l_period -= 1)
       {
+        l_period = (Int32)DateTime.FromOADate((double)l_period).AddDays(-1).ToOADate();  
         DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
         EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
-        if (l_RHEditedFact != null && l_RHEditedFact.ClientId != 0)
-          return l_RHEditedFact.ClientId;
+        if (l_RHEditedFact != null)
+        {
+          if (l_RHEditedFact.EditedClientId != 0)
+          {
+            p_editedFact.EditedValue = l_RHEditedFact.Value;
+            return (UInt32)l_RHEditedFact.EditedClientId;
+          }
+          if (l_RHEditedFact.ClientId != 0)
+          {
+            p_editedFact.EditedValue = l_RHEditedFact.Value;
+            return l_RHEditedFact.ClientId;
+          }
+          }
         else
         {
           Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
           if (l_fact != null && l_fact.ClientId != 0)
+          {
+            p_editedFact.EditedValue = l_fact.Value;
             return l_fact.ClientId;
-        }
+          }
+          }
       }
-      // TO DO :Commit status could be orange when last allocated client is default 
-      return (UInt32)AxisType.Client;
-    }
 
-    public UInt32 GetPreviousDayAllocatedClient(EditedRHFact p_editedFact)
-    {
-      DateTime l_date = DateTime.FromOADate((Int32)p_editedFact.Period);
-      List<DayOfWeek> l_weekEndDays = PeriodModel.GetWeekEndDays();
-      
-      l_date = l_date.AddDays(-1);
-      while (l_weekEndDays.Contains(l_date.DayOfWeek) == true)
-      {
-        l_date = l_date.AddDays(-1);
-      }
-      Int32 l_period = (Int32)l_date.ToOADate();
-      DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
-      EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
-
-      if (l_RHEditedFact != null && l_RHEditedFact.EditedClientId != 0)
-        return (UInt32)l_RHEditedFact.EditedClientId;
-      else
-      {
-        Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
-        if (l_fact != null && l_fact.ClientId != 0)
-          return l_fact.ClientId;
-      }
       // TO DO :Commit status could be orange when last allocated client is default 
+      p_editedFact.EditedValue = 0;
       return (UInt32)AxisType.Client;
     }
 
@@ -481,9 +510,12 @@ namespace FBI.MVC.Model
       EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
 
       if (l_RHEditedFact != null && l_RHEditedFact.EditedClientId != 0)
+      {
+        p_editedFact.EditedValue = l_RHEditedFact.Value;
         return (UInt32)l_RHEditedFact.EditedClientId;
- 
-      // TO DO :Commit status could be orange when last allocated client is default 
+      }
+      // TO DO : Commit status could be orange when last allocated client is default 
+      // TO DO  : set value to 0 ?
       return (UInt32)AxisType.Client;
     }
 

@@ -23,7 +23,7 @@ namespace FBI.MVC.Model
     RangeHighlighter m_rangeHighlighter;
     List<int> m_requestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
-    public event FactsCommitError OnCommitError;
+    //public event FactsCommitError OnCommitError;
     Worksheet m_worksheet;
     private bool m_updateCellsOnDownload;
     UInt32 m_RHAccountId;
@@ -43,7 +43,7 @@ namespace FBI.MVC.Model
       m_periodsList = p_periodsList;
     }
 
-    public void Dispose()
+    ~RHEditedFactsModel()
     {
       // TO DO
       // dispose edited facts
@@ -196,7 +196,7 @@ namespace FBI.MVC.Model
         AddinModuleController.SetExcelInteractionState(false);
         foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
         {
-          l_editedFact.SetCellStatusRH();
+          m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetCellStatusRH());
         }
         AddinModuleController.SetExcelInteractionState(true);
       }

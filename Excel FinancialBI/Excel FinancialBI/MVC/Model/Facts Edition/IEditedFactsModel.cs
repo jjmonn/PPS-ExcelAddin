@@ -12,13 +12,11 @@ namespace FBI.MVC.Model
   using FBI.MVC.View;
 
   public delegate void OnFactsDownloaded(bool p_success);
-  public delegate void FactsCommitError(string p_address, ErrorMessage p_error);
-
+  
   interface IEditedFactsModel
   {
     event OnFactsDownloaded FactsDownloaded;
-    event FactsCommitError OnCommitError;
-
+  
     void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0);
 
     void DownloadFacts(List<Int32> p_periodList, bool p_updateCells);

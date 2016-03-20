@@ -108,8 +108,15 @@ namespace FBI.MVC.View
       if (p_cell == null)
         return;
 
-      RegisterCellOriginalFill(p_cell);
-      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputCommitedFill;
+      try
+      {
+        RegisterCellOriginalFill(p_cell);
+        p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputCommitedFill;
+      }
+      catch (Exception e)
+      {
+      }
+
     }
 
     private void RegisterCellOriginalFill(Range p_cell)
