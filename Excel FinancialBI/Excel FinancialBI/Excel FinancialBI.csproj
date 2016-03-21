@@ -102,8 +102,6 @@
     <!--<None Include="Excel FinancialBI.snk" /> -->
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Loader\adxloader.dll" />
-    <Content Include="Loader\adxloader64.dll" />
     <Content Include="Resources\Add file.png" />
     <Content Include="Resources\add.ico" />
     <Content Include="Resources\add3.ico" />
@@ -240,11 +238,11 @@
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
     <Compile Include="ExcelWorksheetEvents.cs" />
-    <Compile Include="FBIFunctionModule.cs">
+    <Compile Include="FinancialBiXLL.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FBIFunctionModule.Designer.cs">
-      <DependentUpon>FBIFunctionModule.cs</DependentUpon>
+    <Compile Include="FinancialBiXLL.Designer.cs">
+      <DependentUpon>FinancialBiXLL.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
@@ -274,7 +272,8 @@
     <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\UnreferencedClientsController.cs" />
-    <Compile Include="MVC\Controller\FBIFunctionController.cs" />
+    <Compile Include="MVC\Controller\FBIFunctionExcelController.cs" />
+    <Compile Include="MVC\Controller\FBIFunctionViewController.cs" />
     <Compile Include="MVC\Controller\IProgressBarController.cs" />
     <Compile Include="MVC\Controller\LogController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
@@ -742,6 +741,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FinancialBiXLL.resx">
+      <DependentUpon>FinancialBiXLL.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
       <DependentUpon>CommitFollowUpView.cs</DependentUpon>

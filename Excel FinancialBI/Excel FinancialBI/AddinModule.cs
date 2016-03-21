@@ -18,6 +18,7 @@ namespace FBI
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
   {
     private AddinModuleController m_controller;
+    public FBIFunctionExcelController FBIFunctionController { private set; get; }
     public ExcelWorksheetEvents WorksheetEvents { private set; get; }
 
     public AddinModule()
@@ -35,7 +36,7 @@ namespace FBI
 
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
-      System.Diagnostics.Debug.WriteLine(AppDomain.CurrentDomain.ToString());
+      FBIFunctionController = new FBIFunctionExcelController();
       Addin.HostApplication = HostApplication;
       Addin.AddinModule = this;
       Addin.Main();
@@ -288,7 +289,7 @@ namespace FBI
 
     private void OnFBIFunctionButtonClick(object sender, IRibbonControl control, bool pressed)
     {
-      new FBIFunctionController();
+      new FBIFunctionViewController();
     }
 
     private void m_fbiBreakLinksRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -416,16 +417,6 @@ namespace FBI
     }
 
     #endregion
-
-    internal void SetProcessCaption(string p_process)
-    {
-      m_processRibbonButton.Caption = p_process;
-    }
-
-    public void PPSBI(object p_a, object p_b)
-    {
-
-    }
  
   }
 }

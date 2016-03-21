@@ -12,12 +12,12 @@ namespace FBI.MVC.Controller
   using Utils;
   using Model;
 
-  class FBIFunctionController : AFBIFunctionController
+  class FBIFunctionViewController : AFBIFunctionController
   {
     FBIFunctionView m_view;
     public override IView View { get { return (m_view); } }
 
-    public FBIFunctionController()
+    public FBIFunctionViewController()
     {
       m_view = new FBIFunctionView();
       m_view.SetController(this);

@@ -19,7 +19,7 @@ namespace FBI.MVC.View
 
   public partial class FBIFunctionView : Form, IView
   {
-    FBIFunctionController m_controller;
+    FBIFunctionViewController m_controller;
     SafeDictionary<AxisType, vTreeViewBox> m_axisElemTV;
     bool m_editing = false;
 
@@ -31,7 +31,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-      m_controller = p_controller as FBIFunctionController;
+      m_controller = p_controller as FBIFunctionViewController;
     }
 
     public void LoadView()

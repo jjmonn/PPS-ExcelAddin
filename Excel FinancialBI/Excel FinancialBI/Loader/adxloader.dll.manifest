@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration>
-  <assemblyIdentity name="Excel FinancialBI, PublicKeyToken=ed68fb60de12bbaa" />
+  <assemblyIdentity name="Excel FinancialBI, PublicKeyToken=ed68fb60de12bbaa" xllClass="FBI.FinancialBiXLL" />
   <loaderSettings generateLogFile="true" shadowCopyEnabled="false" privileges="user" configFileName="Excel FinancialBI.dll.config" minOfficeVersionSupported="11" />
 </configuration>

@@ -11,7 +11,7 @@ namespace FBI.MVC.Controller
   using Model;
   using View;
 
-  abstract class AFBIFunctionController : IController
+  abstract public class AFBIFunctionController : IController
   {
     public string Error { get; set; }
     public abstract IView View { get; }
