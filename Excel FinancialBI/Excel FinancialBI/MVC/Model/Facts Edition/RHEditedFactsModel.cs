@@ -287,7 +287,7 @@ namespace FBI.MVC.Model
       FactTag.TagType l_tag = FactTag.TagType.NONE;
       if (p_factTag != null)
         l_tag = p_factTag.Tag;
-      if (l_tag != FactTag.TagType.NONE)
+      if (l_tag != FactTag.TagType.NONE && m_factsTagList.Count >= (Int32)l_tag)
         return m_factsTagList.ElementAt((Int32)l_tag).ToUpper();
       else
       {
@@ -362,7 +362,7 @@ namespace FBI.MVC.Model
 
       for (UInt32 l_iterator = 0; l_iterator < m_clientsToBeCreated.Keys.Count; l_iterator += 1)
       {
-        string l_undefinedClient = m_clientsToBeCreated.ElementAt(0).Key;
+        string l_undefinedClient = m_clientsToBeCreated.ElementAt((Int32)l_iterator).Key;
         AxisElem l_client = AxisElemModel.Instance.GetValue(AxisType.Client, l_undefinedClient);
         EditedRHFact l_editedFact = m_clientsToBeCreated.ElementAt((Int32)l_iterator).Value;
 
