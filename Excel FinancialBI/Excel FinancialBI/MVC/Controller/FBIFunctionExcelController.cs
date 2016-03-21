@@ -10,6 +10,7 @@ namespace FBI.MVC.Controller
 {
   using View;
   using Model.CRUD;
+  using Utils;
 
   public class FBIFunctionExcelController : AFBIFunctionController
   {
@@ -78,7 +79,7 @@ namespace FBI.MVC.Controller
 
       if (IsValidFunction(l_function) == false)
         return (Error);
-      return (null);
+      return (Local.GetValue("ppsbi.computing"));
     }
   }
 }

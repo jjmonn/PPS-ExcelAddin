@@ -409,6 +409,7 @@
     <string name="clients_filter">Filtre clients</string>
     <string name="adjustments_filter">Filtre ajustements</string>
     <string name="title">Edition de la fonction Excel Financial BI</string>
+    <string name="computing">calcul...</string>
     <category name="error">
       <string name="invalid_entity">Entité sélectionnée invalide.</string>
       <string name="invalid_account">Compte sélectionné invalide.</string>

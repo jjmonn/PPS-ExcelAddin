@@ -68,6 +68,8 @@ namespace FBI.MVC.Controller
     {
       foreach (string l_name in p_axisElemList)
       {
+        if (l_name == "")
+          continue;
         AxisElem l_axisElem = AxisElemModel.Instance.GetValue(p_axis, l_name);
 
         if (l_axisElem == null)
@@ -83,6 +85,8 @@ namespace FBI.MVC.Controller
     {
       foreach (string l_fvName in p_filterValueList)
       {
+        if (l_fvName == "")
+          continue;
         FilterValue l_fv = FilterValueModel.Instance.GetValue(l_fvName);
 
         if (l_fv == null)

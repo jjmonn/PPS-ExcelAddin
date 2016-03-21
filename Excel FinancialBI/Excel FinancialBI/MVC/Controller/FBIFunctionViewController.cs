@@ -30,22 +30,22 @@ namespace FBI.MVC.Controller
       m_view.Show();
     }
 
-    string Function
+    string Formula
     {
       get
       {
-        string l_func = "PPSBI(";
+        string l_func = "=FBI(";
 
-        l_func += "\"" + m_view.SelectedEntity + "\";";
-        l_func += "\"" + m_view.SelectedAccount + "\";";
-        l_func += "\"" + m_view.SelectedPeriod + "\";";
-        l_func += "\"" + m_view.SelectedCurrency + "\";";
-        l_func += "\"" + m_view.SelectedVersion + "\";";
+        l_func += "\"" + m_view.SelectedEntity + "\",";
+        l_func += "\"" + m_view.SelectedAccount + "\",";
+        l_func += "\"" + m_view.SelectedPeriod + "\",";
+        l_func += "\"" + m_view.SelectedCurrency + "\",";
+        l_func += "\"" + m_view.SelectedVersion + "\",";
 
-        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Client)) + "\";";
-        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Product)) + "\";";
-        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Adjustment)) + "\";";
-        l_func += "\"" + GetListParameter(m_view.SelectedFilterValues) + "\";";
+        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Client)) + "\",";
+        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Product)) + "\",";
+        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Adjustment)) + "\",";
+        l_func += "\"" + GetListParameter(m_view.SelectedFilterValues) + "\"";
 
         l_func += ")";
         return (l_func);
@@ -78,7 +78,7 @@ namespace FBI.MVC.Controller
       }
       try
       {
-        l_cell.Value = Function;
+        l_cell.Formula = Formula;
       }
       catch (Exception)
       {
