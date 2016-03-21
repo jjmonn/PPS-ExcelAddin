@@ -310,6 +310,7 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\CRUD\FBIFunction.cs" />
     <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
     <Compile Include="MVC\Model\DuplicateRHAllocation.cs" />
     <Compile Include="MVC\Model\Facts Edition\FactsRHCommit.cs" />
