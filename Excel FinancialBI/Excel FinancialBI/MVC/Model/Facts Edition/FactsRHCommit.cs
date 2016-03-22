@@ -58,6 +58,14 @@ namespace FBI.MVC.Model
 
     ~FactsRHCommit()
     {
+      m_factTagCommitDict.Clear();
+      m_LegalHolidayCommitDict.Clear();
+      m_legalHolidayDeleteDictIdEditedFact.Clear();
+      m_deleteFactsDict.Clear();
+    }
+
+    public void UnsuscribeEvents()
+    {
       FactsModel.Instance.UpdateEvent -= OnFactsUpdate;
       FactsModel.Instance.DeleteEvent -= OnFactDelete;
       FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdate;

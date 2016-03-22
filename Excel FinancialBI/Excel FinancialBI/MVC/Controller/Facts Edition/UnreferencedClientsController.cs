@@ -16,7 +16,7 @@ namespace FBI.MVC.Controller
   class UnreferencedClientsController : IController
   {
     UnReferencedClientsUI m_view;
-    public IView View { get { return m_view;} }
+    public IView View { get { return m_view; } }
     List<string> m_unreferencedClients;
     public event ClientsCreated OnClientsCreated;
     public string Error { get; set; }
@@ -35,7 +35,7 @@ namespace FBI.MVC.Controller
       m_view.Show();
     }
 
-    public void Dispose()
+    public void UnsusbribeEvent()
     {
       AxisElemModel.Instance.CreationEvent -= AfterAxisElemCreation;
     }
@@ -70,7 +70,11 @@ namespace FBI.MVC.Controller
           m_unreferencedClients.Remove(l_axisElem.Name);
 
         if (m_unreferencedClients.Count == 0)
+        {
           OnClientsCreated(true);
+          m_view.Hide();
+          m_view.Dispose();
+        }
       }
     }
 

@@ -16,7 +16,9 @@ namespace FBI.MVC.Model
   interface IEditedFactsModel
   {
     event OnFactsDownloaded FactsDownloaded;
-  
+
+    void UnsubsribeEvents();
+
     void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0);
 
     void DownloadFacts(List<Int32> p_periodList, bool p_updateCells);

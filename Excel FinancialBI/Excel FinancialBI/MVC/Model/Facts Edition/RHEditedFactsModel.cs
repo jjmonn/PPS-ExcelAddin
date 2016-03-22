@@ -45,10 +45,24 @@ namespace FBI.MVC.Model
 
     ~RHEditedFactsModel()
     {
-      // TO DO
-      // dispose edited facts
       m_RHEditedFacts.Clear();
-      // EMPTY dictionnaries etc.
+      m_requestIdList.Clear();
+      m_legalHolidayTagList.Clear();
+
+      m_factsCommit = null;
+      m_rangeHighlighter = null;
+      m_factsTagList = null;
+      m_RHEditedFacts = null;
+      m_areaController = null;
+    }
+
+    public void UnsubsribeEvents()
+    {
+      m_factsCommit.UnsuscribeEvents();
+      foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
+      {
+        l_editedFact.OnCellValueChanged -= m_rangeHighlighter.FillCellColor;
+      }
     }
 
     public void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId)
