@@ -152,7 +152,7 @@ namespace FBI.MVC.Controller
       }
 
       l_request.Versions.Add(p_function.VersionId);
-      l_request.Process = Account.AccountProcess.RH;
+      l_request.Process = Account.AccountProcess.FINANCIAL;
       l_request.StartPeriod = (int)p_function.Period.ToOADate();
       l_request.NbPeriods = 1;
       l_request.EntityId = p_function.EntityId;

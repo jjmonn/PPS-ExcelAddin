@@ -15,7 +15,7 @@ namespace FBI.MVC.Model
     static FactsModel s_instance = new FactsModel();
     public static FactsModel Instance { get { return (s_instance); } }
     public event UpdateEventHandler UpdateEvent;
-    public delegate void UpdateEventHandler(ErrorMessage p_status, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict);
+    public delegate void UpdateEventHandler(ErrorMessage p_status, CRUDAction p_action, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict);
     public event DeleteEventHandler DeleteEvent;
     public delegate void DeleteEventHandler(ErrorMessage p_status, UInt32 p_factId);
     public event ReadEventHandler ReadEvent;
@@ -73,11 +73,12 @@ namespace FBI.MVC.Model
       return (l_requestId);
     }
 
-    public void UpdateList(SafeDictionary<string, Fact> p_factsCommitDict)
+    public void UpdateList(SafeDictionary<string, Fact> p_factsCommitDict, CRUDAction p_action)
     {
       ByteBuffer packet = new ByteBuffer(Convert.ToUInt16(ClientMessage.CMSG_UPDATE_FACT_LIST));
 
       Int32 l_requestId = packet.AssignRequestId();
+      packet.WriteUint8((byte)p_action);
       m_requestIdCommitDic.Add(l_requestId, p_factsCommitDict.Keys.ToList<string>());
       packet.WriteInt32(p_factsCommitDict.Values.Count);
       foreach (Fact fact_value in p_factsCommitDict.Values)
@@ -99,13 +100,13 @@ namespace FBI.MVC.Model
       if (packet.GetError() == ErrorMessage.SUCCESS)
       {
         Int32 requestId = packet.GetRequestId();
+        CRUDAction l_action = (CRUDAction)packet.ReadUint8(); 
         SafeDictionary<string, Tuple<UInt32, ErrorMessage>> resultsDict = new SafeDictionary<string, Tuple<UInt32, ErrorMessage>>();
-        packet.ReadUint32();
+        UInt32 l_nbRecords = packet.ReadUint32();
         if (m_requestIdCommitDic.ContainsKey(requestId))
         {
           foreach (string cell_address in m_requestIdCommitDic[requestId])
           {
-            packet.ReadUint32();
             resultsDict.Add(cell_address, new Tuple<UInt32, ErrorMessage>(packet.ReadUint32(), (ErrorMessage)packet.ReadUint8()));
           }
           m_requestIdCommitDic.Remove(requestId);
@@ -113,11 +114,11 @@ namespace FBI.MVC.Model
         else
           System.Diagnostics.Debug.WriteLine("FACTS UDPATE LIST request id not in dictionary");
         if (UpdateEvent != null)
-          UpdateEvent(packet.GetError(), resultsDict);
+          UpdateEvent(packet.GetError(),l_action,  resultsDict);
       }
       else
         if (UpdateEvent != null)
-          UpdateEvent(packet.GetError(), null);
+          UpdateEvent(packet.GetError(), CRUDAction.CREATE, null);
     }
 
     private void GetFactAnswer(ByteBuffer p_packet)
