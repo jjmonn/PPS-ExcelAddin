@@ -107,6 +107,18 @@ namespace FBI.MVC.Model
       return (null);
     }
 
+    public T GetValue(string p_name)
+    {
+      foreach (MultiIndexDictionary<UInt32, string, T> axis in m_CRUDDic.Values)
+      {
+        if (axis.ContainsSecondaryKey(p_name) == false)
+          continue;
+
+        return (axis[p_name]);
+      }
+      return (null);
+    }
+
     public MultiIndexDictionary<UInt32, string, T> GetDictionary(AxisType p_axis)
     {
       if (m_CRUDDic.ContainsKey(p_axis) == false)
