@@ -65,15 +65,22 @@ namespace FBI.MVC.Controller
         m_editedFactsManager.RegisterEditedFacts(m_areaController, m_worksheet, m_versionId, m_rangeHighlighter, p_displayInitialDifferences, m_RHAccountId);
         if (m_versionId != 0 && m_periodsList.Count > 0)
         {
-          m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells);
-          ActivateFactEditionRibbon();
-          AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
+          OpenFactsEdition(p_updateCells);
           return true;
         }
         else
           return false;
       }
       return false;
+    }
+
+    private void OpenFactsEdition(bool p_updateCells)
+    {
+      m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells);
+      ActivateFactEditionRibbon();
+      AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
+      // TO DO : subsribe to commit error event ?
+      m_worksheetAnalyzer = null;
     }
 
     private void ActivateFactEditionRibbon()
@@ -90,15 +97,19 @@ namespace FBI.MVC.Controller
       }
     }
   
-    public void CloseInstance()
+    public void CloseFactsEdition()
     {
-      m_rangeHighlighter.RevertToOriginalColors();
-      AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
       m_editedFactsManager.FactsDownloaded -= OnFactsDownloaded;
- //     m_editedFactsManager.OnCommitError -= OnCommitError;
+      m_editedFactsManager.UnsubsribeEvents();
+    
+      //  TO DO : m_editedFactsManager.OnCommitError -= OnCommitError;
 
-      // TO DO : Close current instances
-      
+      m_rangeHighlighter.RevertToOriginalColors();
+      m_editedFactsManager = null;
+      m_rangeHighlighter = null;
+      m_areaController = null;
+
+      AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
       AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = false;
       AddinModule.CurrentInstance.m_financialSubmissionRibbon.Visible = false;
     }

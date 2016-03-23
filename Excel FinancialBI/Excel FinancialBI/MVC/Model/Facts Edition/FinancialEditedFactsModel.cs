@@ -46,9 +46,16 @@ namespace FBI.MVC.Model
     {
       //FactsModel.Instance.UpdateEvent -= AfterFactsCommit;
       // dispose edited facts
-      m_editedFacts.Clear();
+            m_editedFacts.Clear();
       m_outputFacts.Clear();
       // EMPTY dictionnaries etc.
+    }
+
+    public void UnsubsribeEvents()
+    {
+      //  l_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
+     
+
     }
 
     private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension, RangeHighlighter p_rangeHighlighter)

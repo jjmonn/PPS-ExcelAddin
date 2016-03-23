@@ -25,6 +25,10 @@ namespace FBI.MVC.Model
     ProgressBarView m_progressBarView;
     BackgroundWorker m_snapshotBackgroundWorker;
 
+    ~WorksheetAnalyzer()
+    {
+      m_range = null;
+    }
 
     public bool WorksheetScreenshot(Range p_range)
     {
