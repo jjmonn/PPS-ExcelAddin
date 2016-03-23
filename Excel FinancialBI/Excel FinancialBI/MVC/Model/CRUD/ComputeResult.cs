@@ -15,6 +15,7 @@ namespace FBI.MVC.Model.CRUD
 
   public class ComputeResult
   {
+    public Int32 RequestId { get; set; }
     public SafeDictionary<ResultKey, double> Values { get; private set; }
     public UInt32 VersionId { get; set; }
     public UInt32 EntityId { get; set; }

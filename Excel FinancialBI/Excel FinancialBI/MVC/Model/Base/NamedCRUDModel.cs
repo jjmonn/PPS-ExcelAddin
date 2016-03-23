@@ -69,10 +69,9 @@ namespace FBI.MVC.Model
     public UInt32 GetValueId(string p_name)
     {
 
-      if (m_CRUDDic[p_name] == null)
+      if (m_CRUDDic[StringUtils.RemoveDiacritics(p_name)] == null)
         return 0;
-      return m_CRUDDic[p_name].Id;
-
+      return m_CRUDDic[StringUtils.RemoveDiacritics(p_name)].Id;
     }
 
     public string GetValueName(UInt32 p_id)

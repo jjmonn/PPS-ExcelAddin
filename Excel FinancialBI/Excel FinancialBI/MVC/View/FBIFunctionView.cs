@@ -164,7 +164,7 @@ namespace FBI.MVC.View
     {
       get
       {
-        return m_periodPicker.Value.Value.ToString("0:dd/MM/yyyy");
+        return m_periodPicker.Value.Value.ToString("MM/dd/yyyy");
       }
     }
 

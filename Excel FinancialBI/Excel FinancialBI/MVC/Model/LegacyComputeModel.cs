@@ -33,7 +33,7 @@ namespace FBI.MVC.Model
       return Compute(p_request);
     }
 
-    public bool Compute(LegacyComputeRequest p_request)
+    public bool Compute(LegacyComputeRequest p_request, List<Int32> p_requestIdList = null)
     {
       ByteBuffer[] l_packetList = new ByteBuffer[p_request.Versions.Count];
       List<Int32> l_requestIdList = new List<int>();
@@ -41,7 +41,10 @@ namespace FBI.MVC.Model
       for (Int32 i = 0; i < l_packetList.Length; ++i)
       {
         l_packetList[i] = new ByteBuffer((UInt16)ClientMessage.CMSG_COMPUTE_REQUEST);
-        l_requestIdList.Add(l_packetList[i].AssignRequestId());
+        Int32 l_requestId = l_packetList[i].AssignRequestId();
+        l_requestIdList.Add(l_requestId);
+        if (p_requestIdList != null)
+          p_requestIdList.Add(l_requestId);
         m_requestAxisList[l_requestIdList[i]] = p_request.Versions[i];
       }
       m_requestList.Add(new Tuple<AComputeRequest, List<Int32>>(p_request, l_requestIdList));
@@ -79,6 +82,7 @@ namespace FBI.MVC.Model
       {
         l_requestIdList.Remove(l_requestId);
         l_result = ComputeResult.BuildComputeResult(l_request, p_packet, m_requestAxisList[l_requestId]);
+        l_result.RequestId = l_requestId;
         m_requestAxisList.Remove(l_requestId);
         m_resultDic[l_request][l_result.VersionId] = l_result;
         if (l_requestIdList.Count == 0)

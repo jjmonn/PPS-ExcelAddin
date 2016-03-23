@@ -411,6 +411,8 @@
     <string name="title">Edition de la fonction Excel Financial BI</string>
     <string name="computing">calcul...</string>
     <category name="error">
+      <string name="compute_failed">Le calcul a échoué</string>
+      <string name="unable_to_compute">Impossible de lancer le calcul.</string>
       <string name="invalid_entity">Entité sélectionnée invalide.</string>
       <string name="invalid_account">Compte sélectionné invalide.</string>
       <string name="invalid_currency">Devise sélectionnée invalide.</string>
