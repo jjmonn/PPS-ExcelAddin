@@ -17,10 +17,12 @@ namespace FBI.MVC.View
     FactsEditionController m_factsEditionController;
     Int32 DIMENSIONS_COLORS = Color.FromArgb(215, 239, 253).ToArgb();
     SafeDictionary<Range, Object> m_originalCellsColor = new SafeDictionary<Range, Object>();
+    Worksheet m_worksheet;
 
-    public RangeHighlighter(FactsEditionController p_factsEditionController)
+    public RangeHighlighter(FactsEditionController p_factsEditionController, Worksheet p_worksheet)
     {
       m_factsEditionController = p_factsEditionController;
+      m_worksheet = p_worksheet;
     }
 
     public void FillCellColor(Range p_cell, EditedFactStatus p_status)
@@ -65,12 +67,19 @@ namespace FBI.MVC.View
       }
     }
 
-    public void FillDimensionColor(Range p_cell)
+    public void FillDimensionColor(WorksheetAreaController p_areaController)
     {
-      if (p_cell == null)
-        return;
-      RegisterCellOriginalFill(p_cell);
-      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionDimensionsFill;
+      foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
+      {
+        foreach (string l_cellAdress in p_areaController.Dimensions[l_dim].m_values.Keys)
+        {
+          Range l_cell = m_worksheet.Range[l_cellAdress];
+          if (l_cell == null)
+            return;
+          RegisterCellOriginalFill(l_cell);
+          l_cell.Interior.Color = Properties.Settings.Default.FactsEditionDimensionsFill;
+        }
+      }
     }
 
     public void FillInputsBaseColor(Range p_cell)

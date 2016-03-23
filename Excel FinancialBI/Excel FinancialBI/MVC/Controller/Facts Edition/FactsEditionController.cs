@@ -21,6 +21,7 @@ namespace FBI.MVC.Controller
  //   private ExcelWorksheetEvents m_ExcelSheetEvents;
     private RangeHighlighter m_rangeHighlighter;
     private Account.AccountProcess m_process;
+    public bool IsEditingExcel { get; private set; }
     private UInt32 m_RHAccountId;
     private WorksheetAreaController m_areaController;
     private WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
@@ -35,8 +36,8 @@ namespace FBI.MVC.Controller
       m_addinModuleController = p_addinModuleController;
       m_versionId = p_versionId;
       m_worksheet = p_worksheet;
-      m_areaController = new WorksheetAreaController(m_versionId, p_periodsList);
-      m_rangeHighlighter = new RangeHighlighter(this);
+      m_areaController = new WorksheetAreaController(m_versionId, m_worksheet, p_periodsList);
+      m_rangeHighlighter = new RangeHighlighter(this, m_worksheet);
       m_process = p_process;
       m_periodsList = p_periodsList;
       m_RHAccountId = p_RHAccountId;
@@ -80,6 +81,7 @@ namespace FBI.MVC.Controller
       ActivateFactEditionRibbon();
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
       // TO DO : subsribe to commit error event ?
+      m_rangeHighlighter.FillDimensionColor(m_areaController);
       m_worksheetAnalyzer = null;
     }
 
@@ -101,7 +103,8 @@ namespace FBI.MVC.Controller
     {
       m_editedFactsManager.FactsDownloaded -= OnFactsDownloaded;
       m_editedFactsManager.UnsubsribeEvents();
-    
+      m_areaController.ClearDimensions();
+
       //  TO DO : m_editedFactsManager.OnCommitError -= OnCommitError;
 
       m_rangeHighlighter.RevertToOriginalColors();
@@ -124,12 +127,18 @@ namespace FBI.MVC.Controller
       if (m_editedFactsManager.UpdateEditedValueAndTag(p_cell))
         return;
 
+      IsEditingExcel = true;
+      string l_result = m_areaController.CellBelongsToDimension(p_cell);
+      if (l_result != "")
+        p_cell.Value2 = l_result; 
+
+      // if cell belongs to dimension
+      //   -> cancel modification and put back the dimension value
 
       // if financial -> launch compute at the end of the cells range loop
       // financial -> dependant cells
 
-      // if cell belongs to dimension
-      //   -> cancel modification and put back the dimension value
+     
 
       // if cell belongs to output
       //   -> cancel modification and put back the output value 
@@ -139,6 +148,7 @@ namespace FBI.MVC.Controller
       if (m_autoCommit == true)
         m_editedFactsManager.Commit();
 
+      IsEditingExcel = false;
     }
 
     public void BeforeRightClick()

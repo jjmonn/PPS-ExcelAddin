@@ -27,8 +27,8 @@ namespace FBI.MVC.Model
     RangeHighlighter m_rangeHighlighter;
     SafeDictionary<CRUDAction, List<FactTag>> m_factTagCommitDict = new SafeDictionary<CRUDAction, List<FactTag>>();
     SafeDictionary<CRUDAction, List<LegalHoliday>> m_LegalHolidayCommitDict = new SafeDictionary<CRUDAction, List<LegalHoliday>>();
-    SafeDictionary<UInt32, Fact> m_deleteFactsDict;
-    SafeDictionary<UInt32, EditedRHFact> m_legalHolidayDeleteDictIdEditedFact;
+    SafeDictionary<UInt32, Fact> m_deleteFactsDict = new SafeDictionary<uint,Fact>();
+    SafeDictionary<UInt32, EditedRHFact> m_legalHolidayDeleteDictIdEditedFact = new SafeDictionary<uint,EditedRHFact>();
     public event FactsCommitError OnCommitError;
     List<int> m_requestIdList = new List<int>();
     UInt32 m_RHAccountId;
@@ -56,20 +56,17 @@ namespace FBI.MVC.Model
       LegalHolidayModel.Instance.UpdateListEvent += OnLegalHolidayUpdate;
     }
 
-    ~FactsRHCommit()
-    {
-      m_factTagCommitDict.Clear();
-      m_LegalHolidayCommitDict.Clear();
-      m_legalHolidayDeleteDictIdEditedFact.Clear();
-      m_deleteFactsDict.Clear();
-    }
-
     public void UnsuscribeEvents()
     {
       FactsModel.Instance.UpdateEvent -= OnFactsUpdate;
       FactsModel.Instance.DeleteEvent -= OnFactDelete;
       FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdate;
       LegalHolidayModel.Instance.UpdateListEvent -= OnLegalHolidayUpdate;
+
+      m_factTagCommitDict.Clear();
+      m_LegalHolidayCommitDict.Clear();
+      m_legalHolidayDeleteDictIdEditedFact.Clear();
+      m_deleteFactsDict.Clear();
     }
 
     public void Commit()

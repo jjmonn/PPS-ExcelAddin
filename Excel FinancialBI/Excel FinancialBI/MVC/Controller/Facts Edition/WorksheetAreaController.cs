@@ -38,16 +38,25 @@ namespace FBI.MVC.Model
     public Dimension<CRUDEntity> Entities { get { return (Dimensions[DimensionType.ENTITY]); } }
     public Dimension<CRUDEntity> Employees { get { return (Dimensions[DimensionType.EMPLOYEE]); } }
     public Account.AccountProcess Process { get; private set; }
+    private Worksheet m_worksheet;
 
-    public WorksheetAreaController(UInt32 p_versionId, List<Int32> p_periodsList = null)
+    public WorksheetAreaController(UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
     {
+      m_worksheet = p_worksheet;
+     
       foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
-        Dimensions[l_dim] = new Dimension<CRUDEntity>(l_dim);
+        Dimensions[l_dim] = new Dimension<CRUDEntity>(l_dim, m_worksheet);
 
       if (p_periodsList == null)
         p_periodsList = PeriodModel.GetPeriodsList(p_versionId);
 
       m_periodsDatesList = p_periodsList;
+    }
+
+    public void ClearDimensions()
+    {
+      foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
+        Dimensions[l_dim].m_values.Clear();
     }
 
     #region Dimensions identification methods
@@ -292,19 +301,19 @@ namespace FBI.MVC.Model
     private void SetCellsMaxsBelowAndRight(Range p_maxRightCell, Range p_maxBelowCell)
     {
       SafeDictionary<Range, Int32> l_rightCellsDict = new SafeDictionary<Range, Int32>();
-      l_rightCellsDict.Add(Periods.m_values.ElementAt(0).Key, Periods.CellColumnIndex);
-      l_rightCellsDict.Add(Accounts.m_values.ElementAt(0).Key, Accounts.CellColumnIndex);
-      l_rightCellsDict.Add(Entities.m_values.ElementAt(0).Key, Entities.CellColumnIndex);
-      l_rightCellsDict.Add(Employees.m_values.ElementAt(0).Key, Employees.CellColumnIndex);
+      l_rightCellsDict.Add(m_worksheet.Range[Periods.m_values.ElementAt(0).Key], Periods.CellColumnIndex);
+      l_rightCellsDict.Add(m_worksheet.Range[Accounts.m_values.ElementAt(0).Key], Accounts.CellColumnIndex);
+      l_rightCellsDict.Add(m_worksheet.Range[Entities.m_values.ElementAt(0).Key], Entities.CellColumnIndex);
+      l_rightCellsDict.Add(m_worksheet.Range[Employees.m_values.ElementAt(0).Key], Employees.CellColumnIndex);
       IOrderedEnumerable<KeyValuePair<Range, Int32>> l_columnsSortedDict =
         from entry in l_rightCellsDict orderby entry.Value ascending select entry;
       p_maxRightCell = l_columnsSortedDict.ElementAt(0).Key;
 
       SafeDictionary<Range, Int32> l_belowCellsDict = new SafeDictionary<Range, Int32>();
-      l_belowCellsDict.Add(Periods.m_values.ElementAt(0).Key, Periods.CellColumnIndex);
-      l_belowCellsDict.Add(Accounts.m_values.ElementAt(0).Key, Accounts.CellColumnIndex);
-      l_belowCellsDict.Add(Entities.m_values.ElementAt(0).Key, Entities.CellColumnIndex);
-      l_belowCellsDict.Add(Employees.m_values.ElementAt(0).Key, Employees.CellColumnIndex);
+      l_belowCellsDict.Add(m_worksheet.Range[Periods.m_values.ElementAt(0).Key], Periods.CellColumnIndex);
+      l_belowCellsDict.Add(m_worksheet.Range[Accounts.m_values.ElementAt(0).Key], Accounts.CellColumnIndex);
+      l_belowCellsDict.Add(m_worksheet.Range[Entities.m_values.ElementAt(0).Key], Entities.CellColumnIndex);
+      l_belowCellsDict.Add(m_worksheet.Range[Employees.m_values.ElementAt(0).Key], Employees.CellColumnIndex);
       IOrderedEnumerable<KeyValuePair<Range, Int32>> l_rowsSortedDict =
         from entry in l_belowCellsDict orderby entry.Value ascending select entry;
       p_maxBelowCell = l_rowsSortedDict.ElementAt(0).Key;
@@ -362,5 +371,47 @@ namespace FBI.MVC.Model
         l_list.Add(l_item as AxisElem);
       return l_list;
     }
+
+    public string CellBelongsToDimension(Range p_cell)
+    {
+      foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
+      {
+        if (Dimensions[l_dim].m_values.ContainsKey(p_cell.Address) == true)
+        {
+          switch (l_dim)
+          {
+            case DimensionType.ACCOUNT:
+              Account l_account = Dimensions[l_dim].m_values[p_cell.Address] as Account;
+              if (l_account != null)
+                return l_account.Name;
+              break;
+
+            case DimensionType.ENTITY:
+              GetAxisElemName(Dimensions[l_dim].m_values[p_cell.Address]);
+              break;
+
+            case DimensionType.EMPLOYEE:
+              GetAxisElemName(Dimensions[l_dim].m_values[p_cell.Address]);
+              break;
+
+            case DimensionType.PERIOD:
+              PeriodDimension l_period = Dimensions[l_dim].m_values[p_cell.Address] as PeriodDimension;
+              if (l_period != null)
+                return DateTime.FromOADate(l_period.Id).ToString("MM/dd/yyyy");
+              break;
+          }
+        }
+      }
+      return "";
+    }
+
+    private string GetAxisElemName(CRUDEntity p_crud)
+    {
+      AxisElem l_axisElem = p_crud as AxisElem;
+      if (l_axisElem != null)
+        return l_axisElem.Name;
+      return "";
+    }
+
   }
 }

@@ -59,10 +59,10 @@ namespace FBI.MVC.Model
     public void UnsubsribeEvents()
     {
       m_factsCommit.UnsuscribeEvents();
-      foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
-      {
-        l_editedFact.OnCellValueChanged -= m_rangeHighlighter.FillCellColor;
-      }
+      //foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
+      //{
+      //  l_editedFact.OnCellValueChanged -= m_rangeHighlighter.FillCellColor;
+      //}
     }
 
     public void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId)
@@ -84,11 +84,13 @@ namespace FBI.MVC.Model
 
     private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension, RangeHighlighter p_rangeHighlighter)
     {
-      foreach (KeyValuePair<Range, CRUDEntity> l_rowsKeyPair in p_rowsDimension.m_values)
+      foreach (KeyValuePair<string, CRUDEntity> l_rowsKeyPair in p_rowsDimension.m_values)
       {
-        foreach (KeyValuePair<Range, CRUDEntity> l_columnsKeyPair in p_columnsDimension.m_values)
+        foreach (KeyValuePair<string, CRUDEntity> l_columnsKeyPair in p_columnsDimension.m_values)
         {
-          Range l_factCell = m_worksheet.Cells[l_rowsKeyPair.Key.Row, l_columnsKeyPair.Key.Column] as Range;
+          Range l_rowCell = m_worksheet.Range[l_rowsKeyPair.Key];
+          Range l_columnCell = m_worksheet.Range[l_columnsKeyPair.Key];
+          Range l_factCell = m_worksheet.Cells[l_rowCell.Row, l_columnCell.Column] as Range;
           EditedRHFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
           {
@@ -101,14 +103,9 @@ namespace FBI.MVC.Model
     private void InitializeEditedFact(EditedRHFact p_editedFact, RangeHighlighter p_rangeHighlighter)
     {
       m_RHEditedFacts.Set(p_editedFact.Cell.Address, new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, (Int32)p_editedFact.Period), p_editedFact);
-
-    //  p_rangeHighlighter.FillInputsBaseColor(p_editedFact.Cell);
       p_editedFact.EditedClientId = GetClientIdFromCell(p_editedFact.Cell);
       p_editedFact.EditedFactTag.Tag = GetTagTypeFromCell(p_editedFact.Cell);
       p_editedFact.EditedLegalHoliday.Tag = GetLegalHolidayTagFromCell(p_editedFact.Cell);
-
-      p_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
-     // p_editedFact.SetCellStatusRH();
     }
 
     private EditedRHFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1,
@@ -258,11 +255,11 @@ namespace FBI.MVC.Model
       UInt32 l_clientId = (UInt32)GetClientIdFromCell(p_cell);
       FactTag.TagType l_tagType = GetTagTypeFromCell(p_cell);
       LegalHolidayTag l_legalHolidayTag = GetLegalHolidayTagFromCell(p_cell);
-      
-      
+           
       l_editedFact.SetEditedClient(l_clientId, false);
       l_editedFact.SetEditedFactType(l_tagType, false);
-      l_editedFact.SetEditedLegalHoliday(l_legalHolidayTag, true);
+      l_editedFact.SetEditedLegalHoliday(l_legalHolidayTag, false);
+      m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetCellStatusRH());
       return true;
     }
 

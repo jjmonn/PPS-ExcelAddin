@@ -27,6 +27,9 @@ namespace FBI
 
     public override void ProcessChange(object target)
     {
+      if (m_factsEditionController.IsEditingExcel == true)
+        return;
+
       try
       {
         Range l_range = target as Range;
@@ -38,7 +41,7 @@ namespace FBI
           {
             m_factsEditionController.OnWorksheetChange(l_cell);
           }
-        }
+        }        
       }
       catch(Exception e)
       {
