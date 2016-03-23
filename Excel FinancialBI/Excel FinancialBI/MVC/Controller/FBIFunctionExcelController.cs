@@ -27,7 +27,7 @@ namespace FBI.MVC.Controller
       LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
     }
 
-    static object GetValue(object p_param)
+    static dynamic GetValue(object p_param)
     {
       if (p_param.GetType() == typeof(ADXExcelRef))
       {
@@ -88,12 +88,15 @@ namespace FBI.MVC.Controller
         Range l_cell = AddinModule.CurrentInstance.ExcelApp.ActiveCell;
         FBIFunction l_function = new FBIFunction();
 
-        l_function.EntityName = (string)GetValue(p_entity);
-        l_function.AccountName = (string)GetValue(p_account);
-        object l_period = GetValue(p_period);
-        l_function.Period = (DateTime)GetValue(p_period);
-        l_function.CurrencyName = (string)GetValue(p_currency);
-        l_function.VersionName = (string)GetValue(p_version);
+        l_function.EntityName = GetValue(p_entity);
+        l_function.AccountName = GetValue(p_account);
+        dynamic l_period = GetValue(p_period);
+        if (l_period.GetType() == typeof(string))
+          l_function.PeriodString = l_period;
+        else
+          l_function.Period = GetValue(p_period);
+        l_function.CurrencyName = GetValue(p_currency);
+        l_function.VersionName = GetValue(p_version);
         l_function.AxisElems[AxisType.Client] = GetValueList(p_clientsFilters);
         l_function.AxisElems[AxisType.Product] = GetValueList(p_productsFilters);
         l_function.AxisElems[AxisType.Adjustment] = GetValueList(p_adjustmentsFilters);
