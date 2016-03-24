@@ -25,9 +25,10 @@ namespace FBI.MVC.Model
     SafeDictionary<UInt32, EditedRHFact> m_IdEditedFactDict;
     List<Int32> m_periodsList;
     RangeHighlighter m_rangeHighlighter;
+    SafeDictionary<CRUDAction, SafeDictionary<string, Fact>> m_factsCommitDict = new SafeDictionary<CRUDAction,SafeDictionary<string,Fact>>();
     SafeDictionary<CRUDAction, List<FactTag>> m_factTagCommitDict = new SafeDictionary<CRUDAction, List<FactTag>>();
     SafeDictionary<CRUDAction, List<LegalHoliday>> m_LegalHolidayCommitDict = new SafeDictionary<CRUDAction, List<LegalHoliday>>();
-    SafeDictionary<UInt32, Fact> m_deleteFactsDict = new SafeDictionary<uint,Fact>();
+    // SafeDictionary<UInt32, Fact> m_deleteFactsDict = new SafeDictionary<uint,Fact>();
     SafeDictionary<UInt32, EditedRHFact> m_legalHolidayDeleteDictIdEditedFact = new SafeDictionary<uint,EditedRHFact>();
     public event FactsCommitError OnCommitError;
     List<int> m_requestIdList = new List<int>();
@@ -50,32 +51,31 @@ namespace FBI.MVC.Model
       m_RHAccountId = p_RHAccountId;
       m_versionId = p_versionId;
 
-      FactsModel.Instance.UpdateEvent += OnFactsUpdate;
-      FactsModel.Instance.DeleteEvent += OnFactDelete;
+      FactsModel.Instance.UpdateEvent += OnFactsUpdateList;
       FactTagModel.Instance.UpdateListEvent += OnFactTagsUpdate;
       LegalHolidayModel.Instance.UpdateListEvent += OnLegalHolidayUpdate;
     }
 
     public void UnsuscribeEvents()
     {
-      FactsModel.Instance.UpdateEvent -= OnFactsUpdate;
-      FactsModel.Instance.DeleteEvent -= OnFactDelete;
+      FactsModel.Instance.UpdateEvent -= OnFactsUpdateList;
       FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdate;
       LegalHolidayModel.Instance.UpdateListEvent -= OnLegalHolidayUpdate;
 
       m_factTagCommitDict.Clear();
       m_LegalHolidayCommitDict.Clear();
       m_legalHolidayDeleteDictIdEditedFact.Clear();
-      m_deleteFactsDict.Clear();
     }
 
     public void Commit()
     {
-      m_deleteFactsDict = new SafeDictionary<uint, Fact>();
-      SafeDictionary<string, Fact> l_factsCommitDict = new SafeDictionary<string, Fact>();
+      m_factsCommitDict[CRUDAction.UPDATE] = new SafeDictionary<string,Fact>();
+      m_factsCommitDict[CRUDAction.DELETE] = new SafeDictionary<string, Fact>();
+      
       m_factTagCommitDict[CRUDAction.CREATE] = new List<FactTag>();
       m_factTagCommitDict[CRUDAction.UPDATE] = new List<FactTag>();
       m_factTagCommitDict[CRUDAction.DELETE] = new List<FactTag>();
+      
       m_LegalHolidayCommitDict[CRUDAction.CREATE] = new List<LegalHoliday>();
       m_LegalHolidayCommitDict[CRUDAction.DELETE] = new List<LegalHoliday>();
       m_legalHolidayDeleteDictIdEditedFact = new SafeDictionary<UInt32, EditedRHFact>();
@@ -86,9 +86,9 @@ namespace FBI.MVC.Model
           LegalHolidayCommitListFilling(l_RHEditedFact);
 
         if (l_RHEditedFact.EditedFactTag.Tag != FactTag.TagType.NONE)
-          ClientAllocationFromTagType(l_RHEditedFact, l_factsCommitDict);
+          ClientAllocationFromTagType(l_RHEditedFact);
         else
-          RegularClientAllocation(l_RHEditedFact, l_factsCommitDict);
+          RegularClientAllocation(l_RHEditedFact);
 
         if (l_RHEditedFact.EditedFactTag.Tag != l_RHEditedFact.ModelFactTag.Tag)
           FactTagCommitListFilling(l_RHEditedFact);
@@ -96,41 +96,36 @@ namespace FBI.MVC.Model
 
       // AddinModuleController.SetExcelInteractionState(false);
       // TO DO : circular progress : self threaded UI with 
-      if (m_deleteFactsDict.Count > 0)
-        FactsDelete();
-
-      if (l_factsCommitDict.Count > 0)
-        FactsModel.Instance.UpdateList(l_factsCommitDict);
-      else
-        FactTagCommit();
+      FactsCommit();
+      FactTagCommit();
 
       LegalHolidaysCommit();
     }
 
     #region Facts Commit
 
-    private void ClientAllocationFromTagType(EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
+    private void ClientAllocationFromTagType(EditedRHFact p_editedFact)
     {
       switch (p_editedFact.EditedFactTag.Tag)
       {
         case FactTag.TagType.CP:
-          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact);
           break;
 
         case FactTag.TagType.RTT:
-          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact);
           break;
 
         case FactTag.TagType.Abs:
-          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact);
           break;
 
         case FactTag.TagType.E:
-          ClientAllocation(GetNextAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetNextAllocatedClient(p_editedFact), p_editedFact);
           break;
 
         case FactTag.TagType.S :
-          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact, p_factsCommitDict);
+          ClientAllocation(GetLastAllocatedClient(p_editedFact), p_editedFact);
           break;
 
         default:
@@ -139,23 +134,23 @@ namespace FBI.MVC.Model
           {
             p_editedFact.ClientId = (UInt32)AxisType.Client;
             p_editedFact.Value = 0;
-            p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
+            m_factsCommitDict[CRUDAction.UPDATE][p_editedFact.Cell.Address] = p_editedFact;
           }
           break;
       }
     }
 
-    private void ClientAllocation(UInt32 p_clientId, EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
+    private void ClientAllocation(UInt32 p_clientId, EditedRHFact p_editedFact)
     {
       if (p_clientId != p_editedFact.ClientId || p_editedFact.EditedValue != p_editedFact.Value)
       {
         p_editedFact.ClientId = p_clientId;
         p_editedFact.Value = p_editedFact.EditedValue;
-        p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
+        m_factsCommitDict[CRUDAction.UPDATE][p_editedFact.Cell.Address] = p_editedFact;
       }
     }
 
-    private void RegularClientAllocation(EditedRHFact p_editedFact, SafeDictionary<string, Fact> p_factsCommitDict)
+    private void RegularClientAllocation(EditedRHFact p_editedFact)
     {
       if (p_editedFact.EditedClientId != p_editedFact.ClientId)
       {
@@ -163,54 +158,44 @@ namespace FBI.MVC.Model
         p_editedFact.Value = 1;
 
         if (p_editedFact.EditedClientId == 0)
-          m_deleteFactsDict[p_editedFact.Id] = p_editedFact;
+          m_factsCommitDict[CRUDAction.DELETE][p_editedFact.Cell.Address] = p_editedFact;
         else
-          p_factsCommitDict[p_editedFact.Cell.Address] = p_editedFact;
+          m_factsCommitDict[CRUDAction.UPDATE][p_editedFact.Cell.Address] = p_editedFact;
       }
     }
 
-    private void FactsDelete()
+    private void FactsCommit()
     {
-      foreach (KeyValuePair<UInt32, Fact> l_pair in m_deleteFactsDict)
+      foreach (KeyValuePair<CRUDAction, SafeDictionary<string, Fact>> l_CRUDActionList in m_factsCommitDict)
       {
-        FactsModel.Instance.Delete(l_pair.Value);
+        if (l_CRUDActionList.Value.Count > 0)
+          FactsModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
+        l_CRUDActionList.Value.Clear();
       }
-      m_deleteFactsDict.Clear();
     }
 
-    private void OnFactsUpdate(ErrorMessage p_status, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
+    private void OnFactsUpdateList(ErrorMessage p_status, CRUDAction p_CRUDAction, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
-        AddinModuleController.SetExcelInteractionState(false);
-        lock (m_RHEditedFacts)
+        lock (m_IdEditedFactDict)
         {
-          foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_addressMessagePair in p_resultsDict)
+          AddinModuleController.SetExcelInteractionState(false);
+          lock (m_RHEditedFacts)
           {
-            UInt32 l_factId = l_addressMessagePair.Value.Item1;
-            EditedRHFact l_editedFact = m_RHEditedFacts[l_addressMessagePair.Key];
-            if (l_editedFact != null && l_addressMessagePair.Value.Item2 == ErrorMessage.SUCCESS)
+            foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_addressMessagePair in p_resultsDict)
             {
-              l_editedFact.SetId(l_factId);
-              m_IdEditedFactDict[l_factId] = l_editedFact;
-              m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+              if (p_CRUDAction == CRUDAction.UPDATE)
+                OnFactUpdate(l_addressMessagePair.Key, l_addressMessagePair.Value.Item1, l_addressMessagePair.Value.Item2);
+              else
+                OnFactDelete(l_addressMessagePair.Key, l_addressMessagePair.Value.Item1, l_addressMessagePair.Value.Item2);
             }
-            else
-            {
-              // put back model value for ClientId, quid : information not available anymore ..
-              //  OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
-            }
-          }
-          if (m_factTagCommitDict != null)
-          {
-            lock (m_factTagCommitDict)
-            {
+            if (m_factTagCommitDict != null)
               FactTagCommit();
-            }
+            else
+              System.Diagnostics.Debug.WriteLine("On facts commit : m_factsTagCommitList or m_fatcTagsCreate list == null");
+            AddinModuleController.SetExcelInteractionState(true);
           }
-          else
-            System.Diagnostics.Debug.WriteLine("On facts commit : m_factsTagCommitList or m_fatcTagsCreate list == null");
-          AddinModuleController.SetExcelInteractionState(true);
         }
       }
       else
@@ -221,17 +206,31 @@ namespace FBI.MVC.Model
       AddinModuleController.SetExcelInteractionState(true);
     }
 
-    private void OnFactDelete(ErrorMessage p_status, UInt32 p_factId)
+    private void OnFactUpdate(string p_cellAddress, UInt32 p_factId, ErrorMessage p_errorMessage)
     {
-      if (p_status == ErrorMessage.SUCCESS)
+      EditedRHFact l_editedFact = m_RHEditedFacts[p_cellAddress];
+      if (l_editedFact != null && p_errorMessage == ErrorMessage.SUCCESS)
       {
-        lock (m_IdEditedFactDict)
-        {
-          EditedRHFact l_editedFact = m_IdEditedFactDict[p_factId];
-          if (l_editedFact != null)
-            m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+        l_editedFact.SetId(p_factId);
+        m_IdEditedFactDict[p_factId] = l_editedFact;
+        m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+      }
+      else
+      {
+        // Put back model value for ClientId, quid : information not available anymore ..
+        // OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
+      }
+    }
+
+    private void OnFactDelete(string p_cellAddress, UInt32 p_factId, ErrorMessage p_errorMessage)
+    {
+      EditedRHFact l_editedFact = m_RHEditedFacts[p_cellAddress];
+      if (l_editedFact != null && p_errorMessage == ErrorMessage.SUCCESS)
+      {
+        l_editedFact.ClientId = 0;
+        m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
+        if (m_IdEditedFactDict.ContainsKey(p_factId) == true)
           m_IdEditedFactDict.Remove(p_factId);
-        }
       }
       else
       {
@@ -254,8 +253,6 @@ namespace FBI.MVC.Model
         if (p_editedFact.EditedFactTag.Tag == FactTag.TagType.NONE)
         {
           p_editedFact.ClientId = (UInt32)p_editedFact.EditedClientId;
-          //m_deleteFactsDict[p_editedFact.Id] = p_editedFact;
-
           m_factTagCommitDict[CRUDAction.DELETE].Add(p_editedFact.EditedFactTag);
         }
         else
@@ -267,11 +264,14 @@ namespace FBI.MVC.Model
 
     private void FactTagCommit()
     {
-      foreach (KeyValuePair<CRUDAction, List<FactTag>> l_CRUDActionList in m_factTagCommitDict)
+      lock (m_factTagCommitDict)
       {
-      if (l_CRUDActionList.Value.Count > 0)
+        foreach (KeyValuePair<CRUDAction, List<FactTag>> l_CRUDActionList in m_factTagCommitDict)
+        {
+          if (l_CRUDActionList.Value.Count > 0)
             FactTagModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
           l_CRUDActionList.Value.Clear();
+        }
       }
     }
 
@@ -329,7 +329,7 @@ namespace FBI.MVC.Model
       if (p_editedFact.EditedLegalHoliday.Tag == LegalHolidayTag.FER)
       {
         if (p_editedFact.ClientId != 0)
-          m_deleteFactsDict[p_editedFact.Id] = p_editedFact;
+          m_factsCommitDict[CRUDAction.DELETE][p_editedFact.Cell.Address] = p_editedFact;
 
         if (l_legalHoliday == null)
           m_LegalHolidayCommitDict[CRUDAction.CREATE].Add(p_editedFact.EditedLegalHoliday);
