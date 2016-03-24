@@ -168,12 +168,20 @@ namespace FBI.MVC.Model
       FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
       SourcedComputeModel.Instance.ComputeCompleteEvent += OnFinancialOutputsComputed;
       SourcedComputeRequest l_sourcedComputeRequest = new SourcedComputeRequest();
-      l_sourcedComputeRequest.VersionId = m_versionId;
+      Version l_version = VersionModel.Instance.GetValue(m_versionId);
 
+      if (l_version == null)
+        return;
+      l_sourcedComputeRequest.VersionId = m_versionId;
+      l_sourcedComputeRequest.StartPeriod = (int)l_version.StartPeriod;
+      l_sourcedComputeRequest.NbPeriods = l_version.NbPeriod;
+      l_sourcedComputeRequest.GlobalFactVersionId = l_version.GlobalFactVersionId;
+      l_sourcedComputeRequest.RateVersionId = l_version.RateVersionId;
       List<Fact> l_factsList = new List<Fact>();
       foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
         l_factsList.Add(l_editedFact);
       l_sourcedComputeRequest.FactList = l_factsList;
+      l_sourcedComputeRequest.Process = Account.AccountProcess.FINANCIAL;
 
       List<UInt32> l_entitiesList = new List<UInt32>(); 
       foreach (AxisElem l_entity in m_dimensions.Entities.m_values.Values)
@@ -203,13 +211,22 @@ namespace FBI.MVC.Model
 
             if (l_fact == null)
               continue;
-            l_fact.Cell.Value2 = l_valuePair.Value;
+            if ((Double.IsNaN(l_valuePair.Value)))
+              l_fact.Cell.Value2 = "NaN";
+            else if (Double.IsNegativeInfinity(l_valuePair.Value))
+              l_fact.Cell.Value2 = "-inf.";
+            else if (Double.IsPositiveInfinity(l_valuePair.Value))
+              l_fact.Cell.Value2 = "+inf.";
+            else
+              l_fact.Cell.Value2 = l_valuePair.Value;
           }
         }
-        FactsDownloaded(true);
+        if (FactsDownloaded != null)
+          FactsDownloaded(true);
       }
       else
-        FactsDownloaded(false);
+        if (FactsDownloaded != null)
+          FactsDownloaded(false);
     }
 
     public bool UpdateEditedValueAndTag(Range p_cell)
