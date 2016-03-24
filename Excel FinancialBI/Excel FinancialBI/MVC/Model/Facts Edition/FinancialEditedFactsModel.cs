@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI.MVC.Model
 {
-  using Microsoft.Office.Interop.Excel;
-  using FBI.MVC.Model.CRUD;
-  using FBI.MVC.View;
+  using Model.CRUD;
+  using View;
   using Network;
   using Utils;
   using Model;
+  using Controller;
  
   class FinancialEditedFactsModel : IEditedFactsModel
   {
@@ -81,10 +82,6 @@ namespace FBI.MVC.Model
           }
         }
       }
-    }
-
-    void OnCellChanged(Range p_cell, EditedFactStatus p_status)
-    {
     }
 
     private EditedFinancialFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1,
@@ -181,13 +178,22 @@ namespace FBI.MVC.Model
       l_sourcedComputeRequest.RateVersionId = l_version.RateVersionId;
       List<Fact> l_factsList = new List<Fact>();
       foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
-        l_factsList.Add(l_editedFact);
+        if (l_editedFact.Value != 0)
+          l_factsList.Add(l_editedFact);
       l_sourcedComputeRequest.FactList = l_factsList;
       l_sourcedComputeRequest.Process = Account.AccountProcess.FINANCIAL;
 
       List<UInt32> l_entitiesList = new List<UInt32>(); 
       foreach (AxisElem l_entity in m_dimensions.Entities.m_values.Values)
+      {
+        EntityCurrency l_currency = EntityCurrencyModel.Instance.GetValue(l_entity.Id);
+
+        if (l_currency == null)
+          l_sourcedComputeRequest.CurrencyId = Properties.Settings.Default.currentCurrency;
+        else
+          l_sourcedComputeRequest.CurrencyId = l_currency.CurrencyId;
         l_entitiesList.Add(l_entity.Id);
+      }
       l_sourcedComputeRequest.EntityList = l_entitiesList;
       SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest);
     }
@@ -203,6 +209,8 @@ namespace FBI.MVC.Model
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
+        AddinModuleController.SetExcelInteractionState(false);
+        
         foreach (ComputeResult l_result in p_result.Values)
         {
           foreach (KeyValuePair<ResultKey, double> l_valuePair in l_result.Values)
@@ -221,8 +229,11 @@ namespace FBI.MVC.Model
               l_fact.Cell.Value2 = "+inf.";
             else
               l_fact.Cell.Value = l_valuePair.Value;
+            l_fact.Value = l_valuePair.Value;
+            l_fact.EditedValue = l_valuePair.Value;
           }
         }
+        AddinModuleController.SetExcelInteractionState(true);
         if (FactsDownloaded != null)
           FactsDownloaded(true);
       }
@@ -234,7 +245,10 @@ namespace FBI.MVC.Model
     public bool UpdateEditedValueAndTag(Range p_cell)
     {
       if (m_editedFacts.ContainsKey(p_cell.Address))
+      {
+        ComputeOutputs();
         return true;
+      }
       return false;
     }
 

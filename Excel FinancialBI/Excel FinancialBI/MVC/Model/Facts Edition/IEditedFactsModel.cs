@@ -19,7 +19,7 @@ namespace FBI.MVC.Model
 
     void UnsubsribeEvents();
 
-    void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0);
+    void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0);
 
     void DownloadFacts(List<Int32> p_periodList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
 

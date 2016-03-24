@@ -9,7 +9,7 @@ namespace FBI.MVC.Model
   using CRUD;
   using Network;
 
-  class LegacyComputeModel : AComputeModel
+  class LegacyComputeModel : AComputeModel 
   {
     public event ComputeCompleteEventHandler ComputeCompleteEvent;
     public delegate void ComputeCompleteEventHandler(ErrorMessage p_status, LegacyComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result);

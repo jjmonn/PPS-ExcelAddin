@@ -18,12 +18,10 @@ namespace FBI.MVC.Model
 
   class RHEditedFactsModel : IEditedFactsModel
   {
-    MultiIndexDictionary<string, DimensionKey, EditedRHFact> m_RHEditedFacts = new MultiIndexDictionary<string, DimensionKey, EditedRHFact>();
+    public MultiIndexDictionary<string, DimensionKey, EditedRHFact> EditedFacts { get; private set; }
     WorksheetAreaController m_areaController = null;
-    RangeHighlighter m_rangeHighlighter;
-    List<int> m_requestIdList = new List<int>();
+    public List<int> RequestIdList { get; private set; }
     public event OnFactsDownloaded FactsDownloaded;
-    //public event FactsCommitError OnCommitError;
     Worksheet m_worksheet;
     private bool m_updateCellsOnDownload;
     UInt32 m_RHAccountId;
@@ -33,11 +31,11 @@ namespace FBI.MVC.Model
     SafeDictionary<string, EditedRHFact> m_clientsToBeCreated = new SafeDictionary<string, EditedRHFact>();
     private List<Int32> m_periodsList;
     FactsRHCommit m_factsCommit;
-    bool m_displayInitialDifferences;
-
 
     public RHEditedFactsModel(List<Int32> p_periodsList)
     {
+      RequestIdList = new List<int>();
+      EditedFacts = new MultiIndexDictionary<string, DimensionKey, EditedRHFact>();
       m_factsTagList =  StringUtils.ToLowerStringList(Enum.GetNames(typeof(FactTag.TagType)));
       m_legalHolidayTagList = StringUtils.ToLowerStringList(Enum.GetNames(typeof(LegalHolidayTag)));
       m_periodsList = p_periodsList;
@@ -45,34 +43,32 @@ namespace FBI.MVC.Model
 
     ~RHEditedFactsModel()
     {
-      m_RHEditedFacts.Clear();
-      m_requestIdList.Clear();
+      EditedFacts.Clear();
+      RequestIdList.Clear();
       m_legalHolidayTagList.Clear();
-
-      m_factsCommit = null;
-      m_rangeHighlighter = null;
-      m_factsTagList = null;
-      m_RHEditedFacts = null;
-      m_areaController = null;
     }
 
     public void UnsubsribeEvents()
     {
-      m_factsCommit.UnsuscribeEvents();
+      m_factsCommit.UnSuscribeEvents();
       //foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
       //{
       //  l_editedFact.OnCellValueChanged -= m_rangeHighlighter.FillCellColor;
       //}
     }
 
+    public void RaiseFactDownloaded(bool p_success)
+    {
+      if (FactsDownloaded != null)
+        FactsDownloaded(p_success);
+    }
+
     public void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId)
     {
       m_worksheet = p_worksheet;
       m_areaController = p_dimensions;
-      m_rangeHighlighter = p_rangeHighlighter;
       m_versionId = p_versionId;
       m_RHAccountId = p_RHAccountId;
-      m_displayInitialDifferences = p_displayInitialDifferences;
 
       Dimension<CRUDEntity> l_vertical = p_dimensions.Dimensions[p_dimensions.Orientation.Vertical];
       Dimension<CRUDEntity> l_horitontal = p_dimensions.Dimensions[p_dimensions.Orientation.Horizontal];
@@ -93,16 +89,14 @@ namespace FBI.MVC.Model
           Range l_factCell = m_worksheet.Cells[l_rowCell.Row, l_columnCell.Column] as Range;
           EditedRHFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
-          {
             InitializeEditedFact(l_editedFact, p_rangeHighlighter);
-          }
         }
       }
     }
 
     private void InitializeEditedFact(EditedRHFact p_editedFact, RangeHighlighter p_rangeHighlighter)
     {
-      m_RHEditedFacts.Set(p_editedFact.Cell.Address, new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, (Int32)p_editedFact.Period), p_editedFact);
+      EditedFacts.Set(p_editedFact.Cell.Address, new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, (Int32)p_editedFact.Period), p_editedFact);
       p_editedFact.EditedClientId = GetClientIdFromCell(p_editedFact.Cell);
       p_editedFact.EditedFactTag.Tag = GetTagTypeFromCell(p_editedFact.Cell);
       p_editedFact.EditedLegalHoliday.Tag = GetLegalHolidayTagFromCell(p_editedFact.Cell);
@@ -141,47 +135,14 @@ namespace FBI.MVC.Model
       List<AxisElem> l_employeesList = m_areaController.GetAxisElemList(DimensionType.EMPLOYEE);
       Int32 l_startPeriod = PeriodModel.GetDayMinus3Weeks(p_periodsList.ElementAt(0));      // Download 3 weeks more for fact CP tag type purpose
 
-      FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
-      m_requestIdList.Clear();
-      m_requestIdList.Add(FactsModel.Instance.GetFactRH(m_RHAccountId, l_entity.Id, l_employeesList, m_versionId, (UInt32)l_startPeriod, (UInt32)p_periodsList.ElementAt(p_periodsList.Count - 1)));
-    }
-
-    private void AfterRHFactsDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
-    {
-      // TO DO : time up to manage the case where the server stops answering or the connection is lost : 
-      //          -> In this case notify user and exit fact edition 
-      AddinModuleController.SetExcelInteractionState(false);
-      if (p_status == ErrorMessage.SUCCESS)
-      {
-        if (FillEditedFacts(p_fact_list) != true)
-        {
-          SetEditedFactsStatus();
-          AddinModuleController.SetExcelInteractionState(true);
-          FactsDownloaded(false);
-          FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
-        }
-        m_requestIdList.Remove(p_requestId);
-        if (m_requestIdList.Count == 0)
-        {
-          SetEditedFactsStatus();
-          AddinModuleController.SetExcelInteractionState(true);
-          FactsDownloaded(true);
-          FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
-        }
-      }
-      else
-      {
-        SetEditedFactsStatus();
-        AddinModuleController.SetExcelInteractionState(true);
-        FactsDownloaded(false);
-        FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
-      }
+      RequestIdList.Clear();
+      RequestIdList.Add(FactsModel.Instance.GetFactRH(m_RHAccountId, l_entity.Id, l_employeesList, m_versionId, (UInt32)l_startPeriod, (UInt32)p_periodsList.ElementAt(p_periodsList.Count - 1)));
     }
 
     private void DownloadLegalHolidays()
     {
       AddinModuleController.SetExcelInteractionState(false);
-      foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
+      foreach (EditedRHFact l_editedFact in EditedFacts.Values)
       {
         LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(l_editedFact.EmployeeId, l_editedFact.Period);
         if (l_legalHoliday != null)
@@ -200,20 +161,9 @@ namespace FBI.MVC.Model
       }
     }
 
-    private void SetEditedFactsStatus()
-    {
-      if (m_displayInitialDifferences == true)
-      {
-        AddinModuleController.SetExcelInteractionState(false);
-        foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
-        {
-          m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetCellStatusRH());
-        }
-        AddinModuleController.SetExcelInteractionState(true);
-      }
-    }
 
-    private bool FillEditedFacts(List<Fact> p_factsList)
+
+    public bool FillEditedFacts(List<Fact> p_factsList)
     {
       SafeDictionary<DimensionKey, Fact> l_previousWeeksFacts = new SafeDictionary<DimensionKey, Fact>();
       SafeDictionary<UInt32, EditedRHFact> l_IdEditedFactDict = new SafeDictionary<UInt32, EditedRHFact>();
@@ -223,7 +173,7 @@ namespace FBI.MVC.Model
         DimensionKey l_dimensionKey = new DimensionKey(l_fact.EntityId, l_fact.AccountId, l_fact.EmployeeId, (Int32)l_fact.Period);
         if (l_fact.Period >= m_periodsList.ElementAt(0))
         {
-          EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
+          EditedRHFact l_RHEditedFact = EditedFacts[l_dimensionKey];
           if (l_RHEditedFact != null)
           {
             l_IdEditedFactDict[l_fact.Id] = l_RHEditedFact;
@@ -242,13 +192,13 @@ namespace FBI.MVC.Model
         else
           l_previousWeeksFacts[l_dimensionKey] = l_fact;
       }
-      m_factsCommit = new FactsRHCommit(m_RHEditedFacts, l_previousWeeksFacts, l_IdEditedFactDict, m_periodsList, m_rangeHighlighter, m_RHAccountId, m_versionId);
+      m_factsCommit = new FactsRHCommit(EditedFacts, l_previousWeeksFacts, l_IdEditedFactDict, m_periodsList, m_rangeHighlighter, m_RHAccountId, m_versionId);
       return true;
     }
 
     public bool UpdateEditedValueAndTag(Range p_cell)
     {
-      EditedRHFact l_editedFact = m_RHEditedFacts[p_cell.Address];
+      EditedRHFact l_editedFact = EditedFacts[p_cell.Address];
       if (l_editedFact == null)
         return false;
       
@@ -331,7 +281,7 @@ namespace FBI.MVC.Model
 
           if (m_factsTagList.Contains(l_value) == false && m_legalHolidayTagList.Contains(l_value) == false)
           {
-            EditedRHFact l_editedFact = m_RHEditedFacts[p_cell.Address];
+            EditedRHFact l_editedFact = EditedFacts[p_cell.Address];
             if (l_editedFact != null)
               m_clientsToBeCreated[p_cell.Value2 as string] = l_editedFact;
             return -1;
@@ -349,11 +299,8 @@ namespace FBI.MVC.Model
       string l_value = StringUtils.RemoveDiacritics(p_cell.Value2 as string);
       if (l_value == "")
         return FactTag.TagType.NONE;
-
       if (m_factsTagList.Contains(l_value))
-      {
         return (FactTag.TagType)m_factsTagList.FindIndex(x => x.StartsWith(l_value));
-      }
       return FactTag.TagType.NONE;
     }
 

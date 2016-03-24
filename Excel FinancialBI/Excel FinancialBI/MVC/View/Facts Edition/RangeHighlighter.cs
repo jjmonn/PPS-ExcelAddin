@@ -8,20 +8,19 @@ namespace FBI.MVC.View
 {
   using FBI.MVC.Controller;
   using FBI.MVC.Model;
+  using FBI.MVC.Model.CRUD;
   using Microsoft.Office.Interop.Excel;
   using System.Drawing;
   using Utils;
 
   class RangeHighlighter
   {
-    FactsEditionController m_factsEditionController;
     Int32 DIMENSIONS_COLORS = Color.FromArgb(215, 239, 253).ToArgb();
     SafeDictionary<Range, Object> m_originalCellsColor = new SafeDictionary<Range, Object>();
     Worksheet m_worksheet;
 
-    public RangeHighlighter(FactsEditionController p_factsEditionController, Worksheet p_worksheet)
+    public RangeHighlighter(Worksheet p_worksheet)
     {
-      m_factsEditionController = p_factsEditionController;
       m_worksheet = p_worksheet;
     }
 

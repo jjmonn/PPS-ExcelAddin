@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FBI.MVC.Model
+namespace FBI.MVC.Model.CRUD
 {
-  using FBI.MVC.Model.CRUD;
   using Microsoft.Office.Interop.Excel;
-  
   
   class EditedRHFact : EditedFactBase
   {

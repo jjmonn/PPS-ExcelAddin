@@ -56,7 +56,7 @@ namespace FBI.MVC.Model
       LegalHolidayModel.Instance.UpdateListEvent += OnLegalHolidayUpdate;
     }
 
-    public void UnsuscribeEvents()
+    public void UnSuscribeEvents()
     {
       FactsModel.Instance.UpdateEvent -= OnFactsUpdateList;
       FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdate;

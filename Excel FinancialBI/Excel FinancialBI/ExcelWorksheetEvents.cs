@@ -12,7 +12,7 @@ namespace FBI
   /// </summary>
   public class ExcelWorksheetEvents : AddinExpress.MSO.ADXExcelWorksheetEvents
   {
-    FactsEditionController m_factsEditionController;
+    AFactEditionController m_factsEditionController;
     private UInt16 MAX_NB_ROWS = 16384;
 
     public ExcelWorksheetEvents(AddinExpress.MSO.ADXAddinModule module)
@@ -20,7 +20,7 @@ namespace FBI
     {
     }
 
-    public void SetController(FactsEditionController p_factsEditionController)
+    public void SetController(AFactEditionController p_factsEditionController)
     {
       m_factsEditionController = p_factsEditionController;
     }
