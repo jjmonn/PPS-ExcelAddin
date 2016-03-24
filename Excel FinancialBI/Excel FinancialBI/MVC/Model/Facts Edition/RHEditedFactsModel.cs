@@ -291,6 +291,11 @@ namespace FBI.MVC.Model
         Commit();
     }
 
+    public double? CellBelongToOutput(Range p_cell)
+    {
+      return (null);
+    }
+
     #region Utils
 
     private string GetClientString(EditedRHFact p_editedFact, UInt32 p_clientId, FactTag p_factTag)

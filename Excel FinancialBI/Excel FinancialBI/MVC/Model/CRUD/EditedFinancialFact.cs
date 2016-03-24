@@ -11,8 +11,6 @@ namespace FBI.MVC.Model.CRUD
 
   class EditedFinancialFact : EditedFactBase
   {
-    public double EditedValue { get; set; }
-
     public EditedFinancialFact(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId,
                                UInt32 p_employeeId, UInt32 p_versionId, PeriodDimension p_period, Range p_cell)
       : base(p_accountId, p_entityId, p_clientId, p_productId, p_adjustmentId, p_employeeId, p_versionId,

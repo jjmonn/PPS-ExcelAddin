@@ -126,7 +126,11 @@ namespace FBI.MVC.Controller
       IsEditingExcel = true;
       string l_result = m_areaController.CellBelongsToDimension(p_cell);
       if (l_result != "")
-        p_cell.Value2 = l_result; 
+        p_cell.Value2 = l_result;
+      double? l_result2 = m_editedFactsManager.CellBelongToOutput(p_cell);
+
+      if (l_result2 != null)
+        p_cell.Value2 = l_result2;
 
       // if cell belongs to dimension
       //   -> cancel modification and put back the dimension value

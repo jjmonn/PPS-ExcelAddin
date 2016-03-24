@@ -15,9 +15,9 @@ namespace FBI.MVC.Model
  
   class FinancialEditedFactsModel : IEditedFactsModel
   {
-    MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact> m_editedFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact>();
+    MultiIndexDictionary<string, DimensionKey, EditedFinancialFact> m_editedFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
     SafeDictionary<DimensionKey, Fact> m_facts = new SafeDictionary<DimensionKey, Fact>();
-    MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact> m_outputFacts = new MultiIndexDictionary<Range, DimensionKey, EditedFinancialFact>();
+    MultiIndexDictionary<string, DimensionKey, EditedFinancialFact> m_outputFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
     WorksheetAreaController m_dimensions = null;
     List<int> m_inputsRequestIdList = new List<int>();
     public event OnFactsDownloaded FactsDownloaded;
@@ -71,16 +71,20 @@ namespace FBI.MVC.Model
           if (l_editedFact != null)
           {
             // Set Edited Value     
-            l_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
+            l_editedFact.OnCellValueChanged += p_rangeHighlighter.FillCellColor;
       
             Account.FormulaTypes l_formulaType = l_editedFact.Account.FormulaType;
             if (l_formulaType == Account.FormulaTypes.HARD_VALUE_INPUT || l_formulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
-              m_editedFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
+              m_editedFacts.Set(l_factCell.Address, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
             else
-              m_outputFacts.Set(l_factCell, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
+              m_outputFacts.Set(l_factCell.Address, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
           }
         }
       }
+    }
+
+    void OnCellChanged(Range p_cell, EditedFactStatus p_status)
+    {
     }
 
     private EditedFinancialFact CreateEditedFact(Dimension<CRUDEntity> p_dimension1, CRUDEntity p_dimensionValue1,
@@ -229,16 +233,8 @@ namespace FBI.MVC.Model
 
     public bool UpdateEditedValueAndTag(Range p_cell)
     {
-      if (m_editedFacts.ContainsKey(p_cell))
-      {
-
+      if (m_editedFacts.ContainsKey(p_cell.Address))
         return true;
-      }
-      if (m_outputFacts.ContainsKey(p_cell))
-      {
-
-        return true;
-      }
       return false;
     }
 
@@ -263,6 +259,14 @@ namespace FBI.MVC.Model
 
     // TO DO : After commit event
 
+    public double? CellBelongToOutput(Range p_cell)
+    {
+      EditedFinancialFact l_fact = m_outputFacts[p_cell.Address];
+
+      if (l_fact == null)
+        return (null);
+      return (l_fact.Value);
+    }
 
     #region Utils
 
