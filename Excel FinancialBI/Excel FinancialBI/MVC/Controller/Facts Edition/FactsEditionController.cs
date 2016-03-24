@@ -36,7 +36,7 @@ namespace FBI.MVC.Controller
       m_addinModuleController = p_addinModuleController;
       m_versionId = p_versionId;
       m_worksheet = p_worksheet;
-      m_areaController = new WorksheetAreaController(m_versionId, m_worksheet, p_periodsList);
+      m_areaController = new WorksheetAreaController(p_process, m_versionId, m_worksheet, p_periodsList);
       m_rangeHighlighter = new RangeHighlighter(this, m_worksheet);
       m_process = p_process;
       m_periodsList = p_periodsList;
@@ -48,14 +48,10 @@ namespace FBI.MVC.Controller
         m_editedFactsManager = new RHEditedFactsModel(p_periodsList);
 
       m_editedFactsManager.FactsDownloaded += OnFactsDownloaded;
-   //   m_editedFactsManager.OnCommitError -= OnCommitError;
     }
 
-    public bool Launch(bool p_updateCells, bool p_displayInitialDifferences)
+    public bool Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
-      // TO DO: Compatibilité resfresh
-      // Clean current status, higlights and so on
-
       if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
       {
         m_worksheetAnalyzer.Snapshot(m_areaController);
@@ -64,9 +60,9 @@ namespace FBI.MVC.Controller
           return false;
 
         m_editedFactsManager.RegisterEditedFacts(m_areaController, m_worksheet, m_versionId, m_rangeHighlighter, p_displayInitialDifferences, m_RHAccountId);
-        if (m_versionId != 0 && m_periodsList.Count > 0)
+        if (m_versionId != 0 && (m_periodsList == null || m_periodsList.Count > 0))
         {
-          OpenFactsEdition(p_updateCells);
+          OpenFactsEdition(p_updateCells, p_clientId, p_productId, p_adjustmentId);
           return true;
         }
         else
@@ -75,9 +71,9 @@ namespace FBI.MVC.Controller
       return false;
     }
 
-    private void OpenFactsEdition(bool p_updateCells)
+    private void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
-      m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells);
+      m_editedFactsManager.DownloadFacts(m_periodsList, p_updateCells, p_clientId, p_productId, p_adjustmentId);
       ActivateFactEditionRibbon();
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
       // TO DO : subsribe to commit error event ?

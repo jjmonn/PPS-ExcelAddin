@@ -130,7 +130,7 @@ namespace FBI.MVC.Model
       return new EditedRHFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell);
     }
 
-    public void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells)
+    public void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       AddinModuleController.SetExcelInteractionState(false);
       m_updateCellsOnDownload = p_updateCells;

@@ -23,6 +23,25 @@ namespace FBI.MVC.Controller
     public string Error { get; set; }
     // SidePanesControllers
 
+    private UInt32 m_submissionClientId;
+    private UInt32 m_submissionProductId;
+    private UInt32 m_submissionAdjustmentId;
+    public UInt32 SubmissionClientId
+    {
+      get { return (m_submissionClientId); }
+      set { m_view.SubmissionClientId = (m_submissionClientId = value); }
+    }
+    public UInt32 SubmissionProductId
+    {
+      get { return (m_submissionProductId); }
+      set { m_view.SubmissionProductId = (m_submissionProductId = value); }
+    }
+    public UInt32 SubmissionAdjustmentId
+    {
+      get { return (m_submissionAdjustmentId); }
+      set { m_view.SubmissionAdjustmentId = (m_submissionAdjustmentId = value); }
+    }
+
     public AddinModuleController(AddinModule p_view)
     {
       m_view = p_view;
@@ -46,7 +65,8 @@ namespace FBI.MVC.Controller
       if (l_version != null)
       {
         m_factsEditionController = new FactsEditionController(this, Account.AccountProcess.FINANCIAL, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet, null, 0);
-        return m_factsEditionController.Launch(p_updateCells, true);
+        return m_factsEditionController.Launch(p_updateCells, true, SubmissionClientId, 
+          SubmissionProductId, SubmissionAdjustmentId);
       }
       else
         return false;
@@ -55,14 +75,18 @@ namespace FBI.MVC.Controller
     public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId,  bool p_displayInitialDifferences, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
     {
         m_factsEditionController = new FactsEditionController(this, Account.AccountProcess.RH, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
-        return m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences);
+        return m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences, 0, 0, 0);
     }
 
     public bool LaunchReportEdition()
     {
       Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
       Version l_version = GetCurrentVersion();
-      
+
+      SubmissionClientId = (UInt32)AxisType.Client;
+      SubmissionProductId = (UInt32)AxisType.Product;
+      SubmissionAdjustmentId = (UInt32)AxisType.Adjustment;
+
       if (l_version != null)
       {
         ReportEditionController l_reportEditionController = new ReportEditionController(l_process, l_version, this, m_view.ReportUploadEntitySelectionSidePane);

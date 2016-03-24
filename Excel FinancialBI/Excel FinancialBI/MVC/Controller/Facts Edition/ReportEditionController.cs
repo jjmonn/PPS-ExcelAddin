@@ -17,7 +17,7 @@ namespace FBI.MVC.Controller
 
  public class ReportEditionController
   {
-    AddinModuleController m_addinModuleController;
+    AddinModuleController m_addinController;
     ReportEditionSidePane m_view;
     Version m_version;
     AxisElem m_entity;
@@ -31,7 +31,7 @@ namespace FBI.MVC.Controller
     {
       m_process = p_process;
       m_version = p_version;
-      m_addinModuleController = p_addinModuleController;
+      m_addinController = p_addinModuleController;
       m_view = p_view;
       m_view.SetController(this);
       m_view.LoadView(p_process, new PeriodRangeSelectionController(p_version.Id));
@@ -52,7 +52,7 @@ namespace FBI.MVC.Controller
         return (false);
       }
 
-      if (IsInputEntity((UInt32)p_entityNode.Value) == false)
+      if (SetInputEntity((UInt32)p_entityNode.Value) == false)
         return (false);
        
       if (m_process == Account.AccountProcess.RH)
@@ -60,7 +60,7 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-    public bool IsInputEntity(UInt32 p_entityId)
+    public bool SetInputEntity(UInt32 p_entityId)
     {
       AxisElem l_entity = AxisElemModel.Instance.GetValue(p_entityId);
       if (l_entity == null)
@@ -113,7 +113,7 @@ namespace FBI.MVC.Controller
       {
         l_result = InputReportCreationProcessFinancial(l_entityCurrency);
         if (l_result)
-          m_addinModuleController.LaunchFinancialSnapshot(true);
+          m_addinController.LaunchFinancialSnapshot(true);
         AddinModuleController.SetExcelInteractionState(true);
         return l_result;
       }
@@ -121,7 +121,7 @@ namespace FBI.MVC.Controller
       {
         l_result = InputReportCreationProcessRH(l_entityCurrency);
         if (l_result)
-          m_addinModuleController.LaunchRHSnapshot(true, m_version.Id, true, m_periodList, m_RHAccount.Id);
+          m_addinController.LaunchRHSnapshot(true, m_version.Id, true, m_periodList, m_RHAccount.Id);
         AddinModuleController.SetExcelInteractionState(true);
         return l_result;
       }

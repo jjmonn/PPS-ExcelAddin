@@ -417,6 +417,30 @@ namespace FBI
     }
 
     #endregion
+
+    public UInt32 SubmissionClientId
+    {
+      set
+      {
+        ClientsDropDown.SelectedItemId = AxisElemModel.Instance.GetValueName(value);
+      }
+    }
+
+    public UInt32 SubmissionProductId
+    {
+      set
+      {
+        ProductsDropDown.SelectedItemId = AxisElemModel.Instance.GetValueName(value);
+      }
+    }
+
+    public UInt32 SubmissionAdjustmentId
+    {
+      set
+      {
+        AdjustmentDropDown.SelectedItemId = AxisElemModel.Instance.GetValueName(value);
+      }
+    }
  
   }
 }

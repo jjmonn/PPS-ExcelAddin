@@ -46,7 +46,6 @@
       this.m_reportUploadRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_visualizationGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_CUIRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_submissionsTrackingRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_fbiRibbonButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
       this.adxRibbonMenu2 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
       this.m_fbiBreakLinksRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -57,10 +56,14 @@
       this.m_refreshWorkbookRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.adxRibbonMenuSeparator1 = new AddinExpress.MSO.ADXRibbonMenuSeparator(this.components);
       this.m_autoRefreshRibbonChackBox = new AddinExpress.MSO.ADXRibbonCheckBox(this.components);
+      this.m_submissionControlButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
+      this.adxRibbonMenu6 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
+      this.m_submissionsTrackingRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_duplicatesFinderButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.SubmissionRibbonIL = new System.Windows.Forms.ImageList(this.components);
       this.m_configurationGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_platformManagementButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_settingsRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.SubmissionRibbonIL = new System.Windows.Forms.ImageList(this.components);
       this.Menu3 = new System.Windows.Forms.ImageList(this.components);
       this.NewICOs = new System.Windows.Forms.ImageList(this.components);
       this.LightsImageList = new System.Windows.Forms.ImageList(this.components);
@@ -82,7 +85,7 @@
       this.entityEditBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonButton1 = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.VersionBT2 = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.CurrentEntityTB = new AddinExpress.MSO.ADXRibbonEditBox(this.components);
+      this.EntityTB = new AddinExpress.MSO.ADXRibbonEditBox(this.components);
       this.EntCurrTB = new AddinExpress.MSO.ADXRibbonEditBox(this.components);
       this.VersionTBSubRibbon = new AddinExpress.MSO.ADXRibbonEditBox(this.components);
       this.AdxRibbonButton2 = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -130,9 +133,6 @@
       this.m_PDCPeriodsRangeEditButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonRHExitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_submissionControlButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
-      this.adxRibbonMenu6 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
-      this.m_duplicatesFinderButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
       // m_financialbiRibbon
       // 
@@ -296,16 +296,6 @@
       this.m_CUIRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_CUIRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       // 
-      // m_submissionsTrackingRibbonButton
-      // 
-      this.m_submissionsTrackingRibbonButton.Caption = "Submission tracking";
-      this.m_submissionsTrackingRibbonButton.Id = "adxRibbonButton_dddfbfa165464d13bc1086a560e15cc5";
-      this.m_submissionsTrackingRibbonButton.Image = 9;
-      this.m_submissionsTrackingRibbonButton.ImageList = this.m_mainRibbonImageList;
-      this.m_submissionsTrackingRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_submissionsTrackingRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_submissionsTrackingRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      // 
       // m_fbiRibbonButton
       // 
       this.m_fbiRibbonButton.Caption = "GetData()";
@@ -394,6 +384,68 @@
       this.m_autoRefreshRibbonChackBox.Pressed = true;
       this.m_autoRefreshRibbonChackBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
+      // m_submissionControlButton
+      // 
+      this.m_submissionControlButton.Caption = "Submissions Control";
+      this.m_submissionControlButton.Controls.Add(this.adxRibbonMenu6);
+      this.m_submissionControlButton.Id = "adxRibbonSplitButton_6fa21f44bd784c41bdfb5cb9bc46caf0";
+      this.m_submissionControlButton.Image = 9;
+      this.m_submissionControlButton.ImageList = this.m_mainRibbonImageList;
+      this.m_submissionControlButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_submissionControlButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_submissionControlButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
+      // 
+      // adxRibbonMenu6
+      // 
+      this.adxRibbonMenu6.Caption = "adxRibbonMenu6";
+      this.adxRibbonMenu6.Controls.Add(this.m_submissionsTrackingRibbonButton);
+      this.adxRibbonMenu6.Controls.Add(this.m_duplicatesFinderButton);
+      this.adxRibbonMenu6.Id = "adxRibbonMenu_18c93c5cbe6646998ab3b95ba444187f";
+      this.adxRibbonMenu6.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.adxRibbonMenu6.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      // 
+      // m_submissionsTrackingRibbonButton
+      // 
+      this.m_submissionsTrackingRibbonButton.Caption = "Submission tracking";
+      this.m_submissionsTrackingRibbonButton.Id = "adxRibbonButton_dddfbfa165464d13bc1086a560e15cc5";
+      this.m_submissionsTrackingRibbonButton.Image = 9;
+      this.m_submissionsTrackingRibbonButton.ImageList = this.m_mainRibbonImageList;
+      this.m_submissionsTrackingRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_submissionsTrackingRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_submissionsTrackingRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
+      // 
+      // m_duplicatesFinderButton
+      // 
+      this.m_duplicatesFinderButton.Caption = "Duplicates Finder";
+      this.m_duplicatesFinderButton.Id = "adxRibbonButton_81e1b67840834125ba178a6fabdbb4cc";
+      this.m_duplicatesFinderButton.Image = 9;
+      this.m_duplicatesFinderButton.ImageList = this.SubmissionRibbonIL;
+      this.m_duplicatesFinderButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_duplicatesFinderButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_duplicatesFinderButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_duplicatesFinderButton_OnClick);
+      // 
+      // SubmissionRibbonIL
+      // 
+      this.SubmissionRibbonIL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("SubmissionRibbonIL.ImageStream")));
+      this.SubmissionRibbonIL.TransparentColor = System.Drawing.Color.Transparent;
+      this.SubmissionRibbonIL.Images.SetKeyName(0, "1420498403_340208.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(1, "favicon(161).ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(2, "favicon(180).ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(3, "favicon(185).ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(4, "favicon(188).ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(5, "favicon(195).ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(6, "refresh 3.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(7, "imageres_89.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(8, "elements blue.ico.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(9, "spreadsheed.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(10, "currency_euro.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(11, "barcode.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(12, "users_relation.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(13, "breakpoints.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(14, "settings-icon.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(15, "door_exit.ico");
+      this.SubmissionRibbonIL.Images.SetKeyName(16, "upload.ico");
+      // 
       // m_configurationGroup
       // 
       this.m_configurationGroup.Caption = "Configuration";
@@ -422,28 +474,6 @@
       this.m_settingsRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_settingsRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_settingsRibbonButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      // 
-      // SubmissionRibbonIL
-      // 
-      this.SubmissionRibbonIL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("SubmissionRibbonIL.ImageStream")));
-      this.SubmissionRibbonIL.TransparentColor = System.Drawing.Color.Transparent;
-      this.SubmissionRibbonIL.Images.SetKeyName(0, "1420498403_340208.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(1, "favicon(161).ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(2, "favicon(180).ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(3, "favicon(185).ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(4, "favicon(188).ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(5, "favicon(195).ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(6, "refresh 3.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(7, "imageres_89.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(8, "elements blue.ico.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(9, "spreadsheed.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(10, "currency_euro.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(11, "barcode.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(12, "users_relation.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(13, "breakpoints.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(14, "settings-icon.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(15, "door_exit.ico");
-      this.SubmissionRibbonIL.Images.SetKeyName(16, "upload.ico");
       // 
       // Menu3
       // 
@@ -587,7 +617,7 @@
       this.StateSelectionGroup.Controls.Add(this.entityEditBT);
       this.StateSelectionGroup.Controls.Add(this.AdxRibbonButton1);
       this.StateSelectionGroup.Controls.Add(this.VersionBT2);
-      this.StateSelectionGroup.Controls.Add(this.CurrentEntityTB);
+      this.StateSelectionGroup.Controls.Add(this.EntityTB);
       this.StateSelectionGroup.Controls.Add(this.EntCurrTB);
       this.StateSelectionGroup.Controls.Add(this.VersionTBSubRibbon);
       this.StateSelectionGroup.Controls.Add(this.AdxRibbonButton2);
@@ -624,15 +654,15 @@
       this.VersionBT2.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.VersionBT2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
-      // CurrentEntityTB
+      // EntityTB
       // 
-      this.CurrentEntityTB.Caption = " ";
-      this.CurrentEntityTB.Enabled = false;
-      this.CurrentEntityTB.Id = "adxRibbonEditBox_994a7df7764c43dbb7a7f4392d489c7a";
-      this.CurrentEntityTB.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.CurrentEntityTB.MaxLength = 30;
-      this.CurrentEntityTB.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.CurrentEntityTB.SizeString = "wwwwwwwwwwwwwwww";
+      this.EntityTB.Caption = " ";
+      this.EntityTB.Enabled = false;
+      this.EntityTB.Id = "adxRibbonEditBox_994a7df7764c43dbb7a7f4392d489c7a";
+      this.EntityTB.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.EntityTB.MaxLength = 30;
+      this.EntityTB.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.EntityTB.SizeString = "wwwwwwwwwwwwwwww";
       // 
       // EntCurrTB
       // 
@@ -1051,36 +1081,6 @@
       this.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor";
       this.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       // 
-      // m_submissionControlButton
-      // 
-      this.m_submissionControlButton.Caption = "Submissions Control";
-      this.m_submissionControlButton.Controls.Add(this.adxRibbonMenu6);
-      this.m_submissionControlButton.Id = "adxRibbonSplitButton_6fa21f44bd784c41bdfb5cb9bc46caf0";
-      this.m_submissionControlButton.Image = 9;
-      this.m_submissionControlButton.ImageList = this.m_mainRibbonImageList;
-      this.m_submissionControlButton.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_submissionControlButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_submissionControlButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      // 
-      // adxRibbonMenu6
-      // 
-      this.adxRibbonMenu6.Caption = "adxRibbonMenu6";
-      this.adxRibbonMenu6.Controls.Add(this.m_submissionsTrackingRibbonButton);
-      this.adxRibbonMenu6.Controls.Add(this.m_duplicatesFinderButton);
-      this.adxRibbonMenu6.Id = "adxRibbonMenu_18c93c5cbe6646998ab3b95ba444187f";
-      this.adxRibbonMenu6.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.adxRibbonMenu6.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // m_duplicatesFinderButton
-      // 
-      this.m_duplicatesFinderButton.Caption = "Duplicates Finder";
-      this.m_duplicatesFinderButton.Id = "adxRibbonButton_81e1b67840834125ba178a6fabdbb4cc";
-      this.m_duplicatesFinderButton.Image = 9;
-      this.m_duplicatesFinderButton.ImageList = this.SubmissionRibbonIL;
-      this.m_duplicatesFinderButton.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_duplicatesFinderButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_duplicatesFinderButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_duplicatesFinderButton_OnClick);
-      // 
       // AddinModule
       // 
       this.AddinName = "FinancialBI";
@@ -1136,11 +1136,10 @@
     private AddinExpress.MSO.ADXRibbonMenuSeparator AdxRibbonSeparator6;
     private AddinExpress.MSO.ADXRibbonButton m_financialSubmissionSatusButton;
     private AddinExpress.MSO.ADXRibbonButton m_financialSubmissionCancelButton;
-    private AddinExpress.MSO.ADXRibbonGroup StateSelectionGroup;
     private AddinExpress.MSO.ADXRibbonButton entityEditBT;
     private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton1;
     private AddinExpress.MSO.ADXRibbonButton VersionBT2;
-    private AddinExpress.MSO.ADXRibbonEditBox CurrentEntityTB;
+    private AddinExpress.MSO.ADXRibbonEditBox EntityTB;
     private AddinExpress.MSO.ADXRibbonEditBox EntCurrTB;
     private AddinExpress.MSO.ADXRibbonEditBox VersionTBSubRibbon;
 
@@ -1152,9 +1151,6 @@
     private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton2;    // renamme those buttons based on caption TO DO
     private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton3;
     private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton4;
-    private AddinExpress.MSO.ADXRibbonDropDown AdjustmentDropDown;
-    private AddinExpress.MSO.ADXRibbonDropDown ClientsDropDown;
-    private AddinExpress.MSO.ADXRibbonDropDown ProductsDropDown;
     private AddinExpress.MSO.ADXRibbonGroup EditSelectionGroup;
     private AddinExpress.MSO.ADXRibbonSplitButton SubmissionOptionsBT;
     private AddinExpress.MSO.ADXRibbonMenu AdxRibbonMenu5;
@@ -1200,6 +1196,10 @@
     private AddinExpress.MSO.ADXRibbonSplitButton m_submissionControlButton;
     private AddinExpress.MSO.ADXRibbonMenu adxRibbonMenu6;
     private AddinExpress.MSO.ADXRibbonButton m_duplicatesFinderButton;
+    public AddinExpress.MSO.ADXRibbonDropDown AdjustmentDropDown;
+    public AddinExpress.MSO.ADXRibbonDropDown ClientsDropDown;
+    public AddinExpress.MSO.ADXRibbonDropDown ProductsDropDown;
+    public AddinExpress.MSO.ADXRibbonGroup StateSelectionGroup;
     
 
   }

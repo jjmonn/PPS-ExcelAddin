@@ -58,6 +58,7 @@ namespace FBI.MVC.Model
 
     public Int32 GetFactFinancial(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
+      NetworkManager.SetCallback((UInt16)ServerMessage.SMSG_GET_FACT_ANSWER, GetFactAnswer);
       ByteBuffer l_packet = new ByteBuffer((UInt16)ClientMessage.CMSG_GET_FACT);
       Int32 l_requestId = l_packet.AssignRequestId();
 

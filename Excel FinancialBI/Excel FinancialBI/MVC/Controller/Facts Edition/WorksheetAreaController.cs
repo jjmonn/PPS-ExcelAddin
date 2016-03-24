@@ -40,9 +40,10 @@ namespace FBI.MVC.Model
     public Account.AccountProcess Process { get; private set; }
     private Worksheet m_worksheet;
 
-    public WorksheetAreaController(UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
+    public WorksheetAreaController(Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
     {
       m_worksheet = p_worksheet;
+      Process = p_process;
      
       foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
         Dimensions[l_dim] = new Dimension<CRUDEntity>(l_dim, m_worksheet);

@@ -11,7 +11,7 @@ namespace FBI.MVC.Model
   using FBI.MVC.View;
   using Network;
   using Utils;
-
+  using Model;
  
   class FinancialEditedFactsModel : IEditedFactsModel
   {
@@ -105,7 +105,7 @@ namespace FBI.MVC.Model
       return new EditedFinancialFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell);
     }
 
-    public void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells)
+    public void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       // flush m_editedFacts ?
       // flush m_facts ?
@@ -114,43 +114,26 @@ namespace FBI.MVC.Model
       m_periodsList = p_periodsList;
       m_updateCellsOnDownload = p_updateCells;
       List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
-      Int32 l_startPeriod = p_periodsList.ElementAt(0);
-      Int32 l_endPeriod = p_periodsList.ElementAt(p_periodsList.Count);
 
       FactsModel.Instance.ReadEvent += OnFinancialInputDownloaded;
       m_inputsRequestIdList.Clear();
       foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
-      {
         foreach (AxisElem l_entity in l_entitiesList)
-        {
-          //
-          // TO DO : create method on server returning all facts specific to an entity :
-          //    - all accounts
-          //    - filter on client, product, adjustment and employee
-          //
-          //m_inputsRequestIdList.Add(FactsModel.Instance.GetFactFinancial());
-        }
-      }
+          m_inputsRequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entity.Id, m_versionId, p_clientId, p_productId, p_adjustmentId));
     }
 
     private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
-        //
-        // Attention : pour l'instant la méthode n'est pas adaptée: nécessité de filtrer sur les
-        // clients, produits, ajustement et employé pour financial
-        //
-        if (FillFactsDictionnaries(p_fact_list) != true)
+        if (FillFactsDictionnaries(p_fact_list) == false)
         {
           FactsDownloaded(false);
           FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
         }
         m_inputsRequestIdList.Remove(p_requestId);
         if (m_inputsRequestIdList.Count == 0)
-        {
           ComputeOutputs();
-        }
       }
       else
       {
@@ -169,14 +152,15 @@ namespace FBI.MVC.Model
         DimensionKey l_dimensionKey = new DimensionKey(l_fact.EntityId, l_fact.AccountId, (UInt32)AxisType.Employee, (Int32)l_fact.Period);
         EditedFinancialFact l_EditedFact = m_editedFacts[l_dimensionKey];
         if (l_EditedFact != null)
+        {
           l_EditedFact.UpdateFinancialFact(l_fact);
+          if (m_updateCellsOnDownload)
+            l_EditedFact.Cell.Value2 = l_EditedFact.Value;
+        }
         else
           m_facts[l_dimensionKey] = l_fact;  // Fact not on worksheet, saved as fact
-      // if must update worksheet
-        // update cell Value2
-      
       }
-      return true;
+      return (true);
     }
 
     public void ComputeOutputs()
@@ -188,22 +172,13 @@ namespace FBI.MVC.Model
 
       List<Fact> l_factsList = new List<Fact>();
       foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
-      {
         l_factsList.Add(l_editedFact);
-      }
       l_sourcedComputeRequest.FactList = l_factsList;
 
       List<UInt32> l_entitiesList = new List<UInt32>(); 
       foreach (AxisElem l_entity in m_dimensions.Entities.m_values.Values)
-      {
         l_entitiesList.Add(l_entity.Id);
-      }
       l_sourcedComputeRequest.EntityList = l_entitiesList;
-     
-      /////
-      // must fill accounts list ?
-      /////
-
       SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest);
     }
 
@@ -218,13 +193,23 @@ namespace FBI.MVC.Model
     {
       if (p_status == ErrorMessage.SUCCESS)
       {
+        foreach (ComputeResult l_result in p_result.Values)
+        {
+          foreach (KeyValuePair<ResultKey, double> l_valuePair in l_result.Values)
+          {
+            DimensionKey l_key = 
+              new DimensionKey(l_valuePair.Key.EntityId, l_valuePair.Key.AccountId, (UInt32)AxisType.Employee, l_valuePair.Key.Period);
+            EditedFinancialFact l_fact = m_outputFacts[l_key];
 
+            if (l_fact == null)
+              continue;
+            l_fact.Cell.Value2 = l_valuePair.Value;
+          }
+        }
+        FactsDownloaded(true);
       }
       else
-      {
-        // Exit financial edition mode ?
         FactsDownloaded(false);
-      }
     }
 
     public bool UpdateEditedValueAndTag(Range p_cell)
