@@ -359,6 +359,7 @@ namespace FBI.MVC.View
       else
         l_axisList = AxisElemModel.Instance.GetChildren(l_conf.AxisTypeId, l_conf.ParentId);
 
+      l_axisList.Sort();
       foreach (AxisElem l_elem in l_axisList)
       {
         if (l_elem == null)
@@ -410,6 +411,7 @@ namespace FBI.MVC.View
 
       if (l_accountList == null)
         return;
+      l_accountList.Sort();
       foreach (Account l_account in l_accountList)
       {
         if (l_account.Process != m_computeConfig.Request.Process || l_account.FormulaType == Account.FormulaTypes.TITLE)
