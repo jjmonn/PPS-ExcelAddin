@@ -78,7 +78,8 @@ namespace FBI.Utils
     public static void WriteAccountsFromTreeView(FbiTreeView<Account> p_accountsTreeview, Range p_range, List<Int32> p_periodsList, TimeConfig p_timeConfig)
     {
 	    int IndentLevel = 0;
-	    foreach (vTreeNode Node in p_accountsTreeview.Nodes) {
+	    foreach (vTreeNode Node in p_accountsTreeview.Nodes) 
+      {
 		    IndentLevel = 0;
 		    p_range = p_range.Offset[1, 0];
 		    p_range.Value = Node.Text;
@@ -86,8 +87,9 @@ namespace FBI.Utils
         WritePeriodsOnWorksheet(p_range, p_periodsList, p_timeConfig);
 		    p_range = p_range.Offset[1, 0];
 
-		    foreach (vTreeNode childNode in Node.Nodes) {
-			    WriteAccountOnWorksheet(childNode, p_range, IndentLevel);
+		    foreach (vTreeNode childNode in Node.Nodes) 
+        {
+			    WriteAccountOnWorksheet(childNode, ref p_range, IndentLevel);
 		    }
 	    }
 	    p_range.Columns.AutoFit();
@@ -107,7 +109,7 @@ namespace FBI.Utils
       }
     }
     
-    private static void WriteAccountOnWorksheet(vTreeNode p_node, Range p_range, int p_indentLevel)
+    private static void WriteAccountOnWorksheet(vTreeNode p_node, ref Range p_range, int p_indentLevel)
     {
       p_range.IndentLevel = p_indentLevel;
       p_range.Value = p_node.Text;
@@ -116,7 +118,7 @@ namespace FBI.Utils
       foreach (vTreeNode Child in p_node.Nodes)
       {
         p_indentLevel = p_indentLevel + 1;
-        WriteAccountOnWorksheet(Child, p_range, p_indentLevel);
+        WriteAccountOnWorksheet(Child, ref p_range, p_indentLevel);
         p_indentLevel = p_indentLevel - 1;
       }
 

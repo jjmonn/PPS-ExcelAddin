@@ -117,9 +117,8 @@ namespace FBI.MVC.Model
 
       FactsModel.Instance.ReadEvent += OnFinancialInputDownloaded;
       m_inputsRequestIdList.Clear();
-      foreach (EditedFinancialFact l_editedFact in m_editedFacts.Values)
-        foreach (AxisElem l_entity in l_entitiesList)
-          m_inputsRequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entity.Id, m_versionId, p_clientId, p_productId, p_adjustmentId));
+      foreach (AxisElem l_entity in l_entitiesList)
+        m_inputsRequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entity.Id, m_versionId, p_clientId, p_productId, p_adjustmentId));
     }
 
     private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
@@ -141,7 +140,6 @@ namespace FBI.MVC.Model
         FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
       }
     }
-
 
     // TO DO : must update worksheet flag
     //
@@ -212,13 +210,13 @@ namespace FBI.MVC.Model
             if (l_fact == null)
               continue;
             if ((Double.IsNaN(l_valuePair.Value)))
-              l_fact.Cell.Value2 = "NaN";
+              l_fact.Cell.Value2 = "-";
             else if (Double.IsNegativeInfinity(l_valuePair.Value))
               l_fact.Cell.Value2 = "-inf.";
             else if (Double.IsPositiveInfinity(l_valuePair.Value))
               l_fact.Cell.Value2 = "+inf.";
             else
-              l_fact.Cell.Value2 = l_valuePair.Value;
+              l_fact.Cell.Value = l_valuePair.Value;
           }
         }
         if (FactsDownloaded != null)
