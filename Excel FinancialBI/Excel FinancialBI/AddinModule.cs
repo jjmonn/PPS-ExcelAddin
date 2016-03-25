@@ -345,7 +345,7 @@ namespace FBI
     private void m_financialSubmissionSubmitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
         // TO DO raise event or call method in owned facts edition controller
-
+      m_controller.FactsSubmission();
     }
 
     private void m_financialSubmissionAutoCommitButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -364,7 +364,7 @@ namespace FBI
 
     private void m_PDCSubmissionButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      m_controller.RHFactsSubmission();
+      m_controller.FactsSubmission();
     }
 
     private void m_PDCAutocommitButton_OnClick(object sender, IRibbonControl control, bool pressed)

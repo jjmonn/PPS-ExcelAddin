@@ -213,6 +213,17 @@ namespace FBI.MVC.Model
 
     public override void Commit()
     {
+      SafeDictionary<string, Fact> l_dic = new SafeDictionary<string, Fact>();
+
+      foreach (EditedFinancialFact l_editedFact in EditedFacts.Values)
+      {
+        if (l_editedFact.Value == l_editedFact.EditedValue)
+          continue;
+        l_dic[l_editedFact.Cell.Address] = l_editedFact;
+      }
+
+      if (l_dic.Count > 0)
+        FactsModel.Instance.UpdateList(l_dic, CRUDAction.UPDATE);
       // TO DO
       // Loop through facts : if to be commited  add to update list
       // Send EditedFacts to the model  

@@ -112,7 +112,7 @@ namespace FBI.MVC.Controller
       return false;
      }
 
-    public bool RHFactsSubmission()
+    public bool FactsSubmission()
     {
       if (m_factsEditionController == null)
       {

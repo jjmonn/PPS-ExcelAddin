@@ -30,6 +30,7 @@ namespace FBI.MVC.Model.CRUD
     {
       UpdateFactBase(p_fact);
       Value = p_fact.Value;
+      EditedValue = p_fact.Value;
       ClientId = p_fact.ClientId;
       SetFactValueStatus();
     }
