@@ -16,12 +16,10 @@ namespace FBI.MVC.Model
 
 //  public delegate void FactsCommitError(string p_address, ErrorMessage p_error);
 
-  class RHEditedFactsModel : IEditedFactsModel
+  class RHEditedFactsModel : AEditedFactsModel
   {
     public MultiIndexDictionary<string, DimensionKey, EditedRHFact> EditedFacts { get; private set; }
     WorksheetAreaController m_areaController = null;
-    public List<int> RequestIdList { get; private set; }
-    public event OnFactsDownloaded FactsDownloaded;
     Worksheet m_worksheet;
     private bool m_updateCellsOnDownload;
     UInt32 m_RHAccountId;
@@ -31,10 +29,12 @@ namespace FBI.MVC.Model
     SafeDictionary<string, EditedRHFact> m_clientsToBeCreated = new SafeDictionary<string, EditedRHFact>();
     private List<Int32> m_periodsList;
     FactsRHCommit m_factsCommit;
+    RangeHighlighter m_rangeHighlighter;
 
-    public RHEditedFactsModel(List<Int32> p_periodsList)
+    public RHEditedFactsModel(List<Int32> p_periodsList, Worksheet p_worksheet)
     {
-      RequestIdList = new List<int>();
+      m_worksheet = p_worksheet;
+      m_rangeHighlighter = new RangeHighlighter(m_worksheet);
       EditedFacts = new MultiIndexDictionary<string, DimensionKey, EditedRHFact>();
       m_factsTagList =  StringUtils.ToLowerStringList(Enum.GetNames(typeof(FactTag.TagType)));
       m_legalHolidayTagList = StringUtils.ToLowerStringList(Enum.GetNames(typeof(LegalHolidayTag)));
@@ -48,7 +48,7 @@ namespace FBI.MVC.Model
       m_legalHolidayTagList.Clear();
     }
 
-    public void UnsubsribeEvents()
+    public override void UnsubsribeEvents()
     {
       m_factsCommit.UnSuscribeEvents();
       //foreach (EditedRHFact l_editedFact in m_RHEditedFacts.Values)
@@ -57,13 +57,7 @@ namespace FBI.MVC.Model
       //}
     }
 
-    public void RaiseFactDownloaded(bool p_success)
-    {
-      if (FactsDownloaded != null)
-        FactsDownloaded(p_success);
-    }
-
-    public void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, RangeHighlighter p_rangeHighlighter, bool p_displayInitialDifferences, UInt32 p_RHAccountId)
+    public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
     {
       m_worksheet = p_worksheet;
       m_areaController = p_dimensions;
@@ -73,12 +67,12 @@ namespace FBI.MVC.Model
       Dimension<CRUDEntity> l_vertical = p_dimensions.Dimensions[p_dimensions.Orientation.Vertical];
       Dimension<CRUDEntity> l_horitontal = p_dimensions.Dimensions[p_dimensions.Orientation.Horizontal];
 
-      CreateEditedFacts(l_vertical, l_horitontal, p_dimensions.Entities, p_rangeHighlighter);
+      CreateEditedFacts(l_vertical, l_horitontal, p_dimensions.Entities);
 
       // TO DO : Once facts registered clean dimensions and put them into a safe dictionary ?
     }
 
-    private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension, RangeHighlighter p_rangeHighlighter)
+    private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)
     {
       foreach (KeyValuePair<string, CRUDEntity> l_rowsKeyPair in p_rowsDimension.m_values)
       {
@@ -89,12 +83,12 @@ namespace FBI.MVC.Model
           Range l_factCell = m_worksheet.Cells[l_rowCell.Row, l_columnCell.Column] as Range;
           EditedRHFact l_editedFact = CreateEditedFact(p_rowsDimension, l_rowsKeyPair.Value, p_columnsDimension, l_columnsKeyPair.Value, p_fixedDimension, l_factCell);
           if (l_editedFact != null)
-            InitializeEditedFact(l_editedFact, p_rangeHighlighter);
+            InitializeEditedFact(l_editedFact);
         }
       }
     }
 
-    private void InitializeEditedFact(EditedRHFact p_editedFact, RangeHighlighter p_rangeHighlighter)
+    private void InitializeEditedFact(EditedRHFact p_editedFact)
     {
       EditedFacts.Set(p_editedFact.Cell.Address, new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, (Int32)p_editedFact.Period), p_editedFact);
       p_editedFact.EditedClientId = GetClientIdFromCell(p_editedFact.Cell);
@@ -124,7 +118,7 @@ namespace FBI.MVC.Model
       return new EditedRHFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell);
     }
 
-    public void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    public override void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       AddinModuleController.SetExcelInteractionState(false);
       m_updateCellsOnDownload = p_updateCells;
@@ -161,8 +155,6 @@ namespace FBI.MVC.Model
       }
     }
 
-
-
     public bool FillEditedFacts(List<Fact> p_factsList)
     {
       SafeDictionary<DimensionKey, Fact> l_previousWeeksFacts = new SafeDictionary<DimensionKey, Fact>();
@@ -196,7 +188,7 @@ namespace FBI.MVC.Model
       return true;
     }
 
-    public bool UpdateEditedValueAndTag(Range p_cell)
+    public override bool UpdateEditedValueAndTag(Range p_cell)
     {
       EditedRHFact l_editedFact = EditedFacts[p_cell.Address];
       if (l_editedFact == null)
@@ -213,7 +205,7 @@ namespace FBI.MVC.Model
       return true;
     }
 
-    public void Commit()
+    public override void Commit()
     {
       if (m_factsCommit != null)
       {
@@ -241,7 +233,7 @@ namespace FBI.MVC.Model
         Commit();
     }
 
-    public double? CellBelongToOutput(Range p_cell)
+    public override double? CellBelongToOutput(Range p_cell)
     {
       return (null);
     }

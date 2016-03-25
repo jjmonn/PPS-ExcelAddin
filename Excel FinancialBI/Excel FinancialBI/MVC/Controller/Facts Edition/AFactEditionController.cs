@@ -13,17 +13,28 @@ namespace FBI.MVC.Controller
   using Utils;
   using Network;
 
-  public abstract class AFactEditionController<TModel> where TModel : IEditedFactsModel
+  public interface IFactEditionController
+  {
+    void RaiseWorksheetChangedEvent(Range p_cell);
+    bool Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
+    void Close();
+    void CommitFacts();
+  }
+
+  abstract class AFactEditionController<TModel> : IFactEditionController where TModel : AEditedFactsModel
   {
     public AddinModuleController AddinController { get; private set; }
     public TModel EditedFactModel { get; protected set; }
     public Account.AccountProcess Process { get; protected set; }
     public WorksheetAreaController AreaController { get; private set; }
     private UInt32 m_versionId;
-    public abstract IFactEditionView View { get; protected set; }
+    public abstract IFactEditionView View { get; }
     private WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     public List<Int32> m_periodsList;
     Worksheet m_worksheet;
+    public delegate void OnWorksheetChangedHandler(Range p_cell);
+    public event OnWorksheetChangedHandler WorksheetChanged;
+    protected UInt32 m_RHAccountId = 0;
 
     public AFactEditionController(AddinModuleController p_addinModuleController, Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
     {
@@ -34,12 +45,18 @@ namespace FBI.MVC.Controller
       Process = p_process;
     }
 
+    public void RaiseWorksheetChangedEvent(Range p_cell)
+    {
+      if (WorksheetChanged != null)
+        WorksheetChanged(p_cell);
+    }
+
     public void DownloadFacts(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       EditedFactModel.DownloadFacts(m_periodsList, p_updateCells, p_clientId, p_productId, p_adjustmentId);
     }
 
-    public bool Launch(bool p_displayInitialDifferences)
+    public bool Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
       {
@@ -50,16 +67,14 @@ namespace FBI.MVC.Controller
 
         EditedFactModel.RegisterEditedFacts(AreaController, m_worksheet, m_versionId, p_displayInitialDifferences, m_RHAccountId);
         if (m_versionId != 0 && (m_periodsList == null || m_periodsList.Count > 0))
+        {
+          View.OpenFactsEdition(p_updateCells, p_clientId, p_productId, p_adjustmentId);
           return true;
+        }
         else
           return false;
       }
       return false;
-    }
-
-    public void UpdateWorksheetOutputs()
-    {
-      (EditedFactModel).UpdateWorkSheetOutputs();
     }
 
     public void CommitFacts()
@@ -81,12 +96,15 @@ namespace FBI.MVC.Controller
       // write in commit log
     }
 
-        #region Model callbacks
+     #region Model callbacks
 
     protected void OnFactsDownloaded(bool p_success)
     {
       if (p_success == true)
+      {
         AddinController.AssociateExcelWorksheetEvents(m_worksheet);
+        EditedFactModel.FactsDownloaded -= OnFactsDownloaded;
+      }
       else
       {
         // exit mode

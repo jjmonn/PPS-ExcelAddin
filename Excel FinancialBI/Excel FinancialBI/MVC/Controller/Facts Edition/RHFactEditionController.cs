@@ -8,10 +8,12 @@ using Microsoft.Office.Interop.Excel;
 namespace FBI.MVC.Controller
 {
   using Model;
+  using View;
 
   class RHFactEditionController : AFactEditionController<RHEditedFactsModel>
   {
-    private UInt32 m_RHAccountId;
+    RHFactEditionView m_view;
+    public override IFactEditionView View { get { return (m_view); } }
 
     public RHFactEditionController(AddinModuleController p_addinController, UInt32 p_versionId,
       Worksheet p_worksheet, List<Int32> p_periodsList, UInt32 p_RHAccountId) :
@@ -19,8 +21,9 @@ namespace FBI.MVC.Controller
     {
       m_periodsList = p_periodsList;
       m_RHAccountId = p_RHAccountId;
-      EditedFactModel = new RHEditedFactsModel(p_periodsList);
+      EditedFactModel = new RHEditedFactsModel(p_periodsList, p_worksheet);
       EditedFactModel.FactsDownloaded += OnFactsDownloaded;
+      m_view = new RHFactEditionView(this, p_worksheet);
     }
   }
 }

@@ -12,7 +12,7 @@ namespace FBI
   /// </summary>
   public class ExcelWorksheetEvents : AddinExpress.MSO.ADXExcelWorksheetEvents
   {
-    AFactEditionController m_factsEditionController;
+    IFactEditionController m_factsEditionController;
     private UInt16 MAX_NB_ROWS = 16384;
 
     public ExcelWorksheetEvents(AddinExpress.MSO.ADXAddinModule module)
@@ -20,16 +20,13 @@ namespace FBI
     {
     }
 
-    public void SetController(AFactEditionController p_factsEditionController)
+    public void SetController(IFactEditionController p_factsEditionController)
     {
       m_factsEditionController = p_factsEditionController;
     }
 
     public override void ProcessChange(object target)
     {
-      if (m_factsEditionController.IsEditingExcel == true)
-        return;
-
       try
       {
         Range l_range = target as Range;
@@ -38,27 +35,22 @@ namespace FBI
           if (l_range.Count > MAX_NB_ROWS)
             return;
           foreach (Range l_cell in l_range.Cells)
-          {
-            m_factsEditionController.OnWorksheetChange(l_cell);
-          }
-        }        
+            m_factsEditionController.RaiseWorksheetChangedEvent(l_cell);
+        }
       }
       catch(Exception e)
       {
         System.Diagnostics.Debug.WriteLine("Worksheet change event error: " + e.Message);
       }
-      // TODO: Add some code
     }
 
 
     public override void ProcessBeforeRightClick(object target, AddinExpress.MSO.ADXCancelEventArgs e)
     {
-      // TODO: Add some code
     }
 
     public override void ProcessSelectionChange(object target)
     {
-      // TODO: Add some code
     }
 
     #region Unused events

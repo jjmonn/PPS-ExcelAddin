@@ -9,14 +9,24 @@ namespace FBI.MVC.Controller
 {
   using Model;
   using Model.CRUD;
+  using View;
 
   class FinancialFactEditionController : AFactEditionController<FinancialEditedFactsModel>
   {
+    FinancialFactEditionView m_view;
+    public override IFactEditionView View { get { return (m_view); } }
+
     public FinancialFactEditionController(AddinModuleController p_addinController, UInt32 p_versionId, Worksheet p_worksheet) :
       base(p_addinController, Account.AccountProcess.FINANCIAL, p_versionId, p_worksheet)
     {
       EditedFactModel = new FinancialEditedFactsModel();
       EditedFactModel.FactsDownloaded += OnFactsDownloaded;
+      m_view = new FinancialFactEditionView(this, p_worksheet);
+    }
+
+    public void UpdateWorksheetOutputs()
+    {
+      EditedFactModel.UpdateWorkSheetOutputs();
     }
   }
 }

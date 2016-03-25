@@ -13,7 +13,7 @@ namespace FBI.MVC.View
   using System.Drawing;
   using Utils;
 
-  class RangeHighlighter
+  public class RangeHighlighter
   {
     Int32 DIMENSIONS_COLORS = Color.FromArgb(215, 239, 253).ToArgb();
     SafeDictionary<Range, Object> m_originalCellsColor = new SafeDictionary<Range, Object>();

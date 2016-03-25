@@ -12,7 +12,7 @@ namespace FBI.MVC.View
   using Model;
   using Network;
 
-  class RHFactEditionView : AFactEditionView<RHFactEditionController>
+  class RHFactEditionView : AFactEditionView<RHEditedFactsModel, RHFactEditionController>
   {
     RHEditedFactsModel m_model;
     RangeHighlighter m_rangeHighlighter;
@@ -29,8 +29,9 @@ namespace FBI.MVC.View
       FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
     }
 
-    void SuscribeEvents()
+    protected override void SuscribeEvents()
     {
+      base.SuscribeEvents();
       FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
     }
 

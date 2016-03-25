@@ -12,12 +12,14 @@ namespace FBI.MVC.View
   using Model;
   using Model.CRUD;
 
-  public interface IFactEditionView
+  interface IFactEditionView
   {
     void Close();
+    void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
   }
 
-  public abstract class AFactEditionView<TController> where TController : AFactEditionController
+  abstract class AFactEditionView<TModel, TController> : IFactEditionView where TModel : AEditedFactsModel
+    where TController : AFactEditionController<TModel>
   {
     public bool IsEditingExcel { get; private set; }
     protected RangeHighlighter m_rangeHighlighter;
@@ -29,16 +31,15 @@ namespace FBI.MVC.View
     {
       m_controller = p_controller;
       m_worksheet = p_worksheet;
-      m_rangeHighlighter = new RangeHighlighter(m_controller, m_worksheet);
+      m_rangeHighlighter = new RangeHighlighter(m_worksheet);
     }
 
-    private void Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    protected virtual void SuscribeEvents()
     {
-      if (m_controller.Launch(p_displayInitialDifferences))
-        OpenFactsEdition(p_updateCells, p_clientId, p_productId, p_adjustmentId);
+      m_controller.WorksheetChanged += OnWorksheetChange;
     }
 
-    private void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    public void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
       ActivateFactEditionRibbon();
@@ -79,6 +80,9 @@ namespace FBI.MVC.View
 
     public void OnWorksheetChange(Range p_cell)
     {
+      if (IsEditingExcel)
+        return;
+
       if (m_controller.EditedFactModel.UpdateEditedValueAndTag(p_cell))
         return;
 

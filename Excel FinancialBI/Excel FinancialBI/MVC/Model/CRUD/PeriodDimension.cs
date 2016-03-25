@@ -9,7 +9,7 @@ namespace FBI.MVC.Model
   using FBI.MVC.Model.CRUD;
   using FBI.Network;
 
-  class PeriodDimension : CRUDEntity
+  public class PeriodDimension : CRUDEntity
   {
     UInt32 m_id;
 

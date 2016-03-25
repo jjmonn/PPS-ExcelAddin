@@ -17,7 +17,7 @@ namespace FBI.MVC.Controller
   public class AddinModuleController
   {
     private AddinModule m_view;
-    private AFactEditionController m_factsEditionController;
+    private IFactEditionController m_factsEditionController;
   
    // private ReportEditionController m_reportUploadController;
     public string Error { get; set; }
@@ -64,7 +64,7 @@ namespace FBI.MVC.Controller
       Version l_version = GetCurrentVersion();
       if (l_version != null)
       {
-        m_factsEditionController = new AFactEditionController(this, Account.AccountProcess.FINANCIAL, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet, null, 0);
+        m_factsEditionController = new FinancialFactEditionController(this, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet);
         return m_factsEditionController.Launch(p_updateCells, true, SubmissionClientId, 
           SubmissionProductId, SubmissionAdjustmentId);
       }
@@ -74,7 +74,7 @@ namespace FBI.MVC.Controller
 
     public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId,  bool p_displayInitialDifferences, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
     {
-        m_factsEditionController = new AFactEditionController(this, Account.AccountProcess.RH, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
+        m_factsEditionController = new RHFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
         return m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences, 0, 0, 0);
     }
 
@@ -136,7 +136,7 @@ namespace FBI.MVC.Controller
       if (m_factsEditionController != null)
       {
         m_view.WorksheetEvents.RemoveConnection();
-        m_factsEditionController.CloseFactsEdition();
+        m_factsEditionController.Close();
         m_factsEditionController = null;
       }
     }

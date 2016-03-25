@@ -34,7 +34,7 @@ namespace FBI.MVC.Model
   }
 
 
-  class Dimension<T> where T : CRUDEntity
+  public class Dimension<T> where T : CRUDEntity
   {
     public SafeDictionary<string, T> m_values = new SafeDictionary<string, T>();
     public Alignment m_alignment { get; set; }

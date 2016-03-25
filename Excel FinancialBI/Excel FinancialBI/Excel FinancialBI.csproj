@@ -357,7 +357,7 @@
     <Compile Include="MVC\Model\CRUD\LegacyComputeRequest.cs" />
     <Compile Include="MVC\Model\CRUD\SourcedComputeRequest.cs" />
     <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsModel.cs" />
-    <Compile Include="MVC\Model\Facts Edition\IEditedFactsModel.cs" />
+    <Compile Include="MVC\Model\Facts Edition\AEditedFactsModel.cs" />
     <Compile Include="MVC\Model\CRUD\User.cs" />
     <Compile Include="MVC\Model\CRUD\UserAllowedEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Version.cs" />

@@ -10,7 +10,7 @@ namespace FBI.MVC.Model
   using Microsoft.Office.Interop.Excel;
   using FBI.MVC.Model.CRUD;
 
-  struct Orientation
+  public struct Orientation
   {
     public Orientation(DimensionType p_vertical, DimensionType p_horizontal, DimensionType p_tabDimension)
     {
@@ -27,7 +27,7 @@ namespace FBI.MVC.Model
     }
   };
 
-  class WorksheetAreaController
+  public class WorksheetAreaController
   {
     List<Int32> m_periodsDatesList = new List<Int32>();
 
