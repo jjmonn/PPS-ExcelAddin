@@ -17,7 +17,7 @@ namespace FBI.MVC.Controller
 
     public RHFactEditionController(AddinModuleController p_addinController, UInt32 p_versionId,
       Worksheet p_worksheet, List<Int32> p_periodsList, UInt32 p_RHAccountId) :
-      base(p_addinController, Model.CRUD.Account.AccountProcess.FINANCIAL, p_versionId, p_worksheet, p_periodsList)
+      base(p_addinController, Model.CRUD.Account.AccountProcess.RH, p_versionId, p_worksheet, p_periodsList)
     {
       m_periodsList = p_periodsList;
       m_RHAccountId = p_RHAccountId;
