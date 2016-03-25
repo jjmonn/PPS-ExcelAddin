@@ -15,7 +15,8 @@ namespace FBI.MVC.Controller
 
   public interface IFactEditionController
   {
-    void RaiseWorksheetChangedEvent(Range p_cell);
+    void RaiseWorksheetChangingEvent(Range p_cell);
+    void RaiseWorksheetChangedEvent();
     bool Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     void Close();
     void CommitFacts();
@@ -32,8 +33,11 @@ namespace FBI.MVC.Controller
     private WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     public List<Int32> m_periodsList;
     Worksheet m_worksheet;
-    public delegate void OnWorksheetChangedHandler(Range p_cell);
-    public event OnWorksheetChangedHandler WorksheetChanged;
+    public delegate void OnWorksheetChangingHandler(Range p_cell);
+    public event OnWorksheetChangingHandler WorksheetChanging;
+    public delegate void OnWorksheetChanged();
+    public event OnWorksheetChanged WorksheetChanged;
+
     protected UInt32 m_RHAccountId = 0;
 
     public AFactEditionController(AddinModuleController p_addinModuleController, Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
@@ -45,10 +49,16 @@ namespace FBI.MVC.Controller
       Process = p_process;
     }
 
-    public void RaiseWorksheetChangedEvent(Range p_cell)
+    public void RaiseWorksheetChangingEvent(Range p_cell)
+    {
+      if (WorksheetChanging != null)
+        WorksheetChanging(p_cell);
+    }
+
+    public void RaiseWorksheetChangedEvent()
     {
       if (WorksheetChanged != null)
-        WorksheetChanged(p_cell);
+        WorksheetChanged();
     }
 
     public void DownloadFacts(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)

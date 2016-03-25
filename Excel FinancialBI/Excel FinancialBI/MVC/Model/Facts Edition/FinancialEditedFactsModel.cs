@@ -26,6 +26,7 @@ namespace FBI.MVC.Model
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
+    bool m_needRefresh = false;
 
     public FinancialEditedFactsModel()
     {
@@ -184,11 +185,11 @@ namespace FBI.MVC.Model
       SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest);
     }
 
-    public void UpdateWorkSheetOutputs()
+    public override void Refresh()
     {
-      // Create Source_compute data set edited facts (object ?)
-      // send SOURCED_COMPUTE REQUEST
-      
+      if (m_needRefresh)
+        ComputeOutputs();
+      m_needRefresh = false;
     }
 
     public override bool UpdateEditedValueAndTag(Range p_cell)
@@ -196,7 +197,7 @@ namespace FBI.MVC.Model
       if (EditedFacts.ContainsKey(p_cell.Address))
       {
         EditedFacts[p_cell.Address].Value = (double)p_cell.Value2;
-        ComputeOutputs();
+        m_needRefresh = true;
         return true;
       }
       return false;

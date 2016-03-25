@@ -23,10 +23,5 @@ namespace FBI.MVC.Controller
       EditedFactModel.FactsDownloaded += OnFactsDownloaded;
       m_view = new FinancialFactEditionView(this, p_worksheet);
     }
-
-    public void UpdateWorksheetOutputs()
-    {
-      EditedFactModel.UpdateWorkSheetOutputs();
-    }
   }
 }

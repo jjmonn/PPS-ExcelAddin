@@ -36,7 +36,8 @@ namespace FBI.MVC.View
 
     protected virtual void SuscribeEvents()
     {
-      m_controller.WorksheetChanged += OnWorksheetChange;
+      m_controller.WorksheetChanging += OnWorksheetChanging;
+      m_controller.WorksheetChanged += OnWorksheetChanged;
     }
 
     public void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
@@ -78,7 +79,7 @@ namespace FBI.MVC.View
 
     #region User callbacks
 
-    public void OnWorksheetChange(Range p_cell)
+    public void OnWorksheetChanging(Range p_cell)
     {
       if (IsEditingExcel)
         return;
@@ -112,6 +113,11 @@ namespace FBI.MVC.View
         m_controller.CommitFacts();
 
       IsEditingExcel = false;
+    }
+
+    public void OnWorksheetChanged()
+    {
+      m_controller.EditedFactModel.Refresh();
     }
 
     public void BeforeRightClick()

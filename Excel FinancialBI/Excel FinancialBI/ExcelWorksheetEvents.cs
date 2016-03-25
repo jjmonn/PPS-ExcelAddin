@@ -35,8 +35,9 @@ namespace FBI
           if (l_range.Count > MAX_NB_ROWS)
             return;
           foreach (Range l_cell in l_range.Cells)
-            m_factsEditionController.RaiseWorksheetChangedEvent(l_cell);
+            m_factsEditionController.RaiseWorksheetChangingEvent(l_cell);
         }
+        m_factsEditionController.RaiseWorksheetChangedEvent();
       }
       catch(Exception e)
       {

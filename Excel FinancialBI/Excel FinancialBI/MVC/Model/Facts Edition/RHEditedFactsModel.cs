@@ -238,6 +238,11 @@ namespace FBI.MVC.Model
       return (null);
     }
 
+    public override void Refresh()
+    {
+
+    }
+
     #region Utils
 
     private string GetClientString(EditedRHFact p_editedFact, UInt32 p_clientId, FactTag p_factTag)

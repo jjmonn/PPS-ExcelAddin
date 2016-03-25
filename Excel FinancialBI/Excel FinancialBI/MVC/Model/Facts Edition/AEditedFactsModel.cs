@@ -31,6 +31,8 @@ namespace FBI.MVC.Model
 
     public abstract bool UpdateEditedValueAndTag(Range p_cell);
 
+    public abstract void Refresh();
+
     public abstract double? CellBelongToOutput(Range p_cell);
     
     //void UpdateWorksheetInputs();
