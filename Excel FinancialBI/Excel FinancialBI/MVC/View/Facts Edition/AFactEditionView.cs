@@ -84,8 +84,12 @@ namespace FBI.MVC.View
       if (IsEditingExcel)
         return;
 
-      if (m_controller.EditedFactModel.UpdateEditedValueAndTag(p_cell))
+      EditedFactBase l_fact = m_controller.EditedFactModel.UpdateEditedValueAndTag(p_cell);
+      if (l_fact != null)
+      {
+        m_rangeHighlighter.FillCellColor(l_fact.Cell, l_fact.SetFactValueStatus());
         return;
+      }
 
       IsEditingExcel = true;
       string l_result = m_controller.AreaController.CellBelongsToDimension(p_cell);

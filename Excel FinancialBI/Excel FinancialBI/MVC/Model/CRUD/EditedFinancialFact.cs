@@ -35,21 +35,21 @@ namespace FBI.MVC.Model.CRUD
       SetFactValueStatus();
     }
 
-    public void SetFactValueStatus()
+    public override EditedFactStatus SetFactValueStatus()
     {
       if (Account.FormulaType == CRUD.Account.FormulaTypes.HARD_VALUE_INPUT || Account.FormulaType == CRUD.Account.FormulaTypes.FIRST_PERIOD_INPUT)
       {
         if (EditedValue != this.Value)
-          RaiseStatusEvent(EditedFactStatus.InputDifferent);
+          return EditedFactStatus.InputDifferent;
         else
-          RaiseStatusEvent(EditedFactStatus.InputEqual);
+          return EditedFactStatus.InputEqual;
       }
       else
       {
         if (EditedValue != this.Value)
-          RaiseStatusEvent(EditedFactStatus.OutputDifferent);
+          return EditedFactStatus.OutputDifferent;
         else
-          RaiseStatusEvent(EditedFactStatus.OutputEqual);
+          return EditedFactStatus.OutputEqual;
       }
     }
 

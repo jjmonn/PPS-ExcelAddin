@@ -11,6 +11,8 @@ namespace FBI.MVC.View
   using Model;
   using Model.CRUD;
   using Network;
+  using Forms;
+  using Utils;
 
   class FinancialFactEditionView : AFactEditionView<FinancialEditedFactsModel, FinancialFactEditionController>
   {
@@ -25,6 +27,7 @@ namespace FBI.MVC.View
     ~FinancialFactEditionView()
     {
       FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
+      FactsModel.Instance.UpdateEvent -= OnCommitResult;
     }
 
     protected override void SuscribeEvents()
@@ -32,6 +35,33 @@ namespace FBI.MVC.View
       base.SuscribeEvents();
       FactsModel.Instance.ReadEvent += OnFinancialInputDownloaded;
       SourcedComputeModel.Instance.ComputeCompleteEvent += OnFinancialOutputsComputed;
+      FactsModel.Instance.UpdateEvent += OnCommitResult;
+    }
+
+    private void SetEditedFactsStatus()
+    {
+      AddinModuleController.SetExcelInteractionState(false);
+      foreach (EditedFactBase l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
+        m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
+      AddinModuleController.SetExcelInteractionState(true);
+    }
+
+    private void OnCommitResult(ErrorMessage p_status, CRUDAction p_action, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultDic)
+    {
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_pair in p_resultDic)
+        {
+          if (l_pair.Value.Item2 != ErrorMessage.SUCCESS)
+            continue;
+          EditedFinancialFact l_fact = m_model.EditedFacts[l_pair.Key];
+
+          if (l_fact != null)
+            m_rangeHighlighter.FillCellGreen(l_fact.Cell);
+        }
+      }
+      else
+        MsgBox.Show(Local.GetValue("upload.error.commit_failed") + ": " + Error.GetMessage(p_status));
     }
 
     private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)

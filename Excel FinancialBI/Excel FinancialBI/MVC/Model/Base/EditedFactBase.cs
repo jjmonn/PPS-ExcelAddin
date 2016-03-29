@@ -23,7 +23,7 @@ namespace FBI.MVC.Model.CRUD
 
   public delegate void CellValueChangedEventHandler(Range p_cell, EditedFactStatus p_status);
 
-  class EditedFactBase : Fact
+  abstract class EditedFactBase : Fact
   {
     public Range Cell { get; protected set; }
     public Account Account { get { return AccountModel.Instance.GetValue(this.AccountId); } }
@@ -31,6 +31,8 @@ namespace FBI.MVC.Model.CRUD
     public AxisElem Employee { get { return AxisElemModel.Instance.GetValue(AxisType.Employee, this.EmployeeId); } }
     public PeriodDimension PeriodDimension { get; protected set; }
     public double EditedValue { get; set; }
+    abstract public EditedFactStatus SetFactValueStatus();
+
 
  //   public EditedFactStatus EditedFactStatus { get; protected set; }
     public event CellValueChangedEventHandler OnCellValueChanged;

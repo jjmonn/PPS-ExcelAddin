@@ -69,7 +69,7 @@ namespace FBI.MVC.Model.CRUD
       EditedFactTag.Tag = FactTag.TagType.NONE;
    
       if (p_setCellStatus == true)
-        SetCellStatusRH();
+        SetFactValueStatus();
     }
 
     public void SetEditedFactType(FactTag.TagType p_tagType , bool p_setCellStatus)
@@ -77,7 +77,7 @@ namespace FBI.MVC.Model.CRUD
       EditedFactTag.Tag = p_tagType;
 
       if (p_setCellStatus == true)
-        SetCellStatusRH();
+        SetFactValueStatus();
     }
 
     public void SetEditedLegalHoliday(LegalHolidayTag p_legalHolidayTag, bool p_setCellStatus)
@@ -92,7 +92,7 @@ namespace FBI.MVC.Model.CRUD
         EditedLegalHoliday.Tag = LegalHolidayTag.NONE;
        
       if (p_setCellStatus == true)
-         SetCellStatusRH();
+         SetFactValueStatus();
     }
 
     public void UpdateRHFactModels(Fact p_fact, FactTag p_factTag, LegalHoliday p_legalHoliday)
@@ -117,7 +117,7 @@ namespace FBI.MVC.Model.CRUD
       }
     }
 
-    public EditedFactStatus SetCellStatusRH()
+    public override EditedFactStatus SetFactValueStatus()
     {
       if (EditedLegalHoliday.Tag == LegalHolidayTag.FER || ModelLegalHoliday.Tag == LegalHolidayTag.FER)
         return SetLegalHolidayDifferenceStatus();

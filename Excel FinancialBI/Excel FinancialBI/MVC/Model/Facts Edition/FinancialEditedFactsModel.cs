@@ -192,15 +192,18 @@ namespace FBI.MVC.Model
       m_needRefresh = false;
     }
 
-    public override bool UpdateEditedValueAndTag(Range p_cell)
+    public override EditedFactBase UpdateEditedValueAndTag(Range p_cell)
     {
       if (EditedFacts.ContainsKey(p_cell.Address))
       {
-        EditedFacts[p_cell.Address].Value = (double)p_cell.Value2;
+        EditedFinancialFact l_fact = EditedFacts[p_cell.Address];
+        if ((double)p_cell.Value2 == l_fact.Value)
+          return (null);
+        l_fact.Value = (double)p_cell.Value2;
         m_needRefresh = true;
-        return true;
+        return l_fact;
       }
-      return false;
+      return null;
     }
 
     public void UpdateWorksheetInputs()
@@ -224,13 +227,6 @@ namespace FBI.MVC.Model
 
       if (l_dic.Count > 0)
         FactsModel.Instance.UpdateList(l_dic, CRUDAction.UPDATE);
-      // TO DO
-      // Loop through facts : if to be commited  add to update list
-      // Send EditedFacts to the model  
-
-      // associate updates to cells
-      // ready to listen server answer
-      //   -> update cells color on worksheet if success
     }
 
     // TO DO : After commit event

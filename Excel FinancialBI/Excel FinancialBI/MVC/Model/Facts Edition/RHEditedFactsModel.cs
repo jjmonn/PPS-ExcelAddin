@@ -29,12 +29,13 @@ namespace FBI.MVC.Model
     SafeDictionary<string, EditedRHFact> m_clientsToBeCreated = new SafeDictionary<string, EditedRHFact>();
     private List<Int32> m_periodsList;
     FactsRHCommit m_factsCommit;
-    RangeHighlighter m_rangeHighlighter;
+    public RangeHighlighter RangeHighlighter { get; private set; }
+    public bool DisplayInitialDifference { get; private set; }
 
     public RHEditedFactsModel(List<Int32> p_periodsList, Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
-      m_rangeHighlighter = new RangeHighlighter(m_worksheet);
+      RangeHighlighter = new RangeHighlighter(m_worksheet);
       EditedFacts = new MultiIndexDictionary<string, DimensionKey, EditedRHFact>();
       m_factsTagList =  StringUtils.ToLowerStringList(Enum.GetNames(typeof(FactTag.TagType)));
       m_legalHolidayTagList = StringUtils.ToLowerStringList(Enum.GetNames(typeof(LegalHolidayTag)));
@@ -59,6 +60,7 @@ namespace FBI.MVC.Model
 
     public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
     {
+      DisplayInitialDifference = p_displayInitialDifferences;
       m_worksheet = p_worksheet;
       m_areaController = p_dimensions;
       m_versionId = p_versionId;
@@ -184,15 +186,15 @@ namespace FBI.MVC.Model
         else
           l_previousWeeksFacts[l_dimensionKey] = l_fact;
       }
-      m_factsCommit = new FactsRHCommit(EditedFacts, l_previousWeeksFacts, l_IdEditedFactDict, m_periodsList, m_rangeHighlighter, m_RHAccountId, m_versionId);
+      m_factsCommit = new FactsRHCommit(EditedFacts, l_previousWeeksFacts, l_IdEditedFactDict, m_periodsList, RangeHighlighter, m_RHAccountId, m_versionId);
       return true;
     }
 
-    public override bool UpdateEditedValueAndTag(Range p_cell)
+    public override EditedFactBase UpdateEditedValueAndTag(Range p_cell)
     {
       EditedRHFact l_editedFact = EditedFacts[p_cell.Address];
       if (l_editedFact == null)
-        return false;
+        return l_editedFact;
       
       UInt32 l_clientId = (UInt32)GetClientIdFromCell(p_cell);
       FactTag.TagType l_tagType = GetTagTypeFromCell(p_cell);
@@ -201,8 +203,7 @@ namespace FBI.MVC.Model
       l_editedFact.SetEditedClient(l_clientId, false);
       l_editedFact.SetEditedFactType(l_tagType, false);
       l_editedFact.SetEditedLegalHoliday(l_legalHolidayTag, false);
-      m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetCellStatusRH());
-      return true;
+      return null;
     }
 
     public override void Commit()

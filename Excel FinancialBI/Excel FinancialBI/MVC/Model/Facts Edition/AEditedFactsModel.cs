@@ -29,7 +29,7 @@ namespace FBI.MVC.Model
 
     public abstract void DownloadFacts(List<Int32> p_periodList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
 
-    public abstract bool UpdateEditedValueAndTag(Range p_cell);
+    public abstract EditedFactBase UpdateEditedValueAndTag(Range p_cell);
 
     public abstract void Refresh();
 

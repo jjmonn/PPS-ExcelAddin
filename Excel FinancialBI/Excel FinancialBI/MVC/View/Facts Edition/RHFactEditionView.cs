@@ -15,8 +15,6 @@ namespace FBI.MVC.View
   class RHFactEditionView : AFactEditionView<RHEditedFactsModel, RHFactEditionController>
   {
     RHEditedFactsModel m_model;
-    RangeHighlighter m_rangeHighlighter;
-    bool m_displayInitialDifferences;
 
     public RHFactEditionView(RHFactEditionController p_controller, Worksheet p_worksheet) : base(p_controller, p_worksheet)
     {
@@ -37,11 +35,11 @@ namespace FBI.MVC.View
 
     private void SetEditedFactsStatus()
     {
-      if (m_displayInitialDifferences == true)
+      if (m_model.DisplayInitialDifference == true)
       {
         AddinModuleController.SetExcelInteractionState(false);
         foreach (EditedRHFact l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
-          m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetCellStatusRH());
+          m_model.RangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
         AddinModuleController.SetExcelInteractionState(true);
       }
     }
