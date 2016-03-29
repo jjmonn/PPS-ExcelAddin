@@ -121,7 +121,7 @@ namespace FBI.MVC.View
         RegisterCellOriginalFill(p_cell);
         p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputCommitedFill;
       }
-      catch (Exception e)
+      catch
       {
       }
 

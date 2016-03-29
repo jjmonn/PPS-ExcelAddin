@@ -131,6 +131,16 @@ namespace FBI.MVC.Controller
       return true;
     }
 
+    public void RefreshInputs()
+    {
+      if (m_factsEditionController != null && m_factsEditionController.GetType() == typeof(FinancialFactEditionController))
+      {
+        FinancialFactEditionController l_controller = m_factsEditionController as FinancialFactEditionController;
+
+        l_controller.DownloadFacts(true, SubmissionClientId, SubmissionProductId, SubmissionAdjustmentId);
+      }
+    }
+
     public static void SetExcelInteractionState(bool p_state)
     {
       AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;

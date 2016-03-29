@@ -42,7 +42,7 @@ namespace FBI.MVC.View
     {
       AddinModuleController.SetExcelInteractionState(false);
       foreach (EditedFactBase l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
-        m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
+        m_model.RangesHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
       AddinModuleController.SetExcelInteractionState(true);
     }
 
@@ -57,7 +57,7 @@ namespace FBI.MVC.View
           EditedFinancialFact l_fact = m_model.EditedFacts[l_pair.Key];
 
           if (l_fact != null)
-            m_rangeHighlighter.FillCellGreen(l_fact.Cell);
+            m_model.RangesHighlighter.FillCellGreen(l_fact.Cell);
         }
       }
       else

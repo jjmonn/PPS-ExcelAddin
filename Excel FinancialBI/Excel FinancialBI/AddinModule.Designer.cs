@@ -792,6 +792,7 @@
       this.RefreshInputsBT.ImageList = this.SubmissionRibbonIL;
       this.RefreshInputsBT.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.RefreshInputsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.RefreshInputsBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.RefreshInputsBT_OnClick);
       // 
       // EditRangesMenuBT
       // 

@@ -39,7 +39,7 @@ namespace FBI.MVC.View
       {
         AddinModuleController.SetExcelInteractionState(false);
         foreach (EditedRHFact l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
-          m_model.RangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
+          m_model.RangesHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
         AddinModuleController.SetExcelInteractionState(true);
       }
     }

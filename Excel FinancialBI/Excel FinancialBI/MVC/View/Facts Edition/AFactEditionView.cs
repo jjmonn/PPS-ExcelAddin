@@ -22,7 +22,6 @@ namespace FBI.MVC.View
     where TController : AFactEditionController<TModel>
   {
     public bool IsEditingExcel { get; private set; }
-    protected RangeHighlighter m_rangeHighlighter;
     protected Worksheet m_worksheet;
     protected TController m_controller;
     private bool m_autoCommit;
@@ -31,7 +30,6 @@ namespace FBI.MVC.View
     {
       m_controller = p_controller;
       m_worksheet = p_worksheet;
-      m_rangeHighlighter = new RangeHighlighter(m_worksheet);
     }
 
     protected virtual void SuscribeEvents()
@@ -45,7 +43,7 @@ namespace FBI.MVC.View
       m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
       ActivateFactEditionRibbon();
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
-      m_rangeHighlighter.FillDimensionColor(m_controller.AreaController);
+      m_controller.EditedFactModel.RangesHighlighter.FillDimensionColor(m_controller.AreaController);
     }
 
     private void ActivateFactEditionRibbon()
@@ -64,8 +62,7 @@ namespace FBI.MVC.View
 
     public void Close()
     {
-      m_rangeHighlighter.RevertToOriginalColors();
-      m_rangeHighlighter = null;
+      m_controller.EditedFactModel.RangesHighlighter.RevertToOriginalColors();
 
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
       AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = false;
@@ -87,7 +84,7 @@ namespace FBI.MVC.View
       EditedFactBase l_fact = m_controller.EditedFactModel.UpdateEditedValueAndTag(p_cell);
       if (l_fact != null)
       {
-        m_rangeHighlighter.FillCellColor(l_fact.Cell, l_fact.SetFactValueStatus());
+        m_controller.EditedFactModel.RangesHighlighter.FillCellColor(l_fact.Cell, l_fact.SetFactValueStatus());
         return;
       }
 

@@ -358,6 +358,11 @@ namespace FBI
       m_controller.CloseEditionMode();
     }
 
+    private void RefreshInputsBT_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.RefreshInputs();
+    }
+
     #endregion
 
     #region RH facts edition

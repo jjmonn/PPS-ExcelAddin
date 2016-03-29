@@ -26,10 +26,11 @@ namespace FBI.MVC.Model
     private List<Int32> m_periodsList;
     bool m_needRefresh = false;
 
-    public FinancialEditedFactsModel()
+    public FinancialEditedFactsModel(Worksheet p_worksheet)
     {
       EditedFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
       OutputFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
+      RangesHighlighter = new RangeHighlighter(p_worksheet);
     }
 
     public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)

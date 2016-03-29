@@ -17,6 +17,7 @@ namespace FBI.MVC.Model
   {
     public List<int> RequestIdList { get; private set; }
     public event OnFactsDownloaded FactsDownloaded;
+    public RangeHighlighter RangesHighlighter { get; protected set; }
 
     protected AEditedFactsModel()
     {

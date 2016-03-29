@@ -19,7 +19,7 @@ namespace FBI.MVC.Controller
     public FinancialFactEditionController(AddinModuleController p_addinController, UInt32 p_versionId, Worksheet p_worksheet) :
       base(p_addinController, Account.AccountProcess.FINANCIAL, p_versionId, p_worksheet)
     {
-      EditedFactModel = new FinancialEditedFactsModel();
+      EditedFactModel = new FinancialEditedFactsModel(p_worksheet);
       EditedFactModel.FactsDownloaded += OnFactsDownloaded;
       m_view = new FinancialFactEditionView(this, p_worksheet);
     }
