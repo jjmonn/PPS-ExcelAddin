@@ -22,8 +22,9 @@ namespace FBI.MVC.View
       SuscribeEvents();
     }
 
-    ~RHFactEditionView()
+    public override void Close()
     {
+      base.Close();
       FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
     }
 

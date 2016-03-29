@@ -60,7 +60,7 @@ namespace FBI.MVC.View
       }
     }
 
-    public void Close()
+    public virtual void Close()
     {
       m_controller.EditedFactModel.RangesHighlighter.RevertToOriginalColors();
 
