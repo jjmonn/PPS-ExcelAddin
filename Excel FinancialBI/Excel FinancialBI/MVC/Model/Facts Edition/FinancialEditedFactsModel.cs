@@ -13,7 +13,7 @@ namespace FBI.MVC.Model
   using Utils;
   using Model;
   using Controller;
- 
+
   class FinancialEditedFactsModel : AEditedFactsModel
   {
     public MultiIndexDictionary<string, DimensionKey, EditedFinancialFact> EditedFacts { get; private set; }
@@ -58,7 +58,7 @@ namespace FBI.MVC.Model
     {
       //FactsModel.Instance.UpdateEvent -= AfterFactsCommit;
       // dispose edited facts
-            EditedFacts.Clear();
+      EditedFacts.Clear();
       OutputFacts.Clear();
       // EMPTY dictionnaries etc.
     }
@@ -66,7 +66,7 @@ namespace FBI.MVC.Model
     public override void UnsubsribeEvents()
     {
       //  l_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
-     
+
 
     }
 
@@ -209,7 +209,7 @@ namespace FBI.MVC.Model
     {
       foreach (EditedFinancialFact l_editedFact in EditedFacts.Values)
       {
-       // l_editedFact.UpdateCellValue();
+        // l_editedFact.UpdateCellValue();
       }
     }
 

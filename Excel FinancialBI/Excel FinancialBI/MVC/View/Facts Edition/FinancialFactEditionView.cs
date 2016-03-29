@@ -24,10 +24,12 @@ namespace FBI.MVC.View
       SuscribeEvents();
     }
 
-    ~FinancialFactEditionView()
+    public override void Close()
     {
+      base.Close();
       FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
       FactsModel.Instance.UpdateEvent -= OnCommitResult;
+      SourcedComputeModel.Instance.ComputeCompleteEvent -= OnFinancialOutputsComputed;
     }
 
     protected override void SuscribeEvents()
@@ -69,19 +71,13 @@ namespace FBI.MVC.View
       if (p_status == ErrorMessage.SUCCESS)
       {
         if (m_model.FillFactsDictionnaries(p_fact_list) == false)
-        {
           m_model.RaiseFactDownloaded(false);
-          FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
-        }
         m_model.RequestIdList.Remove(p_requestId);
         if (m_model.RequestIdList.Count == 0)
           m_model.ComputeOutputs();
       }
       else
-      {
         m_model.RaiseFactDownloaded(false);
-        FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
-      }
     }
 
     private void OnFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
