@@ -20,8 +20,6 @@ namespace FBI.MVC.Model
     SafeDictionary<DimensionKey, Fact> m_facts = new SafeDictionary<DimensionKey, Fact>();
     public MultiIndexDictionary<string, DimensionKey, EditedFinancialFact> OutputFacts { get; private set; }
     WorksheetAreaController m_dimensions = null;
-    public event FactsCommitError OnCommitError;
-    List<EditedFinancialFact> m_factsToBeCommitted = new List<EditedFinancialFact>(); // ? to be confirmed
     Worksheet m_worksheet;
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;

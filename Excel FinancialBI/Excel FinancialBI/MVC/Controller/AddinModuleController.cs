@@ -62,11 +62,18 @@ namespace FBI.MVC.Controller
     public bool LaunchFinancialSnapshot(bool p_updateCells)
     {
       Version l_version = GetCurrentVersion();
+
       if (l_version != null)
       {
-        m_factsEditionController = new FinancialFactEditionController(this, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet);
-        return m_factsEditionController.Launch(p_updateCells, true, SubmissionClientId, 
+        m_view.InitFinancialSubmissionRibon();
+        m_view.SubmissionVersionName = l_version.Name;
+        FinancialFactEditionController l_editionController =new FinancialFactEditionController(this, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet);
+        m_factsEditionController = l_editionController;
+        bool l_result = m_factsEditionController.Launch(p_updateCells, true, SubmissionClientId, 
           SubmissionProductId, SubmissionAdjustmentId);
+        if (l_result)
+          m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.AreaController.VersionId);
+        return (l_result);
       }
       else
         return false;

@@ -418,11 +418,50 @@ namespace FBI
 
     #endregion
 
+    #region Financial Submission Ribon
+
+    public ADXRibbonItem AddButtonToDropDown(ADXRibbonDropDown p_menu, UInt32 p_id, string p_name)
+    {
+      ADXRibbonItem l_item = new ADXRibbonItem();
+
+      l_item.Caption = p_name;
+      l_item.Id = p_id.ToString();
+      l_item.ImageTransparentColor = System.Drawing.Color.Transparent;
+      p_menu.Items.Add(l_item);
+      return (l_item);
+    }
+
+    public void InitFinancialSubmissionRibon()
+    {
+      foreach (AxisElem l_client in AxisElemModel.Instance.GetDictionary(AxisType.Client).Values)
+        AddButtonToDropDown(ClientsDropDown, l_client.Id, l_client.Name);
+      foreach (AxisElem l_product in AxisElemModel.Instance.GetDictionary(AxisType.Product).Values)
+        AddButtonToDropDown(ProductsDropDown, l_product.Id, l_product.Name);
+      foreach (AxisElem l_adjustment in AxisElemModel.Instance.GetDictionary(AxisType.Adjustment).Values)
+        AddButtonToDropDown(AdjustmentDropDown, l_adjustment.Id, l_adjustment.Name);
+    }
+
+    public string SubmissionVersionName
+    {
+      set
+      {
+        VersionTBSubRibbon.Text = value;
+      }
+    }
+
+    public string SubmissionCurrency
+    {
+      set
+      {
+        EntCurrTB.Text = value;
+      }
+    }
+
     public UInt32 SubmissionClientId
     {
       set
       {
-        ClientsDropDown.SelectedItemId = AxisElemModel.Instance.GetValueName(value);
+        ClientsDropDown.SelectedItemId = value.ToString();
       }
     }
 
@@ -430,7 +469,7 @@ namespace FBI
     {
       set
       {
-        ProductsDropDown.SelectedItemId = AxisElemModel.Instance.GetValueName(value);
+        ProductsDropDown.SelectedItemId = value.ToString();
       }
     }
 
@@ -438,10 +477,12 @@ namespace FBI
     {
       set
       {
-        AdjustmentDropDown.SelectedItemId = AxisElemModel.Instance.GetValueName(value);
+        AdjustmentDropDown.SelectedItemId = value.ToString();
       }
     }
- 
+
+    #endregion
+
   }
 }
 

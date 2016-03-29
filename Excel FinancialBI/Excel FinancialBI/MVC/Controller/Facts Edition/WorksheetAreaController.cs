@@ -37,6 +37,7 @@ namespace FBI.MVC.Model
     public Dimension<CRUDEntity> Accounts { get { return (Dimensions[DimensionType.ACCOUNT]); } }
     public Dimension<CRUDEntity> Entities { get { return (Dimensions[DimensionType.ENTITY]); } }
     public Dimension<CRUDEntity> Employees { get { return (Dimensions[DimensionType.EMPLOYEE]); } }
+    public UInt32 VersionId { get; private set; }
     public Account.AccountProcess Process { get; private set; }
     private Worksheet m_worksheet;
 
@@ -44,12 +45,13 @@ namespace FBI.MVC.Model
     {
       m_worksheet = p_worksheet;
       Process = p_process;
-     
+      VersionId = p_versionId;
+
       foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
         Dimensions[l_dim] = new Dimension<CRUDEntity>(l_dim, m_worksheet);
 
       if (p_periodsList == null)
-        p_periodsList = PeriodModel.GetPeriodsList(p_versionId);
+        p_periodsList = new List<int>();
 
       m_periodsDatesList = p_periodsList;
     }
@@ -72,6 +74,8 @@ namespace FBI.MVC.Model
 
     private void DimensionsIdentifyFinancial(Range p_cell)
     {
+      if (RegisterVersion(p_cell))
+        return;
       if (RegisterAccount(p_cell) == true)
         return;
       if (RegisterEntity(p_cell) == true)
@@ -80,6 +84,8 @@ namespace FBI.MVC.Model
 
     private void DimensionsIdentifyRH(Range p_cell)
     {
+      if (RegisterVersion(p_cell))
+        return;
       if (RegisterEmployee(p_cell) == true)
         return;
       if (Entities.m_values.Count > 0) // only register the first entity found
@@ -87,6 +93,19 @@ namespace FBI.MVC.Model
       if (RegisterEntity(p_cell) == true)
       return;
   }
+
+    public bool RegisterVersion(Range p_cell)
+    {
+      string p_name = (string)p_cell.Value2;
+      Version l_version = VersionModel.Instance.GetValue(p_name);
+
+      if (l_version == null)
+        return (false);
+      VersionId = l_version.Id;
+      if (m_periodsDatesList.Count <= 0)
+        m_periodsDatesList = PeriodModel.GetPeriodsList(VersionId);
+      return (true);
+    }
 
     public bool RegisterPeriod(Range p_cell)
     {
