@@ -59,30 +59,26 @@ namespace FBI.MVC.Controller
         return false;
     }
 
-    public bool LaunchFinancialSnapshot(bool p_updateCells)
+    public bool LaunchFinancialSnapshot(bool p_updateCells, UInt32 p_versionId)
     {
-      Version l_version = GetCurrentVersion();
-
-      if (l_version != null)
-      {
         m_view.InitFinancialSubmissionRibon();
-        m_view.SubmissionVersionName = l_version.Name;
-        FinancialFactEditionController l_editionController =new FinancialFactEditionController(this, l_version.Id, m_view.ExcelApp.ActiveSheet as Worksheet);
+        FinancialFactEditionController l_editionController = new FinancialFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet);
         m_factsEditionController = l_editionController;
         bool l_result = m_factsEditionController.Launch(p_updateCells, true, SubmissionClientId, 
           SubmissionProductId, SubmissionAdjustmentId);
         if (l_result)
           m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.AreaController.VersionId);
         return (l_result);
-      }
-      else
-        return false;
     }
 
-    public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId,  bool p_displayInitialDifferences, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
+    public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId, bool p_displayInitialDifferences, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
     {
-        m_factsEditionController = new RHFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
-        return m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences, 0, 0, 0);
+      RHFactEditionController l_editionController = new RHFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
+      m_factsEditionController = l_editionController;
+      bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences, 0, 0, 0);
+      if (l_result)
+        m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.AreaController.VersionId);
+      return (l_result);
     }
 
     public bool LaunchReportEdition()
@@ -160,7 +156,7 @@ namespace FBI.MVC.Controller
 
     #region Utils
 
-    private Version GetCurrentVersion()
+    public Version GetCurrentVersion()
     {
       Version l_version = VersionModel.Instance.GetValue(FBI.Properties.Settings.Default.version_id);
       if (l_version == null)

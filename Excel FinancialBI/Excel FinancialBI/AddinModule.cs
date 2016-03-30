@@ -255,15 +255,21 @@ namespace FBI
     private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
       Account.AccountProcess l_process = Addin.Process;
-      if (l_process == Account.AccountProcess.FINANCIAL)
+      Version l_version = m_controller.GetCurrentVersion();
+
+      if (l_version != null)
       {
-        if (m_controller.LaunchFinancialSnapshot(false) == false)
-          MessageBox.Show(m_controller.Error);
-      }
-      else
-      {
-        if (m_controller.LaunchRHSnapshotView() == false)
-          MessageBox.Show(m_controller.Error);
+        SubmissionVersionName = l_version.Name;
+        if (l_process == Account.AccountProcess.FINANCIAL)
+        {
+          if (m_controller.LaunchFinancialSnapshot(false, l_version.Id) == false)
+            MessageBox.Show(m_controller.Error);
+        }
+        else
+        {
+          if (m_controller.LaunchRHSnapshotView() == false)
+            MessageBox.Show(m_controller.Error);
+        }
       }
     }
 
@@ -450,7 +456,10 @@ namespace FBI
     {
       set
       {
-        VersionTBSubRibbon.Text = value;
+        if (Addin.Process == Account.AccountProcess.RH)
+          m_PDCVersionEditBox.Text = value;
+        else
+          VersionTBSubRibbon.Text = value;
       }
     }
 
