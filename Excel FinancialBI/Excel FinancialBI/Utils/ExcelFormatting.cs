@@ -55,6 +55,7 @@ namespace FBI.Utils
       FbiAccountFormat l_normalFormat = new FbiAccountFormat("n");
       FbiAccountFormat l_detailFormat = new FbiAccountFormat("d");
 
+      p_inputRange.EntireColumn.AutoFit();
       foreach (Range l_row in p_inputRange.Rows)
       {
         Range l_range =   l_row.Cells[1, 1] as Range;
@@ -133,7 +134,6 @@ namespace FBI.Utils
           }
         }
       }
-      p_inputRange.Columns.AutoFit();
     }
 
     public static void FormatEntitiesReport( Range area)
