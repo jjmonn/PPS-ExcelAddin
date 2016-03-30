@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 using AddinExpress.MSO;
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI
 {
-  using FBI.MVC.Controller;
-  using Microsoft.Office.Interop.Excel;
+  using MVC.Controller;
 
   /// <summary>
   /// Add-in Express Excel Worksheet Events Class

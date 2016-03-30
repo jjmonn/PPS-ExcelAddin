@@ -149,7 +149,6 @@ namespace FBI.MVC.Controller
     {
       AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
       System.Diagnostics.Debug.WriteLine("Excel interaction set to " + p_state.ToString());
-      //AddinModule.CurrentInstance.ExcelApp.ScreenUpdating = p_state; 
     }
 
     public void CloseEditionMode()

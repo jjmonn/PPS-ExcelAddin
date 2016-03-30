@@ -24,6 +24,7 @@ namespace FBI.MVC.Controller
 
   abstract class AFactEditionController<TModel> : IFactEditionController where TModel : AEditedFactsModel
   {
+    public string Error { get; set; }
     public AddinModuleController AddinController { get; private set; }
     public TModel EditedFactModel { get; protected set; }
     public Account.AccountProcess Process { get; protected set; }
@@ -74,8 +75,10 @@ namespace FBI.MVC.Controller
         m_worksheetAnalyzer.Snapshot(AreaController);
         AreaController.DefineOrientation(Process);
         if (AreaController.IsValid() == false)
+        {
+          Error = Local.GetValue("upload.msg_error_upload");
           return false;
-
+        }
         EditedFactModel.RegisterEditedFacts(AreaController, m_worksheet, m_versionId, p_displayInitialDifferences, m_RHAccountId);
         if (m_versionId != 0 && (m_periodsList == null || m_periodsList.Count > 0))
         {
@@ -83,8 +86,12 @@ namespace FBI.MVC.Controller
           return true;
         }
         else
+        {
+          Error = Local.GetValue("upload.msg_error_upload");
           return false;
+        }
       }
+      Error = m_worksheetAnalyzer.Error;
       return false;
     }
 
