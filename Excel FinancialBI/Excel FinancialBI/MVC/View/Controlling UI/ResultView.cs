@@ -414,11 +414,16 @@ namespace FBI.MVC.View
       l_accountList.Sort();
       foreach (Account l_account in l_accountList)
       {
+        if (l_account.ParentId != p_tabId)
+          continue;
         if (l_account.Process != m_computeConfig.Request.Process || l_account.FormulaType == Account.FormulaTypes.TITLE)
           continue;
         ResultKey l_key = p_parentKey + new ResultKey(l_account.Id, "", "", 0, 0, 0);
         HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_account.Name);
+        CUIDimensionConf l_childConf = new CUIDimensionConf(typeof(Account));
 
+        l_childConf.Child = p_conf.Child;
+        AccountBuilder(p_dgv, l_account.Id, l_childConf, p_dimension, l_newItem.Items, l_key);
         if (l_newItem != null)
           InitDimension(p_dgv, p_tabId, p_conf.Child, p_dimension, l_newItem.Items, l_key);
       }

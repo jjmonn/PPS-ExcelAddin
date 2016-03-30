@@ -400,7 +400,7 @@ namespace FBI
 
     private void m_PDCRefreshSnapthshotButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      m_controller.RefreshInputs();
     }
 
     private void m_PDCConsultantRangeEditButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -418,13 +418,19 @@ namespace FBI
     void OnAddinInitializationEvent()
     {
       fbiRibbonChangeState(true);
+      SetFinancialRibbonState(true);
+      SetRHRibbonState(true);
       Addin.VersionId = Properties.Settings.Default.version_id;
     }
 
     private void OnConnectionEvent(bool p_connected)
     {
       if (p_connected == false)
-        fbiRibbonChangeState(false);
+      {
+        fbiRibbonChangeState(p_connected);
+        SetFinancialRibbonState(p_connected);
+        SetRHRibbonState(p_connected);
+      }
     }
 
     #endregion
@@ -440,6 +446,24 @@ namespace FBI
       l_item.ImageTransparentColor = System.Drawing.Color.Transparent;
       p_menu.Items.Add(l_item);
       return (l_item);
+    }
+
+    public void SetFinancialRibbonState(bool p_state)
+    {
+      foreach (AddinExpress.MSO.ADXRibbonGroup l_control in m_financialSubmissionRibbon.Controls)
+        foreach (AddinExpress.MSO.ADXRibbonCustomControl l_button in l_control.Controls)
+          if (l_button.AsRibbonButton != null)
+            l_button.AsRibbonButton.Enabled = p_state;
+      CloseBT.Enabled = true;
+    }
+
+    public void SetRHRibbonState(bool p_state)
+    {
+      foreach (AddinExpress.MSO.ADXRibbonGroup l_control in m_RHSubmissionRibbon.Controls)
+        foreach (AddinExpress.MSO.ADXRibbonCustomControl l_button in l_control.Controls)
+          if (l_button.AsRibbonButton != null)
+            l_button.AsRibbonButton.Enabled = p_state;
+      m_PDCVersionEditBox.Enabled = true;
     }
 
     public void InitFinancialSubmissionRibon()

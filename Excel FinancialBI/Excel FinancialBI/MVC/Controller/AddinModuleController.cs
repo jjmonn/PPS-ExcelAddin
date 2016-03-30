@@ -129,11 +129,20 @@ namespace FBI.MVC.Controller
 
     public void RefreshInputs()
     {
-      if (m_factsEditionController != null && m_factsEditionController.GetType() == typeof(FinancialFactEditionController))
+      if (m_factsEditionController != null)
       {
-        FinancialFactEditionController l_controller = m_factsEditionController as FinancialFactEditionController;
+        if (m_factsEditionController.GetType() == typeof(FinancialFactEditionController))
+        {
+          FinancialFactEditionController l_controller = m_factsEditionController as FinancialFactEditionController;
 
-        l_controller.DownloadFacts(true, SubmissionClientId, SubmissionProductId, SubmissionAdjustmentId);
+          l_controller.DownloadFacts(true, SubmissionClientId, SubmissionProductId, SubmissionAdjustmentId);
+        }
+        else if (m_factsEditionController.GetType() == typeof(RHFactEditionController))
+        {
+          RHFactEditionController l_controller = m_factsEditionController as RHFactEditionController;
+
+          l_controller.DownloadFacts(true, 0, 0, 0);
+        }
       }
     }
 
