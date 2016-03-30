@@ -34,6 +34,7 @@ namespace FBI.MVC.Model
     List<int> m_requestIdList = new List<int>();
     UInt32 m_RHAccountId;
     UInt32 m_versionId;
+    UInt32 m_nbAwaitingAnswer = 0;
 
     public FactsRHCommit(MultiIndexDictionary<string, DimensionKey, EditedRHFact> p_RHEditedFacts,
                          SafeDictionary<DimensionKey, Fact> p_previousWeeksFacts,
@@ -169,13 +170,17 @@ namespace FBI.MVC.Model
       foreach (KeyValuePair<CRUDAction, SafeDictionary<string, Fact>> l_CRUDActionList in m_factsCommitDict)
       {
         if (l_CRUDActionList.Value.Count > 0)
+        {
           FactsModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
+          m_nbAwaitingAnswer++;
+        }
         l_CRUDActionList.Value.Clear();
       }
     }
 
     private void OnFactsUpdateList(ErrorMessage p_status, CRUDAction p_CRUDAction, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
     {
+      m_nbAwaitingAnswer--;
       if (p_status == ErrorMessage.SUCCESS)
       {
         lock (m_IdEditedFactDict)
@@ -194,7 +199,7 @@ namespace FBI.MVC.Model
               FactTagCommit();
             else
               System.Diagnostics.Debug.WriteLine("On facts commit : m_factsTagCommitList or m_fatcTagsCreate list == null");
-            AddinModuleController.SetExcelInteractionState(true);
+            AddinModuleController.SetExcelInteractionState(m_nbAwaitingAnswer == 0);
           }
         }
       }
@@ -269,7 +274,10 @@ namespace FBI.MVC.Model
         foreach (KeyValuePair<CRUDAction, List<FactTag>> l_CRUDActionList in m_factTagCommitDict)
         {
           if (l_CRUDActionList.Value.Count > 0)
+          {
+            m_nbAwaitingAnswer++;
             FactTagModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
+          }
           l_CRUDActionList.Value.Clear();
         }
       }
@@ -277,6 +285,7 @@ namespace FBI.MVC.Model
 
     private void OnFactTagsUpdate(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
     {
+      m_nbAwaitingAnswer--;
       AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
       {
@@ -296,7 +305,7 @@ namespace FBI.MVC.Model
         // Create after commit event intercepted by the view -> only if commit fails
         // set commit status in the ribbon as well
       }
-      AddinModuleController.SetExcelInteractionState(true);
+      AddinModuleController.SetExcelInteractionState(m_nbAwaitingAnswer == 0);
     }
 
     private void FactTagUpdate(ErrorMessage p_status, UInt32 p_id)
@@ -350,6 +359,7 @@ namespace FBI.MVC.Model
       {
         if (l_CRUDActionList.Value.Count > 0)
         {
+          m_nbAwaitingAnswer++;
           LegalHolidayModel.Instance.UpdateList(l_CRUDActionList.Value, l_CRUDActionList.Key);
           l_CRUDActionList.Value.Clear();
         }
@@ -358,6 +368,7 @@ namespace FBI.MVC.Model
 
     private void OnLegalHolidayUpdate(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
     {
+      m_nbAwaitingAnswer--;
       AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
       {
@@ -371,7 +382,7 @@ namespace FBI.MVC.Model
       {
         // Log commit error in view
       }
-      AddinModuleController.SetExcelInteractionState(true);
+      AddinModuleController.SetExcelInteractionState(m_nbAwaitingAnswer == 0);
     }
 
     private void OnLegalHolidayCreate(SafeDictionary<UInt32, ErrorMessage> p_createResults)

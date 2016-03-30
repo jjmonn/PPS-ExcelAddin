@@ -463,7 +463,7 @@ namespace FBI
         foreach (AddinExpress.MSO.ADXRibbonCustomControl l_button in l_control.Controls)
           if (l_button.AsRibbonButton != null)
             l_button.AsRibbonButton.Enabled = p_state;
-      m_PDCVersionEditBox.Enabled = true;
+      m_PDCSumbissionExitButton.Enabled = true;
     }
 
     public void InitFinancialSubmissionRibon()

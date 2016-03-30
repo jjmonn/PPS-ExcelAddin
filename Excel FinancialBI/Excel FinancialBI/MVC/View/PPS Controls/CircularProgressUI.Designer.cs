@@ -32,50 +32,54 @@ partial class CircularProgressUI : System.Windows.Forms.Form
 	[System.Diagnostics.DebuggerStepThrough()]
 	private void InitializeComponent()
 	{
-		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CircularProgressUI));
-		this.CP = new ProgressControls.ProgressIndicator();
-		this.Label1 = new System.Windows.Forms.Label();
-		this.SuspendLayout();
-		//
-		//CP
-		//
-		this.CP.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-		this.CP.CircleColor = System.Drawing.Color.Purple;
-		this.CP.CircleSize = 0.7f;
-		this.CP.Location = new System.Drawing.Point(56, 28);
-		this.CP.Name = "CP";
-		this.CP.NumberOfCircles = 12;
-		this.CP.Percentage = 0f;
-		this.CP.Size = new System.Drawing.Size(79, 79);
-		this.CP.TabIndex = 0;
-		this.CP.Text = "ProgressIndicator1";
-		//
-		//Label1
-		//
-		this.Label1.AutoSize = true;
-		this.Label1.Location = new System.Drawing.Point(67, 128);
-		this.Label1.Name = "Label1";
-		this.Label1.Size = new System.Drawing.Size(62, 15);
-		this.Label1.TabIndex = 1;
-		this.Label1.Text = "Initializing";
-		this.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-		//
-		//CircularProgressUI
-		//
-		this.AutoScaleDimensions = new System.Drawing.SizeF(6f, 13f);
-		this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-		this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-		this.ClientSize = new System.Drawing.Size(190, 164);
-		this.Controls.Add(this.Label1);
-		this.Controls.Add(this.CP);
-		this.Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
-		this.Name = "CircularProgressUI";
-		this.ResumeLayout(false);
-		this.PerformLayout();
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CircularProgressUI));
+      this.Label1 = new System.Windows.Forms.Label();
+      this.vCircularProgressBar1 = new VIBlend.WinForms.Controls.vCircularProgressBar();
+      this.SuspendLayout();
+      // 
+      // Label1
+      // 
+      this.Label1.AutoSize = true;
+      this.Label1.Location = new System.Drawing.Point(67, 128);
+      this.Label1.Name = "Label1";
+      this.Label1.Size = new System.Drawing.Size(52, 13);
+      this.Label1.TabIndex = 1;
+      this.Label1.Text = "Initializing";
+      this.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
+      // vCircularProgressBar1
+      // 
+      this.vCircularProgressBar1.AllowAnimations = true;
+      this.vCircularProgressBar1.BackColor = System.Drawing.Color.Transparent;
+      this.vCircularProgressBar1.IndicatorsCount = 8;
+      this.vCircularProgressBar1.Location = new System.Drawing.Point(42, 26);
+      this.vCircularProgressBar1.Maximum = 100;
+      this.vCircularProgressBar1.Minimum = 0;
+      this.vCircularProgressBar1.Name = "vCircularProgressBar1";
+      this.vCircularProgressBar1.Size = new System.Drawing.Size(106, 99);
+      this.vCircularProgressBar1.TabIndex = 2;
+      this.vCircularProgressBar1.Text = "vCircularProgressBar1";
+      this.vCircularProgressBar1.UseThemeBackground = false;
+      this.vCircularProgressBar1.Value = 0;
+      this.vCircularProgressBar1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // CircularProgressUI
+      // 
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+      this.ClientSize = new System.Drawing.Size(190, 164);
+      this.Controls.Add(this.vCircularProgressBar1);
+      this.Controls.Add(this.Label1);
+      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+      this.Name = "CircularProgressUI";
+      this.ResumeLayout(false);
+      this.PerformLayout();
 
-	}
-	public ProgressControls.ProgressIndicator CP;
+  }
 	public System.Windows.Forms.Label Label1;
+  private VIBlend.WinForms.Controls.vCircularProgressBar vCircularProgressBar1;
 }
 
 }

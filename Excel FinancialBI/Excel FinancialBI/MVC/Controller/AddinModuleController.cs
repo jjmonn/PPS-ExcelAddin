@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI.MVC.Controller
 {    
-  using FBI.MVC.Model;
-  using FBI.MVC.Model.CRUD;
-  using FBI.MVC.View;
-  using Microsoft.Office.Interop.Excel;
+  using Model;
+  using Model.CRUD;
+  using View;
   using Utils;
 
   public class AddinModuleController

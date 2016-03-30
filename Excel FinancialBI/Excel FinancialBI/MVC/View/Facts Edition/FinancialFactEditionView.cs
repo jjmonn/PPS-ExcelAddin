@@ -74,7 +74,10 @@ namespace FBI.MVC.View
           m_model.RaiseFactDownloaded(false);
         m_model.RequestIdList.Remove(p_requestId);
         if (m_model.RequestIdList.Count == 0)
+        {
+          AddinModuleController.SetExcelInteractionState(false);
           m_model.ComputeOutputs();
+        }
       }
       else
         m_model.RaiseFactDownloaded(false);
