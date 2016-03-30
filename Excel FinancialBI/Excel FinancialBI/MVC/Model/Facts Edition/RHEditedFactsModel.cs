@@ -41,13 +41,6 @@ namespace FBI.MVC.Model
       m_periodsList = p_periodsList;
     }
 
-    ~RHEditedFactsModel()
-    {
-      EditedFacts.Clear();
-      RequestIdList.Clear();
-      m_legalHolidayTagList.Clear();
-    }
-
     public override void UnsubsribeEvents()
     {
       m_factsCommit.UnSuscribeEvents();
@@ -250,7 +243,7 @@ namespace FBI.MVC.Model
       FactTag.TagType l_tag = FactTag.TagType.NONE;
       if (p_factTag != null)
         l_tag = p_factTag.Tag;
-      if (l_tag != FactTag.TagType.NONE && m_factsTagList.Count >= (Int32)l_tag)
+      if (l_tag != FactTag.TagType.NONE && m_factsTagList.Count > (Int32)l_tag)
         return m_factsTagList.ElementAt((Int32)l_tag).ToUpper();
       else
       {

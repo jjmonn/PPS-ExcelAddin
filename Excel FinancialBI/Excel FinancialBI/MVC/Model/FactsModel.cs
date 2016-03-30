@@ -82,8 +82,12 @@ namespace FBI.MVC.Model
       packet.WriteUint8((byte)p_action);
       m_requestIdCommitDic.Add(l_requestId, p_factsCommitDict.Keys.ToList<string>());
       packet.WriteInt32(p_factsCommitDict.Values.Count);
-      foreach (Fact fact_value in p_factsCommitDict.Values)
-        fact_value.Dump(packet, false);
+      if (p_action == CRUDAction.DELETE)
+        foreach (Fact fact_value in p_factsCommitDict.Values)
+          packet.WriteUint32(fact_value.Id);
+      else
+        foreach (Fact fact_value in p_factsCommitDict.Values)
+          fact_value.Dump(packet, false);
       packet.Release();
       NetworkManager.Send(packet);
     }

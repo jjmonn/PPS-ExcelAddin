@@ -85,7 +85,7 @@ namespace FBI.MVC.Model
         if (l_RHEditedFact.EditedLegalHoliday.Tag != l_RHEditedFact.ModelLegalHoliday.Tag)
           LegalHolidayCommitListFilling(l_RHEditedFact);
 
-        if (l_RHEditedFact.EditedFactTag.Tag != FactTag.TagType.NONE)
+        if (l_RHEditedFact.EditedFactTag.Tag != FactTag.TagType.NONE) // else if ????
           ClientAllocationFromTagType(l_RHEditedFact);
         else
           RegularClientAllocation(l_RHEditedFact);
