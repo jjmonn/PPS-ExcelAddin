@@ -19,60 +19,60 @@ namespace FBI.MVC.View
     public RHFactEditionView(RHFactEditionController p_controller, Worksheet p_worksheet) : base(p_controller, p_worksheet)
     {
       m_model = p_controller.EditedFactModel;
-      SuscribeEvents();
     }
 
     public override void Close()
     {
       base.Close();
-      FactsModel.Instance.ReadEvent -= AfterRHFactsDownloaded;
+      FactsModel.Instance.UpdateEvent -= OnFactsUpdates;
+      FactTagModel.Instance.UpdateListEvent -= OnFactTagsUpdates;
     }
 
     protected override void SuscribeEvents()
     {
       base.SuscribeEvents();
-      FactsModel.Instance.ReadEvent += AfterRHFactsDownloaded;
+      FactsModel.Instance.UpdateEvent += OnFactsUpdates;
+      FactTagModel.Instance.UpdateListEvent += OnFactTagsUpdates;
     }
 
-    private void SetEditedFactsStatus()
+    protected override void SetEditedFactsStatus()
     {
       if (m_model.DisplayInitialDifference == true)
       {
         AddinModuleController.SetExcelInteractionState(false);
         foreach (EditedRHFact l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
-          m_model.RangesHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
+          m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
         AddinModuleController.SetExcelInteractionState(true);
       }
     }
 
-    private void AfterRHFactsDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_fact_list)
+    #region Model callbacks
+
+    void OnFactsUpdates(ErrorMessage p_status, CRUDAction p_action, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
     {
-      // TO DO : time up to manage the case where the server stops answering or the connection is lost : 
-      //          -> In this case notify user and exit fact edition 
-      AddinModuleController.SetExcelInteractionState(false);
       if (p_status == ErrorMessage.SUCCESS)
+        foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_pair in p_resultsDict)
+          if (l_pair.Value.Item2 == ErrorMessage.SUCCESS)
+          {
+            EditedFactBase l_fact = m_model.EditedFacts[l_pair.Key];
+
+            if (l_fact != null)
+              m_rangeHighlighter.FillCellGreen(l_fact.Cell);
+          }
+    }
+
+    void OnFactTagsUpdates(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
+    {
+      foreach (KeyValuePair<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> l_result in p_updateResults)
       {
-        if (m_model.FillEditedFacts(p_fact_list) == false)
+        foreach (KeyValuePair<UInt32, ErrorMessage> l_pair in l_result.Value)
         {
-          SetEditedFactsStatus();
-          AddinModuleController.SetExcelInteractionState(true);
-          m_model.RaiseFactDownloaded(false);
+
         }
-        m_model.RequestIdList.Remove(p_requestId);
-        if (m_model.RequestIdList.Count == 0)
-        {
-          SetEditedFactsStatus();
-          AddinModuleController.SetExcelInteractionState(true);
-          m_model.RaiseFactDownloaded(true);
-        }
-      }
-      else
-      {
-        SetEditedFactsStatus();
-        AddinModuleController.SetExcelInteractionState(true);
-        m_model.RaiseFactDownloaded(false);
       }
     }
+
+    #endregion
 
   }
 }

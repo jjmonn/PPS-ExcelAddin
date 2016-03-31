@@ -18,6 +18,7 @@ namespace FBI.MVC.View
   {
     void Close();
     void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
+    string Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
   }
 
   abstract class AFactEditionView<TModel, TController> : IFactEditionView where TModel : AEditedFactsModel
@@ -26,27 +27,74 @@ namespace FBI.MVC.View
     public bool IsEditingExcel { get; private set; }
     protected Worksheet m_worksheet;
     protected TController m_controller;
-    private bool m_autoCommit;
+    protected TModel m_model;
+    protected RangeHighlighter m_rangeHighlighter;
+    protected WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
+    protected WorksheetAreaController m_areaController;
 
     public AFactEditionView(TController p_controller, Worksheet p_worksheet)
     {
+      m_rangeHighlighter = new RangeHighlighter(p_worksheet);
       m_controller = p_controller;
       m_worksheet = p_worksheet;
+      m_model = m_controller.EditedFactModel;
+      m_areaController = new WorksheetAreaController(m_controller.Process, m_controller.VersionId, p_worksheet, m_controller.PeriodsList);
+    }
+
+    public virtual void LoadView()
+    {
+      SuscribeEvents();
     }
 
     protected virtual void SuscribeEvents()
     {
       m_controller.WorksheetChanging += OnWorksheetChanging;
       m_controller.WorksheetChanged += OnWorksheetChanged;
+      m_model.FactsDownloaded += OnFactsDownloaded;
       Addin.ConnectionStateEvent += OnServerConnectionChanged;
     }
+
+    public virtual void Close()
+    {
+      m_rangeHighlighter.RevertToOriginalColors();
+      m_areaController.ClearDimensions();
+      Addin.ConnectionStateEvent -= OnServerConnectionChanged;
+      m_model.FactsDownloaded -= OnFactsDownloaded;
+
+      AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
+      AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = false;
+      AddinModule.CurrentInstance.m_financialSubmissionRibbon.Visible = false;
+    }
+
+    protected abstract void SetEditedFactsStatus();
 
     public void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
       ActivateFactEditionRibbon();
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
-      m_controller.EditedFactModel.RangesHighlighter.FillDimensionColor(m_controller.AreaController);
+      m_rangeHighlighter.FillDimensionColor(m_areaController);
+    }
+
+    public string Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    {
+      if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
+      {
+        m_worksheetAnalyzer.Snapshot(m_areaController);
+        m_areaController.DefineOrientation(m_controller.Process);
+        m_controller.VersionId = m_areaController.VersionId;
+        if (m_areaController.IsValid() == false)
+          return Local.GetValue("upload.msg_error_upload");
+        m_controller.EditedFactModel.RegisterEditedFacts(m_areaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
+        if (m_controller.VersionId != 0 && (m_controller.PeriodsList == null || m_controller.PeriodsList.Count > 0))
+        {
+          OpenFactsEdition(p_updateCells, p_clientId, p_productId, p_adjustmentId);
+          return ("");
+        }
+        else
+          return Local.GetValue("upload.msg_error_upload");
+      }
+      return m_worksheetAnalyzer.Error;
     }
 
     private void ActivateFactEditionRibbon()
@@ -63,21 +111,6 @@ namespace FBI.MVC.View
       }
     }
 
-    public virtual void Close()
-    {
-      m_controller.EditedFactModel.RangesHighlighter.RevertToOriginalColors();
-      Addin.ConnectionStateEvent -= OnServerConnectionChanged;
-
-      AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
-      AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = false;
-      AddinModule.CurrentInstance.m_financialSubmissionRibbon.Visible = false;
-    }
-
-    public void SetAutoCommit(bool p_value)
-    {
-      m_autoCommit = p_value;
-    }
-
     #region User callbacks
 
     public void OnWorksheetChanging(Range p_cell)
@@ -88,47 +121,31 @@ namespace FBI.MVC.View
       EditedFactBase l_fact = m_controller.EditedFactModel.UpdateEditedValueAndTag(p_cell);
       if (l_fact != null)
       {
-        m_controller.EditedFactModel.RangesHighlighter.FillCellColor(l_fact.Cell, l_fact.SetFactValueStatus());
+        m_rangeHighlighter.FillCellColor(l_fact.Cell, l_fact.SetFactValueStatus());
+        if (m_controller.AutoCommit)
+          m_controller.CommitFacts();
         return;
       }
 
       IsEditingExcel = true;
-      string l_result = m_controller.AreaController.CellBelongsToDimension(p_cell);
+      string l_result = m_areaController.CellBelongsToDimension(p_cell);
       if (l_result != "")
         p_cell.Value2 = l_result;
-      double? l_result2 = m_controller.EditedFactModel.CellBelongToOutput(p_cell);
+      double? l_result2 = m_model.CellBelongToOutput(p_cell);
 
       if (l_result2 != null)
         p_cell.Value2 = l_result2;
-
-      // if cell belongs to dimension
-      //   -> cancel modification and put back the dimension value
-
-      // if financial -> launch compute at the end of the cells range loop
-      // financial -> dependant cells
-
-
-
-      // if cell belongs to output
-      //   -> cancel modification and put back the output value 
-
-      // TO DO  : antiduplicate system (au préalable -> comparaison des strings)
-
-      if (m_autoCommit == true)
-        m_controller.CommitFacts();
-
       IsEditingExcel = false;
     }
 
     public void OnWorksheetChanged()
     {
-      m_controller.EditedFactModel.Refresh();
+      m_model.Refresh();
     }
 
-    public void BeforeRightClick()
-    {
-      // TO DO
-    }
+    #endregion
+
+    #region Model callbacks
 
     void OnServerConnectionChanged(bool p_connected)
     {
@@ -137,6 +154,16 @@ namespace FBI.MVC.View
         AddinModuleController.SetExcelInteractionState(true);
         MsgBox.Show(Local.GetValue("general.error.server_disconnected"));
       }
+    }
+
+    protected void OnFactsDownloaded(bool p_success)
+    {
+      if (p_success == true)
+      {
+        m_controller.AddinController.AssociateExcelWorksheetEvents(m_worksheet);
+        m_model.FactsDownloaded -= OnFactsDownloaded;
+      }
+      SetEditedFactsStatus();
     }
 
     #endregion

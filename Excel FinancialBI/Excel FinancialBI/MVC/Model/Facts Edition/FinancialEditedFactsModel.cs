@@ -20,22 +20,29 @@ namespace FBI.MVC.Model
     SafeDictionary<DimensionKey, Fact> m_facts = new SafeDictionary<DimensionKey, Fact>();
     public MultiIndexDictionary<string, DimensionKey, EditedFinancialFact> OutputFacts { get; private set; }
     WorksheetAreaController m_dimensions = null;
-    Worksheet m_worksheet;
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
     bool m_needRefresh = false;
 
-    public FinancialEditedFactsModel(Worksheet p_worksheet)
+    #region Initialize
+
+    public FinancialEditedFactsModel(Worksheet p_worksheet) : base(p_worksheet)
     {
       EditedFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
       OutputFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
-      RangesHighlighter = new RangeHighlighter(p_worksheet);
+      FactsModel.Instance.ReadEvent += OnFinancialInputDownloaded;
+      SourcedComputeModel.Instance.ComputeCompleteEvent += OnFinancialOutputsComputed;
     }
 
-    public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
+    public override void Close()
     {
-      m_worksheet = p_worksheet;
+      FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
+      SourcedComputeModel.Instance.ComputeCompleteEvent -= OnFinancialOutputsComputed;
+    }
+
+    public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
+    {
       m_dimensions = p_dimensions;
       m_versionId = p_versionId;
 
@@ -50,24 +57,6 @@ namespace FBI.MVC.Model
       Dimension<CRUDEntity> l_tabDimension = p_dimensions.Dimensions[p_dimensions.Orientation.TabDimension];
 
       CreateEditedFacts(l_vertical, l_horitontal, l_tabDimension);
-
-      // TO DO Once facts registered clean dimensions and put them into a safe dictionary ?
-    }
-
-    ~FinancialEditedFactsModel()
-    {
-      //FactsModel.Instance.UpdateEvent -= AfterFactsCommit;
-      // dispose edited facts
-      EditedFacts.Clear();
-      OutputFacts.Clear();
-      // EMPTY dictionnaries etc.
-    }
-
-    public override void UnsubsribeEvents()
-    {
-      //  l_editedFact.OnCellValueChanged += new CellValueChangedEventHandler(p_rangeHighlighter.FillCellColor);
-
-
     }
 
     private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)
@@ -115,12 +104,10 @@ namespace FBI.MVC.Model
       return new EditedFinancialFact(l_accountId, l_entityId, l_clientId, l_productId, l_adjustmentId, l_employeeId, m_versionId, l_period, p_cell);
     }
 
+    #endregion
+
     public override void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
-      // flush m_editedFacts ?
-      // flush m_facts ?
-      // flush m_outputsFacts ?
-
       m_updateCellsOnDownload = p_updateCells;
       List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
 
@@ -129,11 +116,13 @@ namespace FBI.MVC.Model
         RequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entity.Id, m_versionId, p_clientId, p_productId, p_adjustmentId));
     }
 
-
-    // TO DO : must update worksheet flag
-    //
-    public bool FillFactsDictionnaries(List<Fact> p_factsList)
+    private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_factsList)
     {
+      if (p_status != ErrorMessage.SUCCESS)
+      {
+        RaiseFactDownloaded(false);
+        return;
+      }
       foreach (Fact l_fact in p_factsList)
       {
         DimensionKey l_dimensionKey = new DimensionKey(l_fact.EntityId, l_fact.AccountId, (UInt32)AxisType.Employee, (Int32)l_fact.Period);
@@ -145,9 +134,14 @@ namespace FBI.MVC.Model
             l_EditedFact.Cell.Value2 = l_EditedFact.Value;
         }
         else
-          m_facts[l_dimensionKey] = l_fact;  // Fact not on worksheet, saved as fact
+          m_facts[l_dimensionKey] = l_fact;
       }
-      return (true);
+      RequestIdList.Remove(p_requestId);
+      if (RequestIdList.Count == 0)
+      {
+        AddinModuleController.SetExcelInteractionState(false);
+        ComputeOutputs();
+      }
     }
 
     public void ComputeOutputs()
@@ -184,6 +178,41 @@ namespace FBI.MVC.Model
       SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest);
     }
 
+    private void OnFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
+    {
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        AddinModuleController.SetExcelInteractionState(false);
+
+        foreach (ComputeResult l_result in p_result.Values)
+        {
+          foreach (KeyValuePair<ResultKey, double> l_valuePair in l_result.Values)
+          {
+            DimensionKey l_key =
+              new DimensionKey(l_valuePair.Key.EntityId, l_valuePair.Key.AccountId, (UInt32)AxisType.Employee, l_valuePair.Key.Period);
+            EditedFinancialFact l_fact = OutputFacts[l_key];
+
+            if (l_fact == null)
+              continue;
+            l_fact.Value = l_valuePair.Value;
+            l_fact.EditedValue = l_valuePair.Value;
+            if ((Double.IsNaN(l_valuePair.Value)))
+              l_fact.Cell.Value2 = "-";
+            else if (Double.IsNegativeInfinity(l_valuePair.Value))
+              l_fact.Cell.Value2 = "-inf.";
+            else if (Double.IsPositiveInfinity(l_valuePair.Value))
+              l_fact.Cell.Value2 = "+inf.";
+            else
+              l_fact.Cell.Value = l_valuePair.Value;
+          }
+        }
+        AddinModuleController.SetExcelInteractionState(true);
+        RaiseFactDownloaded(true);
+      }
+      else
+        RaiseFactDownloaded(false);
+    }
+
     public override void Refresh()
     {
       if (m_needRefresh)
@@ -205,14 +234,6 @@ namespace FBI.MVC.Model
       return null;
     }
 
-    public void UpdateWorksheetInputs()
-    {
-      foreach (EditedFinancialFact l_editedFact in EditedFacts.Values)
-      {
-        // l_editedFact.UpdateCellValue();
-      }
-    }
-
     public override void Commit()
     {
       SafeDictionary<string, Fact> l_dic = new SafeDictionary<string, Fact>();
@@ -228,8 +249,6 @@ namespace FBI.MVC.Model
         FactsModel.Instance.UpdateList(l_dic, CRUDAction.UPDATE);
     }
 
-    // TO DO : After commit event
-
     public override double? CellBelongToOutput(Range p_cell)
     {
       EditedFinancialFact l_fact = OutputFacts[p_cell.Address];
@@ -238,26 +257,6 @@ namespace FBI.MVC.Model
         return (null);
       return (l_fact.Value);
     }
-
-    #region Utils
-
-    //private double GetFactValue() 
-    //{
-    //  // below : goes into controller
-    //  if (Cell.Value2 == null)
-    //    return 0;
-    //  double l_doubleValue;
-    //  if (Cell.Value2.GetType() == typeof(string))
-    //  {
-    //    if (Double.TryParse(Cell.Value2 as string, out l_doubleValue))
-    //      return l_doubleValue;
-    //    else return 0;
-    //  }
-    //  return 0;
-    //}
-
-    #endregion
-
 
   }
 }

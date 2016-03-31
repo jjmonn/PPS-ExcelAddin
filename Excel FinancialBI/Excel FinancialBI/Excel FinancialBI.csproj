@@ -315,7 +315,7 @@
     <Compile Include="MVC\Model\CRUD\FBIFunction.cs" />
     <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
     <Compile Include="MVC\Model\DuplicateRHAllocation.cs" />
-    <Compile Include="MVC\Model\Facts Edition\FactsRHCommit.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\FactsRHCommit.cs" />
     <Compile Include="MVC\Model\LegacyComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />

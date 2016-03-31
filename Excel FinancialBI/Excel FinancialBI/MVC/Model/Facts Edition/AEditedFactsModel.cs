@@ -17,16 +17,17 @@ namespace FBI.MVC.Model
   {
     public List<int> RequestIdList { get; private set; }
     public event OnFactsDownloaded FactsDownloaded;
-    public RangeHighlighter RangesHighlighter { get; protected set; }
+    protected Worksheet m_worksheet;
 
-    protected AEditedFactsModel()
+    protected AEditedFactsModel(Worksheet p_worksheet)
     {
+      m_worksheet = p_worksheet;
       RequestIdList = new List<int>();
     }
 
-    public abstract void UnsubsribeEvents();
+    public abstract void Close();
 
-    public abstract void RegisterEditedFacts(WorksheetAreaController p_dimensions, Worksheet p_worksheet, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0);
+    public abstract void RegisterEditedFacts(WorksheetAreaController p_dimensions, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0);
 
     public abstract void DownloadFacts(List<Int32> p_periodList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
 
@@ -36,8 +37,6 @@ namespace FBI.MVC.Model
 
     public abstract double? CellBelongToOutput(Range p_cell);
     
-    //void UpdateWorksheetInputs();
-
     public abstract void Commit();
 
     public void RaiseFactDownloaded(bool p_success)

@@ -80,7 +80,6 @@
       this.m_financialSubmissionAutoCommitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonSeparator6 = new AddinExpress.MSO.ADXRibbonMenuSeparator(this.components);
       this.m_financialSubmissionSatusButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_financialSubmissionCancelButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.StateSelectionGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.entityEditBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonButton1 = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -100,22 +99,13 @@
       this.m_reportUploadAccountInfoButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.ShowReportBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.RefreshInputsBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.EditRangesMenuBT = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
-      this.EditRangesMenu = new AddinExpress.MSO.ADXRibbonMenu(this.components);
-      this.SelectAccRangeBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.SelectEntitiesRangeBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.SelectPeriodsRangeBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_submissionWorksheetCombobox = new AddinExpress.MSO.ADXRibbonDropDown(this.components);
       this.AdxRibbonGroup9 = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.CloseBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_RHSubmissionRibbon = new AddinExpress.MSO.ADXRibbonTab(this.components);
       this.AdxRibbonRHSubmissionGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSubmissionButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.AdxRibbonSeparator2 = new AddinExpress.MSO.ADXRibbonSeparator(this.components);
       this.m_PDCAutocommitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.AdxRibbonSeparator3 = new AddinExpress.MSO.ADXRibbonSeparator(this.components);
       this.m_PDCSUbmissionStatusButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_PDCSubmissionCancelButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonRHInformationGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCEntityLabel = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_PDCVersionLabel = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -129,8 +119,6 @@
       this.m_PDCSubmissionOptionsButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
       this.AdxRibbonRHMenu2 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
       this.m_PDCRefreshSnapthshotButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_PDCConsultantRangeEditButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_PDCPeriodsRangeEditButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonRHExitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
@@ -558,7 +546,6 @@
       this.FinancialSubmissionGroup.Controls.Add(this.m_financialSubmissionAutoCommitButton);
       this.FinancialSubmissionGroup.Controls.Add(this.AdxRibbonSeparator6);
       this.FinancialSubmissionGroup.Controls.Add(this.m_financialSubmissionSatusButton);
-      this.FinancialSubmissionGroup.Controls.Add(this.m_financialSubmissionCancelButton);
       this.FinancialSubmissionGroup.Id = "adxRibbonGroup_d13fa5b1f4584ad99081875d975057c9";
       this.FinancialSubmissionGroup.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.FinancialSubmissionGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -601,15 +588,6 @@
       this.m_financialSubmissionSatusButton.ImageList = this.LightsImageList;
       this.m_financialSubmissionSatusButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_financialSubmissionSatusButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // m_financialSubmissionCancelButton
-      // 
-      this.m_financialSubmissionCancelButton.Caption = "Cancel";
-      this.m_financialSubmissionCancelButton.Id = "adxRibbonButton_b3163cbf2cf444a5af4934c23e854aa6";
-      this.m_financialSubmissionCancelButton.Image = 7;
-      this.m_financialSubmissionCancelButton.ImageList = this.SubmissionRibbonIL;
-      this.m_financialSubmissionCancelButton.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_financialSubmissionCancelButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
       // StateSelectionGroup
       // 
@@ -740,7 +718,6 @@
       // 
       this.EditSelectionGroup.Caption = " Settings";
       this.EditSelectionGroup.Controls.Add(this.SubmissionOptionsBT);
-      this.EditSelectionGroup.Controls.Add(this.m_submissionWorksheetCombobox);
       this.EditSelectionGroup.Id = "adxRibbonGroup_845aac06fe0b43ffa1a5ab1c8cf56d7a";
       this.EditSelectionGroup.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.EditSelectionGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -762,7 +739,6 @@
       this.AdxRibbonMenu5.Controls.Add(this.m_reportUploadAccountInfoButton);
       this.AdxRibbonMenu5.Controls.Add(this.ShowReportBT);
       this.AdxRibbonMenu5.Controls.Add(this.RefreshInputsBT);
-      this.AdxRibbonMenu5.Controls.Add(this.EditRangesMenuBT);
       this.AdxRibbonMenu5.Id = "adxRibbonMenu_22c008855d864379ba85629a938602dc";
       this.AdxRibbonMenu5.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.AdxRibbonMenu5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -793,56 +769,6 @@
       this.RefreshInputsBT.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.RefreshInputsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.RefreshInputsBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.RefreshInputsBT_OnClick);
-      // 
-      // EditRangesMenuBT
-      // 
-      this.EditRangesMenuBT.Caption = "Edit Input Ranges";
-      this.EditRangesMenuBT.Controls.Add(this.EditRangesMenu);
-      this.EditRangesMenuBT.Id = "adxRibbonSplitButton_ce463d91e7174578abd269d924569f1d";
-      this.EditRangesMenuBT.ImageList = this.SubmissionRibbonIL;
-      this.EditRangesMenuBT.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.EditRangesMenuBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.EditRangesMenuBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      // 
-      // EditRangesMenu
-      // 
-      this.EditRangesMenu.Caption = "Edit";
-      this.EditRangesMenu.Controls.Add(this.SelectAccRangeBT);
-      this.EditRangesMenu.Controls.Add(this.SelectEntitiesRangeBT);
-      this.EditRangesMenu.Controls.Add(this.SelectPeriodsRangeBT);
-      this.EditRangesMenu.Id = "adxRibbonMenu_2ac0a0f424dc41c7a02ef8758071e5be";
-      this.EditRangesMenu.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.EditRangesMenu.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // SelectAccRangeBT
-      // 
-      this.SelectAccRangeBT.Caption = "Select Accounts";
-      this.SelectAccRangeBT.Id = "adxRibbonButton_c96e52e08e2d4080876d4d320e7a2705";
-      this.SelectAccRangeBT.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.SelectAccRangeBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // SelectEntitiesRangeBT
-      // 
-      this.SelectEntitiesRangeBT.Caption = "Select Entities Range";
-      this.SelectEntitiesRangeBT.Id = "adxRibbonButton_d24e5ee960704f1e9ca2612d5eebfa53";
-      this.SelectEntitiesRangeBT.ImageList = this.SubmissionRibbonIL;
-      this.SelectEntitiesRangeBT.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.SelectEntitiesRangeBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // SelectPeriodsRangeBT
-      // 
-      this.SelectPeriodsRangeBT.Caption = "Select Periods Range";
-      this.SelectPeriodsRangeBT.Id = "adxRibbonButton_ab9e3107c41a4638be170f1f98a20b70";
-      this.SelectPeriodsRangeBT.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.SelectPeriodsRangeBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // m_submissionWorksheetCombobox
-      // 
-      this.m_submissionWorksheetCombobox.Caption = "Excel Worksheet";
-      this.m_submissionWorksheetCombobox.Id = "adxRibbonDropDown_051d087fb85b425c947f7c3a0fe28700";
-      this.m_submissionWorksheetCombobox.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_submissionWorksheetCombobox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_submissionWorksheetCombobox.SelectedItemId = "1";
       // 
       // AdxRibbonGroup9
       // 
@@ -877,11 +803,8 @@
       // 
       this.AdxRibbonRHSubmissionGroup.Caption = "Submission";
       this.AdxRibbonRHSubmissionGroup.Controls.Add(this.m_PDCSubmissionButton);
-      this.AdxRibbonRHSubmissionGroup.Controls.Add(this.AdxRibbonSeparator2);
       this.AdxRibbonRHSubmissionGroup.Controls.Add(this.m_PDCAutocommitButton);
-      this.AdxRibbonRHSubmissionGroup.Controls.Add(this.AdxRibbonSeparator3);
       this.AdxRibbonRHSubmissionGroup.Controls.Add(this.m_PDCSUbmissionStatusButton);
-      this.AdxRibbonRHSubmissionGroup.Controls.Add(this.m_PDCSubmissionCancelButton);
       this.AdxRibbonRHSubmissionGroup.Id = "adxRibbonGroup_d13fa5b1f4584ad99081875d975057c8";
       this.AdxRibbonRHSubmissionGroup.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.AdxRibbonRHSubmissionGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -896,11 +819,6 @@
       this.m_PDCSubmissionButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_PDCSubmissionButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       // 
-      // AdxRibbonSeparator2
-      // 
-      this.AdxRibbonSeparator2.Id = "adxRibbonSeparator_90768c84873042c0b7a443753b999541";
-      this.AdxRibbonSeparator2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
       // m_PDCAutocommitButton
       // 
       this.m_PDCAutocommitButton.Caption = "Auto Submit";
@@ -912,26 +830,12 @@
       this.m_PDCAutocommitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       this.m_PDCAutocommitButton.ToggleButton = true;
       // 
-      // AdxRibbonSeparator3
-      // 
-      this.AdxRibbonSeparator3.Id = "adxRibbonSeparator_b9b1011c15a54de3b20d1b83916ab7cf";
-      this.AdxRibbonSeparator3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
       // m_PDCSUbmissionStatusButton
       // 
       this.m_PDCSUbmissionStatusButton.Caption = "Status";
       this.m_PDCSUbmissionStatusButton.Id = "adxRibbonButton_83d245af23e34559ab274b13e9a52e0d";
       this.m_PDCSUbmissionStatusButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCSUbmissionStatusButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // m_PDCSubmissionCancelButton
-      // 
-      this.m_PDCSubmissionCancelButton.Caption = "Cancel";
-      this.m_PDCSubmissionCancelButton.Id = "adxRibbonButton_b3163cbf2cf444a5af4934c23e854aa7";
-      this.m_PDCSubmissionCancelButton.Image = 7;
-      this.m_PDCSubmissionCancelButton.ImageList = this.SubmissionRibbonIL;
-      this.m_PDCSubmissionCancelButton.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_PDCSubmissionCancelButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
       // AdxRibbonRHInformationGroup
       // 
@@ -1034,8 +938,6 @@
       // 
       this.AdxRibbonRHMenu2.Caption = "AdxRibbonMenu5";
       this.AdxRibbonRHMenu2.Controls.Add(this.m_PDCRefreshSnapthshotButton);
-      this.AdxRibbonRHMenu2.Controls.Add(this.m_PDCConsultantRangeEditButton);
-      this.AdxRibbonRHMenu2.Controls.Add(this.m_PDCPeriodsRangeEditButton);
       this.AdxRibbonRHMenu2.Id = "adxRibbonMenu_22c008855d864379ba85629a938602dd";
       this.AdxRibbonRHMenu2.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.AdxRibbonRHMenu2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -1048,20 +950,6 @@
       this.m_PDCRefreshSnapthshotButton.ImageList = this.m_mainRibbonImageList;
       this.m_PDCRefreshSnapthshotButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_PDCRefreshSnapthshotButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // m_PDCConsultantRangeEditButton
-      // 
-      this.m_PDCConsultantRangeEditButton.Caption = "Select consultants Range";
-      this.m_PDCConsultantRangeEditButton.Id = "adxRibbonButton_d24e5ee960704f1e9ca2612d5eebfa54";
-      this.m_PDCConsultantRangeEditButton.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_PDCConsultantRangeEditButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // m_PDCPeriodsRangeEditButton
-      // 
-      this.m_PDCPeriodsRangeEditButton.Caption = "Select Periods Range";
-      this.m_PDCPeriodsRangeEditButton.Id = "adxRibbonButton_ab9e3107c41a4638be170f1f98a20b71";
-      this.m_PDCPeriodsRangeEditButton.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_PDCPeriodsRangeEditButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
       // AdxRibbonRHExitGroup
       // 
@@ -1136,7 +1024,6 @@
     private AddinExpress.MSO.ADXRibbonButton m_financialSubmissionAutoCommitButton;
     private AddinExpress.MSO.ADXRibbonMenuSeparator AdxRibbonSeparator6;
     private AddinExpress.MSO.ADXRibbonButton m_financialSubmissionSatusButton;
-    private AddinExpress.MSO.ADXRibbonButton m_financialSubmissionCancelButton;
     private AddinExpress.MSO.ADXRibbonButton entityEditBT;
     private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton1;
     private AddinExpress.MSO.ADXRibbonButton VersionBT2;
@@ -1158,23 +1045,14 @@
     private AddinExpress.MSO.ADXRibbonButton m_reportUploadAccountInfoButton;
     private AddinExpress.MSO.ADXRibbonButton ShowReportBT;
     private AddinExpress.MSO.ADXRibbonButton RefreshInputsBT;
-    private AddinExpress.MSO.ADXRibbonSplitButton EditRangesMenuBT;
-    private AddinExpress.MSO.ADXRibbonMenu EditRangesMenu;
-    private AddinExpress.MSO.ADXRibbonButton SelectAccRangeBT;
-    private AddinExpress.MSO.ADXRibbonButton SelectEntitiesRangeBT;
-    private AddinExpress.MSO.ADXRibbonButton SelectPeriodsRangeBT;
-    private AddinExpress.MSO.ADXRibbonDropDown m_submissionWorksheetCombobox;
     private AddinExpress.MSO.ADXRibbonGroup AdxRibbonGroup9;
     private AddinExpress.MSO.ADXRibbonButton CloseBT;
 
 
     private AddinExpress.MSO.ADXRibbonGroup AdxRibbonRHSubmissionGroup;
     private AddinExpress.MSO.ADXRibbonButton m_PDCSubmissionButton;
-    private AddinExpress.MSO.ADXRibbonSeparator AdxRibbonSeparator2;
     private AddinExpress.MSO.ADXRibbonButton m_PDCAutocommitButton;
-    private AddinExpress.MSO.ADXRibbonSeparator AdxRibbonSeparator3;
     private AddinExpress.MSO.ADXRibbonButton m_PDCSUbmissionStatusButton;
-    private AddinExpress.MSO.ADXRibbonButton m_PDCSubmissionCancelButton;
     private AddinExpress.MSO.ADXRibbonGroup AdxRibbonRHInformationGroup;
     private AddinExpress.MSO.ADXRibbonButton m_PDCEntityLabel;
     private AddinExpress.MSO.ADXRibbonButton m_PDCVersionLabel;
@@ -1188,8 +1066,6 @@
     private AddinExpress.MSO.ADXRibbonSplitButton m_PDCSubmissionOptionsButton;
     private AddinExpress.MSO.ADXRibbonMenu AdxRibbonRHMenu2;
     private AddinExpress.MSO.ADXRibbonButton m_PDCRefreshSnapthshotButton;
-    private AddinExpress.MSO.ADXRibbonButton m_PDCConsultantRangeEditButton;
-    private AddinExpress.MSO.ADXRibbonButton m_PDCPeriodsRangeEditButton;
     private AddinExpress.MSO.ADXRibbonButton m_PDCSumbissionExitButton;
     private AddinExpress.MSO.ADXRibbonGroup AdxRibbonRHExitGroup;
     internal AddinExpress.MSO.ADXRibbonButton m_versionRibbonButton;

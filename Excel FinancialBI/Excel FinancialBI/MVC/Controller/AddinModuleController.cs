@@ -66,7 +66,7 @@ namespace FBI.MVC.Controller
         bool l_result = m_factsEditionController.Launch(p_updateCells, true, SubmissionClientId, 
           SubmissionProductId, SubmissionAdjustmentId);
         if (l_result)
-          m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.AreaController.VersionId);
+          m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.VersionId);
         return (l_result);
     }
 
@@ -76,7 +76,7 @@ namespace FBI.MVC.Controller
       m_factsEditionController = l_editionController;
       bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences, 0, 0, 0);
       if (l_result)
-        m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.AreaController.VersionId);
+        m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.VersionId);
       return (l_result);
     }
 
@@ -124,6 +124,11 @@ namespace FBI.MVC.Controller
       }
       m_factsEditionController.CommitFacts();
       return true;
+    }
+
+    public void SetUploadAutoCommit(bool p_auto)
+    {
+      m_factsEditionController.AutoCommit = p_auto;
     }
 
     public void RefreshInputs()

@@ -79,35 +79,32 @@ namespace FBI
       Addin.InitializationEvent += OnAddinInitializationEvent;
       Addin.ConnectionStateEvent += OnConnectionEvent;
 
-      this.m_connectionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_connectionButton_OnClick);
-      this.m_versionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_versionRibbonButton_OnClick);
-      this.m_RHProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_RHProcessRibbonButton_OnClick);
-      this.m_snapshotRibbonSplitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_snapshotRibbonSplitButton_OnClick);
-      this.m_reportUploadRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_reportUploadRibbonButton_OnClick);
-      this.m_CUIRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_CUIRibbonButton_OnClick);
-      this.m_fbiRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.OnFBIFunctionButtonClick);
-      this.m_refreshRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_refreshRibbonButton_OnClick);
-      this.m_resfreshSelectionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_resfreshSelectionRibbonButton_OnClick);
-      this.m_refreshWorksheetRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_refreshWorksheetRibbonButton_OnClick);
-      this.m_refreshWorkbookRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_refreshWorkbookRibbonButton_OnClick);
-      this.m_platformManagementButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_platformManagementButton_OnClick);
-      this.m_settingsRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_settingsRibbonButton_OnClick);
-      this.m_financialSubmissionSubmitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialSubmissionSubmitButton_OnClick);
-      this.m_financialSubmissionAutoCommitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialSubmissionAutoCommitButton_OnClick);
-      this.CloseBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.CloseBT_OnClick);
-      this.m_PDCSubmissionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCSubmissionButton_OnClick);
-      this.m_PDCAutocommitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCAutocommitButton_OnClick);
-      this.m_PDCSUbmissionStatusButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCSUbmissionStatusButton_OnClick);
-      this.m_PDCSubmissionCancelButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCSubmissionCancelButton_OnClick);
-      this.m_PDCRefreshSnapthshotButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCRefreshSnapthshotButton_OnClick);
-      this.m_PDCConsultantRangeEditButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCConsultantRangeEditButton_OnClick);
-      this.m_PDCPeriodsRangeEditButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCPeriodsRangeEditButton_OnClick);
-      this.m_PDCSumbissionExitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_PDCSumbissionExitButton_OnClick);
-      this.m_directoryRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_directoryRibbonButton_OnClick);
-      this.m_submissionsTrackingRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_submissionsTrackingRibbonButton_OnClick);
-      this.m_fbiBreakLinksRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_fbiBreakLinksRibbonButton_OnClick);
-      this.m_autoRefreshRibbonChackBox.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_autoRefreshRibbonChackBox_OnClick);
-      this.m_financialProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialProcessRibbonButton_OnClick);
+      m_connectionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_connectionButton_OnClick);
+      m_versionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_versionRibbonButton_OnClick);
+      m_RHProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_RHProcessRibbonButton_OnClick);
+      m_snapshotRibbonSplitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_snapshotRibbonSplitButton_OnClick);
+      m_reportUploadRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_reportUploadRibbonButton_OnClick);
+      m_CUIRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_CUIRibbonButton_OnClick);
+      m_fbiRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(OnFBIFunctionButtonClick);
+      m_refreshRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_refreshRibbonButton_OnClick);
+      m_resfreshSelectionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_resfreshSelectionRibbonButton_OnClick);
+      m_refreshWorksheetRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_refreshWorksheetRibbonButton_OnClick);
+      m_refreshWorkbookRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_refreshWorkbookRibbonButton_OnClick);
+      m_platformManagementButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_platformManagementButton_OnClick);
+      m_settingsRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_settingsRibbonButton_OnClick);
+      m_financialSubmissionSubmitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_financialSubmissionSubmitButton_OnClick);
+      m_financialSubmissionAutoCommitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_financialSubmissionAutoCommitButton_OnClick);
+      CloseBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(CloseBT_OnClick);
+      m_PDCSubmissionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCSubmissionButton_OnClick);
+      m_PDCAutocommitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCAutocommitButton_OnClick);
+      m_PDCSUbmissionStatusButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCSUbmissionStatusButton_OnClick);
+      m_PDCRefreshSnapthshotButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCRefreshSnapthshotButton_OnClick);
+      m_PDCSumbissionExitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCSumbissionExitButton_OnClick);
+      m_directoryRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_directoryRibbonButton_OnClick);
+      m_submissionsTrackingRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_submissionsTrackingRibbonButton_OnClick);
+      m_fbiBreakLinksRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_fbiBreakLinksRibbonButton_OnClick);
+      m_autoRefreshRibbonChackBox.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_autoRefreshRibbonChackBox_OnClick);
+      m_financialProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_financialProcessRibbonButton_OnClick);
     }
 
     private void fbiRibbonChangeState(bool p_enabled)
@@ -356,7 +353,7 @@ namespace FBI
 
     private void m_financialSubmissionAutoCommitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-          
+      m_controller.SetUploadAutoCommit(pressed);
     }
 
     private void CloseBT_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -380,7 +377,7 @@ namespace FBI
 
     private void m_PDCAutocommitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      m_controller.SetUploadAutoCommit(pressed);
     }
 
     private void m_PDCSUbmissionStatusButton_OnClick(object sender, IRibbonControl control, bool pressed)

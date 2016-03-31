@@ -28,7 +28,6 @@ namespace FBI.MVC.Model
     SafeDictionary<CRUDAction, SafeDictionary<string, Fact>> m_factsCommitDict = new SafeDictionary<CRUDAction,SafeDictionary<string,Fact>>();
     SafeDictionary<CRUDAction, List<FactTag>> m_factTagCommitDict = new SafeDictionary<CRUDAction, List<FactTag>>();
     SafeDictionary<CRUDAction, List<LegalHoliday>> m_LegalHolidayCommitDict = new SafeDictionary<CRUDAction, List<LegalHoliday>>();
-    // SafeDictionary<UInt32, Fact> m_deleteFactsDict = new SafeDictionary<uint,Fact>();
     SafeDictionary<UInt32, EditedRHFact> m_legalHolidayDeleteDictIdEditedFact = new SafeDictionary<uint,EditedRHFact>();
     public event FactsCommitError OnCommitError;
     List<int> m_requestIdList = new List<int>();
@@ -291,7 +290,7 @@ namespace FBI.MVC.Model
       {
         lock (m_IdEditedFactDict)
         {
-        foreach (KeyValuePair<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> l_result in p_updateResults)
+          foreach (KeyValuePair<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> l_result in p_updateResults)
           {
             foreach (KeyValuePair<UInt32, ErrorMessage> l_idErrorMessage in l_result.Value)
             {
