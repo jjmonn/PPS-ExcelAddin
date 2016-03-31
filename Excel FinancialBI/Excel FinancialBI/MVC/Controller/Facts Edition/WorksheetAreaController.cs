@@ -188,7 +188,7 @@ namespace FBI.MVC.Model
 
     private bool SetFinancialDimensionsOrientation()
     {
-      switch (String.Concat(Periods.m_snapshotResult, Accounts.m_snapshotResult, Entities.m_snapshotResult))
+      switch (String.Concat((int)Periods.m_snapshotResult, (int)Accounts.m_snapshotResult, (int)Entities.m_snapshotResult))
       {
         case "111":
           SetDimensionsAlignmentCaseOneFact();
@@ -211,7 +211,7 @@ namespace FBI.MVC.Model
 
     private bool SetRHDimensionsOrientation()
     {
-      switch (String.Concat(Periods.m_snapshotResult, Employees.m_snapshotResult))
+      switch (String.Concat((int)Periods.m_snapshotResult, (int)Employees.m_snapshotResult))
       {
         case "11":
           // One Period One Entity
@@ -220,12 +220,12 @@ namespace FBI.MVC.Model
 
         case "12":
           // One period Several Entities
-          SetDimensionsAlignmentCellsOtherCases(Entities, Periods);
+          SetDimensionsAlignmentCellsOtherCases(Employees, Periods);
           break;
 
         case "21":
           // Several Periods One Entity
-          SetDimensionsAlignmentCellsOtherCases(Periods, Entities);
+          SetDimensionsAlignmentCellsOtherCases(Periods, Employees);
           break;
       }
       return DefineGlobalOrientation();
@@ -285,9 +285,9 @@ namespace FBI.MVC.Model
     private void SetDimensionsAlignmentCellsOtherCases(Dimension<CRUDEntity> p_definedDimension, Dimension<CRUDEntity> p_dimensionToBeDefined)
     {
       if (p_definedDimension.m_alignment == Alignment.HORIZONTAL)
-        SetDimensionAlignment(p_definedDimension, p_definedDimension, Alignment.VERTICAL);
+        SetDimensionAlignment(p_definedDimension, p_dimensionToBeDefined, Alignment.VERTICAL);
       else
-        SetDimensionAlignment(p_definedDimension, p_definedDimension, Alignment.HORIZONTAL);
+        SetDimensionAlignment(p_definedDimension, p_dimensionToBeDefined, Alignment.HORIZONTAL);
     }
 
     private void SetDimensionAlignment(Dimension<CRUDEntity> p_definedDimension, Dimension<CRUDEntity> p_dimension, Alignment p_alignment)

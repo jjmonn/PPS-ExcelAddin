@@ -155,7 +155,7 @@ namespace FBI.Utils
         Range l_cell = subArea.Cells[1, 1] as Range;
         l_cell.Borders[XlBordersIndex.xlEdgeBottom].Color = Color.Black;
       }
-      area.Columns.AutoFit();
+      area.EntireColumn.AutoFit();
     }
   }
 }
