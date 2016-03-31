@@ -11,6 +11,8 @@ namespace FBI.MVC.View
   using Controller;
   using Model;
   using Model.CRUD;
+  using Forms;
+  using Utils;
 
   interface IFactEditionView
   {
@@ -36,6 +38,7 @@ namespace FBI.MVC.View
     {
       m_controller.WorksheetChanging += OnWorksheetChanging;
       m_controller.WorksheetChanged += OnWorksheetChanged;
+      Addin.ConnectionStateEvent += OnServerConnectionChanged;
     }
 
     public void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
@@ -63,6 +66,7 @@ namespace FBI.MVC.View
     public virtual void Close()
     {
       m_controller.EditedFactModel.RangesHighlighter.RevertToOriginalColors();
+      Addin.ConnectionStateEvent -= OnServerConnectionChanged;
 
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
       AddinModule.CurrentInstance.m_RHSubmissionRibbon.Visible = false;
@@ -124,6 +128,15 @@ namespace FBI.MVC.View
     public void BeforeRightClick()
     {
       // TO DO
+    }
+
+    void OnServerConnectionChanged(bool p_connected)
+    {
+      if (p_connected == false)
+      {
+        AddinModuleController.SetExcelInteractionState(true);
+        MsgBox.Show(Local.GetValue("general.error.server_disconnected"));
+      }
     }
 
     #endregion

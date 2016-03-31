@@ -111,7 +111,7 @@ namespace FBI
       m_networkLauncher = new NetworkLauncher();
       if ((result = m_networkLauncher.Launch(Properties.Settings.Default.serverIp, Properties.Settings.Default.port_number, OnDisconnect)) == true)
         Authenticator.Instance.AskAuthentication(UserName, Password);
-      if (ConnectionStateEvent != null)
+      if (ConnectionStateEvent != null && result == true)
         ConnectionStateEvent(result);
       return (result);
     }
