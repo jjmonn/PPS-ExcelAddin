@@ -37,8 +37,7 @@ namespace FBI.MVC.Controller
 
     public void Commit(RangeHighlighter p_highlighter) // TODO: extract RangeHighlighter from FactsRHCommit
     {
-      m_factsCommit = new FactsRHCommit(EditedFactModel.EditedFacts, EditedFactModel.PreviousWeeksFacts, EditedFactModel.IdEditedFactDict,
-        PeriodsList, p_highlighter, RHAccountId, VersionId);
+      m_factsCommit = new FactsRHCommit(EditedFactModel, PeriodsList, p_highlighter, RHAccountId, VersionId);
       m_highlighter = p_highlighter;
       // TO DO
       // Antiduplicate system

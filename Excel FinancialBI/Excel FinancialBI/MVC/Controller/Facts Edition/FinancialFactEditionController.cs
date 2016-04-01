@@ -10,6 +10,7 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
   using View;
+  using Network;
 
   class FinancialFactEditionController : AFactEditionController<FinancialEditedFactsModel>
   {
@@ -22,6 +23,23 @@ namespace FBI.MVC.Controller
       EditedFactModel = new FinancialEditedFactsModel(p_worksheet);
       m_view = new FinancialFactEditionView(this, p_worksheet);
       m_view.LoadView();
+      FactsModel.Instance.UpdateEvent += OnCommitResult;
+    }
+
+    public override void Close()
+    {
+      base.Close();
+      FactsModel.Instance.UpdateEvent -= OnCommitResult;
+    }
+
+    private void OnCommitResult(ErrorMessage p_status, CRUDAction p_action, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultDic)
+    {
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_pair in p_resultDic)
+          if (l_pair.Value.Item2 != ErrorMessage.SUCCESS)
+            EditedFactModel.RaiseOnCommitError(l_pair.Key, l_pair.Value.Item2);
+      }
     }
   }
 }
