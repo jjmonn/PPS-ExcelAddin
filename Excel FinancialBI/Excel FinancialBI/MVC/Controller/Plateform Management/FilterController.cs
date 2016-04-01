@@ -69,8 +69,9 @@ namespace FBI.MVC.Controller
         l_filter.ParentId = p_parentId;
         l_filter.Axis = AxisType;
         l_filter.IsParent = false;
-        FilterModel.Instance.Create(l_filter);
-        return (true);
+        if (FilterModel.Instance.Create(l_filter))
+          return (true);
+        Error = Local.GetValue("general.error.system");
       }
       return (false);
     }
@@ -84,8 +85,9 @@ namespace FBI.MVC.Controller
         l_filter.Name = p_filterValueName;
         l_filter.FilterId = p_filterId;
         l_filter.ParentId = p_parentId;
-        FilterValueModel.Instance.Create(l_filter);
-        return (true);
+        if (FilterValueModel.Instance.Create(l_filter))
+          return (true);
+        Error = Local.GetValue("general.error.system");
       }
       return (false);
     }
@@ -97,26 +99,26 @@ namespace FBI.MVC.Controller
     public bool Remove(UInt32 p_filterId, Type p_type)
     {
       if (p_type == typeof(Filter))
-      {
         return (this.RemoveCategory(p_filterId));
-      }
       if (p_type == typeof(FilterValue))
-      {
         return (this.RemoveValue(p_filterId));
-      }
       return (false);
     }
 
     public bool RemoveCategory(UInt32 p_filterId)
     {
-      FilterModel.Instance.Delete(p_filterId);
-      return (true);
+      if (FilterModel.Instance.Delete(p_filterId))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool RemoveValue(UInt32 p_filterValue)
     {
-      FilterValueModel.Instance.Delete(p_filterValue);
-      return (true);
+      if (FilterValueModel.Instance.Delete(p_filterValue))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     #endregion
@@ -125,18 +127,12 @@ namespace FBI.MVC.Controller
 
     public bool Update(UInt32 p_filterId, string p_filterName, Type p_type)
     {
-      if (p_filterName == "") //If the user has entered nothing, or if he has canceled, don't show an error, and do nothing.
-      {
+      if (p_filterName == "")
         return (true);
-      }
       if (p_type == typeof(Filter))
-      {
         return (this.UpdateCategory(p_filterId, p_filterName));
-      }
       if (p_type == typeof(FilterValue))
-      {
         return (this.UpdateValue(p_filterId, p_filterName));
-      }
       return (false);
     }
 
@@ -151,8 +147,9 @@ namespace FBI.MVC.Controller
       {
         l_filterVal.ParentId = p_newParentId;
         l_filterVal.FilterId = p_newFilterId;
-        FilterValueModel.Instance.Update(l_filterVal);
-        return (true);
+        if (FilterValueModel.Instance.Update(l_filterVal))
+          return (true);
+        Error = Local.GetValue("general.error.system");
       }
       return (false);
     }
@@ -167,8 +164,9 @@ namespace FBI.MVC.Controller
       if (l_filter != null && this.IsNameValid(p_filterNewName) && FilterModel.Instance.GetValue(AxisType, p_filterNewName) == null)
       {
         l_filter.Name = p_filterNewName;
-        FilterModel.Instance.Update(l_filter);
-        return (true);
+        if (FilterModel.Instance.Update(l_filter))
+          return (true);
+        Error = Local.GetValue("general.error.system");
       }
       return (false);
     }
@@ -183,8 +181,9 @@ namespace FBI.MVC.Controller
       if (l_filterVal != null && this.IsNameValid(p_filterValueNewName) && FilterValueModel.Instance.GetValue(p_filterValueNewName) == null)
       {
         l_filterVal.Name = p_filterValueNewName;
-        FilterValueModel.Instance.Update(l_filterVal);
-        return (true);
+        if (FilterValueModel.Instance.Update(l_filterVal))
+          return (true);
+        Error = Local.GetValue("general.error.system");
       }
       return (false);
     }

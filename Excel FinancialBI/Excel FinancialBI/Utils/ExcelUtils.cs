@@ -9,6 +9,7 @@ namespace FBI.Utils
   using Microsoft.Office.Interop.Excel;
   using VIBlend.WinForms.Controls;
   using Forms;
+  using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
 
   class ExcelUtils
@@ -18,24 +19,37 @@ namespace FBI.Utils
     public static Range CreateReceptionWS(string p_name, string[] p_headerNamesArray, string[] p_headerValuesArray)
     {
       Workbook l_workbook =   AddinModule.CurrentInstance.ExcelApp.ActiveWorkbook;
-	    Worksheet l_worksheet = (Worksheet) AddinModule.CurrentInstance.ExcelApp.Worksheets.Add();
-      RenammeWorksheet(l_worksheet, l_workbook, p_name);
-	    AddinModule.CurrentInstance.ExcelApp.ActiveWindow.DisplayGridlines = false;
-	    return FillHeader(l_worksheet, p_headerNamesArray, p_headerValuesArray);	
+      try
+      {
+        Worksheet l_worksheet = (Worksheet)AddinModule.CurrentInstance.ExcelApp.Worksheets.Add();
+        RenammeWorksheet(l_worksheet, l_workbook, p_name);
+        AddinModule.CurrentInstance.ExcelApp.ActiveWindow.DisplayGridlines = false;
+        return FillHeader(l_worksheet, p_headerNamesArray, p_headerValuesArray);
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("Excel error during worksheet insertion " + e.Message);
+        return null;
+      }
     }
 
     private static void RenammeWorksheet(Worksheet p_worksheet, Workbook p_workbook, string p_name)
     {
-      if (p_name.Length < EXCEL_SHEET_NAME_MAX_LENGHT && CheckIfWorkbookContainsWorksheetName(p_workbook, p_name) == false)
+      try
       {
-        p_worksheet.Name = p_name;
-	    } else {
-        p_name = p_name.Substring(0, EXCEL_SHEET_NAME_MAX_LENGHT);
-        if (CheckIfWorkbookContainsWorksheetName(p_workbook, p_name) == false)
-        {
+        if (p_name.Length < EXCEL_SHEET_NAME_MAX_LENGHT && CheckIfWorkbookContainsWorksheetName(p_workbook, p_name) == false)
           p_worksheet.Name = p_name;
-		    }
-	    }
+        else
+        {
+          p_name = p_name.Substring(0, EXCEL_SHEET_NAME_MAX_LENGHT);
+          if (CheckIfWorkbookContainsWorksheetName(p_workbook, p_name) == false)
+            p_worksheet.Name = p_name;
+        }
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("Could not renamme worksheet " + e.Message);
+      }
     }
 
     private static Range FillHeader(Worksheet p_worksheet, string[] p_headerNamesArray, string[] p_headerValuesArray)
@@ -61,26 +75,27 @@ namespace FBI.Utils
       return false;
     }
 
-    public static void WriteAccountsFromTreeView(FbiTreeView<Account> p_accountsTreeview, Range p_range, List<Int32> p_periodsList = null)
+    public static void WriteAccountsFromTreeView(FbiTreeView<Account> p_accountsTreeview, Range p_range, List<Int32> p_periodsList, TimeConfig p_timeConfig)
     {
 	    int IndentLevel = 0;
-	    foreach (vTreeNode Node in p_accountsTreeview.Nodes) {
+	    foreach (vTreeNode Node in p_accountsTreeview.Nodes) 
+      {
 		    IndentLevel = 0;
 		    p_range = p_range.Offset[1, 0];
 		    p_range.Value = Node.Text;
 
-        WritePeriodsOnWorksheet(p_range, p_periodsList);
-
+        WritePeriodsOnWorksheet(p_range, p_periodsList, p_timeConfig);
 		    p_range = p_range.Offset[1, 0];
 
-		    foreach (vTreeNode childNode in Node.Nodes) {
-			    WriteAccountOnWorksheet(childNode, p_range, IndentLevel);
+		    foreach (vTreeNode childNode in Node.Nodes) 
+        {
+			    WriteAccountOnWorksheet(childNode, ref p_range, IndentLevel);
 		    }
 	    }
 	    p_range.Columns.AutoFit();
     }
     
-    public static void WritePeriodsOnWorksheet(Range p_destinationCell, List<Int32> p_periodsList)
+    public static void WritePeriodsOnWorksheet(Range p_destinationCell, List<Int32> p_periodsList, TimeConfig p_timeConfig)
     {
       if (p_periodsList == null)
         return;
@@ -88,12 +103,13 @@ namespace FBI.Utils
       Int32 i = 0;
       foreach (Int32 l_periodAsInt in p_periodsList)
       {
-        p_destinationCell.Offset[0, 1 + i].Value = DateTime.FromOADate(l_periodAsInt).ToString("Short Date");
+        string l_date =  DateTime.FromOADate(l_periodAsInt).ToString("MM/dd/yyyy");
+        p_destinationCell.Offset[0, 1 + i].Value = l_date;  //PeriodModel.GetFormatedDate(l_periodAsInt, p_timeConfig);
         i = i + 1;
       }
     }
     
-    private static void WriteAccountOnWorksheet(vTreeNode p_node, Range p_range, int p_indentLevel)
+    private static void WriteAccountOnWorksheet(vTreeNode p_node, ref Range p_range, int p_indentLevel)
     {
       p_range.IndentLevel = p_indentLevel;
       p_range.Value = p_node.Text;
@@ -102,7 +118,7 @@ namespace FBI.Utils
       foreach (vTreeNode Child in p_node.Nodes)
       {
         p_indentLevel = p_indentLevel + 1;
-        WriteAccountOnWorksheet(Child, p_range, p_indentLevel);
+        WriteAccountOnWorksheet(Child, ref p_range, p_indentLevel);
         p_indentLevel = p_indentLevel - 1;
       }
 
@@ -115,6 +131,11 @@ namespace FBI.Utils
         p_range = p_range.Offset[1, 0];
         p_range.Value2 = l_value;
       }
+    }
+
+    public static Range GetRange(string p_address, Worksheet p_worksheet)
+    {
+      return p_worksheet.Cells[p_address] as Range;
     }
 
   }

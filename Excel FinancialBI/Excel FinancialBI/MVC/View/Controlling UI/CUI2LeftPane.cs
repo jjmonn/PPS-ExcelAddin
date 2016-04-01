@@ -26,6 +26,8 @@ namespace FBI.MVC.View
 
     SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView> m_selectionTVList = new SafeDictionary<Tuple<AxisType, Type>, AFbiTreeView>();
     SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>> m_TVFormatData = new SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>>();
+    int m_SPDistance = 250;
+    bool m_filterPaneOpen = true;
 
     #endregion
 
@@ -45,11 +47,10 @@ namespace FBI.MVC.View
     {
       if ((Account.AccountProcess)Properties.Settings.Default.processId == Account.AccountProcess.RH)
         InitPeriodRangeSelection();
+      MultilangueSetup();
       TreeViewInit();
       ComboBoxInit();
 
-      MultilangueSetup();
-      HideAllTV();
       SuscribeEvents();
     }
 
@@ -57,6 +58,8 @@ namespace FBI.MVC.View
     {
       m_selectionTVList[new Tuple<AxisType, Type>((AxisType)0, typeof(Version))].NodeChecked += OnVersionSelect;
       SelectionCB.SelectedItemChanged += OnSelectionCBSelectedItemChanged;
+      UnselectAllToolStripMenuItem.Click += OnUnSelectAllButtonClick;
+      SelectAllToolStripMenuItem.Click += OnSelectAllButtonClick;
     }
 
     private void MultilangueSetup()
@@ -69,17 +72,17 @@ namespace FBI.MVC.View
 
     private void ComboBoxInit()
     {
-      InitCBListItem<AxisElem>(Local.GetValue("CUI.adjustment"), AxisType.Entities);
-      InitCBListItem<Filter>(Local.GetValue("CUI.adjustment_cat"), AxisType.Adjustment);
-      InitCBListItem<AxisElem>(Local.GetValue("CUI.product"), AxisType.Product);
-      InitCBListItem<Filter>(Local.GetValue("CUI.product_cat"), AxisType.Product);
-      InitCBListItem<AxisElem>(Local.GetValue("CUI.client"), AxisType.Client);
-      InitCBListItem<Filter>(Local.GetValue("CUI.client_cat"), AxisType.Client);
-      InitCBListItem<Filter>(Local.GetValue("CUI.employee_cat"), AxisType.Employee);
-      InitCBListItem<Filter>(Local.GetValue("CUI.entity_cat"), AxisType.Entities);
-      InitCBListItem<Version>(Local.GetValue("CUI.versions"));
-      InitCBListItem<Currency>(Local.GetValue("CUI.currencies"));
-
+      InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.adjustment"), AxisType.Entities);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.adjustment_cat"), AxisType.Adjustment);
+      InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.product"), AxisType.Product);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.product_cat"), AxisType.Product);
+      InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.client"), AxisType.Client);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.client_cat"), AxisType.Client);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.employee_cat"), AxisType.Employee);
+      InitCBListItem<Filter>(Local.GetValue("CUI.dimension.entity_cat"), AxisType.Entities);
+      SelectionCB.SelectedItem = InitCBListItem<Version>(Local.GetValue("CUI.dimension.versions"));
+      InitCBListItem<Currency>(Local.GetValue("CUI.dimension.currencies"));
+       
       SelectionCB.DropDownList = true;
     }
 
@@ -95,7 +98,7 @@ namespace FBI.MVC.View
       InitFilterTV(AxisType.Employee);
       InitTVAxisElem(AxisElemModel.Instance, AxisType.Adjustment);
       InitFilterTV(AxisType.Adjustment);
-      InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, false, true);
+      InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, true, true);
       InitTV(CurrencyModel.Instance, m_selectionTableLayout.Controls, false, Properties.Settings.Default.currentCurrency, false, true);
     }
 
@@ -110,13 +113,14 @@ namespace FBI.MVC.View
       l_view.BorderStyle = BorderStyle.FixedSingle;
     }
 
-    void InitCBListItem<T>(string p_text, AxisType p_axis = (AxisType)0)
+    ListItem InitCBListItem<T>(string p_text, AxisType p_axis = (AxisType)0)
       where T : class, NamedCRUDEntity
     {
       ListItem l_listItem = new ListItem();
       l_listItem.Text = p_text;
       l_listItem.Value = new Tuple<AxisType, Type>(p_axis, typeof(T));
       SelectionCB.Items.Add(l_listItem);
+      return (l_listItem);
     }
 
     #region Initialize TV
@@ -169,6 +173,7 @@ namespace FBI.MVC.View
         FormatTV(p_tv, m_TVFormatData[p_key]);
       if (p_control != null)
         p_control.Add(p_tv);
+      p_tv.ContextMenuStrip = m_rightClickMenu;
     }
 
     void FormatTV(AFbiTreeView p_tv, Tuple<bool, bool, UInt32> p_format)
@@ -188,6 +193,53 @@ namespace FBI.MVC.View
     #endregion
 
     #region Event
+
+    AFbiTreeView GetTVFromToolStripMenuItem(object p_sender)
+    {
+      if (p_sender.GetType() != typeof(ToolStripMenuItem))
+        return null;
+      ToolStripMenuItem l_item = p_sender as ToolStripMenuItem;
+      ContextMenuStrip l_menu = l_item.Owner as ContextMenuStrip;
+      if (l_menu.SourceControl.GetType().IsSubclassOf(typeof(AFbiTreeView)) == false)
+        return null;
+      AFbiTreeView l_tv = l_menu.SourceControl as AFbiTreeView;
+      return (l_tv);
+    }
+
+    private void OnFilterPanelCollapseClick(object p_sender, EventArgs p_e)
+    {
+      if (p_sender.GetType() == typeof(vButton))
+      {
+        vButton l_button = p_sender as vButton;
+        l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
+      }
+      if (m_filterPaneOpen)
+      {
+        m_SPDistance = SplitContainer.SplitterDistance;
+        SplitContainer.SplitterDistance = SplitContainer.Height;
+      }
+      else
+        SplitContainer.SplitterDistance = m_SPDistance;
+      m_filterPaneOpen = !m_filterPaneOpen;
+    }
+
+    void OnSelectAllButtonClick(object p_sender, EventArgs p_e)
+    {
+      AFbiTreeView l_tv = GetTVFromToolStripMenuItem(p_sender);
+
+      if (l_tv != null)
+        foreach (vTreeNode l_node in l_tv.GetNodes())
+          l_node.Checked = CheckState.Checked;
+    }
+
+    void OnUnSelectAllButtonClick(object p_sender, EventArgs p_e)
+    {
+      AFbiTreeView l_tv = GetTVFromToolStripMenuItem(p_sender);
+
+      if (l_tv != null)
+        foreach (vTreeNode l_node in l_tv.GetNodes())
+          l_node.Checked = CheckState.Unchecked;
+    }
 
     void OnVersionSelect(object p_sender, vTreeViewEventArgs p_e)
     {
@@ -281,6 +333,5 @@ namespace FBI.MVC.View
     }
 
     #endregion
-
   }
 }

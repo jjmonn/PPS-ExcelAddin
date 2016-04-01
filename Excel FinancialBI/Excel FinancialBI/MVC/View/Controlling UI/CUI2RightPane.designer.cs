@@ -67,7 +67,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.63511F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48.36489F));
-      this.TableLayoutPanel1.Size = new System.Drawing.Size(277, 616);
+      this.TableLayoutPanel1.Size = new System.Drawing.Size(331, 777);
       this.TableLayoutPanel1.TabIndex = 1;
       // 
       // TableLayoutPanel2
@@ -81,13 +81,13 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.TableLayoutPanel2.Controls.Add(this.m_rowsDisplayList, 0, 1);
       this.TableLayoutPanel2.Controls.Add(this.m_updateBT, 1, 2);
       this.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.TableLayoutPanel2.Location = new System.Drawing.Point(3, 337);
+      this.TableLayoutPanel2.Location = new System.Drawing.Point(3, 421);
       this.TableLayoutPanel2.Name = "TableLayoutPanel2";
       this.TableLayoutPanel2.RowCount = 3;
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88.44884F));
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.55116F));
-      this.TableLayoutPanel2.Size = new System.Drawing.Size(271, 276);
+      this.TableLayoutPanel2.Size = new System.Drawing.Size(325, 353);
       this.TableLayoutPanel2.TabIndex = 5;
       // 
       // m_columnsLabel
@@ -98,9 +98,9 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.m_columnsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_columnsLabel.ImageKey = "table_selection_column.ico";
       this.m_columnsLabel.ImageList = this.ImageList2;
-      this.m_columnsLabel.Location = new System.Drawing.Point(138, 0);
+      this.m_columnsLabel.Location = new System.Drawing.Point(165, 0);
       this.m_columnsLabel.Name = "m_columnsLabel";
-      this.m_columnsLabel.Size = new System.Drawing.Size(130, 20);
+      this.m_columnsLabel.Size = new System.Drawing.Size(157, 20);
       this.m_columnsLabel.TabIndex = 3;
       this.m_columnsLabel.Text = "[CUI.columns_label]";
       this.m_columnsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -116,10 +116,10 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       // m_columnsDisplayList
       // 
       this.m_columnsDisplayList.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.m_columnsDisplayList.Location = new System.Drawing.Point(138, 23);
+      this.m_columnsDisplayList.Location = new System.Drawing.Point(165, 23);
       this.m_columnsDisplayList.Name = "m_columnsDisplayList";
       this.m_columnsDisplayList.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_columnsDisplayList.Size = new System.Drawing.Size(130, 220);
+      this.m_columnsDisplayList.Size = new System.Drawing.Size(157, 288);
       this.m_columnsDisplayList.TabIndex = 5;
       this.m_columnsDisplayList.Text = "VListBox1";
       this.m_columnsDisplayList.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
@@ -135,7 +135,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.m_rowsLabel.ImageList = this.ImageList2;
       this.m_rowsLabel.Location = new System.Drawing.Point(3, 0);
       this.m_rowsLabel.Name = "m_rowsLabel";
-      this.m_rowsLabel.Size = new System.Drawing.Size(129, 20);
+      this.m_rowsLabel.Size = new System.Drawing.Size(156, 20);
       this.m_rowsLabel.TabIndex = 4;
       this.m_rowsLabel.Text = "[CUI.rows_label]";
       this.m_rowsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -146,21 +146,21 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.m_rowsDisplayList.Location = new System.Drawing.Point(3, 23);
       this.m_rowsDisplayList.Name = "m_rowsDisplayList";
       this.m_rowsDisplayList.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_rowsDisplayList.Size = new System.Drawing.Size(129, 220);
+      this.m_rowsDisplayList.Size = new System.Drawing.Size(156, 288);
       this.m_rowsDisplayList.TabIndex = 6;
       this.m_rowsDisplayList.Text = "VListBox1";
       this.m_rowsDisplayList.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       this.m_rowsDisplayList.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
-      // UpdateBT
+      // m_updateBT
       // 
       this.m_updateBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.m_updateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_updateBT.ImageKey = "Refresh DB 24.ico";
       this.m_updateBT.ImageList = this.ImageList1;
-      this.m_updateBT.Location = new System.Drawing.Point(193, 249);
-      this.m_updateBT.Name = "UpdateBT";
-      this.m_updateBT.Size = new System.Drawing.Size(75, 24);
+      this.m_updateBT.Location = new System.Drawing.Point(210, 317);
+      this.m_updateBT.Name = "m_updateBT";
+      this.m_updateBT.Size = new System.Drawing.Size(112, 24);
       this.m_updateBT.TabIndex = 0;
       this.m_updateBT.Text = "[CUI.refresh]";
       this.m_updateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -178,7 +178,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.m_dimensionsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_dimensionsTVPanel.Location = new System.Drawing.Point(3, 38);
       this.m_dimensionsTVPanel.Name = "m_dimensionsTVPanel";
-      this.m_dimensionsTVPanel.Size = new System.Drawing.Size(271, 293);
+      this.m_dimensionsTVPanel.Size = new System.Drawing.Size(325, 377);
       this.m_dimensionsTVPanel.TabIndex = 7;
       // 
       // Panel1
@@ -188,7 +188,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.Panel1.Location = new System.Drawing.Point(3, 3);
       this.Panel1.Name = "Panel1";
-      this.Panel1.Size = new System.Drawing.Size(271, 29);
+      this.Panel1.Size = new System.Drawing.Size(325, 29);
       this.Panel1.TabIndex = 8;
       // 
       // CollapseRightPaneBT
@@ -197,7 +197,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.CollapseRightPaneBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.CollapseRightPaneBT.BackColor = System.Drawing.Color.Transparent;
       this.CollapseRightPaneBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.CollapseRightPaneBT.Location = new System.Drawing.Point(249, 3);
+      this.CollapseRightPaneBT.Location = new System.Drawing.Point(303, 3);
       this.CollapseRightPaneBT.Name = "CollapseRightPaneBT";
       this.CollapseRightPaneBT.PaintBorder = false;
       this.CollapseRightPaneBT.RoundedCornersMask = ((byte)(15));
@@ -213,7 +213,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.m_fieldChoiceLabel.Location = new System.Drawing.Point(7, 11);
       this.m_fieldChoiceLabel.Margin = new System.Windows.Forms.Padding(10, 3, 3, 0);
       this.m_fieldChoiceLabel.Name = "m_fieldChoiceLabel";
-      this.m_fieldChoiceLabel.Size = new System.Drawing.Size(96, 13);
+      this.m_fieldChoiceLabel.Size = new System.Drawing.Size(108, 15);
       this.m_fieldChoiceLabel.TabIndex = 6;
       this.m_fieldChoiceLabel.Text = "[CUI.fields_choice]";
       // 
@@ -221,10 +221,10 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(212)))), ((int)(((byte)(221)))));
+      this.BackColor = System.Drawing.SystemColors.Control;
       this.Controls.Add(this.TableLayoutPanel1);
       this.Name = "CUI2RightPane";
-      this.Size = new System.Drawing.Size(277, 616);
+      this.Size = new System.Drawing.Size(331, 777);
       this.TableLayoutPanel1.ResumeLayout(false);
       this.TableLayoutPanel2.ResumeLayout(false);
       this.TableLayoutPanel2.PerformLayout();

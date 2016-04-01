@@ -25,6 +25,8 @@ namespace FBI
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
     public static string UserName { get; private set; }
     public static string Password { get; private set; }
+    public static dynamic HostApplication { get; set; }
+    public static AddinModule AddinModule { get; set; }
 
     static void SelectLanguage()
     {
@@ -65,6 +67,7 @@ namespace FBI
       SuscribeModel<User>(UserModel.Instance, p_suscribeEvent);
       SuscribeModel<Version>(VersionModel.Instance, p_suscribeEvent);
       SuscribeModel<ExchangeRate>(ExchangeRateModel.Instance, p_suscribeEvent);
+      SuscribeModel<LegalHoliday>(LegalHolidayModel.Instance, p_suscribeEvent);
     }
 
     static void SuscribeModel<T>(ICRUDModel<T> p_model, bool p_suscribeEvent) where T : class, CRUDEntity
@@ -91,22 +94,11 @@ namespace FBI
     {
       InitModels();
       SelectLanguage();
-      SetCurrentProcessId(Settings.Default.processId);
     }
 
-    public static void SetCurrentProcessId(int p_processId)
+    public static void Disconnect()
     {
-      Settings.Default.processId = (int)p_processId;
-      Settings.Default.Save();
-      if (p_processId == (int)Account.AccountProcess.FINANCIAL)
-      {
-        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_financial"));
-      }
-      else
-      {
-        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_rh"));
-      }
-
+      m_networkLauncher.Stop();
     }
 
     public static bool Connect(string p_userName, string p_password)
@@ -117,9 +109,9 @@ namespace FBI
       Password = p_password;
       UserModel.Instance.CurrentUserName = UserName;
       m_networkLauncher = new NetworkLauncher();
-      if ((result = m_networkLauncher.Launch("192.168.1.11", 4242, OnDisconnect)) == true)
+      if ((result = m_networkLauncher.Launch(Properties.Settings.Default.serverIp, Properties.Settings.Default.port_number, OnDisconnect)) == true)
         Authenticator.Instance.AskAuthentication(UserName, Password);
-      if (ConnectionStateEvent != null)
+      if (ConnectionStateEvent != null && result == true)
         ConnectionStateEvent(result);
       return (result);
     }
@@ -160,5 +152,44 @@ namespace FBI
       }
     }
 
+    public static UInt32 VersionId
+    {
+      get { return (Properties.Settings.Default.version_id); }
+      set
+      {
+        string l_name = VersionModel.Instance.GetValueName(value);
+
+        if (l_name == "")
+          l_name = Local.GetValue("general.select_version");
+        AddinModule.m_versionRibbonButton.Caption = l_name;
+        Properties.Settings.Default.version_id = value;
+        Properties.Settings.Default.Save();
+      }
+    }
+
+    public static Account.AccountProcess Process
+    {
+      get { return ((Account.AccountProcess)Properties.Settings.Default.processId); }
+      set
+      {
+        string l_name;
+
+        switch (value)
+        {
+          case Account.AccountProcess.RH:
+            l_name = Local.GetValue("process.process_rh");
+            break;
+          case Account.AccountProcess.FINANCIAL:
+            l_name = Local.GetValue("process.process_financial");
+            break;
+          default:
+            l_name = Local.GetValue("process.select_process");
+            break;
+        }
+        AddinModule.m_processRibbonButton.Caption = l_name;
+        Properties.Settings.Default.processId = (Int32)value;
+        Properties.Settings.Default.Save();
+      }
+    }
   }
 }

@@ -36,10 +36,18 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="AddinExpress.Install.2005, Version=5.2.2024.2005, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="AddinExpress.MSO.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL">
-      <Private>False</Private>
+    <Reference Include="AddinExpress.MSO.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.MSO.2005.dll</HintPath>
     </Reference>
-    <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.XL.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.XL.2005.dll</HintPath>
+    </Reference>
+    <Reference Include="AddinExpress.XL.2005.Design, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.XL.2005.Design.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zlib">
       <HintPath>dependencies\Ionic.Zlib.dll</HintPath>
     </Reference>
@@ -94,8 +102,6 @@
     <!--<None Include="Excel FinancialBI.snk" /> -->
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Loader\adxloader.dll" />
-    <Content Include="Loader\adxloader64.dll" />
     <Content Include="Resources\Add file.png" />
     <Content Include="Resources\add.ico" />
     <Content Include="Resources\add3.ico" />
@@ -231,11 +237,12 @@
     <Compile Include="AddinModule.Designer.cs">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExcelSheetModule1.cs">
+    <Compile Include="ExcelWorksheetEvents.cs" />
+    <Compile Include="FinancialBiXLL.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ExcelSheetModule1.Designer.cs">
-      <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
+    <Compile Include="FinancialBiXLL.Designer.cs">
+      <DependentUpon>FinancialBiXLL.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
@@ -246,19 +253,31 @@
     <Compile Include="Forms\FbiFilterHierarchyTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\FbiMsgBox.cs" />
     <Compile Include="Forms\FbiToolStripMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\AddinModuleController.cs" />
+    <Compile Include="MVC\Controller\AFBIFunctionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\CUIVisualizationController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
-    <Compile Include="MVC\Controller\Facts Edition\FactsEditionController.cs" />
-    <Compile Include="MVC\Controller\Facts Edition\ReportBuilder.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\AFactEditionController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\FinancialFactEditionController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\RHFactEditionController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\UnreferencedClientsController.cs" />
+    <Compile Include="MVC\Controller\FBIFunctionExcelController.cs" />
+    <Compile Include="MVC\Controller\FBIFunctionViewController.cs" />
+    <Compile Include="MVC\Controller\IProgressBarController.cs" />
+    <Compile Include="MVC\Controller\LogController.cs" />
     <Compile Include="MVC\Controller\PeriodRangeSelectionController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisBaseController.cs" />
@@ -281,16 +300,23 @@
     <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
+    <Compile Include="MVC\Controller\SettingsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
+    <Compile Include="MVC\Model\AComputeModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
     <Compile Include="MVC\Model\AxisFilterModel.cs" />
     <Compile Include="MVC\Model\AxisOwnerModel.cs" />
     <Compile Include="MVC\Model\Base\AxedCRUDModel.cs" />
+    <Compile Include="MVC\Model\Base\EditedFactBase.cs" />
     <Compile Include="MVC\Model\Base\ICRUDModel.cs" />
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
-    <Compile Include="MVC\Model\ComputeModel.cs" />
+    <Compile Include="MVC\Model\CRUD\FBIFunction.cs" />
+    <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
+    <Compile Include="MVC\Model\DuplicateRHAllocation.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\FactsRHCommit.cs" />
+    <Compile Include="MVC\Model\LegacyComputeModel.cs" />
     <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElem.cs" />
@@ -306,12 +332,14 @@
     <Compile Include="MVC\Model\CRUD\Commit.cs" />
     <Compile Include="MVC\Model\CRUD\CommitLog.cs" />
     <Compile Include="MVC\Model\CRUD\ComputeConfig.cs" />
-    <Compile Include="MVC\Model\CRUD\ComputeRequest.cs" />
+    <Compile Include="MVC\Model\CRUD\AComputeRequest.cs" />
     <Compile Include="MVC\Model\CRUD\ComputeResult.cs" />
     <Compile Include="MVC\Model\CRUD\CRUDAction.cs" />
     <Compile Include="MVC\Model\CRUD\CUIDimensionConf.cs" />
     <Compile Include="MVC\Model\CRUD\Currency.cs" />
     <Compile Include="MVC\Model\CRUD\DimensionElem.cs" />
+    <Compile Include="MVC\Model\CRUD\DimensionKey.cs" />
+    <Compile Include="MVC\Model\CRUD\EditedFinancialFact.cs" />
     <Compile Include="MVC\Model\CRUD\EntityCurrency.cs" />
     <Compile Include="MVC\Model\CRUD\EntityDistribution.cs" />
     <Compile Include="MVC\Model\CRUD\ExchangeRate.cs" />
@@ -326,8 +354,10 @@
     <Compile Include="MVC\Model\CRUD\GlobalFactData.cs" />
     <Compile Include="MVC\Model\CRUD\GlobalFactVersion.cs" />
     <Compile Include="MVC\Model\CRUD\Group.cs" />
-    <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsManager.cs" />
-    <Compile Include="MVC\Model\Facts Edition\IEditedFactsManager.cs" />
+    <Compile Include="MVC\Model\CRUD\LegacyComputeRequest.cs" />
+    <Compile Include="MVC\Model\CRUD\SourcedComputeRequest.cs" />
+    <Compile Include="MVC\Model\Facts Edition\FinancialEditedFactsModel.cs" />
+    <Compile Include="MVC\Model\Facts Edition\AEditedFactsModel.cs" />
     <Compile Include="MVC\Model\CRUD\User.cs" />
     <Compile Include="MVC\Model\CRUD\UserAllowedEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Version.cs" />
@@ -337,10 +367,10 @@
     <Compile Include="MVC\Model\ExchangeRateModel.cs" />
     <Compile Include="MVC\Model\FactLogModel.cs" />
     <Compile Include="MVC\Model\Facts Edition\Dimension.cs" />
-    <Compile Include="MVC\Controller\Facts Edition\Dimensions.cs" />
-    <Compile Include="MVC\Model\Facts Edition\EditedFact.cs" />
-    <Compile Include="MVC\Model\Facts Edition\PeriodDimension.cs" />
-    <Compile Include="MVC\Model\Facts Edition\RHEditedFactsManager.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\WorksheetAreaController.cs" />
+    <Compile Include="MVC\Model\CRUD\EditedRHFact.cs" />
+    <Compile Include="MVC\Model\CRUD\PeriodDimension.cs" />
+    <Compile Include="MVC\Model\Facts Edition\RHEditedFactsModel.cs" />
     <Compile Include="MVC\Controller\Facts Edition\WorksheetAnalyzer.cs" />
     <Compile Include="MVC\Model\FactsModel.cs" />
     <Compile Include="MVC\Model\FactTagModel.cs" />
@@ -354,6 +384,8 @@
     <Compile Include="MVC\Model\PeriodModel.cs" />
     <Compile Include="MVC\Model\RatesVersionModel.cs" />
     <Compile Include="MVC\Model\CRUD\ResultKey.cs" />
+    <Compile Include="MVC\Model\SourcedComputeModel.cs" />
+    <Compile Include="MVC\Model\LegalHolidayModel.cs" />
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
@@ -393,18 +425,20 @@
     <Compile Include="MVC\View\Controlling UI\CUI2VisualisationChartsSettings.Designer.cs">
       <DependentUpon>CUI2VisualisationChartsSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Controlling UI\CUI2Visualization.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Controlling UI\CUI2Visualization.Designer.cs">
-      <DependentUpon>CUI2Visualization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.cs">
+    <Compile Include="MVC\View\Controlling UI\CUIVisualization.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.Designer.cs">
-      <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
+    <Compile Include="MVC\View\Controlling UI\CUIVisualization.Designer.cs">
+      <DependentUpon>CUIVisualization.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\DuplicatesUIDemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\DuplicatesUIDemo.Designer.cs">
+      <DependentUpon>DuplicatesUIDemo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Facts Edition\AFactEditionView.cs" />
+    <Compile Include="MVC\View\Facts Edition\FinancialFactEditionView.cs" />
     <Compile Include="MVC\View\Facts Edition\RangeHighlighter.cs" />
     <Compile Include="MVC\View\Controlling UI\ResultView.cs">
       <SubType>UserControl</SubType>
@@ -412,11 +446,12 @@
     <Compile Include="MVC\View\Controlling UI\ResultView.Designer.cs">
       <DependentUpon>ResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\FBIFunctionUI.cs">
+    <Compile Include="MVC\View\Facts Edition\RHFactEditionView.cs" />
+    <Compile Include="MVC\View\FBIFunctionView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\FBIFunctionUI.Designer.cs">
-      <DependentUpon>FBIFunctionUI.cs</DependentUpon>
+    <Compile Include="MVC\View\FBIFunctionView.Designer.cs">
+      <DependentUpon>FBIFunctionView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\FixDesigner\AxisBaseView.cs" />
     <Compile Include="MVC\View\FixDesigner\FactBaseView.cs" />
@@ -428,6 +463,7 @@
     <Compile Include="MVC\View\GenericView.Designer.cs">
       <DependentUpon>GenericView.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\IPlateformMgtView.cs" />
     <Compile Include="MVC\View\LogView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -606,17 +642,17 @@
     <Compile Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.Designer.cs">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.cs">
+    <Compile Include="MVC\View\Facts Edition\ReportEditionSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.Designer.cs">
-      <DependentUpon>ReportUploadEntitySelectionSidePane.cs</DependentUpon>
+    <Compile Include="MVC\View\Facts Edition\ReportEditionSidePane.Designer.cs">
+      <DependentUpon>ReportEditionSidePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.cs">
+    <Compile Include="MVC\View\Facts Edition\RHSnapshotLaunchView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.Designer.cs">
-      <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
+    <Compile Include="MVC\View\Facts Edition\RHSnapshotLaunchView.Designer.cs">
+      <DependentUpon>RHSnapshotLaunchView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Facts Edition\StatusReportInterfaceUI.cs">
       <SubType>Form</SubType>
@@ -630,11 +666,23 @@
     <Compile Include="MVC\View\Facts Edition\UnReferencedClientsUI.Designer.cs">
       <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\ProgressBarView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\ProgressBarView.Designer.cs">
+      <DependentUpon>ProgressBarView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\ReportsDesignerUI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MVC\View\ReportsDesignerUI.Designer.cs">
       <DependentUpon>ReportsDesignerUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\SettingsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\SettingsView.Designer.cs">
+      <DependentUpon>SettingsView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\SubmissionsControlUI.cs">
       <SubType>Form</SubType>
@@ -694,13 +742,14 @@
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\TreeNode.cs" />
     <Compile Include="Utils\TreeviewUtils.cs" />
+    <Compile Include="Utils\WorksheetWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExcelSheetModule1.resx">
-      <DependentUpon>ExcelSheetModule1.cs</DependentUpon>
+    <EmbeddedResource Include="FinancialBiXLL.resx">
+      <DependentUpon>FinancialBiXLL.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
       <DependentUpon>CommitFollowUpView.cs</DependentUpon>
@@ -720,14 +769,17 @@
     <EmbeddedResource Include="MVC\View\Controlling UI\CUI2VisualisationChartsSettings.resx">
       <DependentUpon>CUI2VisualisationChartsSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2Visualization.resx">
-      <DependentUpon>CUI2Visualization.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Controlling UI\CUIVisualization.resx">
+      <DependentUpon>CUIVisualization.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2VisualizationContainer.resx">
-      <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Controlling UI\ResultView.resx">
+      <DependentUpon>ResultView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\FBIFunctionUI.resx">
-      <DependentUpon>FBIFunctionUI.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\DuplicatesUIDemo.resx">
+      <DependentUpon>DuplicatesUIDemo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\FBIFunctionView.resx">
+      <DependentUpon>FBIFunctionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\GenericView.resx">
       <DependentUpon>GenericView.cs</DependentUpon>
@@ -810,11 +862,11 @@
     <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadAccountInfoSidePane.resx">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Facts Edition\ReportUploadEntitySelectionSidePane.resx">
-      <DependentUpon>ReportUploadEntitySelectionSidePane.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Facts Edition\ReportEditionSidePane.resx">
+      <DependentUpon>ReportEditionSidePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Facts Edition\SnapshotPeriodRangeSelectionUI.resx">
-      <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Facts Edition\RHSnapshotLaunchView.resx">
+      <DependentUpon>RHSnapshotLaunchView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Facts Edition\StatusReportInterfaceUI.resx">
       <DependentUpon>StatusReportInterfaceUI.cs</DependentUpon>
@@ -822,8 +874,14 @@
     <EmbeddedResource Include="MVC\View\Facts Edition\UnReferencedClientsUI.resx">
       <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\ProgressBarView.resx">
+      <DependentUpon>ProgressBarView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\ReportsDesignerUI.resx">
       <DependentUpon>ReportsDesignerUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\SettingsView.resx">
+      <DependentUpon>SettingsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\SubmissionsControlUI.resx">
       <DependentUpon>SubmissionsControlUI.cs</DependentUpon>

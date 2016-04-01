@@ -21,6 +21,7 @@ namespace FBI.Forms
 
     protected SafeDictionary<KeyType, HierarchyItem> m_rowsDic = new SafeDictionary<KeyType, HierarchyItem>();
     protected SafeDictionary<KeyType, HierarchyItem> m_columnsDic = new SafeDictionary<KeyType, HierarchyItem>();
+    protected SafeDictionary<HierarchyItem, KeyType> m_hierarchyItemDic = new SafeDictionary<HierarchyItem, KeyType>();
     protected const Int32 COLUMNS_WIDTH = 150;
     public GridCell HoveredCell { get; private set; }
     protected string m_cellValue = null;
@@ -41,6 +42,11 @@ namespace FBI.Forms
     public SafeDictionary<KeyType, HierarchyItem> Columns
     {
       get { return (m_columnsDic); }
+    }
+
+    public SafeDictionary<HierarchyItem, KeyType> HierarchyItems
+    {
+      get { return (m_hierarchyItemDic); }
     }
 
     public HierarchyItem HoveredColumn
@@ -102,7 +108,6 @@ namespace FBI.Forms
       CellValueChanged += OnCellChanged;
     }
 
-
     void InitDGVDisplay()
     {
       Dock = System.Windows.Forms.DockStyle.Fill;
@@ -116,6 +121,26 @@ namespace FBI.Forms
       FilterDisplayMode = FilterDisplayMode.Custom;
       //RowsHierarchy.AllowDragDrop = true;
       AllowDragDropIndication = true;
+    }
+
+    public HierarchyItem HitTestRow(Point p_point)
+    {
+      HierarchyItem l_row = RowsHierarchy.HitTest(p_point);
+
+      if (l_row == null)
+        if (HoveredCell != null)
+          return (HoveredCell.RowItem);
+      return (l_row);
+    }
+
+    public HierarchyItem HitTestColumn(Point p_point)
+    {
+      HierarchyItem l_column = ColumnsHierarchy.HitTest(p_point);
+
+      if (l_column == null)
+        if (HoveredCell != null)
+          return (HoveredCell.ColumnItem);
+      return (l_column);
     }
 
     public bool AllowDragAndDrop
@@ -242,6 +267,13 @@ namespace FBI.Forms
       return (this.CellsArea.GetCellValue(row, column));
     }
 
+    public bool HasChild(Dimension p_dim, KeyType p_key)
+    {
+      HierarchyItem l_item = (p_dim == Dimension.ROW) ? m_rowsDic[p_key] : m_columnsDic[p_key];
+
+      return (l_item != null && l_item.Items.Count > 0);
+    }
+
     void OnCellValidating(object p_sender, CellEventArgs p_args)
     {
       m_cellValue = p_args.Cell.FormattedText;
@@ -274,6 +306,7 @@ namespace FBI.Forms
         l_item = new HierarchyItem();
         l_dimensionDic[p_key] = l_item;
       }
+      m_hierarchyItemDic[l_item] = p_key;
       l_item.ItemValue = p_key;
       l_item.Caption = p_name;
       l_item.Width = COLUMNS_WIDTH;
@@ -360,6 +393,7 @@ namespace FBI.Forms
       l_dim.ItemValue = p_id;
       l_dim.Caption = p_name;
       l_dim.Width = p_width;
+      m_hierarchyItemDic[l_dim] = p_id;
       return (l_dim);
     }
   }

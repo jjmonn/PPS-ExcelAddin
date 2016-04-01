@@ -94,7 +94,7 @@ namespace FBI.MVC.View
       LoadFilters(AxisType.Client, l_client);
       UInt32 l_entity = SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.entity"), new AxisElemConf(AxisType.Entities)));
       LoadFilters(AxisType.Entities, l_entity);
-      SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.version"), new VersionConf(Convert.ToUInt32(Settings.Default.version_id))));
+      SetToDimensionTV(GenerateDimension(Local.GetValue("CUI.dimension.versions"), new VersionConf(Convert.ToUInt32(Settings.Default.version_id))));
       SetToRowList(GenerateDimension(Local.GetValue("CUI.dimension.account"), new CUIDimensionConf(typeof(AccountModel)), false));
 
       if ((Account.AccountProcess)Settings.Default.processId == Account.AccountProcess.FINANCIAL)
@@ -142,7 +142,7 @@ namespace FBI.MVC.View
     void OnUpdateClick(object p_sender, MouseEventArgs p_e)
     {
       if (m_controller.Update() == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnDisplayListKeyDown(object p_sender, KeyEventArgs p_args)
@@ -160,7 +160,7 @@ namespace FBI.MVC.View
             if (l_dimension != null && l_dimension.Deletable)
               l_displayList.Items.Remove(l_displayList.SelectedItem);
             else
-              MessageBox.Show(Local.GetValue("CUI.not_deletable_dimension"));
+              Forms.MsgBox.Show(Local.GetValue("CUI.not_deletable_dimension"));
           }
       }
     }

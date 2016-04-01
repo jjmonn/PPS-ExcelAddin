@@ -72,7 +72,8 @@ namespace FBI.MVC.Controller
         l_rate.Value = p_value;
         if (IsRateValid(l_rate) == false)
           return (false);
-        ExchangeRateModel.Instance.Create(l_rate);
+        if (ExchangeRateModel.Instance.Create(l_rate))
+          return (true);
       }
       else
       {
@@ -80,9 +81,11 @@ namespace FBI.MVC.Controller
         l_rate.Value = p_value;
         if (IsRateValid(l_rate) == false)
           return (false);
-        ExchangeRateModel.Instance.Update(l_rate);
+        if (ExchangeRateModel.Instance.Update(l_rate))
+          return (true);
       }
-      return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool Create(UInt32 p_id, List<Int32> p_periods, List<double> p_values)

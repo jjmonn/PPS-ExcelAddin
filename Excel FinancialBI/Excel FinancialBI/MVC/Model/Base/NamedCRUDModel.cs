@@ -26,7 +26,7 @@ namespace FBI.MVC.Model
         {
           T tmp_crud = Build(p_packet) as T;
 
-          m_CRUDDic.Set(tmp_crud.Id, tmp_crud.Name, tmp_crud);
+          m_CRUDDic.Set(tmp_crud.Id, StringUtils.RemoveDiacritics(tmp_crud.Name), tmp_crud);
         }
 
         IsInit = true;
@@ -45,7 +45,7 @@ namespace FBI.MVC.Model
       {
         T tmp_crud = Build(p_packet) as T;
 
-        m_CRUDDic.Set(tmp_crud.Id, tmp_crud.Name, tmp_crud);
+        m_CRUDDic.Set(tmp_crud.Id, StringUtils.RemoveDiacritics(tmp_crud.Name), tmp_crud);
         RaiseReadEvent(p_packet.GetError(), tmp_crud);
       }
       else
@@ -69,10 +69,9 @@ namespace FBI.MVC.Model
     public UInt32 GetValueId(string p_name)
     {
 
-      if (m_CRUDDic[p_name] == null)
+      if (m_CRUDDic[StringUtils.RemoveDiacritics(p_name)] == null)
         return 0;
-      return m_CRUDDic[p_name].Id;
-
+      return m_CRUDDic[StringUtils.RemoveDiacritics(p_name)].Id;
     }
 
     public string GetValueName(UInt32 p_id)
@@ -86,7 +85,7 @@ namespace FBI.MVC.Model
     {
       if (p_name == null)
         return null;
-      return m_CRUDDic[p_name];
+      return m_CRUDDic[StringUtils.RemoveDiacritics(p_name)];
     }
 
     public override T GetValue(UInt32 p_id)

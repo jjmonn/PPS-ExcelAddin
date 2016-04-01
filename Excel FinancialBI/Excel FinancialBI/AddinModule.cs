@@ -14,11 +14,16 @@ namespace FBI
   using MVC.Controller;
   using Utils;
 
-  [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("ExcelFinancialBI.AddinModule")]
+  [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("FBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
   {
+    private AddinModuleController m_controller;
+    public FBIFunctionExcelController FBIFunctionController { private set; get; }
+    public ExcelWorksheetEvents WorksheetEvents { private set; get; }
+
     public AddinModule()
     {
+      VIBlend.Utilities.Licensing.LicenseContent = "0g0g635756920818516203geeae134609ccc047560baf100768868d8abc|P20sP8MuxE14HfXpiO3X3PueOBIpfMynKjd9/ifkWaAwYrH/u0NNk7rqh77rOQs3OmrTem7ghz4hnkVM+Bdu9Fzt6u6rne35u/o5JPTC00BzjTUNUXP7f/xplMNliHELbbHfixl1O/3/E6uDNHDVKJc6sRHHTOYPBnao09omX4s=";
       Application.EnableVisualStyles();
       InitializeComponent();
       // Please add any initialization code to the AddinInitialize event handler
@@ -31,11 +36,75 @@ namespace FBI
 
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
+      FBIFunctionController = new FBIFunctionExcelController();
+      Addin.HostApplication = HostApplication;
+      Addin.AddinModule = this;
       Addin.Main();
-      SubmissionModeRibbon.Visible = false;
+      m_controller = new AddinModuleController(this);
+
+      m_financialSubmissionRibbon.Visible = false;
+      m_RHSubmissionRibbon.Visible = false;
       fbiRibbonChangeState(false);
+      SuscribeEvents();
+      MultilanguageSetup();
+      Addin.Process = (Account.AccountProcess)Properties.Settings.Default.processId;
+    }
+
+    private void AddinModule_AddinStartupComplete(object sender, EventArgs e)
+    {
+      WorksheetEvents = new ExcelWorksheetEvents(this);
+    }
+
+    private void MultilanguageSetup()
+    {
+      m_connectionGroup.Caption = Local.GetValue("connection.connection");
+      m_connectionButton.Caption = Local.GetValue("connection.connection");
+      m_versionGroup.Caption = Local.GetValue("general.version");
+      m_versionRibbonButton.Caption = Local.GetValue("general.select_version");
+      m_processRibbonButton.Caption = Local.GetValue("general.select_process");
+      m_uploadGroup.Caption = Local.GetValue("general.upload");
+      m_snapshotRibbonSplitButton.Caption = Local.GetValue("general.snapshot");
+      m_reportUploadRibbonButton.Caption = Local.GetValue("general.edition");
+      m_submissionsTrackingRibbonButton.Caption = Local.GetValue("submissionsFollowUp.submissions_tracking");
+      m_CUIRibbonButton.Caption = Local.GetValue("general.data_visualization");
+      m_refreshRibbonButton.Caption = Local.GetValue("general.refresh");
+      m_platformManagementButton.Caption = Local.GetValue("general.platform_management");
+      m_visualizationGroup.Caption = Local.GetValue("general.visualization");
+      m_settingsRibbonButton.Caption = Local.GetValue("general.settings");
+      m_configurationGroup.Caption = Local.GetValue("general.configuration");
+    }
+
+    void SuscribeEvents()
+    {
       Addin.InitializationEvent += OnAddinInitializationEvent;
       Addin.ConnectionStateEvent += OnConnectionEvent;
+
+      m_connectionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_connectionButton_OnClick);
+      m_versionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_versionRibbonButton_OnClick);
+      m_RHProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_RHProcessRibbonButton_OnClick);
+      m_snapshotRibbonSplitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_snapshotRibbonSplitButton_OnClick);
+      m_reportUploadRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_reportUploadRibbonButton_OnClick);
+      m_CUIRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_CUIRibbonButton_OnClick);
+      m_fbiRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(OnFBIFunctionButtonClick);
+      m_refreshRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_refreshRibbonButton_OnClick);
+      m_resfreshSelectionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_resfreshSelectionRibbonButton_OnClick);
+      m_refreshWorksheetRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_refreshWorksheetRibbonButton_OnClick);
+      m_refreshWorkbookRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_refreshWorkbookRibbonButton_OnClick);
+      m_platformManagementButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_platformManagementButton_OnClick);
+      m_settingsRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_settingsRibbonButton_OnClick);
+      m_financialSubmissionSubmitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_financialSubmissionSubmitButton_OnClick);
+      m_financialSubmissionAutoCommitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_financialSubmissionAutoCommitButton_OnClick);
+      CloseBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(CloseBT_OnClick);
+      m_PDCSubmissionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCSubmissionButton_OnClick);
+      m_PDCAutocommitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCAutocommitButton_OnClick);
+      m_PDCSUbmissionStatusButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCSUbmissionStatusButton_OnClick);
+      m_PDCRefreshSnapthshotButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCRefreshSnapthshotButton_OnClick);
+      m_PDCSumbissionExitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCSumbissionExitButton_OnClick);
+      m_directoryRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_directoryRibbonButton_OnClick);
+      m_submissionsTrackingRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_submissionsTrackingRibbonButton_OnClick);
+      m_fbiBreakLinksRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_fbiBreakLinksRibbonButton_OnClick);
+      m_autoRefreshRibbonChackBox.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_autoRefreshRibbonChackBox_OnClick);
+      m_financialProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_financialProcessRibbonButton_OnClick);
     }
 
     private void fbiRibbonChangeState(bool p_enabled)
@@ -121,13 +190,13 @@ namespace FBI
       }
     }
 
-    public ReportUploadEntitySelectionSidePane ReportUploadEntitySelectionSidePane
+    public ReportEditionSidePane ReportUploadEntitySelectionSidePane
     {
       get
       {
         if (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance != null)
-          return (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance as ReportUploadEntitySelectionSidePane);
-        return (ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance() as ReportUploadEntitySelectionSidePane);
+          return (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance as ReportEditionSidePane);
+        return (ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance() as ReportEditionSidePane);
       }
     }
 
@@ -172,32 +241,33 @@ namespace FBI
 
     private void m_financialProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      Addin.SetCurrentProcessId((int)Account.AccountProcess.FINANCIAL);
+      Addin.Process = Account.AccountProcess.FINANCIAL;
     }
 
     private void m_RHProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      Addin.SetCurrentProcessId((int)Account.AccountProcess.RH);
+      Addin.Process = Account.AccountProcess.RH;
     }
 
     private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-        Version l_version = VersionModel.Instance.GetValue(FBI.Properties.Settings.Default.version_id);
-        if (l_version == null)
-        {
-            MessageBox.Show("versions.select_version");
-            return;
-        }
-        Excel.Worksheet l_worksheet = this.ExcelApp.ActiveSheet as Excel.Worksheet;   
-        Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
+      Account.AccountProcess l_process = Addin.Process;
+      Version l_version = m_controller.GetCurrentVersion();
+
+      if (l_version != null)
+      {
+        SubmissionVersionName = l_version.Name;
         if (l_process == Account.AccountProcess.FINANCIAL)
         {
-            FactsEditionController l_factsEditionController = new FactsEditionController(l_process, l_version, l_worksheet);
+          if (m_controller.LaunchFinancialSnapshot(false, l_version.Id) == false)
+            MessageBox.Show(m_controller.Error);
         }
         else
         {
-            // TO DO : launch snapshot RH selection Controller (to be implemented)
+          if (m_controller.LaunchRHSnapshotView() == false)
+            MessageBox.Show(m_controller.Error);
         }
+      }
     }
 
     private void m_directoryRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -207,9 +277,7 @@ namespace FBI
 
     private void m_reportUploadRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      Account.AccountProcess l_process = (Account.AccountProcess)FBI.Properties.Settings.Default.processId;
-      ReportUploadEntitySelectionSidePane.LoadView(l_process);
-      ReportUploadEntitySelectionSidePane.Show();
+      m_controller.LaunchReportEdition();
     }
 
     private void m_CUIRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -222,9 +290,9 @@ namespace FBI
       new CommitFollowUpController();
     }
 
-    private void m_fbiRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    private void OnFBIFunctionButtonClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      new FBIFunctionViewController();
     }
 
     private void m_fbiBreakLinksRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -259,13 +327,18 @@ namespace FBI
 
     private void m_platformManagementButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      // if connected
       new PlatformMgtController();
     }
 
     private void m_settingsRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      
+      new SettingsController();
+    }
+
+    private void m_duplicatesFinderButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      DuplicatesUIDemo l_duplicatesUI = new DuplicatesUIDemo();
+      l_duplicatesUI.Show();
     }
 
     #endregion
@@ -275,15 +348,64 @@ namespace FBI
     private void m_financialSubmissionSubmitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
         // TO DO raise event or call method in owned facts edition controller
-
+      m_controller.FactsSubmission();
     }
 
     private void m_financialSubmissionAutoCommitButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      m_controller.SetUploadAutoCommit(pressed);
     }
 
     private void CloseBT_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.CloseEditionMode();
+    }
+
+    private void RefreshInputsBT_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.RefreshInputs();
+    }
+
+    #endregion
+
+    #region RH facts edition
+
+    private void m_PDCSubmissionButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.FactsSubmission();
+    }
+
+    private void m_PDCAutocommitButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.SetUploadAutoCommit(pressed);
+    }
+
+    private void m_PDCSUbmissionStatusButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCSubmissionCancelButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCSumbissionExitButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.CloseEditionMode();
+    }
+
+    private void m_PDCRefreshSnapthshotButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.RefreshInputs();
+    }
+
+    private void m_PDCConsultantRangeEditButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_PDCPeriodsRangeEditButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
 
     }
@@ -293,21 +415,108 @@ namespace FBI
     void OnAddinInitializationEvent()
     {
       fbiRibbonChangeState(true);
+      SetFinancialRibbonState(true);
+      SetRHRibbonState(true);
+      Addin.VersionId = Properties.Settings.Default.version_id;
     }
 
     private void OnConnectionEvent(bool p_connected)
     {
       if (p_connected == false)
-        fbiRibbonChangeState(false);
+      {
+        fbiRibbonChangeState(p_connected);
+        SetFinancialRibbonState(p_connected);
+        SetRHRibbonState(p_connected);
+      }
     }
 
     #endregion
 
-    public void SetProcessCaption(string p_process)
+    #region Financial Submission Ribon
+
+    public ADXRibbonItem AddButtonToDropDown(ADXRibbonDropDown p_menu, UInt32 p_id, string p_name)
     {
-      m_processRibbonButton.Caption = p_process;
+      ADXRibbonItem l_item = new ADXRibbonItem();
+
+      l_item.Caption = p_name;
+      l_item.Id = p_id.ToString();
+      l_item.ImageTransparentColor = System.Drawing.Color.Transparent;
+      p_menu.Items.Add(l_item);
+      return (l_item);
     }
 
+    public void SetFinancialRibbonState(bool p_state)
+    {
+      foreach (AddinExpress.MSO.ADXRibbonGroup l_control in m_financialSubmissionRibbon.Controls)
+        foreach (AddinExpress.MSO.ADXRibbonCustomControl l_button in l_control.Controls)
+          if (l_button.AsRibbonButton != null)
+            l_button.AsRibbonButton.Enabled = p_state;
+      CloseBT.Enabled = true;
+    }
+
+    public void SetRHRibbonState(bool p_state)
+    {
+      foreach (AddinExpress.MSO.ADXRibbonGroup l_control in m_RHSubmissionRibbon.Controls)
+        foreach (AddinExpress.MSO.ADXRibbonCustomControl l_button in l_control.Controls)
+          if (l_button.AsRibbonButton != null)
+            l_button.AsRibbonButton.Enabled = p_state;
+      m_PDCSumbissionExitButton.Enabled = true;
+    }
+
+    public void InitFinancialSubmissionRibon()
+    {
+      foreach (AxisElem l_client in AxisElemModel.Instance.GetDictionary(AxisType.Client).Values)
+        AddButtonToDropDown(ClientsDropDown, l_client.Id, l_client.Name);
+      foreach (AxisElem l_product in AxisElemModel.Instance.GetDictionary(AxisType.Product).Values)
+        AddButtonToDropDown(ProductsDropDown, l_product.Id, l_product.Name);
+      foreach (AxisElem l_adjustment in AxisElemModel.Instance.GetDictionary(AxisType.Adjustment).Values)
+        AddButtonToDropDown(AdjustmentDropDown, l_adjustment.Id, l_adjustment.Name);
+    }
+
+    public string SubmissionVersionName
+    {
+      set
+      {
+        if (Addin.Process == Account.AccountProcess.RH)
+          m_PDCVersionEditBox.Text = value;
+        else
+          VersionTBSubRibbon.Text = value;
+      }
+    }
+
+    public string SubmissionCurrency
+    {
+      set
+      {
+        EntCurrTB.Text = value;
+      }
+    }
+
+    public UInt32 SubmissionClientId
+    {
+      set
+      {
+        ClientsDropDown.SelectedItemId = value.ToString();
+      }
+    }
+
+    public UInt32 SubmissionProductId
+    {
+      set
+      {
+        ProductsDropDown.SelectedItemId = value.ToString();
+      }
+    }
+
+    public UInt32 SubmissionAdjustmentId
+    {
+      set
+      {
+        AdjustmentDropDown.SelectedItemId = value.ToString();
+      }
+    }
+
+    #endregion
 
   }
 }

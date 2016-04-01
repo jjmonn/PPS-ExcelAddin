@@ -33,7 +33,7 @@ partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
 	{
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VersionSelectionPane));
-    this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_versionSelectionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_validateButton = new VIBlend.WinForms.Controls.vButton();
       this.BTsIL = new System.Windows.Forms.ImageList(this.components);
@@ -69,7 +69,7 @@ partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
       this.m_versionSelectionLabel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
       this.m_versionSelectionLabel.Multiline = true;
       this.m_versionSelectionLabel.Name = "m_versionSelectionLabel";
-      this.m_versionSelectionLabel.Size = new System.Drawing.Size(95, 15);
+      this.m_versionSelectionLabel.Size = new System.Drawing.Size(217, 15);
       this.m_versionSelectionLabel.TabIndex = 2;
       this.m_versionSelectionLabel.Text = "Select a Version";
       this.m_versionSelectionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -115,8 +115,7 @@ partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
       this.Name = "VersionSelectionPane";
       this.Text = "Versions Selection";
       this.ADXBeforeTaskPaneShow += new AddinExpress.XL.ADXBeforeTaskPaneShowEventHandler(this.VersionSelectionPane_ADXBeforeTaskPaneShow);
-      this.Visible = false;  
-    this.TableLayoutPanel1.ResumeLayout(false);
+      this.TableLayoutPanel1.ResumeLayout(false);
       this.ResumeLayout(false);
 
 	}

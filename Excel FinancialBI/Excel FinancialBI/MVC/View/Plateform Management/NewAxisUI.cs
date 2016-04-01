@@ -39,6 +39,9 @@ namespace FBI.MVC.View
         case AxisType.Entities:
           FbiTreeView<AxisElem>.Load(m_parentAxisElemTreeviewBox.TreeView.Nodes, AxisElemModel.Instance.GetDictionary(m_controller.AxisType));
           break;
+        case AxisType.Client:
+          FbiTreeView<AxisElem>.Load(m_parentAxisElemTreeviewBox.TreeView.Nodes, AxisElemModel.Instance.GetDictionary(m_controller.AxisType));
+          break;
         default:
           m_parentAxisLabel.Visible = false;
           m_parentAxisElemTreeviewBox.Visible = false;
@@ -120,7 +123,7 @@ namespace FBI.MVC.View
       l_newElem.ParentId = l_parentAxisId;
       l_newElem.AllowEdition = true;
       if (m_controller.CreateAxisElem(l_newElem) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
       Hide();
     }
   }

@@ -362,5 +362,4 @@ Public Class CUI2LeftPane
 
 #End Region
 
-
 End Class

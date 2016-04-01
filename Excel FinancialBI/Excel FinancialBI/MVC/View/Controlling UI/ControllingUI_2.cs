@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
 {
@@ -15,6 +16,7 @@ namespace FBI.MVC.View
   using Network;
   using Model;
   using Model.CRUD;
+  using Forms;
 
   public partial class ControllingUI_2 : Form, IView
   {
@@ -30,7 +32,6 @@ namespace FBI.MVC.View
     public ControllingUI_2()
     {
       InitializeComponent();
-      
     }
 
     public void SetController(IController p_controller)
@@ -48,22 +49,30 @@ namespace FBI.MVC.View
       ResultView l_resultView =  m_controller.ResultController.View as ResultView;
       this.SplitContainer1.Panel1.Controls.Add(l_leftPane);
       this.SplitContainer2.Panel2.Controls.Add(l_rightPane);
-      this.m_DGVsControlTab.Controls.Add(l_resultView);
+      this.SplitContainer1.Panel2.Controls.Add(l_resultView);
       l_leftPane.Dock = DockStyle.Fill;
       l_rightPane.Dock = DockStyle.Fill;
       l_resultView.Dock = DockStyle.Fill;
-      
+
+      BusinessControlToolStripMenuItem.Enabled = false;
       this.Show();
       SuscribeEvents();
     }
 
     public void SuscribeEvents()
     {
-      ComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
+      LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
       m_refreshButton.MouseDown += OnRefreshButtonMouseDown;
       m_versionComparisonButton.MouseDown += OnVersionComparisionButtonMouseDown;
       m_versionSwitchButton.MouseDown += OnVersionSwitchButtonMouseDown;
       m_hideVersionButton.MouseDown += OnHideVersionButtonMouseDown;
+      m_chartBT.MouseDown += OnChartButtonMouseDown;
+    }
+
+    override protected void OnClosed(EventArgs e)
+    {
+      base.OnClosed(e);
+      LegacyComputeModel.Instance.ComputeCompleteEvent -= OnComputeResult;
     }
 
     private void MultilangueSetup()
@@ -71,18 +80,11 @@ namespace FBI.MVC.View
       this.RefreshRightClick.Text = Local.GetValue("CUI.refresh");
       this.SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all");
       this.UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all");
-      this.ExpandAllRightClick.Text = Local.GetValue("CUI.expand_all");
-      this.CollapseAllRightClick.Text = Local.GetValue("CUI.collapse_all");
-      this.LogRightClick.Text = Local.GetValue("CUI.log");
-      this.DGVFormatsButton.Text = Local.GetValue("CUI.display_options");
-      this.ColumnsAutoSize.Text = Local.GetValue("CUI.adjust_columns_size");
-      this.ColumnsAutoFitBT.Text = Local.GetValue("CUI.automatic_columns_adjustment");
       this.SelectAllToolStripMenuItem1.Text = Local.GetValue("CUI.select_all");
       this.UnselectAllToolStripMenuItem1.Text = Local.GetValue("CUI.unselect_all");
 
-      this.m_currencyLabel.Text = Local.GetValue("CUI.currency");
-      this.m_versionLabel.Text = Local.GetValue("CUI.version");
-      this.m_entityLabel.Text = Local.GetValue("CUI.entity");
+      this.m_currencyLabel.Text = Local.GetValue("general.currency");
+      this.m_entityLabel.Text = Local.GetValue("general.entity");
 
       this.MainMenu.Text = Local.GetValue("CUI.main_menu");
       this.m_refreshButton.Text = Local.GetValue("CUI.refresh");
@@ -96,21 +98,47 @@ namespace FBI.MVC.View
       this.m_versionSwitchButton.Text = Local.GetValue("CUI.switch_versions");
       this.m_hideVersionButton.Text = Local.GetValue("CUI.take_off_comparison");
       this.m_refreshButton.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
-      this.ChartBT.Text = Local.GetValue("CUI.charts");
+      this.m_chartBT.Text = Local.GetValue("CUI.charts");
       this.Text = Local.GetValue("CUI.financials");
     }
 
-    void OnComputeResult(ErrorMessage p_status, ComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
+    delegate void OnComputeResult_delegate(ErrorMessage p_status, AComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result);
+    void OnComputeResult(ErrorMessage p_status, AComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
-      if (p_status == ErrorMessage.SUCCESS && p_result != null)
-        m_controller.ResultController.DisplayResult(p_result);
+      if (InvokeRequired)
+      {
+        OnComputeResult_delegate func = new OnComputeResult_delegate(OnComputeResult);
+        Invoke(func, p_status, p_request, p_result);
+      }
       else
-        MessageBox.Show(Error.GetMessage(p_status));
+      {
+        if (p_status == ErrorMessage.SUCCESS && p_result != null)
+        {
+          LegacyComputeRequest l_request = p_request as LegacyComputeRequest;
+
+          if (l_request != null)
+          {
+            BusinessControlToolStripMenuItem.Enabled = l_request.IsDiff;
+            CurrencyTB.Text = CurrencyModel.Instance.GetValueName(l_request.CurrencyId);
+            EntityTB.Text = AxisElemModel.Instance.GetValueName(l_request.EntityId);
+          }
+          else
+            BusinessControlToolStripMenuItem.Enabled = false;
+          m_controller.ResultController.DisplayResult(p_result);
+        }
+        else
+          MsgBox.Show(Error.GetMessage(p_status));
+      }
     }
 
     void OnRefreshButtonMouseDown(object sender, MouseEventArgs e)
     {
       m_controller.Compute();
+    }
+
+    void OnChartButtonMouseDown(object sender, MouseEventArgs e)
+    {
+      m_controller.ShowCharts();
     }
 
     void OnVersionComparisionButtonMouseDown(object sender, MouseEventArgs e)

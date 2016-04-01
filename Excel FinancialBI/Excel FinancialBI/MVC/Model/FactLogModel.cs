@@ -27,7 +27,7 @@ namespace FBI.MVC.Model
       NetworkManager.RemoveCallback((UInt16)ServerMessage.SMSG_GET_FACT_LOG_ANSWER, GetFactLogAnswer);
     }
 
-    void GetFactLog(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_period, UInt32 p_versionId)
+    public void GetFactLog(UInt32 p_accountId, UInt32 p_entityId, UInt32 p_period, UInt32 p_versionId)
     {
       ByteBuffer packet = new ByteBuffer((UInt16)ClientMessage.CMSG_GET_FACT_LOG);
 
@@ -50,7 +50,7 @@ namespace FBI.MVC.Model
         UInt32 requestId = p_packet.ReadUint32();
         UInt32 nbResult = p_packet.ReadUint32();
 
-        for (UInt32 i = 0; i <= nbResult; i++)
+        for (UInt32 i = 0; i < nbResult; i++)
         {
           FactLog ht = FactLog.BuildFactLog(p_packet);
           factLogList.Add(ht);

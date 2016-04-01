@@ -46,16 +46,20 @@ namespace FBI.MVC.Controller
     {
       if (!IsVersionValid(p_version, GlobalFactVersionModel.Instance) || !IsVersionNameAvailable(p_version.Name, GlobalFactVersionModel.Instance))
         return (false);
-      GlobalFactVersionModel.Instance.Create(p_version);
-      return (true);
+      if (GlobalFactVersionModel.Instance.Create(p_version))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public override bool UpdateVersion(GlobalFactVersion p_version)
     {
       if (!IsVersionValid(p_version, GlobalFactVersionModel.Instance))
         return (false);
-      GlobalFactVersionModel.Instance.Update(p_version);
-      return (true);
+      if (GlobalFactVersionModel.Instance.Update(p_version))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public override bool DeleteVersion(UInt32 p_versionId)
@@ -65,8 +69,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.already_exist");
         return (false);
       }
-      GlobalFactVersionModel.Instance.Delete(p_versionId);
-      return (true);
+      if (GlobalFactVersionModel.Instance.Delete(p_versionId))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool CreateGFactData(GlobalFactData p_gfactData)
@@ -78,24 +84,30 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.already_exist");
         return (false);
       }
-      GlobalFactDataModel.Instance.Create(p_gfactData);
-      return (true);
+      if (GlobalFactDataModel.Instance.Create(p_gfactData))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool UpdateGFactData(GlobalFactData p_gfactData)
     {
       if (IsGFactDataValid(p_gfactData) == false)
         return (false);
-      GlobalFactDataModel.Instance.Update(p_gfactData);
-      return (true);
+      if (GlobalFactDataModel.Instance.Update(p_gfactData))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool UpdateGFact(GlobalFact p_gfact)
     {
       if (IsNameValid(p_gfact.Name) == false)
         return (false);
-      GlobalFactModel.Instance.Update(p_gfact);
-      return (true);
+      if (GlobalFactModel.Instance.Update(p_gfact))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool CreateGFact(GlobalFact p_gfact)
@@ -107,8 +119,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.name_already_used");
         return (false);
       }
-      GlobalFactModel.Instance.Create(p_gfact);
-      return (true);
+      if (GlobalFactModel.Instance.Create(p_gfact))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool DeleteGFact(UInt32 p_gfactId)
@@ -118,8 +132,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.not_found");
         return (false);
       }
-      GlobalFactModel.Instance.Delete(p_gfactId);
-      return (true);
+      if (GlobalFactModel.Instance.Delete(p_gfactId))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
   }
 }

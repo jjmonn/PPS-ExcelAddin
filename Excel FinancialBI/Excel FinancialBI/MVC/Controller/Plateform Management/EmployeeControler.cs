@@ -50,16 +50,20 @@ namespace FBI.MVC.Controller
     {
       if (IsAxisOwnerValid(p_axisOwner) == false)
         return (false);
-      AxisOwnerModel.Instance.Create(p_axisOwner);
-      return (true);
+      if (AxisOwnerModel.Instance.Create(p_axisOwner))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool UpdateAxisOwner(AxisOwner p_axisOwner)
     {
       if (IsAxisOwnerValid(p_axisOwner) == false)
         return (false);
-      AxisOwnerModel.Instance.Update(p_axisOwner);
-      return (true);
+      if (AxisOwnerModel.Instance.Update(p_axisOwner))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
   }
 }

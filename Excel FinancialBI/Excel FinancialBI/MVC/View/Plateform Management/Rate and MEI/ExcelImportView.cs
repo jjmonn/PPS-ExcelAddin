@@ -193,12 +193,12 @@ namespace FBI.MVC.View
     {
       if (m_comboBox.SelectedItem == null)
       {
-        MessageBox.Show(Local.GetValue("upload.no_item_selected"));
+        Forms.MsgBox.Show(Local.GetValue("upload.no_item_selected"));
         return;
       }
       if (!m_controller.Create((UInt32)m_comboBox.SelectedItem.Value, m_periods, m_values))
       {
-        MessageBox.Show(Local.GetValue(m_controller.Error));
+        Forms.MsgBox.Show(Local.GetValue(m_controller.Error));
         return;
       }
       this.Close();
@@ -211,7 +211,7 @@ namespace FBI.MVC.View
       if (l_rangePeriods != null)
       {
         if ((m_periods = this.GetRangeValue<Int32>(l_rangePeriods, this.GetDateTime)) == null)
-          MessageBox.Show(Local.GetValue("upload.incorrect_value"));
+          Forms.MsgBox.Show(Local.GetValue("upload.incorrect_value"));
         else
           m_periodsRangeTextBox.Text = l_rangePeriods.Address;
       }
@@ -224,7 +224,7 @@ namespace FBI.MVC.View
       if (l_rangeValues != null)
       {
         if ((m_values = this.GetRangeValue<double>(l_rangeValues, this.GetDouble)) == null)
-          MessageBox.Show(Local.GetValue("upload.incorrect_value"));
+          Forms.MsgBox.Show(Local.GetValue("upload.incorrect_value"));
         else
           m_valuesRangeTextBox.Text = l_rangeValues.Address;
       }

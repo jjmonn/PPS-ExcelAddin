@@ -49,8 +49,10 @@ namespace FBI.MVC.Controller
     {
       if (IsRateValid(p_rate) == false)
         return (false);
-      ExchangeRateModel.Instance.Update(p_rate);
-      return (true);
+      if (ExchangeRateModel.Instance.Update(p_rate))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool CreateRate(ExchangeRate p_rate)
@@ -62,24 +64,30 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.name_already_used");
         return (false);
       }
-      ExchangeRateModel.Instance.Create(p_rate);
-      return (true);
+      if (ExchangeRateModel.Instance.Create(p_rate))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public override bool CreateVersion(ExchangeRateVersion p_rateVersion)
     {
       if (!IsVersionValid(p_rateVersion, RatesVersionModel.Instance) || !IsVersionNameAvailable(p_rateVersion.Name, RatesVersionModel.Instance))
         return (false);
-      RatesVersionModel.Instance.Create(p_rateVersion);
-      return (true);
+      if (RatesVersionModel.Instance.Create(p_rateVersion))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public override bool UpdateVersion(ExchangeRateVersion p_rateVersion)
     {
       if (!IsVersionValid(p_rateVersion, RatesVersionModel.Instance))
         return (false);
-      RatesVersionModel.Instance.Update(p_rateVersion);
-      return (true);
+      if (RatesVersionModel.Instance.Update(p_rateVersion))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public override bool DeleteVersion(UInt32 p_versionId)
@@ -89,8 +97,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.not_found");
         return (false);
       }
-      RatesVersionModel.Instance.Delete(p_versionId);
-      return (true);
+      if (RatesVersionModel.Instance.Delete(p_versionId))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
   }
 }

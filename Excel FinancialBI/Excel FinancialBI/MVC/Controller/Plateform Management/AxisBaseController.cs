@@ -24,7 +24,7 @@ namespace FBI.MVC.Controller
   }
 
   public abstract class AxisBaseController<TView, TController> : NameController<TView>, IAxisController 
-    where TView : ContainerControl, IView
+    where TView : ContainerControl, IPlatformMgtView
     where TController : class, IAxisController
   {
     public override IView View { get { return (m_view); } }
@@ -58,8 +58,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("axis.error.not_found");
         return (false);
       }
-      AxisElemModel.Instance.Delete(p_elem.Id);
-      return (true);
+      if (AxisElemModel.Instance.Delete(p_elem.Id))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     bool IsAxisElemValid(AxisElem p_axisElem)
@@ -83,8 +85,10 @@ namespace FBI.MVC.Controller
       }
       if (!IsAxisElemValid(p_axisElem))
         return (false);
-      AxisElemModel.Instance.Create(p_axisElem);
-      return (true);
+      if (AxisElemModel.Instance.Create(p_axisElem))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool UpdateAxisFilter(AxisFilter p_axisFilter, UInt32 p_filterValueId)
@@ -94,16 +98,20 @@ namespace FBI.MVC.Controller
       p_axisFilter = p_axisFilter.Clone();
 
       p_axisFilter.FilterValueId = p_filterValueId;
-      AxisFilterModel.Instance.Update(p_axisFilter);
-      return (true);
+      if (AxisFilterModel.Instance.Update(p_axisFilter))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool UpdateAxisElem(AxisElem p_axisElem)
     {
       if (IsAxisElemValid(p_axisElem) == false)
         return (false);
-      AxisElemModel.Instance.Update(p_axisElem);
-      return (true);
+      if (AxisElemModel.Instance.Update(p_axisElem))
+        return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
   }
 }

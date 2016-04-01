@@ -20,17 +20,17 @@ namespace FBI.MVC.View
   using FBI.Forms;
   using Network;
 
-  public partial class AxisBaseView<TControllerType> : UserControl, IView where TControllerType : class, IAxisController
+  public partial class AxisBaseView<TControllerType> : UserControl, IPlatformMgtView where TControllerType : class, IAxisController
   {
     protected FbiDataGridView m_dgv = new FbiDataGridView();
     protected TControllerType m_controller;
     bool m_cellModif = false;
     RightManager m_rightMgr = new RightManager();
+    HierarchyItem m_hoveredRow = null;
 
     public AxisBaseView()
     {
       InitializeComponent();
-      m_dgv.ContextMenuStrip = m_axisRightClickMenu;
     }
 
     public virtual void SetController(IController p_controller)
@@ -51,6 +51,12 @@ namespace FBI.MVC.View
       DesactivateUnallowed();
       SuscribeEvents();
       MultiLangueSetup();
+      if (m_controller.AxisType == AxisType.Client || m_controller.AxisType == AxisType.Entities)
+      {
+        m_dgv.AllowDrop = true;
+        m_dgv.AllowDragAndDrop = true;
+        m_dgv.AllowDragDropIndication = true;
+      }
     }
 
     private void MultiLangueSetup()
@@ -96,7 +102,17 @@ namespace FBI.MVC.View
       m_renameAxisElemMenu.Click += OnClickRename;
       m_createNewAxisElemMenuTop.Click += OnClickCreate;
       m_deleteAxisElemMenuTop.Click += OnClickDelete;
+      m_dgv.MouseClick += OnDGVMouseClick;
       Addin.SuscribeAutoLock(this);
+      if (m_controller.AxisType == AxisType.Client || m_controller.AxisType == AxisType.Entities)
+        m_dgv.Dropped += OnDGVDropItem;
+    }
+
+    public virtual void CloseView()
+    {
+      AxisElemModel.Instance.ReadEvent -= OnModelRead;
+      AxisElemModel.Instance.DeleteEvent -= OnModelDelete;
+      AxisFilterModel.Instance.ReadEvent -= OnModelReadAxisFilter;
     }
 
     #endregion
@@ -187,6 +203,33 @@ namespace FBI.MVC.View
 
     #region User Callback
 
+    void OnDGVDropItem(HierarchyItem p_origin, HierarchyItem p_dest, DragEventArgs p_args)
+    {
+      if (p_origin == null || p_dest == null)
+        return;
+      AxisElem l_originAxis = AxisElemModel.Instance.GetValue((UInt32)p_origin.ItemValue);
+      AxisElem l_destAxis = AxisElemModel.Instance.GetValue((UInt32)p_dest.ItemValue);
+
+      if (l_originAxis == null || l_destAxis == null)
+        return;
+      l_originAxis = l_originAxis.Clone();
+      l_originAxis.ParentId = l_destAxis.Id;
+      if (m_controller.UpdateAxisElem(l_originAxis) == false)
+        Forms.MsgBox.Show(m_controller.Error);
+    }
+
+    void OnDGVMouseClick(object p_sender, MouseEventArgs p_args)
+    {
+      if (p_args.Button == MouseButtons.Right)
+      {
+        Point l_location = PointToScreen(p_args.Location);
+
+        l_location.Y += 30;
+        m_hoveredRow = m_dgv.HitTestRow(p_args.Location);
+        m_axisRightClickMenu.Show(l_location);
+      }
+    }
+
     private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
     {
       if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_AXIS) == false)
@@ -217,7 +260,7 @@ namespace FBI.MVC.View
 
     private void OnClickDelete(object p_sender, EventArgs p_e)
     {
-      HierarchyItem l_row = m_dgv.HoveredRow;
+      HierarchyItem l_row = m_hoveredRow;
 
       if (l_row == null || l_row.ItemValue == null)
         return;
@@ -225,26 +268,26 @@ namespace FBI.MVC.View
 
       if (l_axisItem == null)
       {
-        MessageBox.Show(Local.GetValue("axis.error.not_found"));
+        Forms.MsgBox.Show(Local.GetValue("axis.error.not_found"));
         return;
       }
       string l_result = PasswordBox.Open(Local.GetValue("axis.creation_confirm"));
 
       if (l_result != PasswordBox.Canceled && l_result != Addin.Password)
       {
-        MessageBox.Show(Local.GetValue("general.invalid_password"));
+        Forms.MsgBox.Show(Local.GetValue("general.invalid_password"));
         return;
       }
       if (l_result != PasswordBox.Canceled && m_controller.Delete(l_axisItem) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     private void OnClickCreate(object sender, EventArgs e)
     {
-      HierarchyItem row = m_dgv.HoveredRow;
+      HierarchyItem l_row = m_hoveredRow;
 
-      if (row != null)
-        m_controller.ShowNewAxisUI((UInt32)row.ItemValue);
+      if (l_row != null)
+        m_controller.ShowNewAxisUI((UInt32)l_row.ItemValue);
       else
         m_controller.ShowNewAxisUI();
     }
@@ -364,7 +407,7 @@ namespace FBI.MVC.View
             m_dgv.Refresh();
             break;
           default:
-            MessageBox.Show(Error.GetMessage(p_status));
+            Forms.MsgBox.Show(Error.GetMessage(p_status));
             break;
         }
       }
@@ -410,7 +453,7 @@ namespace FBI.MVC.View
           DesactivateUnallowed();
         }
         else
-          MessageBox.Show(Local.GetValue("general.error.system"));
+          Forms.MsgBox.Show(Local.GetValue("general.error.system"));
       }
     }
 

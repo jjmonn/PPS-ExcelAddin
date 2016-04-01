@@ -62,7 +62,7 @@ namespace FBI.MVC.View
       l_newVersion.Name =  (string)NameTB.Text;
       l_newVersion.ParentId = SelectedParent;
       if (m_controller.CreateVersion(l_newVersion) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
       Hide();
     }
 

@@ -35,22 +35,22 @@ namespace FBI.MVC.Model
 
     #region CRUD
 
-    public override void Delete(UInt32 p_id)
+    public override bool Delete(UInt32 p_id)
     {
-      throw new NotImplementedException();
+      return (false);
     }
 
-    public override void Update(UserAllowedEntity p_crud)
+    public override bool Update(UserAllowedEntity p_crud)
     {
-      throw new NotImplementedException();
+      return (false);
     }
 
-    public override void UpdateList(List<UserAllowedEntity> p_crudList)
+    public override bool UpdateList(List<UserAllowedEntity> p_crudList, CRUDAction p_action)
     {
-      throw new NotImplementedException();
+      return (false);
     }
 
-    public void Delete(UInt32 p_id, UInt32 p_userId, UInt32 p_entityId)
+    public bool Delete(UInt32 p_id, UInt32 p_userId, UInt32 p_entityId)
     {
       ByteBuffer packet = new ByteBuffer((UInt16)DeleteCMSG);
 
@@ -58,7 +58,7 @@ namespace FBI.MVC.Model
       packet.WriteUint32(p_userId);
       packet.WriteUint32(p_entityId);
       packet.Release();
-      NetworkManager.Send(packet);
+      return NetworkManager.Send(packet);
     }
 
     protected override void ListAnswer(ByteBuffer p_packet)

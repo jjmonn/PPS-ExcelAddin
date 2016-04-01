@@ -44,7 +44,7 @@ namespace FBI.MVC.View
       }
       catch (Exception e)
       {
-        MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        Forms.MsgBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.Message);
       }
     }
@@ -54,7 +54,7 @@ namespace FBI.MVC.View
 
       this.m_addFilter.Text = Local.GetValue("general.create");
       this.m_deleteFilter.Text = Local.GetValue("general.delete");
-      this.m_createSubCategory.Text = Local.GetValue("general.create_category_under_category");
+      this.m_createSubCategory.Text = Local.GetValue("general.create_sub_category");
       this.m_renameButton.Text = Local.GetValue("general.rename");
       this.m_deleteButton.Text = Local.GetValue("general.delete");
       this.Text = Local.GetValue("filters.title_filters_structure");
@@ -90,6 +90,15 @@ namespace FBI.MVC.View
       Addin.SuscribeAutoLock(this);
     }
 
+    protected override void OnClosed(EventArgs e)
+    {
+      base.OnClosed(e);
+      FilterModel.Instance.ReadEvent -= OnModelRead;
+      FilterModel.Instance.CreationEvent -= OnModelCreate;
+      FilterModel.Instance.DeleteEvent -= OnModelDelete;
+      FilterModel.Instance.UpdateEvent -= OnModelUpdate;
+    }
+
     #region Utils
 
     private bool HasChild()
@@ -103,7 +112,7 @@ namespace FBI.MVC.View
     {
       if (m_tree.SelectedNode == null)
       {
-        MessageBox.Show(Local.GetValue("filters.msg_no_category_selected"), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show(Local.GetValue("filters.msg_no_category_selected"), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         return (false);
       }
       return (true);
@@ -136,7 +145,7 @@ namespace FBI.MVC.View
       l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name"), Local.GetValue("filters.new_category")).Trim();
       if (!m_controller.Add(l_filterName, 0, 0, typeof(Filter)))
       {
-        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -148,13 +157,13 @@ namespace FBI.MVC.View
         return;
       if (this.HasChild())
       {
-        MessageBox.Show("filters.error.has_child", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show("filters.error.has_child", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         return;
       }
       l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name"), Local.GetValue("filters.new_category")).Trim();
       if (!m_controller.Add(l_filterName, (UInt32)m_tree.SelectedNode.Value, 0, typeof(Filter)))
       {
-        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -169,7 +178,7 @@ namespace FBI.MVC.View
       {
         if (!m_controller.Remove((UInt32)m_tree.SelectedNode.Value, typeof(Filter)))
         {
-          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.delete_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.delete_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
       }
     }
@@ -183,7 +192,7 @@ namespace FBI.MVC.View
       l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name")).Trim();
       if (!m_controller.Update((UInt32)m_tree.SelectedNode.Value, l_filterName, typeof(Filter)))
       {
-        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -203,7 +212,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          MessageBox.Show("", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show("", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
       }
     }
@@ -220,7 +229,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          MessageBox.Show("", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show("", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
       }
     }
@@ -249,14 +258,14 @@ namespace FBI.MVC.View
           }
           return;
         }
-        MessageBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
     delegate void OnModelRead_delegate(ErrorMessage p_status, Filter p_attributes);
     void OnModelRead(Network.ErrorMessage p_status, Filter p_attributes)
     {
-      if (InvokeRequired)
+      if (m_tree.InvokeRequired)
       {
         OnModelRead_delegate func = new OnModelRead_delegate(OnModelRead);
         Invoke(func, p_status, p_attributes);

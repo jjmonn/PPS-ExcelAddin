@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Network;
 
-  public partial class FilterView : UserControl, IView
+  public partial class FilterView : UserControl, IPlatformMgtView
   {
     private FbiFilterHierarchyTreeView m_tree;
     private FilterController m_controller;
@@ -46,7 +46,7 @@ namespace FBI.MVC.View
       }
       catch (Exception e)
       {
-        MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        Forms.MsgBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.StackTrace);
       }
     }
@@ -95,6 +95,14 @@ namespace FBI.MVC.View
       FilterValueModel.Instance.DeleteEvent += OnModelDelete;
       FilterValueModel.Instance.UpdateEvent += OnModelUpdate;
       Addin.SuscribeAutoLock(this);
+    }
+
+    public void CloseView()
+    {
+      FilterValueModel.Instance.ReadEvent -= OnModelRead;
+      FilterValueModel.Instance.CreationEvent -= OnModelCreate;
+      FilterValueModel.Instance.DeleteEvent -= OnModelDelete;
+      FilterValueModel.Instance.UpdateEvent -= OnModelUpdate;
     }
 
     private void OnTreeNodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)
@@ -203,7 +211,7 @@ namespace FBI.MVC.View
     {
       if (m_tree.SelectedNode == null)
       {
-        MessageBox.Show(Local.GetValue("filters.error.no_selection"), Local.GetValue(title), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show(Local.GetValue("filters.error.no_selection"), Local.GetValue(title), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         return (false);
       }
       return (true);
@@ -251,13 +259,13 @@ namespace FBI.MVC.View
       {
         if ((l_filter = FilterModel.Instance.GetChild(l_value.FilterId, m_controller.AxisType)) == null) //Can't go deeper, if you known what I mean ;)
         {
-          MessageBox.Show(Local.GetValue("filters.error.no_child"), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show(Local.GetValue("filters.error.no_child"), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
           return;
         }
         l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_value_name")).Trim();
         if (!m_controller.Add(l_filterName, l_value.Id, l_filter.Id, typeof(FilterValue)))
         {
-          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
       }
     }
@@ -269,7 +277,7 @@ namespace FBI.MVC.View
       l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_value_name")).Trim();
       if (!this.Create(p_node, l_filterName))
       {
-        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -288,7 +296,7 @@ namespace FBI.MVC.View
       {
         if (!this.Remove(m_tree.SelectedNode))
         {
-          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
       }
     }
@@ -305,7 +313,7 @@ namespace FBI.MVC.View
       {
         l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name")).Trim();
         if (!m_controller.Update((UInt32)l_node.Value, l_filterName, typeof(FilterValue)))
-          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -346,7 +354,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          MessageBox.Show("{CREATE}", "filters.new_value", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show("{CREATE}", "filters.new_value", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
           this.DesactivateUnallowed();
         }
       }
@@ -364,7 +372,7 @@ namespace FBI.MVC.View
       {
         if (p_status != ErrorMessage.SUCCESS)
         {
-          MessageBox.Show("{UPDATE}", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          Forms.MsgBox.Show("{UPDATE}", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         this.DesactivateUnallowed();
       }
@@ -395,7 +403,7 @@ namespace FBI.MVC.View
           m_tree.Refresh();
           return;
         }
-        MessageBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        Forms.MsgBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 

@@ -13,7 +13,7 @@ namespace FBI.MVC.Model.CRUD
     public UInt32 Id { get; private set; }
     public UInt32 EntityId { get; set; }
     public UInt32 AccountId { get; set; }
-    public byte Percentage { get; set; }
+    public uint Percentage { get; set; }
     public UInt32 Image { get; set; }
 
     public EntityDistribution() { }
@@ -39,7 +39,7 @@ namespace FBI.MVC.Model.CRUD
         p_packet.WriteUint32(Id);
       p_packet.WriteUint32(EntityId);
       p_packet.WriteUint32(AccountId);
-      p_packet.WriteUint8(Percentage);
+      p_packet.WriteUint8((byte)Percentage);
     }
 
     public void CopyFrom(EntityDistribution p_model)

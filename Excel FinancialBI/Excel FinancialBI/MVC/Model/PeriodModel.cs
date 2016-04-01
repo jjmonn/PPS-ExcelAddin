@@ -12,7 +12,7 @@ namespace FBI.MVC.Model
   using Utils;
   using FBI.MVC.Model;
   using FBI.MVC.Model.CRUD;
-  using CRUD;
+
 
   class PeriodModel
   {
@@ -114,7 +114,7 @@ namespace FBI.MVC.Model
         case CRUD.TimeConfig.WEEK:
           return Utils.Local.GetValue("general.week") + " " + GetWeekNumberFromDateId(p_period) + ", " + DateTime.FromOADate(p_period).ToString("yyyy");
         case CRUD.TimeConfig.DAYS:
-          return DateTime.FromOADate(p_period).ToLongDateString();
+          return DateTime.FromOADate(p_period).ToString("d"); // format to be set in settings
           //return DateTime.FromOADate(p_period).ToString("MMMM dd, yyyy");
       }
       return (DateTime.FromOADate(p_period).ToShortDateString());
@@ -392,17 +392,23 @@ namespace FBI.MVC.Model
     #endregion
 
     #region "Days interface"
-    // To be checked 
+    
     static public List<Int32> GetDaysList(Int32 p_startDayId, Int32 p_nbDays)
     {
+      bool l_includeWeekEnds = Properties.Settings.Default.includeWeekEnds;
+      List<DayOfWeek> l_weekEndDays = PeriodModel.GetWeekEndDays();
       List<Int32> l_daysList = new List<Int32>();
-      for (Int32 i = 0; i <= p_nbDays - 1; i++)
-      {
-        l_daysList.Add(p_startDayId);
-        p_startDayId += 1;
-      }
-      return (l_daysList);
 
+      for (Int32 l_dayId = p_startDayId; l_dayId <= p_startDayId + p_nbDays - 1; l_dayId++)
+        l_daysList.Add(l_dayId);
+      return (l_daysList);
+    }
+
+    static public bool IsWeekEnd(Int32 p_day)
+    {
+      List<DayOfWeek> l_weekEndDays = PeriodModel.GetWeekEndDays();
+
+      return (l_weekEndDays.Contains(DateTime.FromOADate((double)p_day).DayOfWeek));
     }
 
     static public List<Int32> GetDaysPeriodsListFromWeeksId(List<Int32> p_weeksPeriodsList)
@@ -514,6 +520,12 @@ namespace FBI.MVC.Model
       return l_resultPeriods;
     }
 
+    public static Int32 GetDayMinus3Weeks(Int32 p_dayId)
+    {
+      DateTime l_date = DateTime.FromOADate(p_dayId);
+      l_date = l_date.AddDays(-3 * m_nbDaysInWeek);
+      return (Int32)l_date.ToOADate();
+    }
 
     public static string GetDateAsStringWeekFormat(DateTime p_date)
     {
@@ -521,6 +533,29 @@ namespace FBI.MVC.Model
       string l_weekString = Local.GetValue("general.week");
       return l_weekString + PeriodModel.GetWeekNumberFromDateId(l_period) + ", " + DateTime.FromOADate(l_period).Year;
     }
+
+    public static List<DayOfWeek> GetWeekEndDays()
+    {
+      List<DayOfWeek> l_weekEndDays = new List<DayOfWeek>();
+      l_weekEndDays.Add(DayOfWeek.Saturday);
+      l_weekEndDays.Add(DayOfWeek.Sunday);
+      return l_weekEndDays;
+    }
+
+    public static List<Int32> FilterWeekEnds(List<Int32> p_periodList)
+    {
+    //  bool l_includeWeekEnds = Properties.Settings.Default.includeWeekEnds;
+      List<DayOfWeek> l_weekEndDays = GetWeekEndDays();
+      List<Int32> l_filteredPeriodsList = new List<Int32>();
+
+      foreach (Int32 l_periodId in p_periodList)
+      {
+        if (l_weekEndDays.Contains(DateTime.FromOADate(l_periodId).DayOfWeek) == false)
+          l_filteredPeriodsList.Add(l_periodId);
+      }
+        return l_filteredPeriodsList;
+    }
+
 
     #endregion
   }

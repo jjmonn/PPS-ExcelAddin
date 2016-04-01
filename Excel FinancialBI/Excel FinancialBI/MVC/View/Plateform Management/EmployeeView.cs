@@ -49,7 +49,7 @@ namespace FBI.MVC.View
       SuscribeEvents();
     }
 
-    public void SuscribeEvents()
+    void SuscribeEvents()
     {
       m_dgv.MouseDown += OnDGVMouseDown;
       m_entitiesTV.NodeMouseDown += OnNodeSelect;
@@ -59,18 +59,28 @@ namespace FBI.MVC.View
       AxisOwnerModel.Instance.CreationEvent += OnModelCreateAxisOwner;
       AxisOwnerModel.Instance.UpdateEvent += OnModelUpdateAxisOwner;
     }
+
+    public override void CloseView()
+    {
+      base.CloseView();
+      AxisElemModel.Instance.CreationEvent -= OnModelCreateAxisElem;
+      AxisOwnerModel.Instance.ReadEvent -= OnModelReadAxisOwner;
+      AxisOwnerModel.Instance.CreationEvent -= OnModelCreateAxisOwner;
+      AxisOwnerModel.Instance.UpdateEvent -= OnModelUpdateAxisOwner;
+    }
     
     #region User Callback
 
     void OnDGVMouseDown(object p_sender, MouseEventArgs p_args)
     {
-      if (m_dgv.HoveredRow == null)
+      HierarchyItem l_row = (m_dgv.HoveredRow != null) ? m_dgv.HoveredRow : m_dgv.HitTestRow(p_args.Location);
+      if (l_row == null)
         return;
       if (p_args.Button == MouseButtons.Left)
         if (ModifierKeys.HasFlag(Keys.Control))
         {
-          m_dgv.DoDragDrop(m_dgv.HoveredRow, DragDropEffects.Move);
-          m_draggingRow = m_dgv.HoveredRow;
+          m_dgv.DoDragDrop(l_row, DragDropEffects.Move);
+          m_draggingRow = l_row;
         }
     }
 
@@ -94,7 +104,7 @@ namespace FBI.MVC.View
       l_axisOwner = l_axisOwner.Clone();
       l_axisOwner.OwnerId = l_entity.Id;
       if (m_controller.UpdateAxisOwner(l_axisOwner) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnNodeSelect(object p_sender, vTreeViewMouseEventArgs p_args)
@@ -132,7 +142,7 @@ namespace FBI.MVC.View
     {
       if (p_status != ErrorMessage.SUCCESS)
       {
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
         return;
       }
       AxisOwner l_axisOwner = new AxisOwner();
@@ -140,7 +150,7 @@ namespace FBI.MVC.View
       l_axisOwner.Id = p_id;
       l_axisOwner.OwnerId = m_controller.SelectedEntity;
       if (m_controller.CreateAxisOwner(l_axisOwner) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     delegate void OnModelReadAxisOwner_delegate(ErrorMessage p_status, AxisOwner p_axisOwner);
@@ -170,13 +180,13 @@ namespace FBI.MVC.View
     void OnModelCreateAxisOwner(ErrorMessage p_status, UInt32 p_axisOwnerId)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     void OnModelUpdateAxisOwner(ErrorMessage p_status, UInt32 p_axisOwnerId)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     #endregion

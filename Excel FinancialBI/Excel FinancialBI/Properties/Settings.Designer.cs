@@ -12,7 +12,7 @@ namespace FBI.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,7 +25,7 @@ namespace FBI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
         public uint version_id {
             get {
                 return ((uint)(this["version_id"]));
@@ -38,9 +38,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("8")]
-        public string tablesFontSize {
+        public double tablesFontSize {
             get {
-                return ((string)(this["tablesFontSize"]));
+                return ((double)(this["tablesFontSize"]));
             }
             set {
                 this["tablesFontSize"] = value;
@@ -50,9 +50,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("8.5")]
-        public string dgvFontSize {
+        public double dgvFontSize {
             get {
-                return ((string)(this["dgvFontSize"]));
+                return ((double)(this["dgvFontSize"]));
             }
             set {
                 this["dgvFontSize"] = value;
@@ -74,9 +74,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public string controllingUIResizeTofitGrid {
+        public bool controllingUIResizeTofitGrid {
             get {
-                return ((string)(this["controllingUIResizeTofitGrid"]));
+                return ((bool)(this["controllingUIResizeTofitGrid"]));
             }
             set {
                 this["controllingUIResizeTofitGrid"] = value;
@@ -410,48 +410,48 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("PowderBlue")]
-        public global::System.Drawing.Color snapshotInputsBackColor {
+        public global::System.Drawing.Color FactsEditionInputsFillColor {
             get {
-                return ((global::System.Drawing.Color)(this["snapshotInputsBackColor"]));
+                return ((global::System.Drawing.Color)(this["FactsEditionInputsFillColor"]));
             }
             set {
-                this["snapshotInputsBackColor"] = value;
+                this["FactsEditionInputsFillColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Navy")]
-        public global::System.Drawing.Color snapshotInputsTextColor {
+        public global::System.Drawing.Color FactsEditionInputsTextColor {
             get {
-                return ((global::System.Drawing.Color)(this["snapshotInputsTextColor"]));
+                return ((global::System.Drawing.Color)(this["FactsEditionInputsTextColor"]));
             }
             set {
-                this["snapshotInputsTextColor"] = value;
+                this["FactsEditionInputsTextColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("White")]
-        public global::System.Drawing.Color snapshotOutputsBackColor {
+        public global::System.Drawing.Color FactsEditionOutputsBackColor {
             get {
-                return ((global::System.Drawing.Color)(this["snapshotOutputsBackColor"]));
+                return ((global::System.Drawing.Color)(this["FactsEditionOutputsBackColor"]));
             }
             set {
-                this["snapshotOutputsBackColor"] = value;
+                this["FactsEditionOutputsBackColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public global::System.Drawing.Color snapshotOutputsTextColor {
+        public global::System.Drawing.Color FactsEditionOutputsTextColor {
             get {
-                return ((global::System.Drawing.Color)(this["snapshotOutputsTextColor"]));
+                return ((global::System.Drawing.Color)(this["FactsEditionOutputsTextColor"]));
             }
             set {
-                this["snapshotOutputsTextColor"] = value;
+                this["FactsEditionOutputsTextColor"] = value;
             }
         }
         
@@ -806,9 +806,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("4242")]
-        public int port_number {
+        public ushort port_number {
             get {
-                return ((int)(this["port_number"]));
+                return ((ushort)(this["port_number"]));
             }
             set {
                 this["port_number"] = value;
@@ -853,13 +853,85 @@ namespace FBI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int language {
             get {
                 return ((int)(this["language"]));
             }
             set {
                 this["language"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("223, 106, 120")]
+        public global::System.Drawing.Color FactsEditionInputsRedFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionInputsRedFill"]));
+            }
+            set {
+                this["FactsEditionInputsRedFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255, 192, 192")]
+        public global::System.Drawing.Color FactsEditionOutputsRedFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionOutputsRedFill"]));
+            }
+            set {
+                this["FactsEditionOutputsRedFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("102, 199, 150")]
+        public global::System.Drawing.Color FactsEditionInputCommitedFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionInputCommitedFill"]));
+            }
+            set {
+                this["FactsEditionInputCommitedFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("207, 237, 222")]
+        public global::System.Drawing.Color FactsEditionOutputCommitedFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionOutputCommitedFill"]));
+            }
+            set {
+                this["FactsEditionOutputCommitedFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PowderBlue")]
+        public global::System.Drawing.Color FactsEditionDimensionsFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionDimensionsFill"]));
+            }
+            set {
+                this["FactsEditionDimensionsFill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool includeWeekEnds {
+            get {
+                return ((bool)(this["includeWeekEnds"]));
+            }
+            set {
+                this["includeWeekEnds"] = value;
             }
         }
     }

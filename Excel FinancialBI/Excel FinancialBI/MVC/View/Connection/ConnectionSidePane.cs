@@ -25,13 +25,13 @@ namespace FBI.MVC.View
     {
       InitializeComponent();
    
-      EventsSubscribtion();
+      SuscribeEvents();
       SetupMultilangue();
       IsLoading = false;
       ConnectionBT.Visible = true;
     }
 
-    private void EventsSubscribtion()
+    private void SuscribeEvents()
     {
       Authenticator.AuthenticationEvent += OnAuthentification;
       Addin.InitializationEvent += OnInitComplete;
@@ -81,7 +81,13 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != ErrorMessage.SUCCESS)
+        {
           IsLoading = false;
+          if (p_status == ErrorMessage.PERMISSION_DENIED)
+            Forms.MsgBox.Show(Local.GetValue("connection.error.wrong_credentials"));
+          else if (p_status != ErrorMessage.SUCCESS)
+            Forms.MsgBox.Show(Error.GetMessage(p_status));
+        }
       }
     }
 
@@ -134,19 +140,20 @@ namespace FBI.MVC.View
     private void m_cancelButton_Click(object sender, EventArgs e)
     {
       IsLoading = false;
+      Addin.Disconnect();
     }
 
     #endregion
 
     #region Connection background worker
 
-
     private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
     {
+      Addin.Disconnect();
       if (Addin.Connect(m_userNameTextBox.Text, m_passwordTextBox.Text) == false)
       {
         this.BackgroundWorker1.CancelAsync();
-        MessageBox.Show(Local.GetValue("connection.msg_wrong_credentials"));     // TO DO: procedure
+        Forms.MsgBox.Show(Local.GetValue("connection.error.connection_refused"));
       }
       else
       {

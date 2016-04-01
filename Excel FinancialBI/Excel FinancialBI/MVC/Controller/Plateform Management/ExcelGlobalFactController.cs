@@ -69,7 +69,8 @@ namespace FBI.MVC.Controller
         l_fact.Value = p_value;
         if (IsFactValid(l_fact) == false)
           return (false);
-        GlobalFactDataModel.Instance.Create(l_fact);
+        if (GlobalFactDataModel.Instance.Create(l_fact))
+          return (true);
       }
       else
       {
@@ -77,9 +78,11 @@ namespace FBI.MVC.Controller
         l_fact.Value = p_value;
         if (IsFactValid(l_fact) == false)
           return (false);
-        GlobalFactDataModel.Instance.Update(l_fact);
+        if (GlobalFactDataModel.Instance.Update(l_fact))
+          return (true);
       }
-      return (true);
+      Error = Local.GetValue("general.error.system");
+      return (false);
     }
 
     public bool Create(UInt32 p_id, List<Int32> p_periods, List<double> p_values)

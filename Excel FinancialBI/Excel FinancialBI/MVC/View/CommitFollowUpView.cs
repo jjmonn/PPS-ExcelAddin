@@ -303,7 +303,7 @@ namespace FBI.MVC.View
     {
       if (p_status != ErrorMessage.SUCCESS)
       {
-        MessageBox.Show("{UPDATE}");
+        Forms.MsgBox.Show("{UPDATE}");
       }
     }
 

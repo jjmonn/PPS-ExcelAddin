@@ -18,9 +18,11 @@ namespace FBI.MVC.Controller
     public IView View { get { return (m_view); } }
     ComputeConfig m_config = null;
     UInt32 m_displayedVersionCompare = 0;
+    LogController m_logController;
 
     public ResultController(CUIController p_controller)
     {
+      m_logController = new LogController();
       m_parentController = p_controller;
       m_view = new ResultView();
       m_view.SetController(this);
@@ -81,6 +83,16 @@ namespace FBI.MVC.Controller
 
       m_view.SetVersionVisible(versionDiff1, false);
       m_view.SetVersionVisible(versionDiff2, false);
+    }
+
+    public bool ShowLog(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_accountId, UInt32 p_period)
+    {
+      if (m_logController.ShowView(p_entityId, p_versionId, p_accountId, p_period) == false)
+      {
+        Error = m_logController.Error;
+        return (false);
+      }
+      return (true);
     }
   }
 }

@@ -12,7 +12,16 @@ namespace FBI.MVC.Model.CRUD
   {
     public enum TagType
     {
-      PAID_LEAVE
+      NONE = 0,
+      CP,
+      RTT,
+      Abs,
+      ALD,
+      CD,
+      E,
+      S,
+      RD,
+      RG
     }
 
     public UInt32 Id { get; set; }

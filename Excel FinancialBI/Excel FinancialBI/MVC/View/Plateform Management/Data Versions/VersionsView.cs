@@ -19,7 +19,7 @@ namespace FBI.MVC.View
   using FBI.Network;
   using Microsoft.VisualBasic;
 
-  public partial class VersionsView : UserControl, IView
+  public partial class VersionsView : UserControl, IPlatformMgtView
   {
     private VersionsController m_controller;
     private FbiTreeView<Version> m_versionsTreeview;
@@ -106,6 +106,15 @@ namespace FBI.MVC.View
       this.m_deleteRCMButton.Click += new System.EventHandler(this.OnClickDelete);
 
       Addin.SuscribeAutoLock(this);
+    }
+
+    public void CloseView()
+    {
+      VersionModel.Instance.CreationEvent -= AfterCreate;
+      VersionModel.Instance.ReadEvent -= AfterRead;
+      VersionModel.Instance.UpdateEvent -= AfterUpdate;
+      VersionModel.Instance.CopyEvent -= AfterCopy;
+      VersionModel.Instance.DeleteEvent -= AfterDelete;
     }
 
     private void MultilanguageSetup()
@@ -242,7 +251,7 @@ namespace FBI.MVC.View
     private void AfterCreate(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_create"), p_status);
+        DisplayErrorMessage(Local.GetValue("facts_versions.error.create"), p_status);
     }
 
     private void AfterDelete(ErrorMessage p_status, UInt32 p_id)
@@ -252,43 +261,25 @@ namespace FBI.MVC.View
         DeleteNode(p_id);
       }
       else
-        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_delete"), p_status);
+        DisplayErrorMessage(Local.GetValue("facts_versions.error.delete"), p_status);
     }
 
     private void AfterUpdate(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_update"), p_status);
+        DisplayErrorMessage(Local.GetValue("facts_versions.error.update"), p_status);
     }
 
     private void AfterCopy(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_copy"), p_status);
+        DisplayErrorMessage(Local.GetValue("facts_versions.error.copy"), p_status);
     }
 
     void DisplayErrorMessage(string p_message, ErrorMessage p_status)
     {
-      p_message += ": ";
-
-      switch (p_status)
-      {
-        case ErrorMessage.SUCCESS:
-          return;
-        case ErrorMessage.NOT_FOUND:
-          p_message += Local.GetValue("facts_versions.msg_not_found");
-          break;
-        case ErrorMessage.SYSTEM:
-          p_message += Local.GetValue("facts_versions.msg_system");
-          break;
-        case ErrorMessage.INVALID_ATTRIBUTE:
-          p_message = Local.GetValue("facts_versions.msg_invalid_attribute");
-          break;
-        default:
-          p_message += Local.GetValue("facts_versions.msg_unknown");
-          break;
-      }
-      MessageBox.Show(p_message);
+      p_message += ": " + Error.GetMessage(p_status);
+      Forms.MsgBox.Show(p_message);
     }
 
     #endregion
@@ -427,7 +418,7 @@ namespace FBI.MVC.View
           l_versionCopy.RateVersionId = l_ratesVersionId;
           if (m_controller.Update(l_versionCopy) == false)
           {
-            MessageBox.Show(m_controller.Error);
+            Forms.MsgBox.Show(m_controller.Error);
             m_isDisplaying = true;
             SetExchangeVersion(l_version);
             m_isDisplaying = false;
@@ -449,7 +440,7 @@ namespace FBI.MVC.View
           l_versionCopy.GlobalFactVersionId = l_gfactsVersionId;
           if (m_controller.Update(l_versionCopy) == false)
           {
-            MessageBox.Show(m_controller.Error);
+            Forms.MsgBox.Show(m_controller.Error);
             m_isDisplaying = true;
             SetGlobalFactsVersion(l_version);
             m_isDisplaying = false;
@@ -507,13 +498,13 @@ namespace FBI.MVC.View
       l_newFolderVersion.IsFolder = true;
       l_newFolderVersion.ParentId = m_controller.SelectedVersion;
       if (m_controller.Create(l_newFolderVersion) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     private void DeleteVersion(UInt32 p_versionId)
     {
       if (m_controller.Delete(p_versionId) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     private void RenameVersion(UInt32 p_versionId)
@@ -526,7 +517,7 @@ namespace FBI.MVC.View
         l_version = l_version.Clone();
         l_version.Name = Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
         if (m_controller.Update(l_version) == false)
-          MessageBox.Show(m_controller.Error);
+          Forms.MsgBox.Show(m_controller.Error);
       }
     }
 
@@ -543,7 +534,7 @@ namespace FBI.MVC.View
       else
         l_version.LockDate = "";
       if (m_controller.Update(l_version) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
   }

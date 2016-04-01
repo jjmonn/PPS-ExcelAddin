@@ -51,6 +51,15 @@ namespace FBI.MVC.View
       ExchangeRateModel.Instance.DeleteEvent += OnModelDeleteRate;
     }
 
+    public override void CloseView()
+    {
+      base.CloseView();
+      ExchangeRateModel.Instance.ReadEvent -= OnModelReadRate;
+      ExchangeRateModel.Instance.UpdateEvent -= OnModelUpdateRate;
+      ExchangeRateModel.Instance.CreationEvent -= OnModelUpdateRate;
+      ExchangeRateModel.Instance.DeleteEvent -= OnModelDeleteRate;
+    }
+
     #region Initialize
 
     void InitPeriods(List<Int32> p_monthList)
@@ -93,7 +102,7 @@ namespace FBI.MVC.View
 
       if (l_monthList == null)
       {
-        MessageBox.Show(Local.GetValue("exchange_rate_version.error.not_found"));
+        Forms.MsgBox.Show(Local.GetValue("exchange_rate_version.error.not_found"));
         return;
       }
       InitPeriods(l_monthList);
@@ -140,13 +149,13 @@ namespace FBI.MVC.View
     void OnModelUpdateRate(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     void OnModelDeleteRate(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     #endregion

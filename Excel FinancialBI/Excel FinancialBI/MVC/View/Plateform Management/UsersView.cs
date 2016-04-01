@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using Utils;
   using Network;
 
-  public partial class UsersView : UserControl, IView
+  public partial class UsersView : UserControl, IPlatformMgtView
   {
     enum Column
     {
@@ -75,6 +75,16 @@ namespace FBI.MVC.View
       UserAllowedEntityModel.Instance.CreationEvent += OnUserAllowedModelCreationEvent;
       m_userDGV.CellMouseDown += OnCellMouseDown;
       Addin.SuscribeAutoLock(this);
+    }
+
+    public void CloseView()
+    {
+      UserModel.Instance.UpdateEvent -= OnUserModelUpdateEvent;
+      UserModel.Instance.ReadEvent -= OnUserModelReadEvent;
+      UserAllowedEntityModel.Instance.UpdateEvent -= OnUserAllowedModelUpdateEvent;
+      UserAllowedEntityModel.Instance.ReadEvent -= OnUserAllowedModelReadEvent;
+      UserAllowedEntityModel.Instance.DeleteEvent -= OnUserAllowedModelDeleteEvent;
+      UserAllowedEntityModel.Instance.CreationEvent -= OnUserAllowedModelCreationEvent;
     }
 
     void EntitiesTVInit()
@@ -250,7 +260,7 @@ namespace FBI.MVC.View
     void OnUserModelUpdateEvent(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != Network.ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
     }
 
     #endregion
@@ -293,7 +303,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
-          MessageBox.Show(Error.GetMessage(p_status));
+          Forms.MsgBox.Show(Error.GetMessage(p_status));
       }
     }
 
@@ -308,7 +318,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
-          MessageBox.Show(Error.GetMessage(p_status));
+          Forms.MsgBox.Show(Error.GetMessage(p_status));
         SetEntities(UserModel.Instance.GetValue(m_userClicked));
         m_userDGV.Refresh();
         if (m_displayEntities)
@@ -327,7 +337,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
-          MessageBox.Show(Error.GetMessage(p_status));
+          Forms.MsgBox.Show(Error.GetMessage(p_status));
       }
     }
 

@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using Utils;
   using Network;
 
-  public abstract partial class FactBaseView<TVersion, TControllerType> : UserControl, IView
+  public abstract partial class FactBaseView<TVersion, TControllerType> : UserControl, IPlatformMgtView
     where TVersion : BaseVersion, NamedHierarchyCRUDEntity, new()
     where TControllerType : IFactBaseController<TVersion>
   {
@@ -107,6 +107,14 @@ namespace FBI.MVC.View
       Addin.SuscribeAutoLock(this);
     }
 
+    public virtual void CloseView()
+    {
+      m_versionModel.ReadEvent -= OnModelReadVersion;
+      m_versionModel.UpdateEvent -= OnModelUpdateVersion;
+      m_versionModel.CreationEvent -= OnModelCreateVersion;
+      m_versionModel.DeleteEvent -= OnModelDeleteVersion;
+    }
+
     #region User Callback
 
     private void OnImportExcel(object sender, EventArgs e)
@@ -147,7 +155,7 @@ namespace FBI.MVC.View
       l_version.IsFolder = true;
       l_version.Name = l_result;
       if (m_controller.CreateVersion(l_version) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnRenameVersionClick(object p_sender, EventArgs p_args)
@@ -162,7 +170,7 @@ namespace FBI.MVC.View
       l_version = l_version.BaseClone() as TVersion;
       l_version.Name = l_result;
       if (m_controller.UpdateVersion(l_version) == false)
-        MessageBox.Show(m_controller.Error);
+        Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnCreateVersionClick(object p_sender, EventArgs p_args)
@@ -197,14 +205,14 @@ namespace FBI.MVC.View
     void OnModelUpdateVersion(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
       DesactivateUnallowed();
     }
 
     void OnModelCreateVersion(ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MessageBox.Show(Error.GetMessage(p_status));
+        Forms.MsgBox.Show(Error.GetMessage(p_status));
       DesactivateUnallowed();
     }
 
@@ -219,7 +227,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != ErrorMessage.SUCCESS)
-          MessageBox.Show(Error.GetMessage(p_status));
+          Forms.MsgBox.Show(Error.GetMessage(p_status));
         else
         {
           m_versionTV.FindAndRemove(p_id);

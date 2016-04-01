@@ -55,7 +55,7 @@ namespace FBI.MVC.Model.CRUD
       MONETARY = 1,
       NUMBER,
       PERCENTAGE,
-      DATE_
+      DATE
     }
 
     public enum FormulaTypesLookUpOption
@@ -175,6 +175,20 @@ namespace FBI.MVC.Model.CRUD
       else
         return 1;
     }
+
+    //public override bool Equals(object p_obj)
+    //{
+    //  if (p_obj.GetType() != this.GetType())
+    //    return (false);
+    //  Account l_obj = p_obj as Account;
+
+    //  return (l_obj.Id == Id);
+    //}
+
+    //public override Int32 GetHashCode()
+    //{
+    //  return (Int32)Id;
+    //}
 
   }
 }

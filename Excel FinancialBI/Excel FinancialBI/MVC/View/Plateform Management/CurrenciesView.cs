@@ -20,7 +20,7 @@ namespace FBI.MVC.View
   using Network;
   
 
-  public partial class CurrenciesView : UserControl, IView
+  public partial class CurrenciesView : UserControl, IPlatformMgtView
   {
     FbiDataGridView m_dgv = new FbiDataGridView();
     CurrenciesController m_controller;
@@ -82,6 +82,12 @@ namespace FBI.MVC.View
       Addin.SuscribeAutoLock(this);
     }
 
+    public void CloseView()
+    {
+      CurrencyModel.Instance.ReadEvent -= OnModelRead;
+      CurrencyModel.Instance.DeleteEvent -= OnModelDelete;
+    }
+
     delegate void OnModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);
     void OnModelDelete(ErrorMessage p_status, UInt32 p_id)
     {
@@ -91,13 +97,13 @@ namespace FBI.MVC.View
           m_dgv.DeleteRow(p_id);
           break;
         case ErrorMessage.PERMISSION_DENIED:
-          MessageBox.Show(Local.GetValue("general.error.permission_denied"));
+          Forms.MsgBox.Show(Local.GetValue("general.error.permission_denied"));
           break;
         case ErrorMessage.NOT_FOUND:
-          MessageBox.Show(Local.GetValue("general.error.not_found"));
+          Forms.MsgBox.Show(Local.GetValue("general.error.not_found"));
           break;
         default:
-          MessageBox.Show(Local.GetValue("general.error.system"));
+          Forms.MsgBox.Show(Local.GetValue("general.error.system"));
           break;
       }
     }
@@ -156,13 +162,13 @@ namespace FBI.MVC.View
             UpdateOrAddCurrencyRow(p_attributes);
             break;
           case ErrorMessage.PERMISSION_DENIED:
-            MessageBox.Show(Local.GetValue("general.error.permission_denied"));
+            Forms.MsgBox.Show(Local.GetValue("general.error.permission_denied"));
             break;
           case ErrorMessage.NOT_FOUND:
-            MessageBox.Show(Local.GetValue("general.error.not_found"));
+            Forms.MsgBox.Show(Local.GetValue("general.error.not_found"));
             break;
           default:
-            MessageBox.Show(Local.GetValue("general.error.system"));
+            Forms.MsgBox.Show(Local.GetValue("general.error.system"));
             break;
         }
       }

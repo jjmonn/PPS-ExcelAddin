@@ -9,7 +9,7 @@ namespace FBI.MVC.Controller
   using Model;
   using View;
 
-  class PeriodRangeSelectionController : IController
+  public class PeriodRangeSelectionController : IController
   {
     public string Error { get; set; }
     PeriodRangeSelectionControl m_view;
@@ -83,6 +83,7 @@ namespace FBI.MVC.Controller
     {
       List<Int32> l_periodsRange = new List<Int32>();
       DateTime l_date = p_startDate;
+
       while (l_date <= p_endDate)
       {
         l_periodsRange.Add((Int32)l_date.ToOADate());

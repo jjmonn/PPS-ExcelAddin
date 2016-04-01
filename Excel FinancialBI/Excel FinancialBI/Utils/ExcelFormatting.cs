@@ -27,7 +27,6 @@ namespace FBI.Utils
         l_Range = ws.Range[first_range_cell, l_lastCell];
         FormatExcelRangeAs(l_Range,  currency,  startingDate);
       }
-    
     }
 
     // Identify the current range and 
@@ -43,7 +42,6 @@ namespace FBI.Utils
         //  to be reimplemented ?
         //  FormatExcelRangeAs(l_Range, Currency, startingDate)
       }
-    
     }
 
     static internal void FormatExcelRangeAs(Range p_inputRange,  UInt32 p_currencyId, DateTime startingDate)
@@ -57,9 +55,10 @@ namespace FBI.Utils
       FbiAccountFormat l_normalFormat = new FbiAccountFormat("n");
       FbiAccountFormat l_detailFormat = new FbiAccountFormat("d");
 
-      foreach (Range row in p_inputRange.Rows)
+      p_inputRange.EntireColumn.AutoFit();
+      foreach (Range l_row in p_inputRange.Rows)
       {
-        Range l_range =   row.Cells[1, 1] as Range;
+        Range l_range =   l_row.Cells[1, 1] as Range;
         string accValue = l_range.Value2 as string;
         if ((accValue != null))
         {
@@ -89,56 +88,53 @@ namespace FBI.Utils
               continue;
 
             // Colors
-            row.Interior.Color = l_format.backColor;
-            row.Font.Color = l_format.textColor;
+            l_row.Interior.Color = l_format.backColor;
+            l_row.Font.Color = l_format.textColor;
 
             // Formats
-            if (row.Cells.Count > 0)
+            if (l_row.Cells.Count > 0)
             {
-              Range l_cell = row.Cells[1, 1] as Range;
+              Range l_cell = l_row.Cells[1, 1] as Range;
               l_cell.IndentLevel = l_format.indent;
             }
 
             if (l_format.isBold == true)
-              row.Font.Bold = true;
+              l_row.Font.Bold = true;
             if (l_format.isItalic == true)
-              row.Font.Italic = true;
+              l_row.Font.Italic = true;
 
             switch (l_account.Type)
             {
               case Account.AccountType.MONETARY:
-                row.Cells.NumberFormat = "[$" + l_currency.Symbol + "]#,##0.00;([$" + l_currency.Symbol + "]#,##0.00)";
+                l_row.Cells.NumberFormat = "[$" + l_currency.Symbol + "]#,##0.00;([$" + l_currency.Symbol + "]#,##0.00)";
                 break;
               case Account.AccountType.PERCENTAGE:
-                row.Cells.NumberFormat = "0.00%";
+                l_row.Cells.NumberFormat = "0.00%";
                 // put this in a table ?
                 break;
               case Account.AccountType.NUMBER:
-                row.Cells.NumberFormat = "#,##0.00";
+                l_row.Cells.NumberFormat = "#,##0.00";
                 // further evolution set unit ?
                 break;
-              case Account.AccountType.DATE_:
-                row.Cells.NumberFormat = "d-mmm-yy";
+              case Account.AccountType.DATE:
+                l_row.Cells.NumberFormat = "d-mmm-yy";
                 // d-mmm-yy
                 break;
               default:
-                row.Cells.NumberFormat = "#,##0.00";
+                l_row.Cells.NumberFormat = "#,##0.00";
                 break;
             }
 
             // Borders
             if (l_format.bordersPresent == true)
             {
-              row.Borders[XlBordersIndex.xlEdgeBottom].Color = l_format.bordersColor;
-              row.Borders[XlBordersIndex.xlEdgeTop].Color = l_format.bordersColor;
+              l_row.Borders[XlBordersIndex.xlEdgeBottom].Color = l_format.bordersColor;
+              l_row.Borders[XlBordersIndex.xlEdgeTop].Color = l_format.bordersColor;
             }
           }
         }
       }
-      p_inputRange.Columns.AutoFit();
-
     }
-
 
     public static void FormatEntitiesReport( Range area)
     {
@@ -159,9 +155,7 @@ namespace FBI.Utils
         Range l_cell = subArea.Cells[1, 1] as Range;
         l_cell.Borders[XlBordersIndex.xlEdgeBottom].Color = Color.Black;
       }
-      area.Columns.AutoFit();
+      area.EntireColumn.AutoFit();
     }
-
-
   }
 }
