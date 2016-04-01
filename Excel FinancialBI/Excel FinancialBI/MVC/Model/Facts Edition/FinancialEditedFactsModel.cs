@@ -225,9 +225,14 @@ namespace FBI.MVC.Model
       if (EditedFacts.ContainsKey(p_cell.Address))
       {
         EditedFinancialFact l_fact = EditedFacts[p_cell.Address];
-        if (p_cell.Value2 == null || (double)p_cell.Value2 == l_fact.Value)
+        if (p_cell.Value2 != null && (double)p_cell.Value2 == l_fact.Value)
           return (null);
-        l_fact.Value = (double)p_cell.Value2;
+
+        if (p_cell.Value2 == null)
+          l_fact.Value = 0;
+        else
+          l_fact.Value = (double)p_cell.Value2;
+        
         m_needRefresh = true;
         return l_fact;
       }

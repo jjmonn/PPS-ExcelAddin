@@ -225,7 +225,7 @@
       <Value Profile="(Default)">207, 237, 222</Value>
     </Setting>
     <Setting Name="FactsEditionDimensionsFill" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">PaleTurquoise</Value>
+      <Value Profile="(Default)">PowderBlue</Value>
     </Setting>
     <Setting Name="includeWeekEnds" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
