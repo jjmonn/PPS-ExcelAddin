@@ -950,21 +950,20 @@ Friend Class ControllingUI_2
             Me.Invoke(MyDelegate, New Object() {})
         Else
             Dim dgvFormatter As New DataGridViewsUtil
-            For Each tab_ As vTabPage In DGVsControlTab.TabPages
-                If tab_.Controls.Count <= 0 Then Continue For
-                Dim dgv As vDataGridView = tab_.Controls(0)
-                dgv.Select()
-                dgv.GroupingDefaultHeaderTextVisible = True
-                dgv.BackColor = Color.White
-                dgv.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_NONE
-                dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+            For Each l_tab As vTabPage In DGVsControlTab.TabPages
+                If l_tab.Controls.Count <= 0 Then Continue For
+                Dim l_dgv As vDataGridView = l_tab.Controls(0)
+                l_dgv.Select()
+                l_dgv.GroupingDefaultHeaderTextVisible = True
+                l_dgv.BackColor = Color.White
+                l_dgv.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_NONE
                 '    dgv.RowsHierarchy.AllowResize = False
-                dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
-                dgv.ColumnsHierarchy.ExpandAllItems()
+                l_dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
+                l_dgv.ColumnsHierarchy.ExpandAllItems()
                 '     dgv.ColumnsHierarchy.AutoStretchColumns = True
-                dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-                dgv.Refresh()
-                dgv.Select()
+                l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                l_dgv.Refresh()
+                l_dgv.Select()
             Next
         End If
 
@@ -993,6 +992,56 @@ Friend Class ControllingUI_2
         End If
 
     End Sub
+
+    Delegate Sub DeleteNonUsedClientsRH_Delegate()
+    Friend Sub DeleteNonUsedClientsRH()
+
+        If Me.m_accountsTreeview.InvokeRequired Then
+            Dim MyDelegate As New DeleteNonUsedClientsRH_Delegate(AddressOf DeleteNonUsedClientsRH)
+            Me.m_accountsTreeview.Invoke(MyDelegate, New Object() {})
+        Else
+            For Each l_tab As vTabPage In DGVsControlTab.TabPages
+                If l_tab.Controls.Count <= 0 Then Continue For
+                Dim l_dgv As vDataGridView = l_tab.Controls(0)
+                l_dgv.Select()
+                For Each l_row In l_dgv.RowsHierarchy.Items
+                    DeleteUnusedClientsRows(l_row)
+                Next
+                l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                l_dgv.Refresh()
+            Next
+        End If
+
+    End Sub
+
+    Private Sub DeleteUnusedClientsRows(ByRef p_row As HierarchyItem)
+
+        If GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, p_row.Caption) IsNot Nothing Then
+            Dim l_parent As HierarchyItem = p_row.ParentItem
+            If IsZeroRow(p_row) = True _
+             AndAlso l_parent IsNot Nothing Then
+                l_parent.Items.Remove(p_row)
+                p_row = Nothing
+            End If
+        End If
+        If p_row IsNot Nothing Then
+            For Each l_subItem In p_row.Items.ToList
+                If l_subItem IsNot Nothing Then DeleteUnusedClientsRows(l_subItem)
+            Next
+        End If
+
+    End Sub
+
+    Private Function IsZeroRow(ByRef p_row As HierarchyItem) As Boolean
+        For Each item In p_row.Cells
+            If TypeOf (item.Value) Is Double _
+            AndAlso item.Value <> 0 Then Return (False)
+            '    If TypeOf (item.Value) Is String _
+            '    AndAlso item.Value <> "" Then Return (False)
+        Next
+        Return (True)
+    End Function
+
 
 #End Region
 

@@ -435,7 +435,7 @@ Public Class ReportUploadControler
         End If
 
         On Error GoTo errorHandler
-        GlobalVariables.APPS.Interactive = False
+        '   GlobalVariables.APPS.Interactive = False
         m_dataset.RegisterDimensionsToCellDictionary()
         m_dataModificationsTracker.HighlightsFPIOutputPart()
         If m_mustUpdateExcelWorksheetFromDataBase = True Then
