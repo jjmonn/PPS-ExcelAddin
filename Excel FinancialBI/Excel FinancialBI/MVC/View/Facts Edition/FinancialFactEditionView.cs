@@ -31,6 +31,15 @@ namespace FBI.MVC.View
     {
       base.SuscribeEvents();
       FactsModel.Instance.UpdateEvent += OnCommitResult;
+      m_controller.WorksheetSelectionChanged += OnWorksheetSelectionChanged;
+    }
+
+    void OnWorksheetSelectionChanged(Range p_range)
+    {
+      Account l_account = m_areaController.GetAccount(p_range);
+
+      if (l_account != null)
+        m_controller.DisplayAccountSP(l_account);
     }
 
     protected override void SetEditedFactsStatus()

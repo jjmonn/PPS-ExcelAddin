@@ -26,6 +26,7 @@ namespace FBI.MVC.Controller
       RHAccountId = p_RHAccountId;
       EditedFactModel = new RHEditedFactsModel(p_periodsList, p_worksheet);
       m_view = new RHFactEditionView(this, p_worksheet);
+      m_statusView = new StatusReportInterfaceUI(EditedFactModel);
     }
 
     public override void Close()

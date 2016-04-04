@@ -17,9 +17,11 @@ namespace FBI.MVC.Controller
   {
     void RaiseWorksheetChangingEvent(Range p_cell);
     void RaiseWorksheetChangedEvent();
+    void RaiseWorksheetSelectionChangedEvent(Range p_range);
     bool Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     void Close();
     void CommitFacts();
+    void ShowStatusView();
     bool AutoCommit { get; set; }
   }
 
@@ -36,8 +38,11 @@ namespace FBI.MVC.Controller
     public event OnWorksheetChangingHandler WorksheetChanging;
     public delegate void OnWorksheetChanged();
     public event OnWorksheetChanged WorksheetChanged;
+    public delegate void OnWorksheetSelectionChangedHandler(Range p_range);
+    public event OnWorksheetSelectionChangedHandler WorksheetSelectionChanged;
     public bool AutoCommit { get; set; }
     public UInt32 RHAccountId { get; set; }
+    protected StatusReportInterfaceUI m_statusView;
 
     public AFactEditionController(AddinModuleController p_addinModuleController, Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
     {
@@ -45,6 +50,12 @@ namespace FBI.MVC.Controller
       VersionId = p_versionId;
       Process = p_process;
       RHAccountId = 0;
+    }
+
+    public void RaiseWorksheetSelectionChangedEvent(Range p_range)
+    {
+      if (WorksheetSelectionChanged != null)
+        WorksheetSelectionChanged(p_range);
     }
 
     public void RaiseWorksheetChangingEvent(Range p_cell)
@@ -80,6 +91,14 @@ namespace FBI.MVC.Controller
     {
       View.Close();
       EditedFactModel.Close();
+      if (m_statusView != null)
+        m_statusView.Close();
+    }
+
+    public void ShowStatusView()
+    {
+      if (m_statusView != null)
+        m_statusView.Show();
     }
 
     private void OnCommitError(string p_address, ErrorMessage p_error)

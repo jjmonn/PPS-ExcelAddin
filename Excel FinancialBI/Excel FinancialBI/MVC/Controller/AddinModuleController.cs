@@ -58,12 +58,12 @@ namespace FBI.MVC.Controller
         return false;
     }
 
-    public bool LaunchFinancialSnapshot(bool p_updateCells, UInt32 p_versionId)
+    public bool LaunchFinancialSnapshot(bool p_displayDiff, bool p_updateCells, UInt32 p_versionId)
     {
         m_view.InitFinancialSubmissionRibon();
         FinancialFactEditionController l_editionController = new FinancialFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet);
         m_factsEditionController = l_editionController;
-        bool l_result = m_factsEditionController.Launch(p_updateCells, true, SubmissionClientId, 
+        bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayDiff, SubmissionClientId, 
           SubmissionProductId, SubmissionAdjustmentId);
         if (l_result)
           m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.VersionId);
@@ -99,6 +99,12 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.no_version_selected");
         return false;
       }
+    }
+
+    public void ShowStatusView()
+    {
+      if (m_factsEditionController != null)
+        m_factsEditionController.ShowStatusView();
     }
 
     public bool AssociateExcelWorksheetEvents(Worksheet p_worksheet)

@@ -588,6 +588,7 @@
       this.m_financialSubmissionSatusButton.ImageList = this.LightsImageList;
       this.m_financialSubmissionSatusButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_financialSubmissionSatusButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_financialSubmissionSatusButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialSubmissionSatusButton_OnClick);
       // 
       // StateSelectionGroup
       // 

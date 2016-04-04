@@ -52,6 +52,7 @@ namespace FBI
 
     public override void ProcessSelectionChange(object target)
     {
+      m_factsEditionController.RaiseWorksheetSelectionChangedEvent(target as Range);
     }
 
     #region Unused events

@@ -23,6 +23,7 @@ namespace FBI.MVC.Model
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
+    bool m_displayDiff = true;
     bool m_needRefresh = false;
 
     #region Initialize
@@ -56,6 +57,7 @@ namespace FBI.MVC.Model
       Dimension<CRUDEntity> l_horitontal = p_dimensions.Dimensions[p_dimensions.Orientation.Horizontal];
       Dimension<CRUDEntity> l_tabDimension = p_dimensions.Dimensions[p_dimensions.Orientation.TabDimension];
 
+      m_displayDiff = p_displayInitialDifferences;
       CreateEditedFacts(l_vertical, l_horitontal, l_tabDimension);
     }
 
@@ -129,7 +131,10 @@ namespace FBI.MVC.Model
         EditedFinancialFact l_EditedFact = EditedFacts[l_dimensionKey];
         if (l_EditedFact != null)
         {
+          double l_editedValue = l_EditedFact.EditedValue;
           l_EditedFact.UpdateFinancialFact(l_fact);
+          if (m_displayDiff)
+            l_EditedFact.EditedValue = l_editedValue;
           if (m_updateCellsOnDownload)
             l_EditedFact.Cell.Value2 = l_EditedFact.Value;
         }

@@ -14,7 +14,7 @@ namespace FBI.MVC.Model
   public delegate void OnFactsDownloaded(bool p_success);
   public delegate void FactsCommitError(string p_address, ErrorMessage p_error);
 
-  abstract class AEditedFactsModel
+  abstract public class AEditedFactsModel
   {
     public List<int> RequestIdList { get; private set; }
     public event OnFactsDownloaded FactsDownloaded;

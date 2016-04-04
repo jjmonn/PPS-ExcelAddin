@@ -62,6 +62,23 @@ namespace FBI.MVC.Model
         Dimensions[l_dim].m_values.Clear();
     }
 
+    public Account GetAccount(Range p_cell)
+    {
+      foreach (KeyValuePair<string, CRUDEntity> l_pair in Accounts.m_values)
+      {
+        Range l_range = m_worksheet.get_Range(l_pair.Key);
+
+        if (l_range != null)
+        {
+          if (Orientation.Vertical == DimensionType.ACCOUNT && l_range.Row == p_cell.Row)
+            return (l_pair.Value as Account);
+          else if (Orientation.Horizontal == DimensionType.ACCOUNT && l_range.Column == p_cell.Column)
+            return (l_pair.Value as Account);
+        }
+      }
+      return (null);
+    }
+
     #region Dimensions identification methods
 
     public void DimensionsIdentify(Range p_cell)

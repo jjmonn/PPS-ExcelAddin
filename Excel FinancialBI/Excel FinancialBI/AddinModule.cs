@@ -259,7 +259,7 @@ namespace FBI
         SubmissionVersionName = l_version.Name;
         if (l_process == Account.AccountProcess.FINANCIAL)
         {
-          if (m_controller.LaunchFinancialSnapshot(false, l_version.Id) == false)
+          if (m_controller.LaunchFinancialSnapshot(true, false, l_version.Id) == false)
             MessageBox.Show(m_controller.Error);
         }
         else
@@ -517,6 +517,11 @@ namespace FBI
     }
 
     #endregion
+
+    private void m_financialSubmissionSatusButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.ShowStatusView();
+    }
 
   }
 }
