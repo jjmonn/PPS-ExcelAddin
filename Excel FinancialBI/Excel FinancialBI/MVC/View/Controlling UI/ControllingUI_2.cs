@@ -24,6 +24,8 @@ namespace FBI.MVC.View
     #region Variables
 
     private CUIController m_controller = null;
+    private int m_leftDistance = 30;
+    private int m_rightDistance = 30;
 
     #endregion
 
@@ -67,6 +69,46 @@ namespace FBI.MVC.View
       m_versionSwitchButton.MouseDown += OnVersionSwitchButtonMouseDown;
       m_hideVersionButton.MouseDown += OnHideVersionButtonMouseDown;
       m_chartBT.MouseDown += OnChartButtonMouseDown;
+      m_expandLeftBT.MouseDown += OnExpandLeftPane;
+      m_expandRightBT.MouseDown += OnExpandRightPane;
+    }
+
+    public void OnExpandLeftPane(object p_sender, MouseEventArgs p_e)
+    {
+      CUI2LeftPane l_leftPane = this.m_controller.LeftPaneController.View as CUI2LeftPane;
+
+      if (l_leftPane.Visible)
+      {
+        l_leftPane.Visible = false;
+        m_leftDistance = SplitContainer1.SplitterDistance;
+        SplitContainer1.SplitterDistance = 30;
+        m_expandLeftBT.Text = "+";
+      }
+      else
+      {
+        l_leftPane.Visible = true;
+        SplitContainer1.SplitterDistance = m_leftDistance;
+        m_expandLeftBT.Text = "-";
+      }
+    }
+
+    public void OnExpandRightPane(object p_sender, MouseEventArgs p_e)
+    {
+      CUI2RightPane l_rightPane = this.m_controller.RightPaneController.View as CUI2RightPane;
+
+      if (l_rightPane.Visible)
+      {
+        l_rightPane.Visible = false;
+        m_rightDistance = SplitContainer2.SplitterDistance;
+        SplitContainer2.SplitterDistance = m_rightDistance + l_rightPane.Width - 30;
+        m_expandRightBT.Text = "+";
+      }
+      else
+      {
+        l_rightPane.Visible = true;
+        SplitContainer2.SplitterDistance = m_rightDistance;
+        m_expandRightBT.Text = "-";
+      }
     }
 
     override protected void OnClosed(EventArgs e)
