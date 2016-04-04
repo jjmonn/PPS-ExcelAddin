@@ -913,7 +913,7 @@ namespace FBI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PaleTurquoise")]
+        [global::System.Configuration.DefaultSettingValueAttribute("PowderBlue")]
         public global::System.Drawing.Color FactsEditionDimensionsFill {
             get {
                 return ((global::System.Drawing.Color)(this["FactsEditionDimensionsFill"]));
