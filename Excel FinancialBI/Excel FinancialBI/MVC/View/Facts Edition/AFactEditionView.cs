@@ -156,7 +156,7 @@ namespace FBI.MVC.View
       }
     }
 
-    protected void OnFactsDownloaded(bool p_success)
+    protected virtual void OnFactsDownloaded(bool p_success)
     {
       if (p_success == true)
       {

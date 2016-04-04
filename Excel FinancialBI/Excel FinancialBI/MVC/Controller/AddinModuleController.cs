@@ -22,6 +22,7 @@ namespace FBI.MVC.Controller
     public string Error { get; set; }
     // SidePanesControllers
 
+    private static bool m_interactive = true;
     private UInt32 m_submissionClientId;
     private UInt32 m_submissionProductId;
     private UInt32 m_submissionAdjustmentId;
@@ -158,7 +159,19 @@ namespace FBI.MVC.Controller
 
     public static void SetExcelInteractionState(bool p_state)
     {
-      AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
+      try
+      {
+        lock (AddinModule.CurrentInstance.ExcelApp)
+        {
+          if (m_interactive != p_state)
+            AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
+          m_interactive = p_state;
+        }
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("AddinModuleController.SetExcelInteractionState: " + e.Message);
+      }
       System.Diagnostics.Debug.WriteLine("Excel interaction set to " + p_state.ToString());
     }
 

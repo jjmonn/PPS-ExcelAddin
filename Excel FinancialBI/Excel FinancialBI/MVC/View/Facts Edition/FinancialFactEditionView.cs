@@ -70,6 +70,15 @@ namespace FBI.MVC.View
         MsgBox.Show(Local.GetValue("upload.error.commit_failed") + ": " + Error.GetMessage(p_status));
     }
 
+    protected override void OnFactsDownloaded(bool p_success)
+    {
+      base.OnFactsDownloaded(p_success);
+      AddinModuleController.SetExcelInteractionState(false);
+      foreach (EditedFinancialFact l_fact in m_model.OutputFacts.Values)
+        m_rangeHighlighter.FillCellColor(l_fact.Cell, EditedFactStatus.OutputEqual);
+      AddinModuleController.SetExcelInteractionState(true);
+    }
+
     #endregion
   }
 }

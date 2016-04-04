@@ -39,6 +39,10 @@ namespace FBI.MVC.View
           FillOutputCellRed(p_cell);
           break;
 
+        case EditedFactStatus.OutputEqual :
+          FillOutputBaseColor(p_cell);
+          break;
+
         case EditedFactStatus.InputEqual :
           FillInputsBaseColor(p_cell);
           break;
@@ -79,6 +83,14 @@ namespace FBI.MVC.View
           l_cell.Interior.Color = Properties.Settings.Default.FactsEditionDimensionsFill;
         }
       }
+    }
+
+    public void FillOutputBaseColor(Range p_cell)
+    {
+      if (p_cell == null)
+        return;
+      RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionOutputsBackColor;
     }
 
     public void FillInputsBaseColor(Range p_cell)
