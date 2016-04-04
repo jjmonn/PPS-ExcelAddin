@@ -13,7 +13,8 @@ namespace FBI
   public class ExcelWorksheetEvents : AddinExpress.MSO.ADXExcelWorksheetEvents
   {
     IFactEditionController m_factsEditionController;
-    private UInt16 MAX_NB_ROWS = 16384;
+    private const UInt16 MAX_NB_ROWS = 16384;
+    private bool m_editing = false;
 
     public ExcelWorksheetEvents(AddinExpress.MSO.ADXAddinModule module)
       : base(module)
@@ -27,8 +28,11 @@ namespace FBI
 
     public override void ProcessChange(object target)
     {
+      if (m_editing)
+        return;
       try
       {
+        m_editing = true;
         Range l_range = target as Range;
         if (l_range != null && m_factsEditionController != null)
         {
@@ -38,9 +42,11 @@ namespace FBI
             m_factsEditionController.RaiseWorksheetChangingEvent(l_cell);
         }
         m_factsEditionController.RaiseWorksheetChangedEvent();
+        m_editing = false;
       }
       catch(Exception e)
       {
+        m_editing = false;
         System.Diagnostics.Debug.WriteLine("Worksheet change event error: " + e.Message);
       }
     }
