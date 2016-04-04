@@ -54,6 +54,8 @@ namespace FBI.MVC.View
 
     private void OnCommitResult(ErrorMessage p_status, CRUDAction p_action, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultDic)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       if (p_status == ErrorMessage.SUCCESS)
       {
         foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_pair in p_resultDic)
@@ -72,6 +74,8 @@ namespace FBI.MVC.View
 
     protected override void OnFactsDownloaded(bool p_success)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       base.OnFactsDownloaded(p_success);
       AddinModuleController.SetExcelInteractionState(false);
       foreach (EditedFinancialFact l_fact in m_model.OutputFacts.Values)

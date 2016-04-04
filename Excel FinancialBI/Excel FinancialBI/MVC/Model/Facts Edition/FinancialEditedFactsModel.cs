@@ -45,6 +45,8 @@ namespace FBI.MVC.Model
 
     public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       m_dimensions = p_dimensions;
       m_versionId = p_versionId;
 
@@ -125,6 +127,8 @@ namespace FBI.MVC.Model
 
     private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_factsList)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       if (p_status != ErrorMessage.SUCCESS)
       {
         RaiseFactDownloaded(false);
@@ -190,6 +194,8 @@ namespace FBI.MVC.Model
 
     private void OnFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       if (p_status == ErrorMessage.SUCCESS)
       {
         AddinModuleController.SetExcelInteractionState(false);

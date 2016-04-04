@@ -325,6 +325,7 @@
 	  <string name="title_client_selection">Selection des Clients</string>
 	  <string name="title_upload_error_messages">Erreur d'import</string>
 
+    <string name="msg_error_worksheet_closed">La worksheet n'existe plus.</string>
     <string name="msg_invalidEntity">L'entité sélectionée n'est pas valide.</string>
     <string name="msg_invalidRHAccount">Le compte sélectionné n'est pas valide.</string>
     <string name="msg_select_entity">Une entité doit êter sélectionnée.</string>

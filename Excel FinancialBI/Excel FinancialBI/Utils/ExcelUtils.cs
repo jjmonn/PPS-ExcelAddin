@@ -16,6 +16,20 @@ namespace FBI.Utils
   {
     public const Int32 EXCEL_SHEET_NAME_MAX_LENGHT = 30;
 
+    public static bool IsWorksheetOpened(Worksheet p_worksheet)
+    {
+      try
+      {
+        if (p_worksheet.Name == "") { } // try to access property, if an exception is thrown => the worksheet is closed
+        return (true);
+      }
+      catch
+      {
+        AddinModule.CurrentInstance.ExcelApp.Interactive = true;
+        return (false);
+      }
+    }
+
     public static Range CreateReceptionWS(string p_name, string[] p_headerNamesArray, string[] p_headerValuesArray)
     {
       Workbook l_workbook =   AddinModule.CurrentInstance.ExcelApp.ActiveWorkbook;

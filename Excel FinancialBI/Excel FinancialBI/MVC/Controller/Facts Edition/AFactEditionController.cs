@@ -23,6 +23,7 @@ namespace FBI.MVC.Controller
     void CommitFacts();
     void ShowStatusView();
     bool AutoCommit { get; set; }
+    Worksheet Worksheet { get; set; }
   }
 
   abstract class AFactEditionController<TModel> : IFactEditionController where TModel : AEditedFactsModel
@@ -43,9 +44,11 @@ namespace FBI.MVC.Controller
     public bool AutoCommit { get; set; }
     public UInt32 RHAccountId { get; set; }
     protected StatusReportInterfaceUI m_statusView;
+    public Worksheet Worksheet { get; set; }
 
     public AFactEditionController(AddinModuleController p_addinModuleController, Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
     {
+      Worksheet = p_worksheet;
       AddinController = p_addinModuleController;
       VersionId = p_versionId;
       Process = p_process;
