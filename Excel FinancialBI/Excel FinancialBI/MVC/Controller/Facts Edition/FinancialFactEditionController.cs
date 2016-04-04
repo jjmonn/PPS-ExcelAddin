@@ -25,7 +25,7 @@ namespace FBI.MVC.Controller
       EditedFactModel = new FinancialEditedFactsModel(p_worksheet);
       m_view = new FinancialFactEditionView(this, p_worksheet);
       m_view.LoadView();
-      m_accountSP = new ReportUploadAccountInfoSidePane();
+      m_accountSP = AddinModule.CurrentInstance.ReportUploadAccountInfoSidePane;
       m_statusView = new StatusReportInterfaceUI(EditedFactModel);
       FactsModel.Instance.UpdateEvent += OnCommitResult;
     }
@@ -39,8 +39,8 @@ namespace FBI.MVC.Controller
     public void DisplayAccountSP(Account p_account)
     {
       m_accountSP.SelectAccount(p_account);
-   /*   m_accountSP.Visible = true;
-      m_accountSP.Show();*/
+      m_accountSP.Visible = true;
+      m_accountSP.Show();
     }
 
     private void OnCommitResult(ErrorMessage p_status, CRUDAction p_action, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultDic)
