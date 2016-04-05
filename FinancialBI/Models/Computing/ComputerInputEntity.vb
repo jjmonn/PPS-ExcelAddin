@@ -87,6 +87,7 @@ Public Class ComputerInputEntity
                 l_packet.WriteUint32(l_entityCurrency.CurrencyId)                               ' currency_id
                 l_packet.WriteUint32(l_version.StartPeriod)
                 l_packet.WriteUint32(l_version.NbPeriod)
+                l_packet.WriteUint32(0) ' nb accounts
 
                 l_packet.WriteUint32(p_entitiesIdInputsValues(l_entityId).Length)
                 For i = 0 To p_entitiesIdInputsValues(l_entityId).Length - 1
