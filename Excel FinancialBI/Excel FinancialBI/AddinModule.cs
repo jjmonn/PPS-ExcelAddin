@@ -414,10 +414,20 @@ namespace FBI
 
     void OnAddinInitializationEvent()
     {
+      ClientsDropDown.OnAction += OnAxisSelectionChanged;
+      ProductsDropDown.OnAction += OnAxisSelectionChanged;
+      AdjustmentDropDown.OnAction += OnAxisSelectionChanged;
       fbiRibbonChangeState(true);
       SetFinancialRibbonState(true);
       SetRHRibbonState(true);
       Addin.VersionId = Properties.Settings.Default.version_id;
+    }
+
+    void OnAxisSelectionChanged(object p_sender, IRibbonControl p_control, string p_selectedId, int p_selectedIndex)
+    {
+      DialogResult l_result = MessageBox.Show(Local.GetValue("upload.change_axis_elem"), "", MessageBoxButtons.YesNo);
+
+      m_controller.ReloadReportUpload(l_result == DialogResult.No);
     }
 
     private void OnConnectionEvent(bool p_connected)
@@ -501,6 +511,10 @@ namespace FBI
       {
         ClientsDropDown.SelectedItemId = value.ToString();
       }
+      get
+      {
+        return (UInt32.Parse(ClientsDropDown.SelectedItemId));
+      }
     }
 
     public UInt32 SubmissionProductId
@@ -509,6 +523,10 @@ namespace FBI
       {
         ProductsDropDown.SelectedItemId = value.ToString();
       }
+      get
+      {
+        return (UInt32.Parse(ProductsDropDown.SelectedItemId));
+      }
     }
 
     public UInt32 SubmissionAdjustmentId
@@ -516,6 +534,10 @@ namespace FBI
       set
       {
         AdjustmentDropDown.SelectedItemId = value.ToString();
+      }
+      get
+      {
+        return (UInt32.Parse(AdjustmentDropDown.SelectedItemId));
       }
     }
 

@@ -42,6 +42,7 @@ namespace FBI.MVC.Model
       m_periodsList = p_periodsList;
       PreviousWeeksFacts = new SafeDictionary<DimensionKey, Fact>();
       IdEditedFactDict = new SafeDictionary<UInt32, EditedRHFact>();
+      FactsModel.Instance.ReadEvent += OnFactsDownloaded;
     }
 
     public override void Commit()
@@ -51,6 +52,7 @@ namespace FBI.MVC.Model
 
     public override void Close()
     {
+      FactsModel.Instance.ReadEvent -= OnFactsDownloaded;
     }
 
     public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
@@ -100,8 +102,8 @@ namespace FBI.MVC.Model
       UInt32 l_accountId = m_RHAccountId;
       UInt32 l_entityId = 0;
       UInt32 l_clientId = 0;
-      UInt32 l_productId = (UInt32)AxisType.Product;
-      UInt32 l_adjustmentId = (UInt32)AxisType.Adjustment;
+      UInt32 l_productId = ProductId;
+      UInt32 l_adjustmentId = AdjustmentId;
       UInt32 l_employeeId = 0;
       PeriodDimension l_period = null;
 
@@ -228,6 +230,11 @@ namespace FBI.MVC.Model
     }
 
     public override double? CellBelongToOutput(Range p_cell)
+    {
+      return (null);
+    }
+
+    public override double? CellBelongToInput(Range p_cell)
     {
       return (null);
     }

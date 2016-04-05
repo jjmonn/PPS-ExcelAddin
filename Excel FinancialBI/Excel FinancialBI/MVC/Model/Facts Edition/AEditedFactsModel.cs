@@ -20,11 +20,25 @@ namespace FBI.MVC.Model
     public event OnFactsDownloaded FactsDownloaded;
     protected Worksheet m_worksheet;
     public event FactsCommitError OnCommitError;
+    public UInt32 ClientId { get; set; }
+    public UInt32 ProductId { get; set; }
+    public UInt32 AdjustmentId { get; set; }
+    public UInt32 EmployeeId { get; set; }
+    protected bool m_factDownloaded = false;
 
     protected AEditedFactsModel(Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
       RequestIdList = new List<int>();
+      ClientId = (UInt32)AxisType.Client;
+      ProductId = (UInt32)AxisType.Product;
+      AdjustmentId = (UInt32)AxisType.Adjustment;
+      EmployeeId = (UInt32)AxisType.Employee;
+    }
+
+    public void Reload()
+    {
+      m_factDownloaded = false;
     }
 
     public abstract void Close();
@@ -38,11 +52,15 @@ namespace FBI.MVC.Model
     public abstract void Refresh();
 
     public abstract double? CellBelongToOutput(Range p_cell);
+    public abstract double? CellBelongToInput(Range p_cell);
     
     public abstract void Commit();
 
     public void RaiseFactDownloaded(bool p_success)
     {
+      if (m_factDownloaded == true)
+        return;
+      m_factDownloaded = p_success;
       if (FactsDownloaded != null)
         FactsDownloaded(p_success);
     }

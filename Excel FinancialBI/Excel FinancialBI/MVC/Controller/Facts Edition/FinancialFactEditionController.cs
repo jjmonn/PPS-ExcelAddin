@@ -34,6 +34,7 @@ namespace FBI.MVC.Controller
     {
       base.Close();
       FactsModel.Instance.UpdateEvent -= OnCommitResult;
+      m_accountSP.Hide();
     }
 
     public void DisplayAccountSP(Account p_account)

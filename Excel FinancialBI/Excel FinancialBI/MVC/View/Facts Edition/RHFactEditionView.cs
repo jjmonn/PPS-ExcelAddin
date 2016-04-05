@@ -16,6 +16,7 @@ namespace FBI.MVC.View
   class RHFactEditionView : AFactEditionView<RHEditedFactsModel, RHFactEditionController>
   {
     RHEditedFactsModel m_model;
+    public RangeHighlighter RangeHighlighter { get { return (m_rangeHighlighter); } }
 
     public RHFactEditionView(RHFactEditionController p_controller, Worksheet p_worksheet) : base(p_controller, p_worksheet)
     {

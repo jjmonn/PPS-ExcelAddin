@@ -76,10 +76,11 @@ namespace FBI.MVC.View
     {
       if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
         return;
-      base.OnFactsDownloaded(p_success);
       AddinModuleController.SetExcelInteractionState(false);
-      foreach (EditedFinancialFact l_fact in m_model.OutputFacts.Values)
-        m_rangeHighlighter.FillCellColor(l_fact.Cell, EditedFactStatus.OutputEqual);
+      if (m_init == false)
+        foreach (EditedFinancialFact l_fact in m_model.OutputFacts.Values)
+          m_rangeHighlighter.FillCellColor(l_fact.Cell, EditedFactStatus.OutputEqual);
+      base.OnFactsDownloaded(p_success);
       AddinModuleController.SetExcelInteractionState(true);
     }
 

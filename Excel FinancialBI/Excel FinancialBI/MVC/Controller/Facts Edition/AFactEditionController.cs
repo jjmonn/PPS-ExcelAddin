@@ -22,6 +22,7 @@ namespace FBI.MVC.Controller
     void Close();
     void CommitFacts();
     void ShowStatusView();
+    void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     bool AutoCommit { get; set; }
     Worksheet Worksheet { get; set; }
   }
@@ -61,6 +62,15 @@ namespace FBI.MVC.Controller
         WorksheetSelectionChanged(p_range);
     }
 
+    public void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    {
+      EditedFactModel.Reload();
+      EditedFactModel.ClientId = p_clientId;
+      EditedFactModel.ProductId = p_productId;
+      EditedFactModel.AdjustmentId = p_adjustmentId;
+      View.Reload(p_updateCells, p_displayInitialDifferences, p_clientId, p_productId, p_adjustmentId);
+    }
+
     public void RaiseWorksheetChangingEvent(Range p_cell)
     {
       if (WorksheetChanging != null)
@@ -76,6 +86,7 @@ namespace FBI.MVC.Controller
     public void DownloadFacts(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       AddinModuleController.SetExcelInteractionState(false);
+      EditedFactModel.Reload();
       EditedFactModel.DownloadFacts(PeriodsList, p_updateCells, p_clientId, p_productId, p_adjustmentId);
     }
 
@@ -85,7 +96,7 @@ namespace FBI.MVC.Controller
       return (Error == "");
     }
 
-    public void CommitFacts()
+    public virtual void CommitFacts()
     {
       EditedFactModel.Commit();
     }

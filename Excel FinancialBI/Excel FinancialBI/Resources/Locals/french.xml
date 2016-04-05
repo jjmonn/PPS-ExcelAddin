@@ -301,6 +301,7 @@
   
 
   <category name="upload">
+    <string name="change_axis_elem">Voulez vous télécharger les données correspondantes à cet ajustement/ produit/ client (attention les données non envoyées seront perdues)</string>
     <string name="periods">Périodes</string>
     <string name="rates">Taux</string>
     <string name="values">Valeurs</string>

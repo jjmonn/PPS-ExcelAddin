@@ -19,6 +19,7 @@ namespace FBI.MVC.View
     void Close();
     void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     string Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
+    void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
   }
 
   abstract class AFactEditionView<TModel, TController> : IFactEditionView where TModel : AEditedFactsModel
@@ -31,6 +32,7 @@ namespace FBI.MVC.View
     protected RangeHighlighter m_rangeHighlighter;
     protected WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     protected WorksheetAreaController m_areaController;
+    protected bool m_init = false;
 
     public AFactEditionView(TController p_controller, Worksheet p_worksheet)
     {
@@ -75,6 +77,12 @@ namespace FBI.MVC.View
       ActivateFactEditionRibbon();
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
       m_rangeHighlighter.FillDimensionColor(m_areaController);
+    }
+
+    public void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    {
+      m_controller.EditedFactModel.RegisterEditedFacts(m_areaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
+      m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
     }
 
     public string Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
@@ -135,7 +143,8 @@ namespace FBI.MVC.View
       if (l_result != "")
         p_cell.Value2 = l_result;
       double? l_result2 = m_model.CellBelongToOutput(p_cell);
-
+      if (l_result2 == null)
+        l_result2 = m_model.CellBelongToInput(p_cell); 
       if (l_result2 != null)
         p_cell.Value2 = l_result2;
       IsEditingExcel = false;
@@ -163,10 +172,10 @@ namespace FBI.MVC.View
     {
       if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
         return;
-      if (p_success == true)
+      if (p_success == true && m_init == false)
       {
+        m_init = true;
         m_controller.AddinController.AssociateExcelWorksheetEvents(m_worksheet);
-        m_model.FactsDownloaded -= OnFactsDownloaded;
       }
       SetEditedFactsStatus();
     }

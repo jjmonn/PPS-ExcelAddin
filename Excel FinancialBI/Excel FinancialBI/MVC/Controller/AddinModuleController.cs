@@ -23,23 +23,22 @@ namespace FBI.MVC.Controller
     // SidePanesControllers
 
     private static bool m_interactive = true;
-    private UInt32 m_submissionClientId;
     private UInt32 m_submissionProductId;
     private UInt32 m_submissionAdjustmentId;
     public UInt32 SubmissionClientId
     {
-      get { return (m_submissionClientId); }
-      set { m_view.SubmissionClientId = (m_submissionClientId = value); }
+      get { return (m_view.SubmissionClientId); }
+      set { m_view.SubmissionClientId = value; }
     }
     public UInt32 SubmissionProductId
     {
-      get { return (m_submissionProductId); }
-      set { m_view.SubmissionProductId = (m_submissionProductId = value); }
+      get { return (m_view.SubmissionProductId); }
+      set { m_view.SubmissionProductId = value; }
     }
     public UInt32 SubmissionAdjustmentId
     {
-      get { return (m_submissionAdjustmentId); }
-      set { m_view.SubmissionAdjustmentId = (m_submissionAdjustmentId = value); }
+      get { return (m_view.SubmissionAdjustmentId); }
+      set { m_view.SubmissionAdjustmentId = value; }
     }
 
     public AddinModuleController(AddinModule p_view)
@@ -121,6 +120,11 @@ namespace FBI.MVC.Controller
       return false;
      }
 
+    public void ReloadReportUpload(bool p_displayInitialDifferences)
+    {
+      m_factsEditionController.Reload(!p_displayInitialDifferences, p_displayInitialDifferences, SubmissionClientId, SubmissionProductId, SubmissionAdjustmentId);
+    }
+
     public bool FactsSubmission()
     {
       if (m_factsEditionController == null)
@@ -163,8 +167,9 @@ namespace FBI.MVC.Controller
       {
         lock (AddinModule.CurrentInstance.ExcelApp)
         {
-          if (m_interactive != p_state)
-            AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
+          if (m_interactive == p_state)
+            return;
+          AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
           m_interactive = p_state;
         }
       }

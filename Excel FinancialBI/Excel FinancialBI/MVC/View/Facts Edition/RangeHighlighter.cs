@@ -16,7 +16,7 @@ namespace FBI.MVC.View
   public class RangeHighlighter
   {
     Int32 DIMENSIONS_COLORS = Color.FromArgb(215, 239, 253).ToArgb();
-    SafeDictionary<Range, Object> m_originalCellsColor = new SafeDictionary<Range, Object>();
+    SafeDictionary<string, Object> m_originalCellsColor = new SafeDictionary<string, Object>();
     Worksheet m_worksheet;
 
     public RangeHighlighter(Worksheet p_worksheet)
@@ -74,9 +74,9 @@ namespace FBI.MVC.View
     {
       foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
       {
-        foreach (string l_cellAdress in p_areaController.Dimensions[l_dim].m_values.Keys)
+        foreach (KeyValuePair<string, CRUDEntity> l_pair in p_areaController.Dimensions[l_dim].m_values)
         {
-          Range l_cell = m_worksheet.Range[l_cellAdress];
+          Range l_cell = m_worksheet.Range[l_pair.Key];
           if (l_cell == null)
             return;
           RegisterCellOriginalFill(l_cell);
@@ -141,17 +141,20 @@ namespace FBI.MVC.View
 
     private void RegisterCellOriginalFill(Range p_cell)
     {
-      if (!m_originalCellsColor.ContainsKey(p_cell)) // only add if color has not been yet changed
-        m_originalCellsColor.Add(p_cell, p_cell.Interior.Color); 
+      if (!m_originalCellsColor.ContainsKey(p_cell.Address)) // only add if color has not been yet changed
+        m_originalCellsColor.Add(p_cell.Address, p_cell.Interior.Color); 
     }
 
     public void RevertToOriginalColors()
     {
-      foreach (KeyValuePair<Range, Object> l_keyPair in m_originalCellsColor)
+      foreach (KeyValuePair<string, Object> l_keyPair in m_originalCellsColor)
       {
         try
         {
-          l_keyPair.Key.Interior.Color = l_keyPair.Value;
+          Range l_cell = m_worksheet.get_Range(l_keyPair.Key);
+
+          if (l_cell != null)
+            l_cell.Interior.Color = l_keyPair.Value;
         }
         catch (Exception e)
         {
