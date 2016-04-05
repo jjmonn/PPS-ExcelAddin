@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
 {
@@ -17,6 +18,7 @@ namespace FBI.MVC.View
   public partial class SettingsView : Form, IView
   {
     SettingsController m_controller;
+    SafeDictionary<int, ListItem> m_languagesItems = new SafeDictionary<int,ListItem>();
 
     public SettingsView()
     {
@@ -35,8 +37,8 @@ namespace FBI.MVC.View
         m_portNumberLabel.Text = Local.GetValue("settings.port_number");
         m_userIdLabel.Text = Local.GetValue("connection.user_id");
         m_saveConnectionButton.Text = Local.GetValue("general.save");
-        m_formatsGroup.Text = Local.GetValue("settings.report_formats");
-        m_consolidationCurrencyLabel.Text = Local.GetValue("settings.report_formats");
+        m_formatsGroup.Text = Local.GetValue("settings.report_format");
+        m_consolidationCurrencyLabel.Text = Local.GetValue("settings.report_format");
         m_languageLabel.Text = Local.GetValue("settings.language");
         m_otherValidateButton.Text = Local.GetValue("general.save");
         m_connectionTab.Text = Local.GetValue("connection.connection");
@@ -60,10 +62,34 @@ namespace FBI.MVC.View
     public void LoadView()
     {
       MultilanguageSetup();
-      m_serverAddressTB.Text = Settings.Default.serverIp;
-      m_portTB.Text = Settings.Default.port_number.ToString();
-      m_userTB.Text = Settings.Default.user;
+      LoadConnectionTab();
+      LoadOtherTab();
       SuscribeEvents();
+    }
+
+    void LoadOtherTab()
+    {
+      m_languagesItems[0] = CreateListItem(Local.GetValue("settings.english"));
+      m_languagesItems[1] = CreateListItem(Local.GetValue("settings.french"));
+      foreach (ListItem l_item in m_languagesItems.Values)
+        m_languageComboBox.Items.Add(l_item);
+      if (m_languagesItems[Properties.Settings.Default.language] != null)
+       m_languageComboBox.SelectedItem = m_languagesItems[Properties.Settings.Default.language];
+    }
+
+    ListItem CreateListItem(string p_text)
+    {
+      ListItem l_item = new ListItem();
+
+      l_item.Text = p_text;
+      return (l_item);
+    }
+
+    void LoadConnectionTab()
+    {
+      m_serverAddressTB.Text = Settings.Default.serverIp;
+      m_portTB.Value = Settings.Default.port_number;
+      m_userTB.Text = Settings.Default.user;
     }
   }
 }

@@ -49,6 +49,7 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.m_rightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.SelectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.UnselectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.Panel2 = new VIBlend.WinForms.Controls.vSplitterPanel();
       this.MainTableLayout.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
       this.SplitContainer.Panel2.SuspendLayout();
@@ -167,11 +168,9 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       // Panel1
       // 
       this.Panel1.Controls.Add(this.m_entitySelectionLabel);
-      this.Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.Panel1.Location = new System.Drawing.Point(0, 0);
-      this.Panel1.Margin = new System.Windows.Forms.Padding(0);
+      this.Panel1.Location = new System.Drawing.Point(3, 3);
       this.Panel1.Name = "Panel1";
-      this.Panel1.Size = new System.Drawing.Size(270, 25);
+      this.Panel1.Size = new System.Drawing.Size(264, 19);
       this.Panel1.TabIndex = 2;
       // 
       // m_entitySelectionLabel
@@ -179,7 +178,7 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
       this.m_entitySelectionLabel.AutoSize = true;
       this.m_entitySelectionLabel.Location = new System.Drawing.Point(3, 5);
       this.m_entitySelectionLabel.Name = "m_entitySelectionLabel";
-      this.m_entitySelectionLabel.Size = new System.Drawing.Size(131, 15);
+      this.m_entitySelectionLabel.Size = new System.Drawing.Size(115, 13);
       this.m_entitySelectionLabel.TabIndex = 0;
       this.m_entitySelectionLabel.Text = "[CUI.entities_selection]";
       this.m_entitySelectionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -212,19 +211,28 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
             this.SelectAllToolStripMenuItem,
             this.UnselectAllToolStripMenuItem});
       this.m_rightClickMenu.Name = "periodsRightClickMenu";
-      this.m_rightClickMenu.Size = new System.Drawing.Size(182, 52);
+      this.m_rightClickMenu.Size = new System.Drawing.Size(166, 48);
       // 
       // SelectAllToolStripMenuItem
       // 
       this.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem";
-      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
+      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
       this.SelectAllToolStripMenuItem.Text = "[CUI.select_all]";
       // 
       // UnselectAllToolStripMenuItem
       // 
       this.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem";
-      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
+      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
       this.UnselectAllToolStripMenuItem.Text = "[CUI.unselect_all]";
+      // 
+      // Panel2
+      // 
+      this.Panel2.BackColor = System.Drawing.Color.White;
+      this.Panel2.BorderColor = System.Drawing.Color.Silver;
+      this.Panel2.Location = new System.Drawing.Point(41, 0);
+      this.Panel2.Name = "Panel2";
+      this.Panel2.Size = new System.Drawing.Size(34, 23);
+      this.Panel2.TabIndex = 2;
       // 
       // CUI2LeftPane
       // 
@@ -254,14 +262,15 @@ partial class CUI2LeftPane : System.Windows.Forms.UserControl
 	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
 	public VIBlend.WinForms.Controls.vButton CollapseSelectionBT;
 	public System.Windows.Forms.ImageList CategoriesIL;
-	public System.Windows.Forms.ImageList EntitiesTVImageList;
-  public System.Windows.Forms.Panel Panel1;
+  public System.Windows.Forms.ImageList EntitiesTVImageList;
 	public System.Windows.Forms.ImageList ExpansionImageList;
 	public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
 	public System.Windows.Forms.ContextMenuStrip m_rightClickMenu;
 	public System.Windows.Forms.ToolStripMenuItem SelectAllToolStripMenuItem;
 
 	public System.Windows.Forms.ToolStripMenuItem UnselectAllToolStripMenuItem;
+  public System.Windows.Forms.Panel Panel1;
+  private VIBlend.WinForms.Controls.vSplitterPanel Panel2;
 }
 
 }

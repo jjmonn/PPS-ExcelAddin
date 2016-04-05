@@ -37,7 +37,7 @@ namespace FBI.MVC.View
     {
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsView));
-      VIBlend.WinForms.DataGridView.DataGridLocalization dataGridLocalization2 = new VIBlend.WinForms.DataGridView.DataGridLocalization();
+      VIBlend.WinForms.DataGridView.DataGridLocalization dataGridLocalization1 = new VIBlend.WinForms.DataGridView.DataGridLocalization();
       this.Panel1 = new System.Windows.Forms.Panel();
       this.TabControl1 = new VIBlend.WinForms.Controls.vTabControl();
       this.m_connectionTab = new VIBlend.WinForms.Controls.vTabPage();
@@ -123,9 +123,14 @@ namespace FBI.MVC.View
       // 
       this.m_portTB.BackColor = System.Drawing.Color.White;
       this.m_portTB.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.m_portTB.CausesValidation = false;
       this.m_portTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
-      this.m_portTB.CultureInfo = new System.Globalization.CultureInfo("en-US");
+      this.m_portTB.CultureInfo = new System.Globalization.CultureInfo("fr");
+      this.m_portTB.Cursor = System.Windows.Forms.Cursors.Default;
+      this.m_portTB.DecimalPlaces = 0;
       this.m_portTB.DefaultText = "Empty...";
+      this.m_portTB.DefaultTextFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
+      this.m_portTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.m_portTB.Location = new System.Drawing.Point(201, 107);
       this.m_portTB.Maximum = new decimal(new int[] {
             65535,
@@ -144,9 +149,9 @@ namespace FBI.MVC.View
       this.m_portTB.SelectionLength = 0;
       this.m_portTB.SelectionStart = 0;
       this.m_portTB.Size = new System.Drawing.Size(220, 23);
-      this.m_portTB.SpinType = VIBlend.WinForms.Controls.SpinType.None;
+      this.m_portTB.SpinType = VIBlend.WinForms.Controls.SpinType.SpinDigitWithWrap;
       this.m_portTB.TabIndex = 0;
-      this.m_portTB.Text = "0.00";
+      this.m_portTB.Text = "0";
       this.m_portTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
       this.m_portTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
@@ -331,7 +336,7 @@ namespace FBI.MVC.View
       this.FormatsDGV.HorizontalScrollBarLargeChange = 20;
       this.FormatsDGV.HorizontalScrollBarSmallChange = 5;
       this.FormatsDGV.ImageList = null;
-      this.FormatsDGV.Localization = dataGridLocalization2;
+      this.FormatsDGV.Localization = dataGridLocalization1;
       this.FormatsDGV.Location = new System.Drawing.Point(6, 16);
       this.FormatsDGV.MultipleSelectionEnabled = true;
       this.FormatsDGV.Name = "FormatsDGV";
@@ -485,6 +490,7 @@ namespace FBI.MVC.View
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(462, 317);
       this.Controls.Add(this.Panel1);
+      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "SettingsView";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -492,7 +498,6 @@ namespace FBI.MVC.View
       this.Panel1.ResumeLayout(false);
       this.TabControl1.ResumeLayout(false);
       this.m_connectionTab.ResumeLayout(false);
-      this.m_connectionTab.PerformLayout();
       this.m_formatsTab.ResumeLayout(false);
       this.m_formatsGroup.ResumeLayout(false);
       this.m_otherTab.ResumeLayout(false);

@@ -45,7 +45,6 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.ImageList1 = new System.Windows.Forms.ImageList(this.components);
       this.m_dimensionsTVPanel = new System.Windows.Forms.Panel();
       this.Panel1 = new System.Windows.Forms.Panel();
-      this.CollapseRightPaneBT = new VIBlend.WinForms.Controls.vButton();
       this.m_fieldChoiceLabel = new System.Windows.Forms.Label();
       this.TableLayoutPanel1.SuspendLayout();
       this.TableLayoutPanel2.SuspendLayout();
@@ -183,7 +182,6 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       // 
       // Panel1
       // 
-      this.Panel1.Controls.Add(this.CollapseRightPaneBT);
       this.Panel1.Controls.Add(this.m_fieldChoiceLabel);
       this.Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.Panel1.Location = new System.Drawing.Point(3, 3);
@@ -191,29 +189,14 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
       this.Panel1.Size = new System.Drawing.Size(325, 29);
       this.Panel1.TabIndex = 8;
       // 
-      // CollapseRightPaneBT
-      // 
-      this.CollapseRightPaneBT.AllowAnimations = true;
-      this.CollapseRightPaneBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.CollapseRightPaneBT.BackColor = System.Drawing.Color.Transparent;
-      this.CollapseRightPaneBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.CollapseRightPaneBT.Location = new System.Drawing.Point(303, 3);
-      this.CollapseRightPaneBT.Name = "CollapseRightPaneBT";
-      this.CollapseRightPaneBT.PaintBorder = false;
-      this.CollapseRightPaneBT.RoundedCornersMask = ((byte)(15));
-      this.CollapseRightPaneBT.Size = new System.Drawing.Size(19, 19);
-      this.CollapseRightPaneBT.TabIndex = 7;
-      this.CollapseRightPaneBT.UseVisualStyleBackColor = false;
-      this.CollapseRightPaneBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
       // m_fieldChoiceLabel
       // 
       this.m_fieldChoiceLabel.AutoSize = true;
       this.m_fieldChoiceLabel.ForeColor = System.Drawing.Color.Black;
-      this.m_fieldChoiceLabel.Location = new System.Drawing.Point(7, 11);
+      this.m_fieldChoiceLabel.Location = new System.Drawing.Point(30, 3);
       this.m_fieldChoiceLabel.Margin = new System.Windows.Forms.Padding(10, 3, 3, 0);
       this.m_fieldChoiceLabel.Name = "m_fieldChoiceLabel";
-      this.m_fieldChoiceLabel.Size = new System.Drawing.Size(108, 15);
+      this.m_fieldChoiceLabel.Size = new System.Drawing.Size(96, 13);
       this.m_fieldChoiceLabel.TabIndex = 6;
       this.m_fieldChoiceLabel.Text = "[CUI.fields_choice]";
       // 
@@ -243,8 +226,7 @@ partial class CUI2RightPane : System.Windows.Forms.UserControl
 	public VIBlend.WinForms.Controls.vListBox m_columnsDisplayList;
 	public VIBlend.WinForms.Controls.vListBox m_rowsDisplayList;
 	public System.Windows.Forms.Panel Panel1;
-	public System.Windows.Forms.ImageList ImageList2;
-	public VIBlend.WinForms.Controls.vButton CollapseRightPaneBT;
+  public System.Windows.Forms.ImageList ImageList2;
 
 	public System.Windows.Forms.Label m_rowsLabel;
 }

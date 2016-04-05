@@ -23,7 +23,9 @@ namespace FBI.MVC.Model
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
+    bool m_displayDiff = true;
     bool m_needRefresh = false;
+    int m_nbRequest = 0;
 
     #region Initialize
 
@@ -43,6 +45,8 @@ namespace FBI.MVC.Model
 
     public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       m_dimensions = p_dimensions;
       m_versionId = p_versionId;
 
@@ -56,6 +60,7 @@ namespace FBI.MVC.Model
       Dimension<CRUDEntity> l_horitontal = p_dimensions.Dimensions[p_dimensions.Orientation.Horizontal];
       Dimension<CRUDEntity> l_tabDimension = p_dimensions.Dimensions[p_dimensions.Orientation.TabDimension];
 
+      m_displayDiff = p_displayInitialDifferences;
       CreateEditedFacts(l_vertical, l_horitontal, l_tabDimension);
     }
 
@@ -108,16 +113,22 @@ namespace FBI.MVC.Model
 
     public override void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
+      AddinModuleController.SetExcelInteractionState(false);
       m_updateCellsOnDownload = p_updateCells;
       List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
 
       RequestIdList.Clear();
       foreach (AxisElem l_entity in l_entitiesList)
+      {
         RequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entity.Id, m_versionId, p_clientId, p_productId, p_adjustmentId));
+        m_nbRequest++;
+      }
     }
 
     private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_factsList)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       if (p_status != ErrorMessage.SUCCESS)
       {
         RaiseFactDownloaded(false);
@@ -129,7 +140,10 @@ namespace FBI.MVC.Model
         EditedFinancialFact l_EditedFact = EditedFacts[l_dimensionKey];
         if (l_EditedFact != null)
         {
+          double l_editedValue = l_EditedFact.EditedValue;
           l_EditedFact.UpdateFinancialFact(l_fact);
+          if (m_displayDiff)
+            l_EditedFact.EditedValue = l_editedValue;
           if (m_updateCellsOnDownload)
             l_EditedFact.Cell.Value2 = l_EditedFact.Value;
         }
@@ -137,11 +151,11 @@ namespace FBI.MVC.Model
           m_facts[l_dimensionKey] = l_fact;
       }
       RequestIdList.Remove(p_requestId);
+      m_nbRequest--;
       if (RequestIdList.Count == 0)
-      {
-        AddinModuleController.SetExcelInteractionState(false);
         ComputeOutputs();
-      }
+      else
+        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
     }
 
     public void ComputeOutputs()
@@ -180,6 +194,8 @@ namespace FBI.MVC.Model
 
     private void OnFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       if (p_status == ErrorMessage.SUCCESS)
       {
         AddinModuleController.SetExcelInteractionState(false);
@@ -206,7 +222,7 @@ namespace FBI.MVC.Model
               l_fact.Cell.Value = l_valuePair.Value;
           }
         }
-        AddinModuleController.SetExcelInteractionState(true);
+        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
         RaiseFactDownloaded(true);
       }
       else

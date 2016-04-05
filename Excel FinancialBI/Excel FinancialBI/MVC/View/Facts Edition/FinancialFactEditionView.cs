@@ -31,6 +31,15 @@ namespace FBI.MVC.View
     {
       base.SuscribeEvents();
       FactsModel.Instance.UpdateEvent += OnCommitResult;
+      m_controller.WorksheetSelectionChanged += OnWorksheetSelectionChanged;
+    }
+
+    void OnWorksheetSelectionChanged(Range p_range)
+    {
+      Account l_account = m_areaController.GetAccount(p_range);
+
+      if (l_account != null)
+        m_controller.DisplayAccountSP(l_account);
     }
 
     protected override void SetEditedFactsStatus()
@@ -45,6 +54,8 @@ namespace FBI.MVC.View
 
     private void OnCommitResult(ErrorMessage p_status, CRUDAction p_action, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultDic)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       if (p_status == ErrorMessage.SUCCESS)
       {
         foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_pair in p_resultDic)
@@ -59,6 +70,17 @@ namespace FBI.MVC.View
       }
       else
         MsgBox.Show(Local.GetValue("upload.error.commit_failed") + ": " + Error.GetMessage(p_status));
+    }
+
+    protected override void OnFactsDownloaded(bool p_success)
+    {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
+      base.OnFactsDownloaded(p_success);
+      AddinModuleController.SetExcelInteractionState(false);
+      foreach (EditedFinancialFact l_fact in m_model.OutputFacts.Values)
+        m_rangeHighlighter.FillCellColor(l_fact.Cell, EditedFactStatus.OutputEqual);
+      AddinModuleController.SetExcelInteractionState(true);
     }
 
     #endregion

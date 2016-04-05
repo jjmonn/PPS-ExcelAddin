@@ -56,7 +56,8 @@ namespace FBI.MVC.View
 
     public virtual void Close()
     {
-      m_rangeHighlighter.RevertToOriginalColors();
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet))
+        m_rangeHighlighter.RevertToOriginalColors();
       m_areaController.ClearDimensions();
       Addin.ConnectionStateEvent -= OnServerConnectionChanged;
       m_model.FactsDownloaded -= OnFactsDownloaded;
@@ -78,6 +79,8 @@ namespace FBI.MVC.View
 
     public string Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return Local.GetValue("upload.msg_error_worksheet_closed");
       if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
       {
         m_worksheetAnalyzer.Snapshot(m_areaController);
@@ -156,8 +159,10 @@ namespace FBI.MVC.View
       }
     }
 
-    protected void OnFactsDownloaded(bool p_success)
+    protected virtual void OnFactsDownloaded(bool p_success)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       if (p_success == true)
       {
         m_controller.AddinController.AssociateExcelWorksheetEvents(m_worksheet);

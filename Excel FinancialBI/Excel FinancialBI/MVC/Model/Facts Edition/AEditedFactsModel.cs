@@ -12,12 +12,14 @@ namespace FBI.MVC.Model
   using FBI.MVC.View;
 
   public delegate void OnFactsDownloaded(bool p_success);
-  
-  abstract class AEditedFactsModel
+  public delegate void FactsCommitError(string p_address, ErrorMessage p_error);
+
+  abstract public class AEditedFactsModel
   {
     public List<int> RequestIdList { get; private set; }
     public event OnFactsDownloaded FactsDownloaded;
     protected Worksheet m_worksheet;
+    public event FactsCommitError OnCommitError;
 
     protected AEditedFactsModel(Worksheet p_worksheet)
     {
@@ -43,6 +45,12 @@ namespace FBI.MVC.Model
     {
       if (FactsDownloaded != null)
         FactsDownloaded(p_success);
+    }
+
+    public void RaiseOnCommitError(string p_address, ErrorMessage p_error)
+    {
+      if (OnCommitError != null)
+        OnCommitError(p_address, p_error);
     }
   }
 }
