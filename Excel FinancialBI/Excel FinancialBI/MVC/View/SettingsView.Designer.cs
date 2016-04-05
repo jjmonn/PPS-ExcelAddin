@@ -37,7 +37,7 @@ namespace FBI.MVC.View
     {
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsView));
-      VIBlend.WinForms.DataGridView.DataGridLocalization dataGridLocalization1 = new VIBlend.WinForms.DataGridView.DataGridLocalization();
+      VIBlend.WinForms.DataGridView.DataGridLocalization dataGridLocalization2 = new VIBlend.WinForms.DataGridView.DataGridLocalization();
       this.Panel1 = new System.Windows.Forms.Panel();
       this.TabControl1 = new VIBlend.WinForms.Controls.vTabControl();
       this.m_connectionTab = new VIBlend.WinForms.Controls.vTabPage();
@@ -162,7 +162,7 @@ namespace FBI.MVC.View
       this.m_saveConnectionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_saveConnectionButton.ImageKey = "1420498403_340208.ico";
       this.m_saveConnectionButton.ImageList = this.ButtonIcons;
-      this.m_saveConnectionButton.Location = new System.Drawing.Point(319, 206);
+      this.m_saveConnectionButton.Location = new System.Drawing.Point(347, 229);
       this.m_saveConnectionButton.Name = "m_saveConnectionButton";
       this.m_saveConnectionButton.RoundedCornersMask = ((byte)(15));
       this.m_saveConnectionButton.Size = new System.Drawing.Size(102, 30);
@@ -336,7 +336,7 @@ namespace FBI.MVC.View
       this.FormatsDGV.HorizontalScrollBarLargeChange = 20;
       this.FormatsDGV.HorizontalScrollBarSmallChange = 5;
       this.FormatsDGV.ImageList = null;
-      this.FormatsDGV.Localization = dataGridLocalization1;
+      this.FormatsDGV.Localization = dataGridLocalization2;
       this.FormatsDGV.Location = new System.Drawing.Point(6, 16);
       this.FormatsDGV.MultipleSelectionEnabled = true;
       this.FormatsDGV.Name = "FormatsDGV";
@@ -391,7 +391,7 @@ namespace FBI.MVC.View
       this.m_otherValidateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_otherValidateButton.ImageKey = "1420498403_340208.ico";
       this.m_otherValidateButton.ImageList = this.ButtonIcons;
-      this.m_otherValidateButton.Location = new System.Drawing.Point(315, 178);
+      this.m_otherValidateButton.Location = new System.Drawing.Point(347, 229);
       this.m_otherValidateButton.Name = "m_otherValidateButton";
       this.m_otherValidateButton.RoundedCornersMask = ((byte)(15));
       this.m_otherValidateButton.Size = new System.Drawing.Size(102, 30);

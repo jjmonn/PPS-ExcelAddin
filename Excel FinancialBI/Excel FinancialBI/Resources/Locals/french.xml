@@ -427,14 +427,13 @@
   </category>
 
   <category name="settings">
-    <string name="Settings">Réglages</string>
+    <string name="settings">Réglages</string>
+    <string name="currency">Devise de consolidation</string>
     <string name="port_number">Numéro de port</string>
     <string name="server_address">Adresse du serveur</string>
     <string name="display_options">Options d'affichage</string>
     <string name="report_format">Format des rapports</string>
     <string name="preferences">Préférences</string>
-    <string name="consolidation_currency">Devise de consolidation</string>
-    <string name="settings">Paramètres</string>
     <string name="format_preview">Prévisualisation du format</string>
     <string name="text_color">Couleur du texte</string>
     <string name="background_color">Couleur du fonds</string>
@@ -448,7 +447,6 @@
     <string name="language">Langue</string>
     <string name="french">Français</string>
     <string name="english">Anglais</string>
-    <string name="msg_excel_reboot">Excel doit être redémarré afin de prendre en compte la sélection de la langue.</string>
   </category>
 
   <category name="allocationKeys">
