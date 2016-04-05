@@ -94,6 +94,9 @@ namespace FBI.MVC.View
         m_worksheetAnalyzer.Snapshot(m_areaController);
         m_areaController.DefineOrientation(m_controller.Process);
         m_controller.VersionId = m_areaController.VersionId;
+        if (m_areaController.Entities.m_values == null || m_areaController.Entities.m_values.Count != 1)
+          m_controller.EntityId = 0;
+        m_controller.EntityId = m_areaController.Entities.m_values.First().Value.Id;
         if (m_areaController.IsValid() == false)
           return Local.GetValue("upload.msg_error_upload");
         m_controller.EditedFactModel.RegisterEditedFacts(m_areaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);

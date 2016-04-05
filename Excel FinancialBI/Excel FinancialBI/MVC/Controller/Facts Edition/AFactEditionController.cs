@@ -34,6 +34,7 @@ namespace FBI.MVC.Controller
     public TModel EditedFactModel { get; protected set; }
     public Account.AccountProcess Process { get; protected set; }
     public UInt32 VersionId { get; set; }
+    public UInt32 EntityId { get; set; }
     public abstract IFactEditionView View { get; }
     public List<Int32> PeriodsList { get; set; }
     public delegate void OnWorksheetChangingHandler(Range p_cell);
@@ -52,6 +53,7 @@ namespace FBI.MVC.Controller
       Worksheet = p_worksheet;
       AddinController = p_addinModuleController;
       VersionId = p_versionId;
+      EntityId = 0;
       Process = p_process;
       RHAccountId = 0;
     }

@@ -66,7 +66,24 @@ namespace FBI.MVC.Controller
         bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayDiff, SubmissionClientId, 
           SubmissionProductId, SubmissionAdjustmentId);
         if (l_result)
+        {
           m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.VersionId);
+          AxisElem l_entity = AxisElemModel.Instance.GetValue(l_editionController.EntityId);
+
+          if (l_entity == null)
+          {
+            m_view.SubmissionEntityName = "-";
+            m_view.SubmissionCurrencyName = "-";
+          }
+          else
+          {
+            m_view.SubmissionEntityName = l_entity.Name;
+            EntityCurrency l_currency = EntityCurrencyModel.Instance.GetValue(l_entity.Id);
+
+            if (l_currency != null)
+              m_view.SubmissionCurrencyName = CurrencyModel.Instance.GetValueName(l_currency.CurrencyId);
+          }
+        }
         return (l_result);
     }
 

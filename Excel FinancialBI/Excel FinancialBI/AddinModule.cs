@@ -497,6 +497,22 @@ namespace FBI
       }
     }
 
+    public string SubmissionEntityName
+    {
+      set
+      {
+        EntityTB.Text = value;
+      }
+    }
+
+    public string SubmissionCurrencyName
+    {
+      set
+      {
+        EntCurrTB.Text = value;
+      }
+    }
+
     public string SubmissionCurrency
     {
       set
