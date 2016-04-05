@@ -465,6 +465,9 @@ namespace FBI
 
     public void InitFinancialSubmissionRibon()
     {
+      ClientsDropDown.Items.Clear();
+      ProductsDropDown.Items.Clear();
+      AdjustmentDropDown.Items.Clear();
       foreach (AxisElem l_client in AxisElemModel.Instance.GetDictionary(AxisType.Client).Values)
         AddButtonToDropDown(ClientsDropDown, l_client.Id, l_client.Name);
       foreach (AxisElem l_product in AxisElemModel.Instance.GetDictionary(AxisType.Product).Values)
