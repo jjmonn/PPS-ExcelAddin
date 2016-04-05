@@ -100,7 +100,9 @@ namespace FBI.MVC.View
       InitFilterTV(AxisType.Adjustment);
       InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, true, true);
       FbiTreeView<Currency> l_currencyTV = new FbiTreeView<Currency>(CurrencyModel.Instance.GetUsedCurrenciesDic(), null, false, true);
-      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(Currency));
+ 
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>(AxisType.Entities, typeof(AxisElem));
+      m_selectionTVList[l_key].ImageList = EntitiesTVImageList;
 
       BaseInitTV<Currency>(l_key, l_currencyTV, m_selectionTableLayout.Controls, false, false, Properties.Settings.Default.currentCurrency, false, true);
     }
