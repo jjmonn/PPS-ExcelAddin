@@ -163,17 +163,19 @@ namespace FBI.MVC.View
       this.TableLayoutPanel3.Controls.Add(this.MenuStrip1, 0, 0);
       this.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
       this.TableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+      this.TableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.TableLayoutPanel3.Name = "TableLayoutPanel3";
       this.TableLayoutPanel3.RowCount = 2;
       this.TableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.863813F));
       this.TableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95.13618F));
-      this.TableLayoutPanel3.Size = new System.Drawing.Size(1049, 635);
+      this.TableLayoutPanel3.Size = new System.Drawing.Size(1399, 782);
       this.TableLayoutPanel3.TabIndex = 2;
       // 
       // SplitContainer1
       // 
       this.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.SplitContainer1.Location = new System.Drawing.Point(3, 33);
+      this.SplitContainer1.Location = new System.Drawing.Point(4, 42);
+      this.SplitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.SplitContainer1.Name = "SplitContainer1";
       // 
       // SplitContainer1.Panel1
@@ -183,16 +185,18 @@ namespace FBI.MVC.View
       // SplitContainer1.Panel2
       // 
       this.SplitContainer1.Panel2.Controls.Add(this.TableLayoutPanel2);
-      this.SplitContainer1.Size = new System.Drawing.Size(1043, 599);
-      this.SplitContainer1.SplitterDistance = 293;
+      this.SplitContainer1.Size = new System.Drawing.Size(1391, 736);
+      this.SplitContainer1.SplitterDistance = 390;
+      this.SplitContainer1.SplitterWidth = 5;
       this.SplitContainer1.TabIndex = 2;
       // 
       // m_versionsTVPanel
       // 
       this.m_versionsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_versionsTVPanel.Location = new System.Drawing.Point(0, 0);
+      this.m_versionsTVPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_versionsTVPanel.Name = "m_versionsTVPanel";
-      this.m_versionsTVPanel.Size = new System.Drawing.Size(293, 599);
+      this.m_versionsTVPanel.Size = new System.Drawing.Size(390, 736);
       this.m_versionsTVPanel.TabIndex = 1;
       // 
       // TableLayoutPanel2
@@ -218,7 +222,8 @@ namespace FBI.MVC.View
       this.TableLayoutPanel2.Controls.Add(this.m_nbPeriodsTextbox, 1, 6);
       this.TableLayoutPanel2.Controls.Add(this.m_exchangeRatesVersionVTreeviewbox, 1, 7);
       this.TableLayoutPanel2.Controls.Add(this.m_factsVersionVTreeviewbox, 1, 8);
-      this.TableLayoutPanel2.Location = new System.Drawing.Point(28, 18);
+      this.TableLayoutPanel2.Location = new System.Drawing.Point(37, 22);
+      this.TableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.TableLayoutPanel2.Name = "TableLayoutPanel2";
       this.TableLayoutPanel2.RowCount = 9;
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
@@ -229,57 +234,57 @@ namespace FBI.MVC.View
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-      this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-      this.TableLayoutPanel2.Size = new System.Drawing.Size(679, 392);
+      this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+      this.TableLayoutPanel2.Size = new System.Drawing.Size(905, 482);
       this.TableLayoutPanel2.TabIndex = 0;
       // 
       // m_globalFactsVersionLabel
       // 
       this.m_globalFactsVersionLabel.AutoSize = true;
-      this.m_globalFactsVersionLabel.Location = new System.Drawing.Point(3, 359);
-      this.m_globalFactsVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_globalFactsVersionLabel.Location = new System.Drawing.Point(4, 441);
+      this.m_globalFactsVersionLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_globalFactsVersionLabel.Name = "m_globalFactsVersionLabel";
-      this.m_globalFactsVersionLabel.Size = new System.Drawing.Size(100, 13);
+      this.m_globalFactsVersionLabel.Size = new System.Drawing.Size(126, 16);
       this.m_globalFactsVersionLabel.TabIndex = 24;
       this.m_globalFactsVersionLabel.Text = "Global facts version";
       // 
       // m_exchangeRatesVersionLabel
       // 
       this.m_exchangeRatesVersionLabel.AutoSize = true;
-      this.m_exchangeRatesVersionLabel.Location = new System.Drawing.Point(3, 315);
-      this.m_exchangeRatesVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_exchangeRatesVersionLabel.Location = new System.Drawing.Point(4, 387);
+      this.m_exchangeRatesVersionLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_exchangeRatesVersionLabel.Name = "m_exchangeRatesVersionLabel";
-      this.m_exchangeRatesVersionLabel.Size = new System.Drawing.Size(118, 13);
+      this.m_exchangeRatesVersionLabel.Size = new System.Drawing.Size(148, 16);
       this.m_exchangeRatesVersionLabel.TabIndex = 22;
       this.m_exchangeRatesVersionLabel.Text = "Exchange rates version";
       // 
       // m_numberOfYearsLabel
       // 
       this.m_numberOfYearsLabel.AutoSize = true;
-      this.m_numberOfYearsLabel.Location = new System.Drawing.Point(3, 271);
-      this.m_numberOfYearsLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_numberOfYearsLabel.Location = new System.Drawing.Point(4, 333);
+      this.m_numberOfYearsLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_numberOfYearsLabel.Name = "m_numberOfYearsLabel";
-      this.m_numberOfYearsLabel.Size = new System.Drawing.Size(93, 13);
+      this.m_numberOfYearsLabel.Size = new System.Drawing.Size(119, 16);
       this.m_numberOfYearsLabel.TabIndex = 20;
       this.m_numberOfYearsLabel.Text = "Number of periods";
       // 
       // m_startingPeriodLabel
       // 
       this.m_startingPeriodLabel.AutoSize = true;
-      this.m_startingPeriodLabel.Location = new System.Drawing.Point(3, 227);
-      this.m_startingPeriodLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_startingPeriodLabel.Location = new System.Drawing.Point(4, 279);
+      this.m_startingPeriodLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_startingPeriodLabel.Name = "m_startingPeriodLabel";
-      this.m_startingPeriodLabel.Size = new System.Drawing.Size(75, 13);
+      this.m_startingPeriodLabel.Size = new System.Drawing.Size(95, 16);
       this.m_startingPeriodLabel.TabIndex = 17;
       this.m_startingPeriodLabel.Text = "Starting period";
       // 
       // m_periodConfigLabel
       // 
       this.m_periodConfigLabel.AutoSize = true;
-      this.m_periodConfigLabel.Location = new System.Drawing.Point(3, 183);
-      this.m_periodConfigLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_periodConfigLabel.Location = new System.Drawing.Point(4, 225);
+      this.m_periodConfigLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_periodConfigLabel.Name = "m_periodConfigLabel";
-      this.m_periodConfigLabel.Size = new System.Drawing.Size(69, 13);
+      this.m_periodConfigLabel.Size = new System.Drawing.Size(87, 16);
       this.m_periodConfigLabel.TabIndex = 15;
       this.m_periodConfigLabel.Text = "Period config";
       // 
@@ -287,8 +292,8 @@ namespace FBI.MVC.View
       // 
       this.m_nameLabel.AutoSize = true;
       this.m_nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.m_nameLabel.Location = new System.Drawing.Point(3, 7);
-      this.m_nameLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_nameLabel.Location = new System.Drawing.Point(4, 9);
+      this.m_nameLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_nameLabel.Name = "m_nameLabel";
       this.m_nameLabel.Size = new System.Drawing.Size(83, 13);
       this.m_nameLabel.TabIndex = 7;
@@ -297,43 +302,43 @@ namespace FBI.MVC.View
       // m_CreationDateTextbox
       // 
       this.m_CreationDateTextbox.Enabled = false;
-      this.m_CreationDateTextbox.Location = new System.Drawing.Point(290, 49);
-      this.m_CreationDateTextbox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-      this.m_CreationDateTextbox.MaximumSize = new System.Drawing.Size(400, 4);
-      this.m_CreationDateTextbox.MinimumSize = new System.Drawing.Size(280, 20);
+      this.m_CreationDateTextbox.Location = new System.Drawing.Point(387, 60);
+      this.m_CreationDateTextbox.Margin = new System.Windows.Forms.Padding(4, 6, 4, 4);
+      this.m_CreationDateTextbox.MaximumSize = new System.Drawing.Size(532, 4);
+      this.m_CreationDateTextbox.MinimumSize = new System.Drawing.Size(372, 20);
       this.m_CreationDateTextbox.Name = "m_CreationDateTextbox";
-      this.m_CreationDateTextbox.Size = new System.Drawing.Size(386, 20);
+      this.m_CreationDateTextbox.Size = new System.Drawing.Size(513, 22);
       this.m_CreationDateTextbox.TabIndex = 3;
       // 
       // m_lockedLabel
       // 
       this.m_lockedLabel.AutoSize = true;
-      this.m_lockedLabel.Location = new System.Drawing.Point(3, 95);
-      this.m_lockedLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_lockedLabel.Location = new System.Drawing.Point(4, 117);
+      this.m_lockedLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_lockedLabel.Name = "m_lockedLabel";
-      this.m_lockedLabel.Size = new System.Drawing.Size(77, 13);
+      this.m_lockedLabel.Size = new System.Drawing.Size(98, 16);
       this.m_lockedLabel.TabIndex = 10;
       this.m_lockedLabel.Text = "Version locked";
       // 
       // m_lockedDateLabel
       // 
       this.m_lockedDateLabel.AutoSize = true;
-      this.m_lockedDateLabel.Location = new System.Drawing.Point(3, 139);
-      this.m_lockedDateLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_lockedDateLabel.Location = new System.Drawing.Point(4, 171);
+      this.m_lockedDateLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_lockedDateLabel.Name = "m_lockedDateLabel";
-      this.m_lockedDateLabel.Size = new System.Drawing.Size(67, 13);
+      this.m_lockedDateLabel.Size = new System.Drawing.Size(83, 16);
       this.m_lockedDateLabel.TabIndex = 11;
       this.m_lockedDateLabel.Text = "Locked date";
       // 
       // LockedDateT
       // 
       this.LockedDateT.Enabled = false;
-      this.LockedDateT.Location = new System.Drawing.Point(290, 137);
-      this.LockedDateT.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-      this.LockedDateT.MaximumSize = new System.Drawing.Size(400, 4);
-      this.LockedDateT.MinimumSize = new System.Drawing.Size(280, 20);
+      this.LockedDateT.Location = new System.Drawing.Point(387, 168);
+      this.LockedDateT.Margin = new System.Windows.Forms.Padding(4, 6, 4, 4);
+      this.LockedDateT.MaximumSize = new System.Drawing.Size(532, 4);
+      this.LockedDateT.MinimumSize = new System.Drawing.Size(372, 20);
       this.LockedDateT.Name = "LockedDateT";
-      this.LockedDateT.Size = new System.Drawing.Size(386, 20);
+      this.LockedDateT.Size = new System.Drawing.Size(513, 20);
       this.LockedDateT.TabIndex = 12;
       // 
       // m_nameTextbox
@@ -342,29 +347,29 @@ namespace FBI.MVC.View
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.m_nameTextbox.Enabled = false;
-      this.m_nameTextbox.Location = new System.Drawing.Point(290, 5);
-      this.m_nameTextbox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-      this.m_nameTextbox.MaximumSize = new System.Drawing.Size(400, 4);
-      this.m_nameTextbox.MinimumSize = new System.Drawing.Size(280, 20);
+      this.m_nameTextbox.Location = new System.Drawing.Point(387, 6);
+      this.m_nameTextbox.Margin = new System.Windows.Forms.Padding(4, 6, 4, 4);
+      this.m_nameTextbox.MaximumSize = new System.Drawing.Size(532, 4);
+      this.m_nameTextbox.MinimumSize = new System.Drawing.Size(372, 20);
       this.m_nameTextbox.Name = "m_nameTextbox";
-      this.m_nameTextbox.Size = new System.Drawing.Size(386, 20);
+      this.m_nameTextbox.Size = new System.Drawing.Size(514, 20);
       this.m_nameTextbox.TabIndex = 13;
       // 
       // m_creationDateLabel
       // 
       this.m_creationDateLabel.AutoSize = true;
-      this.m_creationDateLabel.Location = new System.Drawing.Point(3, 51);
-      this.m_creationDateLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
+      this.m_creationDateLabel.Location = new System.Drawing.Point(4, 63);
+      this.m_creationDateLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
       this.m_creationDateLabel.Name = "m_creationDateLabel";
-      this.m_creationDateLabel.Size = new System.Drawing.Size(70, 13);
+      this.m_creationDateLabel.Size = new System.Drawing.Size(88, 16);
       this.m_creationDateLabel.TabIndex = 6;
       this.m_creationDateLabel.Text = "Creation date";
       // 
       // m_lockCombobox
       // 
       this.m_lockCombobox.AutoSize = true;
-      this.m_lockCombobox.Location = new System.Drawing.Point(290, 98);
-      this.m_lockCombobox.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+      this.m_lockCombobox.Location = new System.Drawing.Point(387, 120);
+      this.m_lockCombobox.Margin = new System.Windows.Forms.Padding(4, 12, 4, 4);
       this.m_lockCombobox.Name = "m_lockCombobox";
       this.m_lockCombobox.Size = new System.Drawing.Size(15, 14);
       this.m_lockCombobox.TabIndex = 14;
@@ -374,25 +379,28 @@ namespace FBI.MVC.View
       // m_timeConfigTB
       // 
       this.m_timeConfigTB.Enabled = false;
-      this.m_timeConfigTB.Location = new System.Drawing.Point(290, 179);
+      this.m_timeConfigTB.Location = new System.Drawing.Point(387, 220);
+      this.m_timeConfigTB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_timeConfigTB.Name = "m_timeConfigTB";
-      this.m_timeConfigTB.Size = new System.Drawing.Size(386, 20);
+      this.m_timeConfigTB.Size = new System.Drawing.Size(513, 22);
       this.m_timeConfigTB.TabIndex = 18;
       // 
       // m_startPeriodTextbox
       // 
       this.m_startPeriodTextbox.Enabled = false;
-      this.m_startPeriodTextbox.Location = new System.Drawing.Point(290, 223);
+      this.m_startPeriodTextbox.Location = new System.Drawing.Point(387, 274);
+      this.m_startPeriodTextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_startPeriodTextbox.Name = "m_startPeriodTextbox";
-      this.m_startPeriodTextbox.Size = new System.Drawing.Size(386, 21);
+      this.m_startPeriodTextbox.Size = new System.Drawing.Size(513, 24);
       this.m_startPeriodTextbox.TabIndex = 19;
       // 
       // m_nbPeriodsTextbox
       // 
       this.m_nbPeriodsTextbox.Enabled = false;
-      this.m_nbPeriodsTextbox.Location = new System.Drawing.Point(290, 267);
+      this.m_nbPeriodsTextbox.Location = new System.Drawing.Point(387, 328);
+      this.m_nbPeriodsTextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_nbPeriodsTextbox.Name = "m_nbPeriodsTextbox";
-      this.m_nbPeriodsTextbox.Size = new System.Drawing.Size(384, 20);
+      this.m_nbPeriodsTextbox.Size = new System.Drawing.Size(511, 22);
       this.m_nbPeriodsTextbox.TabIndex = 21;
       // 
       // m_exchangeRatesVersionVTreeviewbox
@@ -402,9 +410,10 @@ namespace FBI.MVC.View
       this.m_exchangeRatesVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_exchangeRatesVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_exchangeRatesVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(290, 311);
+      this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(387, 382);
+      this.m_exchangeRatesVersionVTreeviewbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox";
-      this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(386, 23);
+      this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(514, 28);
       this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 25;
       this.m_exchangeRatesVersionVTreeviewbox.Text = " ";
       this.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false;
@@ -418,9 +427,10 @@ namespace FBI.MVC.View
       this.m_factsVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_factsVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_factsVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_factsVersionVTreeviewbox.Location = new System.Drawing.Point(290, 355);
+      this.m_factsVersionVTreeviewbox.Location = new System.Drawing.Point(387, 436);
+      this.m_factsVersionVTreeviewbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_factsVersionVTreeviewbox.Name = "m_factsVersionVTreeviewbox";
-      this.m_factsVersionVTreeviewbox.Size = new System.Drawing.Size(384, 23);
+      this.m_factsVersionVTreeviewbox.Size = new System.Drawing.Size(512, 28);
       this.m_factsVersionVTreeviewbox.TabIndex = 26;
       this.m_factsVersionVTreeviewbox.Text = " ";
       this.m_factsVersionVTreeviewbox.UseThemeBackColor = false;
@@ -433,7 +443,8 @@ namespace FBI.MVC.View
             this.VersionsToolStripMenuItem});
       this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
       this.MenuStrip1.Name = "MenuStrip1";
-      this.MenuStrip1.Size = new System.Drawing.Size(1049, 24);
+      this.MenuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+      this.MenuStrip1.Size = new System.Drawing.Size(1399, 24);
       this.MenuStrip1.TabIndex = 0;
       this.MenuStrip1.Text = "MenuStrip1";
       // 
@@ -496,11 +507,12 @@ namespace FBI.MVC.View
       // 
       // VersionsView
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.Controls.Add(this.TableLayoutPanel3);
+      this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.Name = "VersionsView";
-      this.Size = new System.Drawing.Size(1049, 635);
+      this.Size = new System.Drawing.Size(1399, 782);
       this.m_versionsRightClickMenu.ResumeLayout(false);
       this.TableLayoutPanel3.ResumeLayout(false);
       this.TableLayoutPanel3.PerformLayout();

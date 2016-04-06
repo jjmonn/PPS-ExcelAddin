@@ -247,6 +247,9 @@
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\FbiChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -311,7 +314,10 @@
     <Compile Include="MVC\Model\Base\ICRUDModel.cs" />
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
+    <Compile Include="MVC\Model\ChartSettingsModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\CRUD\Serie.cs" />
+    <Compile Include="MVC\Model\CRUD\ChartSettings.cs" />
     <Compile Include="MVC\Model\CRUD\FBIFunction.cs" />
     <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
     <Compile Include="MVC\Model\DuplicateRHAllocation.cs" />
@@ -742,6 +748,7 @@
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\TreeNode.cs" />
     <Compile Include="Utils\TreeviewUtils.cs" />
+    <Compile Include="Utils\ControlUtils.cs" />
     <Compile Include="Utils\WorksheetWriter.cs" />
   </ItemGroup>
   <ItemGroup>

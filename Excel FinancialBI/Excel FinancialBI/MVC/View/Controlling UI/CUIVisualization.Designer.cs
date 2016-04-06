@@ -51,6 +51,7 @@ namespace FBI.MVC.View
       this.m_panelRightClick = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_horizontalSplitBT = new System.Windows.Forms.ToolStripMenuItem();
       this.m_splitVerticalBT = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_chartEdit = new System.Windows.Forms.ToolStripMenuItem();
       this.TableLayoutPanel1.SuspendLayout();
       this.Panel1.SuspendLayout();
       this.m_chartsRightClickMenu.SuspendLayout();
@@ -66,24 +67,22 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
       this.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.TableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+      this.TableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.TableLayoutPanel1.Name = "TableLayoutPanel1";
       this.TableLayoutPanel1.RowCount = 2;
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.TableLayoutPanel1.Size = new System.Drawing.Size(688, 380);
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+      this.TableLayoutPanel1.Size = new System.Drawing.Size(917, 468);
       this.TableLayoutPanel1.TabIndex = 1;
       // 
       // Panel1
       // 
       this.Panel1.Controls.Add(this.m_refreshButton);
-      this.Panel1.Controls.Add(this.VersionTB);
-      this.Panel1.Controls.Add(this.CurrencyTB);
-      this.Panel1.Controls.Add(this.EntityTB);
       this.Panel1.Controls.Add(this.m_currencyLabel);
       this.Panel1.Controls.Add(this.m_versionLabel);
       this.Panel1.Controls.Add(this.m_entityLabel);
@@ -91,7 +90,7 @@ namespace FBI.MVC.View
       this.Panel1.Location = new System.Drawing.Point(0, 0);
       this.Panel1.Margin = new System.Windows.Forms.Padding(0);
       this.Panel1.Name = "Panel1";
-      this.Panel1.Size = new System.Drawing.Size(688, 25);
+      this.Panel1.Size = new System.Drawing.Size(917, 31);
       this.Panel1.TabIndex = 1;
       // 
       // m_refreshButton
@@ -101,10 +100,11 @@ namespace FBI.MVC.View
       this.m_refreshButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_refreshButton.ImageKey = "refresh classic green.ico";
       this.m_refreshButton.ImageList = this.ImageList1;
-      this.m_refreshButton.Location = new System.Drawing.Point(3, 0);
+      this.m_refreshButton.Location = new System.Drawing.Point(4, 0);
+      this.m_refreshButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_refreshButton.Name = "m_refreshButton";
       this.m_refreshButton.RoundedCornersMask = ((byte)(15));
-      this.m_refreshButton.Size = new System.Drawing.Size(73, 25);
+      this.m_refreshButton.Size = new System.Drawing.Size(97, 31);
       this.m_refreshButton.TabIndex = 13;
       this.m_refreshButton.Text = "Refresh";
       this.m_refreshButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -126,14 +126,15 @@ namespace FBI.MVC.View
       this.VersionTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.VersionTB.DefaultText = "Empty...";
       this.VersionTB.Enabled = false;
-      this.VersionTB.Location = new System.Drawing.Point(530, 1);
+      this.VersionTB.Location = new System.Drawing.Point(707, 1);
+      this.VersionTB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.VersionTB.MaxLength = 32767;
       this.VersionTB.Name = "VersionTB";
       this.VersionTB.PasswordChar = '\0';
       this.VersionTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
       this.VersionTB.SelectionLength = 0;
       this.VersionTB.SelectionStart = 0;
-      this.VersionTB.Size = new System.Drawing.Size(154, 23);
+      this.VersionTB.Size = new System.Drawing.Size(205, 28);
       this.VersionTB.TabIndex = 12;
       this.VersionTB.Text = " ";
       this.VersionTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -147,14 +148,15 @@ namespace FBI.MVC.View
       this.CurrencyTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.CurrencyTB.DefaultText = "Empty...";
       this.CurrencyTB.Enabled = false;
-      this.CurrencyTB.Location = new System.Drawing.Point(401, 1);
+      this.CurrencyTB.Location = new System.Drawing.Point(535, 1);
+      this.CurrencyTB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.CurrencyTB.MaxLength = 32767;
       this.CurrencyTB.Name = "CurrencyTB";
       this.CurrencyTB.PasswordChar = '\0';
       this.CurrencyTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
       this.CurrencyTB.SelectionLength = 0;
       this.CurrencyTB.SelectionStart = 0;
-      this.CurrencyTB.Size = new System.Drawing.Size(69, 23);
+      this.CurrencyTB.Size = new System.Drawing.Size(92, 28);
       this.CurrencyTB.TabIndex = 11;
       this.CurrencyTB.Text = " ";
       this.CurrencyTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -168,14 +170,15 @@ namespace FBI.MVC.View
       this.EntityTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.EntityTB.DefaultText = "Empty...";
       this.EntityTB.Enabled = false;
-      this.EntityTB.Location = new System.Drawing.Point(198, 1);
+      this.EntityTB.Location = new System.Drawing.Point(264, 1);
+      this.EntityTB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.EntityTB.MaxLength = 32767;
       this.EntityTB.Name = "EntityTB";
       this.EntityTB.PasswordChar = '\0';
       this.EntityTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
       this.EntityTB.SelectionLength = 0;
       this.EntityTB.SelectionStart = 0;
-      this.EntityTB.Size = new System.Drawing.Size(136, 23);
+      this.EntityTB.Size = new System.Drawing.Size(181, 28);
       this.EntityTB.TabIndex = 10;
       this.EntityTB.Text = " ";
       this.EntityTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -188,10 +191,11 @@ namespace FBI.MVC.View
       this.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_currencyLabel.Ellipsis = false;
       this.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_currencyLabel.Location = new System.Drawing.Point(340, 5);
+      this.m_currencyLabel.Location = new System.Drawing.Point(453, 6);
+      this.m_currencyLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_currencyLabel.Multiline = true;
       this.m_currencyLabel.Name = "m_currencyLabel";
-      this.m_currencyLabel.Size = new System.Drawing.Size(55, 16);
+      this.m_currencyLabel.Size = new System.Drawing.Size(73, 20);
       this.m_currencyLabel.TabIndex = 9;
       this.m_currencyLabel.Text = "Currency";
       this.m_currencyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -205,10 +209,11 @@ namespace FBI.MVC.View
       this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_versionLabel.Ellipsis = false;
       this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionLabel.Location = new System.Drawing.Point(476, 5);
+      this.m_versionLabel.Location = new System.Drawing.Point(635, 6);
+      this.m_versionLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_versionLabel.Multiline = true;
       this.m_versionLabel.Name = "m_versionLabel";
-      this.m_versionLabel.Size = new System.Drawing.Size(58, 16);
+      this.m_versionLabel.Size = new System.Drawing.Size(77, 20);
       this.m_versionLabel.TabIndex = 8;
       this.m_versionLabel.Text = "Version";
       this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -222,10 +227,11 @@ namespace FBI.MVC.View
       this.m_entityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_entityLabel.Ellipsis = false;
       this.m_entityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_entityLabel.Location = new System.Drawing.Point(156, 5);
+      this.m_entityLabel.Location = new System.Drawing.Point(208, 6);
+      this.m_entityLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_entityLabel.Multiline = true;
       this.m_entityLabel.Name = "m_entityLabel";
-      this.m_entityLabel.Size = new System.Drawing.Size(33, 13);
+      this.m_entityLabel.Size = new System.Drawing.Size(44, 16);
       this.m_entityLabel.TabIndex = 7;
       this.m_entityLabel.Text = "Entity";
       this.m_entityLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -235,9 +241,10 @@ namespace FBI.MVC.View
       // panel2
       // 
       this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panel2.Location = new System.Drawing.Point(3, 28);
+      this.panel2.Location = new System.Drawing.Point(4, 35);
+      this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(682, 349);
+      this.panel2.Size = new System.Drawing.Size(909, 429);
       this.panel2.TabIndex = 2;
       // 
       // m_chartsRightClickMenu
@@ -266,9 +273,10 @@ namespace FBI.MVC.View
       // 
       this.m_panelRightClick.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_horizontalSplitBT,
-            this.m_splitVerticalBT});
+            this.m_splitVerticalBT,
+            this.m_chartEdit});
       this.m_panelRightClick.Name = "m_chartsRightClickMenu";
-      this.m_panelRightClick.Size = new System.Drawing.Size(156, 48);
+      this.m_panelRightClick.Size = new System.Drawing.Size(156, 92);
       // 
       // m_horizontalSplitBT
       // 
@@ -282,12 +290,19 @@ namespace FBI.MVC.View
       this.m_splitVerticalBT.Size = new System.Drawing.Size(155, 22);
       this.m_splitVerticalBT.Text = "Split Vertical";
       // 
+      // m_chartEdit
+      // 
+      this.m_chartEdit.Name = "m_chartEdit";
+      this.m_chartEdit.Size = new System.Drawing.Size(155, 22);
+      this.m_chartEdit.Text = "Chart";
+      // 
       // CUIVisualization
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(688, 380);
+      this.ClientSize = new System.Drawing.Size(917, 468);
       this.Controls.Add(this.TableLayoutPanel1);
+      this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.Name = "CUIVisualization";
       this.TableLayoutPanel1.ResumeLayout(false);
       this.Panel1.ResumeLayout(false);
@@ -314,6 +329,7 @@ namespace FBI.MVC.View
   public VIBlend.WinForms.Controls.vLabel m_entityLabel;
   private System.Windows.Forms.Panel panel2;
   private System.Windows.Forms.ToolStripMenuItem m_splitVerticalBT;
+  private System.Windows.Forms.ToolStripMenuItem m_chartEdit;
 }
 
 }

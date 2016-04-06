@@ -15,16 +15,22 @@ namespace FBI.MVC.View
 {
   using Controller;
   using Utils;
+  using Model;
   using Model.CRUD;
+  using System.Diagnostics;
+  using Forms;
+  using Network;
 
   public partial class CUIVisualization : Form, IView
   {
     CUIVisualizationController m_controller;
 
+    private FbiChart m_lastClickedChart;
+
     public CUIVisualization()
     {
-      InitializeComponent();
-      MultilangueSetup();
+      this.InitializeComponent();
+      this.MultilangueSetup();
     }
 
     private void MultilangueSetup()
@@ -42,7 +48,7 @@ namespace FBI.MVC.View
 
     public void LoadView()
     {
-      SuscribeEvents();
+      this.SuscribeEvents();
     }
 
     void SuscribeEvents()
@@ -50,33 +56,10 @@ namespace FBI.MVC.View
       panel2.ContextMenuStrip = m_panelRightClick;
       m_horizontalSplitBT.Click += OnSplitHorizontalClick;
       m_splitVerticalBT.Click += OnSplitVerticalClick;
-    }
+      m_chartEdit.Click += OnChartClick;
 
-    Chart CreateChart()
-    {
-      Chart l_chart = new Chart();
-      ChartArea l_area = new ChartArea();
-
-      l_chart.ChartAreas.Add(l_area);
-      l_area.AxisX.MajorGrid.Enabled = false;
-      l_area.AxisY.MajorGrid.Enabled = false;
-      l_area.IsSameFontSizeForAllAxes = true;
-
-      l_area.AxisY.TitleFont = new Font("calibri", 8);
-      l_area.AxisX.TitleFont = new Font("calibri", 8);
-      l_area.AxisX.LabelStyle.Angle = -45;
-      l_area.AxisY.LabelAutoFitMaxFontSize = 10;
-      l_area.AxisX.LabelAutoFitMaxFontSize = 10;
-      
-      return (l_chart);
-    }
-
-    void BindSeries(Chart p_chart, IEnumerable p_dataX, IEnumerable p_dataY)
-    {
-      Series l_series = new Series();
-
-      l_series.ChartArea = p_chart.ChartAreas.First().Name;
-      l_series.Points.DataBindXY(p_dataX, p_dataY);
+      ChartSettingsModel.Instance.CreationEvent += OnSettingsUpdated;
+      ChartSettingsModel.Instance.UpdateEvent += OnSettingsUpdated;
     }
 
     #region Split
@@ -87,7 +70,7 @@ namespace FBI.MVC.View
       ContextMenuStrip l_menu = l_item.Owner as ContextMenuStrip;
 
       if (l_menu != null)
-        Split(l_menu.SourceControl, Orientation.Vertical);
+        Split(l_menu.SourceControl, System.Windows.Forms.Orientation.Vertical);
     }
 
     void OnSplitVerticalClick(object p_sender, EventArgs p_args)
@@ -96,10 +79,10 @@ namespace FBI.MVC.View
       ContextMenuStrip l_menu = l_item.Owner as ContextMenuStrip;
 
       if (l_menu != null)
-        Split(l_menu.SourceControl, Orientation.Horizontal);
+        Split(l_menu.SourceControl, System.Windows.Forms.Orientation.Horizontal);
     }
 
-    void Split(Control p_control, Orientation p_orientation)
+    void Split(Control p_control, System.Windows.Forms.Orientation p_orientation)
     {
       vSplitContainer l_newSplit = new vSplitContainer();
       l_newSplit.Panel1.ContextMenuStrip = m_panelRightClick;
@@ -108,13 +91,66 @@ namespace FBI.MVC.View
       foreach (Control l_control in p_control.Controls)
         l_newSplit.Panel1.Controls.Add(l_control);
 
-      Chart l_chart = CreateChart();
-
       p_control.Controls.Clear();
       p_control.Controls.Add(l_newSplit);
       l_newSplit.Dock = DockStyle.Fill;
-      l_newSplit.Panel2.Controls.Add(l_chart);
-      l_chart.Dock = DockStyle.Fill;
+    }
+
+    #endregion
+
+
+    private void UpdateChart(FbiChart p_chart, ChartSettings p_settings)
+    {
+      int[] test = { 0, 10, 42, 142 };
+      int[] test2 = { 0, 10, 20, 30 };
+      p_chart.AddSerie(test, test2);
+      //           ^
+      //TEST HERE / \
+      //           |
+      //           |
+
+      p_chart.Assign(p_settings, m_controller.LastConfig, m_controller.LastResult);
+    }
+    
+    private void OnSettingsUpdated(ErrorMessage p_msg, UInt32 p_id)
+    {
+      this.UpdateChart(m_lastClickedChart, ChartSettingsModel.Instance.GetValue(p_id));
+    }
+
+    private void OnChartClick(object sender, EventArgs e)
+    {
+      FbiChart l_chart;
+      ToolStripMenuItem l_toolStrip = (ToolStripMenuItem)sender;
+      Control l_clickedControl = ((ContextMenuStrip)(((ToolStripMenuItem)sender).Owner)).SourceControl;
+
+      if ((l_chart = this.GetObjectFromControl(l_clickedControl, typeof(FbiChart))) == null)
+      {
+        l_chart = new FbiChart();
+        l_chart.Dock = DockStyle.Fill;
+        l_clickedControl.Controls.Add(l_chart);
+      }
+      m_lastClickedChart = l_chart;
+
+      if (l_chart.HasSettings())
+      {
+        m_controller.ShowSettingsView(l_chart.Settings.Id);
+      }
+      else
+      {
+        m_controller.ShowSettingsView();
+      }
+    }
+
+    #region Utils
+
+    private FbiChart GetObjectFromControl(Control p_control, Type p_type)
+    {
+      foreach (Control l_control in p_control.Controls)
+      {
+        if (l_control.GetType() == p_type)
+          return ((FbiChart)l_control);
+      }
+      return (null);
     }
 
     #endregion

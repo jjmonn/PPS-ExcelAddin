@@ -114,6 +114,7 @@ namespace FBI.MVC.View
       {
         if (p_status == ErrorMessage.SUCCESS && p_result != null)
         {
+          m_controller.LastResult = p_result;
           LegacyComputeRequest l_request = p_request as LegacyComputeRequest;
 
           if (l_request != null)
