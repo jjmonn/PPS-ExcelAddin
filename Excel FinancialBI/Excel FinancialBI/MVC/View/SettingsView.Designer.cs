@@ -49,6 +49,7 @@ namespace FBI.MVC.View
       this.m_userTB = new VIBlend.WinForms.Controls.vTextBox();
       this.m_userIdLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_formatsTab = new VIBlend.WinForms.Controls.vTabPage();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_formatsGroup = new VIBlend.WinForms.Controls.vGroupBox();
       this.m_otherTab = new VIBlend.WinForms.Controls.vTabPage();
       this.m_otherValidateButton = new VIBlend.WinForms.Controls.vButton();
@@ -60,10 +61,12 @@ namespace FBI.MVC.View
       this.ACFIcon = new System.Windows.Forms.ImageList(this.components);
       this.FolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
       this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
+      this.m_saveFormatBT = new VIBlend.WinForms.Controls.vButton();
       this.Panel1.SuspendLayout();
       this.TabControl1.SuspendLayout();
       this.m_connectionTab.SuspendLayout();
       this.m_formatsTab.SuspendLayout();
+      this.tableLayoutPanel1.SuspendLayout();
       this.m_otherTab.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -159,7 +162,7 @@ namespace FBI.MVC.View
       this.m_saveConnectionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_saveConnectionButton.ImageKey = "1420498403_340208.ico";
       this.m_saveConnectionButton.ImageList = this.ButtonIcons;
-      this.m_saveConnectionButton.Location = new System.Drawing.Point(347, 229);
+      this.m_saveConnectionButton.Location = new System.Drawing.Point(351, 229);
       this.m_saveConnectionButton.Name = "m_saveConnectionButton";
       this.m_saveConnectionButton.RoundedCornersMask = ((byte)(15));
       this.m_saveConnectionButton.Size = new System.Drawing.Size(102, 30);
@@ -268,7 +271,7 @@ namespace FBI.MVC.View
       // 
       // m_formatsTab
       // 
-      this.m_formatsTab.Controls.Add(this.m_formatsGroup);
+      this.m_formatsTab.Controls.Add(this.tableLayoutPanel1);
       this.m_formatsTab.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_formatsTab.Location = new System.Drawing.Point(0, 45);
       this.m_formatsTab.Name = "m_formatsTab";
@@ -280,14 +283,29 @@ namespace FBI.MVC.View
       this.m_formatsTab.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       this.m_formatsTab.Visible = false;
       // 
+      // tableLayoutPanel1
+      // 
+      this.tableLayoutPanel1.ColumnCount = 1;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+      this.tableLayoutPanel1.Controls.Add(this.m_formatsGroup, 0, 0);
+      this.tableLayoutPanel1.Controls.Add(this.m_saveFormatBT, 0, 1);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 4);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 2;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(452, 262);
+      this.tableLayoutPanel1.TabIndex = 0;
+      // 
       // m_formatsGroup
       // 
       this.m_formatsGroup.BackColor = System.Drawing.Color.Transparent;
       this.m_formatsGroup.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.m_formatsGroup.Location = new System.Drawing.Point(4, 4);
+      this.m_formatsGroup.Location = new System.Drawing.Point(3, 3);
       this.m_formatsGroup.Name = "m_formatsGroup";
-      this.m_formatsGroup.Size = new System.Drawing.Size(452, 262);
-      this.m_formatsGroup.TabIndex = 1;
+      this.m_formatsGroup.Size = new System.Drawing.Size(446, 217);
+      this.m_formatsGroup.TabIndex = 2;
       this.m_formatsGroup.TabStop = false;
       this.m_formatsGroup.Text = "Reports formats";
       this.m_formatsGroup.UseThemeBorderColor = true;
@@ -318,7 +336,7 @@ namespace FBI.MVC.View
       this.m_otherValidateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_otherValidateButton.ImageKey = "1420498403_340208.ico";
       this.m_otherValidateButton.ImageList = this.ButtonIcons;
-      this.m_otherValidateButton.Location = new System.Drawing.Point(347, 229);
+      this.m_otherValidateButton.Location = new System.Drawing.Point(351, 229);
       this.m_otherValidateButton.Name = "m_otherValidateButton";
       this.m_otherValidateButton.RoundedCornersMask = ((byte)(15));
       this.m_otherValidateButton.Size = new System.Drawing.Size(102, 30);
@@ -326,7 +344,7 @@ namespace FBI.MVC.View
       this.m_otherValidateButton.Text = "Save";
       this.m_otherValidateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_otherValidateButton.UseVisualStyleBackColor = false;
-      this.m_otherValidateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_otherValidateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_languageComboBox
       // 
@@ -411,6 +429,24 @@ namespace FBI.MVC.View
       this.ACFIcon.TransparentColor = System.Drawing.Color.Transparent;
       this.ACFIcon.Images.SetKeyName(0, "ACF Square 2 .1Control bgd.png");
       // 
+      // m_saveFormatBT
+      // 
+      this.m_saveFormatBT.AllowAnimations = true;
+      this.m_saveFormatBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_saveFormatBT.BackColor = System.Drawing.Color.Transparent;
+      this.m_saveFormatBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_saveFormatBT.ImageKey = "1420498403_340208.ico";
+      this.m_saveFormatBT.ImageList = this.ButtonIcons;
+      this.m_saveFormatBT.Location = new System.Drawing.Point(347, 226);
+      this.m_saveFormatBT.Name = "m_saveFormatBT";
+      this.m_saveFormatBT.RoundedCornersMask = ((byte)(15));
+      this.m_saveFormatBT.Size = new System.Drawing.Size(102, 30);
+      this.m_saveFormatBT.TabIndex = 21;
+      this.m_saveFormatBT.Text = "Save";
+      this.m_saveFormatBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_saveFormatBT.UseVisualStyleBackColor = false;
+      this.m_saveFormatBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
       // SettingsView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -425,11 +461,11 @@ namespace FBI.MVC.View
       this.TabControl1.ResumeLayout(false);
       this.m_connectionTab.ResumeLayout(false);
       this.m_formatsTab.ResumeLayout(false);
+      this.tableLayoutPanel1.ResumeLayout(false);
       this.m_otherTab.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
-    internal System.Windows.Forms.Panel Panel1;
     internal VIBlend.WinForms.Controls.vTabControl TabControl1;
     internal VIBlend.WinForms.Controls.vTabPage m_connectionTab;
     internal System.Windows.Forms.ImageList ControlImages;
@@ -442,7 +478,6 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.FolderBrowserDialog FolderBrowserDialog1;
     internal VIBlend.WinForms.Controls.vLabel m_portNumberLabel;
     internal VIBlend.WinForms.Controls.vTabPage m_formatsTab;
-    internal VIBlend.WinForms.Controls.vGroupBox m_formatsGroup;
     internal System.Windows.Forms.ColorDialog ColorDialog1;
     internal VIBlend.WinForms.Controls.vTabPage m_otherTab;
     internal VIBlend.WinForms.Controls.vComboBox m_currenciesCombobox;
@@ -452,5 +487,9 @@ namespace FBI.MVC.View
     internal VIBlend.WinForms.Controls.vLabel m_languageLabel;
     internal VIBlend.WinForms.Controls.vButton m_otherValidateButton;
     private VIBlend.WinForms.Controls.vNumberEditor m_portTB;
+    internal System.Windows.Forms.Panel Panel1;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+    internal VIBlend.WinForms.Controls.vGroupBox m_formatsGroup;
+    internal VIBlend.WinForms.Controls.vButton m_saveFormatBT;
   }
 }
