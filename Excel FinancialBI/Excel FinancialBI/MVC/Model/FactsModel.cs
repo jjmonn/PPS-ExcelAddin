@@ -84,7 +84,7 @@ namespace FBI.MVC.Model
       packet.WriteInt32(p_factsCommitDict.Values.Count);
       if (p_action == CRUDAction.DELETE)
         foreach (Fact fact_value in p_factsCommitDict.Values)
-          packet.WriteUint32(fact_value.Id);
+          fact_value.Dump(packet, true);
       else
         foreach (Fact fact_value in p_factsCommitDict.Values)
           fact_value.Dump(packet, false);

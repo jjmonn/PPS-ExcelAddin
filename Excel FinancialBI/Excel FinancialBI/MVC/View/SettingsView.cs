@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VIBlend.WinForms.Controls;
+using VIBlend.WinForms.DataGridView;
 
 namespace FBI.MVC.View
 {
@@ -15,13 +16,34 @@ namespace FBI.MVC.View
   using Utils;
   using Model;
   using Model.CRUD;
+  using Forms;
   using Settings = Properties.Settings;
+  using Dimension = FBI.Forms.BaseFbiDataGridView<UInt32>.Dimension;
 
   public partial class SettingsView : Form, IView
   {
+    enum Columns
+    {
+      PREVIEW,
+      TEXT_COLOR,
+      BACKGROUND_COLOR,
+      BOLD,
+      ITALIC,
+      BORDER
+    };
+
+    enum Rows
+    {
+      TITLE,
+      IMPORTANT,
+      NORMAL,
+      DETAIL
+    }
+
     SettingsController m_controller;
     SafeDictionary<UInt32, ListItem> m_languagesItems = new SafeDictionary<UInt32, ListItem>();
     SafeDictionary<UInt32, ListItem> m_currenciesItems = new SafeDictionary<UInt32, ListItem>();
+    BaseFbiDataGridView<UInt32> m_formatDGV = new BaseFbiDataGridView<UInt32>();
 
     public SettingsView()
     {
@@ -76,8 +98,36 @@ namespace FBI.MVC.View
     {
       MultilanguageSetup();
       LoadConnectionTab();
+      LoadFormatTab();
       LoadOtherTab();
       SuscribeEvents();
+    }
+
+    void LoadFormatTab()
+    {
+      m_formatsGroup.Controls.Add(m_formatDGV);
+      m_formatDGV.Dock = DockStyle.Fill;
+      SetFormatColumn(Columns.PREVIEW, Local.GetValue("settings.format_preview"));
+      SetFormatColumn(Columns.TEXT_COLOR, Local.GetValue("settings.text_color"));
+      SetFormatColumn(Columns.BACKGROUND_COLOR, Local.GetValue("settings.background_color"));
+      SetFormatColumn(Columns.BOLD, Local.GetValue("settings.bold"));
+      SetFormatColumn(Columns.ITALIC, Local.GetValue("settings.italic"));
+      SetFormatColumn(Columns.BORDER, Local.GetValue("settings.border"));
+
+      SetFormatRow(Rows.TITLE, Local.GetValue("settings.title"));
+      SetFormatRow(Rows.IMPORTANT, Local.GetValue("settings.important"));
+      SetFormatRow(Rows.NORMAL, Local.GetValue("settings.normal"));
+      SetFormatRow(Rows.DETAIL, Local.GetValue("settings.detail"));
+    }
+
+    void SetFormatColumn(Columns p_id, string p_name)
+    {
+      m_formatDGV.SetDimension(Dimension.COLUMN, m_formatDGV.ColumnsHierarchy.Items, (UInt32)p_id, p_name);
+    }
+
+    void SetFormatRow(Rows p_id, string p_name)
+    {
+      m_formatDGV.SetDimension(Dimension.ROW, m_formatDGV.RowsHierarchy.Items, (UInt32)p_id, p_name);
     }
 
     void LoadOtherTab()

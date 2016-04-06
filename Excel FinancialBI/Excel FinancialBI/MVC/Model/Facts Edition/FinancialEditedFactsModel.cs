@@ -136,6 +136,7 @@ namespace FBI.MVC.Model
     {
       if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
         return;
+      AddinModuleController.SetExcelInteractionState(false);
       if (p_status != ErrorMessage.SUCCESS)
       {
         RaiseFactDownloaded(false);
@@ -157,12 +158,19 @@ namespace FBI.MVC.Model
             l_fact = l_editedFact.Clone();
             l_fact.Value = 0;
           }
-          double l_editedValue = l_editedFact.EditedValue;
-          l_editedFact.UpdateFinancialFact(l_fact);
-          if (m_displayDiff)
-            l_editedFact.EditedValue = l_editedValue;
-          if (m_updateCellsOnDownload)
-            l_editedFact.Cell.Value2 = l_editedFact.Value;
+          try
+          {
+            double l_editedValue = l_editedFact.EditedValue;
+            l_editedFact.UpdateFinancialFact(l_fact);
+            if (m_displayDiff)
+              l_editedFact.EditedValue = l_editedValue;
+            if (m_updateCellsOnDownload)
+              l_editedFact.Cell.Value2 = l_editedFact.Value;
+          }
+          catch (Exception e)
+          {
+            System.Diagnostics.Debug.WriteLine("FinancialEditedFactsModel::OnFinancialInputDownloaded", e.Message);
+          }
         }
       }
       foreach (KeyValuePair<DimensionKey, Fact> l_pair in l_downloadedFactDic)
