@@ -167,6 +167,7 @@ namespace FBI.MVC.View
           InitDimension(l_dgv, l_account.Id, p_config.Rows, DGVDimension.ROW, l_dgv.RowsHierarchy.Items, new ResultKey(0, "", "", 0, 0, 0, false, l_account.Id));
           InitDimension(l_dgv, l_account.Id, p_config.Columns, DGVDimension.COLUMN, l_dgv.ColumnsHierarchy.Items,
             new ResultKey(0, "", "", 0, 0, (m_computeConfig.Request.Versions.Count <= 1) ? m_computeConfig.Request.Versions[0] : 0, false, l_account.Id));
+          DGVFormatUtils.FormatDGVs(l_dgv, m_computeConfig.Request.CurrencyId);
           l_dgv.Refresh();
         }
     }

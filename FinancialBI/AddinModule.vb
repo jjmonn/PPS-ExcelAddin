@@ -306,6 +306,7 @@ Public Class AddinModule
         GlobalVariables.EntityCurrencies = New EntityCurrencyManager
         GlobalVariables.EntitiesDistributions = New EntityDistributionManager
         GlobalVariables.AxisOwners = New AxisOwnerManager
+        GlobalVariables.FactTags = New FactTagManager
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New FBIFunctionController

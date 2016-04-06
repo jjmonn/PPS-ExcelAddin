@@ -737,6 +737,7 @@
     <Compile Include="Utils\BNF\FbiGrammar.cs" />
     <Compile Include="Utils\BNF\SimpleBnf.cs" />
     <Compile Include="Utils\CustomComponentResourceManager.cs" />
+    <Compile Include="Utils\DGVFormatUtils.cs" />
     <Compile Include="Utils\ExcelFormatting.cs" />
     <Compile Include="Utils\ExcelUtils.cs" />
     <Compile Include="Utils\Formats.cs" />

@@ -171,8 +171,8 @@ Public Class ReportUploadEntitySelectionPane
 #Region "Utilities"
 
     Private Sub PeriodsControlDisplay(ByRef p_visible As Boolean)
-        m_periodsRangeSelection.Visible = p_visible
-    End Sub
+    If Not m_periodsRangeSelection Is Nothing Then m_periodsRangeSelection.Visible = p_visible
+  End Sub
 
 #End Region
 

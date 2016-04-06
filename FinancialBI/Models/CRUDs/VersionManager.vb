@@ -66,6 +66,7 @@ Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
         packet.WriteInt32(p_originId)
         packet.WriteString(p_new.Name)
+        packet.WriteUint16(p_new.StartPeriod)
         packet.WriteUint16(p_new.NbPeriod)
         packet.WriteUint32(p_new.RateVersionId)
         packet.WriteUint32(p_new.GlobalFactVersionId)

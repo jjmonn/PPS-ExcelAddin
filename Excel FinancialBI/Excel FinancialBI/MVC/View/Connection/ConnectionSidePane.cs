@@ -29,6 +29,7 @@ namespace FBI.MVC.View
       SetupMultilangue();
       IsLoading = false;
       ConnectionBT.Visible = true;
+      m_userNameTextBox.Text = Properties.Settings.Default.user;
     }
 
     private void SuscribeEvents()

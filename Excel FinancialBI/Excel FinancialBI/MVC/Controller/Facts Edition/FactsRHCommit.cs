@@ -11,13 +11,9 @@ namespace FBI.MVC.Model
   using Network;
   using Utils;
   using CRUD;
-  using FBI.MVC.Model;
-  using FBI.MVC.Controller;
-  using FBI.MVC.View;
+  using Controller;
+  using View;
   
-  public delegate void FactsCommitError(string p_address, ErrorMessage p_error);
-
-
   class FactsRHCommit
   {
     MultiIndexDictionary<string, DimensionKey, EditedRHFact> m_RHEditedFacts;
@@ -29,23 +25,22 @@ namespace FBI.MVC.Model
     SafeDictionary<CRUDAction, List<FactTag>> m_factTagCommitDict = new SafeDictionary<CRUDAction, List<FactTag>>();
     SafeDictionary<CRUDAction, List<LegalHoliday>> m_LegalHolidayCommitDict = new SafeDictionary<CRUDAction, List<LegalHoliday>>();
     SafeDictionary<UInt32, EditedRHFact> m_legalHolidayDeleteDictIdEditedFact = new SafeDictionary<uint,EditedRHFact>();
-    public event FactsCommitError OnCommitError;
     List<int> m_requestIdList = new List<int>();
     UInt32 m_RHAccountId;
     UInt32 m_versionId;
     UInt32 m_nbAwaitingAnswer = 0;
+    RHEditedFactsModel m_model;
 
-    public FactsRHCommit(MultiIndexDictionary<string, DimensionKey, EditedRHFact> p_RHEditedFacts,
-                         SafeDictionary<DimensionKey, Fact> p_previousWeeksFacts,
-                         SafeDictionary<UInt32, EditedRHFact> p_IdEditedFactDict,
+    public FactsRHCommit(RHEditedFactsModel p_model,
                          List<Int32> p_periodsList,
                          RangeHighlighter p_rangeHighlighter,
                          UInt32 p_RHAccountId,
                          UInt32 p_versionId)
     {
-      m_RHEditedFacts = p_RHEditedFacts;
-      m_previousWeeksFacts = p_previousWeeksFacts;
-      m_IdEditedFactDict = p_IdEditedFactDict;
+      m_model = p_model;
+      m_RHEditedFacts = m_model.EditedFacts;
+      m_previousWeeksFacts = m_model.PreviousWeeksFacts;
+      m_IdEditedFactDict = m_model.IdEditedFactDict;
       m_periodsList = p_periodsList;
       m_rangeHighlighter = p_rangeHighlighter;
       m_RHAccountId = p_RHAccountId;
@@ -193,6 +188,8 @@ namespace FBI.MVC.Model
                 OnFactUpdate(l_addressMessagePair.Key, l_addressMessagePair.Value.Item1, l_addressMessagePair.Value.Item2);
               else
                 OnFactDelete(l_addressMessagePair.Key, l_addressMessagePair.Value.Item1, l_addressMessagePair.Value.Item2);
+              if (l_addressMessagePair.Value.Item2 != ErrorMessage.SUCCESS)
+                m_model.RaiseOnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
             }
             if (m_factTagCommitDict != null)
               FactTagCommit();
@@ -219,11 +216,6 @@ namespace FBI.MVC.Model
         m_IdEditedFactDict[p_factId] = l_editedFact;
         m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
       }
-      else
-      {
-        // Put back model value for ClientId, quid : information not available anymore ..
-        // OnCommitError(l_addressMessagePair.Key, l_addressMessagePair.Value.Item2);
-      }
     }
 
     private void OnFactDelete(string p_cellAddress, UInt32 p_factId, ErrorMessage p_errorMessage)
@@ -235,11 +227,6 @@ namespace FBI.MVC.Model
         m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
         if (m_IdEditedFactDict.ContainsKey(p_factId) == true)
           m_IdEditedFactDict.Remove(p_factId);
-      }
-      else
-      {
-        // put back edited client to fact Client Id value
-        // Log commit error
       }
     }
 
@@ -319,9 +306,7 @@ namespace FBI.MVC.Model
           FactTag l_modelFactTag = FactTagModel.Instance.GetValue(l_editedFact.Id);
           if (l_modelFactTag != null)
             l_editedFact.ModelFactTag.Tag = l_modelFactTag.Tag;
-
-          if (OnCommitError != null)
-            OnCommitError(l_editedFact.Cell.Address, ErrorMessage.SYSTEM); // TO DO : facts tags should be commited like facts
+          m_model.RaiseOnCommitError(l_editedFact.Cell.Address, p_status); // TO DO : facts tags should be commited like facts
         }
       }
     }
@@ -388,16 +373,16 @@ namespace FBI.MVC.Model
     {
       foreach (KeyValuePair<UInt32, ErrorMessage> l_result in p_createResults)
       {
+        LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(l_result.Key);
+        if (l_legalHoliday == null)
+          continue;
+
+        EditedRHFact l_editedFact = GetEditedFact(l_legalHoliday.EmployeeId, (Int32)l_legalHoliday.Period);
+        if (l_editedFact == null)
+          continue;
+
         if (l_result.Value == ErrorMessage.SUCCESS)
         {
-          LegalHoliday l_legalHoliday = LegalHolidayModel.Instance.GetValue(l_result.Key);
-          if (l_legalHoliday == null)
-            return;
-
-          EditedRHFact l_editedFact = GetEditedFact(l_legalHoliday.EmployeeId, (Int32)l_legalHoliday.Period);
-          if (l_editedFact == null)
-            return;
-
           m_rangeHighlighter.FillCellGreen(l_editedFact.Cell);
           l_editedFact.ModelLegalHoliday.Id = l_legalHoliday.Id;
           l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.FER;
@@ -405,9 +390,7 @@ namespace FBI.MVC.Model
           l_editedFact.EditedLegalHoliday.Tag = LegalHolidayTag.FER;
         }
         else
-        {
-          // TO DO: Log error
-        }
+          m_model.RaiseOnCommitError(l_editedFact.Cell.Address, l_result.Value);
       }
     }
 
@@ -420,19 +403,17 @@ namespace FBI.MVC.Model
       {
         foreach (KeyValuePair<UInt32, ErrorMessage> l_result in p_deleteResults)
         {
+          EditedRHFact l_editedFact = m_legalHolidayDeleteDictIdEditedFact[l_result.Key];
+          if (l_editedFact == null)
+            continue;
+
           if (l_result.Value == ErrorMessage.SUCCESS)
           {
-            EditedRHFact l_editedFact = m_legalHolidayDeleteDictIdEditedFact[l_result.Key];
-            if (l_editedFact == null)
-              return;
-
             m_rangeHighlighter.FillCellColor(l_editedFact.Cell, EditedFactStatus.Committed);
             l_editedFact.ModelLegalHoliday.Tag = LegalHolidayTag.NONE;
           }
           else
-          {
-            // TO DO: Log commit error to view
-          }
+            m_model.RaiseOnCommitError(l_editedFact.Cell.Address, l_result.Value);
           m_legalHolidayDeleteDictIdEditedFact.Remove(l_result.Key);
         }
       }
@@ -478,7 +459,7 @@ namespace FBI.MVC.Model
       Int32 l_periodMinus3Weeks = PeriodModel.GetDayMinus3Weeks(m_periodsList.ElementAt(0));
       for (Int32 l_period = (Int32)p_editedFact.Period; l_period >= l_periodMinus3Weeks; l_period -= 1)
       {
-        l_period = (Int32)DateTime.FromOADate((double)l_period).AddDays(-1).ToOADate();  
+        l_period = (Int32)DateTime.FromOADate((double)l_period).AddDays(-1).ToOADate();
         DimensionKey l_dimensionKey = new DimensionKey(p_editedFact.EntityId, p_editedFact.AccountId, p_editedFact.EmployeeId, l_period);
         EditedRHFact l_RHEditedFact = m_RHEditedFacts[l_dimensionKey];
         if (l_RHEditedFact != null)
@@ -493,7 +474,7 @@ namespace FBI.MVC.Model
             p_editedFact.EditedValue = l_RHEditedFact.Value;
             return l_RHEditedFact.ClientId;
           }
-          }
+        }
         else
         {
           Fact l_fact = m_previousWeeksFacts[l_dimensionKey];
@@ -502,7 +483,7 @@ namespace FBI.MVC.Model
             p_editedFact.EditedValue = l_fact.Value;
             return l_fact.ClientId;
           }
-          }
+        }
       }
 
       // TO DO :Commit status could be orange when last allocated client is default 

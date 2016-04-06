@@ -259,7 +259,7 @@ namespace FBI
         SubmissionVersionName = l_version.Name;
         if (l_process == Account.AccountProcess.FINANCIAL)
         {
-          if (m_controller.LaunchFinancialSnapshot(false, l_version.Id) == false)
+          if (m_controller.LaunchFinancialSnapshot(true, false, l_version.Id) == false)
             MessageBox.Show(m_controller.Error);
         }
         else
@@ -414,10 +414,20 @@ namespace FBI
 
     void OnAddinInitializationEvent()
     {
+      ClientsDropDown.OnAction += OnAxisSelectionChanged;
+      ProductsDropDown.OnAction += OnAxisSelectionChanged;
+      AdjustmentDropDown.OnAction += OnAxisSelectionChanged;
       fbiRibbonChangeState(true);
       SetFinancialRibbonState(true);
       SetRHRibbonState(true);
       Addin.VersionId = Properties.Settings.Default.version_id;
+    }
+
+    void OnAxisSelectionChanged(object p_sender, IRibbonControl p_control, string p_selectedId, int p_selectedIndex)
+    {
+      DialogResult l_result = MessageBox.Show(Local.GetValue("upload.change_axis_elem"), "", MessageBoxButtons.YesNo);
+
+      m_controller.ReloadReportUpload(l_result == DialogResult.No);
     }
 
     private void OnConnectionEvent(bool p_connected)
@@ -465,6 +475,9 @@ namespace FBI
 
     public void InitFinancialSubmissionRibon()
     {
+      ClientsDropDown.Items.Clear();
+      ProductsDropDown.Items.Clear();
+      AdjustmentDropDown.Items.Clear();
       foreach (AxisElem l_client in AxisElemModel.Instance.GetDictionary(AxisType.Client).Values)
         AddButtonToDropDown(ClientsDropDown, l_client.Id, l_client.Name);
       foreach (AxisElem l_product in AxisElemModel.Instance.GetDictionary(AxisType.Product).Values)
@@ -484,6 +497,22 @@ namespace FBI
       }
     }
 
+    public string SubmissionEntityName
+    {
+      set
+      {
+        EntityTB.Text = value;
+      }
+    }
+
+    public string SubmissionCurrencyName
+    {
+      set
+      {
+        EntCurrTB.Text = value;
+      }
+    }
+
     public string SubmissionCurrency
     {
       set
@@ -498,6 +527,10 @@ namespace FBI
       {
         ClientsDropDown.SelectedItemId = value.ToString();
       }
+      get
+      {
+        return (UInt32.Parse(ClientsDropDown.SelectedItemId));
+      }
     }
 
     public UInt32 SubmissionProductId
@@ -505,6 +538,10 @@ namespace FBI
       set
       {
         ProductsDropDown.SelectedItemId = value.ToString();
+      }
+      get
+      {
+        return (UInt32.Parse(ProductsDropDown.SelectedItemId));
       }
     }
 
@@ -514,9 +551,18 @@ namespace FBI
       {
         AdjustmentDropDown.SelectedItemId = value.ToString();
       }
+      get
+      {
+        return (UInt32.Parse(AdjustmentDropDown.SelectedItemId));
+      }
     }
 
     #endregion
+
+    private void m_financialSubmissionSatusButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.ShowStatusView();
+    }
 
   }
 }

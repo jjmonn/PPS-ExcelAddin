@@ -1076,7 +1076,9 @@ Friend Class ModelDataSet
                 l_cell = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_horizontalDimensionAddress).Column, _
                                                 m_excelWorkSheet.Range(l_verticalAddressValuePair.Key).Row)
                 l_datasetCell = m_datasetCellDimensionsDictionary(l_cell.Address)
-                l_datasetCell.m_value = l_cell.Value2
+
+                l_datasetCell.m_value = 0
+                Double.TryParse(l_cell.Value2, l_datasetCell.m_value)
                 l_datasetCell.m_client = l_cell.Value2
             Next
         Next

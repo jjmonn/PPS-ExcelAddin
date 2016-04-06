@@ -514,8 +514,7 @@
       this.ReportUploadAccountInfoSidePaneItem.AllowedDropPositions = ((AddinExpress.XL.ADXExcelAllowedDropPositions)((AddinExpress.XL.ADXExcelAllowedDropPositions.Right | AddinExpress.XL.ADXExcelAllowedDropPositions.Left)));
       this.ReportUploadAccountInfoSidePaneItem.AlwaysShowHeader = true;
       this.ReportUploadAccountInfoSidePaneItem.CloseButton = true;
-      this.ReportUploadAccountInfoSidePaneItem.DefaultRegionState = AddinExpress.XL.ADXRegionState.Hidden;
-      this.ReportUploadAccountInfoSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left;
+      this.ReportUploadAccountInfoSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right;
       this.ReportUploadAccountInfoSidePaneItem.TaskPaneClassName = "FBI.MVC.View.ReportUploadAccountInfoSidePane";
       this.ReportUploadAccountInfoSidePaneItem.UseOfficeThemeForBackground = true;
       // 
@@ -588,6 +587,7 @@
       this.m_financialSubmissionSatusButton.ImageList = this.LightsImageList;
       this.m_financialSubmissionSatusButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_financialSubmissionSatusButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_financialSubmissionSatusButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialSubmissionSatusButton_OnClick);
       // 
       // StateSelectionGroup
       // 

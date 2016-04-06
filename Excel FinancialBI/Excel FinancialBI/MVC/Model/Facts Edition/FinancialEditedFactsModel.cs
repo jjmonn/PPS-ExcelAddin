@@ -23,7 +23,9 @@ namespace FBI.MVC.Model
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
+    bool m_displayDiff = true;
     bool m_needRefresh = false;
+    int m_nbRequest = 0;
 
     #region Initialize
 
@@ -43,6 +45,8 @@ namespace FBI.MVC.Model
 
     public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       m_dimensions = p_dimensions;
       m_versionId = p_versionId;
 
@@ -56,6 +60,7 @@ namespace FBI.MVC.Model
       Dimension<CRUDEntity> l_horitontal = p_dimensions.Dimensions[p_dimensions.Orientation.Horizontal];
       Dimension<CRUDEntity> l_tabDimension = p_dimensions.Dimensions[p_dimensions.Orientation.TabDimension];
 
+      m_displayDiff = p_displayInitialDifferences;
       CreateEditedFacts(l_vertical, l_horitontal, l_tabDimension);
     }
 
@@ -75,7 +80,7 @@ namespace FBI.MVC.Model
             Account.FormulaTypes l_formulaType = l_editedFact.Account.FormulaType;
             if (l_formulaType == Account.FormulaTypes.HARD_VALUE_INPUT || (l_formulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT && m_periodsList.FirstOrDefault() == l_editedFact.Period))
               EditedFacts.Set(l_factCell.Address, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
-            else
+            else if (l_formulaType != Account.FormulaTypes.TITLE)
               OutputFacts.Set(l_factCell.Address, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
           }
         }
@@ -89,10 +94,10 @@ namespace FBI.MVC.Model
     {
       UInt32 l_accountId = 0;
       UInt32 l_entityId = 0;
-      UInt32 l_clientId = (UInt32)AxisType.Client;
-      UInt32 l_productId = (UInt32)AxisType.Product;
-      UInt32 l_adjustmentId = (UInt32)AxisType.Adjustment;
-      UInt32 l_employeeId = (UInt32)AxisType.Employee;
+      UInt32 l_clientId = ClientId;
+      UInt32 l_productId = ProductId;
+      UInt32 l_adjustmentId = AdjustmentId;
+      UInt32 l_employeeId = EmployeeId;
       PeriodDimension l_period = null;
 
       WorksheetAreaController.SetDimensionValue(p_dimension1, p_dimensionValue1, ref l_accountId, ref l_entityId, ref l_employeeId, ref l_period);
@@ -108,40 +113,74 @@ namespace FBI.MVC.Model
 
     public override void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
+      AddinModuleController.SetExcelInteractionState(false);
       m_updateCellsOnDownload = p_updateCells;
+      if (m_updateCellsOnDownload)
+        foreach (EditedFactBase l_fact in EditedFacts.Values)
+        {
+          l_fact.Value = 0;
+          l_fact.EditedValue = 0;
+          l_fact.Cell.Value2 = 0;
+        }
       List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
 
       RequestIdList.Clear();
       foreach (AxisElem l_entity in l_entitiesList)
+      {
         RequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entity.Id, m_versionId, p_clientId, p_productId, p_adjustmentId));
+        m_nbRequest++;
+      }
     }
 
     private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_factsList)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
+      AddinModuleController.SetExcelInteractionState(false);
       if (p_status != ErrorMessage.SUCCESS)
       {
         RaiseFactDownloaded(false);
         return;
       }
+      SafeDictionary<DimensionKey, Fact> l_downloadedFactDic = new SafeDictionary<DimensionKey, Fact>();
       foreach (Fact l_fact in p_factsList)
+        l_downloadedFactDic[new DimensionKey(l_fact.EntityId, l_fact.AccountId, (UInt32)AxisType.Employee, (Int32)l_fact.Period)] = l_fact;
+      foreach (DimensionKey l_key in EditedFacts.SecondaryKeys)
       {
-        DimensionKey l_dimensionKey = new DimensionKey(l_fact.EntityId, l_fact.AccountId, (UInt32)AxisType.Employee, (Int32)l_fact.Period);
-        EditedFinancialFact l_EditedFact = EditedFacts[l_dimensionKey];
-        if (l_EditedFact != null)
+        EditedFinancialFact l_editedFact = EditedFacts[l_key];
+        if (l_editedFact != null)
         {
-          l_EditedFact.UpdateFinancialFact(l_fact);
-          if (m_updateCellsOnDownload)
-            l_EditedFact.Cell.Value2 = l_EditedFact.Value;
+          Fact l_fact = l_downloadedFactDic[l_key];
+          l_downloadedFactDic.Remove(l_key);
+
+          if (l_fact == null)
+          {
+            l_fact = l_editedFact.Clone();
+            l_fact.Value = 0;
+          }
+          try
+          {
+            double l_editedValue = l_editedFact.EditedValue;
+            l_editedFact.UpdateFinancialFact(l_fact);
+            if (m_displayDiff)
+              l_editedFact.EditedValue = l_editedValue;
+            if (m_updateCellsOnDownload)
+              l_editedFact.Cell.Value2 = l_editedFact.Value;
+          }
+          catch (Exception e)
+          {
+            System.Diagnostics.Debug.WriteLine("FinancialEditedFactsModel::OnFinancialInputDownloaded", e.Message);
+          }
         }
-        else
-          m_facts[l_dimensionKey] = l_fact;
       }
+      foreach (KeyValuePair<DimensionKey, Fact> l_pair in l_downloadedFactDic)
+        m_facts[l_pair.Key] = l_pair.Value;
       RequestIdList.Remove(p_requestId);
+      m_nbRequest--;
       if (RequestIdList.Count == 0)
-      {
-        AddinModuleController.SetExcelInteractionState(false);
         ComputeOutputs();
-      }
+      else
+        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
     }
 
     public void ComputeOutputs()
@@ -158,8 +197,12 @@ namespace FBI.MVC.Model
       l_sourcedComputeRequest.RateVersionId = l_version.RateVersionId;
       List<Fact> l_factsList = new List<Fact>();
       foreach (EditedFinancialFact l_editedFact in EditedFacts.Values)
-        if (l_editedFact.Value != 0)
-          l_factsList.Add(l_editedFact);
+        if (l_editedFact.EditedValue != 0)
+        {
+          Fact l_tmp = l_editedFact.Clone();
+          l_tmp.Value = l_editedFact.EditedValue;
+          l_factsList.Add(l_tmp);
+        }
       l_sourcedComputeRequest.FactList = l_factsList;
       l_sourcedComputeRequest.Process = Account.AccountProcess.FINANCIAL;
 
@@ -180,6 +223,8 @@ namespace FBI.MVC.Model
 
     private void OnFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
       if (p_status == ErrorMessage.SUCCESS)
       {
         AddinModuleController.SetExcelInteractionState(false);
@@ -206,7 +251,7 @@ namespace FBI.MVC.Model
               l_fact.Cell.Value = l_valuePair.Value;
           }
         }
-        AddinModuleController.SetExcelInteractionState(true);
+        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
         RaiseFactDownloaded(true);
       }
       else
@@ -225,13 +270,14 @@ namespace FBI.MVC.Model
       if (EditedFacts.ContainsKey(p_cell.Address))
       {
         EditedFinancialFact l_fact = EditedFacts[p_cell.Address];
-        if (p_cell.Value2 != null && (double)p_cell.Value2 == l_fact.Value)
+
+        if (p_cell.Value2 != null && (p_cell.Value2.GetType() != typeof(double) || (double)p_cell.Value2 == l_fact.Value))
           return (null);
 
         if (p_cell.Value2 == null)
-          l_fact.Value = 0;
+          l_fact.EditedValue = 0;
         else
-          l_fact.Value = (double)p_cell.Value2;
+          l_fact.EditedValue = (double)p_cell.Value2;
         
         m_needRefresh = true;
         return l_fact;
@@ -241,17 +287,23 @@ namespace FBI.MVC.Model
 
     public override void Commit()
     {
-      SafeDictionary<string, Fact> l_dic = new SafeDictionary<string, Fact>();
+      SafeDictionary<CRUDAction, SafeDictionary<string, Fact>> l_dic = new SafeDictionary<CRUDAction, SafeDictionary<string, Fact>>();
 
+      l_dic[CRUDAction.UPDATE] = new SafeDictionary<string, Fact>();
+      l_dic[CRUDAction.DELETE] = new SafeDictionary<string, Fact>();
       foreach (EditedFinancialFact l_editedFact in EditedFacts.Values)
       {
         if (l_editedFact.Value == l_editedFact.EditedValue)
           continue;
-        l_dic[l_editedFact.Cell.Address] = l_editedFact;
+        l_editedFact.Value = l_editedFact.EditedValue;
+        CRUDAction l_action = ((l_editedFact.Value == 0) ? CRUDAction.DELETE : CRUDAction.UPDATE);
+        l_dic[l_action][l_editedFact.Cell.Address] = l_editedFact;
       }
 
-      if (l_dic.Count > 0)
-        FactsModel.Instance.UpdateList(l_dic, CRUDAction.UPDATE);
+      if (l_dic[CRUDAction.UPDATE].Count > 0)
+        FactsModel.Instance.UpdateList(l_dic[CRUDAction.UPDATE], CRUDAction.UPDATE);
+      if (l_dic[CRUDAction.DELETE].Count > 0)
+        FactsModel.Instance.UpdateList(l_dic[CRUDAction.DELETE], CRUDAction.DELETE);
     }
 
     public override double? CellBelongToOutput(Range p_cell)
@@ -263,5 +315,13 @@ namespace FBI.MVC.Model
       return (l_fact.Value);
     }
 
+    public override double? CellBelongToInput(Range p_cell)
+    {
+      EditedFinancialFact l_fact = EditedFacts[p_cell.Address];
+
+      if (l_fact == null)
+        return (null);
+      return (l_fact.Value);
+    }
   }
 }

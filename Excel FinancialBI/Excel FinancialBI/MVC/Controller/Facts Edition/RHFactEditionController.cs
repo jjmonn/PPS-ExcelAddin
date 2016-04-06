@@ -26,6 +26,8 @@ namespace FBI.MVC.Controller
       RHAccountId = p_RHAccountId;
       EditedFactModel = new RHEditedFactsModel(p_periodsList, p_worksheet);
       m_view = new RHFactEditionView(this, p_worksheet);
+      m_view.LoadView();
+      m_statusView = new StatusReportInterfaceUI(EditedFactModel);
     }
 
     public override void Close()
@@ -35,11 +37,9 @@ namespace FBI.MVC.Controller
         m_factsCommit.UnSuscribeEvents();
     }
 
-    public void Commit(RangeHighlighter p_highlighter) // TODO: extract RangeHighlighter from FactsRHCommit
+    public override void CommitFacts() // TODO: extract RangeHighlighter from FactsRHCommit
     {
-      m_factsCommit = new FactsRHCommit(EditedFactModel.EditedFacts, EditedFactModel.PreviousWeeksFacts, EditedFactModel.IdEditedFactDict,
-        PeriodsList, p_highlighter, RHAccountId, VersionId);
-      m_highlighter = p_highlighter;
+      m_factsCommit = new FactsRHCommit(EditedFactModel, PeriodsList, m_view.RangeHighlighter, RHAccountId, VersionId);
       // TO DO
       // Antiduplicate system
 
@@ -56,7 +56,7 @@ namespace FBI.MVC.Controller
     private void OnUndefinedClientsCreated(bool p_status)
     {
       if (p_status == true)
-        Commit(m_highlighter);
+        CommitFacts();
     }
   }
 }

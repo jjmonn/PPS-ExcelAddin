@@ -11,10 +11,12 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Model;
   using Network;
+  using Utils;
 
   class RHFactEditionView : AFactEditionView<RHEditedFactsModel, RHFactEditionController>
   {
     RHEditedFactsModel m_model;
+    public RangeHighlighter RangeHighlighter { get { return (m_rangeHighlighter); } }
 
     public RHFactEditionView(RHFactEditionController p_controller, Worksheet p_worksheet) : base(p_controller, p_worksheet)
     {
@@ -50,6 +52,9 @@ namespace FBI.MVC.View
 
     void OnFactsUpdates(ErrorMessage p_status, CRUDAction p_action, SafeDictionary<string, Tuple<UInt32, ErrorMessage>> p_resultsDict)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
+
       if (p_status == ErrorMessage.SUCCESS)
         foreach (KeyValuePair<string, Tuple<UInt32, ErrorMessage>> l_pair in p_resultsDict)
           if (l_pair.Value.Item2 == ErrorMessage.SUCCESS)
@@ -63,6 +68,9 @@ namespace FBI.MVC.View
 
     void OnFactTagsUpdates(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> p_updateResults)
     {
+      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+        return;
+
       foreach (KeyValuePair<CRUDAction, SafeDictionary<UInt32, ErrorMessage>> l_result in p_updateResults)
       {
         foreach (KeyValuePair<UInt32, ErrorMessage> l_pair in l_result.Value)

@@ -23,7 +23,7 @@ namespace FBI.MVC.Model.CRUD
 
   public delegate void CellValueChangedEventHandler(Range p_cell, EditedFactStatus p_status);
 
-  abstract class EditedFactBase : Fact
+  abstract public class EditedFactBase : Fact
   {
     public Range Cell { get; protected set; }
     public Account Account { get { return AccountModel.Instance.GetValue(this.AccountId); } }

@@ -22,23 +22,23 @@ namespace FBI.MVC.Controller
     public string Error { get; set; }
     // SidePanesControllers
 
-    private UInt32 m_submissionClientId;
+    private static bool m_interactive = true;
     private UInt32 m_submissionProductId;
     private UInt32 m_submissionAdjustmentId;
     public UInt32 SubmissionClientId
     {
-      get { return (m_submissionClientId); }
-      set { m_view.SubmissionClientId = (m_submissionClientId = value); }
+      get { return (m_view.SubmissionClientId); }
+      set { m_view.SubmissionClientId = value; }
     }
     public UInt32 SubmissionProductId
     {
-      get { return (m_submissionProductId); }
-      set { m_view.SubmissionProductId = (m_submissionProductId = value); }
+      get { return (m_view.SubmissionProductId); }
+      set { m_view.SubmissionProductId = value; }
     }
     public UInt32 SubmissionAdjustmentId
     {
-      get { return (m_submissionAdjustmentId); }
-      set { m_view.SubmissionAdjustmentId = (m_submissionAdjustmentId = value); }
+      get { return (m_view.SubmissionAdjustmentId); }
+      set { m_view.SubmissionAdjustmentId = value; }
     }
 
     public AddinModuleController(AddinModule p_view)
@@ -58,15 +58,32 @@ namespace FBI.MVC.Controller
         return false;
     }
 
-    public bool LaunchFinancialSnapshot(bool p_updateCells, UInt32 p_versionId)
+    public bool LaunchFinancialSnapshot(bool p_displayDiff, bool p_updateCells, UInt32 p_versionId)
     {
         m_view.InitFinancialSubmissionRibon();
         FinancialFactEditionController l_editionController = new FinancialFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet);
         m_factsEditionController = l_editionController;
-        bool l_result = m_factsEditionController.Launch(p_updateCells, true, SubmissionClientId, 
+        bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayDiff, SubmissionClientId, 
           SubmissionProductId, SubmissionAdjustmentId);
         if (l_result)
+        {
           m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.VersionId);
+          AxisElem l_entity = AxisElemModel.Instance.GetValue(l_editionController.EntityId);
+
+          if (l_entity == null)
+          {
+            m_view.SubmissionEntityName = "-";
+            m_view.SubmissionCurrencyName = "-";
+          }
+          else
+          {
+            m_view.SubmissionEntityName = l_entity.Name;
+            EntityCurrency l_currency = EntityCurrencyModel.Instance.GetValue(l_entity.Id);
+
+            if (l_currency != null)
+              m_view.SubmissionCurrencyName = CurrencyModel.Instance.GetValueName(l_currency.CurrencyId);
+          }
+        }
         return (l_result);
     }
 
@@ -101,6 +118,12 @@ namespace FBI.MVC.Controller
       }
     }
 
+    public void ShowStatusView()
+    {
+      if (m_factsEditionController != null)
+        m_factsEditionController.ShowStatusView();
+    }
+
     public bool AssociateExcelWorksheetEvents(Worksheet p_worksheet)
     {
       if (p_worksheet != null && m_factsEditionController != null)
@@ -113,6 +136,11 @@ namespace FBI.MVC.Controller
         m_view.WorksheetEvents.RemoveConnection();
       return false;
      }
+
+    public void ReloadReportUpload(bool p_displayInitialDifferences)
+    {
+      m_factsEditionController.Reload(!p_displayInitialDifferences, p_displayInitialDifferences, SubmissionClientId, SubmissionProductId, SubmissionAdjustmentId);
+    }
 
     public bool FactsSubmission()
     {
@@ -152,7 +180,20 @@ namespace FBI.MVC.Controller
 
     public static void SetExcelInteractionState(bool p_state)
     {
-      AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
+      try
+      {
+        lock (AddinModule.CurrentInstance.ExcelApp)
+        {
+          if (m_interactive == p_state)
+            return;
+          AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
+          m_interactive = p_state;
+        }
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("AddinModuleController.SetExcelInteractionState: " + e.Message);
+      }
       System.Diagnostics.Debug.WriteLine("Excel interaction set to " + p_state.ToString());
     }
 

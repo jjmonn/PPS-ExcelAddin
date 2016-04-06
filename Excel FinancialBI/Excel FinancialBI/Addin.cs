@@ -28,7 +28,7 @@ namespace FBI
     public static dynamic HostApplication { get; set; }
     public static AddinModule AddinModule { get; set; }
 
-    static void SelectLanguage()
+    public static void SelectLanguage()
     {
       switch (Settings.Default.language)
       {

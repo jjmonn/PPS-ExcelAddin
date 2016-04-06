@@ -99,7 +99,12 @@ namespace FBI.MVC.View
       InitTVAxisElem(AxisElemModel.Instance, AxisType.Adjustment);
       InitFilterTV(AxisType.Adjustment);
       InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, true, true);
-      InitTV(CurrencyModel.Instance, m_selectionTableLayout.Controls, false, Properties.Settings.Default.currentCurrency, false, true);
+
+      FbiTreeView<Currency> l_currencyTV = new FbiTreeView<Currency>(CurrencyModel.Instance.GetUsedCurrenciesDic(), null, false, true);
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(Currency));
+      BaseInitTV<Currency>(l_key, l_currencyTV, m_selectionTableLayout.Controls, false, false, Properties.Settings.Default.currentCurrency, false, true);
+
+      m_selectionTVList[new Tuple<AxisType, Type>(AxisType.Entities, typeof(AxisElem))].ImageList = EntitiesTVImageList;
     }
 
     private void InitPeriodRangeSelection()
