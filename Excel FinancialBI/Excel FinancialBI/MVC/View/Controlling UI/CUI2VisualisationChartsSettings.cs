@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VIBlend.WinForms.Controls;
+using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
@@ -100,16 +101,9 @@ namespace FBI.MVC.View
       m_settings.Name = m_chartTitle.Text.Trim();
       foreach (Control[] l_control in m_series)
       {
-        if (!m_settings.Has(i))
-          m_settings.AddSerie(l_control[1].Text, ((vColorPicker)l_control[2]).SelectedColor);
-        else
-          m_settings.UpdateSerie(i, l_control[1].Text, ((vColorPicker)l_control[2]).SelectedColor);
-        ++i;
+        m_settings.AddUpdateSerie(i++, l_control[1].Text, ((vColorPicker)l_control[2]).SelectedColor);
       }
-      while (i < m_settings.Series.Count)
-      {
-        m_settings.RemoveSerie(i++);
-      }
+      m_settings.Series.RemoveRange(i, m_settings.Series.Count - i);
       if (!m_controller.CreateUpdateSettings(m_settings))
       {
         MessageBox.Show(Local.GetValue(m_controller.Error));
@@ -150,9 +144,14 @@ namespace FBI.MVC.View
         MessageBox.Show(Local.GetValue("CUI_Charts.error.no_name"));
         return;
       }
-      if (!AreTreeViewBoxesFilled())
+      if (!this.AreTreeViewBoxesFilled())
       {
         MessageBox.Show(Local.GetValue("CUI_Charts.error.incomplete_series"));
+        return;
+      }
+      if (!this.AreTreeViewBoxValid())
+      {
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.invalid_serie"));
         return;
       }
       if (this.SaveSettings())
@@ -237,6 +236,20 @@ namespace FBI.MVC.View
       foreach (Control[] l_controls in m_series)
       {
         if (l_controls[1].Text.Trim() == "")
+          return (false);
+      }
+      return (true);
+    }
+
+    private bool AreTreeViewBoxValid()
+    {
+      Account l_account;
+
+      foreach (Control[] l_controls in m_series)
+      {
+        if ((l_account = AccountModel.Instance.GetValue(l_controls[1].Text)) == null)
+          return (false);
+        if (l_account.FormulaType == Account.FormulaTypes.TITLE)
           return (false);
       }
       return (true);

@@ -10,6 +10,7 @@ using System.Diagnostics;
 
 namespace FBI.Forms
 {
+  using Utils;
   using MVC.Model;
   using MVC.Model.CRUD;
 
@@ -18,24 +19,27 @@ namespace FBI.Forms
     private static UInt32 m_chartId = 0;
 
     private UInt32 m_id;
-    private ChartArea m_chartArea;
     private ChartSettings m_settings = null;
 
     public FbiChart() : base()
     {
-      m_chartArea = new ChartArea();
-
       m_id = m_chartId++;
-      this.ChartAreas.Add(m_chartArea);
-      m_chartArea.AxisX.MajorGrid.Enabled = false;
-      m_chartArea.AxisY.MajorGrid.Enabled = false;
-      m_chartArea.IsSameFontSizeForAllAxes = true;
+    }
 
-      m_chartArea.AxisY.TitleFont = new Font("calibri", 8);
-      m_chartArea.AxisX.TitleFont = new Font("calibri", 8);
-      m_chartArea.AxisX.LabelStyle.Angle = -45;
-      m_chartArea.AxisY.LabelAutoFitMaxFontSize = 10;
-      m_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
+    private ChartArea CreateArea()
+    {
+      ChartArea l_chartArea = new ChartArea();
+
+      this.ChartAreas.Add(l_chartArea);
+      l_chartArea.AxisX.MajorGrid.Enabled = false;
+      l_chartArea.AxisY.MajorGrid.Enabled = false;
+      l_chartArea.IsSameFontSizeForAllAxes = true;
+      l_chartArea.AxisY.TitleFont = new Font("calibri", 8);
+      l_chartArea.AxisX.TitleFont = new Font("calibri", 8);
+      l_chartArea.AxisX.LabelStyle.Angle = -45;
+      l_chartArea.AxisY.LabelAutoFitMaxFontSize = 10;
+      l_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
+      return (l_chartArea);
     }
 
     public UInt32 Id
@@ -46,6 +50,14 @@ namespace FBI.Forms
     public ChartSettings Settings
     {
       get { return (m_settings); }
+    }
+
+    public void Clear()
+    {
+      if (this.ChartAreas != null)
+        this.ChartAreas.Clear();
+      if (this.Series != null)
+        this.Series.Clear();
     }
 
     public bool HasSettings()
@@ -80,26 +92,34 @@ namespace FBI.Forms
       ResultKey l_key;
       UInt32 l_version = p_config.Request.Versions[0];
       List<int> l_periods = PeriodModel.GetPeriodList(p_config.Request.StartPeriod, p_config.Request.NbPeriods, p_config.BaseTimeConfig);
+      List<string> l_displayPeriods = PeriodUtils.ToList(l_periods, p_config.BaseTimeConfig);
+      List<double> l_values = new List<double>();
 
+      this.Clear();
+      this.CreateArea();
       foreach (Serie l_serie in p_settings.Series)
       {
         foreach (int l_period in l_periods)
         {
           l_key = this.GetKey(l_serie.Account, p_config, l_period, l_version);
-
-          double l_value = p_result[l_version].Values[l_key];
-          Debug.WriteLine(">> " + l_value);
+          l_values.Add(p_result[l_version].Values[l_key]);
         }
+        this.AddSerie(l_displayPeriods, l_values, l_serie.Color);
+        l_values.Clear();
       }
       m_settings = p_settings;
     }
 
-    public void AddSerie(IEnumerable p_dataX, IEnumerable p_dataY)
+    public void AddSerie(IList p_dataX, IList p_dataY, Color p_color, SeriesChartType p_chartType = SeriesChartType.Spline, int p_borderWidth = 4)
     {
       Series l_series = new Series();
 
       l_series.ChartArea = this.ChartAreas.First().Name;
+      l_series.ChartType = p_chartType;
+      l_series.BorderWidth = p_borderWidth;
+      l_series.Color = p_color;
       l_series.Points.DataBindXY(p_dataX, p_dataY);
+      this.ChartAreas[0].AxisX.IsMarginVisible = false; //Set X origin to the first point
       this.Series.Add(l_series);
     }
   }

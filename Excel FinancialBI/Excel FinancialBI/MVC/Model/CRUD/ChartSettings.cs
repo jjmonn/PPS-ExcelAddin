@@ -81,12 +81,13 @@ namespace FBI.MVC.Model.CRUD
       return (true);
     }
 
-    public bool RemoveSerie(int p_index)
+    public bool AddUpdateSerie(int p_index, string p_accountName, Color p_color)
     {
-      if (!this.Has(p_index))
-        return (false);
-      m_series.RemoveAt(p_index);
-      return (true);
+      if (this.Has(p_index))
+      {
+        return (this.UpdateSerie(p_index, p_accountName, p_color));
+      }
+      return (this.AddSerie(p_accountName, p_color));
     }
   }
 }

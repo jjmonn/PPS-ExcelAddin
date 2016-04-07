@@ -744,6 +744,7 @@
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\Local.cs" />
     <Compile Include="Utils\MultiIndexDictionary.cs" />
+    <Compile Include="Utils\PeriodUtils.cs" />
     <Compile Include="Utils\RightManager.cs" />
     <Compile Include="Utils\SafeDictionary.cs" />
     <Compile Include="Utils\StringUtils.cs" />
