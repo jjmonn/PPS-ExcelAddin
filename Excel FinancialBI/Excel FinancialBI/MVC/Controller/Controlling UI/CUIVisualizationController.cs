@@ -7,6 +7,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.Controller
 {
+  using Forms;
   using Model;
   using Model.CRUD;
   using View;
@@ -39,14 +40,13 @@ namespace FBI.MVC.Controller
       m_view.Show();
     }
 
-    public ComputeConfig LastConfig
+    public FbiChart.Computation LastComputation
     {
-      get { return (m_parentController.LastConfig); }
-    }
-
-    public SafeDictionary<uint, ComputeResult> LastResult
-    {
-      get { return (m_parentController.LastResult); }
+      get
+      {
+        return (new FbiChart.Computation(m_parentController.LastConfig,
+          m_parentController.LastResult));
+      }
     }
 
     public bool CreateUpdateSettings(ChartSettings p_settings)

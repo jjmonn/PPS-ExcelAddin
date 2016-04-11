@@ -176,7 +176,8 @@ namespace FBI.MVC.View
 
     void OnRefreshButtonMouseDown(object sender, MouseEventArgs e)
     {
-      m_controller.Compute();
+      if (m_controller.Compute() == false)
+        MsgBox.Show(m_controller.Error);
     }
 
     void OnChartButtonMouseDown(object sender, MouseEventArgs e)

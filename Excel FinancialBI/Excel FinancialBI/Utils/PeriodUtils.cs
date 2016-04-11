@@ -10,10 +10,10 @@ namespace FBI.Utils
 
   class PeriodUtils
   {
-    public static List<string> ToList(List<int> p_periods, TimeConfig p_time)
+    public static SafeDictionary<int, string> ToList(List<int> p_periods, TimeConfig p_time)
     {
       DateTime l_date;
-      List<string> l_list = new List<string>();
+      SafeDictionary<int, string> l_dic = new SafeDictionary<int, string>();
 
       foreach (int l_period in p_periods)
       {
@@ -21,18 +21,18 @@ namespace FBI.Utils
         switch (p_time)
         {
           case TimeConfig.YEARS:
-            l_list.Add(l_date.Year.ToString());
+            l_dic[l_period] = l_date.Year.ToString();
             break;
           case TimeConfig.MONTHS:
-            l_list.Add(l_date.Month + " " + l_date.Year);
+            l_dic[l_period] = l_date.Month + " " + l_date.Year;
             break;
           default:
           case TimeConfig.DAYS:
-            l_list.Add(l_date.Day + " " + l_date.Month + " " + l_date.Year);
+            l_dic[l_period] = l_date.Day + " " + l_date.Month + " " + l_date.Year;
             break;
         }
       }
-      return (l_list);
+      return (l_dic);
     }
   }
 }

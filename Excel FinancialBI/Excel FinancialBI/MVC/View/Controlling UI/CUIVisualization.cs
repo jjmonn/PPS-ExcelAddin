@@ -101,15 +101,7 @@ namespace FBI.MVC.View
 
     private void UpdateChart(FbiChart p_chart, ChartSettings p_settings)
     {
-     /* int[] test = { 0, 10, 42, 142 };
-      int[] test2 = { 0, 10, 20, 30 };
-      p_chart.AddSerie(test, test2); */
-      //           ^
-      //TEST HERE / \
-      //           |
-      //           |
-
-      p_chart.Assign(p_settings, m_controller.LastConfig, m_controller.LastResult);
+      p_chart.Assign(p_settings, m_controller.LastComputation);
     }
     
     private void OnSettingsUpdated(ErrorMessage p_msg, UInt32 p_id)
