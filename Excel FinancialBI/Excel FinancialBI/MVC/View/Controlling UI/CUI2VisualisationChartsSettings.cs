@@ -21,6 +21,7 @@ namespace FBI.MVC.View
   public partial class CUI2VisualisationChartsSettings : Form, IView
   {
     private static readonly Int32 SEP_SIZE = 40;
+    private static readonly Color DEFAULT_COLOR = Color.Gray;
 
     private CUIVisualizationController m_controller;
     private Int32 m_location = 0; //Default location (axis Y) of m_serieLabel
@@ -41,6 +42,7 @@ namespace FBI.MVC.View
     {
       this.SuscribeEvents();
       m_location = m_serieLabel.Location.Y;
+      m_serieColor.SelectedColor = DEFAULT_COLOR;
       FbiTreeView<Account>.Load(m_treeView.Nodes, AccountModel.Instance.GetDictionary());
       m_series.Add(new Control[] { m_serieLabel, m_serie, m_serieColor });
     }
@@ -96,10 +98,50 @@ namespace FBI.MVC.View
       int i = 0;
 
       if (m_settings == null)
+      {
         m_settings = new ChartSettings();
+      }
+      if ((m_settings.Name = m_chartTitle.Text.Trim()) == "")
+      {
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.no_name"));
+        return (false);
+      }
+      m_settings.HasDeconstruction = m_controller.LastConfig.Request.SortList.Count >= 1;
+      m_settings.Versions = m_controller.LastConfig.Request.Versions;
+      m_settings.Deconstruction = (m_settings.HasDeconstruction ? m_controller.LastConfig.Request.SortList[0] : null);
+      m_settings.TimeConfig = m_controller.LastConfig.BaseTimeConfig;
 
-      m_settings.Name = m_chartTitle.Text.Trim();
-      foreach (Control[] l_control in m_series)
+      if (m_series.Count > 1 && m_settings.Versions.Count > 1 && m_settings.HasDeconstruction) //If you can't deconstruct because there is too much informations
+      {
+        DialogResult result = MessageBox.Show(Local.GetValue("CUI_Charts.choose_version_or_deconstruction"), Local.GetValue("CUI_Charts.chart_title"), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+        if (result == DialogResult.Yes) //Use version view, ignore deconstruction.
+        {
+          m_settings.HasDeconstruction = false;
+        }
+        else if (result == DialogResult.No) //Use deconstruction, specify a version
+        {
+           DialogResult l_result = FbiUserBox.ShowDialog(Local.GetValue("CUI_Charts.choose_version"),
+              Local.GetValue("CUI_Charts.choose_version"),
+              this.VersionNames(m_settings.Versions));
+          if (l_result != DialogResult.OK)
+            return (false);
+          m_settings.Versions = new List<UInt32>();
+          m_settings.Versions.Add(m_controller.LastConfig.Request.Versions[FbiUserBox.Index]);
+        }
+      }
+
+      if (!this.AreTreeViewBoxesFilled())
+      {
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.incomplete_series"));
+        return (false);
+      }
+      if (!this.AreTreeViewBoxValid())
+      {
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.invalid_serie"));
+        return (false);
+      }
+
+      foreach (Control[] l_control in m_series) //Save every serie
       {
         m_settings.AddUpdateSerie(i++, l_control[1].Text, ((vColorPicker)l_control[2]).SelectedColor);
       }
@@ -116,7 +158,7 @@ namespace FBI.MVC.View
     {
       m_serie.Text = "";
       m_chartTitle.Text = "";
-      m_serieColor.SelectedColor = Color.White;
+      m_serieColor.SelectedColor = DEFAULT_COLOR;
       while (this.HasSeries())
       {
         this.RemoveLastSerie();
@@ -139,21 +181,6 @@ namespace FBI.MVC.View
 
     private void OnSaveClicked(object sender, EventArgs e)
     {
-      if (m_chartTitle.Text.Trim() == "")
-      {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.no_name"));
-        return;
-      }
-      if (!this.AreTreeViewBoxesFilled())
-      {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.incomplete_series"));
-        return;
-      }
-      if (!this.AreTreeViewBoxValid())
-      {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.invalid_serie"));
-        return;
-      }
       if (this.SaveSettings())
       {
         this.Close();
@@ -192,7 +219,7 @@ namespace FBI.MVC.View
       l_serie.Enter += OnvTreeViewBoxEnter;
       l_color = ControlUtils.Clone(m_serieColor);
       l_color.Location = new Point(m_serieColor.Location.X, m_location);
-      l_color.SelectedColor = p_color ?? Color.White;
+      l_color.SelectedColor = p_color ?? DEFAULT_COLOR;
 
       this.MoveStandardControls(SEP_SIZE);
       m_series.Add(new Control[] { l_text, l_serie, l_color });
@@ -253,6 +280,25 @@ namespace FBI.MVC.View
           return (false);
       }
       return (true);
+    }
+
+    private List<string> VersionNames(List<UInt32> p_versions)
+    {
+      List<string> l_versions = new List<string>();
+
+      foreach (UInt32 l_versionId in p_versions)
+      {
+        try
+        {
+          Debug.WriteLine(">> " + l_versionId + " " + VersionModel.Instance.GetValue(l_versionId).Name);
+          l_versions.Add(VersionModel.Instance.GetValue(l_versionId).Name);
+        }
+        catch
+        {
+          l_versions.Add("N/A");
+        }
+      }
+      return (l_versions);
     }
 
     #endregion

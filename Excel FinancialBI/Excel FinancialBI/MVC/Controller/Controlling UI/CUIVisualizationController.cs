@@ -49,6 +49,16 @@ namespace FBI.MVC.Controller
       }
     }
 
+    public ComputeConfig LastConfig
+    {
+      get { return (m_parentController.LastConfig); }
+    }
+
+    public SafeDictionary<UInt32, ComputeResult> LastResult
+    {
+      get { return (m_parentController.LastResult); }
+    }
+
     public bool CreateUpdateSettings(ChartSettings p_settings)
     {
       if (p_settings.Id == ChartSettingsModel.INVALID)

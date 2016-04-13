@@ -51,7 +51,7 @@ namespace FBI.MVC.View
       this.SuscribeEvents();
     }
 
-    void SuscribeEvents()
+    private void SuscribeEvents()
     {
       panel2.ContextMenuStrip = m_panelRightClick;
       m_horizontalSplitBT.Click += OnSplitHorizontalClick;
@@ -60,6 +60,12 @@ namespace FBI.MVC.View
 
       ChartSettingsModel.Instance.CreationEvent += OnSettingsUpdated;
       ChartSettingsModel.Instance.UpdateEvent += OnSettingsUpdated;
+    }
+
+    private void CloseView()
+    {
+      ChartSettingsModel.Instance.CreationEvent -= OnSettingsUpdated;
+      ChartSettingsModel.Instance.UpdateEvent -= OnSettingsUpdated;
     }
 
     #region Split
@@ -99,9 +105,9 @@ namespace FBI.MVC.View
     #endregion
 
 
-    private void UpdateChart(FbiChart p_chart, ChartSettings p_settings)
+    private void OnFormClosed(object sender, FormClosedEventArgs e)
     {
-      p_chart.Assign(p_settings, m_controller.LastComputation);
+      CloseView();
     }
     
     private void OnSettingsUpdated(ErrorMessage p_msg, UInt32 p_id)
@@ -134,6 +140,12 @@ namespace FBI.MVC.View
     }
 
     #region Utils
+
+    private void UpdateChart(FbiChart p_chart, ChartSettings p_settings)
+    {
+      if (p_chart != null)
+        p_chart.Assign(p_settings, m_controller.LastComputation);
+    }
 
     private FbiChart GetObjectFromControl(Control p_control, Type p_type)
     {

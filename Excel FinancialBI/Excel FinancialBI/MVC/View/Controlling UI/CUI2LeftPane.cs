@@ -300,7 +300,7 @@ namespace FBI.MVC.View
 
       foreach (KeyValuePair<Tuple<AxisType, Type>, AFbiTreeView> l_tv in m_selectionTVList)
       {
-        bool l_allChecked = true;
+        bool l_allChecked = l_tv.Key.Item2 == typeof(Filter) || l_tv.Key.Item2 == typeof(AxisElem);
 
         foreach (vTreeNode l_topNode in l_tv.Value.Nodes)
           if (l_topNode.Checked != CheckState.Checked)

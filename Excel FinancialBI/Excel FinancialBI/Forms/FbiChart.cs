@@ -17,6 +17,7 @@ namespace FBI.Forms
   public class FbiChart : Chart
   {
     private const int ELEM_DISPLAYED = 4;
+    private const int GRADIENT_MULTIPLIER = 2;
 
     public class Computation
     {
@@ -69,17 +70,18 @@ namespace FBI.Forms
 
     public void Clear()
     {
-      if (this.ChartAreas != null) //Error throw nullException, 'cause WTF.
-        this.ChartAreas.Clear();
-      if (this.Series != null)
-        this.Series.Clear();
+      this.ChartAreas.Clear();
+      this.Series.Clear();
       this.Titles.Clear();
+      this.Legends.Clear();
     }
 
     public void SetChart(string p_name)
     {
       this.Clear();
-      this.Titles.Add(p_name);
+/*      this.Legends.Add(p_name);
+      this.Legends[p_name].IsDockedInsideChartArea = true;*/
+      this.Titles.Add(new Title(p_name, Docking.Bottom, new Font("calibri", 15), Color.Black));
       this.CreateArea();
     }
 
@@ -88,111 +90,96 @@ namespace FBI.Forms
       return (m_settings != null);
     }
 
-    private bool HasDeconstruction(ComputeConfig p_config)
+    private SeriesChartType GetChartType(ChartSettings p_settings)
     {
-      if (p_config.Request.Versions.Count > 1 ||
-        p_config.Request.SortList.Count > 0)
-        return (true);
-      return (false);
-    }
-
-    private SeriesChartType GetChartType(ComputeConfig p_config)
-    {
-      if (p_config.Request.Versions.Count > 1 || p_config.Request.SortList.Count > 0)
+      if (p_settings.HasDeconstruction)
         return (SeriesChartType.StackedColumn);
       return (SeriesChartType.Spline);
     }
 
-    private UInt32 GetVersion(ComputeConfig p_compute, UInt32? p_version)
+    private ResultKey GetKey(ChartSettings p_settings, Account p_account, int p_period, UInt32 p_version, UInt32 p_value = 0)
     {
-      return (p_version.HasValue ? p_version.Value : p_compute.Request.Versions[0]);
+      if (!p_settings.HasDeconstruction)
+      {
+        return (new ResultKey(p_account.Id, "", "", p_settings.TimeConfig, p_period, p_version, true));
+      }
+      if (p_settings.Deconstruction.Item1 && p_settings.Deconstruction.Item2 == AxisType.Entities)
+      {
+        return (new ResultKey(p_account.Id, "", ResultKey.GetSortKey(p_settings.Deconstruction.Item1,
+          AxisType.Entities, p_value), p_settings.TimeConfig, p_period, p_version, true));
+      }
+      return (new ResultKey(p_account.Id, ResultKey.GetSortKey(p_settings.Deconstruction.Item1,
+        p_settings.Deconstruction.Item2, p_value), "", p_settings.TimeConfig, p_period, p_version, true));
     }
 
-    private ResultKey GetKey(ComputeConfig p_config, Account p_account, int p_period, UInt32 p_version, UInt32 p_value = 0)
-    {
-      if (p_config.Request.SortList.Count == 0)
-      {
-        return (new ResultKey(p_account.Id, "", "", p_config.BaseTimeConfig, p_period, p_version, true));
-      }
-      if (p_config.Request.SortList[0].Item1 && p_config.Request.SortList[0].Item2 == AxisType.Entities)
-      {
-        return (new ResultKey(p_account.Id, "", ResultKey.GetSortKey(p_config.Request.SortList[0].Item1,
-          AxisType.Entities, p_value), p_config.BaseTimeConfig, p_period, p_version, true));
-      }
-      return (new ResultKey(p_account.Id, ResultKey.GetSortKey(p_config.Request.SortList[0].Item1,
-        p_config.Request.SortList[0].Item2, p_value), "", p_config.BaseTimeConfig, p_period, p_version, true));
-    }
-
-    private SafeDictionary<string, double> GetValuesVersion(SafeDictionary<string, double> p_dic, Computation p_compute, Account p_account, int p_period)
+    private SafeDictionary<string, double> GetValuesVersion(ChartSettings p_settings, Computation p_compute,
+      Account p_account, int p_period)
     {
       ResultKey l_key;
       Version l_version;
+      SafeDictionary<string, double> l_dic = new SafeDictionary<string, double>();
 
-      foreach (UInt32 l_versionId in p_compute.Config.Request.Versions)
+      foreach (UInt32 l_versionId in p_settings.Versions)
       {
-        l_key = this.GetKey(p_compute.Config, p_account, p_period, l_versionId);
+        l_key = this.GetKey(p_settings, p_account, p_period, l_versionId);
         l_version = VersionModel.Instance.GetValue(l_versionId);
-        p_dic[l_version.Name] = p_compute.Result[l_versionId].Values[l_key];
+        l_dic[l_version.Name] = p_compute.Result[l_versionId].Values[l_key];
       }
-      return (p_dic);
+      return (l_dic);
     }
 
-    private SafeDictionary<string, double> GetValuesDeconstruction(SafeDictionary<string, double> p_dic, Computation p_compute, Account p_account, int p_period, UInt32? p_version)
+    private SafeDictionary<string, double> GetValuesDeconstruction(ChartSettings p_settings, Computation p_compute,
+      Account p_account, int p_period, UInt32 p_version)
     {
       ResultKey l_key;
-      UInt32 l_version = this.GetVersion(p_compute.Config, p_version);
-      Tuple<bool, AxisType, UInt32> l_parent;
+      SafeDictionary<string, double> l_dic = new SafeDictionary<string, double>();
 
-      l_parent = p_compute.Config.Request.SortList[0];
-      if (!l_parent.Item1) //Is filter
+      if (!p_settings.Deconstruction.Item1) //Is filter
       {
-        foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(l_parent.Item3).Values)
+        foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(p_settings.Deconstruction.Item3).Values)
         {
-          l_key = this.GetKey(p_compute.Config, p_account, p_period, l_version, l_filterValue.Id);
-          p_dic[l_filterValue.Name] = p_compute.Result[l_version].Values[l_key];
+          l_key = this.GetKey(p_settings, p_account, p_period, p_version, l_filterValue.Id);
+          l_dic[l_filterValue.Name] = p_compute.Result[p_version].Values[l_key];
         }
       }
       else //Is AxisElem
       {
         List<AxisElem> l_axisList = new List<AxisElem>(); //GOTO ResultView AxisElemBuilder() to know what's going on, 'cause I have no idea...
 
-        if (l_parent.Item3 == 0 && l_parent.Item2 == AxisType.Entities)
+        if (p_settings.Deconstruction.Item3 == 0 && p_settings.Deconstruction.Item2 == AxisType.Entities)
           l_axisList.Add(AxisElemModel.Instance.GetValue(p_compute.Config.Request.EntityId));
         else
-          l_axisList = AxisElemModel.Instance.GetChildren(l_parent.Item2, l_parent.Item3);
+          l_axisList = AxisElemModel.Instance.GetChildren(p_settings.Deconstruction.Item2, p_settings.Deconstruction.Item3);
         foreach (AxisElem l_axisElem in l_axisList)
         {
-          l_key = this.GetKey(p_compute.Config, p_account, p_period, l_version, l_axisElem.Id);
-          p_dic[l_axisElem.Name] = p_compute.Result[l_version].Values[l_key];
+          l_key = this.GetKey(p_settings, p_account, p_period, p_version, l_axisElem.Id);
+          l_dic[l_axisElem.Name] = p_compute.Result[p_version].Values[l_key];
         }
       }
-      return (p_dic);
+      return (l_dic);
     }
 
-    private SafeDictionary<string, double> GetValues(Computation p_compute, Account p_account, int p_period, UInt32? p_version = null)
+    private SafeDictionary<string, double> GetValues(ChartSettings p_settings, Computation p_compute,
+      Account p_account, int p_period, UInt32 p_version)
     {
       SafeDictionary<string, double> l_dic = new SafeDictionary<string, double>();
 
-      if (!this.HasDeconstruction(p_compute.Config))
+      if (!p_settings.HasDeconstruction && p_settings.Versions.Count == 1)
       {
         return (null);
       }
-      if (!p_version.HasValue && p_compute.Config.Request.Versions.Count > 1) //If the version is not defined, and there is multiple versions
+      if (!p_settings.HasDeconstruction && p_settings.Versions.Count > 1)
       {
-        return (this.GetValuesVersion(l_dic, p_compute, p_account, p_period));
+        return (this.GetValuesVersion(p_settings, p_compute, p_account, p_period));
       }
-      return (this.GetValuesDeconstruction(l_dic, p_compute, p_account, p_period, p_version));
+      return (this.GetValuesDeconstruction(p_settings, p_compute, p_account, p_period, p_version));
     }
 
-    private double GetValue(Computation p_compute, Account p_account, int p_period)
+    private double GetValue(ChartSettings p_settings, SafeDictionary<UInt32, ComputeResult> p_result,
+      Account p_account, int p_period, UInt32 p_version)
     {
-      UInt32 l_version = this.GetVersion(p_compute.Config, null);
-      return (p_compute.Result[l_version].Values[this.GetKey(p_compute.Config, p_account, p_period, l_version)]);
+      return (p_result[p_version].Values[this.GetKey(p_settings, p_account, p_period, p_version)]);
     }
-
-    //TODO Display caption
-    //TODO Resolve null bugS
-    //TODO bool IsAmbigious() -> Display error asking to choose version or deconstruction !
 
     public void Assign(ChartSettings p_settings, Computation p_compute)
     {
@@ -207,33 +194,43 @@ namespace FBI.Forms
       m_settings = p_settings;
     }
 
-    
     public void Display(ChartSettings p_settings, Computation p_compute,
       List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
-      if (this.HasDeconstruction(p_compute.Config))
+      if (p_settings.HasDeconstruction && p_settings.Versions.Count > 1)
+      {
+        this.DisplayAsStackVersion(p_settings, p_compute, p_periods, p_displayPeriods);
+      }
+      else if (p_settings.HasDeconstruction)
       {
         this.DisplayAsStack(p_settings, p_compute, p_periods, p_displayPeriods);
-        return;
       }
-      this.DisplayAsLine(p_settings, p_compute, p_periods, p_displayPeriods);
+      else
+      {
+        this.DisplayAsLine(p_settings, p_compute, p_periods, p_displayPeriods);
+      }
     }
 
     private void DisplayAsLine(ChartSettings p_settings, Computation p_compute,
       List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
-      int l_pIndex;
       double l_value;
+      Color l_color = Color.FromArgb(0, 0, 0, 0);
 
-      foreach (Serie l_serie in p_settings.Series)
+      foreach (UInt32 l_version in p_settings.Versions)
       {
-        Series l_series = this.CreateSeries(this.GetChartType(p_compute.Config), l_serie.Color);
-        foreach (int l_period in p_periods)
+        foreach (Serie l_serie in p_settings.Series)
         {
-          l_value = this.GetValue(p_compute, l_serie.Account, l_period);
-          l_pIndex = l_series.Points.AddXY(p_displayPeriods[l_period], l_value);
+          Series l_series = this.CreateSeries(this.GetChartType(p_settings), ColorGradient.Sub(l_serie.Color, l_color));
+          l_series.LegendText = l_serie.Account.Name + "\n" + VersionModel.Instance.GetValue(l_version).Name;
+          foreach (int l_period in p_periods)
+          {
+            l_value = this.GetValue(p_settings, p_compute.Result, l_serie.Account, l_period, l_version);
+            l_series.Points.AddXY(p_displayPeriods[l_period], l_value);
+          }
+          this.Series.Add(l_series);
         }
-        this.Series.Add(l_series);
+        l_color = ColorGradient.Add(l_color, (p_settings.Versions.Count * 8) * GRADIENT_MULTIPLIER);
       }
     }
 
@@ -241,27 +238,51 @@ namespace FBI.Forms
       List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       int i, l_pIndex;
+      List<Color> l_colors;
       SafeDictionary<string, double> l_values;
       List<Series> l_series = this.CreateMultipleSeries(p_settings, p_compute, ELEM_DISPLAYED);
 
-      //
-      Random randomGen = new Random();
-      KnownColor[] names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
-      //
-
+      this.AddSeries(l_series);
       foreach (int l_period in p_periods)
       {
         foreach (Serie l_serie in p_settings.Series)
         {
           i = 0;
-          l_values = this.GetValues(p_compute, l_serie.Account, l_period);
+          l_colors = ColorGradient.Create(l_serie.Color, Color.Black, ELEM_DISPLAYED * GRADIENT_MULTIPLIER);
+          l_values = this.GetValues(p_settings, p_compute, l_serie.Account, l_period, p_settings.Versions[0]);
           l_values = this.GetSignificantValues(l_values);
           foreach (KeyValuePair<string, double> l_val in l_values)
           {
             l_pIndex = l_series[i].Points.AddXY(p_displayPeriods[l_period], l_val.Value);
-            l_series[i].Points[l_pIndex].Color = Color.FromKnownColor(names[randomGen.Next(names.Length)]); //TMP
-            if (!this.Series.Contains(l_series[i]))
-              this.Series.Add(l_series[i]);
+            l_series[i].Points[l_pIndex].Color = l_colors[i];
+            ++i;
+          }
+        }
+      }
+    }
+
+    private void DisplayAsStackVersion(ChartSettings p_settings, Computation p_compute,
+      List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
+    {
+      int i, l_pIndex;
+      List<Color> l_colors;
+      Serie l_serie = p_settings.Series[0];
+      SafeDictionary<string, double> l_values;
+      List<Series> l_series = this.CreateMultipleSeries(p_settings, p_compute, ELEM_DISPLAYED);
+
+      this.AddSeries(l_series);
+      foreach (int l_period in p_periods)
+      {
+        foreach (UInt32 l_version in p_settings.Versions)
+        {
+          i = 0;
+          l_colors = ColorGradient.Create(l_serie.Color, Color.Black, ELEM_DISPLAYED * GRADIENT_MULTIPLIER);
+          l_values = this.GetValues(p_settings, p_compute, l_serie.Account, l_period, l_version);
+          l_values = this.GetSignificantValues(l_values);
+          foreach (KeyValuePair<string, double> l_val in l_values)
+          {
+            l_pIndex = l_series[i].Points.AddXY(p_displayPeriods[l_period], l_val.Value);
+            l_series[i].Points[l_pIndex].Color = l_colors[i];
             ++i;
           }
         }
@@ -276,15 +297,23 @@ namespace FBI.Forms
       var l_sortedValues = p_dic.ToList();
       l_sortedValues.Sort((pair1, pair2) => pair2.Value.CompareTo(pair1.Value));
       l_dic = new SafeDictionary<string, double>();
-      for (; i < 3 && i < l_sortedValues.Count; ++i)
+      for (; i < ELEM_DISPLAYED - 1 && i < l_sortedValues.Count; ++i)
       {
         l_dic[l_sortedValues[i].Key] = l_sortedValues[i].Value;
       }
       for (; i < l_sortedValues.Count; ++i)
       {
-        l_dic["Other"] += l_sortedValues[i].Value;
+        l_dic[Local.GetValue("CUI_Charts.other")] += l_sortedValues[i].Value;
       }
       return (l_dic);
+    }
+
+    private void AddSeries(List<Series> p_series)
+    {
+      foreach (Series l_series in p_series)
+      {
+        this.Series.Add(l_series);
+      }
     }
 
     private List<Series> CreateMultipleSeries(ChartSettings p_settings, Computation p_compute, int n)
@@ -293,7 +322,7 @@ namespace FBI.Forms
 
       for (int i = 0; i < n; ++i)
       {
-        l_list.Add(this.CreateSeries(this.GetChartType(p_compute.Config)));
+        l_list.Add(this.CreateSeries(this.GetChartType(p_settings)));
       }
       return (l_list);
     }

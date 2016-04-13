@@ -10,10 +10,14 @@ namespace FBI.MVC.Model.CRUD
   public class ChartSettings
   {
     private UInt32 m_id;
-    private UInt32? m_chartId = null;
 
     private string m_name = "";
     private List<Serie> m_series = new List<Serie>();
+
+    private bool m_hasDeconstruction;
+    private List<UInt32> m_versions;
+    private Tuple<bool, AxisType, UInt32> m_deconstruction;
+    private TimeConfig m_timeConfig;
 
     public ChartSettings(UInt32 p_id = ChartSettingsModel.INVALID)
     {
@@ -23,12 +27,6 @@ namespace FBI.MVC.Model.CRUD
     public UInt32 Id
     {
       get { return (m_id); }
-    }
-
-    public UInt32? ChartId
-    {
-      get { return (m_chartId); }
-      set { m_chartId = value; }
     }
 
     public string Name
@@ -48,6 +46,34 @@ namespace FBI.MVC.Model.CRUD
       get { return (m_series[p_key]); }
       set { m_series[p_key] = value; }
     }
+
+    //
+
+    public TimeConfig TimeConfig
+    {
+      get { return (m_timeConfig); }
+      set { m_timeConfig = value; }
+    }
+
+    public bool HasDeconstruction
+    {
+      get { return (m_hasDeconstruction); }
+      set { m_hasDeconstruction = value; }
+    }
+
+    public List<UInt32> Versions
+    {
+      get { return (m_versions); }
+      set { m_versions = value; }
+    }
+
+    public Tuple<bool, AxisType, UInt32> Deconstruction
+    {
+      get { return (m_deconstruction); }
+      set { m_deconstruction = value; }
+    }
+
+    //
 
     public bool Has(int p_index)
     {

@@ -263,6 +263,12 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\FbiUserBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FbiUserBox.Designer.cs">
+      <DependentUpon>FbiUserBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
     <Compile Include="MVC\Controller\AFBIFunctionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
@@ -760,6 +766,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FinancialBiXLL.resx">
       <DependentUpon>FinancialBiXLL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FbiUserBox.resx">
+      <DependentUpon>FbiUserBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
       <DependentUpon>CommitFollowUpView.cs</DependentUpon>
