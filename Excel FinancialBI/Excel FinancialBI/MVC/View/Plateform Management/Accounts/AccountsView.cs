@@ -387,11 +387,11 @@ namespace FBI.MVC.View
         return;
 
       string l_result = PasswordBox.Open(Local.GetValue("accounts.msg_account_deletion1") + "\n\r" + "\n"
-         + Local.GetValue("accounts.msg_account_deletion4")
+         + Local.GetValue("accounts.msg_account_deletion2")
          , Local.GetValue("accounts.msg_account_deletion_confirmation"));
       if (l_result != PasswordBox.Canceled && l_result != Addin.Password)
         MsgBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-      else if (m_controller.DeleteAccount((UInt32)m_accountTV.SelectedNode.Value) == false)
+      else if (l_result != PasswordBox.Canceled && m_controller.DeleteAccount((UInt32)m_accountTV.SelectedNode.Value) == false)
         MsgBox.Show(m_controller.Error);
     }
 
