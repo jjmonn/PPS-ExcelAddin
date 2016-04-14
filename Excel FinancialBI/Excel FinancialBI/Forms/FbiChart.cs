@@ -117,19 +117,19 @@ namespace FBI.Forms
       return (SeriesChartType.Spline);
     }
 
-    private ResultKey GetKey(ChartSettings p_settings, Account p_account, int p_period, UInt32 p_version, UInt32 p_value = 0)
+    private ResultKey GetKey(ChartSettings p_settings, ComputeConfig p_config, Account p_account, int p_period, UInt32 p_version, UInt32 p_value = 0)
     {
       if (!p_settings.HasDeconstruction)
       {
-        return (new ResultKey(p_account.Id, "", "", p_settings.TimeConfig, p_period, p_version, true));
+        return (new ResultKey(p_account.Id, "", "", p_config.BaseTimeConfig, p_period, p_version, true));
       }
       if (p_settings.Deconstruction.Item1 && p_settings.Deconstruction.Item2 == AxisType.Entities)
       {
         return (new ResultKey(p_account.Id, "", ResultKey.GetSortKey(p_settings.Deconstruction.Item1,
-          AxisType.Entities, p_value), p_settings.TimeConfig, p_period, p_version, true));
+          AxisType.Entities, p_value), p_config.BaseTimeConfig, p_period, p_version, true));
       }
       return (new ResultKey(p_account.Id, ResultKey.GetSortKey(p_settings.Deconstruction.Item1,
-        p_settings.Deconstruction.Item2, p_value), "", p_settings.TimeConfig, p_period, p_version, true));
+        p_settings.Deconstruction.Item2, p_value), "", p_config.BaseTimeConfig, p_period, p_version, true));
     }
 
     private ChartValues GetValuesVersion(ChartSettings p_settings, Computation p_compute,
@@ -141,7 +141,7 @@ namespace FBI.Forms
 
       foreach (UInt32 l_versionId in p_settings.Versions)
       {
-        l_key = this.GetKey(p_settings, p_account, p_period, l_versionId);
+        l_key = this.GetKey(p_settings, p_compute.Config, p_account, p_period, l_versionId);
         l_version = VersionModel.Instance.GetValue(l_versionId);
         l_values.Add(new Tuple<string, double>(l_version.Name, p_compute.Result[l_versionId].Values[l_key]));
       }
@@ -158,7 +158,7 @@ namespace FBI.Forms
       {
         foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(p_settings.Deconstruction.Item3).Values)
         {
-          l_key = this.GetKey(p_settings, p_account, p_period, p_version, l_filterValue.Id);
+          l_key = this.GetKey(p_settings, p_compute.Config, p_account, p_period, p_version, l_filterValue.Id);
           l_values.Add(new Tuple<string, double>(l_filterValue.Name, p_compute.Result[p_version].Values[l_key]));
         }
       }
@@ -172,7 +172,7 @@ namespace FBI.Forms
           l_axisList = AxisElemModel.Instance.GetChildren(p_settings.Deconstruction.Item2, p_settings.Deconstruction.Item3);
         foreach (AxisElem l_axisElem in l_axisList)
         {
-          l_key = this.GetKey(p_settings, p_account, p_period, p_version, l_axisElem.Id);
+          l_key = this.GetKey(p_settings, p_compute.Config, p_account, p_period, p_version, l_axisElem.Id);
           l_values.Add(new Tuple<string, double>(l_axisElem.Name, p_compute.Result[p_version].Values[l_key]));
         }
       }
@@ -193,10 +193,10 @@ namespace FBI.Forms
       return (this.GetValuesDeconstruction(p_settings, p_compute, p_account, p_period, p_version));
     }
 
-    private double GetValue(ChartSettings p_settings, SafeDictionary<UInt32, ComputeResult> p_result,
+    private double GetValue(ChartSettings p_settings, Computation p_compute,
       Account p_account, int p_period, UInt32 p_version)
     {
-      return (p_result[p_version].Values[this.GetKey(p_settings, p_account, p_period, p_version)]);
+      return (p_compute.Result[p_version].Values[this.GetKey(p_settings, p_compute.Config, p_account, p_period, p_version)]);
     }
 
     public void Assign(ChartSettings p_settings, Computation p_compute)
@@ -242,7 +242,7 @@ namespace FBI.Forms
           Series l_series = this.CreateSeries(this.GetChartType(p_settings), ColorUtils.Sub(l_serie.Color, l_color));
           foreach (int l_period in p_periods)
           {
-            l_value = this.GetValue(p_settings, p_compute.Result, l_serie.Account, l_period, l_version);
+            l_value = this.GetValue(p_settings, p_compute, l_serie.Account, l_period, l_version);
             l_series.Points.AddXY(p_displayPeriods[l_period], l_value);
           }
           l_series.LegendText = l_serie.Account.Name + "\n" + VersionModel.Instance.GetValue(l_version).Name;
