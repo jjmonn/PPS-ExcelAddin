@@ -49,10 +49,10 @@ namespace FBI.Utils.BNF
 
     public FbiGrammar()
     {
-      m_errors[m_functions.PERIOD] = "bnf.error.period";
-      m_errors[m_functions.IDENTIFICATOR] = "bnf.error.identificator";
-      m_errors[m_functions.FUNCTION] = "bnf.error.function";
-      m_errors[m_functions.NA] = "bnf.error.syntax";
+      m_errors[m_functions.PERIOD] = Local.GetValue("bnf.error.period");
+      m_errors[m_functions.IDENTIFICATOR] = Local.GetValue("bnf.error.identificator");
+      m_errors[m_functions.FUNCTION] = Local.GetValue("bnf.error.function");
+      m_errors[m_functions.NA] = Local.GetValue("bnf.error.syntax");
     }
 
     #region Internal Utils

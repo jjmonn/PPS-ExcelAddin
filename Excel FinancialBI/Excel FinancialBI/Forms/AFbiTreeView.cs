@@ -129,8 +129,9 @@ namespace FBI.Forms
       vTreeNode l_draggedNode = e.Data.GetData(typeof(vTreeNode)) as vTreeNode;
       if (l_draggedNode != null)
       {
-        Point location = this.PointToClient(Cursor.Position);
+        Point location = PointToClient(new Point(e.X, e.Y - this.ScrollPosition.Y));
         vTreeNode l_targetNode = this.HitTest(location);
+
         if (NodeDropped != null)
           NodeDropped(l_draggedNode, l_targetNode);
       }

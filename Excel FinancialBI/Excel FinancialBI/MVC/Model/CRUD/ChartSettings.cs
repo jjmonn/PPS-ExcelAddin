@@ -17,7 +17,6 @@ namespace FBI.MVC.Model.CRUD
     private bool m_hasDeconstruction;
     private List<UInt32> m_versions;
     private Tuple<bool, AxisType, UInt32> m_deconstruction;
-    private TimeConfig m_timeConfig;
 
     public ChartSettings(UInt32 p_id = ChartSettingsModel.INVALID)
     {
@@ -48,12 +47,6 @@ namespace FBI.MVC.Model.CRUD
     }
 
     //
-
-    public TimeConfig TimeConfig
-    {
-      get { return (m_timeConfig); }
-      set { m_timeConfig = value; }
-    }
 
     public bool HasDeconstruction
     {
