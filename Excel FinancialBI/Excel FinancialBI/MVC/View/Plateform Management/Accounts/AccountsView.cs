@@ -75,7 +75,7 @@ namespace FBI.MVC.View
       }
       catch (Exception e)
       {
-        Forms.MsgBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.Message + e.StackTrace);
       }
 
@@ -285,7 +285,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != ErrorMessage.SUCCESS)
-          Forms.MsgBox.Show(Local.GetValue("accounts.error.create") + "\r\n" + Error.GetMessage(p_status));
+          MsgBox.Show(Local.GetValue("accounts.error.create") + "\r\n" + Error.GetMessage(p_status));
       }
     }
 
@@ -340,7 +340,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          Forms.MsgBox.Show(Local.GetValue("accounts.error.update"));
+          MessageBox.Show(Local.GetValue("accounts.error.update"));
         }
       }
     }
@@ -357,7 +357,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          Forms.MsgBox.Show(Error.GetMessage(p_status));
+          MessageBox.Show(Error.GetMessage(p_status));
           return;
         }
         vTreeNode l_toDelete = m_accountTV.FindNode(p_id);
@@ -396,7 +396,7 @@ namespace FBI.MVC.View
     }
 
     private void OnNameTextBoxKeyDown(object p_sender, KeyEventArgs p_e)
-    {
+    {      
       if (p_e.KeyCode == Keys.Enter)
       {
         if (m_currentNode != null)
@@ -775,7 +775,7 @@ namespace FBI.MVC.View
               if (l_result == PasswordBox.Canceled || l_result != Addin.Password)
               {
                 if (l_result != PasswordBox.Canceled)
-                  Forms.MsgBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"),
+                  MessageBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (m_controller.UpdateAccount(l_currentAccount) == false)
                   MsgBox.Show(m_controller.Error); 
@@ -942,7 +942,7 @@ namespace FBI.MVC.View
         if (m_bnf.Parse("fbi_to_human_grammar", l_account.Formula))
           m_formulaTextBox.Text = m_grammar.Formula;
         else
-          Forms.MsgBox.Show(m_grammar.LastError);
+          MessageBox.Show(m_grammar.LastError);
 
         //Description
         m_descriptionTextBox.Text = l_account.Description;
