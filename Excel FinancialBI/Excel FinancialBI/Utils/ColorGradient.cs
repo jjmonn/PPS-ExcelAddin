@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace FBI.Utils
 {
-  class ColorGradient
+  class ColorUtils
   {
-    public static List<Color> Create(Color p_start, Color p_end, int steps)
+    private static Random m_rand = new Random();
+
+    public static List<Color> Gradient(Color p_start, Color p_end, int steps)
     {
       List<Color> l_list = new List<Color>();
 
@@ -39,7 +41,7 @@ namespace FBI.Utils
 
     public static Color Add(Color p_a, int n)
     {
-      return (ColorGradient.Add(p_a, Color.FromArgb(n, n, n, n)));
+      return (ColorUtils.Add(p_a, Color.FromArgb(n, n, n, n)));
     }
 
     public static Color Sub(Color p_a, Color p_b)
@@ -53,7 +55,17 @@ namespace FBI.Utils
 
     public static Color Sub(Color p_a, int n, bool p_useAlpha = false)
     {
-      return (ColorGradient.Sub(p_a, Color.FromArgb((p_useAlpha ? n : 0), n, n, n)));
+      return (ColorUtils.Sub(p_a, Color.FromArgb((p_useAlpha ? n : 0), n, n, n)));
+    }
+
+    public static Color RandomBrightColor(int p_alpha, Color p_max)
+    {
+      return (Color.FromArgb(p_alpha, m_rand.Next(p_max.R, 255), m_rand.Next(p_max.G, 255), m_rand.Next(p_max.B, 255)));
+    }
+
+    public static Color RandomDarkColor(int p_alpha, Color p_max)
+    {
+      return (Color.FromArgb(p_alpha, m_rand.Next(p_max.R), m_rand.Next(p_max.G), m_rand.Next(p_max.B)));
     }
   }
 }
