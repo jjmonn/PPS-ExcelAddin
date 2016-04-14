@@ -109,7 +109,6 @@ namespace FBI.MVC.View
       m_settings.HasDeconstruction = m_controller.LastConfig.Request.SortList.Count >= 1;
       m_settings.Versions = m_controller.LastConfig.Request.Versions;
       m_settings.Deconstruction = (m_settings.HasDeconstruction ? m_controller.LastConfig.Request.SortList[0] : null);
-      m_settings.TimeConfig = m_controller.LastConfig.BaseTimeConfig;
 
       if (m_series.Count > 1 && m_settings.Versions.Count > 1 && m_settings.HasDeconstruction) //If you can't deconstruct because there is too much informations
       {

@@ -35,7 +35,6 @@ namespace FBI.MVC.Model
       l_settings.Name = p_settings.Name;
       l_settings.Series = p_settings.Series;
       l_settings.HasDeconstruction = p_settings.HasDeconstruction;
-      l_settings.TimeConfig = p_settings.TimeConfig;
       l_settings.Versions = p_settings.Versions;
       l_settings.Deconstruction = p_settings.Deconstruction;
       m_settings[m_lastSettingsId] = l_settings;
@@ -55,7 +54,6 @@ namespace FBI.MVC.Model
       l_settings.Name = p_settings.Name;
       l_settings.Series = p_settings.Series;
       l_settings.HasDeconstruction = p_settings.HasDeconstruction;
-      l_settings.TimeConfig = p_settings.TimeConfig;
       l_settings.Versions = p_settings.Versions;
       l_settings.Deconstruction = p_settings.Deconstruction;
 

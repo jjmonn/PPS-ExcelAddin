@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using VIBlend.WinForms.Controls;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Collections;
+using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
@@ -17,7 +18,6 @@ namespace FBI.MVC.View
   using Utils;
   using Model;
   using Model.CRUD;
-  using System.Diagnostics;
   using Forms;
   using Network;
 
@@ -143,8 +143,20 @@ namespace FBI.MVC.View
 
     private void UpdateChart(FbiChart p_chart, ChartSettings p_settings)
     {
-      if (p_chart != null)
-        p_chart.Assign(p_settings, m_controller.LastComputation);
+      if (p_chart == null)
+        return;
+
+      m_versionLabel.Text = this.GetVersionName(p_settings);
+      m_entityLabel.Text = AxisElemModel.Instance.GetValueName(m_controller.LastConfig.Request.EntityId);
+      m_currencyLabel.Text = CurrencyModel.Instance.GetValueName(m_controller.LastConfig.Request.CurrencyId);
+      p_chart.Assign(p_settings, m_controller.LastComputation);
+    }
+
+    private string GetVersionName(ChartSettings p_settings)
+    {
+      return (p_settings.Versions.Count == 1 ?
+        VersionModel.Instance.GetValue(p_settings.Versions[0]).Name :
+        "N/A");
     }
 
     private FbiChart GetObjectFromControl(Control p_control, Type p_type)

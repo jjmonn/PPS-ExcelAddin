@@ -126,7 +126,7 @@ namespace FBI.MVC.View
       this.m_currencyLabel.Location = new System.Drawing.Point(340, 5);
       this.m_currencyLabel.Multiline = true;
       this.m_currencyLabel.Name = "m_currencyLabel";
-      this.m_currencyLabel.Size = new System.Drawing.Size(55, 16);
+      this.m_currencyLabel.Size = new System.Drawing.Size(130, 16);
       this.m_currencyLabel.TabIndex = 9;
       this.m_currencyLabel.Text = "Currency";
       this.m_currencyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -143,7 +143,7 @@ namespace FBI.MVC.View
       this.m_versionLabel.Location = new System.Drawing.Point(476, 5);
       this.m_versionLabel.Multiline = true;
       this.m_versionLabel.Name = "m_versionLabel";
-      this.m_versionLabel.Size = new System.Drawing.Size(58, 16);
+      this.m_versionLabel.Size = new System.Drawing.Size(200, 16);
       this.m_versionLabel.TabIndex = 8;
       this.m_versionLabel.Text = "Version";
       this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -160,7 +160,7 @@ namespace FBI.MVC.View
       this.m_entityLabel.Location = new System.Drawing.Point(156, 5);
       this.m_entityLabel.Multiline = true;
       this.m_entityLabel.Name = "m_entityLabel";
-      this.m_entityLabel.Size = new System.Drawing.Size(33, 13);
+      this.m_entityLabel.Size = new System.Drawing.Size(178, 13);
       this.m_entityLabel.TabIndex = 7;
       this.m_entityLabel.Text = "Entity";
       this.m_entityLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
