@@ -942,7 +942,7 @@ namespace FBI.MVC.View
         if (m_bnf.Parse("fbi_to_human_grammar", l_account.Formula))
           m_formulaTextBox.Text = m_grammar.Formula;
         else
-          Forms.MsgBox.Show(m_grammar.LastError);
+          m_formulaTextBox.Text = m_grammar.LastError;
 
         //Description
         m_descriptionTextBox.Text = l_account.Description;
