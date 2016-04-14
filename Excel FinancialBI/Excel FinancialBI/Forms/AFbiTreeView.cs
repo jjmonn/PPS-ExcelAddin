@@ -157,5 +157,32 @@ namespace FBI.Forms
 
     #endregion
 
+    public static void Copy(vTreeView p_copy, vTreeView p_toCopy)
+    {
+      vTreeNode l_newNode;
+
+      foreach (vTreeNode l_node in p_toCopy.Nodes)
+      {
+        l_newNode = new vTreeNode(l_node.Text);
+        l_newNode.Value = l_node.Value;
+        l_newNode.Tag = l_node.Tag;
+        CopyChildren(l_newNode, l_node);
+        p_copy.Nodes.Add(l_newNode);
+      }
+    }
+
+    public static void CopyChildren(vTreeNode p_parent, vTreeNode p_node)
+    {
+      vTreeNode l_newNode;
+
+      foreach (vTreeNode l_node in p_node.Nodes)
+      {
+        l_newNode = new vTreeNode(l_node.Text);
+        l_newNode.Value = l_node.Value;
+        l_newNode.Tag = l_node.Tag;
+        p_parent.Nodes.Add(l_newNode);
+        CopyChildren(l_newNode, l_node);
+      }
+    }
   }
 }

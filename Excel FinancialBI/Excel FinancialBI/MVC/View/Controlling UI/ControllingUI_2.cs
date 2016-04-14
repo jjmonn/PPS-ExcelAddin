@@ -156,6 +156,7 @@ namespace FBI.MVC.View
       {
         if (p_status == ErrorMessage.SUCCESS && p_result != null)
         {
+          m_controller.LastResult = p_result;
           LegacyComputeRequest l_request = p_request as LegacyComputeRequest;
 
           if (l_request != null)
@@ -175,7 +176,8 @@ namespace FBI.MVC.View
 
     void OnRefreshButtonMouseDown(object sender, MouseEventArgs e)
     {
-      m_controller.Compute();
+      if (m_controller.Compute() == false)
+        MsgBox.Show(m_controller.Error);
     }
 
     void OnChartButtonMouseDown(object sender, MouseEventArgs e)

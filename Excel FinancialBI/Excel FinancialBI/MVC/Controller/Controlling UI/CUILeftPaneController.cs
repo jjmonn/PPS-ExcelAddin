@@ -53,8 +53,8 @@ namespace FBI.MVC.Controller
       SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();
       List<UInt32> l_list = new List<uint>();
 
-      if (l_dic == null)
-        return (l_list);
+      if (l_dic[typeof(Version)] == null)
+        return (null);
       foreach (UInt32 l_versionId in l_dic[typeof(Version)])
       {
         Version l_version = VersionModel.Instance.GetValue(l_versionId);

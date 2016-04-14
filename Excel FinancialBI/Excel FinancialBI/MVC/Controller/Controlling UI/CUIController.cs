@@ -23,6 +23,8 @@ namespace FBI.MVC.Controller
     public CUIRightPaneController RightPaneController { get; set; }
     public ResultController ResultController { get; set; }
     public CUIVisualizationController VisualizationController { get; set; }
+    public SafeDictionary<UInt32, ComputeResult> LastResult { get; set; }
+    public ComputeConfig LastConfig { get; set; }
 
     public IView View { get { return (m_view); } }
     public string Error { get; set; }
@@ -90,6 +92,7 @@ namespace FBI.MVC.Controller
 
       if (CheckConfig(l_config) == false)
         return (false);
+      LastConfig = l_config;
       ResultController.LoadDGV(l_config);
       if (l_request.IsDiff)
       {
@@ -167,7 +170,7 @@ namespace FBI.MVC.Controller
 
     public void ShowCharts()
     {
-      VisualizationController = new CUIVisualizationController();
+      VisualizationController = new CUIVisualizationController(this);
     }
   }
 }

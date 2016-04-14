@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace FBI.MVC.Controller
 {
+  using Forms;
+  using Model;
   using Model.CRUD;
   using View;
   using GraphSortedDic = SafeDictionary<UInt32, SafeDictionary<Int32, SafeDictionary<Tuple<bool, Model.CRUD.AxisType, UInt32>, double>>>;
@@ -18,14 +21,17 @@ namespace FBI.MVC.Controller
     public string Error { get; set; }
     public IView View { get { return (m_view); } }
 
-    SafeDictionary<ResultKey, double> m_values;
-    SafeDictionary<ResultKey, double> m_accountValues;
+    CUI2VisualisationChartsSettings m_viewChartSettings;
+    CUIController m_parentController;
 
-    public CUIVisualizationController()
+    public CUIVisualizationController(CUIController p_parentController)
     {
+      m_parentController = p_parentController;
       m_view = new CUIVisualization();
       m_view.SetController(this);
-      LoadView();
+      m_viewChartSettings = new CUI2VisualisationChartsSettings();
+      m_viewChartSettings.SetController(this);
+      this.LoadView();
     }
 
     void LoadView()
@@ -34,45 +40,47 @@ namespace FBI.MVC.Controller
       m_view.Show();
     }
 
-
-    void LoadData(SafeDictionary<ResultKey, double> p_values)
+    public FbiChart.Computation LastComputation
     {
-      m_values = p_values;
-      SelectAccount(1);
+      get
+      {
+        return (new FbiChart.Computation(m_parentController.LastConfig,
+          m_parentController.LastResult));
+      }
     }
 
-    public void SelectAccount(UInt32 p_accountId)
+    public ComputeConfig LastConfig
     {
-      m_accountValues = new SafeDictionary<ResultKey, double>();
-
-      foreach (KeyValuePair<ResultKey, double> l_pair in m_values)
-        if (l_pair.Key.AccountId == p_accountId)
-          m_accountValues[l_pair.Key] = l_pair.Value;
+      get { return (m_parentController.LastConfig); }
     }
 
-    GraphSortedDic BuildSortedValues(bool p_isAxis, AxisType p_axis, UInt32 p_id = 0)
+    public SafeDictionary<UInt32, ComputeResult> LastResult
     {
-      GraphSortedDic l_sortedValues = new GraphSortedDic();
-
-      foreach (KeyValuePair<ResultKey, double> l_pair in m_accountValues)
-        if (l_pair.Key.IsSort(p_isAxis, p_axis, p_id))
-        {
-          Tuple<bool, AxisType, UInt32> l_sort = l_pair.Key.LastSort;
-
-          if (l_sort != null)
-            l_sortedValues[l_pair.Key.VersionId][l_pair.Key.Period][l_sort] = l_pair.Value;
-        }
-      return (l_sortedValues);
+      get { return (m_parentController.LastResult); }
     }
 
-    GraphUnSortedDic BuildUnsortedValues()
+    public bool CreateUpdateSettings(ChartSettings p_settings)
     {
-      GraphUnSortedDic l_values = new GraphUnSortedDic();
+      if (p_settings.Id == ChartSettingsModel.INVALID)
+      {
+        ChartSettingsModel.Instance.Create(p_settings);
+        return (true);
+      }
+      ChartSettingsModel.Instance.Update(p_settings.Id, p_settings);
+      return (true);
+    }
 
-      foreach (KeyValuePair<ResultKey, double> l_pair in m_accountValues)
-        if (l_pair.Key.SortHash == "")
-          l_values[l_pair.Key.VersionId][l_pair.Key.Period].Add(l_pair.Value);
-      return (l_values);
+    public void ShowSettingsView()
+    {
+      m_viewChartSettings.ShowDialog();
+    }
+
+    public void ShowSettingsView(UInt32 p_settingsId)
+    {
+      ChartSettings settings = ChartSettingsModel.Instance.GetValue(p_settingsId);
+
+      m_viewChartSettings.LoadSettings(settings);
+      this.ShowSettingsView();
     }
   }
 }
