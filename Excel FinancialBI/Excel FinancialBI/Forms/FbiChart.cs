@@ -19,6 +19,11 @@ namespace FBI.Forms
     private const int ELEM_DISPLAYED = 4;
     private const int GRADIENT_MULTIPLIER = 2;
 
+    private const int TITLE_SIZE = 12;
+    private const int LEGEND_SIZE = 10;
+    private const int AXIS_SIZE = 8;
+    private const string DEFAULT_FONT = "calibri";
+
     public class Computation
     {
       public ComputeConfig Config;
@@ -42,22 +47,6 @@ namespace FBI.Forms
       m_id = m_chartId++;
     }
 
-    private ChartArea CreateArea()
-    {
-      ChartArea l_chartArea = new ChartArea();
-
-      this.ChartAreas.Add(l_chartArea);
-      l_chartArea.AxisX.MajorGrid.Enabled = false;
-      l_chartArea.AxisY.MajorGrid.Enabled = false;
-      l_chartArea.IsSameFontSizeForAllAxes = true;
-      l_chartArea.AxisY.TitleFont = new Font("calibri", 8);
-      l_chartArea.AxisX.TitleFont = new Font("calibri", 8);
-      l_chartArea.AxisX.LabelStyle.Angle = -45;
-      l_chartArea.AxisY.LabelAutoFitMaxFontSize = 10;
-      l_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
-      return (l_chartArea);
-    }
-
     public UInt32 Id
     {
       get { return (m_id); }
@@ -76,13 +65,40 @@ namespace FBI.Forms
       this.Legends.Clear();
     }
 
+    private ChartArea CreateArea()
+    {
+      ChartArea l_chartArea = new ChartArea();
+
+      this.ChartAreas.Add(l_chartArea);
+      l_chartArea.AxisX.MajorGrid.Enabled = false;
+      l_chartArea.AxisY.MajorGrid.Enabled = false;
+      l_chartArea.IsSameFontSizeForAllAxes = true;
+      l_chartArea.AxisY.TitleFont = new Font(DEFAULT_FONT, AXIS_SIZE);
+      l_chartArea.AxisX.TitleFont = new Font(DEFAULT_FONT, AXIS_SIZE);
+      l_chartArea.AxisX.LabelStyle.Angle = -45;
+      l_chartArea.AxisY.LabelAutoFitMaxFontSize = 10;
+      l_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
+      return (l_chartArea);
+    }
+
+    private void CreateLegend()
+    {
+      this.Legends.Add(new Legend());
+      this.Legends[0].Docking = Docking.Bottom;
+      this.Legends[0].IsDockedInsideChartArea = false;
+      this.Legends[0].TableStyle = LegendTableStyle.Wide;
+      this.Legends[0].Alignment = StringAlignment.Center;
+      this.Legends[0].Font = new Font(DEFAULT_FONT, LEGEND_SIZE);
+    }
+
     public void SetChart(string p_name)
     {
       this.Clear();
-/*      this.Legends.Add(p_name);
-      this.Legends[p_name].IsDockedInsideChartArea = true;*/
-      this.Titles.Add(new Title(p_name, Docking.Bottom, new Font("calibri", 15), Color.Black));
+      this.Titles.Add(new Title(p_name, Docking.Bottom, new Font(DEFAULT_FONT, TITLE_SIZE), Color.Black));
+      this.BorderlineWidth = 1;
+      this.BorderlineColor = Color.Gray;
       this.CreateArea();
+      this.CreateLegend();
     }
 
     public bool HasSettings()
@@ -261,6 +277,7 @@ namespace FBI.Forms
       }
     }
 
+    //ERK... Almost like DisplayAsStack, but no time to generalize, sorry :(
     private void DisplayAsStackVersion(ChartSettings p_settings, Computation p_compute,
       List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {

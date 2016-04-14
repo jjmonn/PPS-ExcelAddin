@@ -92,6 +92,17 @@ namespace FBI.Network
           new RemoteCertificateValidationCallback(ValidateServerCertificate),
           null);
         m_StreamSSL.AuthenticateAsClient("pps");
+
+        byte[] header = System.Text.Encoding.UTF8.GetBytes("NOWEBSOCKET");
+
+        m_StreamSSL.Write(header, 0, header.Length);
+        m_StreamSSL.Flush();
+
+        byte[] answer = new byte[5];
+        int ret = m_StreamSSL.Read(answer, 0, answer.Length);
+        if (ret < answer.Length)
+          return (false);
+        return (System.Text.Encoding.UTF8.GetString(answer) == "READY");
       }
       catch (Exception e)
       {
@@ -103,18 +114,6 @@ namespace FBI.Network
         Debug.WriteLine("SSL authentication failed");
         return (false);
       }
-
-      byte[] header = System.Text.Encoding.UTF8.GetBytes("NOWEBSOCKET");
-
-      m_StreamSSL.Write(header, 0, header.Length);
-      m_StreamSSL.Flush();
-
-      byte[] answer = new byte[5];
-      int ret = m_StreamSSL.Read(answer, 0, answer.Length);
-
-      if (ret < answer.Length)
-        return (false);
-      return (System.Text.Encoding.UTF8.GetString(answer) == "READY");
     }
 
     public static bool Send(ByteBuffer p_data)
