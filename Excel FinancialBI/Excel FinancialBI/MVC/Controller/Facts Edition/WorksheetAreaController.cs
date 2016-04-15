@@ -108,8 +108,13 @@ namespace FBI.MVC.Model
       if (Entities.m_values.Count > 0) // only register the first entity found
         return;
       if (RegisterEntity(p_cell) == true)
-      return;
-  }
+        return;
+    }
+
+    public void InitPeriods()
+    {
+      m_periodsDatesList = PeriodModel.GetPeriodsList(VersionId);
+    }
 
     public bool RegisterVersion(Range p_cell)
     {

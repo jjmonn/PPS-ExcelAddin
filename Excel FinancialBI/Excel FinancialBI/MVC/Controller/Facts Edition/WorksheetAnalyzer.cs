@@ -68,6 +68,7 @@ namespace FBI.MVC.Model
     private void SnapshotBackgroundWorker_DoWork()//object sender, DoWorkEventArgs e)
     {
       Range l_cell;
+      m_dimensions.InitPeriods();
       for (UInt32 l_rowIndex = 1; l_rowIndex <= m_lastCell.Row; l_rowIndex++)
       {
         for (UInt32 l_columnIndex = 1; l_columnIndex <= m_lastCell.Column; l_columnIndex++)
