@@ -47,6 +47,7 @@ namespace FBI.MVC.View
     SimpleBnf m_bnf = new SimpleBnf();
     FbiGrammar m_grammar = new FbiGrammar();
     SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
+    UInt32 m_currentAccount = 0;
 
     #endregion
 
@@ -403,7 +404,7 @@ namespace FBI.MVC.View
         {
           Account l_currentAccount;
 
-          if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null)
+          if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null)
           {
             l_currentAccount = l_currentAccount.Clone();
             l_currentAccount.Name = Name_TB.Text;
@@ -476,7 +477,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           if (m_formulaTextBox.Text == "")
@@ -535,7 +536,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.Description = m_descriptionTextBox.Text;
@@ -626,6 +627,7 @@ namespace FBI.MVC.View
         m_currentNode = p_e.Node;
         if (m_currentNode != null)
         {
+          m_currentAccount = (UInt32)m_currentNode.Value;
           DesactivateUnallowed();
           DisplayAttributes();
         }
@@ -684,7 +686,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.Process = (Account.AccountProcess)((vComboBox)p_sender).SelectedItem.Value;
@@ -702,7 +704,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.Type = (Account.AccountType)((vComboBox)p_sender).SelectedItem.Value;
@@ -728,7 +730,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.ConversionOptionId = (Account.ConversionOptions)((vComboBox)p_sender).SelectedItem.Value;
@@ -744,7 +746,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.ConsolidationOptionId = (Account.ConsolidationOptions)((vComboBox)p_sender).SelectedItem.Value;
@@ -760,7 +762,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           Account.FormulaTypes l_value = (Account.FormulaTypes)((vComboBox)p_sender).SelectedItem.Value;
@@ -883,7 +885,7 @@ namespace FBI.MVC.View
     {
       if ((m_currentNode != null) && m_isEditingFormulaFlag == false)
       {
-        Account l_account = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value);
+        Account l_account = AccountModel.Instance.GetValue(m_currentAccount);
 
         if (l_account == null)
           return;

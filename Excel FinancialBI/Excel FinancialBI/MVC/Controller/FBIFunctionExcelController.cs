@@ -19,6 +19,7 @@ namespace FBI.MVC.Controller
     static System.Threading.EventWaitHandle m_waitResult;
     public override IView View { get { return (null); } }
     SafeDictionary<Int32, ComputeResult> m_results;
+    static string m_lastParameter ="";
 
     public FBIFunctionExcelController()
     {
@@ -27,8 +28,9 @@ namespace FBI.MVC.Controller
       LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
     }
 
-    static dynamic GetValue(object p_param)
+    static dynamic GetValue(object p_param, string p_name)
     {
+      m_lastParameter = p_name;
       if (p_param.GetType() == typeof(ADXExcelRef))
       {
         ADXExcelRef l_ref = p_param as ADXExcelRef;
@@ -37,7 +39,7 @@ namespace FBI.MVC.Controller
         Range l_range = AddinModule.CurrentInstance.ExcelApp.Range[l_address];
 
         if (l_range != null)
-          return (GetValue(l_range.Value));
+          return (GetValue(l_range.Value, p_name));
         else
           return ("");
       }
@@ -45,13 +47,13 @@ namespace FBI.MVC.Controller
         return (p_param);
     }
 
-    static List<string> GetValueList(object p_param)
+    static List<string> GetValueList(object p_param, string p_name)
     {
       List<string> l_list = new List<string>();
       if (p_param.GetType().IsArray == false)
       {
         if ((string)p_param != "")
-          l_list.Add((string)GetValue(p_param));
+          l_list.Add((string)GetValue(p_param, p_name));
       }
       else
       {
@@ -61,7 +63,7 @@ namespace FBI.MVC.Controller
         foreach (object l_param in l_paramList)
         {
           if ((string)l_param != "")
-            l_list.Add((string)GetValue(l_param));
+            l_list.Add((string)GetValue(l_param, p_name));
         }
       }
       return (l_list);
@@ -88,19 +90,19 @@ namespace FBI.MVC.Controller
         Range l_cell = AddinModule.CurrentInstance.ExcelApp.ActiveCell;
         FBIFunction l_function = new FBIFunction();
 
-        l_function.EntityName = GetValue(p_entity);
-        l_function.AccountName = GetValue(p_account);
-        dynamic l_period = GetValue(p_period);
+        l_function.EntityName = GetValue(p_entity, Local.GetValue("ppsbi.entity"));
+        l_function.AccountName = GetValue(p_account, Local.GetValue("ppsbi.account"));
+        dynamic l_period = GetValue(p_period, Local.GetValue("ppsbi.period"));
         if (l_period.GetType() == typeof(string))
           l_function.PeriodString = l_period;
         else
-          l_function.Period = GetValue(p_period);
-        l_function.CurrencyName = GetValue(p_currency);
-        l_function.VersionName = GetValue(p_version);
-        l_function.AxisElems[AxisType.Client] = GetValueList(p_clientsFilters);
-        l_function.AxisElems[AxisType.Product] = GetValueList(p_productsFilters);
-        l_function.AxisElems[AxisType.Adjustment] = GetValueList(p_adjustmentsFilters);
-        l_function.Filters = GetValueList(p_categoriesFilters);
+          l_function.Period = l_period;
+        l_function.CurrencyName = GetValue(p_currency, Local.GetValue("ppsbi.currency"));
+        l_function.VersionName = GetValue(p_version, Local.GetValue("ppsbi.version"));
+        l_function.AxisElems[AxisType.Client] = GetValueList(p_clientsFilters, Local.GetValue("ppsbi.clients_filter"));
+        l_function.AxisElems[AxisType.Product] = GetValueList(p_productsFilters, Local.GetValue("ppsbi.products_filter"));
+        l_function.AxisElems[AxisType.Adjustment] = GetValueList(p_adjustmentsFilters, Local.GetValue("ppsbi.adjustments_filter"));
+        l_function.Filters = GetValueList(p_categoriesFilters, Local.GetValue("ppsbi.categories_filter"));
 
         if (IsValidFunction(l_function) == false)
           return (Error);
@@ -121,7 +123,7 @@ namespace FBI.MVC.Controller
       }
       catch
       {
-        return (null);
+        return (m_lastParameter + " " + Local.GetValue("ppsbi.error.invalid_parameter"));
       }
 
     }
