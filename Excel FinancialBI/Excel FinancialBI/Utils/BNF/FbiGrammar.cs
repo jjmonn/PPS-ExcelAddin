@@ -31,10 +31,16 @@ namespace FBI.Utils.BNF
     private int m_inputPtr;
     private int m_formulaPtr;
     private string m_lastError;
+    private List<UInt32> m_accounts = new List<uint>(); 
 
     public string Formula
     {
       get { return (m_formula); }
+    }
+
+    public List<UInt32> Accounts
+    {
+      get { return (m_accounts); }
     }
 
     public string LastError
@@ -64,6 +70,7 @@ namespace FBI.Utils.BNF
       m_formulaPtr = 0;
       m_lastError = "";
       m_formula = "";
+      m_accounts.Clear();
     }
 
     private void Add(string p_data)
@@ -143,6 +150,7 @@ namespace FBI.Utils.BNF
 
       if (p_account == null || (l_account = AccountModel.Instance.GetValue(p_account)) == null)
         return (null);
+      m_accounts.Add(l_account.Id);
       return (m_serverAccount + l_account.Id.ToString());
     }
 

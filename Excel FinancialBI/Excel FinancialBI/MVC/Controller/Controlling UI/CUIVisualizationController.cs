@@ -70,16 +70,31 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
+    public bool IsLastConfigAmbigious(ChartSettings p_settings)
+    {
+      return (this.LastConfig.Request.SortList.Count >= 1 &&
+        this.LastConfig.Request.Versions.Count > 1 &&
+        p_settings.Series.Count > 1);
+    }
+
+    public void ApplyLastCompute(ChartSettings p_settings, bool p_bypass = false)
+    {
+      if (!this.IsLastConfigAmbigious(p_settings) || p_bypass)
+      {
+        p_settings.HasDeconstruction = this.LastConfig.Request.SortList.Count >= 1;
+        p_settings.Versions = this.LastConfig.Request.Versions;
+        p_settings.Deconstruction = (p_settings.HasDeconstruction ? this.LastConfig.Request.SortList[0] : null);
+      }
+    }
+
     public void ShowSettingsView()
     {
       m_viewChartSettings.ShowDialog();
     }
 
-    public void ShowSettingsView(UInt32 p_settingsId)
+    public void ShowSettingsView(ChartSettings p_settings)
     {
-      ChartSettings settings = ChartSettingsModel.Instance.GetValue(p_settingsId);
-
-      m_viewChartSettings.LoadSettings(settings);
+      m_viewChartSettings.LoadSettings(p_settings);
       this.ShowSettingsView();
     }
   }
