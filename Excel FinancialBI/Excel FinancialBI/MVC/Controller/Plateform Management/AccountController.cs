@@ -13,6 +13,7 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
   using Utils;
+  using Utils.BNF;
 
   class AccountController : NameController<AccountsView>
   {
@@ -20,6 +21,8 @@ namespace FBI.MVC.Controller
 
     public override IView View { get { return (m_view); } }
     private const string ACCOUNTS_FORBIDDEN_CHARACTERS = "+-*=<>^?:;![]";
+    public SimpleBnf BNF = new SimpleBnf();
+    public FbiGrammar Grammar = new FbiGrammar();
 
     #endregion
 
@@ -29,6 +32,8 @@ namespace FBI.MVC.Controller
     {
       m_view = new AccountsView();
       m_view.SetController(this);
+      BNF.AddRule("fbi_to_grammar", Grammar.ToGrammar);
+      BNF.AddRule("grammar_to_fbi", Grammar.ToHuman);
       this.LoadView();
     }
 
@@ -81,6 +86,17 @@ namespace FBI.MVC.Controller
         return (false);
       }
       return (true);
+    }
+
+    List<Account> GetDependantAccounts(UInt32 p_id)
+    {
+      List<Account> l_dependantAccounts = AccountModel.Instance.GetChildren(p_id);
+
+      foreach (Account l_account in AccountModel.Instance.GetDictionary().Values)
+      {
+        BNF.Parse("grammar_to_fbi", l_account.Formula);
+      }
+      return (null);
     }
 
     public bool DeleteAccount(UInt32 p_id)

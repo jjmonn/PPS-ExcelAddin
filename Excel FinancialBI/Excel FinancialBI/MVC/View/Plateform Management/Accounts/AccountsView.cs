@@ -44,8 +44,6 @@ namespace FBI.MVC.View
     bool m_isEditingFormulaFlag = false;
     string m_saveFormula = "";
 
-    SimpleBnf m_bnf = new SimpleBnf();
-    FbiGrammar m_grammar = new FbiGrammar();
     SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
     UInt32 m_currentAccount = 0;
 
@@ -488,16 +486,15 @@ namespace FBI.MVC.View
             SetEditingFormulaUI(false);
             return;
           }
-          m_bnf.AddRule("fbi_to_grammar", m_grammar.ToGrammar);
-          if (m_bnf.Parse("fbi_to_grammar", m_formulaTextBox.Text))
+          if (m_controller.BNF.Parse("fbi_to_grammar", m_formulaTextBox.Text))
           {
-            l_currentAccount.Formula = m_grammar.Formula;
+            l_currentAccount.Formula = m_controller.Grammar.Formula;
             if (m_controller.UpdateAccount(l_currentAccount) == false)
               MsgBox.Show(m_controller.Error); 
             SetEditingFormulaUI(false);
           }
           else
-            MsgBox.Show(m_grammar.LastError);
+            MsgBox.Show(m_controller.Grammar.LastError);
         }
       }
     }
@@ -940,11 +937,11 @@ namespace FBI.MVC.View
 
         // Formula TB
         m_formulaTextBox.Text = "";
-        m_bnf.AddRule("fbi_to_human_grammar", m_grammar.ToHuman);
-        if (m_bnf.Parse("fbi_to_human_grammar", l_account.Formula))
-          m_formulaTextBox.Text = m_grammar.Formula;
+        m_controller.BNF.AddRule("fbi_to_human_grammar", m_controller.Grammar.ToHuman);
+        if (m_controller.BNF.Parse("fbi_to_human_grammar", l_account.Formula))
+          m_formulaTextBox.Text = m_controller.Grammar.Formula;
         else
-          m_formulaTextBox.Text = m_grammar.LastError;
+          m_formulaTextBox.Text = m_controller.Grammar.LastError;
 
         //Description
         m_descriptionTextBox.Text = l_account.Description;
