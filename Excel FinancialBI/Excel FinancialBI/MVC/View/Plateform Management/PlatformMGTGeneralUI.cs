@@ -183,6 +183,11 @@ namespace FBI.MVC.View
       m_controller.SwitchView<GlobalFactView, GlobalFactController>(new GlobalFactController());
     }
 
+    private void PlatformMGTGeneralUI_FormClosed(object sender, FormClosedEventArgs e)
+    {
+      m_controller.Close();
+    }
+
   }
 
 }
