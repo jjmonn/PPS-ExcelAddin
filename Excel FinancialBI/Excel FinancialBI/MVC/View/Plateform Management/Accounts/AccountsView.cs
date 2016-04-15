@@ -481,7 +481,7 @@ namespace FBI.MVC.View
           l_currentAccount = l_currentAccount.Clone();
           if (m_formulaTextBox.Text == "")
           {
-            l_currentAccount.Formula = m_grammar.Formula;
+            l_currentAccount.Formula = "";
             if (m_controller.UpdateAccount(l_currentAccount) == false)
               MsgBox.Show(m_controller.Error); 
             SetEditingFormulaUI(false);
