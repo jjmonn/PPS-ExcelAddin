@@ -41,7 +41,7 @@ namespace FBI.MVC.View
       this.m_currencyLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_versionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_entityLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.panel2 = new System.Windows.Forms.Panel();
+      this.m_panel = new System.Windows.Forms.Panel();
       this.VersionTB = new VIBlend.WinForms.Controls.vTextBox();
       this.CurrencyTB = new VIBlend.WinForms.Controls.vTextBox();
       this.EntityTB = new VIBlend.WinForms.Controls.vTextBox();
@@ -64,7 +64,7 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.ColumnCount = 1;
       this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.TableLayoutPanel1.Controls.Add(this.Panel1, 0, 0);
-      this.TableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
+      this.TableLayoutPanel1.Controls.Add(this.m_panel, 0, 1);
       this.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.TableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
       this.TableLayoutPanel1.Name = "TableLayoutPanel1";
@@ -167,13 +167,13 @@ namespace FBI.MVC.View
       this.m_entityLabel.UseMnemonics = true;
       this.m_entityLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
-      // panel2
+      // m_panel
       // 
-      this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panel2.Location = new System.Drawing.Point(3, 28);
-      this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(682, 349);
-      this.panel2.TabIndex = 2;
+      this.m_panel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_panel.Location = new System.Drawing.Point(3, 28);
+      this.m_panel.Name = "m_panel";
+      this.m_panel.Size = new System.Drawing.Size(682, 349);
+      this.m_panel.TabIndex = 2;
       // 
       // VersionTB
       // 
@@ -321,7 +321,7 @@ namespace FBI.MVC.View
   public VIBlend.WinForms.Controls.vLabel m_currencyLabel;
   public VIBlend.WinForms.Controls.vLabel m_versionLabel;
   public VIBlend.WinForms.Controls.vLabel m_entityLabel;
-  private System.Windows.Forms.Panel panel2;
+  private System.Windows.Forms.Panel m_panel;
   private System.Windows.Forms.ToolStripMenuItem m_splitVerticalBT;
   private System.Windows.Forms.ToolStripMenuItem m_chartEdit;
 }

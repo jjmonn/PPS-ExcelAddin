@@ -63,8 +63,6 @@ namespace FBI.MVC.Model
         DeleteEvent(ErrorMessage.SUCCESS, p_settingsId);
     }
 
-    //TODO Remove...
-
     public SafeDictionary<UInt32, ChartSettings> GetDictionnary()
     {
       return (m_settings);
