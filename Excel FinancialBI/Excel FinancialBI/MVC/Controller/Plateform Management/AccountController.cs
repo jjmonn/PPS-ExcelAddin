@@ -33,7 +33,7 @@ namespace FBI.MVC.Controller
       m_view = new AccountsView();
       m_view.SetController(this);
       BNF.AddRule("fbi_to_grammar", Grammar.ToGrammar);
-      BNF.AddRule("grammar_to_fbi", Grammar.ToHuman);
+      BNF.AddRule("fbi_to_human_grammar", Grammar.ToHuman);
       this.LoadView();
     }
 
@@ -94,14 +94,17 @@ namespace FBI.MVC.Controller
 
       foreach (Account l_account in AccountModel.Instance.GetDictionary().Values)
       {
-        BNF.Parse("grammar_to_fbi", l_account.Formula);
+        bool l_result = BNF.Parse("fbi_to_human_grammar", l_account.Formula);
+        if (l_result)
+          if (Grammar.Accounts.Contains(p_id))
+            l_dependantAccounts.Add(l_account);
       }
-      return (null);
+      return (l_dependantAccounts);
     }
 
     public bool DeleteAccount(UInt32 p_id)
     {
-      List<Account> l_dependantAccounts = AccountModel.Instance.GetChildren(p_id);
+      List<Account> l_dependantAccounts = GetDependantAccounts(p_id);
 
       if (l_dependantAccounts.Count > 0)
       {

@@ -38,7 +38,6 @@ namespace FBI.MVC.View
       m_accountTextBox.Text = p_account.Name;
       m_descriptionTextBox.Text = p_account.Description;
       m_formulaTextBox.Text = "";
-      m_bnf.AddRule("fbi_to_human_grammar", m_grammar.ToHuman);
       if (m_bnf.Parse("fbi_to_human_grammar", p_account.Formula))
         m_formulaTextBox.Text = m_grammar.Formula;
       else
