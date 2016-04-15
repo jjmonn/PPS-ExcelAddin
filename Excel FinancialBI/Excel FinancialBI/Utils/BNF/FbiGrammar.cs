@@ -31,14 +31,14 @@ namespace FBI.Utils.BNF
     private int m_inputPtr;
     private int m_formulaPtr;
     private string m_lastError;
-    private List<UInt32> m_accounts = new List<uint>(); 
+    private SortedSet<UInt32> m_accounts = new SortedSet<uint>(); 
 
     public string Formula
     {
       get { return (m_formula); }
     }
 
-    public List<UInt32> Accounts
+    public SortedSet<UInt32> Accounts
     {
       get { return (m_accounts); }
     }
@@ -468,6 +468,7 @@ namespace FBI.Utils.BNF
       {
         if ((l_account = AccountModel.Instance.GetValue(l_accountId)) != null)
         {
+          m_accounts.Add(l_account.Id);
           this.Add("\"" + l_account.Name + "\"");
         }
       }
