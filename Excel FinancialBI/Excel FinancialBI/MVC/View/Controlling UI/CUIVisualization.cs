@@ -124,7 +124,7 @@ namespace FBI.MVC.View
 
     private void OnSettingsCreated(ErrorMessage p_msg, UInt32 p_id)
     {
-      this.CreateChart(ChartSettingsModel.Instance.GetValue(p_id));
+      this.UpdateChart(m_lastClickedChart, ChartSettingsModel.Instance.GetValue(p_id));
     }
 
     private void OnSettingsUpdated(ErrorMessage p_msg, UInt32 p_id)
@@ -188,29 +188,23 @@ namespace FBI.MVC.View
       return (l_chart);
     }
 
-    private void CreateChart(ChartSettings p_settings)
+    private void UpdateChart(FbiChart p_chart, ChartSettings p_settings)
     {
-      FbiChart l_chart;
-
       if (p_settings == null)
         return;
 
-      Control l_control = this.GetOrCreateEmptyPanel();
-      if ((l_chart = this.AddChart(l_control)) == null)
-        return;
-      this.UpdateChart(l_chart, p_settings);
-    }
-
-    private void UpdateChart(FbiChart p_chart, ChartSettings p_settings)
-    {
-      if (p_settings == null || p_chart == null)
-        return;
-
+      if (p_chart == null)
+      {
+        Control l_control = this.GetOrCreateEmptyPanel();
+        if ((p_chart = this.AddChart(l_control)) == null)
+          return;
+      }
       m_controller.ApplyLastCompute(p_settings);
       m_versionLabel.Text = this.GetVersionName(p_settings);
       m_entityLabel.Text = AxisElemModel.Instance.GetValueName(m_controller.LastConfig.Request.EntityId);
       m_currencyLabel.Text = CurrencyModel.Instance.GetValueName(m_controller.LastConfig.Request.CurrencyId);
       p_chart.Assign(p_settings, m_controller.LastComputation);
+      m_lastClickedChart = null;
     }
 
     private void RemoveChart(FbiChart l_chart)
