@@ -413,6 +413,11 @@
     <string name="products_filter">Filtre produits</string>
     <string name="clients_filter">Filtre clients</string>
     <string name="adjustments_filter">Filtre ajustements</string>
+    <string name="period">Période</string>
+    <string name="currency">Devise</string>
+    <string name="version">Version</string>
+    <string name="account">Compte</string>
+    <string name="entity">Entité</string>
     <string name="title">Edition de la fonction Excel Financial BI</string>
     <string name="computing">calcul...</string>
     <category name="error">
@@ -424,6 +429,7 @@
       <string name="invalid_version">Version sélectionnée invalide (Verifiez que la version selectionnée n'est pas un dossier)</string>
       <string name="invalid_axis_elem">Filtre sélectionné invalide.</string>
       <string name="invalid_filter_value">Catégorie sélectionnée invalide.</string>
+      <string name="invalid_parameter">invalide.</string>
     </category>
   </category>
 

@@ -268,6 +268,7 @@ namespace FBI.MVC.View
       this.MainMenuStrip = this.MenuStrip1;
       this.Name = "PlatformMGTGeneralUI";
       this.Text = "[GeneralEditionUI.platform_config]";
+      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PlatformMGTGeneralUI_FormClosed);
       this.MenuStrip1.ResumeLayout(false);
       this.MenuStrip1.PerformLayout();
       this.ResumeLayout(false);

@@ -24,6 +24,7 @@ namespace FBI.MVC.Controller
     void ShowStatusView();
     void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     bool AutoCommit { get; set; }
+    string Error { get; set; }
     Worksheet Worksheet { get; set; }
   }
 

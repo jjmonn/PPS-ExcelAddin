@@ -84,6 +84,8 @@ namespace FBI.MVC.Controller
               m_view.SubmissionCurrencyName = CurrencyModel.Instance.GetValueName(l_currency.CurrencyId);
           }
         }
+        else
+          Error = m_factsEditionController.Error;
         return (l_result);
     }
 

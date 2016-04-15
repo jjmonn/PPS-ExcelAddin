@@ -45,7 +45,7 @@ namespace FBI.MVC.Controller
       l_view.Dock = DockStyle.Fill;
     }
 
-    void Close()
+    public void Close()
     {
       CloseCurrentControl();
     }

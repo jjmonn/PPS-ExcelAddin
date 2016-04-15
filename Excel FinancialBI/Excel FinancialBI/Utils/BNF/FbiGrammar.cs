@@ -480,8 +480,8 @@ namespace FBI.Utils.BNF
       {
         if (p_input.ReadText("acc"))
         {
-          if (this.ToHumanAccount(p_input) == null || this.ToHumanPeriod(p_input) == null)
-            return (false);
+          this.ToHumanAccount(p_input);
+          this.ToHumanPeriod(p_input);
         }
         else
         {
