@@ -20,7 +20,8 @@ namespace FBI.Forms
   public class FbiChart : Chart
   {
     private const int ELEM_DISPLAYED = 4;
-    private const int GRADIENT_MULTIPLIER = 2;
+    private const int GRADIENT_MULTIPLIER = 2; //Used for stackColumn. Nb of stacks * GRADIENT_MULTIPLIER => Nb of steps of gradient
+    private const int GRADIENT_DIVIDED = 225; //Used for lines. Nb of lines / GRADIENT_DIVIDED
 
     private const int TITLE_SIZE = 12;
     private const int LEGEND_SIZE = 10;
@@ -58,6 +59,7 @@ namespace FBI.Forms
     public ChartSettings Settings
     {
       get { return (m_settings); }
+      set { m_settings = value; }
     }
 
     public void Clear()
@@ -105,9 +107,9 @@ namespace FBI.Forms
       this.CreateLegend();
     }
 
-    public bool HasSettings()
+    public bool HasSettings
     {
-      return (m_settings != null);
+      get { return (m_settings != null); }
     }
 
     private SeriesChartType GetChartType(ChartSettings p_settings)
@@ -199,6 +201,11 @@ namespace FBI.Forms
       return (p_compute.Result[p_version].Values[this.GetKey(p_settings, p_compute.Config, p_account, p_period, p_version)]);
     }
 
+    public bool IsAmbigious(ChartSettings p_settings)
+    {
+      return (p_settings.HasDeconstruction && p_settings.Versions.Count > 1 && p_settings.Series.Count > 1);
+    }
+
     public void Assign(ChartSettings p_settings, Computation p_compute)
     {
       List<int> l_periods = PeriodModel.GetPeriodList(p_compute.Config.Request.StartPeriod,
@@ -207,8 +214,15 @@ namespace FBI.Forms
       SafeDictionary<int, string> l_displayPeriods = PeriodUtils.ToList(l_periods, p_compute.Config.BaseTimeConfig);
 
       this.SetChart(p_settings.Name);
-      this.Display(p_settings, p_compute, l_periods, l_displayPeriods);
 
+      if (this.IsAmbigious(p_settings))
+      {
+        this.Titles[0].Text = Local.GetValue("CUI_Charts.error.ambigious_settings");
+      }
+      else
+      {
+        this.Display(p_settings, p_compute, l_periods, l_displayPeriods);
+      }
       m_settings = p_settings;
     }
 
@@ -248,7 +262,7 @@ namespace FBI.Forms
           l_series.LegendText = l_serie.Account.Name + "\n" + VersionModel.Instance.GetValue(l_version).Name;
           this.Series.Add(l_series);
         }
-        l_color = ColorUtils.Add(l_color, (p_settings.Versions.Count * 8) * GRADIENT_MULTIPLIER);
+        l_color = ColorUtils.Add(l_color, GRADIENT_DIVIDED / p_settings.Versions.Count);
       }
     }
 

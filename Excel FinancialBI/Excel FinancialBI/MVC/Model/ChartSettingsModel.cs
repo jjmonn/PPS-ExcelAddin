@@ -25,8 +25,8 @@ namespace FBI.MVC.Model
     public delegate void CreationEventHandler(ErrorMessage status, UInt32 id);
     public event UpdateEventHandler UpdateEvent;
     public delegate void UpdateEventHandler(ErrorMessage status, UInt32 id);
-    /*public event DeleteEventHandler DeleteEvent;
-    public delegate void DeleteEventHandler(ErrorMessage status, UInt32 id);*/
+    public event DeleteEventHandler DeleteEvent;
+    public delegate void DeleteEventHandler(ErrorMessage status, UInt32 id);
 
     public void Create(ChartSettings p_settings)
     {
@@ -34,9 +34,6 @@ namespace FBI.MVC.Model
 
       l_settings.Name = p_settings.Name;
       l_settings.Series = p_settings.Series;
-      l_settings.HasDeconstruction = p_settings.HasDeconstruction;
-      l_settings.Versions = p_settings.Versions;
-      l_settings.Deconstruction = p_settings.Deconstruction;
       m_settings[m_lastSettingsId] = l_settings;
 
       if (CreationEvent != null)
@@ -53,12 +50,17 @@ namespace FBI.MVC.Model
 
       l_settings.Name = p_settings.Name;
       l_settings.Series = p_settings.Series;
-      l_settings.HasDeconstruction = p_settings.HasDeconstruction;
-      l_settings.Versions = p_settings.Versions;
-      l_settings.Deconstruction = p_settings.Deconstruction;
 
       if (UpdateEvent != null)
         UpdateEvent(ErrorMessage.SUCCESS, p_id);
+    }
+
+    public void Delete(UInt32 p_settingsId)
+    {
+      m_settings.Remove(p_settingsId);
+
+      if (DeleteEvent != null)
+        DeleteEvent(ErrorMessage.SUCCESS, p_settingsId);
     }
 
     //TODO Remove...
