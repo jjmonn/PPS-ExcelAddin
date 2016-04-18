@@ -314,7 +314,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.MainMenu.Location = new System.Drawing.Point(0, 0);
       this.MainMenu.Name = "MainMenu";
       this.MainMenu.ShowItemToolTips = true;
-      this.MainMenu.Size = new System.Drawing.Size(454, 55);
+      this.MainMenu.Size = new System.Drawing.Size(546, 55);
       this.MainMenu.TabIndex = 0;
       this.MainMenu.Text = "[CUI.main_menu]";
       // 
@@ -336,12 +336,14 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem";
       this.DropOnExcelToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
       this.DropOnExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]";
+      this.DropOnExcelToolStripMenuItem.Click += new System.EventHandler(this.OnDropOnExcelClick);
       // 
       // DropOnlyTheVisibleItemsOnExcelToolStripMenuItem
       // 
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Name = "DropOnlyTheVisibleItemsOnExcelToolStripMenuItem";
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = "Drop only the visible items on Excel";
+      this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Click += new System.EventHandler(this.OnDropVisibleOnExcelClick);
       // 
       // BusinessControlToolStripMenuItem
       // 

@@ -172,5 +172,6 @@ namespace FBI.MVC.Controller
     {
       VisualizationController = new CUIVisualizationController(this);
     }
+
   }
 }
