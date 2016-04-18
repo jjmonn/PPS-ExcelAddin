@@ -247,9 +247,7 @@
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\FbiChart.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Forms\FbiChart.cs" />
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -310,6 +308,8 @@
     <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Controller\SettingsController.cs" />
+    <Compile Include="MVC\Model\ChartAccountModel.cs" />
+    <Compile Include="MVC\Model\ChartPanelModel.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AComputeModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
@@ -322,6 +322,9 @@
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\ChartSettingsModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\CRUD\ChartAccount.cs" />
+    <Compile Include="MVC\Model\CRUD\ChartPanel.cs" />
+    <Compile Include="MVC\Model\CRUD\Chart.cs" />
     <Compile Include="MVC\Model\CRUD\Serie.cs" />
     <Compile Include="MVC\Model\CRUD\ChartSettings.cs" />
     <Compile Include="MVC\Model\CRUD\FBIFunction.cs" />
@@ -398,6 +401,7 @@
     <Compile Include="MVC\Model\CRUD\ResultKey.cs" />
     <Compile Include="MVC\Model\SourcedComputeModel.cs" />
     <Compile Include="MVC\Model\LegalHolidayModel.cs" />
+    <Compile Include="MVC\Model\ChartModel.cs" />
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />

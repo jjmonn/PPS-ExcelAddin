@@ -68,6 +68,9 @@ namespace FBI
       SuscribeModel<Version>(VersionModel.Instance, p_suscribeEvent);
       SuscribeModel<ExchangeRate>(ExchangeRateModel.Instance, p_suscribeEvent);
       SuscribeModel<LegalHoliday>(LegalHolidayModel.Instance, p_suscribeEvent);
+      SuscribeModel<ChartPanel>(ChartPanelModel.Instance, p_suscribeEvent);
+      SuscribeModel<ChartConf>(ChartModel.Instance, p_suscribeEvent);
+      SuscribeModel<ChartAccount>(ChartAccountModel.Instance, p_suscribeEvent);
     }
 
     static void SuscribeModel<T>(ICRUDModel<T> p_model, bool p_suscribeEvent) where T : class, CRUDEntity
