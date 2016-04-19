@@ -1,112 +1,76 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace FBI.MVC.Model.CRUD
 {
-  public class ChartSettings
+  using Network;
+
+  public class ChartSettings : CRUDEntity, IComparable
   {
-    private UInt32 m_id;
+    public UInt32 Id { get; private set; }
+    public UInt32 PanelId { get; set; }
+    public string Name { get; set; }
+    public UInt32 Image { get; set; }
 
-    private string m_name = "";
-    private List<Serie> m_series = new List<Serie>();
+    //NOT ON DATABASE, ONLY IN SESSION !
+    public bool HasDeconstruction { get; set; }
+    public List<UInt32> Versions { get; set; }
+    public Tuple<bool, AxisType, UInt32> Deconstruction { get; set; }
 
-    private bool m_hasDeconstruction;
-    private List<UInt32> m_versions;
-    private Tuple<bool, AxisType, UInt32> m_deconstruction;
-
-    public ChartSettings(UInt32 p_id = ChartSettingsModel.INVALID)
+    public ChartSettings() { }
+    private ChartSettings(UInt32 p_id)
     {
-      m_id = p_id;
+      Id = p_id;
     }
 
-    public UInt32 Id
+    public static ChartSettings BuildChart(ByteBuffer p_packet)
     {
-      get { return (m_id); }
+      ChartSettings l_chart = new ChartSettings(p_packet.ReadUint32());
+
+      l_chart.PanelId = p_packet.ReadUint32();
+      l_chart.Name = p_packet.ReadString();
+
+      return (l_chart);
     }
 
-    public string Name
+    public void Dump(ByteBuffer p_packet, bool p_includeId)
     {
-      get { return (m_name); }
-      set { m_name = value; }
+      if (p_includeId)
+        p_packet.WriteUint32(Id);
+      p_packet.WriteUint32(PanelId);
+      p_packet.WriteString(Name);
     }
 
-    public List<Serie> Series
+    public void CopyFrom(ChartSettings p_model)
     {
-      get { return (m_series); }
-      set { m_series = value; }
+      PanelId = p_model.PanelId;
+      Name = p_model.Name;
     }
 
-    public Serie this[int p_key]
+    public ChartSettings Clone()
     {
-      get { return (m_series[p_key]); }
-      set { m_series[p_key] = value; }
+      ChartSettings l_clone = new ChartSettings(Id);
+
+      l_clone.CopyFrom(this);
+      return (l_clone);
     }
 
-    //
-
-    public bool HasDeconstruction
+    public int CompareTo(object p_obj)
     {
-      get { return (m_hasDeconstruction); }
-      set { m_hasDeconstruction = value; }
-    }
+      if (p_obj == null)
+        return 0;
+      ChartSettings l_cmpChart = p_obj as ChartSettings;
 
-    public List<UInt32> Versions
-    {
-      get { return (m_versions); }
-      set { m_versions = value; }
-    }
-
-    public Tuple<bool, AxisType, UInt32> Deconstruction
-    {
-      get { return (m_deconstruction); }
-      set { m_deconstruction = value; }
-    }
-
-    //
-
-    public bool Has(int p_index)
-    {
-      return (p_index < m_series.Count);
-    }
-
-    public bool AddSerie(string p_accountName, Color p_color)
-    {
-      Serie l_serie;
-      Account l_account;
-
-      if ((l_account = AccountModel.Instance.GetValue(p_accountName)) == null)
-        return (false);
-      l_serie = new Serie();
-      l_serie.Account = l_account;
-      l_serie.Color = p_color;
-      m_series.Add(l_serie);
-      return (true);
-    }
-
-    public bool UpdateSerie(int p_index, string p_accountName, Color p_color)
-    {
-      Account l_account;
-
-      if (!this.Has(p_index))
-        return (false);
-      if ((l_account = AccountModel.Instance.GetValue(p_accountName)) == null)
-        return (false);
-      m_series[p_index].Account = l_account;
-      m_series[p_index].Color = p_color;
-      return (true);
-    }
-
-    public bool AddUpdateSerie(int p_index, string p_accountName, Color p_color)
-    {
-      if (this.Has(p_index))
-      {
-        return (this.UpdateSerie(p_index, p_accountName, p_color));
-      }
-      return (this.AddSerie(p_accountName, p_color));
+      if (l_cmpChart == null)
+        return 0;
+      if (l_cmpChart.PanelId > PanelId)
+        return -1;
+      else
+        return 1;
     }
   }
 }

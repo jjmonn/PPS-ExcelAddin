@@ -69,7 +69,7 @@ namespace FBI
       SuscribeModel<ExchangeRate>(ExchangeRateModel.Instance, p_suscribeEvent);
       SuscribeModel<LegalHoliday>(LegalHolidayModel.Instance, p_suscribeEvent);
       SuscribeModel<ChartPanel>(ChartPanelModel.Instance, p_suscribeEvent);
-      SuscribeModel<ChartConf>(ChartModel.Instance, p_suscribeEvent);
+      SuscribeModel<ChartSettings>(ChartSettingsModel.Instance, p_suscribeEvent);
       SuscribeModel<ChartAccount>(ChartAccountModel.Instance, p_suscribeEvent);
     }
 

@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using VIBlend.WinForms.Controls;
 using VIBlend.WinForms.DataGridView;
 using VIBlend.Utilities;
-using System.Drawing;
 
 namespace FBI.MVC.View
 {

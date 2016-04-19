@@ -10,6 +10,8 @@ namespace FBI.MVC.Model.CRUD
 
   public class ChartPanel : CRUDEntity, IComparable, NamedCRUDEntity
   {
+    public const UInt32 INVALID_ID = 0;
+
     public UInt32 Id { get; private set; }
     public UInt32 UserId { get; set; }
     public string Name { get; set; }
@@ -61,10 +63,7 @@ namespace FBI.MVC.Model.CRUD
 
       if (l_cmpPanel == null)
         return 0;
-      if (l_cmpPanel.UserId > UserId)
-        return -1;
-      else
-        return 1;
+      return (Name.CompareTo(l_cmpPanel.Name));
     }
   }
 }

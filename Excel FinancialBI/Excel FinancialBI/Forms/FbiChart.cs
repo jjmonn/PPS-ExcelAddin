@@ -201,13 +201,14 @@ namespace FBI.Forms
       return (p_compute.Result[p_version].Values[this.GetKey(p_settings, p_compute.Config, p_account, p_period, p_version)]);
     }
 
-    public bool IsAmbigious(ChartSettings p_settings)
+    public bool IsAmbigious(ChartSettings p_settings, List<Serie> p_series)
     {
-      return (p_settings.HasDeconstruction && p_settings.Versions.Count > 1 && p_settings.Series.Count > 1);
+      return (p_settings.HasDeconstruction && p_settings.Versions.Count > 1 && p_series.Count > 1);
     }
 
     public void Assign(ChartSettings p_settings, Computation p_compute)
     {
+      List<Serie> l_series = Serie.FromChartSettings(p_settings);
       List<int> l_periods = PeriodModel.GetPeriodList(p_compute.Config.Request.StartPeriod,
         p_compute.Config.Request.NbPeriods,
         p_compute.Config.BaseTimeConfig);
@@ -215,43 +216,43 @@ namespace FBI.Forms
 
       this.SetChart(p_settings.Name);
 
-      if (this.IsAmbigious(p_settings))
+      if (this.IsAmbigious(p_settings, l_series))
       {
         this.Titles[0].Text = Local.GetValue("CUI_Charts.error.ambigious_settings");
       }
       else
       {
-        this.Display(p_settings, p_compute, l_periods, l_displayPeriods);
+        this.Display(p_settings, l_series, p_compute, l_periods, l_displayPeriods);
       }
       m_settings = p_settings;
     }
 
-    public void Display(ChartSettings p_settings, Computation p_compute,
-      List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
+    public void Display(ChartSettings p_settings, List<Serie> p_series,
+      Computation p_compute, List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       if (p_settings.HasDeconstruction && p_settings.Versions.Count > 1)
       {
-        this.DisplayAsStackVersion(p_settings, p_compute, p_periods, p_displayPeriods);
+        this.DisplayAsStackVersion(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
       }
       else if (p_settings.HasDeconstruction)
       {
-        this.DisplayAsStack(p_settings, p_compute, p_periods, p_displayPeriods);
+        this.DisplayAsStack(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
       }
       else
       {
-        this.DisplayAsLine(p_settings, p_compute, p_periods, p_displayPeriods);
+        this.DisplayAsLine(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
       }
     }
 
-    private void DisplayAsLine(ChartSettings p_settings, Computation p_compute,
-      List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
+    private void DisplayAsLine(ChartSettings p_settings, List<Serie> p_series,
+      Computation p_compute, List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       double l_value;
       Color l_color = Color.FromArgb(0, 0, 0, 0);
 
       foreach (UInt32 l_version in p_settings.Versions)
       {
-        foreach (Serie l_serie in p_settings.Series)
+        foreach (Serie l_serie in p_series)
         {
           Series l_series = this.CreateSeries(this.GetChartType(p_settings), ColorUtils.Sub(l_serie.Color, l_color));
           foreach (int l_period in p_periods)
@@ -266,17 +267,17 @@ namespace FBI.Forms
       }
     }
 
-    private void DisplayAsStack(ChartSettings p_settings, Computation p_compute,
-      List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
+    private void DisplayAsStack(ChartSettings p_settings, List<Serie> p_series,
+      Computation p_compute, List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       List<Color> l_colors;
       ChartValues l_values;
-      string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_compute, p_periods);
-      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_settings.Series.Count, ELEM_DISPLAYED);
+      string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_series, p_compute, p_periods);
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series.Count, ELEM_DISPLAYED);
 
-      for (int i = 0; i < p_settings.Series.Count; ++i)
+      for (int i = 0; i < p_series.Count; ++i)
       {
-        Serie l_serie = p_settings.Series[i];
+        Serie l_serie = p_series[i];
         l_colors = ColorUtils.Gradient(l_serie.Color, Color.Black, ELEM_DISPLAYED * GRADIENT_MULTIPLIER);
 
         foreach (int l_period in p_periods)
@@ -296,17 +297,17 @@ namespace FBI.Forms
       this.AddSeries(l_series);
     }
 
-    private void DisplayAsStackVersion(ChartSettings p_settings, Computation p_compute,
-      List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
+    private void DisplayAsStackVersion(ChartSettings p_settings, List<Serie> p_series,
+      Computation p_compute, List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       List<Color> l_colors;
       ChartValues l_values;
-      string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_compute, p_periods);
+      string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_series, p_compute, p_periods);
       ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_settings.Versions.Count, ELEM_DISPLAYED);
 
       for (int i = 0; i < p_settings.Versions.Count; ++i)
       {
-        Serie l_serie = p_settings.Series[0];
+        Serie l_serie = p_series[0];
         UInt32 l_version = p_settings.Versions[i];
         l_colors = ColorUtils.Gradient(ColorUtils.RandomBrightColor(255, Color.Gray), Color.Black, ELEM_DISPLAYED * GRADIENT_MULTIPLIER);
 
@@ -351,7 +352,7 @@ namespace FBI.Forms
     }
 
     private string[] GetSignificantKeys(ChartSettings p_settings,
-      Computation p_compute, List<int> p_periods)
+      List<Serie> p_series, Computation p_compute, List<int> p_periods)
     {
       int i = 0;
       ChartValues l_values;
@@ -360,7 +361,7 @@ namespace FBI.Forms
 
       foreach (int l_period in p_periods)
       {
-        foreach (Serie l_serie in p_settings.Series)
+        foreach (Serie l_serie in p_series)
         {
           l_values = this.GetValues(p_settings, p_compute, l_serie.Account, l_period, p_settings.Versions[0]);
           l_values.Sort((x, y) => y.Item2.CompareTo(x.Item2));

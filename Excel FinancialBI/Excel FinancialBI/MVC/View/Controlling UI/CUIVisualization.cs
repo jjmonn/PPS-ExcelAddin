@@ -66,6 +66,7 @@ namespace FBI.MVC.View
       ChartSettingsModel.Instance.CreationEvent += OnSettingsCreated;
       ChartSettingsModel.Instance.UpdateEvent += OnSettingsUpdated;
       ChartSettingsModel.Instance.DeleteEvent += OnSettingsDeleted;
+      ChartSettingsModel.Instance.ReadEvent += OnSettingRead;
     }
 
     private void CloseView()
@@ -73,6 +74,7 @@ namespace FBI.MVC.View
       ChartSettingsModel.Instance.CreationEvent -= OnSettingsCreated;
       ChartSettingsModel.Instance.UpdateEvent -= OnSettingsUpdated;
       ChartSettingsModel.Instance.DeleteEvent -= OnSettingsDeleted;
+      ChartSettingsModel.Instance.ReadEvent += OnSettingRead;
     }
 
     #region Split
@@ -122,22 +124,43 @@ namespace FBI.MVC.View
       CloseView();
     }
 
-    private void OnSettingsCreated(ErrorMessage p_msg, UInt32 p_id)
+    private void OnSettingsCreated(ErrorMessage p_status, UInt32 p_id)
     {
-      this.UpdateChart(m_lastClickedChart, ChartSettingsModel.Instance.GetValue(p_id));
-    }
-
-    private void OnSettingsUpdated(ErrorMessage p_msg, UInt32 p_id)
-    {
-      this.UpdateChart(m_lastClickedChart, ChartSettingsModel.Instance.GetValue(p_id));
-    }
-
-    private void OnSettingsDeleted(ErrorMessage p_msg, UInt32 p_id)
-    {
-      foreach (FbiChart l_chart in m_charts)
+      if (p_status != ErrorMessage.SUCCESS)
       {
-        if (l_chart != null && l_chart.HasSettings && l_chart.Settings.Id == p_id)
-          this.RemoveChart(l_chart);
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.create_settings") + " " + Network.Error.GetMessage(p_status));
+      }
+    }
+
+    private void OnSettingsUpdated(ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_status != ErrorMessage.SUCCESS)
+      {
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.update_settings") + " " + Network.Error.GetMessage(p_status));
+      }
+    }
+
+    private void OnSettingsDeleted(ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_status != ErrorMessage.SUCCESS)
+      {
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.delete_settings") + " " + Network.Error.GetMessage(p_status));
+      }
+      else
+      {
+        foreach (FbiChart l_chart in m_charts)
+        {
+          if (l_chart != null && l_chart.HasSettings && l_chart.Settings.Id == p_id)
+            this.RemoveChart(l_chart);
+        }
+      }
+    }
+
+    private void OnSettingRead(ErrorMessage p_status, ChartSettings p_settings)
+    {
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        this.UpdateChart(m_lastClickedChart, p_settings);
       }
     }
 
@@ -199,11 +222,12 @@ namespace FBI.MVC.View
         if ((p_chart = this.AddChart(l_control)) == null)
           return;
       }
-      m_controller.ApplyLastCompute(p_settings);
+      if (!m_controller.ApplyLastCompute())
+        return;
       m_versionLabel.Text = this.GetVersionName(p_settings);
       m_entityLabel.Text = AxisElemModel.Instance.GetValueName(m_controller.LastConfig.Request.EntityId);
       m_currencyLabel.Text = CurrencyModel.Instance.GetValueName(m_controller.LastConfig.Request.CurrencyId);
-      p_chart.Assign(p_settings, m_controller.LastComputation);
+      //p_chart.Assign(p_settings, m_controller.LastComputation);
       m_lastClickedChart = null;
     }
 
@@ -220,8 +244,7 @@ namespace FBI.MVC.View
     private string GetVersionName(ChartSettings p_settings)
     {
       return (p_settings.Versions.Count == 1 ?
-        VersionModel.Instance.GetValue(p_settings.Versions[0]).Name :
-        "N/A");
+        VersionModel.Instance.GetValue(p_settings.Versions[0]).Name : "N/A");
     }
 
     private Control GetObjectFromControl(Control p_control, Type p_type)

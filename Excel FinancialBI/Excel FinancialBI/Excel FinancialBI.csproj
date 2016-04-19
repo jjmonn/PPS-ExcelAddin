@@ -247,7 +247,9 @@
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\FbiChart.cs" />
+    <Compile Include="Forms\FbiChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -320,13 +322,11 @@
     <Compile Include="MVC\Model\Base\ICRUDModel.cs" />
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
-    <Compile Include="MVC\Model\ChartSettingsModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
     <Compile Include="MVC\Model\CRUD\ChartAccount.cs" />
     <Compile Include="MVC\Model\CRUD\ChartPanel.cs" />
-    <Compile Include="MVC\Model\CRUD\Chart.cs" />
-    <Compile Include="MVC\Model\CRUD\Serie.cs" />
     <Compile Include="MVC\Model\CRUD\ChartSettings.cs" />
+    <Compile Include="MVC\Model\CRUD\Serie.cs" />
     <Compile Include="MVC\Model\CRUD\FBIFunction.cs" />
     <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
     <Compile Include="MVC\Model\DuplicateRHAllocation.cs" />
@@ -401,7 +401,7 @@
     <Compile Include="MVC\Model\CRUD\ResultKey.cs" />
     <Compile Include="MVC\Model\SourcedComputeModel.cs" />
     <Compile Include="MVC\Model\LegalHolidayModel.cs" />
-    <Compile Include="MVC\Model\ChartModel.cs" />
+    <Compile Include="MVC\Model\ChartSettingsModel.cs" />
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
@@ -416,6 +416,12 @@
     </Compile>
     <Compile Include="MVC\View\Connection\ConnectionSidePane.Designer.cs">
       <DependentUpon>ConnectionSidePane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ChartPanelSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ChartPanelSelection.Designer.cs">
+      <DependentUpon>ChartPanelSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Controlling UI\ControllingUI_2.cs">
       <SubType>Form</SubType>
@@ -779,6 +785,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Connection\ConnectionSidePane.resx">
       <DependentUpon>ConnectionSidePane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\ChartPanelSelection.resx">
+      <DependentUpon>ChartPanelSelection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\ControllingUI_2.resx">
       <DependentUpon>ControllingUI_2.cs</DependentUpon>

@@ -15,7 +15,7 @@ namespace FBI.MVC.Model
     static ChartPanelModel s_instance = new ChartPanelModel();
     public static ChartPanelModel Instance { get { return (s_instance); } }
 
-    ChartPanelModel()
+    ChartPanelModel() : base(true)
     {
       CreateCMSG = ClientMessage.CMSG_CREATE_CHART_PANEL;
       UpdateCMSG = ClientMessage.CMSG_UPDATE_CHART_PANEL;

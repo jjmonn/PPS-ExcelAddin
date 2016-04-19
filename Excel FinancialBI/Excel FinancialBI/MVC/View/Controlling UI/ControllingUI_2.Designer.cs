@@ -314,7 +314,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.MainMenu.Location = new System.Drawing.Point(0, 0);
       this.MainMenu.Name = "MainMenu";
       this.MainMenu.ShowItemToolTips = true;
-      this.MainMenu.Size = new System.Drawing.Size(454, 55);
+      this.MainMenu.Size = new System.Drawing.Size(546, 55);
       this.MainMenu.TabIndex = 0;
       this.MainMenu.Text = "[CUI.main_menu]";
       // 

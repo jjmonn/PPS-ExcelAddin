@@ -29,8 +29,6 @@ namespace FBI.MVC.View
 
     private List<Control[]> m_series = new List<Control[]>(); //Containing controls of every serie. { Label, vTreeViewBox, vColorPicker }
 
-    private ChartSettings m_settings = null;
-
     public CUI2VisualisationChartsSettings()
     {
       this.InitializeComponent();
@@ -75,58 +73,37 @@ namespace FBI.MVC.View
     public void LoadSettings(ChartSettings p_settings)
     {
       int i = 1;
+      SafeDictionary<UInt32, ChartAccount> l_dicAccounts;
+      List<ChartAccount> l_accounts;
 
       if (p_settings == null)
         return;
 
-      m_settings = p_settings;
-      m_chartTitle.Text = m_settings.Name;
-      if (p_settings.Series.Count >= 1)
+      m_controller.ChartSettings = p_settings;
+      l_dicAccounts = ChartAccountModel.Instance.GetDictionary(p_settings.Id);
+      l_accounts = l_dicAccounts.Values.ToList();
+      m_chartTitle.Text = p_settings.Name;
+      if (l_accounts.Count >= 1)
       {
-        m_serie.Text = p_settings.Series[0].Account.Name;
-        m_serieColor.SelectedColor = p_settings.Series[0].Color;
+        m_serie.Text = this.AccountName(l_accounts[0].AccountId);
+        m_serieColor.SelectedColor = Color.FromArgb(l_accounts[0].Color);
       }
-      while (i < p_settings.Series.Count)
+      while (i < l_accounts.Count)
       {
-        this.AddSerie(p_settings[i].Account.Name, p_settings[i].Color);
+        this.AddSerie(this.AccountName(l_accounts[i].AccountId), Color.FromArgb(l_accounts[i].Color));
         ++i;
       }
     }
 
     public bool SaveSettings()
     {
-      int i = 0;
+      List<Tuple<string, Color>> l_accounts = new List<Tuple<string, Color>>();
 
-      if (m_settings == null)
-      {
-        m_settings = new ChartSettings();
-      }
-      if ((m_settings.Name = m_chartTitle.Text.Trim()) == "")
+      if (m_chartTitle.Text.Trim() == "")
       {
         MessageBox.Show(Local.GetValue("CUI_Charts.error.no_name"));
         return (false);
       }
-      m_controller.ApplyLastCompute(m_settings, true);
-
-      if (m_series.Count > 1 && m_settings.Versions.Count > 1 && m_settings.HasDeconstruction) //If you can't deconstruct because there is too much informations
-      {
-        DialogResult result = MessageBox.Show(Local.GetValue("CUI_Charts.choose_version_or_deconstruction"), Local.GetValue("CUI_Charts.chart_title"), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-        if (result == DialogResult.Yes) //Use version view, ignore deconstruction.
-        {
-          m_settings.HasDeconstruction = false;
-        }
-        else if (result == DialogResult.No) //Use deconstruction, specify a version
-        {
-           DialogResult l_result = FbiUserBox.ShowDialog(Local.GetValue("CUI_Charts.choose_version"),
-              Local.GetValue("CUI_Charts.choose_version"),
-              this.VersionNames(m_settings.Versions));
-          if (l_result != DialogResult.OK)
-            return (false);
-          m_settings.Versions = new List<UInt32>();
-          m_settings.Versions.Add(m_controller.LastConfig.Request.Versions[FbiUserBox.Index]);
-        }
-      }
-
       if (!this.AreTreeViewBoxesFilled())
       {
         MessageBox.Show(Local.GetValue("CUI_Charts.error.incomplete_series"));
@@ -137,31 +114,31 @@ namespace FBI.MVC.View
         MessageBox.Show(Local.GetValue("CUI_Charts.error.invalid_serie"));
         return (false);
       }
-
+      m_controller.ApplyLastCompute(true);
+      if (!this.TooMuchInfoSelection())
+        return (false);
       foreach (Control[] l_control in m_series) //Save every serie
       {
-        m_settings.AddUpdateSerie(i++, l_control[1].Text, ((vColorPicker)l_control[2]).SelectedColor);
+        l_accounts.Add(new Tuple<string,Color>(l_control[1].Text, ((vColorPicker)l_control[2]).SelectedColor));
       }
-      m_settings.Series.RemoveRange(i, m_settings.Series.Count - i);
-      if (!m_controller.CreateUpdateSettings(m_settings))
+      if (!m_controller.EditSettings(m_chartTitle.Text.Trim(), l_accounts))
       {
-        MessageBox.Show(Local.GetValue(m_controller.Error));
-        return (false);
+        MessageBox.Show(m_controller.Error);
+        return(false);
       }
       return (true);
     }
 
     public void ResetView()
     {
-      m_serie.Text = "";
-      m_chartTitle.Text = "";
+      m_serie.ResetText();
+      m_chartTitle.ResetText();
       m_serieColor.SelectedColor = DEFAULT_COLOR;
       while (this.HasSeries())
       {
         this.RemoveLastSerie();
       }
       m_location = m_serieLabel.Location.Y;
-      m_settings = null;
     }
 
     #region Events
@@ -279,6 +256,15 @@ namespace FBI.MVC.View
       return (true);
     }
 
+    private string AccountName(UInt32 p_accountId)
+    {
+      Account l_account;
+
+      if ((l_account = AccountModel.Instance.GetValue(p_accountId)) == null)
+        return (Local.GetValue("CUI_Charts.error.account_invalid"));
+      return (l_account.Name);
+    }
+
     private List<string> VersionNames(List<UInt32> p_versions)
     {
       List<string> l_versions = new List<string>();
@@ -287,7 +273,6 @@ namespace FBI.MVC.View
       {
         try
         {
-          Debug.WriteLine(">> " + l_versionId + " " + VersionModel.Instance.GetValue(l_versionId).Name);
           l_versions.Add(VersionModel.Instance.GetValue(l_versionId).Name);
         }
         catch
@@ -296,6 +281,29 @@ namespace FBI.MVC.View
         }
       }
       return (l_versions);
+    }
+
+    public bool TooMuchInfoSelection()
+    {
+      if (m_series.Count > 1 && m_controller.ChartSettings.Versions.Count > 1 && m_controller.ChartSettings.HasDeconstruction) //If you can't deconstruct because there is too much informations
+      {
+        DialogResult result = MessageBox.Show(Local.GetValue("CUI_Charts.choose_version_or_deconstruction"), Local.GetValue("CUI_Charts.chart_title"), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+        if (result == DialogResult.Yes) //Use version view, ignore deconstruction.
+        {
+          m_controller.ChartSettings.HasDeconstruction = false;
+        }
+        else if (result == DialogResult.No) //Use deconstruction, specify a version
+        {
+          DialogResult l_result = FbiUserBox.ShowDialog(Local.GetValue("CUI_Charts.choose_version"),
+             Local.GetValue("CUI_Charts.choose_version"),
+             this.VersionNames(m_controller.ChartSettings.Versions));
+          if (l_result != DialogResult.OK)
+            return (false);
+          m_controller.ChartSettings.Versions = new List<UInt32>();
+          m_controller.ChartSettings.Versions.Add(m_controller.LastConfig.Request.Versions[FbiUserBox.Index]);
+        }
+      }
+      return (true);
     }
 
     #endregion

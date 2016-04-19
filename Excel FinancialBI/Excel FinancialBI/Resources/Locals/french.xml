@@ -3,7 +3,7 @@
   <category name="Platform Management">
     <string name="currencies">Devises</string>
   </category>
- 
+
   <category name="CUI">
     <category name="dimension">
       <string name="account">Comptes</string>
@@ -24,7 +24,7 @@
       <string name="day">Jours</string>
       <string name="year">Années</string>
     </category>
-    
+
     <category name="error">
       <string name="system">Une erreur est survenue au cours du calcul. Veuillez contacter votre administrateur si le problème persiste.</string>
       <string name="out_of_memory">Impossible de charger toutes les données, requête trop complexe.</string>
@@ -36,7 +36,7 @@
       <string name="period_range">Période invalide.</string>
       <string name="version_process_invalid">Une ou plusieurs version(s) selectionnée(s) n'est pas compatible avec votre processus (Financier / Ressources Humaines)</string>
     </category>
-    
+
     <string name="adjust_columns_size">Ajuster la largeur des colonnes</string>
     <string name="automatic_columns_adjustment">Ajustement automatique de la largeur des colones</string>
     <string name="charts">Graphiques</string>
@@ -77,7 +77,7 @@
     <string name="chart_title">Titre</string>
     <string name="serie_1">Série 1</string>
     <string name="serie_2">Série 2</string>
-    <string name="CUI2_vizualization">Financial BI Visualisation</string>   
+    <string name="CUI2_vizualization">Financial BI Visualisation</string>
   </category>
 
   <category name="connection">
@@ -209,7 +209,7 @@
     </category>
 
   </category>
-   
+
   <category name="axis">
     <string name="rename">Renommer l'element.</string>
     <category name="error">
@@ -233,7 +233,7 @@
     <string name="msg_delete_category">Supprimer la catégorie</string>
     <string name="confirmation_delete">Etes-vous sûr ?</string>
     <string name="create_sub_category">Créer une nouvelle catégorie sous la catégorie sélectionée</string>
-  
+
     <!--messages-->
     <string name="msg_new_category_name">Entrez le nom de la nouvelle catégorie :</string>
     <string name="msg_new_value_name">Entrez le nom de la nouvelle valeur :</string>
@@ -290,7 +290,7 @@
       <string name="no_selected_version">Veuillez sélectioner une version.</string>
       <string name="cannot_select_folder">Vous ne pouvez pas sélectionner un dossier.</string>
     </category>
-    
+
   </category>
 
   <category name="process">
@@ -298,7 +298,7 @@
     <string name="process_financial">Processus Financier</string>
     <string name="process_selection">Selection du Process</string>
   </category>
-  
+
 
   <category name="upload">
     <string name="change_axis_elem">Voulez vous télécharger les données correspondantes à cet ajustement/ produit/ client (attention les données non envoyées seront perdues)</string>
@@ -385,7 +385,7 @@
       <string name="unknown_version">Version inconnue</string>
     </category>
   </category>
-  
+
   <category name="period">
 	<string name="month1">Janvier</string>
 	<string name="month2">Février</string>
@@ -443,7 +443,7 @@
     <string name="preferences">Préférences</string>
     <string name="format_preview">Prévisualisation du format</string>
     <string name="text_color">Couleur du texte</string>
-    <string name="background_color">Couleur du fonds</string>
+    <string name="background_color">Couleur du fond</string>
     <string name="bold">Gras</string>
     <string name="italic">Italique</string>
     <string name="border">Bordures</string>

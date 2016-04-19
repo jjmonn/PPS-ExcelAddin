@@ -13,7 +13,7 @@ namespace FBI.MVC.Model.CRUD
     public UInt32 Id { get; private set; }
     public UInt32 ChartId { get; set; }
     public UInt32 AccountId { get; set; }
-    public UInt32 Color { get; set; }
+    public Int32 Color { get; set; }
     public UInt32 Image { get; set; }
 
     public ChartAccount() { }
@@ -28,7 +28,7 @@ namespace FBI.MVC.Model.CRUD
 
       l_chartAcc.ChartId = p_packet.ReadUint32();
       l_chartAcc.AccountId = p_packet.ReadUint32();
-      l_chartAcc.Color = p_packet.ReadUint32();
+      l_chartAcc.Color = p_packet.ReadInt32();
 
       return (l_chartAcc);
     }
@@ -39,7 +39,7 @@ namespace FBI.MVC.Model.CRUD
         p_packet.WriteUint32(Id);
       p_packet.WriteUint32(ChartId);
       p_packet.WriteUint32(AccountId);
-      p_packet.WriteUint32(Color);
+      p_packet.WriteInt32(Color);
     }
 
     public void CopyFrom(ChartAccount p_model)
