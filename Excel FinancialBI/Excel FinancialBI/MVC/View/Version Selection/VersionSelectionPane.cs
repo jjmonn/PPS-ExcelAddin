@@ -34,6 +34,8 @@ namespace FBI.MVC.View
     void SuscribeEvents()
     {
       VersionModel.Instance.ObjectInitialized += OnModelVersionList;
+      VersionModel.Instance.CreationEvent += OnModelVersionCreate;
+      VersionModel.Instance.DeleteEvent += OnModelVersionCreate;
       m_validateButton.Click += OnValidateButtonClick;
     }
 
@@ -65,13 +67,32 @@ namespace FBI.MVC.View
       }
       else
       {
+        RefreshVersionsTV();
+      }
+    }
+
+    delegate void OnModelVersionCreate_delegate(ErrorMessage status, UInt32 id);
+    void OnModelVersionCreate(ErrorMessage status, UInt32 id)
+    {
+      if (m_versionTV.InvokeRequired)
+      {
+        OnModelVersionCreate_delegate func = new OnModelVersionCreate_delegate(OnModelVersionCreate);
+        Invoke(func, status, id);
+      }
+      else
+      {
+        RefreshVersionsTV();
+      }
+    }
+
+    private void RefreshVersionsTV()
+    {
         TableLayoutPanel1.Controls.Remove(m_versionTV);
         m_versionTV = new FbiTreeView<Version>(VersionModel.Instance.GetDictionary(), null, true);
         m_versionTV.ImageList = m_versionsTreeviewImageList;
         TableLayoutPanel1.Controls.Add(m_versionTV, 0, 1);
         m_versionTV.Dock = DockStyle.Fill;
         m_versionTV.SelectedNode = m_versionTV.FindNode(Properties.Settings.Default.version_id);
-      }
     }
 
     void MultilangueSetup()
