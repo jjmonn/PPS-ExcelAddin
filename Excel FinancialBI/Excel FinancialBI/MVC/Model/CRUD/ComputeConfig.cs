@@ -12,5 +12,6 @@ namespace FBI.MVC.Model.CRUD
     public LegacyComputeRequest Request { get; set; }
     public CUIDimensionConf Rows { get; set; }
     public CUIDimensionConf Columns { get; set; }
+    public List<Int32> Periods { get; set; }
   }
 }

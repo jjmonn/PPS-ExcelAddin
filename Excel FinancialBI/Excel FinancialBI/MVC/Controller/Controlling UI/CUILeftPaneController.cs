@@ -65,6 +65,18 @@ namespace FBI.MVC.Controller
       return (l_list);
     }
 
+    public List<Int32> GetPeriods()
+    {
+      SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();
+      List<Int32> l_list = new List<int>();
+
+      if (l_dic[typeof(PeriodModel)] == null)
+        return (null);
+      foreach (UInt32 l_period in l_dic[typeof(PeriodModel)])
+        l_list.Add((Int32)l_period);
+      return (l_list);
+    }
+
     public List<Tuple<AxisType, UInt32>> GetAxisElems()
     {
       SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();

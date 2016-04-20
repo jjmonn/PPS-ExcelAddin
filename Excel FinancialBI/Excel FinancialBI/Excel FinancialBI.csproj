@@ -247,7 +247,9 @@
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\FbiChart.cs" />
+    <Compile Include="Forms\FbiChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -266,6 +268,9 @@
     </Compile>
     <Compile Include="Forms\FbiUserBox.Designer.cs">
       <DependentUpon>FbiUserBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FlatFBITreeView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
     <Compile Include="MVC\Controller\AFBIFunctionController.cs" />

@@ -293,6 +293,8 @@ namespace FBI.MVC.View
 
       foreach (int l_date in l_periodList)
       {
+        if (m_computeConfig.Periods != null && m_computeConfig.Periods.Contains(l_date) == false)
+          continue;
         if (l_includeWeekEnds == false && PeriodModel.IsWeekEnd(l_date))
           continue;
         l_formatedDate = PeriodModel.GetFormatedDate(l_date, l_conf.PeriodType);

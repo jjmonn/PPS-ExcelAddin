@@ -23,6 +23,7 @@
       <string name="month">Months</string>
       <string name="day">Days</string>
       <string name="year">Years</string>
+      <string name="period">Period</string>
     </category>
 
     <category name="error">
