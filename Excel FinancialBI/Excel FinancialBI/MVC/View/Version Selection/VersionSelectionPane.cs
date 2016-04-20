@@ -33,7 +33,6 @@ namespace FBI.MVC.View
 
     void SuscribeEvents()
     {
-      VersionModel.Instance.ObjectInitialized += OnModelVersionList;
       m_validateButton.Click += OnValidateButtonClick;
     }
 
@@ -55,25 +54,6 @@ namespace FBI.MVC.View
       }
     }
 
-    delegate void OnModelVersionList_delegate(ErrorMessage p_status, Type p_type);
-    void OnModelVersionList(ErrorMessage p_status, Type p_type)
-    {
-      if (m_versionTV.InvokeRequired)
-      {
-        OnModelVersionList_delegate func = new OnModelVersionList_delegate(OnModelVersionList);
-        Invoke(func, p_status, p_type);
-      }
-      else
-      {
-        TableLayoutPanel1.Controls.Remove(m_versionTV);
-        m_versionTV = new FbiTreeView<Version>(VersionModel.Instance.GetDictionary(), null, true);
-        m_versionTV.ImageList = m_versionsTreeviewImageList;
-        TableLayoutPanel1.Controls.Add(m_versionTV, 0, 1);
-        m_versionTV.Dock = DockStyle.Fill;
-        m_versionTV.SelectedNode = m_versionTV.FindNode(Properties.Settings.Default.version_id);
-      }
-    }
-
     void MultilangueSetup()
     {
       m_versionSelectionLabel.Text = Local.GetValue("general.select_version");
@@ -82,7 +62,26 @@ namespace FBI.MVC.View
 
     void VersionSelectionPane_ADXBeforeTaskPaneShow(object sender, AddinExpress.XL.ADXBeforeTaskPaneShowEventArgs e)
     {
-      if (m_shown == false) { this.Visible = false; }
+      if (m_shown == false)
+      {
+        this.Visible = false;
+      }
+      else
+      {
+        RefreshVersionsTV();
+        this.Refresh();
+      }
     }
+
+    private void RefreshVersionsTV()
+    {
+      TableLayoutPanel1.Controls.Remove(m_versionTV);
+      m_versionTV = new FbiTreeView<Version>(VersionModel.Instance.GetDictionary(), null, true);
+      m_versionTV.ImageList = m_versionsTreeviewImageList;
+      TableLayoutPanel1.Controls.Add(m_versionTV, 0, 1);
+      m_versionTV.Dock = DockStyle.Fill;
+      //m_versionTV.SelectedNode = m_versionTV.FindNode(Properties.Settings.Default.version_id);
+    }
+
   }
 }
