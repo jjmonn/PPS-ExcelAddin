@@ -253,7 +253,7 @@ namespace FBI.MVC.View
     //Create comboBox, cannot modify parents
     private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
     {
-      if (p_e.Cell != null && !AxisElemModel.Instance.IsParent((UInt32)p_e.Cell.RowItem.ItemValue)) //Add comboBox if NOT a parent
+      if (p_e.Cell != null && p_e.Cell.RowItem.ItemValue != null && !AxisElemModel.Instance.IsParent((UInt32)p_e.Cell.RowItem.ItemValue)) //Add comboBox if NOT a parent
       {
         ComboBoxEditor l_cb = this.CreateComboBoxEditor();
         m_dataGridView.CellsArea.SetCellEditor(p_e.Cell.RowItem, p_e.Cell.ColumnItem, l_cb);
