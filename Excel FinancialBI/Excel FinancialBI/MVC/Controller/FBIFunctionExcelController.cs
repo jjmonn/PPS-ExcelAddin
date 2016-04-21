@@ -107,10 +107,12 @@ namespace FBI.MVC.Controller
         if (IsValidFunction(l_function) == false)
           return (Error);
         Int32 l_requestId;
+        m_results.Clear();
         if (Compute(l_function, out l_requestId) == false)
           return (Local.GetValue("ppsbi.error.unable_to_compute"));
 
         m_waitResult.WaitOne();
+        m_waitResult.Reset();
 
         Version l_version = VersionModel.Instance.GetValue(l_function.VersionId);
 
