@@ -110,7 +110,7 @@ namespace FBI.MVC.Model
         case CRUD.TimeConfig.YEARS:
           return DateTime.FromOADate(p_period).ToString("yyyy");
         case CRUD.TimeConfig.MONTHS:
-          return DateTime.FromOADate(p_period).ToString("MM yyyy");
+          return DateTime.FromOADate(p_period).ToString("MMMM yyyy");
         case CRUD.TimeConfig.WEEK:
           return Utils.Local.GetValue("general.week") + " " + GetWeekNumberFromDateId(p_period) + ", " + DateTime.FromOADate(p_period).ToString("yyyy");
         case CRUD.TimeConfig.DAYS:
