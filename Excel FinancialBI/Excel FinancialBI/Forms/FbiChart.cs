@@ -203,7 +203,7 @@ namespace FBI.Forms
 
     public bool IsAmbigious(ChartSettings p_settings, List<Serie> p_series)
     {
-      return (p_settings.HasDeconstruction && p_settings.Versions.Count > 1 && p_series.Count > 1);
+      return (p_settings.Versions == null || p_settings.HasDeconstruction && p_settings.Versions.Count > 1 && p_series.Count > 1);
     }
 
     public void Assign(ChartSettings p_settings, Computation p_compute)

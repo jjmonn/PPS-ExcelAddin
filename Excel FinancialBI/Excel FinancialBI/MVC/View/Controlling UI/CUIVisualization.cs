@@ -342,7 +342,7 @@ namespace FBI.MVC.View
 
     private string GetVersionName(ChartSettings p_settings)
     {
-      return (p_settings.Versions.Count == 1 ?
+      return (p_settings.Versions != null && p_settings.Versions.Count == 1 ?
         VersionModel.Instance.GetValue(p_settings.Versions[0]).Name : "N/A");
     }
 
