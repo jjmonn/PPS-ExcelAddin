@@ -109,10 +109,13 @@ namespace FBI.MVC.View
     {
       DateTime l_periodBegin = m_controller.PeriodController.MinDate;
       DateTime l_periodEnd = m_controller.PeriodController.MaxDate;
+      SafeDictionary<Int32, string> l_periodStringDic = new SafeDictionary<int, string>();
 
       List<UInt32> l_versionList = m_controller.GetVersions();
       TimeConfig l_selectedConfig = TimeConfig.MONTHS;
 
+      if (l_versionList == null)
+        return (l_periodStringDic);
       foreach (UInt32 l_versionId in l_versionList)
       {
         Version l_version = VersionModel.Instance.GetValue(l_versionId);
@@ -126,7 +129,6 @@ namespace FBI.MVC.View
       List<Int32> l_periodList = (l_selectedConfig == TimeConfig.MONTHS) ?
         PeriodModel.GetMonthPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd) :
         PeriodModel.GetYearsPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd);
-      SafeDictionary<Int32, string> l_periodStringDic = new SafeDictionary<int, string>();
 
       foreach (Int32 l_period in l_periodList)
         l_periodStringDic[l_period] = PeriodModel.GetFormatedDate(l_period, l_selectedConfig);
