@@ -251,11 +251,11 @@ namespace FBI.MVC.Model
               l_fact.Cell.Value = l_valuePair.Value;
           }
         }
-        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
         RaiseFactDownloaded(true);
       }
       else
         RaiseFactDownloaded(false);
+      AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
     }
 
     public override void Refresh()

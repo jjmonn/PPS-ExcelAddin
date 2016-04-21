@@ -98,7 +98,7 @@ namespace FBI.MVC.View
           m_controller.EntityId = 0;
         m_controller.EntityId = m_areaController.Entities.m_values.First().Value.Id;
         if (m_areaController.IsValid() == false)
-          return Local.GetValue("upload.error.dimension_identification");
+          return m_areaController.GetDimensionError();
         m_controller.EditedFactModel.RegisterEditedFacts(m_areaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
         if (m_controller.VersionId != 0 && (m_controller.PeriodsList == null || m_controller.PeriodsList.Count > 0))
         {
