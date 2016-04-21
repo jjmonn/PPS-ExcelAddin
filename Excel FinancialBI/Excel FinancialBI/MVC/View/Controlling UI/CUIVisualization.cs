@@ -27,8 +27,13 @@ namespace FBI.MVC.View
 
     private FbiChart m_lastClickedChart;
     private List<FbiChart> m_charts = new List<FbiChart>();
+
     private List<Control> m_panels = new List<Control>();
     private System.Windows.Forms.Orientation m_lastOrientationPanel = System.Windows.Forms.Orientation.Vertical;
+
+    private UInt32[] m_expectedChartSettings = { 0, 0, 0 };
+    private UInt32[] m_expectedChartAccounts = { 0, 0, 0 };
+    private ChartAccount m_lastChartAccountRcvd = null;
 
     public CUIVisualization()
     {
@@ -55,6 +60,18 @@ namespace FBI.MVC.View
       this.SuscribeEvents();
     }
 
+    public void LoadPanel(UInt32 p_panelId)
+    {
+      var l_chartSettings = ChartSettingsModel.Instance.GetDictionary(p_panelId);
+
+      if (l_chartSettings == null)
+        return;
+      foreach (var l_settings in l_chartSettings.Values)
+      {
+        this.UpdateChart(null, l_settings);
+      }
+    }
+
     private void SuscribeEvents()
     {
       m_panel.ContextMenuStrip = m_panelRightClick;
@@ -63,18 +80,26 @@ namespace FBI.MVC.View
       m_chartEdit.Click += OnChartClick;
       m_refreshButton.Click += OnRefreshClick;
 
-      ChartSettingsModel.Instance.CreationEvent += OnSettingsCreated;
-      ChartSettingsModel.Instance.UpdateEvent += OnSettingsUpdated;
-      ChartSettingsModel.Instance.DeleteEvent += OnSettingsDeleted;
-      ChartSettingsModel.Instance.ReadEvent += OnSettingRead;
+      ChartSettingsModel.Instance.CreationEvent += OnChartSettingsCreated;
+      ChartSettingsModel.Instance.UpdateEvent += OnChartSettingsUpdated;
+      ChartSettingsModel.Instance.DeleteEvent += OnChartSettingsDeleted;
+
+      ChartAccountModel.Instance.CreationEvent += OnChartAccountCreated;
+      ChartAccountModel.Instance.UpdateEvent += OnChartAccountUpdated;
+      ChartAccountModel.Instance.DeleteEvent += OnChartAccountDeleted;
+      ChartAccountModel.Instance.ReadEvent += OnChartAccountRead;
     }
 
     private void CloseView()
     {
-      ChartSettingsModel.Instance.CreationEvent -= OnSettingsCreated;
-      ChartSettingsModel.Instance.UpdateEvent -= OnSettingsUpdated;
-      ChartSettingsModel.Instance.DeleteEvent -= OnSettingsDeleted;
-      ChartSettingsModel.Instance.ReadEvent += OnSettingRead;
+      ChartSettingsModel.Instance.CreationEvent -= OnChartSettingsCreated;
+      ChartSettingsModel.Instance.UpdateEvent -= OnChartSettingsUpdated;
+      ChartSettingsModel.Instance.DeleteEvent -= OnChartSettingsDeleted;
+
+      ChartAccountModel.Instance.CreationEvent -= OnChartAccountCreated;
+      ChartAccountModel.Instance.UpdateEvent -= OnChartAccountUpdated;
+      ChartAccountModel.Instance.DeleteEvent -= OnChartAccountDeleted;
+      ChartAccountModel.Instance.ReadEvent -= OnChartAccountRead;
     }
 
     #region Split
@@ -124,46 +149,6 @@ namespace FBI.MVC.View
       CloseView();
     }
 
-    private void OnSettingsCreated(ErrorMessage p_status, UInt32 p_id)
-    {
-      if (p_status != ErrorMessage.SUCCESS)
-      {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.create_settings") + " " + Network.Error.GetMessage(p_status));
-      }
-    }
-
-    private void OnSettingsUpdated(ErrorMessage p_status, UInt32 p_id)
-    {
-      if (p_status != ErrorMessage.SUCCESS)
-      {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.update_settings") + " " + Network.Error.GetMessage(p_status));
-      }
-    }
-
-    private void OnSettingsDeleted(ErrorMessage p_status, UInt32 p_id)
-    {
-      if (p_status != ErrorMessage.SUCCESS)
-      {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.delete_settings") + " " + Network.Error.GetMessage(p_status));
-      }
-      else
-      {
-        foreach (FbiChart l_chart in m_charts)
-        {
-          if (l_chart != null && l_chart.HasSettings && l_chart.Settings.Id == p_id)
-            this.RemoveChart(l_chart);
-        }
-      }
-    }
-
-    private void OnSettingRead(ErrorMessage p_status, ChartSettings p_settings)
-    {
-      if (p_status == ErrorMessage.SUCCESS)
-      {
-        this.UpdateChart(m_lastClickedChart, p_settings);
-      }
-    }
-
     private void OnRefreshClick(object sender, EventArgs e)
     {
       foreach (FbiChart l_chart in m_charts)
@@ -183,20 +168,126 @@ namespace FBI.MVC.View
         l_chart = this.AddChart(l_clickedControl);
       }
       m_lastClickedChart = l_chart;
+      m_controller.ShowSettingsView(l_chart.Settings);
+    }
 
-      if (l_chart.HasSettings)
+    #region Model
+
+    private void OnChartSettingsCreated(ErrorMessage p_status, UInt32 p_id)
+    {
+      this.OnChartSettingsChanged(p_status, p_id, 0);
+    }
+
+    private void OnChartSettingsUpdated(ErrorMessage p_status, UInt32 p_id)
+    {
+      this.OnChartSettingsChanged(p_status, p_id, 1);
+    }
+
+    private void OnChartSettingsDeleted(ErrorMessage p_status, UInt32 p_id)
+    {
+      this.OnChartSettingsChanged(p_status, p_id, 2);
+    }
+
+    private void OnChartAccountCreated(ErrorMessage p_status, UInt32 p_id)
+    {
+      this.OnChartAccountChanged(p_status, p_id, 0);
+    }
+
+    private void OnChartAccountUpdated(ErrorMessage p_status, UInt32 p_id)
+    {
+      this.OnChartAccountChanged(p_status, p_id, 1);
+    }
+
+    private void OnChartAccountDeleted(ErrorMessage p_status, UInt32 p_id)
+    {
+      this.OnChartAccountChanged(p_status, p_id, 2);
+    }
+
+
+    delegate void OnChartSettingsChanged_delegate(ErrorMessage p_status, UInt32 p_id, Int32 p_val);
+    private void OnChartSettingsChanged(ErrorMessage p_status, UInt32 p_id, Int32 p_val)
+    {
+      if (InvokeRequired)
       {
-        m_controller.ShowSettingsView(l_chart.Settings);
+        OnChartSettingsChanged_delegate func = new OnChartSettingsChanged_delegate(OnChartSettingsChanged);
+        Invoke(func, p_status, p_id, p_val);
       }
       else
       {
-        m_controller.ShowSettingsView();
+        this.UpdateChartFromCSModel(m_expectedChartSettings, p_val, p_id, p_status);
+      }
+    }
+
+    delegate void OnChartAccountChanged_delegate(ErrorMessage p_status, UInt32 p_id, Int32 p_val);
+    private void OnChartAccountChanged(ErrorMessage p_status, UInt32 p_id, Int32 p_val)
+    {
+      if (InvokeRequired)
+      {
+        OnChartAccountChanged_delegate func = new OnChartAccountChanged_delegate(OnChartAccountChanged);
+        Invoke(func, p_status, p_id, p_val);
+      }
+      else
+      {
+        this.UpdateChartFromCAModel(m_expectedChartAccounts, p_val, p_id, p_status);
+      }
+    }
+
+    delegate void OnChartAccountRead_delegate(ErrorMessage p_status, ChartAccount p_account);
+    private void OnChartAccountRead(ErrorMessage p_status, ChartAccount p_account)
+    {
+      if (InvokeRequired)
+      {
+        OnChartAccountRead_delegate func = new OnChartAccountRead_delegate(OnChartAccountRead);
+        Invoke(func, p_status, p_account);
+      }
+      else
+      {
+        m_lastChartAccountRcvd = p_account;
       }
     }
 
     #endregion
 
+    #endregion
+
     #region Chart
+
+    #region UpdateFromModel
+
+    private bool UpdateChartFromModel(UInt32[] p_expected, Int32 p_value, UInt32 p_id, ErrorMessage p_status)
+    {
+      if (p_status != ErrorMessage.SUCCESS)
+      {
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.settings") + " " + Error.GetMessage(p_status));
+        ArrayUtils.Set<UInt32>(p_expected, 0);
+        return (false);
+      }
+      p_expected[p_value] += 1;
+      return (this.HasCompleteChart());
+    }
+
+    private void UpdateChartFromCSModel(UInt32[] p_expected, Int32 p_value, UInt32 p_id, ErrorMessage p_status)
+    {
+      if (this.UpdateChartFromModel(p_expected, p_value, p_id, p_status))
+      {
+        this.UpdateChart(m_lastClickedChart, ChartSettingsModel.Instance.GetValue(p_id));
+        ArrayUtils.Set<UInt32>(m_expectedChartSettings, 0);
+        ArrayUtils.Set<UInt32>(m_expectedChartAccounts, 0);
+      }
+    }
+
+    private void UpdateChartFromCAModel(UInt32[] p_expected, Int32 p_value, UInt32 p_id, ErrorMessage p_status)
+    {
+      if (this.UpdateChartFromModel(p_expected, p_value, p_id, p_status))
+      {
+        ChartSettings l_sett = ChartSettingsModel.Instance.GetValue(m_lastChartAccountRcvd.ChartId);
+        this.UpdateChart(m_lastClickedChart, l_sett);
+        ArrayUtils.Set<UInt32>(m_expectedChartSettings, 0);
+        ArrayUtils.Set<UInt32>(m_expectedChartAccounts, 0);
+      }
+    }
+
+    #endregion
 
     private FbiChart AddChart(Control p_control)
     {
@@ -222,19 +313,27 @@ namespace FBI.MVC.View
         if ((p_chart = this.AddChart(l_control)) == null)
           return;
       }
-      if (!m_controller.ApplyLastCompute())
-        return;
-      m_versionLabel.Text = this.GetVersionName(p_settings);
-      m_entityLabel.Text = AxisElemModel.Instance.GetValueName(m_controller.LastConfig.Request.EntityId);
-      m_currencyLabel.Text = CurrencyModel.Instance.GetValueName(m_controller.LastConfig.Request.CurrencyId);
-      //p_chart.Assign(p_settings, m_controller.LastComputation);
-      m_lastClickedChart = null;
+      p_chart.Settings = p_settings;
+      if (m_controller.ApplyLastCompute(p_settings))
+      {
+        m_versionLabel.Text = this.GetVersionName(p_settings);
+        m_entityLabel.Text = AxisElemModel.Instance.GetValueName(m_controller.LastConfig.Request.EntityId);
+        m_currencyLabel.Text = CurrencyModel.Instance.GetValueName(m_controller.LastConfig.Request.CurrencyId);
+        p_chart.Assign(p_settings, m_controller.LastComputation);
+      }
     }
 
-    private void RemoveChart(FbiChart l_chart)
+    private void RemoveChart(UInt32 p_chartId)
     {
-      l_chart.Settings = null;
-      m_charts.Remove(l_chart);
+      foreach (FbiChart l_chart in m_charts)
+      {
+        if (l_chart.HasSettings && l_chart.Settings.Id == p_chartId)
+        {
+          l_chart.Settings = null;
+          m_charts.Remove(l_chart);
+          return;
+        }
+      }
     }
 
     #endregion
@@ -269,6 +368,21 @@ namespace FBI.MVC.View
         l_control = m_panels[m_panels.Count - 1];
       }
       return (l_control);
+    }
+
+    private bool HasCompleteChart()
+    {
+      for (int i = 0; i < m_expectedChartSettings.Length; ++i)
+      {
+        if (m_expectedChartSettings[i] != m_controller.ExpectedChartSettings[i])
+          return (false);
+      }
+      for (int i = 0; i < m_expectedChartAccounts.Length; ++i)
+      {
+        if (m_expectedChartAccounts[i] != m_controller.ExpectedChartAccounts[i])
+          return (false);
+      }
+      return (true);
     }
 
     private System.Windows.Forms.Orientation OpposedOrientation(System.Windows.Forms.Orientation p_orientation)

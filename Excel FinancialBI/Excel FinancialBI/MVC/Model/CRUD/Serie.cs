@@ -22,8 +22,11 @@ namespace FBI.MVC.Model.CRUD
     {
       Account l_account;
       List<Serie> l_series = new List<Serie>();
+      var l_accounts = ChartAccountModel.Instance.GetDictionary(p_settings.Id);
 
-      foreach (var l_item in ChartAccountModel.Instance.GetDictionary(p_settings.Id))
+      if (l_accounts == null)
+        return (l_series);
+      foreach (var l_item in l_accounts)
       {
         if ((l_account = AccountModel.Instance.GetValue(l_item.Value.AccountId)) != null)
         {

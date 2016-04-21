@@ -91,6 +91,9 @@ namespace FBI.MVC.View
 
     private void OnNextClick(object sender, EventArgs e)
     {
+      if (m_selectedItem == null || m_selectedItem.Item2 == ChartPanel.INVALID_ID)
+        return;
+
       this.DialogResult = System.Windows.Forms.DialogResult.OK;
       m_controller.LastPanel = m_selectedItem;
       this.Close();
@@ -100,7 +103,7 @@ namespace FBI.MVC.View
     {
       if (p_status != Network.ErrorMessage.SUCCESS)
       {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.create_panel") + Network.Error.GetMessage(p_status));
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.create_panel") + " " + Network.Error.GetMessage(p_status));
       }
     }
 
@@ -108,7 +111,7 @@ namespace FBI.MVC.View
     {
       if (p_status != Network.ErrorMessage.SUCCESS)
       {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.update_panel") + Network.Error.GetMessage(p_status));
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.update_panel") + " " + Network.Error.GetMessage(p_status));
       }
     }
 

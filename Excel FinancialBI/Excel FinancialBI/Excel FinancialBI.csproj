@@ -749,6 +749,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ArrayUtils.cs" />
     <Compile Include="Utils\BNF\BnfConsumer.cs" />
     <Compile Include="Utils\BNF\FbiGrammar.cs" />
     <Compile Include="Utils\BNF\SimpleBnf.cs" />

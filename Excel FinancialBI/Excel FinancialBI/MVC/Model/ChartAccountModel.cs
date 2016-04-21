@@ -109,6 +109,18 @@ namespace FBI.MVC.Model
         return (null);
       return (m_chartAccountDic[p_chartId]);
     }
+
+    public List<ChartAccount> GetList(UInt32 p_chartId)
+    {
+      var l_accounts = this.GetDictionary(p_chartId);
+      List<ChartAccount> l_accountList;
+
+      if (l_accounts == null)
+        return (null);
+      l_accountList = l_accounts.Values.ToList();
+      l_accountList.Sort((x, y) => x.AccountId.CompareTo(y.AccountId));
+      return (l_accountList);
+    }
     #endregion
   }
 }

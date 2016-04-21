@@ -26,10 +26,10 @@ namespace FBI.MVC.Controller
     ChartPanelSelection m_viewPanelSelection;
     CUIController m_parentController;
 
-    //Filled by views
     private Tuple<string, UInt32> m_lastPanel = null;
-    private ChartSettings m_chartSettings = null;
-    private SafeDictionary<UInt32, ChartAccount> m_chartAccounts = null;
+
+    private UInt32[] m_chartSettings = { 0, 0, 0 };
+    private UInt32[] m_chartAccounts = { 0, 0, 0 };
 
     public CUIVisualizationController(CUIController p_parentController)
     {
@@ -48,7 +48,10 @@ namespace FBI.MVC.Controller
       m_view.LoadView();
       m_viewPanelSelection.LoadView();
       if (m_viewPanelSelection.ShowDialog() != DialogResult.Cancel)
+      {
         m_view.Show();
+        m_view.LoadPanel(m_lastPanel.Item2);
+      }
     }
 
     public FbiChart.Computation LastComputation
@@ -76,14 +79,14 @@ namespace FBI.MVC.Controller
       set { m_lastPanel = value; }
     }
 
-    public ChartSettings ChartSettings
+    public UInt32[] ExpectedChartSettings
     {
       get { return (m_chartSettings); }
-      set
-      {
-        m_chartSettings = value;
-        m_chartAccounts = ChartAccountModel.Instance.GetDictionary(m_chartSettings.Id);
-      }
+    }
+
+    public UInt32[] ExpectedChartAccounts
+    {
+      get { return (m_chartAccounts); }
     }
 
     public bool CRUPanel(UInt32 p_panelId, string p_panelName)
@@ -103,21 +106,13 @@ namespace FBI.MVC.Controller
       return (ChartPanelModel.Instance.Update(l_panel));
     }
 
-    /*
-     * 
-     * TODO
-     * Create ChartSetting in Controller, then catch events in ViewChartSettings
-     * When events triggered and ChartSetting is OK, AddAccounts in Controller !
-     * 
-     * ChartView: ChartAccountModel && ChartSettingsEvents !
-     *
-     */
-
-    public bool EditSettings(string p_name, List<Tuple<string, Color>> p_accountList)
+    public bool CRUDChartAccounts(ChartSettings p_settings, List<Tuple<string, Color>> p_accountList)
     {
       Account l_account;
-      List<UInt32> l_accountList = new List<uint>();
+      HashSet<UInt32> l_accountIds = new HashSet<UInt32>();
+      var l_chartAccounts = ChartAccountModel.Instance.GetDictionary(p_settings.Id);
 
+      ArrayUtils.Set<UInt32>(m_chartAccounts, 0);
       foreach (Tuple<string, Color> l_item in p_accountList)
       {
         if ((l_account = AccountModel.Instance.GetValue(l_item.Item1)) == null)
@@ -125,92 +120,119 @@ namespace FBI.MVC.Controller
           Error = Local.GetValue("CUI_Charts.error.invalid_account");
           return (false);
         }
-        if (!this.CRUChartAccount(l_account.Id, l_item))
+        if (!this.CRUChartAccount(p_settings, l_chartAccounts, l_account.Id, l_item))
           return (false);
-        l_accountList.Add(l_account.Id);
+        l_accountIds.Add(l_account.Id);
       }
-      //Delete chartAccount if unused
-      if (m_chartAccounts != null)
-      {
-        foreach (UInt32 l_accountId in m_chartAccounts.Keys)
-        {
-          if (!l_accountList.Contains(l_accountId))
-            ChartAccountModel.Instance.Delete(l_accountId);
-        }
-      }
-      if (!this.CRUChartSetting(p_name))
-      {
-        Error = Local.GetValue("CUI_Charts.error.cannot_update");
-        return (false);
-      }
+      this.DChartAccounts(l_accountIds, l_chartAccounts);
       return (true);
     }
 
-    private bool CRUChartAccount(UInt32 p_accountId, Tuple<string, Color> p_value)
+    private bool CRUChartAccount(ChartSettings p_settings, SafeDictionary<UInt32, ChartAccount> p_chartAccounts,
+      UInt32 p_accountId, Tuple<string, Color> p_value)
     {
-      bool l_update = true;
+      UInt32 l_chartAccId;
       ChartAccount l_chartAccount;
+      bool l_create = false;
 
-      if (m_chartAccounts == null ||
-        (l_chartAccount = m_chartAccounts[p_accountId]) == null)
+      if (this.HasAccount(p_chartAccounts, p_accountId, out l_chartAccId))
       {
+        l_chartAccount = p_chartAccounts[l_chartAccId];
+        m_chartAccounts[1]++;
+      }
+      else
+      {
+        l_create = true;
         l_chartAccount = new ChartAccount();
-        l_update = false;
+        m_chartAccounts[0]++;
       }
       l_chartAccount.AccountId = p_accountId;
       l_chartAccount.Color = p_value.Item2.ToArgb();
-      l_chartAccount.ChartId = m_chartSettings.Id;
-      return (l_update ? ChartAccountModel.Instance.Update(l_chartAccount) :
-        ChartAccountModel.Instance.Create(l_chartAccount));
+      l_chartAccount.ChartId = p_settings.Id;
+      return (l_create ? ChartAccountModel.Instance.Create(l_chartAccount) :
+         ChartAccountModel.Instance.Update(l_chartAccount));
     }
 
-    private bool CRUChartSetting(string p_name)
+    public bool CRUChartSetting(ChartSettings p_settings, string p_name)
     {
-      if (m_chartSettings == null)
+      ArrayUtils.Set<UInt32>(m_chartSettings, 0);
+      if (p_settings == null)
       {
-        this.ChartSettings = new ChartSettings();
-        m_chartSettings.PanelId = this.LastPanel.Item2;
-        m_chartSettings.Name = p_name;
-        return (ChartSettingsModel.Instance.Create(m_chartSettings));
+        p_settings = new ChartSettings();
+        p_settings.PanelId = this.LastPanel.Item2;
+        p_settings.Name = p_name;
+        m_chartSettings[0]++;
+        return (ChartSettingsModel.Instance.Create(p_settings));
       }
-      m_chartSettings.Name = p_name;
-      return (ChartSettingsModel.Instance.Update(m_chartSettings));
+      p_settings.Name = p_name;
+      m_chartSettings[1]++;
+      return (ChartSettingsModel.Instance.Update(p_settings));
     }
 
-    public bool IsLastConfigAmbigious()
+    private void DChartAccounts(HashSet<UInt32> p_accountIds, SafeDictionary<UInt32, ChartAccount> p_chartAccounts)
     {
-      var l_chart = ChartAccountModel.Instance.GetDictionary(m_chartSettings.Id);
+      HashSet<UInt32> l_unused = new HashSet<uint>();
+
+      if (p_chartAccounts == null)
+        return;
+      foreach (var l_account in p_chartAccounts)
+      {
+        if (!p_accountIds.Contains(l_account.Value.AccountId))
+          l_unused.Add(l_account.Key);
+      }
+      foreach (var l_accountId in l_unused)
+      {
+        ChartAccountModel.Instance.Delete(l_accountId);
+        m_chartAccounts[2]++;
+      }
+    }
+
+    private bool HasAccount(SafeDictionary<UInt32, ChartAccount> p_chartAccounts, UInt32 p_accountId, out UInt32 p_id)
+    {
+      p_id = 0;
+      if (p_chartAccounts == null)
+        return (false);
+      foreach (var l_item in p_chartAccounts)
+      {
+        if (l_item.Value.AccountId == p_accountId)
+        {
+          p_id = l_item.Key;
+          return (true);
+        }
+      }
+      return (false);
+    }
+
+    public bool IsLastConfigAmbigious(ChartSettings p_settings)
+    {
+      var l_chart = ChartAccountModel.Instance.GetDictionary(p_settings.Id);
 
       if (l_chart == null)
-        return (true);
+        return (false);
       return (this.LastConfig.Request.SortList.Count >= 1 &&
         this.LastConfig.Request.Versions.Count > 1 &&
-        l_chart.Count > 1); //Number of series
+        l_chart.Count > 1);
     }
 
-    public bool ApplyLastCompute(bool p_bypass = false)
+    public bool ApplyLastCompute(ChartSettings p_settings, bool p_bypass = false)
     {
       if (this.LastConfig == null || this.LastResult == null)
         return (false);
 
-      if (!this.IsLastConfigAmbigious() || p_bypass)
+      if (!this.IsLastConfigAmbigious(p_settings) || p_bypass)
       {
-        m_chartSettings.HasDeconstruction = this.LastConfig.Request.SortList.Count >= 1;
-        m_chartSettings.Versions = this.LastConfig.Request.Versions;
-        m_chartSettings.Deconstruction = (m_chartSettings.HasDeconstruction ? this.LastConfig.Request.SortList[0] : null);
+        p_settings.HasDeconstruction = this.LastConfig.Request.SortList.Count >= 1;
+        p_settings.Versions = this.LastConfig.Request.Versions;
+        p_settings.Deconstruction = (p_settings.HasDeconstruction ? this.LastConfig.Request.SortList[0] : null);
       }
       return (true);
     }
 
-    public void ShowSettingsView()
-    {
-      m_viewChartSettings.ShowDialog();
-    }
-
     public void ShowSettingsView(ChartSettings p_settings)
     {
+      m_viewChartSettings.Reload();
       m_viewChartSettings.LoadSettings(p_settings);
-      this.ShowSettingsView();
+      m_viewChartSettings.ShowDialog();
     }
   }
 }

@@ -14,9 +14,10 @@ namespace FBI.MVC.View
 {
   using Controller;
   using Forms;
-  using MVC.Model;
-  using MVC.Model.CRUD;
+  using Model;
+  using Model.CRUD;
   using Utils;
+  using Network;
 
   public partial class CUI2VisualisationChartsSettings : Form, IView
   {
@@ -28,6 +29,7 @@ namespace FBI.MVC.View
     private vTreeView m_treeView = new vTreeView();
 
     private List<Control[]> m_series = new List<Control[]>(); //Containing controls of every serie. { Label, vTreeViewBox, vColorPicker }
+    private ChartSettings m_chartSettings = null;
 
     public CUI2VisualisationChartsSettings()
     {
@@ -39,10 +41,9 @@ namespace FBI.MVC.View
     public void LoadView()
     {
       this.SuscribeEvents();
-      m_location = m_serieLabel.Location.Y;
-      m_serieColor.SelectedColor = DEFAULT_COLOR;
       FbiTreeView<Account>.Load(m_treeView.Nodes, AccountModel.Instance.GetDictionary());
       m_series.Add(new Control[] { m_serieLabel, m_serie, m_serieColor });
+      this.ResetView();
     }
 
     private void MultilangueSetup()
@@ -65,6 +66,17 @@ namespace FBI.MVC.View
       m_serie.Enter += OnvTreeViewBoxEnter;
     }
 
+    public void Reload()
+    {
+      this.ResetView();
+      ChartSettingsModel.Instance.ReadEvent += OnChartSettingRead;
+    }
+
+    private void UnsuscribeEvents()
+    {
+      ChartSettingsModel.Instance.ReadEvent -= OnChartSettingRead;
+    }
+
     public void SetController(IController p_controller)
     {
       m_controller = p_controller as CUIVisualizationController;
@@ -73,16 +85,14 @@ namespace FBI.MVC.View
     public void LoadSettings(ChartSettings p_settings)
     {
       int i = 1;
-      SafeDictionary<UInt32, ChartAccount> l_dicAccounts;
       List<ChartAccount> l_accounts;
 
+      m_chartSettings = p_settings;
       if (p_settings == null)
         return;
-
-      m_controller.ChartSettings = p_settings;
-      l_dicAccounts = ChartAccountModel.Instance.GetDictionary(p_settings.Id);
-      l_accounts = l_dicAccounts.Values.ToList();
       m_chartTitle.Text = p_settings.Name;
+      if ((l_accounts = ChartAccountModel.Instance.GetList(p_settings.Id)) == null)
+        return;
       if (l_accounts.Count >= 1)
       {
         m_serie.Text = this.AccountName(l_accounts[0].AccountId);
@@ -95,10 +105,8 @@ namespace FBI.MVC.View
       }
     }
 
-    public bool SaveSettings()
+    public bool SaveChartSettings()
     {
-      List<Tuple<string, Color>> l_accounts = new List<Tuple<string, Color>>();
-
       if (m_chartTitle.Text.Trim() == "")
       {
         MessageBox.Show(Local.GetValue("CUI_Charts.error.no_name"));
@@ -114,22 +122,29 @@ namespace FBI.MVC.View
         MessageBox.Show(Local.GetValue("CUI_Charts.error.invalid_serie"));
         return (false);
       }
-      m_controller.ApplyLastCompute(true);
+      return (m_controller.CRUChartSetting(m_chartSettings, m_chartTitle.Text.Trim()));
+    }
+
+    private bool SaveChartAccounts()
+    {
+      List<Tuple<string, Color>> l_accounts = new List<Tuple<string, Color>>();
+
+      m_controller.ApplyLastCompute(m_chartSettings, true);
       if (!this.TooMuchInfoSelection())
         return (false);
       foreach (Control[] l_control in m_series) //Save every serie
       {
-        l_accounts.Add(new Tuple<string,Color>(l_control[1].Text, ((vColorPicker)l_control[2]).SelectedColor));
+        l_accounts.Add(new Tuple<string, Color>(l_control[1].Text, ((vColorPicker)l_control[2]).SelectedColor));
       }
-      if (!m_controller.EditSettings(m_chartTitle.Text.Trim(), l_accounts))
+      if (!m_controller.CRUDChartAccounts(m_chartSettings, l_accounts))
       {
         MessageBox.Show(m_controller.Error);
-        return(false);
+        return (false);
       }
       return (true);
     }
 
-    public void ResetView()
+    private void ResetView()
     {
       m_serie.ResetText();
       m_chartTitle.ResetText();
@@ -146,6 +161,7 @@ namespace FBI.MVC.View
     private void OnClosing(object sender, FormClosingEventArgs e)
     {
       this.ResetView();
+      this.UnsuscribeEvents();
     }
 
     private void OnAddSerieClicked(object sender, EventArgs e)
@@ -155,10 +171,7 @@ namespace FBI.MVC.View
 
     private void OnSaveClicked(object sender, EventArgs e)
     {
-      if (this.SaveSettings())
-      {
-        this.Close();
-      }
+      this.SaveChartSettings();
     }
 
     private void OnRemoveSerieClicked(object sender, EventArgs e)
@@ -172,6 +185,29 @@ namespace FBI.MVC.View
 
       if (l_clickedTVBox.TreeView.Nodes.Count == 0)
         AFbiTreeView.Copy(l_clickedTVBox.TreeView, m_treeView);
+    }
+
+    delegate void OnChartSettingRead_delegate(ErrorMessage p_status, ChartSettings p_settings);
+    void OnChartSettingRead(ErrorMessage p_status, ChartSettings p_settings)
+    {
+      if (InvokeRequired)
+      {
+        OnChartSettingRead_delegate func = new OnChartSettingRead_delegate(OnChartSettingRead);
+        Invoke(func, p_status, p_settings);
+      }
+      else
+      {
+        if (p_status != Network.ErrorMessage.SUCCESS)
+        {
+          MessageBox.Show(Local.GetValue("CUI_Charts.error.settings"));
+        }
+        else
+        {
+          m_chartSettings = p_settings;
+          if (this.SaveChartAccounts())
+            this.Close();
+        }
+      }
     }
 
     #endregion
@@ -245,6 +281,7 @@ namespace FBI.MVC.View
     private bool AreTreeViewBoxValid()
     {
       Account l_account;
+      HashSet<string> l_accounts = new HashSet<string>();
 
       foreach (Control[] l_controls in m_series)
       {
@@ -252,6 +289,10 @@ namespace FBI.MVC.View
           return (false);
         if (l_account.FormulaType == Account.FormulaTypes.TITLE)
           return (false);
+        if (!l_accounts.Contains(l_controls[1].Text))
+          l_accounts.Add(l_controls[1].Text);
+        else
+          MessageBox.Show(Local.GetValue("CUI_Charts.warning.multiple_account"));
       }
       return (true);
     }
@@ -285,22 +326,24 @@ namespace FBI.MVC.View
 
     public bool TooMuchInfoSelection()
     {
-      if (m_series.Count > 1 && m_controller.ChartSettings.Versions.Count > 1 && m_controller.ChartSettings.HasDeconstruction) //If you can't deconstruct because there is too much informations
+      if (m_chartSettings.Versions == null)
+        return (true);
+      if (m_series.Count > 1 && m_chartSettings.Versions.Count > 1 && m_chartSettings.HasDeconstruction) //If you can't deconstruct because there is too much informations
       {
         DialogResult result = MessageBox.Show(Local.GetValue("CUI_Charts.choose_version_or_deconstruction"), Local.GetValue("CUI_Charts.chart_title"), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
         if (result == DialogResult.Yes) //Use version view, ignore deconstruction.
         {
-          m_controller.ChartSettings.HasDeconstruction = false;
+          m_chartSettings.HasDeconstruction = false;
         }
         else if (result == DialogResult.No) //Use deconstruction, specify a version
         {
           DialogResult l_result = FbiUserBox.ShowDialog(Local.GetValue("CUI_Charts.choose_version"),
              Local.GetValue("CUI_Charts.choose_version"),
-             this.VersionNames(m_controller.ChartSettings.Versions));
+             this.VersionNames(m_chartSettings.Versions));
           if (l_result != DialogResult.OK)
             return (false);
-          m_controller.ChartSettings.Versions = new List<UInt32>();
-          m_controller.ChartSettings.Versions.Add(m_controller.LastConfig.Request.Versions[FbiUserBox.Index]);
+          m_chartSettings.Versions = new List<UInt32>();
+          m_chartSettings.Versions.Add(m_controller.LastConfig.Request.Versions[FbiUserBox.Index]);
         }
       }
       return (true);
