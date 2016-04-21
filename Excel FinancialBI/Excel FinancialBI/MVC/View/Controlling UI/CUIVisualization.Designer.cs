@@ -76,7 +76,7 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.TableLayoutPanel1.Size = new System.Drawing.Size(688, 380);
+      this.TableLayoutPanel1.Size = new System.Drawing.Size(733, 358);
       this.TableLayoutPanel1.TabIndex = 1;
       // 
       // Panel1
@@ -89,7 +89,7 @@ namespace FBI.MVC.View
       this.Panel1.Location = new System.Drawing.Point(0, 0);
       this.Panel1.Margin = new System.Windows.Forms.Padding(0);
       this.Panel1.Name = "Panel1";
-      this.Panel1.Size = new System.Drawing.Size(688, 25);
+      this.Panel1.Size = new System.Drawing.Size(733, 25);
       this.Panel1.TabIndex = 1;
       // 
       // m_refreshButton
@@ -97,7 +97,7 @@ namespace FBI.MVC.View
       this.m_refreshButton.AllowAnimations = true;
       this.m_refreshButton.BackColor = System.Drawing.Color.Transparent;
       this.m_refreshButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.m_refreshButton.ImageKey = "refresh classic green.ico";
+      this.m_refreshButton.ImageKey = "(none)";
       this.m_refreshButton.ImageList = this.ImageList1;
       this.m_refreshButton.Location = new System.Drawing.Point(3, 0);
       this.m_refreshButton.Name = "m_refreshButton";
@@ -123,7 +123,7 @@ namespace FBI.MVC.View
       this.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_currencyLabel.Ellipsis = false;
       this.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_currencyLabel.Location = new System.Drawing.Point(340, 5);
+      this.m_currencyLabel.Location = new System.Drawing.Point(385, 5);
       this.m_currencyLabel.Multiline = true;
       this.m_currencyLabel.Name = "m_currencyLabel";
       this.m_currencyLabel.Size = new System.Drawing.Size(130, 16);
@@ -140,7 +140,7 @@ namespace FBI.MVC.View
       this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_versionLabel.Ellipsis = false;
       this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionLabel.Location = new System.Drawing.Point(476, 5);
+      this.m_versionLabel.Location = new System.Drawing.Point(521, 5);
       this.m_versionLabel.Multiline = true;
       this.m_versionLabel.Name = "m_versionLabel";
       this.m_versionLabel.Size = new System.Drawing.Size(200, 16);
@@ -157,7 +157,7 @@ namespace FBI.MVC.View
       this.m_entityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_entityLabel.Ellipsis = false;
       this.m_entityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_entityLabel.Location = new System.Drawing.Point(156, 5);
+      this.m_entityLabel.Location = new System.Drawing.Point(201, 5);
       this.m_entityLabel.Multiline = true;
       this.m_entityLabel.Name = "m_entityLabel";
       this.m_entityLabel.Size = new System.Drawing.Size(178, 13);
@@ -172,7 +172,7 @@ namespace FBI.MVC.View
       this.m_panel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_panel.Location = new System.Drawing.Point(3, 28);
       this.m_panel.Name = "m_panel";
-      this.m_panel.Size = new System.Drawing.Size(682, 349);
+      this.m_panel.Size = new System.Drawing.Size(727, 327);
       this.m_panel.TabIndex = 2;
       // 
       // VersionTB
@@ -294,8 +294,9 @@ namespace FBI.MVC.View
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(688, 380);
+      this.ClientSize = new System.Drawing.Size(733, 358);
       this.Controls.Add(this.TableLayoutPanel1);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "CUIVisualization";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
       this.TableLayoutPanel1.ResumeLayout(false);
