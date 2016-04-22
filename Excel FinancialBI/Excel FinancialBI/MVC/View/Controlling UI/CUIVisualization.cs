@@ -79,6 +79,7 @@ namespace FBI.MVC.View
       m_splitVerticalBT.Click += OnSplitVerticalClick;
       m_chartEdit.Click += OnChartClick;
       m_refreshButton.Click += OnRefreshClick;
+      m_delete.Click += OnDeleteClick;
 
       ChartSettingsModel.Instance.CreationEvent += OnChartSettingsCreated;
       ChartSettingsModel.Instance.UpdateEvent += OnChartSettingsUpdated;
@@ -140,6 +141,21 @@ namespace FBI.MVC.View
       m_panels.Add(l_newSplit.Panel2);
     }
 
+    private void Merge(Control p_control)
+    {
+      if (p_control.Parent != null && p_control.GetType() == typeof(vSplitterPanel))
+      {
+        vSplitContainer l_split = (vSplitContainer)p_control.Parent;
+        Control l_otherPanel = (l_split.Panel1 == p_control ? l_split.Panel2 : l_split.Panel1);
+        Control l_container = l_split.Parent;
+
+        l_split.Controls.Remove(p_control);
+        foreach (Control l_control in l_otherPanel.Controls)
+          l_container.Controls.Add(l_control);
+        l_container.Controls.Remove(l_split);
+      }
+    }
+
     #endregion
 
     #region Events
@@ -169,6 +185,17 @@ namespace FBI.MVC.View
       }
       m_lastClickedChart = l_chart;
       m_controller.ShowSettingsView(l_chart.Settings);
+    }
+
+    private void OnDeleteClick(object sender, EventArgs e)
+    {
+      FbiChart l_chart;
+      ToolStripMenuItem l_toolStrip = (ToolStripMenuItem)sender;
+      Control l_clickedControl = ((ContextMenuStrip)(((ToolStripMenuItem)sender).Owner)).SourceControl;
+
+      if ((l_chart = (FbiChart)this.GetObjectFromControl(l_clickedControl, typeof(FbiChart))) != null && l_chart.HasSettings)
+        m_controller.DChartSettings(l_chart.Settings.Id);
+      this.Merge(l_clickedControl);
     }
 
     #region Model
@@ -268,7 +295,11 @@ namespace FBI.MVC.View
 
     private void UpdateChartFromCSModel(UInt32[] p_expected, Int32 p_value, UInt32 p_id, ErrorMessage p_status)
     {
-      if (this.UpdateChartFromModel(p_expected, p_value, p_id, p_status))
+      if (p_value == CUIVisualizationController.DELETE)
+      {
+        this.RemoveChart(p_id);
+      }
+      else if (this.UpdateChartFromModel(p_expected, p_value, p_id, p_status))
       {
         this.UpdateChart(m_lastClickedChart, ChartSettingsModel.Instance.GetValue(p_id));
         ArrayUtils.Set<UInt32>(m_expectedChartSettings, 0);
@@ -329,6 +360,7 @@ namespace FBI.MVC.View
       {
         if (l_chart.HasSettings && l_chart.Settings.Id == p_chartId)
         {
+          l_chart.Clear();
           l_chart.Settings = null;
           m_charts.Remove(l_chart);
           return;

@@ -52,6 +52,7 @@ namespace FBI.MVC.View
       this.m_horizontalSplitBT = new System.Windows.Forms.ToolStripMenuItem();
       this.m_splitVerticalBT = new System.Windows.Forms.ToolStripMenuItem();
       this.m_chartEdit = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_delete = new System.Windows.Forms.ToolStripMenuItem();
       this.TableLayoutPanel1.SuspendLayout();
       this.Panel1.SuspendLayout();
       this.m_chartsRightClickMenu.SuspendLayout();
@@ -268,9 +269,10 @@ namespace FBI.MVC.View
       this.m_panelRightClick.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_horizontalSplitBT,
             this.m_splitVerticalBT,
-            this.m_chartEdit});
+            this.m_chartEdit,
+            this.m_delete});
       this.m_panelRightClick.Name = "m_chartsRightClickMenu";
-      this.m_panelRightClick.Size = new System.Drawing.Size(156, 70);
+      this.m_panelRightClick.Size = new System.Drawing.Size(156, 114);
       // 
       // m_horizontalSplitBT
       // 
@@ -289,6 +291,12 @@ namespace FBI.MVC.View
       this.m_chartEdit.Name = "m_chartEdit";
       this.m_chartEdit.Size = new System.Drawing.Size(155, 22);
       this.m_chartEdit.Text = "Chart";
+      // 
+      // m_delete
+      // 
+      this.m_delete.Name = "m_delete";
+      this.m_delete.Size = new System.Drawing.Size(155, 22);
+      this.m_delete.Text = "Delete";
       // 
       // CUIVisualization
       // 
@@ -324,6 +332,7 @@ namespace FBI.MVC.View
   private System.Windows.Forms.Panel m_panel;
   private System.Windows.Forms.ToolStripMenuItem m_splitVerticalBT;
   private System.Windows.Forms.ToolStripMenuItem m_chartEdit;
+  private System.Windows.Forms.ToolStripMenuItem m_delete;
 }
 
 }

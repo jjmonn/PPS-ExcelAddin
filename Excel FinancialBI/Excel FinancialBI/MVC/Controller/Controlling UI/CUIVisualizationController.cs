@@ -17,6 +17,10 @@ namespace FBI.MVC.Controller
 
   class CUIVisualizationController : IController
   {
+    public const Int32 CREATE = 0;
+    public const Int32 UPDATE = 1;
+    public const Int32 DELETE = 2;
+
     CUIVisualization m_view;
 
     public string Error { get; set; }
@@ -26,7 +30,7 @@ namespace FBI.MVC.Controller
     ChartPanelSelection m_viewPanelSelection;
     CUIController m_parentController;
 
-    private Tuple<string, UInt32> m_lastPanel = null;
+    private UInt32 m_panel = 0;
 
     private UInt32[] m_chartSettings = { 0, 0, 0 };
     private UInt32[] m_chartAccounts = { 0, 0, 0 };
@@ -50,7 +54,7 @@ namespace FBI.MVC.Controller
       if (m_viewPanelSelection.ShowDialog() != DialogResult.Cancel)
       {
         m_view.Show();
-        m_view.LoadPanel(m_lastPanel.Item2);
+        m_view.LoadPanel(m_panel);
       }
     }
 
@@ -73,10 +77,10 @@ namespace FBI.MVC.Controller
       get { return (m_parentController.LastResult); }
     }
 
-    public Tuple<string, UInt32> LastPanel
+    public UInt32 PanelId
     {
-      get { return (m_lastPanel); }
-      set { m_lastPanel = value; }
+      get { return (m_panel); }
+      set { m_panel = value; }
     }
 
     public UInt32[] ExpectedChartSettings
@@ -138,13 +142,13 @@ namespace FBI.MVC.Controller
       if (this.HasAccount(p_chartAccounts, p_accountId, out l_chartAccId))
       {
         l_chartAccount = p_chartAccounts[l_chartAccId];
-        m_chartAccounts[1]++;
+        m_chartAccounts[UPDATE]++;
       }
       else
       {
         l_create = true;
         l_chartAccount = new ChartAccount();
-        m_chartAccounts[0]++;
+        m_chartAccounts[CREATE]++;
       }
       l_chartAccount.AccountId = p_accountId;
       l_chartAccount.Color = p_value.Item2.ToArgb();
@@ -153,20 +157,25 @@ namespace FBI.MVC.Controller
          ChartAccountModel.Instance.Update(l_chartAccount));
     }
 
-    public bool CRUChartSetting(ChartSettings p_settings, string p_name)
+    public bool CRUChartSettings(ChartSettings p_settings, string p_name)
     {
       ArrayUtils.Set<UInt32>(m_chartSettings, 0);
       if (p_settings == null)
       {
         p_settings = new ChartSettings();
-        p_settings.PanelId = this.LastPanel.Item2;
+        p_settings.PanelId = m_panel;
         p_settings.Name = p_name;
-        m_chartSettings[0]++;
+        m_chartSettings[CREATE]++;
         return (ChartSettingsModel.Instance.Create(p_settings));
       }
       p_settings.Name = p_name;
-      m_chartSettings[1]++;
+      m_chartSettings[UPDATE]++;
       return (ChartSettingsModel.Instance.Update(p_settings));
+    }
+
+    public bool DChartSettings(UInt32 p_settingsId)
+    {
+      return (ChartSettingsModel.Instance.Delete(p_settingsId));
     }
 
     private void DChartAccounts(HashSet<UInt32> p_accountIds, SafeDictionary<UInt32, ChartAccount> p_chartAccounts)
@@ -183,7 +192,7 @@ namespace FBI.MVC.Controller
       foreach (var l_accountId in l_unused)
       {
         ChartAccountModel.Instance.Delete(l_accountId);
-        m_chartAccounts[2]++;
+        m_chartAccounts[DELETE]++;
       }
     }
 

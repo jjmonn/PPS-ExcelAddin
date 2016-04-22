@@ -232,19 +232,19 @@ namespace FBI.Forms
     {
       if (p_settings.HasDeconstruction && p_settings.Versions.Count > 1)
       {
-        this.DisplayAsStackVersion(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
+        this.DisplayAsDeconstructionPerVersion(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
       }
       else if (p_settings.HasDeconstruction)
       {
-        this.DisplayAsStack(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
+        this.DisplayAsDeconstruction(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
       }
       else
       {
-        this.DisplayAsLine(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
+        this.DisplayAsVersion(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
       }
     }
 
-    private void DisplayAsLine(ChartSettings p_settings, List<Serie> p_series,
+    private void DisplayAsVersion(ChartSettings p_settings, List<Serie> p_series,
       Computation p_compute, List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       double l_value;
@@ -267,13 +267,13 @@ namespace FBI.Forms
       }
     }
 
-    private void DisplayAsStack(ChartSettings p_settings, List<Serie> p_series,
+    private void DisplayAsDeconstruction(ChartSettings p_settings, List<Serie> p_series,
       Computation p_compute, List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       List<Color> l_colors;
       ChartValues l_values;
       string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_series, p_compute, p_periods);
-      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series.Count, ELEM_DISPLAYED);
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series.Count, this.GetNumberOfDeconstruction(p_settings));
 
       for (int i = 0; i < p_series.Count; ++i)
       {
@@ -297,7 +297,7 @@ namespace FBI.Forms
       this.AddSeries(l_series);
     }
 
-    private void DisplayAsStackVersion(ChartSettings p_settings, List<Serie> p_series,
+    private void DisplayAsDeconstructionPerVersion(ChartSettings p_settings, List<Serie> p_series,
       Computation p_compute, List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       List<Color> l_colors;
@@ -329,6 +329,27 @@ namespace FBI.Forms
       this.AddSeries(l_series);
     }
 
+    private int GetNumberOfDeconstruction(ChartSettings p_settings)
+    {
+      int l_nbValues = 0;
+
+      if (!p_settings.HasDeconstruction)
+        return (ELEM_DISPLAYED);
+
+      if (p_settings.Deconstruction.Item1)
+      {
+        l_nbValues = (p_settings.Deconstruction.Item3 == 0 && p_settings.Deconstruction.Item2 == AxisType.Entities ? 1 :
+          AxisElemModel.Instance.GetChildren(p_settings.Deconstruction.Item2, p_settings.Deconstruction.Item3).Count);
+      }
+      else
+      {
+        l_nbValues = FilterValueModel.Instance.GetDictionary(p_settings.Deconstruction.Item3).Count;
+      }
+      return (l_nbValues > ELEM_DISPLAYED ? ELEM_DISPLAYED : l_nbValues);
+    }
+
+    #region SignificantsUtils
+
     private ChartValues GetSignificantValues(ChartValues p_values, string[] p_signValues)
     {
       double l_sum = 0;
@@ -336,6 +357,8 @@ namespace FBI.Forms
 
       for (int i = 0; i < p_signValues.Length; ++i)
       {
+        if (p_signValues[i] == null) //If we encountered a null, we don't process the 'Other'. Used when a deconstruction has less that 4 ELEM_DISPLAYED values.
+          return (l_values);
         foreach (ChartValue l_val in p_values)
         {
           if (p_signValues[i] == l_val.Item1)
@@ -378,8 +401,14 @@ namespace FBI.Forms
         l_list[i] = l_item.Key;
         ++i;
       }
+      for (; i < l_list.Length; ++i) //Fill the end with null values
+        l_list[i] = null;
       return (l_list);
     }
+
+    #endregion
+
+    #region SeriesUtils
 
     private void AddSeries(ChartSeries p_series)
     {
@@ -421,5 +450,7 @@ namespace FBI.Forms
       this.ChartAreas[0].AxisX.IsMarginVisible = p_margin;
       return (l_series);
     }
+
+    #endregion
   }
 }

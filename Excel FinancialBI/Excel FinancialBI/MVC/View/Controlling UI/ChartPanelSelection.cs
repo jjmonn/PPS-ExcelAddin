@@ -21,7 +21,6 @@ namespace FBI.MVC.View
     private const UInt32 MAX_PANEL = 8;
 
     private CUIVisualizationController m_controller;
-    private Tuple<string, UInt32> m_selectedItem = null;
 
     public ChartPanelSelection()
     {
@@ -75,15 +74,14 @@ namespace FBI.MVC.View
 
     private void OnListChanged(object sender, EventArgs p_e)
     {
-      m_selectedItem = new Tuple<string, uint>(m_list.SelectedItem.Text, (UInt32)m_list.SelectedItem.Value);
-      m_text.Text = (m_selectedItem.Item2 == ChartPanel.INVALID_ID ? "" : m_selectedItem.Item1);
+      m_text.Text = ((UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID ? "" : m_list.SelectedItem.Text);
     }
 
     private void OnSaveClick(object sender, EventArgs e)
     {
-      if (m_selectedItem == null || m_text.Text.Trim() == "")
+      if (m_list.SelectedItem == null || m_text.Text.Trim() == "")
         return;
-      if (!m_controller.CRUPanel(m_selectedItem.Item2, m_text.Text.Trim()))
+      if (!m_controller.CRUPanel((UInt32)m_list.SelectedItem.Value, m_text.Text.Trim()))
       {
         MessageBox.Show("general.error.system");
       }
@@ -91,11 +89,11 @@ namespace FBI.MVC.View
 
     private void OnNextClick(object sender, EventArgs e)
     {
-      if (m_selectedItem == null || m_selectedItem.Item2 == ChartPanel.INVALID_ID)
+      if (m_list.SelectedItem == null || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
         return;
 
       this.DialogResult = System.Windows.Forms.DialogResult.OK;
-      m_controller.LastPanel = m_selectedItem;
+      m_controller.PanelId = (UInt32)m_list.SelectedItem.Value;
       this.Close();
     }
 
