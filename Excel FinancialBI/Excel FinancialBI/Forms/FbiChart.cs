@@ -303,7 +303,7 @@ namespace FBI.Forms
       List<Color> l_colors;
       ChartValues l_values;
       string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_series, p_compute, p_periods);
-      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_settings.Versions.Count, ELEM_DISPLAYED);
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_settings.Versions.Count, this.GetNumberOfDeconstruction(p_settings));
 
       for (int i = 0; i < p_settings.Versions.Count; ++i)
       {

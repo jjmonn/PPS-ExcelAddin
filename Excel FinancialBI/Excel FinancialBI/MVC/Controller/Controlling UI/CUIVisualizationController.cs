@@ -32,8 +32,8 @@ namespace FBI.MVC.Controller
 
     private UInt32 m_panel = 0;
 
-    private UInt32[] m_chartSettings = { 0, 0, 0 };
-    private UInt32[] m_chartAccounts = { 0, 0, 0 };
+    private UInt32[] m_chartSettings = { 0, 0 };
+    private UInt32[] m_chartAccounts = { 0, 0 };
 
     public CUIVisualizationController(CUIController p_parentController)
     {
@@ -80,7 +80,6 @@ namespace FBI.MVC.Controller
     public UInt32 PanelId
     {
       get { return (m_panel); }
-      set { m_panel = value; }
     }
 
     public UInt32[] ExpectedChartSettings
@@ -91,6 +90,21 @@ namespace FBI.MVC.Controller
     public UInt32[] ExpectedChartAccounts
     {
       get { return (m_chartAccounts); }
+    }
+
+    public bool SetPanel(UInt32 p_panelId)
+    {
+      if (m_parentController.AddPanel(p_panelId))
+      {
+        m_panel = p_panelId;
+        return (true);
+      }
+      return (false);
+    }
+
+    public void ClosePanel()
+    {
+      m_parentController.RemovePanel(m_panel);
     }
 
     public bool CRUPanel(UInt32 p_panelId, string p_panelName)
@@ -113,7 +127,7 @@ namespace FBI.MVC.Controller
     public bool CRUDChartAccounts(ChartSettings p_settings, List<Tuple<string, Color>> p_accountList)
     {
       Account l_account;
-      HashSet<UInt32> l_accountIds = new HashSet<UInt32>();
+      List<UInt32> l_accountIds = new List<UInt32>();
       var l_chartAccounts = ChartAccountModel.Instance.GetDictionary(p_settings.Id);
 
       ArrayUtils.Set<UInt32>(m_chartAccounts, 0);
@@ -124,11 +138,20 @@ namespace FBI.MVC.Controller
           Error = Local.GetValue("CUI_Charts.error.invalid_account");
           return (false);
         }
-        if (!this.CRUChartAccount(p_settings, l_chartAccounts, l_account.Id, l_item))
-          return (false);
         l_accountIds.Add(l_account.Id);
       }
-      this.DChartAccounts(l_accountIds, l_chartAccounts);
+      this.DChartAccounts(l_accountIds, l_chartAccounts); //Delete first, because we don't want to consider them into the 'expected' arguments
+      return (this.CRUChartAccounts(p_settings, l_chartAccounts, l_accountIds, p_accountList));
+    }
+
+    private bool CRUChartAccounts(ChartSettings p_settings, SafeDictionary<UInt32, ChartAccount> p_chartAccounts,
+      List<UInt32> l_accountIds, List<Tuple<string, Color>> p_accountList)
+    {
+      for (int i = 0; i < l_accountIds.Count; ++i)
+      {
+        if (!this.CRUChartAccount(p_settings, p_chartAccounts, l_accountIds[i], p_accountList[i]))
+          return (false);
+      }
       return (true);
     }
 
@@ -157,6 +180,23 @@ namespace FBI.MVC.Controller
          ChartAccountModel.Instance.Update(l_chartAccount));
     }
 
+    private void DChartAccounts(List<UInt32> p_accountIds, SafeDictionary<UInt32, ChartAccount> p_chartAccounts)
+    {
+      HashSet<UInt32> l_unused = new HashSet<uint>();
+
+      if (p_chartAccounts == null)
+        return;
+      foreach (var l_account in p_chartAccounts)
+      {
+        if (!p_accountIds.Contains(l_account.Value.AccountId))
+          l_unused.Add(l_account.Key);
+      }
+      foreach (var l_accountId in l_unused)
+      {
+        ChartAccountModel.Instance.Delete(l_accountId);
+      }
+    }
+
     public bool CRUChartSettings(ChartSettings p_settings, string p_name)
     {
       ArrayUtils.Set<UInt32>(m_chartSettings, 0);
@@ -176,24 +216,6 @@ namespace FBI.MVC.Controller
     public bool DChartSettings(UInt32 p_settingsId)
     {
       return (ChartSettingsModel.Instance.Delete(p_settingsId));
-    }
-
-    private void DChartAccounts(HashSet<UInt32> p_accountIds, SafeDictionary<UInt32, ChartAccount> p_chartAccounts)
-    {
-      HashSet<UInt32> l_unused = new HashSet<uint>();
-
-      if (p_chartAccounts == null)
-        return;
-      foreach (var l_account in p_chartAccounts)
-      {
-        if (!p_accountIds.Contains(l_account.Value.AccountId))
-          l_unused.Add(l_account.Key);
-      }
-      foreach (var l_accountId in l_unused)
-      {
-        ChartAccountModel.Instance.Delete(l_accountId);
-        m_chartAccounts[DELETE]++;
-      }
     }
 
     private bool HasAccount(SafeDictionary<UInt32, ChartAccount> p_chartAccounts, UInt32 p_accountId, out UInt32 p_id)

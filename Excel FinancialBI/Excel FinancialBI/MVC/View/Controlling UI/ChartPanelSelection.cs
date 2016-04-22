@@ -92,8 +92,12 @@ namespace FBI.MVC.View
       if (m_list.SelectedItem == null || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
         return;
 
+      if (!m_controller.SetPanel((UInt32)m_list.SelectedItem.Value))
+      {
+        MessageBox.Show(Local.GetValue("CUI_Charts.error.same_panel"));
+        return;
+      }
       this.DialogResult = System.Windows.Forms.DialogResult.OK;
-      m_controller.PanelId = (UInt32)m_list.SelectedItem.Value;
       this.Close();
     }
 
