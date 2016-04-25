@@ -467,21 +467,17 @@ namespace FBI.MVC.View
 
       Version l_targetVersion = VersionModel.Instance.GetValue((UInt32)p_targetNode.Value);
         
-      if (p_draggedNode.Equals(p_targetNode) == true || l_targetVersion.IsFolder == false || p_draggedNode.Parent.Equals(p_targetNode.Value))
+      if (p_draggedNode.Equals(p_targetNode) == true || l_targetVersion.IsFolder == false || (p_draggedNode.Parent != null && p_draggedNode.Parent.Equals(p_targetNode)))
         return;
 
       Version l_version = VersionModel.Instance.GetValue((UInt32)p_draggedNode.Value).Clone();
       if (l_version == null)
         return;
 
-      vTreeNode l_newNode = new vTreeNode();
-      l_newNode.Value = p_draggedNode.Value;
-      l_newNode.Text = p_draggedNode.Text;
-      l_newNode.ImageIndex = p_draggedNode.ImageIndex;
-      p_draggedNode.Remove();
       m_versionsTreeview.DoDragDrop(p_draggedNode, DragDropEffects.None);
       l_version.ParentId = (UInt32)p_targetNode.Value;
-      m_controller.Update(l_version);
+      if (m_controller.Update(l_version) == false)
+        MsgBox.Show(m_controller.Error);
     }
    
     #endregion
@@ -498,7 +494,7 @@ namespace FBI.MVC.View
       l_newFolderVersion.IsFolder = true;
       l_newFolderVersion.ParentId = m_controller.SelectedVersion;
       if (m_controller.Create(l_newFolderVersion) == false)
-        Forms.MsgBox.Show(m_controller.Error);
+        MsgBox.Show(m_controller.Error);
     }
 
     private void DeleteVersion(UInt32 p_versionId)
@@ -508,7 +504,7 @@ namespace FBI.MVC.View
       if (l_password == PasswordBox.Canceled || Addin.Password != l_password)
         return;
       if (m_controller.Delete(p_versionId) == false)
-        Forms.MsgBox.Show(m_controller.Error);
+        MsgBox.Show(m_controller.Error);
     }
 
     private void RenameVersion(UInt32 p_versionId)
@@ -521,7 +517,7 @@ namespace FBI.MVC.View
         l_version = l_version.Clone();
         l_version.Name = Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
         if (m_controller.Update(l_version) == false)
-          Forms.MsgBox.Show(m_controller.Error);
+          MsgBox.Show(m_controller.Error);
       }
     }
 
@@ -538,7 +534,7 @@ namespace FBI.MVC.View
       else
         l_version.LockDate = "";
       if (m_controller.Update(l_version) == false)
-        Forms.MsgBox.Show(m_controller.Error);
+        MsgBox.Show(m_controller.Error);
     }
 
   }
