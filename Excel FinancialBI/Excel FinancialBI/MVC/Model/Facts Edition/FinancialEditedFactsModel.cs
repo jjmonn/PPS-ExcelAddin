@@ -303,7 +303,7 @@ namespace FBI.MVC.Model
       {
         EditedFinancialFact l_fact = EditedFacts[p_cell.Address];
 
-        if (p_cell.Value2 != null && (p_cell.Value2.GetType() != typeof(double) || (double)p_cell.Value2 == l_fact.Value))
+        if (p_cell.Value2 != null && (p_cell.Value2.GetType() != typeof(double) || (double)p_cell.Value2 == l_fact.EditedValue))
           return (null);
 
         if (p_cell.Value2 == null)
