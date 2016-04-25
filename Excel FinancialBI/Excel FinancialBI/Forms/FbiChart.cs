@@ -83,6 +83,8 @@ namespace FBI.Forms
       l_chartArea.AxisX.LabelStyle.Angle = -45;
       l_chartArea.AxisY.LabelAutoFitMaxFontSize = 10;
       l_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
+      l_chartArea.AxisX.IsMarginVisible = true;
+      l_chartArea.AxisY.IsMarginVisible = true;
       return (l_chartArea);
     }
 
@@ -436,18 +438,17 @@ namespace FBI.Forms
       return (l_series);
     }
 
-    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null, bool p_margin = false, int p_borderWidth = 4)
+    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null)
     {
       Series l_series = new Series();
 
       l_series.ChartArea = this.ChartAreas.First().Name;
       l_series.ChartType = p_chartType;
-      l_series.BorderWidth = p_borderWidth;
+      l_series.BorderWidth = Properties.Settings.Default.chartBorderWidth;
       if (p_color != null)
       {
         l_series.Color = p_color.Value;
       }
-      this.ChartAreas[0].AxisX.IsMarginVisible = p_margin;
       return (l_series);
     }
 

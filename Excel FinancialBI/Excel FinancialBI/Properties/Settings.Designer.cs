@@ -934,5 +934,17 @@ namespace FBI.Properties {
                 this["includeWeekEnds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int chartBorderWidth {
+            get {
+                return ((int)(this["chartBorderWidth"]));
+            }
+            set {
+                this["chartBorderWidth"] = value;
+            }
+        }
     }
 }
