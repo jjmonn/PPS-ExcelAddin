@@ -14,18 +14,22 @@ namespace FBI.MVC.Model
   using Model;
   using Controller;
 
+  public delegate void OnComputeFailed();
+
   class FinancialEditedFactsModel : AEditedFactsModel
   {
     public MultiIndexDictionary<string, DimensionKey, EditedFinancialFact> EditedFacts { get; private set; }
     SafeDictionary<DimensionKey, Fact> m_facts = new SafeDictionary<DimensionKey, Fact>();
     public MultiIndexDictionary<string, DimensionKey, EditedFinancialFact> OutputFacts { get; private set; }
+    public event OnComputeFailed ComputeFailed;
     WorksheetAreaController m_dimensions = null;
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
     private List<Int32> m_periodsList;
     bool m_displayDiff = true;
     bool m_needRefresh = false;
-    int m_nbRequest = 0;
+    public int m_nbRequest = 0;
+    UInt32 m_computeId = 0;
 
     #region Initialize
 
@@ -114,7 +118,6 @@ namespace FBI.MVC.Model
 
     public override void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
-      AddinModuleController.SetExcelInteractionState(false);
       m_updateCellsOnDownload = p_updateCells;
       if (m_updateCellsOnDownload)
         foreach (EditedFactBase l_fact in EditedFacts.Values)
@@ -126,6 +129,7 @@ namespace FBI.MVC.Model
       List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
 
       RequestIdList.Clear();
+      AddinModuleController.SetExcelInteractionState(false);
       foreach (AxisElem l_entity in l_entitiesList)
       {
         RequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entity.Id, m_versionId, p_clientId, p_productId, p_adjustmentId));
@@ -137,7 +141,6 @@ namespace FBI.MVC.Model
     {
       if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
         return;
-      AddinModuleController.SetExcelInteractionState(false);
       if (p_status != ErrorMessage.SUCCESS)
       {
         RaiseFactDownloaded(false);
@@ -177,11 +180,8 @@ namespace FBI.MVC.Model
       foreach (KeyValuePair<DimensionKey, Fact> l_pair in l_downloadedFactDic)
         m_facts[l_pair.Key] = l_pair.Value;
       RequestIdList.Remove(p_requestId);
-      m_nbRequest--;
       if (RequestIdList.Count == 0)
         ComputeOutputs();
-      else
-        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
     }
 
     public void ComputeOutputs()
@@ -219,23 +219,38 @@ namespace FBI.MVC.Model
         l_entitiesList.Add(l_entity.Id);
       }
       l_sourcedComputeRequest.EntityList = l_entitiesList;
-      SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest);
-      Task.Delay(8000).ContinueWith(t =>
+      m_nbRequest++;
+      AddinModuleController.SetExcelInteractionState(false);
+      if (SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest) == false)
+        OnComputeFailed();
+      else
       {
-        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
-      });
+        UInt32 l_computeId = ++m_computeId;
+        Task.Delay(5000).ContinueWith(t =>
+        {
+          if (l_computeId == m_computeId && m_nbRequest > 0)
+            OnComputeFailed();
+        });
+      }
+    }
+
+    void OnComputeFailed()
+    {
+      m_nbRequest--;
+      AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
+      if (ComputeFailed != null)
+        ComputeFailed();
     }
 
     private void OnFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
       try
       {
+        m_nbRequest--;
         if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
           return;
         if (p_status == ErrorMessage.SUCCESS)
         {
-          AddinModuleController.SetExcelInteractionState(false);
-
           Version l_version = VersionModel.Instance.GetValue(m_versionId);
 
           if (l_version != null)
@@ -317,6 +332,8 @@ namespace FBI.MVC.Model
         l_dic[l_action][l_editedFact.Cell.Address] = l_editedFact;
       }
 
+      m_nbRequest++;
+      AddinModuleController.SetExcelInteractionState(false);
       if (l_dic[CRUDAction.UPDATE].Count > 0)
         FactsModel.Instance.UpdateList(l_dic[CRUDAction.UPDATE], CRUDAction.UPDATE);
       if (l_dic[CRUDAction.DELETE].Count > 0)

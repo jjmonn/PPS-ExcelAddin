@@ -23,6 +23,7 @@ namespace FBI.MVC.Controller
     // SidePanesControllers
 
     private static bool m_interactive = true;
+    private static XlCalculation m_prevCalculationMode;
     private UInt32 m_submissionProductId;
     private UInt32 m_submissionAdjustmentId;
     public UInt32 SubmissionClientId
@@ -44,6 +45,7 @@ namespace FBI.MVC.Controller
     public AddinModuleController(AddinModule p_view)
     {
       m_view = p_view;
+      m_prevCalculationMode = p_view.ExcelApp.Calculation;
     }
 
     public bool LaunchRHSnapshotView()
@@ -192,6 +194,17 @@ namespace FBI.MVC.Controller
         {
           if (m_interactive == p_state)
             return;
+          if (p_state == false)
+          {
+            m_prevCalculationMode = AddinModule.CurrentInstance.ExcelApp.Calculation;
+            AddinModule.CurrentInstance.ExcelApp.Calculation = XlCalculation.xlCalculationManual;
+          }
+          else
+          {
+            if (m_prevCalculationMode != AddinModule.CurrentInstance.ExcelApp.Calculation)
+              AddinModule.CurrentInstance.ExcelApp.Calculate();
+            AddinModule.CurrentInstance.ExcelApp.Calculation = m_prevCalculationMode;
+          }
           AddinModule.CurrentInstance.ExcelApp.Interactive = p_state;
           m_interactive = p_state;
         }
