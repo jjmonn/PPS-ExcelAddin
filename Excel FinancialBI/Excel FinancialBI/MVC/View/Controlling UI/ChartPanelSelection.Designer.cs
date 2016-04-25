@@ -32,6 +32,7 @@
       this.m_text = new VIBlend.WinForms.Controls.vTextBox();
       this.m_next = new VIBlend.WinForms.Controls.vButton();
       this.m_save = new VIBlend.WinForms.Controls.vButton();
+      this.m_delete = new VIBlend.WinForms.Controls.vButton();
       this.SuspendLayout();
       // 
       // m_list
@@ -91,11 +92,26 @@
       this.m_save.UseVisualStyleBackColor = false;
       this.m_save.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
+      // m_delete
+      // 
+      this.m_delete.AllowAnimations = true;
+      this.m_delete.BackColor = System.Drawing.Color.Transparent;
+      this.m_delete.Location = new System.Drawing.Point(357, 77);
+      this.m_delete.Name = "m_delete";
+      this.m_delete.PressedTextColor = System.Drawing.SystemColors.ActiveCaptionText;
+      this.m_delete.RoundedCornersMask = ((byte)(15));
+      this.m_delete.Size = new System.Drawing.Size(234, 27);
+      this.m_delete.TabIndex = 3;
+      this.m_delete.Text = "vButton1";
+      this.m_delete.UseVisualStyleBackColor = false;
+      this.m_delete.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
       // ChartPanelSelection
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(603, 215);
+      this.Controls.Add(this.m_delete);
       this.Controls.Add(this.m_save);
       this.Controls.Add(this.m_list);
       this.Controls.Add(this.m_next);
@@ -112,5 +128,6 @@
     private VIBlend.WinForms.Controls.vTextBox m_text;
     private VIBlend.WinForms.Controls.vButton m_next;
     private VIBlend.WinForms.Controls.vButton m_save;
+    private VIBlend.WinForms.Controls.vButton m_delete;
   }
 }
