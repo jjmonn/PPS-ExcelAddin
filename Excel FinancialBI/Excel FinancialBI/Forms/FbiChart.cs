@@ -83,7 +83,7 @@ namespace FBI.Forms
       l_chartArea.AxisX.LabelStyle.Angle = -45;
       l_chartArea.AxisY.LabelAutoFitMaxFontSize = 10;
       l_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
-      l_chartArea.AxisX.IsMarginVisible = true;
+      l_chartArea.AxisX.IsMarginVisible = false;
       l_chartArea.AxisY.IsMarginVisible = true;
       return (l_chartArea);
     }

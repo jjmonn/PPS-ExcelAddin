@@ -33,6 +33,7 @@ namespace FBI.MVC.View
       m_text.Text = "";
       m_save.Text = Local.GetValue("general.save");
       m_next.Text = Local.GetValue("general.next");
+      m_delete.Text = Local.GetValue("general.delete");
     }
 
     public void SetController(IController p_controller)
@@ -50,11 +51,13 @@ namespace FBI.MVC.View
     {
       m_next.Click += OnNextClick;
       m_save.Click += OnSaveClick;
+      m_delete.Click += OnDeleteClick;
       m_list.SelectedItemChanged += OnListChanged;
       this.FormClosed += OnClosed;
 
       ChartPanelModel.Instance.CreationEvent += OnCreatePanel;
       ChartPanelModel.Instance.UpdateEvent += OnUpdatePanel;
+      ChartPanelModel.Instance.DeleteEvent += OnDeletePanel;
       ChartPanelModel.Instance.ReadEvent += OnReadPanel;
     }
 
@@ -62,6 +65,7 @@ namespace FBI.MVC.View
     {
       ChartPanelModel.Instance.CreationEvent -= OnCreatePanel;
       ChartPanelModel.Instance.UpdateEvent -= OnUpdatePanel;
+      ChartPanelModel.Instance.DeleteEvent -= OnDeletePanel;
       ChartPanelModel.Instance.ReadEvent -= OnReadPanel;
     }
 
@@ -101,19 +105,42 @@ namespace FBI.MVC.View
       this.Close();
     }
 
-    private void OnCreatePanel(Network.ErrorMessage p_status, uint p_id)
+    private void OnDeleteClick(object sender, EventArgs e)
     {
-      if (p_status != Network.ErrorMessage.SUCCESS)
+      if (m_list.SelectedItem == null || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
+        return;
+
+      if (!m_controller.DPanel((UInt32)m_list.SelectedItem.Value))
       {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.create_panel") + " " + Network.Error.GetMessage(p_status));
+        MessageBox.Show("general.error.system");
       }
     }
 
-    private void OnUpdatePanel(Network.ErrorMessage p_status, uint p_id)
+    private void OnCreatePanel(Network.ErrorMessage p_status, UInt32 p_id)
     {
       if (p_status != Network.ErrorMessage.SUCCESS)
       {
-        MessageBox.Show(Local.GetValue("CUI_Charts.error.update_panel") + " " + Network.Error.GetMessage(p_status));
+        MessageBox.Show(Local.GetValue("general.error.system") + " " + Network.Error.GetMessage(p_status));
+      }
+    }
+
+    private void OnUpdatePanel(Network.ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_status != Network.ErrorMessage.SUCCESS)
+      {
+        MessageBox.Show(Local.GetValue("general.error.system") + " " + Network.Error.GetMessage(p_status));
+      }
+    }
+
+    private void OnDeletePanel(Network.ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_status != Network.ErrorMessage.SUCCESS)
+      {
+        MessageBox.Show(Local.GetValue("general.error.system") + " " + Network.Error.GetMessage(p_status));
+      }
+      else
+      {
+        this.DeleteListItem(p_id);
       }
     }
 
@@ -156,6 +183,16 @@ namespace FBI.MVC.View
           return (m_list.Items[i]);
       }
       return (null);
+    }
+
+    private void DeleteListItem(UInt32 p_panelId)
+    {
+      ListItem l_item;
+
+      if ((l_item = this.GetItem(p_panelId)) == null)
+        return;
+      l_item.Text = Local.GetValue("CUI_Charts.new_panel");
+      l_item.Value = ChartPanel.INVALID_ID;
     }
 
     private void UpdateListItem(ChartPanel p_panel)
