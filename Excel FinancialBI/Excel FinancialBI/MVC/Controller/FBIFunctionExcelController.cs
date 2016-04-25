@@ -104,21 +104,29 @@ namespace FBI.MVC.Controller
         l_function.AxisElems[AxisType.Adjustment] = GetValueList(p_adjustmentsFilters, Local.GetValue("ppsbi.adjustments_filter"));
         l_function.Filters = GetValueList(p_categoriesFilters, Local.GetValue("ppsbi.categories_filter"));
 
+        Version l_version = VersionModel.Instance.GetValue(l_function.VersionId);
+
+        if (l_version == null)
+          return ("general.error.system");
+        if (l_version.TimeConfiguration <= TimeConfig.MONTHS)
+          l_function.Period = l_function.Period.AddDays(DateTime.DaysInMonth(l_function.Period.Year, l_function.Period.Month) - l_function.Period.Day);
+        if (l_version.TimeConfiguration <= TimeConfig.YEARS)
+          l_function.Period = l_function.Period.AddMonths(12 - l_function.Period.Month);
         if (IsValidFunction(l_function) == false)
           return (Error);
         Int32 l_requestId;
+        m_results.Clear();
         if (Compute(l_function, out l_requestId) == false)
           return (Local.GetValue("ppsbi.error.unable_to_compute"));
 
         m_waitResult.WaitOne();
-
-        Version l_version = VersionModel.Instance.GetValue(l_function.VersionId);
+        m_waitResult.Reset();
 
         ResultKey l_key = new ResultKey(l_function.AccountId, "", "", l_version.TimeConfiguration,
           (int)l_function.Period.ToOADate(), l_version.Id, true);
 
         if (m_results[l_requestId] == null)
-          return (Error);
+          return (Error = Local.GetValue("general.error.system"));
         return (m_results[l_requestId].Values[l_key]);
       }
       catch

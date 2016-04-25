@@ -101,7 +101,7 @@ namespace FBI.MVC.Model
     private delegate void ReportProgress_Delegate(object sender, ProgressChangedEventArgs e);
     private void SnapshotBackgroundWorker_ReportProgress(object sender, ProgressChangedEventArgs e)
     {
-       if (m_progressBarView.InvokeRequired)
+      if (m_progressBarView.InvokeRequired)
       {
         ReportProgress_Delegate MyDelegate = new ReportProgress_Delegate(SnapshotBackgroundWorker_ReportProgress);
         m_progressBarView.Invoke(MyDelegate, new object[] { sender, e});
@@ -128,7 +128,6 @@ namespace FBI.MVC.Model
     public void Cancel()
     {
       m_snapshotBackgroundWorker.CancelAsync();
-
     }
 
     #endregion

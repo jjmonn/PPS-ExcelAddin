@@ -71,7 +71,9 @@ namespace FBI.MVC.Controller
       Version l_version = VersionModel.Instance.GetValue(LeftPaneController.GetVersions()[0]);
 
       l_config.BaseTimeConfig = l_version.TimeConfiguration;
-      l_request.Process = (Account.AccountProcess)Settings.Default.processId;
+      if (Addin.Process == Account.AccountProcess.FINANCIAL)
+       l_config.Periods = LeftPaneController.GetPeriods();
+      l_request.Process = (Account.AccountProcess)Addin.Process;
       l_request.StartPeriod = (l_request.Process == Account.AccountProcess.RH) ? 
         LeftPaneController.GetStartPeriod() : (int)l_version.StartPeriod;
       l_request.NbPeriods = (l_request.Process == Account.AccountProcess.RH) ? 
@@ -172,5 +174,6 @@ namespace FBI.MVC.Controller
     {
       VisualizationController = new CUIVisualizationController(this);
     }
+
   }
 }

@@ -200,6 +200,16 @@ namespace FBI.MVC.View
       m_controller.ResultController.HideVersionComparaison();
     }
 
+    private void OnDropOnExcelClick(object sender, EventArgs e)
+    {
+      m_controller.ResultController.DropOnExcel(false);
+    }
+
+    private void OnDropVisibleOnExcelClick(object sender, EventArgs e)
+    {
+      m_controller.ResultController.DropOnExcel(true);
+    }
+
     #endregion
   }
 }

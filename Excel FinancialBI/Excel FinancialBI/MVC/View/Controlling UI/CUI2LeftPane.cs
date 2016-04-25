@@ -82,8 +82,57 @@ namespace FBI.MVC.View
       InitCBListItem<Filter>(Local.GetValue("CUI.dimension.entity_cat"), AxisType.Entities);
       SelectionCB.SelectedItem = InitCBListItem<Version>(Local.GetValue("CUI.dimension.versions"));
       InitCBListItem<Currency>(Local.GetValue("CUI.dimension.currencies"));
-       
+
+      if (Addin.Process == Account.AccountProcess.FINANCIAL)
+        InitPeriodCB();
+
       SelectionCB.DropDownList = true;
+    }
+
+    void InitPeriodCB()
+    {
+      ListItem l_item = InitCBListItem<PeriodModel>(Local.GetValue("CUI.dimension.period"));
+      InitPeriodTV();
+    }
+
+    void InitPeriodTV()
+    {
+
+      FlatFBITreeView l_tv = new FlatFBITreeView(GetPeriods());
+
+      l_tv.LoadFunction = () => { l_tv.SetItems(GetPeriods()); };
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(PeriodModel));
+      BaseInitTV<PeriodModel>(l_key, l_tv, m_selectionTableLayout.Controls, false, false, 0, true, false);
+    }
+
+    SafeDictionary<Int32, string> GetPeriods()
+    {
+      DateTime l_periodBegin = m_controller.PeriodController.MinDate;
+      DateTime l_periodEnd = m_controller.PeriodController.MaxDate;
+      SafeDictionary<Int32, string> l_periodStringDic = new SafeDictionary<int, string>();
+
+      List<UInt32> l_versionList = m_controller.GetVersions();
+      TimeConfig l_selectedConfig = TimeConfig.MONTHS;
+
+      if (l_versionList == null)
+        return (l_periodStringDic);
+      foreach (UInt32 l_versionId in l_versionList)
+      {
+        Version l_version = VersionModel.Instance.GetValue(l_versionId);
+
+        if (l_version == null)
+          continue;
+        if ((UInt32)l_version.TimeConfiguration < (UInt32)l_selectedConfig)
+          l_selectedConfig = l_version.TimeConfiguration;
+      }
+
+      List<Int32> l_periodList = (l_selectedConfig == TimeConfig.MONTHS) ?
+        PeriodModel.GetMonthPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd) :
+        PeriodModel.GetYearsPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd);
+
+      foreach (Int32 l_period in l_periodList)
+        l_periodStringDic[l_period] = PeriodModel.GetFormatedDate(l_period, l_selectedConfig);
+      return (l_periodStringDic);
     }
 
     private void TreeViewInit()
@@ -119,7 +168,6 @@ namespace FBI.MVC.View
     }
 
     ListItem InitCBListItem<T>(string p_text, AxisType p_axis = (AxisType)0)
-      where T : class, NamedCRUDEntity
     {
       ListItem l_listItem = new ListItem();
       l_listItem.Text = p_text;

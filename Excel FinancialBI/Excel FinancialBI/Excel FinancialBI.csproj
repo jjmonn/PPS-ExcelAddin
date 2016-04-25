@@ -269,6 +269,9 @@
     <Compile Include="Forms\FbiUserBox.Designer.cs">
       <DependentUpon>FbiUserBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FlatFBITreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
     <Compile Include="MVC\Controller\AFBIFunctionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />

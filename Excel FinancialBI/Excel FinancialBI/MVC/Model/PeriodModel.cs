@@ -110,7 +110,7 @@ namespace FBI.MVC.Model
         case CRUD.TimeConfig.YEARS:
           return DateTime.FromOADate(p_period).ToString("yyyy");
         case CRUD.TimeConfig.MONTHS:
-          return DateTime.FromOADate(p_period).ToString("mm yyyy");
+          return DateTime.FromOADate(p_period).ToString("MMMM yyyy");
         case CRUD.TimeConfig.WEEK:
           return Utils.Local.GetValue("general.week") + " " + GetWeekNumberFromDateId(p_period) + ", " + DateTime.FromOADate(p_period).ToString("yyyy");
         case CRUD.TimeConfig.DAYS:
@@ -387,6 +387,29 @@ namespace FBI.MVC.Model
       }
       return l_periods;
 
+    }
+
+    static public List<Int32> GetMonthPeriodListFromPeriodsRange(System.DateTime p_startDate, System.DateTime p_endDate)
+    {
+      List<Int32> l_periods = new List<Int32>();
+      while (p_startDate < p_endDate)
+      {
+        l_periods.Add(PeriodModel.GetWeekIdFromPeriodId((Int32)p_startDate.ToOADate()));
+        p_startDate = p_startDate.AddMonths(1);
+      }
+      return l_periods;
+    }
+
+    static public List<Int32> GetYearsPeriodListFromPeriodsRange(System.DateTime p_startDate, System.DateTime p_endDate)
+    {
+      List<Int32> l_periods = new List<Int32>();
+      while (p_startDate < p_endDate)
+      {
+        l_periods.Add((Int32)p_startDate.ToOADate());
+        p_startDate = p_startDate.AddYears(1);
+      }
+      l_periods.Add((Int32)p_startDate.ToOADate());
+      return l_periods;
     }
 
     #endregion

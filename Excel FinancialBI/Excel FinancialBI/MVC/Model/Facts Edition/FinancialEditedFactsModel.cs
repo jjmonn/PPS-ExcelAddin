@@ -33,6 +33,7 @@ namespace FBI.MVC.Model
     {
       EditedFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
       OutputFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
+
       FactsModel.Instance.ReadEvent += OnFinancialInputDownloaded;
       SourcedComputeModel.Instance.ComputeCompleteEvent += OnFinancialOutputsComputed;
     }
@@ -219,43 +220,59 @@ namespace FBI.MVC.Model
       }
       l_sourcedComputeRequest.EntityList = l_entitiesList;
       SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest);
+      Task.Delay(8000).ContinueWith(t =>
+      {
+        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
+      });
     }
 
     private void OnFinancialOutputsComputed(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
     {
-      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
-        return;
-      if (p_status == ErrorMessage.SUCCESS)
+      try
       {
-        AddinModuleController.SetExcelInteractionState(false);
-
-        foreach (ComputeResult l_result in p_result.Values)
+        if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+          return;
+        if (p_status == ErrorMessage.SUCCESS)
         {
-          foreach (KeyValuePair<ResultKey, double> l_valuePair in l_result.Values)
-          {
-            DimensionKey l_key =
-              new DimensionKey(l_valuePair.Key.EntityId, l_valuePair.Key.AccountId, (UInt32)AxisType.Employee, l_valuePair.Key.Period);
-            EditedFinancialFact l_fact = OutputFacts[l_key];
+          AddinModuleController.SetExcelInteractionState(false);
 
-            if (l_fact == null)
-              continue;
-            l_fact.Value = l_valuePair.Value;
-            l_fact.EditedValue = l_valuePair.Value;
-            if ((Double.IsNaN(l_valuePair.Value)))
-              l_fact.Cell.Value2 = "-";
-            else if (Double.IsNegativeInfinity(l_valuePair.Value))
-              l_fact.Cell.Value2 = "-inf.";
-            else if (Double.IsPositiveInfinity(l_valuePair.Value))
-              l_fact.Cell.Value2 = "+inf.";
-            else
-              l_fact.Cell.Value = l_valuePair.Value;
-          }
+          Version l_version = VersionModel.Instance.GetValue(m_versionId);
+
+          if (l_version != null)
+            foreach (ComputeResult l_result in p_result.Values)
+            {
+              foreach (KeyValuePair<ResultKey, double> l_valuePair in l_result.Values) // value first set to correct value but reset to 0
+              {
+                if (l_valuePair.Key.PeriodType != l_version.TimeConfiguration)
+                  continue;
+                DimensionKey l_key =
+                  new DimensionKey(l_valuePair.Key.EntityId, l_valuePair.Key.AccountId, (UInt32)AxisType.Employee, l_valuePair.Key.Period);
+                EditedFinancialFact l_fact = OutputFacts[l_key];
+
+                if (l_fact == null)
+                  continue;
+                l_fact.Value = l_valuePair.Value;
+                l_fact.EditedValue = l_valuePair.Value;
+                if ((Double.IsNaN(l_valuePair.Value)))
+                  l_fact.Cell.Value2 = "-";
+                else if (Double.IsNegativeInfinity(l_valuePair.Value))
+                  l_fact.Cell.Value2 = "-inf.";
+                else if (Double.IsPositiveInfinity(l_valuePair.Value))
+                  l_fact.Cell.Value2 = "+inf.";
+                else
+                  l_fact.Cell.Value = l_valuePair.Value;
+              }
+            }
+          RaiseFactDownloaded(true);
         }
+        else
+          RaiseFactDownloaded(false);
         AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
-        RaiseFactDownloaded(true);
       }
-      else
-        RaiseFactDownloaded(false);
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("FinancialEditedFactsModel.OnFinancialOutputsComputed: " + e.Message);
+      }
     }
 
     public override void Refresh()
