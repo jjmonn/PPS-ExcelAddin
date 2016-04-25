@@ -194,6 +194,7 @@ namespace FBI.MVC.Controller
         {
           if (m_interactive == p_state)
             return;
+          AddinModule.CurrentInstance.ExcelApp.ScreenUpdating = p_state;
           if (p_state == false)
           {
             m_prevCalculationMode = AddinModule.CurrentInstance.ExcelApp.Calculation;

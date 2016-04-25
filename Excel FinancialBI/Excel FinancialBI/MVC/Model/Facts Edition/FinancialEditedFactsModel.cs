@@ -29,6 +29,7 @@ namespace FBI.MVC.Model
     bool m_displayDiff = true;
     bool m_needRefresh = false;
     public int m_nbRequest = 0;
+    public int m_nbCompute = 0;
     UInt32 m_computeId = 0;
 
     #region Initialize
@@ -220,6 +221,7 @@ namespace FBI.MVC.Model
       }
       l_sourcedComputeRequest.EntityList = l_entitiesList;
       m_nbRequest++;
+      m_nbCompute++;
       AddinModuleController.SetExcelInteractionState(false);
       if (SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest) == false)
         OnComputeFailed();
@@ -228,7 +230,7 @@ namespace FBI.MVC.Model
         UInt32 l_computeId = ++m_computeId;
         Task.Delay(5000).ContinueWith(t =>
         {
-          if (l_computeId == m_computeId && m_nbRequest > 0)
+          if (l_computeId == m_computeId && m_nbCompute > 0)
             OnComputeFailed();
         });
       }
@@ -237,7 +239,8 @@ namespace FBI.MVC.Model
     void OnComputeFailed()
     {
       m_nbRequest--;
-      AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
+      m_nbCompute--;
+      AddinModuleController.SetExcelInteractionState(m_nbRequest <= 0);
       if (ComputeFailed != null)
         ComputeFailed();
     }
@@ -247,6 +250,7 @@ namespace FBI.MVC.Model
       try
       {
         m_nbRequest--;
+        m_nbCompute--;
         if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
           return;
         if (p_status == ErrorMessage.SUCCESS)
@@ -282,7 +286,7 @@ namespace FBI.MVC.Model
         }
         else
           RaiseFactDownloaded(false);
-        AddinModuleController.SetExcelInteractionState(m_nbRequest == 0);
+        AddinModuleController.SetExcelInteractionState(m_nbRequest <= 0);
       }
       catch (Exception e)
       {

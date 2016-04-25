@@ -75,7 +75,7 @@ namespace FBI.MVC.View
       else
         MsgBox.Show(Local.GetValue("upload.error.commit_failed") + ": " + Error.GetMessage(p_status));
       m_controller.EditedFactModel.m_nbRequest--;
-      AddinModuleController.SetExcelInteractionState(m_controller.EditedFactModel.m_nbRequest == 0);
+      AddinModuleController.SetExcelInteractionState(m_controller.EditedFactModel.m_nbRequest <= 0);
     }
 
     protected override void OnFactsDownloaded(bool p_success)
@@ -87,7 +87,7 @@ namespace FBI.MVC.View
           m_rangeHighlighter.FillCellColor(l_fact.Cell, EditedFactStatus.OutputEqual);
       base.OnFactsDownloaded(p_success);
       m_controller.EditedFactModel.m_nbRequest--;
-      AddinModuleController.SetExcelInteractionState(m_controller.EditedFactModel.m_nbRequest == 0);
+      AddinModuleController.SetExcelInteractionState(m_controller.EditedFactModel.m_nbRequest <= 0);
     }
 
     #endregion
