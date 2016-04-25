@@ -16,7 +16,7 @@ namespace FBI.MVC.Controller
 
   public class FBIFunctionExcelController : AFBIFunctionController
   {
-    static System.Threading.AutoResetEvent m_waitResult;
+    static System.Threading.ManualResetEvent m_waitResult;
     public override IView View { get { return (null); } }
     SafeDictionary<Int32, ComputeResult> m_results;
     static string m_lastParameter ="";
@@ -25,7 +25,7 @@ namespace FBI.MVC.Controller
     public FBIFunctionExcelController()
     {
       m_results = new SafeDictionary<int, ComputeResult>();
-      m_waitResult = new System.Threading.AutoResetEvent(false);
+      m_waitResult = new System.Threading.ManualResetEvent(false);
       LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
     }
 
@@ -37,7 +37,6 @@ namespace FBI.MVC.Controller
     public void Refresh()
     {
       ResetCache();
-      m_waitResult.Reset();
       Worksheet l_worksheet = AddinModule.CurrentInstance.ExcelApp.ActiveSheet as Worksheet;
 
       if (l_worksheet != null)
@@ -197,12 +196,14 @@ namespace FBI.MVC.Controller
       else
       {
         List<Int32> l_requestIdList = new List<int>();
+        m_waitResult = new System.Threading.ManualResetEvent(false);
         bool l_success = LegacyComputeModel.Instance.Compute(l_request, l_requestIdList);
 
         if (l_success == false)
           return (false);
         p_requestId = l_requestIdList.FirstOrDefault();
-        m_waitResult.WaitOne();
+        if (m_waitResult.WaitOne(2000) == false)
+          return (false);
       }
       return (true);
     }
