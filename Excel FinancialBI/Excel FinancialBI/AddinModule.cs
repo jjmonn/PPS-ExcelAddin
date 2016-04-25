@@ -302,7 +302,7 @@ namespace FBI
 
     private void m_refreshRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+      FBIFunctionController.Refresh();
     }
 
     private void m_resfreshSelectionRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)

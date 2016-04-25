@@ -16,16 +16,36 @@ namespace FBI.MVC.Controller
 
   public class FBIFunctionExcelController : AFBIFunctionController
   {
-    static System.Threading.EventWaitHandle m_waitResult;
+    static System.Threading.AutoResetEvent m_waitResult;
     public override IView View { get { return (null); } }
     SafeDictionary<Int32, ComputeResult> m_results;
     static string m_lastParameter ="";
+    static List<Tuple<LegacyComputeRequest, ComputeResult>> m_computeCache = new List<Tuple<LegacyComputeRequest, ComputeResult>>();
 
     public FBIFunctionExcelController()
     {
       m_results = new SafeDictionary<int, ComputeResult>();
       m_waitResult = new System.Threading.AutoResetEvent(false);
       LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
+    }
+
+    void ResetCache()
+    {
+      m_computeCache.Clear();
+    }
+
+    public void Refresh()
+    {
+      ResetCache();
+      m_waitResult.Reset();
+      Worksheet l_worksheet = AddinModule.CurrentInstance.ExcelApp.ActiveSheet as Worksheet;
+
+      if (l_worksheet != null)
+      {
+        Range l_range = l_worksheet.Range[l_worksheet.Cells[1, 1], WorksheetWriter.GetRealLastCell(l_worksheet)];
+        foreach (Range l_cell in l_range)
+          l_cell.Formula = l_cell.Formula;
+      }
     }
 
     static dynamic GetValue(object p_param, string p_name)
@@ -119,9 +139,6 @@ namespace FBI.MVC.Controller
         if (Compute(l_function, out l_requestId) == false)
           return (Local.GetValue("ppsbi.error.unable_to_compute"));
 
-        m_waitResult.WaitOne();
-        m_waitResult.Reset();
-
         ResultKey l_key = new ResultKey(l_function.AccountId, "", "", l_version.TimeConfiguration,
           (int)l_function.Period.ToOADate(), l_version.Id, true);
 
@@ -133,7 +150,6 @@ namespace FBI.MVC.Controller
       {
         return (m_lastParameter + " " + Local.GetValue("ppsbi.error.invalid_parameter"));
       }
-
     }
 
     bool Compute(FBIFunction p_function, out Int32 p_requestId)
@@ -170,12 +186,24 @@ namespace FBI.MVC.Controller
       l_request.GlobalFactVersionId = l_version.GlobalFactVersionId;
       l_request.RateVersionId = l_version.RateVersionId;
 
-      List<Int32> l_requestIdList = new List<int>();
-      bool l_success = LegacyComputeModel.Instance.Compute(l_request, l_requestIdList);
+      ComputeResult l_result = FindInCache(l_request);
+      if (l_result != null)
+      {
+        SafeDictionary<UInt32, ComputeResult> l_dic = new SafeDictionary<UInt32, ComputeResult>();
+        l_dic[(UInt32)l_result.RequestId] = l_result;
+        p_requestId = l_result.RequestId;
+        OnComputeResult(ErrorMessage.SUCCESS, l_request, l_dic);
+      }
+      else
+      {
+        List<Int32> l_requestIdList = new List<int>();
+        bool l_success = LegacyComputeModel.Instance.Compute(l_request, l_requestIdList);
 
-      if (l_success == false)
-        return (false);
-      p_requestId = l_requestIdList.FirstOrDefault();
+        if (l_success == false)
+          return (false);
+        p_requestId = l_requestIdList.FirstOrDefault();
+        m_waitResult.WaitOne();
+      }
       return (true);
     }
 
@@ -187,8 +215,32 @@ namespace FBI.MVC.Controller
         return;
       }
       foreach (ComputeResult l_result in p_result.Values)
+      {
+        m_computeCache.Add(new Tuple<LegacyComputeRequest, ComputeResult>(p_request, l_result));
         m_results[l_result.RequestId] = l_result;
+      }
       m_waitResult.Set();
+    }
+
+    ComputeResult FindInCache(LegacyComputeRequest p_request)
+    {
+      foreach (Tuple<LegacyComputeRequest, ComputeResult> l_pair in m_computeCache)
+      {
+        LegacyComputeRequest l_request = l_pair.Item1;
+
+        if (l_request.EntityId == p_request.EntityId &&
+          l_request.CurrencyId == p_request.CurrencyId &&
+          l_request.RateVersionId == p_request.RateVersionId &&
+          l_request.GlobalFactVersionId == p_request.GlobalFactVersionId &&
+          !l_request.AccountList.Except(p_request.AccountList).Any() && l_request.AccountList.Count == p_request.AccountList.Count &&
+          l_request.AxisHierarchy == p_request.AxisHierarchy &&
+          !l_request.FilterList.Except(p_request.FilterList).Any() && l_request.FilterList.Count == p_request.FilterList.Count &&
+          !l_request.AxisElemList.Except(p_request.AxisElemList).Any() && l_request.AxisElemList.Count == p_request.AxisElemList.Count &&
+          !l_request.SortList.Except(p_request.SortList).Any() && l_request.SortList.Count == p_request.SortList.Count &&
+          !l_request.Versions.Except(p_request.Versions).Any() && l_request.Versions.Count == p_request.Versions.Count)
+          return (l_pair.Item2);
+      }
+      return (null);
     }
   }
 }
