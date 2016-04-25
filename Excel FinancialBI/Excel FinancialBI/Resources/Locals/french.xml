@@ -23,6 +23,7 @@
       <string name="month">Mois</string>
       <string name="day">Jours</string>
       <string name="year">Années</string>
+      <string name="period">Période</string>
     </category>
 
     <category name="error">
@@ -285,6 +286,7 @@
     <!--messages-->
     <string name="msg_folder_name">Entrez le nom du nouveau dossier</string>
     <string name="msg_new_name">Entrez le nouveau nom</string>
+    <string name="warning_delete">Si vous supprimez cette version toutes les données associées à celle-ci seront suppriméees. Cette action est irréversible. Entrez votre mot de passe pour confirmer.</string>
 
     <category name="error">
       <string name="rates_version_not_selected">Veuillez sélectioner une version des taux de change.</string>
@@ -340,11 +342,6 @@
     <string name="msg_snapshot_error">Le snapshot n'a pas réussi car les dimensions suivantes n'ont pas été identifiées sur la feuille de calcul: </string>
     <string name="msg_entity_not_computed1">Le serveur a renvoyé une erreur.</string>
     <string name="msg_report_error">Une erreur est survenue dans le calcul de ce rapport. Il est possible que vous n'ayez pas les droits pour accéder à l'entité sélectionnée.</string>
-    <string name="msg_accounts_orientation_unclear">L'organisation des comptes n'est pas claire. Merci de vérifier que les comptes sont disposés en lignes ou en colones.</string>
-    <string name="msg_entities_orientation_unclear">L'organisation des entités n'est pas claire. Merci de vérifier que les entités sont disposés en lignes ou en colones.</string>
-    <string name="msg_periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
-    <string name="msg_products_orientation_unclear">L'organisation des produits n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
-    <string name="msg_employees_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
     <string name="msg_entity_not_found">Aucune BU n'a été identifiée sur la feuille.</string>
     <string name="msg_error_upload">Une erreur est survenue dans Excel et le rapport ne peut pas être affiché.</string>
     <string name="msg_invalid_value_for_client">Cette valeur n'est pas valide pour un nom de client: </string>
@@ -352,7 +349,13 @@
     <string name="msg_no_account_selected">Aucun compte n'a été sélectioné.</string>
 	  <string name="msg_uploading">Importation ...</string>
     <category name="error">
+      <string name="dimension_identification">Impossible d'identifier toutes les dimensions nécéssaires.</string>
       <string name="commit_failed">Impossible d'enregistrer la feuille</string>
+      <string name="accounts_orientation_unclear">L'organisation des comptes n'est pas claire. Merci de vérifier que les comptes sont disposés en lignes ou en colones.</string>
+      <string name="entities_orientation_unclear">L'organisation des entités n'est pas claire. Merci de vérifier que les entités sont disposés en lignes ou en colones.</string>
+      <string name="periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
+      <string name="employees_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
+
     </category>
   </category>
 

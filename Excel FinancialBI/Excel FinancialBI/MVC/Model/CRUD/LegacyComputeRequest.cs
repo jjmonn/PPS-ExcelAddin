@@ -56,7 +56,8 @@ namespace FBI.MVC.Model.CRUD
       {
         p_packet.WriteInt32((Int32)l_sort.Item2);
         p_packet.WriteBool(l_sort.Item1);
-        p_packet.WriteUint32(l_sort.Item3);
+        if (!l_sort.Item1)
+          p_packet.WriteUint32(l_sort.Item3);
       }
       if (l_entityDecomposition)
         SortList.Add(new Tuple<bool, AxisType, UInt32>(true, AxisType.Entities, 0));

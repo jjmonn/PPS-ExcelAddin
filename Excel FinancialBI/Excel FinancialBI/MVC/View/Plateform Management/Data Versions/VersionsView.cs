@@ -503,6 +503,10 @@ namespace FBI.MVC.View
 
     private void DeleteVersion(UInt32 p_versionId)
     {
+      string l_password = PasswordBox.Open(Local.GetValue("versions.warning_delete"));
+
+      if (l_password == PasswordBox.Canceled || Addin.Password != l_password)
+        return;
       if (m_controller.Delete(p_versionId) == false)
         Forms.MsgBox.Show(m_controller.Error);
     }

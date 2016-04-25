@@ -336,12 +336,14 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem";
       this.DropOnExcelToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
       this.DropOnExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]";
+      this.DropOnExcelToolStripMenuItem.Click += new System.EventHandler(this.OnDropOnExcelClick);
       // 
       // DropOnlyTheVisibleItemsOnExcelToolStripMenuItem
       // 
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Name = "DropOnlyTheVisibleItemsOnExcelToolStripMenuItem";
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = "Drop only the visible items on Excel";
+      this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Click += new System.EventHandler(this.OnDropVisibleOnExcelClick);
       // 
       // BusinessControlToolStripMenuItem
       // 

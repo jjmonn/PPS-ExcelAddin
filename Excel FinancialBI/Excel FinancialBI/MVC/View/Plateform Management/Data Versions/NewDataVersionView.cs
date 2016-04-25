@@ -51,6 +51,7 @@ namespace FBI.MVC.View
       this.m_startingPeriodDatePicker.Value = DateTime.Now;
 
       MultilangueSetup();
+      SuscribeEvents();
     }
 
     void SuscribeEvents()

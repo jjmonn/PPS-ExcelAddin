@@ -61,6 +61,8 @@ namespace FBI.MVC.Controller
     public bool LaunchFinancialSnapshot(bool p_displayDiff, bool p_updateCells, UInt32 p_versionId)
     {
         m_view.InitFinancialSubmissionRibon();
+        if (m_factsEditionController != null)
+          m_factsEditionController.Close();
         FinancialFactEditionController l_editionController = new FinancialFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet);
         m_factsEditionController = l_editionController;
         bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayDiff, SubmissionClientId, 
@@ -91,6 +93,8 @@ namespace FBI.MVC.Controller
 
     public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId, bool p_displayInitialDifferences, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
     {
+      if (m_factsEditionController != null)
+        m_factsEditionController.Close();
       RHFactEditionController l_editionController = new RHFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
       m_factsEditionController = l_editionController;
       bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences, 0, 0, 0);

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using VIBlend.WinForms.DataGridView;
 using System.Threading;
 using Microsoft.VisualBasic;
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI.MVC.View
 {
@@ -27,10 +28,20 @@ namespace FBI.MVC.View
     bool m_cellModif = false;
     RightManager m_rightMgr = new RightManager();
     HierarchyItem m_hoveredRow = null;
+    static SafeDictionary<AxisType, string> m_axisNames = null;
 
     public AxisBaseView()
     {
       InitializeComponent();
+      if (m_axisNames == null)
+      {
+        m_axisNames = new SafeDictionary<AxisType, string>();
+        m_axisNames[AxisType.Adjustment] = Local.GetValue("general.adjustments");
+        m_axisNames[AxisType.Client] = Local.GetValue("general.clients");
+        m_axisNames[AxisType.Employee] = Local.GetValue("general.employees");
+        m_axisNames[AxisType.Entities] = Local.GetValue("general.entities");
+        m_axisNames[AxisType.Product] = Local.GetValue("general.products");
+      }
     }
 
     public virtual void SetController(IController p_controller)
@@ -222,7 +233,7 @@ namespace FBI.MVC.View
     {
       if (p_args.Button == MouseButtons.Right)
       {
-        Point l_location = PointToScreen(p_args.Location);
+        System.Drawing.Point l_location = PointToScreen(p_args.Location);
 
         l_location.Y += 30;
         m_hoveredRow = m_dgv.HitTestRow(p_args.Location);
@@ -357,6 +368,8 @@ namespace FBI.MVC.View
 
     void OnClickRename(object sender, EventArgs e)
     {
+      if (m_hoveredRow == null)
+        return;
       UInt32 l_axisElemId = (UInt32)m_hoveredRow.ItemValue;
       AxisElem l_axisElem = AxisElemModel.Instance.GetValue(l_axisElemId);
 
@@ -458,5 +471,15 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    private void OnDropToExcelClick(object sender, EventArgs e)
+    {
+      Range l_destination = WorksheetWriter.CreateReceptionWS(m_axisNames[m_controller.AxisType], new string[]{ "" }, new string[]{ "" });
+      int i = 0;
+      bool l_expanded = false;
+
+      if (l_destination != null)
+        WorksheetWriter.CopyDGVToExcelGeneric(m_dgv, l_destination, "", ref i, ref l_expanded);
+    }
   }
 }

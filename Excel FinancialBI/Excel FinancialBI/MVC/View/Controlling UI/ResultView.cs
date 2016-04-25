@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using VIBlend.WinForms.DataGridView;
 using VIBlend.WinForms.Controls;
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI.MVC.View
 {
@@ -215,6 +216,8 @@ namespace FBI.MVC.View
             DGV l_dgv = l_tab.Controls[0] as DGV;
             l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
             l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+            l_dgv.Refresh();
+            l_tab.Refresh();
           }
         }
       }
@@ -290,6 +293,8 @@ namespace FBI.MVC.View
 
       foreach (int l_date in l_periodList)
       {
+        if (m_computeConfig.Periods != null && m_computeConfig.Periods.Contains(l_date) == false)
+          continue;
         if (l_includeWeekEnds == false && PeriodModel.IsWeekEnd(l_date))
           continue;
         l_formatedDate = PeriodModel.GetFormatedDate(l_date, l_conf.PeriodType);
@@ -495,5 +500,31 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    internal void DropOnExcel(bool p_copyOnlyExpanded)
+    {
+      if (m_controller.Config != null)
+      {
+        string l_entityName = AxisElemModel.Instance.GetValueName(m_controller.Config.Request.EntityId);
+        string l_versionName = VersionModel.Instance.GetValueName(m_controller.Config.Request.Versions[0]);
+        Currency l_currency = CurrencyModel.Instance.GetValue(m_controller.Config.Request.CurrencyId);
+
+        if (l_currency == null)
+          return;
+        Range destination = WorksheetWriter.CreateReceptionWS(l_entityName,
+        new string[] { Local.GetValue("CUI.entity"), Local.GetValue("CUI.version"), Local.GetValue("CUI.currency") },
+        new string[] { l_entityName, l_versionName, l_currency.Name });
+
+        Int32 i = 1;
+        foreach (vTabPage l_tab in m_tabCtrl.TabPages)
+        {
+          vDataGridView DGV = l_tab.Controls[0] as vDataGridView;
+          WorksheetWriter.CopyDGVToExcelGeneric(DGV, destination, l_currency.Symbol, ref i, ref p_copyOnlyExpanded);
+        }
+        destination.Worksheet.Columns.AutoFit();
+        destination.Worksheet.Outline.ShowLevels(RowLevels: 1);
+        AddinModule.CurrentInstance.ExcelApp.ActiveWindow.Activate();
+      }
+    }
   }
 }

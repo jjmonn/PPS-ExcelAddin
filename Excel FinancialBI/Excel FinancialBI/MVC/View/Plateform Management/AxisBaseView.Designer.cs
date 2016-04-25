@@ -92,13 +92,13 @@ namespace FBI.MVC.View
             this.m_expandAllMenu,
             this.m_collapseAllMenu});
       this.m_axisRightClickMenu.Name = "ContextMenuStripTGV";
-      this.m_axisRightClickMenu.Size = new System.Drawing.Size(218, 230);
+      this.m_axisRightClickMenu.Size = new System.Drawing.Size(186, 230);
       // 
       // m_createAxisElemMenu
       // 
       this.m_createAxisElemMenu.Image = global::FBI.Properties.Resources.element_branch2_add;
       this.m_createAxisElemMenu.Name = "m_createAxisElemMenu";
-      this.m_createAxisElemMenu.Size = new System.Drawing.Size(217, 26);
+      this.m_createAxisElemMenu.Size = new System.Drawing.Size(185, 26);
       this.m_createAxisElemMenu.Text = "Create";
       this.m_createAxisElemMenu.Click += new System.EventHandler(this.OnClickCreate);
       // 
@@ -106,61 +106,61 @@ namespace FBI.MVC.View
       // 
       this.m_deleteAxisElemMenu.Image = global::FBI.Properties.Resources.element_branch2_delete;
       this.m_deleteAxisElemMenu.Name = "m_deleteAxisElemMenu";
-      this.m_deleteAxisElemMenu.Size = new System.Drawing.Size(217, 26);
+      this.m_deleteAxisElemMenu.Size = new System.Drawing.Size(185, 26);
       this.m_deleteAxisElemMenu.Text = "Delete";
       this.m_deleteAxisElemMenu.Click += new System.EventHandler(this.OnClickDelete);
       // 
       // ToolStripSeparator1
       // 
       this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-      this.ToolStripSeparator1.Size = new System.Drawing.Size(214, 6);
+      this.ToolStripSeparator1.Size = new System.Drawing.Size(182, 6);
       // 
       // m_renameAxisElemMenu
       // 
       this.m_renameAxisElemMenu.Name = "m_renameAxisElemMenu";
-      this.m_renameAxisElemMenu.Size = new System.Drawing.Size(217, 26);
+      this.m_renameAxisElemMenu.Size = new System.Drawing.Size(185, 26);
       this.m_renameAxisElemMenu.Text = "Rename";
       // 
       // ToolStripSeparator5
       // 
       this.ToolStripSeparator5.Name = "ToolStripSeparator5";
-      this.ToolStripSeparator5.Size = new System.Drawing.Size(214, 6);
+      this.ToolStripSeparator5.Size = new System.Drawing.Size(182, 6);
       // 
       // m_copyDownMenu
       // 
       this.m_copyDownMenu.Image = global::FBI.Properties.Resources.Download;
       this.m_copyDownMenu.Name = "m_copyDownMenu";
-      this.m_copyDownMenu.Size = new System.Drawing.Size(217, 26);
+      this.m_copyDownMenu.Size = new System.Drawing.Size(185, 26);
       this.m_copyDownMenu.Text = "Copy down";
       // 
       // ToolStripSeparator4
       // 
       this.ToolStripSeparator4.Name = "ToolStripSeparator4";
-      this.ToolStripSeparator4.Size = new System.Drawing.Size(214, 6);
+      this.ToolStripSeparator4.Size = new System.Drawing.Size(182, 6);
       // 
       // m_dropToExcelMenu
       // 
       this.m_dropToExcelMenu.Image = global::FBI.Properties.Resources.excel_blue2;
       this.m_dropToExcelMenu.Name = "m_dropToExcelMenu";
-      this.m_dropToExcelMenu.Size = new System.Drawing.Size(217, 26);
+      this.m_dropToExcelMenu.Size = new System.Drawing.Size(185, 26);
       this.m_dropToExcelMenu.Text = "Drop on excel";
       // 
       // m_autoResizeMenu
       // 
       this.m_autoResizeMenu.Name = "m_autoResizeMenu";
-      this.m_autoResizeMenu.Size = new System.Drawing.Size(217, 26);
+      this.m_autoResizeMenu.Size = new System.Drawing.Size(185, 26);
       this.m_autoResizeMenu.Text = "Auto resize columns";
       // 
       // m_expandAllMenu
       // 
       this.m_expandAllMenu.Name = "m_expandAllMenu";
-      this.m_expandAllMenu.Size = new System.Drawing.Size(217, 26);
+      this.m_expandAllMenu.Size = new System.Drawing.Size(185, 26);
       this.m_expandAllMenu.Text = "Expand all";
       // 
       // m_collapseAllMenu
       // 
       this.m_collapseAllMenu.Name = "m_collapseAllMenu";
-      this.m_collapseAllMenu.Size = new System.Drawing.Size(217, 26);
+      this.m_collapseAllMenu.Size = new System.Drawing.Size(185, 26);
       this.m_collapseAllMenu.Text = "Collapse all";
       // 
       // TableLayoutPanel1
@@ -173,9 +173,9 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
       this.TableLayoutPanel1.Name = "TableLayoutPanel1";
       this.TableLayoutPanel1.RowCount = 2;
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.TableLayoutPanel1.Size = new System.Drawing.Size(688, 517);
+      this.TableLayoutPanel1.Size = new System.Drawing.Size(516, 420);
       this.TableLayoutPanel1.TabIndex = 7;
       // 
       // MenuStrip1
@@ -186,8 +186,7 @@ namespace FBI.MVC.View
             this.ExcelToolStripMenuItem});
       this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
       this.MenuStrip1.Name = "MenuStrip1";
-      this.MenuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-      this.MenuStrip1.Size = new System.Drawing.Size(688, 28);
+      this.MenuStrip1.Size = new System.Drawing.Size(516, 24);
       this.MenuStrip1.TabIndex = 7;
       this.MenuStrip1.Text = "MenuStrip1";
       // 
@@ -199,27 +198,27 @@ namespace FBI.MVC.View
             this.ToolStripSeparator2});
       this.m_axisEditionButton.Image = global::FBI.Properties.Resources.element_branch23;
       this.m_axisEditionButton.Name = "m_axisEditionButton";
-      this.m_axisEditionButton.Size = new System.Drawing.Size(89, 24);
+      this.m_axisEditionButton.Size = new System.Drawing.Size(77, 20);
       this.m_axisEditionButton.Text = "Entities";
       // 
       // m_createNewAxisElemMenuTop
       // 
       this.m_createNewAxisElemMenuTop.Image = global::FBI.Properties.Resources.plus;
       this.m_createNewAxisElemMenuTop.Name = "m_createNewAxisElemMenuTop";
-      this.m_createNewAxisElemMenuTop.Size = new System.Drawing.Size(128, 26);
+      this.m_createNewAxisElemMenuTop.Size = new System.Drawing.Size(108, 22);
       this.m_createNewAxisElemMenuTop.Text = "Create";
       // 
       // m_deleteAxisElemMenuTop
       // 
       this.m_deleteAxisElemMenuTop.Image = global::FBI.Properties.Resources.imageres_89;
       this.m_deleteAxisElemMenuTop.Name = "m_deleteAxisElemMenuTop";
-      this.m_deleteAxisElemMenuTop.Size = new System.Drawing.Size(128, 26);
+      this.m_deleteAxisElemMenuTop.Size = new System.Drawing.Size(108, 22);
       this.m_deleteAxisElemMenuTop.Text = "Delete";
       // 
       // ToolStripSeparator2
       // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(125, 6);
+      this.ToolStripSeparator2.Size = new System.Drawing.Size(105, 6);
       // 
       // ExcelToolStripMenuItem
       // 
@@ -227,24 +226,24 @@ namespace FBI.MVC.View
             this.m_dropToExcelMenuTop});
       this.ExcelToolStripMenuItem.Image = global::FBI.Properties.Resources.Excel_dark_24_24;
       this.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem";
-      this.ExcelToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
+      this.ExcelToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
       this.ExcelToolStripMenuItem.Text = "Excel";
       // 
       // m_dropToExcelMenuTop
       // 
       this.m_dropToExcelMenuTop.Image = global::FBI.Properties.Resources.excel_blue2;
       this.m_dropToExcelMenuTop.Name = "m_dropToExcelMenuTop";
-      this.m_dropToExcelMenuTop.Size = new System.Drawing.Size(177, 26);
+      this.m_dropToExcelMenuTop.Size = new System.Drawing.Size(156, 26);
       this.m_dropToExcelMenuTop.Text = "Drop on excel";
+      this.m_dropToExcelMenuTop.Click += new System.EventHandler(this.OnDropToExcelClick);
       // 
       // AxisBaseView
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.Controls.Add(this.TableLayoutPanel1);
-      this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.Name = "AxisBaseView";
-      this.Size = new System.Drawing.Size(688, 517);
+      this.Size = new System.Drawing.Size(516, 420);
       this.m_axisRightClickMenu.ResumeLayout(false);
       this.TableLayoutPanel1.ResumeLayout(false);
       this.TableLayoutPanel1.PerformLayout();

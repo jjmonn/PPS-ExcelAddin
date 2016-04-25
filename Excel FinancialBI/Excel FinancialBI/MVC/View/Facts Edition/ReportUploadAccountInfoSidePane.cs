@@ -22,6 +22,7 @@ namespace FBI.MVC.View
       InitializeComponent();
       MultilangueSetup();
       m_shown = false;
+      m_bnf.AddRule("fbi_to_human_grammar", m_grammar.ToHuman);
     }
 
     private void MultilangueSetup()

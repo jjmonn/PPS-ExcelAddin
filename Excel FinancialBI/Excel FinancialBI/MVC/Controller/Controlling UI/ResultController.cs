@@ -16,12 +16,13 @@ namespace FBI.MVC.Controller
     ResultView m_view;
     public string Error { get; set; }
     public IView View { get { return (m_view); } }
-    ComputeConfig m_config = null;
+    public ComputeConfig Config { get; set; }
     UInt32 m_displayedVersionCompare = 0;
     LogController m_logController;
 
     public ResultController(CUIController p_controller)
     {
+      Config = null;
       m_logController = new LogController();
       m_parentController = p_controller;
       m_view = new ResultView();
@@ -37,7 +38,7 @@ namespace FBI.MVC.Controller
     public void LoadDGV(ComputeConfig p_config)
     {
       m_displayedVersionCompare = 0;
-      m_config = p_config;
+      Config = p_config;
       m_view.PrepareDgv(p_config);
     }
 
@@ -48,13 +49,13 @@ namespace FBI.MVC.Controller
 
     public bool DisplayVersionComparaison()
     {
-      if (m_config == null || m_config.Request.Versions == null || m_config.Request.Versions.Count != 2)
+      if (Config == null || Config.Request.Versions == null || Config.Request.Versions.Count != 2)
       {
         Error = Local.GetValue("CUI.error.invalid_version");
         return (false);
       }
-      UInt32 versionDiff1 = ComputeResult.GetDiffId(m_config.Request.Versions[0], m_config.Request.Versions[1]);
-      UInt32 versionDiff2 = ComputeResult.GetDiffId(m_config.Request.Versions[1], m_config.Request.Versions[0]);
+      UInt32 versionDiff1 = ComputeResult.GetDiffId(Config.Request.Versions[0], Config.Request.Versions[1]);
+      UInt32 versionDiff2 = ComputeResult.GetDiffId(Config.Request.Versions[1], Config.Request.Versions[0]);
 
 
       if (m_displayedVersionCompare != versionDiff1)
@@ -78,8 +79,8 @@ namespace FBI.MVC.Controller
     {
       if (m_displayedVersionCompare == 0)
         return;
-      UInt32 versionDiff1 = ComputeResult.GetDiffId(m_config.Request.Versions[0], m_config.Request.Versions[1]);
-      UInt32 versionDiff2 = ComputeResult.GetDiffId(m_config.Request.Versions[1], m_config.Request.Versions[0]);
+      UInt32 versionDiff1 = ComputeResult.GetDiffId(Config.Request.Versions[0], Config.Request.Versions[1]);
+      UInt32 versionDiff2 = ComputeResult.GetDiffId(Config.Request.Versions[1], Config.Request.Versions[0]);
 
       m_view.SetVersionVisible(versionDiff1, false);
       m_view.SetVersionVisible(versionDiff2, false);
@@ -93,6 +94,11 @@ namespace FBI.MVC.Controller
         return (false);
       }
       return (true);
+    }
+
+    public void DropOnExcel(bool p_copyOnlyExpanded)
+    {
+      m_view.DropOnExcel(p_copyOnlyExpanded);
     }
   }
 }

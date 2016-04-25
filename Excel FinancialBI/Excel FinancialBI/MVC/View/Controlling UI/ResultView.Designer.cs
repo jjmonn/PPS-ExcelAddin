@@ -55,47 +55,47 @@
             this.ColumnsAutoSize,
             this.ColumnsAutoFitBT});
       this.m_dgvMenu.Name = "DGVsRCM";
-      this.m_dgvMenu.Size = new System.Drawing.Size(329, 200);
+      this.m_dgvMenu.Size = new System.Drawing.Size(279, 194);
       // 
       // ExpandAllRightClick
       // 
       this.ExpandAllRightClick.Name = "ExpandAllRightClick";
-      this.ExpandAllRightClick.Size = new System.Drawing.Size(328, 26);
+      this.ExpandAllRightClick.Size = new System.Drawing.Size(278, 26);
       this.ExpandAllRightClick.Text = "[CUI.expand_all]";
       // 
       // CollapseAllRightClick
       // 
       this.CollapseAllRightClick.Name = "CollapseAllRightClick";
-      this.CollapseAllRightClick.Size = new System.Drawing.Size(328, 26);
+      this.CollapseAllRightClick.Size = new System.Drawing.Size(278, 26);
       this.CollapseAllRightClick.Text = "[CUI.collapse_all]";
       // 
       // ToolStripSeparator2
       // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(325, 6);
+      this.ToolStripSeparator2.Size = new System.Drawing.Size(275, 6);
       // 
       // LogRightClick
       // 
       this.LogRightClick.Name = "LogRightClick";
-      this.LogRightClick.Size = new System.Drawing.Size(328, 26);
+      this.LogRightClick.Size = new System.Drawing.Size(278, 26);
       this.LogRightClick.Text = "[CUI.log]";
       // 
       // ToolStripSeparator4
       // 
       this.ToolStripSeparator4.Name = "ToolStripSeparator4";
-      this.ToolStripSeparator4.Size = new System.Drawing.Size(325, 6);
+      this.ToolStripSeparator4.Size = new System.Drawing.Size(275, 6);
       // 
       // DGVFormatsButton
       // 
       this.DGVFormatsButton.Image = ((System.Drawing.Image)(resources.GetObject("DGVFormatsButton.Image")));
       this.DGVFormatsButton.Name = "DGVFormatsButton";
-      this.DGVFormatsButton.Size = new System.Drawing.Size(328, 26);
+      this.DGVFormatsButton.Size = new System.Drawing.Size(278, 26);
       this.DGVFormatsButton.Text = "[CUI.display_options]";
       // 
       // ColumnsAutoSize
       // 
       this.ColumnsAutoSize.Name = "ColumnsAutoSize";
-      this.ColumnsAutoSize.Size = new System.Drawing.Size(328, 26);
+      this.ColumnsAutoSize.Size = new System.Drawing.Size(278, 26);
       this.ColumnsAutoSize.Text = "[CUI.adjust_columns_size]";
       // 
       // ColumnsAutoFitBT
@@ -104,14 +104,16 @@
       this.ColumnsAutoFitBT.CheckOnClick = true;
       this.ColumnsAutoFitBT.CheckState = System.Windows.Forms.CheckState.Checked;
       this.ColumnsAutoFitBT.Name = "ColumnsAutoFitBT";
-      this.ColumnsAutoFitBT.Size = new System.Drawing.Size(328, 26);
+      this.ColumnsAutoFitBT.Size = new System.Drawing.Size(278, 26);
       this.ColumnsAutoFitBT.Text = "[CUI.automatic_columns_adjustment]";
       // 
       // ResultView
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
       this.Name = "ResultView";
+      this.Size = new System.Drawing.Size(112, 122);
       this.m_dgvMenu.ResumeLayout(false);
       this.ResumeLayout(false);
 
