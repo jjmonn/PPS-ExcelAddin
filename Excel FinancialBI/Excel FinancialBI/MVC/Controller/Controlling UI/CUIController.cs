@@ -29,6 +29,8 @@ namespace FBI.MVC.Controller
     public IView View { get { return (m_view); } }
     public string Error { get; set; }
 
+    private List<UInt32> m_openedPanels = new List<UInt32>();
+
     #endregion
 
     #region Initialize
@@ -57,6 +59,19 @@ namespace FBI.MVC.Controller
     }
 
     #endregion
+
+    public bool AddPanel(UInt32 p_panelId)
+    {
+      if (m_openedPanels.Contains(p_panelId))
+        return (false);
+      m_openedPanels.Add(p_panelId);
+      return (true);
+    }
+
+    public void RemovePanel(UInt32 p_panelid)
+    {
+      m_openedPanels.Remove(p_panelid);
+    }
 
     public bool Compute()
     {

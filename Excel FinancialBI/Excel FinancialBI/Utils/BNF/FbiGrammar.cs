@@ -18,7 +18,7 @@ namespace FBI.Utils.BNF
     public static readonly string m_operators = "+-*/";
     public static readonly string m_serverOperators = "pm..";
     public static readonly string m_serverAccount = "acc";
-    public static readonly string m_serverStandardPeriod = "Tn";
+    public static readonly string m_serverStandardPeriod = "T";
 
     private static readonly string m_funcSeparators = "()";
     private static readonly string m_periodSeparators = "[]";
@@ -227,6 +227,7 @@ namespace FBI.Utils.BNF
         p_input.ReadWhitespaces();
         if (!p_input.ReadChar(m_periodId)) //Read 'n' -> [n3] OR [n+1]
           return (this.Error(p_input, m_functions.PERIOD));
+        this.Add("n");
         p_input.ReadWhitespaces();
         p_input.Save("period_op");
         if (p_input.ReadChar(m_operators[0]) || p_input.ReadChar(m_operators[1])) //If read a valid operator: '-' or '+' [n+1] OR [n-1]
@@ -271,10 +272,9 @@ namespace FBI.Utils.BNF
       if (p_input.ReadChar(m_identifierFilter) && p_input.Save("account_name") && p_input.ReadTo(m_identifierFilter) && (l_account = p_input.Stop("account_name")) != null && p_input.ReadChar(m_identifierFilter)) //Read "Chiffre d'affaire", and keeps Chiffre d'affaire stored inside a string.
       {
         this.Add(this.AccountToServerAccount(l_account));
-        this.Add(m_serverStandardPeriod); //Add the 'Tn' period identificator
+        this.Add(m_serverStandardPeriod); //Add the 'T' period identificator
         p_input.ReadWhitespaces();
-        this.IsPeriod(p_input); //If the identificator is followed by a time period ([n+1], etc), add it to the formula !
-        return (true);
+        return (this.IsPeriod(p_input)); //If the identificator is followed by a time period ([n+1], etc), add it to the formula !
       }
       return (this.Error(p_input, m_functions.IDENTIFICATOR));
     }
@@ -453,6 +453,10 @@ namespace FBI.Utils.BNF
         {
           this.Add(this.GetInputNumber(p_input) + "]");
         }
+      }
+      else
+      {
+        this.Add("[" + this.GetInputNumber(p_input) + "]");
       }
       return (null);
     }

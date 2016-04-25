@@ -34,6 +34,7 @@ namespace FBI.MVC.View
     private UInt32[] m_expectedChartSettings = { 0, 0, 0 };
     private UInt32[] m_expectedChartAccounts = { 0, 0, 0 };
     private ChartAccount m_lastChartAccountRcvd = null;
+    private ChartSettings m_lastChartSettingsRcvd = null;
 
     public CUIVisualization()
     {
@@ -79,10 +80,12 @@ namespace FBI.MVC.View
       m_splitVerticalBT.Click += OnSplitVerticalClick;
       m_chartEdit.Click += OnChartClick;
       m_refreshButton.Click += OnRefreshClick;
+      m_delete.Click += OnDeleteClick;
 
       ChartSettingsModel.Instance.CreationEvent += OnChartSettingsCreated;
       ChartSettingsModel.Instance.UpdateEvent += OnChartSettingsUpdated;
       ChartSettingsModel.Instance.DeleteEvent += OnChartSettingsDeleted;
+      ChartSettingsModel.Instance.ReadEvent += OnChartSettingsRead;
 
       ChartAccountModel.Instance.CreationEvent += OnChartAccountCreated;
       ChartAccountModel.Instance.UpdateEvent += OnChartAccountUpdated;
@@ -92,9 +95,11 @@ namespace FBI.MVC.View
 
     private void CloseView()
     {
+      m_controller.ClosePanel();
       ChartSettingsModel.Instance.CreationEvent -= OnChartSettingsCreated;
       ChartSettingsModel.Instance.UpdateEvent -= OnChartSettingsUpdated;
       ChartSettingsModel.Instance.DeleteEvent -= OnChartSettingsDeleted;
+      ChartSettingsModel.Instance.ReadEvent -= OnChartSettingsRead;
 
       ChartAccountModel.Instance.CreationEvent -= OnChartAccountCreated;
       ChartAccountModel.Instance.UpdateEvent -= OnChartAccountUpdated;
@@ -140,6 +145,21 @@ namespace FBI.MVC.View
       m_panels.Add(l_newSplit.Panel2);
     }
 
+    private void Merge(Control p_control)
+    {
+      if (p_control.Parent != null && p_control.GetType() == typeof(vSplitterPanel))
+      {
+        vSplitContainer l_split = (vSplitContainer)p_control.Parent;
+        Control l_otherPanel = (l_split.Panel1 == p_control ? l_split.Panel2 : l_split.Panel1);
+        Control l_container = l_split.Parent;
+
+        l_split.Controls.Remove(p_control);
+        foreach (Control l_control in l_otherPanel.Controls)
+          l_container.Controls.Add(l_control);
+        l_container.Controls.Remove(l_split);
+      }
+    }
+
     #endregion
 
     #region Events
@@ -171,36 +191,47 @@ namespace FBI.MVC.View
       m_controller.ShowSettingsView(l_chart.Settings);
     }
 
+    private void OnDeleteClick(object sender, EventArgs e)
+    {
+      FbiChart l_chart;
+      ToolStripMenuItem l_toolStrip = (ToolStripMenuItem)sender;
+      Control l_clickedControl = ((ContextMenuStrip)(((ToolStripMenuItem)sender).Owner)).SourceControl;
+
+      if ((l_chart = (FbiChart)this.GetObjectFromControl(l_clickedControl, typeof(FbiChart))) != null && l_chart.HasSettings)
+        m_controller.DChartSettings(l_chart.Settings.Id);
+      this.Merge(l_clickedControl);
+    }
+
     #region Model
 
     private void OnChartSettingsCreated(ErrorMessage p_status, UInt32 p_id)
     {
-      this.OnChartSettingsChanged(p_status, p_id, 0);
+      this.OnChartSettingsChanged(p_status, p_id, CUIVisualizationController.CREATE);
     }
 
     private void OnChartSettingsUpdated(ErrorMessage p_status, UInt32 p_id)
     {
-      this.OnChartSettingsChanged(p_status, p_id, 1);
+      this.OnChartSettingsChanged(p_status, p_id, CUIVisualizationController.UPDATE);
     }
 
     private void OnChartSettingsDeleted(ErrorMessage p_status, UInt32 p_id)
     {
-      this.OnChartSettingsChanged(p_status, p_id, 2);
+      this.OnChartSettingsChanged(p_status, p_id, CUIVisualizationController.DELETE);
     }
 
     private void OnChartAccountCreated(ErrorMessage p_status, UInt32 p_id)
     {
-      this.OnChartAccountChanged(p_status, p_id, 0);
+      this.OnChartAccountChanged(p_status, p_id, CUIVisualizationController.CREATE);
     }
 
     private void OnChartAccountUpdated(ErrorMessage p_status, UInt32 p_id)
     {
-      this.OnChartAccountChanged(p_status, p_id, 1);
+      this.OnChartAccountChanged(p_status, p_id, CUIVisualizationController.UPDATE);
     }
 
     private void OnChartAccountDeleted(ErrorMessage p_status, UInt32 p_id)
     {
-      this.OnChartAccountChanged(p_status, p_id, 2);
+      this.OnChartAccountChanged(p_status, p_id, CUIVisualizationController.DELETE);
     }
 
 
@@ -215,6 +246,21 @@ namespace FBI.MVC.View
       else
       {
         this.UpdateChartFromCSModel(m_expectedChartSettings, p_val, p_id, p_status);
+      }
+    }
+
+    delegate void OnChartSettingsRead_delegate(ErrorMessage p_status, ChartSettings p_settings);
+    private void OnChartSettingsRead(ErrorMessage p_status, ChartSettings p_settings)
+    {
+      if (InvokeRequired)
+      {
+        OnChartSettingsRead_delegate func = new OnChartSettingsRead_delegate(OnChartSettingsRead);
+        Invoke(func, p_status, p_settings);
+      }
+      else
+      {
+        if (p_settings.PanelId == m_controller.PanelId)
+          m_lastChartSettingsRcvd = p_settings;
       }
     }
 
@@ -242,7 +288,8 @@ namespace FBI.MVC.View
       }
       else
       {
-        m_lastChartAccountRcvd = p_account;
+        if (m_lastChartSettingsRcvd != null && p_account.ChartId == m_lastChartSettingsRcvd.Id)
+          m_lastChartAccountRcvd = p_account;
       }
     }
 
@@ -268,23 +315,38 @@ namespace FBI.MVC.View
 
     private void UpdateChartFromCSModel(UInt32[] p_expected, Int32 p_value, UInt32 p_id, ErrorMessage p_status)
     {
-      if (this.UpdateChartFromModel(p_expected, p_value, p_id, p_status))
+      if (m_lastChartSettingsRcvd == null || m_lastChartSettingsRcvd.Id != p_id)
+        return;
+      if (p_value == CUIVisualizationController.DELETE)
+        this.RemoveChart(p_id);
+      else if (this.UpdateChartFromModel(p_expected, p_value, p_id, p_status))
       {
         this.UpdateChart(m_lastClickedChart, ChartSettingsModel.Instance.GetValue(p_id));
-        ArrayUtils.Set<UInt32>(m_expectedChartSettings, 0);
-        ArrayUtils.Set<UInt32>(m_expectedChartAccounts, 0);
+        this.ResetExpectedElemsForUpdate();
       }
     }
 
     private void UpdateChartFromCAModel(UInt32[] p_expected, Int32 p_value, UInt32 p_id, ErrorMessage p_status)
     {
+      ChartAccount l_acc;
+
+      if (m_lastChartSettingsRcvd == null || (l_acc = ChartAccountModel.Instance.GetValue(p_id)) == null ||
+        l_acc.ChartId != m_lastChartSettingsRcvd.Id)
+        return;
       if (this.UpdateChartFromModel(p_expected, p_value, p_id, p_status))
       {
         ChartSettings l_sett = ChartSettingsModel.Instance.GetValue(m_lastChartAccountRcvd.ChartId);
         this.UpdateChart(m_lastClickedChart, l_sett);
-        ArrayUtils.Set<UInt32>(m_expectedChartSettings, 0);
-        ArrayUtils.Set<UInt32>(m_expectedChartAccounts, 0);
+        this.ResetExpectedElemsForUpdate();
       }
+    }
+
+    private void ResetExpectedElemsForUpdate()
+    {
+      ArrayUtils.Set<UInt32>(m_expectedChartSettings, 0);
+      ArrayUtils.Set<UInt32>(m_expectedChartAccounts, 0);
+      m_lastChartAccountRcvd = null;
+      m_lastChartSettingsRcvd = null;
     }
 
     #endregion
@@ -329,6 +391,7 @@ namespace FBI.MVC.View
       {
         if (l_chart.HasSettings && l_chart.Settings.Id == p_chartId)
         {
+          l_chart.Clear();
           l_chart.Settings = null;
           m_charts.Remove(l_chart);
           return;
@@ -372,12 +435,12 @@ namespace FBI.MVC.View
 
     private bool HasCompleteChart()
     {
-      for (int i = 0; i < m_expectedChartSettings.Length; ++i)
+      for (int i = 0; i < m_controller.ExpectedChartSettings.Length; ++i)
       {
         if (m_expectedChartSettings[i] != m_controller.ExpectedChartSettings[i])
           return (false);
       }
-      for (int i = 0; i < m_expectedChartAccounts.Length; ++i)
+      for (int i = 0; i < m_controller.ExpectedChartAccounts.Length; ++i)
       {
         if (m_expectedChartAccounts[i] != m_controller.ExpectedChartAccounts[i])
           return (false);

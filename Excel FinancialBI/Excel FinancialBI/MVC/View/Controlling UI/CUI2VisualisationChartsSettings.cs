@@ -122,7 +122,7 @@ namespace FBI.MVC.View
         MessageBox.Show(Local.GetValue("CUI_Charts.error.invalid_serie"));
         return (false);
       }
-      return (m_controller.CRUChartSetting(m_chartSettings, m_chartTitle.Text.Trim()));
+      return (m_controller.CRUChartSettings(m_chartSettings, m_chartTitle.Text.Trim()));
     }
 
     private bool SaveChartAccounts()

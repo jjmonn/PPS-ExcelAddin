@@ -74,6 +74,10 @@
   </category>
 
   <category name="CUI_Charts">
+    <category name="error">
+      <string name="create_panel">Cannot create panel</string>
+      <string name="same_panel">Cannot open the same panel</string>
+    </category>
     <string name="charts_settings">Graphics settings</string>
     <string name="chart_title">Title</string>
     <string name="serie_1">Serie 1</string>
