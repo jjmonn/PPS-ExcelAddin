@@ -56,9 +56,12 @@ namespace FBI.MVC.Model.CRUD
       l_result.m_version = VersionModel.Instance.GetValue(l_result.VersionId);
       l_result.m_periodList = PeriodModel.GetPeriodList((Int32)p_request.StartPeriod, (Int32)p_request.NbPeriods, l_result.m_version.TimeConfiguration);
 
-      TimeConfig l_aggregationTimeConfig = (TimeConfig)((byte)l_result.m_version.TimeConfiguration + 1);
-      if (Enum.IsDefined(typeof(TimeConfig), l_aggregationTimeConfig))
+      if (l_result.m_version.TimeConfiguration == TimeConfig.DAYS || l_result.m_version.TimeConfiguration == TimeConfig.MONTHS) 
+      {
+        TimeConfig l_aggregationTimeConfig =
+          (l_result.m_version.TimeConfiguration == TimeConfig.DAYS) ? TimeConfig.WEEK : TimeConfig.YEARS;
         l_result.m_aggregationPeriodList = PeriodModel.GetPeriodList((Int32)p_request.StartPeriod, (Int32)p_request.NbPeriods, l_aggregationTimeConfig);
+      }
       else
         l_result.m_aggregationPeriodList = new List<Int32>();
 
@@ -119,7 +122,9 @@ namespace FBI.MVC.Model.CRUD
         }
 
         l_nbAggregation = p_packet.ReadUint32();
-        TimeConfig l_aggregationTimeConfig = (TimeConfig)((byte)m_version.TimeConfiguration + 1);
+
+        TimeConfig l_aggregationTimeConfig =
+          (m_version.TimeConfiguration == TimeConfig.DAYS) ? TimeConfig.WEEK : TimeConfig.YEARS;
         for (UInt16 j = 0; j < l_nbAggregation && j < m_aggregationPeriodList.Count; ++j)
         {
           double l_value = p_packet.ReadDouble();

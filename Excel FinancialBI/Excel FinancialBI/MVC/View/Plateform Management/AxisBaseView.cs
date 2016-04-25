@@ -368,6 +368,8 @@ namespace FBI.MVC.View
 
     void OnClickRename(object sender, EventArgs e)
     {
+      if (m_hoveredRow == null)
+        return;
       UInt32 l_axisElemId = (UInt32)m_hoveredRow.ItemValue;
       AxisElem l_axisElem = AxisElemModel.Instance.GetValue(l_axisElemId);
 
