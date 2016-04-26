@@ -42,10 +42,10 @@ namespace FBI.MVC.Controller
         l_func += "\"" + m_view.SelectedCurrency + "\",";
         l_func += "\"" + m_view.SelectedVersion + "\",";
 
-        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Client)) + "\",";
-        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Product)) + "\",";
-        l_func += "\"" + GetListParameter(m_view.GetSelectedAxisElem(AxisType.Adjustment)) + "\",";
-        l_func += "\"" + GetListParameter(m_view.SelectedFilterValues) + "\"";
+        l_func += GetListParameter(m_view.GetSelectedAxisElem(AxisType.Client)) + ",";
+        l_func += GetListParameter(m_view.GetSelectedAxisElem(AxisType.Product)) + ",";
+        l_func += GetListParameter(m_view.GetSelectedAxisElem(AxisType.Adjustment)) + ",";
+        l_func += GetListParameter(m_view.SelectedFilterValues);
 
         l_func += ")";
         return (l_func);
@@ -90,11 +90,13 @@ namespace FBI.MVC.Controller
 
     string GetListParameter(List<string> p_list)
     {
-      string l_parameter = "";
+      if (p_list.Count == 0)
+        return ("\"\"");
+      string l_parameter = "{";
 
       foreach (string l_elem in p_list)
-        l_parameter += l_elem + ((p_list.Last() == l_elem) ? "" : ",");
-      return (l_parameter);
+        l_parameter += "\"" + l_elem + "\"" + ((p_list.Last() == l_elem) ? "" : ";");
+      return (l_parameter + "}");
     }
   }
 }

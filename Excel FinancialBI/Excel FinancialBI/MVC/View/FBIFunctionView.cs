@@ -77,10 +77,19 @@ namespace FBI.MVC.View
     {
       FbiTreeView<Account>.Load(m_accountTree.TreeView.Nodes, AccountModel.Instance.GetDictionary());
       foreach (UInt32 l_currencyId in CurrencyModel.Instance.GetUsedCurrencies())
-        m_currencyCB.Items.Add(CurrencyModel.Instance.GetValueName(l_currencyId));
+      {
+        ListItem l_item = m_currencyCB.Items.Add(CurrencyModel.Instance.GetValueName(l_currencyId));
+
+        if (l_currencyId == Properties.Settings.Default.currentCurrency)
+          m_currencyCB.SelectedItem = l_item;
+      }
       FbiTreeView<Version>.Load(m_versionTree.TreeView.Nodes, VersionModel.Instance.GetDictionary());
+      m_versionTree.TreeView.SelectedNode = FbiTreeView<Version>.FindNode(m_versionTree.TreeView, Properties.Settings.Default.version_id);
 
       AddAxisElem(m_entityTree, AxisType.Entities);
+      AxisElem l_topEntity = AxisElemModel.Instance.GetTopEntity();
+      if (l_topEntity != null)
+        m_axisElemTV[AxisType.Entities].TreeView.SelectedNode = FbiTreeView<AxisElem>.FindNode(m_axisElemTV[AxisType.Entities].TreeView, l_topEntity.Id);
       AddAxisElem(m_clientTree, AxisType.Client);
       AddAxisElem(m_productTree, AxisType.Product);
       AddAxisElem(m_adjustmentTree, AxisType.Adjustment);
