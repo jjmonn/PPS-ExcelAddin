@@ -80,7 +80,7 @@ namespace FBI.Utils
       }
       catch (Exception e)
       {
-        System.Diagnostics.Debug.WriteLine(e.StackTrace);
+        this.LastError = Local.GetValue("bnf.error.bnf_is_fucked") + " " + e.Message;
         return (false);
       }
     }

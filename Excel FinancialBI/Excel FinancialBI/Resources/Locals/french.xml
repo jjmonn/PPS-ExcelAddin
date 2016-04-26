@@ -607,4 +607,11 @@
     </category>
   </category>
 
+  <category name="bnf">
+    <category name="error">
+      <string name="bnf_is_fucked">Mauvais paramètre(s) pour la BNF. Contactez un administrateur</string>
+      <string name="at">Input erroné au caractère</string>
+    </category>
+  </category>
+
 </category>
