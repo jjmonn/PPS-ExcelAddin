@@ -9,20 +9,18 @@ namespace FBI.MVC.View
   using FBI;
   using Utils;
   using Model.CRUD;
-  using Utils.BNF;
 
   public partial class ReportUploadAccountInfoSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
     public  bool m_shown { set; get; }
-    SimpleBnf m_bnf = new SimpleBnf();
-    FbiGrammar m_grammar = new FbiGrammar();
+    BNF m_bnf = new BNF();
 
     public ReportUploadAccountInfoSidePane()
     {
       InitializeComponent();
       MultilangueSetup();
       m_shown = false;
-      m_bnf.AddRule("fbi_to_human_grammar", m_grammar.ToHuman);
+      FbiGrammar.AddGrammar(m_bnf);
     }
 
     private void MultilangueSetup()
@@ -39,10 +37,10 @@ namespace FBI.MVC.View
       m_accountTextBox.Text = p_account.Name;
       m_descriptionTextBox.Text = p_account.Description;
       m_formulaTextBox.Text = "";
-      if (m_bnf.Parse("fbi_to_human_grammar", p_account.Formula))
-        m_formulaTextBox.Text = m_grammar.Formula;
+      if (m_bnf.Parse(p_account.Formula, FbiGrammar.TO_HUMAN))
+        m_formulaTextBox.Text = m_bnf.Concatenated;
       else
-        m_formulaTextBox.Text = m_grammar.LastError;
+        m_formulaTextBox.Text = m_bnf.LastError;
       switch (p_account.FormulaType)
       {
         case Account.FormulaTypes.TITLE:

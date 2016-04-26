@@ -20,7 +20,6 @@ namespace FBI.MVC.View
   using Model;
   using Network;
   using Model.CRUD;
-  using Utils.BNF;
 
   public partial class AccountsView : UserControl, IPlatformMgtView
   {
@@ -486,15 +485,15 @@ namespace FBI.MVC.View
             SetEditingFormulaUI(false);
             return;
           }
-          if (m_controller.BNF.Parse("fbi_to_grammar", m_formulaTextBox.Text))
+          if (m_controller.m_bnf.Parse(m_formulaTextBox.Text, FbiGrammar.TO_SERVER))
           {
-            l_currentAccount.Formula = m_controller.Grammar.Formula;
+            l_currentAccount.Formula = m_controller.m_bnf.Concatenated;
             if (m_controller.UpdateAccount(l_currentAccount) == false)
               MsgBox.Show(m_controller.Error); 
             SetEditingFormulaUI(false);
           }
           else
-            MsgBox.Show(m_controller.Grammar.LastError);
+            MsgBox.Show(m_controller.m_bnf.LastError);
         }
       }
     }
@@ -937,11 +936,10 @@ namespace FBI.MVC.View
 
         // Formula TB
         m_formulaTextBox.Text = "";
-        m_controller.BNF.AddRule("fbi_to_human_grammar", m_controller.Grammar.ToHuman);
-        if (m_controller.BNF.Parse("fbi_to_human_grammar", l_account.Formula))
-          m_formulaTextBox.Text = m_controller.Grammar.Formula;
+        if (m_controller.m_bnf.Parse(l_account.Formula, FbiGrammar.TO_HUMAN))
+          m_formulaTextBox.Text = m_controller.m_bnf.Concatenated;
         else
-          m_formulaTextBox.Text = m_controller.Grammar.LastError;
+          m_formulaTextBox.Text = m_controller.m_bnf.LastError;
 
         //Description
         m_descriptionTextBox.Text = l_account.Description;

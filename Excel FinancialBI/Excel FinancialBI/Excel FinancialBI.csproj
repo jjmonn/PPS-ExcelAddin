@@ -753,9 +753,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Utils\ArrayUtils.cs" />
-    <Compile Include="Utils\BNF\BnfConsumer.cs" />
+    <Compile Include="Utils\BNF\BNF.cs" />
+    <Compile Include="Utils\BNF\Consumer.cs" />
     <Compile Include="Utils\BNF\FbiGrammar.cs" />
-    <Compile Include="Utils\BNF\SimpleBnf.cs" />
+    <Compile Include="Utils\BNF\Rule.cs" />
     <Compile Include="Utils\ColorGradient.cs" />
     <Compile Include="Utils\CustomComponentResourceManager.cs" />
     <Compile Include="Utils\DGVFormatUtils.cs" />

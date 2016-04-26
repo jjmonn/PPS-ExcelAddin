@@ -13,7 +13,6 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
   using Utils;
-  using Utils.BNF;
 
   class AccountController : NameController<AccountsView>
   {
@@ -21,8 +20,7 @@ namespace FBI.MVC.Controller
 
     public override IView View { get { return (m_view); } }
     private const string ACCOUNTS_FORBIDDEN_CHARACTERS = "+-*=<>^?:;![]";
-    public SimpleBnf BNF = new SimpleBnf();
-    public FbiGrammar Grammar = new FbiGrammar();
+    public BNF m_bnf = new BNF();
 
     #endregion
 
@@ -32,8 +30,7 @@ namespace FBI.MVC.Controller
     {
       m_view = new AccountsView();
       m_view.SetController(this);
-      BNF.AddRule("fbi_to_grammar", Grammar.ToGrammar);
-      BNF.AddRule("fbi_to_human_grammar", Grammar.ToHuman);
+      FbiGrammar.AddGrammar(m_bnf);
       this.LoadView();
     }
 
@@ -94,10 +91,10 @@ namespace FBI.MVC.Controller
 
       foreach (Account l_account in AccountModel.Instance.GetDictionary().Values)
       {
-        bool l_result = BNF.Parse("fbi_to_human_grammar", l_account.Formula);
-        if (l_result)
-          if (Grammar.Accounts.Contains(p_id))
-            l_dependantAccounts.Add(l_account);
+        FbiGrammar.ClearAccounts();
+        bool l_result = m_bnf.Parse(l_account.Formula, FbiGrammar.TO_HUMAN);
+        if (l_result && FbiGrammar.Accounts.Contains(p_id))
+          l_dependantAccounts.Add(l_account);
       }
       return (l_dependantAccounts);
     }
