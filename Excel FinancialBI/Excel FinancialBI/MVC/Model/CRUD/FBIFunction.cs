@@ -9,7 +9,7 @@ namespace FBI.MVC.Model.CRUD
   using Utils;
   using Model;
 
-  class FBIFunction
+  public class FBIFunction
   {
     public DateTime Period { get; set; }
     public UInt32 EntityId { get; set; }

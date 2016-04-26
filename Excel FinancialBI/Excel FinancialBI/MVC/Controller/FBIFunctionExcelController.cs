@@ -21,6 +21,7 @@ namespace FBI.MVC.Controller
     SafeDictionary<Int32, ComputeResult> m_results;
     static string m_lastParameter ="";
     static List<Tuple<LegacyComputeRequest, ComputeResult>> m_computeCache = new List<Tuple<LegacyComputeRequest, ComputeResult>>();
+    public static FBIFunction LastExecutedFunction { get; set; }
 
     public FBIFunctionExcelController()
     {
@@ -135,6 +136,8 @@ namespace FBI.MVC.Controller
           return (Error);
         Int32 l_requestId;
         m_results.Clear();
+
+        LastExecutedFunction = l_function;
         if (Compute(l_function, out l_requestId) == false)
           return (Local.GetValue("ppsbi.error.unable_to_compute"));
 

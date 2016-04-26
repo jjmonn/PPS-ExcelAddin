@@ -21,6 +21,7 @@ namespace FBI.MVC.View
   {
     FBIFunctionViewController m_controller;
     SafeDictionary<AxisType, vTreeViewBox> m_axisElemTV;
+    SafeDictionary<UInt32, ListItem> m_currencyListItems = new SafeDictionary<uint, ListItem>();
     bool m_editing = false;
 
     public FBIFunctionView()
@@ -40,6 +41,45 @@ namespace FBI.MVC.View
       InitTV();
       m_periodPicker.FormatValue = "MM/yyyy";
       SuscribeEvents();
+      FBIFunctionExcelController.LastExecutedFunction = null;
+      AddinModule.CurrentInstance.ExcelApp.ActiveCell.Formula = AddinModule.CurrentInstance.ExcelApp.ActiveCell.Formula;
+      if (FBIFunctionExcelController.LastExecutedFunction != null)
+        LoadFromFormula(FBIFunctionExcelController.LastExecutedFunction);
+    }
+
+    public void LoadFromFormula(FBIFunction p_formula)
+    {
+      m_axisElemTV[AxisType.Entities].TreeView.SelectedNode =
+        FbiTreeView<AxisElem>.FindNode(m_axisElemTV[AxisType.Entities].TreeView, p_formula.EntityId);
+      m_accountTree.TreeView.SelectedNode = FbiTreeView<Account>.FindNode(m_accountTree.TreeView, p_formula.AccountId);
+      m_periodPicker.Value = p_formula.Period;
+      m_currencyCB.SelectedItem = m_currencyListItems[p_formula.CurrencyId];
+      m_versionTree.TreeView.SelectedNode = FbiTreeView<Version>.FindNode(m_versionTree.TreeView, p_formula.VersionId);
+
+      foreach (KeyValuePair<AxisType, List<string>> l_axis in p_formula.AxisElems)
+        foreach (string l_axisElem in l_axis.Value)
+          FbiTreeView<AxisElem>.CheckNode(m_axisElemTV[l_axis.Key].TreeView, AxisElemModel.Instance.GetValueId(l_axisElem));
+      foreach (string l_filterValue in p_formula.Filters)
+      {
+        foreach (vTreeNode l_axisNode in m_categoriesFilterTree.TreeView.Nodes)
+          foreach (vTreeNode l_filterNode in l_axisNode.Nodes)
+            CheckNode(l_filterNode, FilterValueModel.Instance.GetValueId(l_filterValue));
+      }
+    }
+
+    bool CheckNode(vTreeNode p_parentNode, UInt32 p_value)
+    {
+      foreach (vTreeNode l_node in p_parentNode.Nodes)
+      {
+        if (l_node.Value != null && (UInt32)l_node.Value == p_value)
+        {
+          l_node.Checked = CheckState.Checked;
+          return (true);
+        }
+        if (CheckNode(l_node, p_value))
+          return (true);
+      }
+      return (false);
     }
 
     #region Initialize
@@ -80,6 +120,7 @@ namespace FBI.MVC.View
       {
         ListItem l_item = m_currencyCB.Items.Add(CurrencyModel.Instance.GetValueName(l_currencyId));
 
+        m_currencyListItems[l_currencyId] = l_item;
         if (l_currencyId == Properties.Settings.Default.currentCurrency)
           m_currencyCB.SelectedItem = l_item;
       }
