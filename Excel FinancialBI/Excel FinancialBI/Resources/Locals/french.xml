@@ -291,10 +291,12 @@
     <category name="error">
       <string name="rates_version_not_selected">Veuillez sélectioner une version des taux de change.</string>
       <string name="gfacts_version_not_selected">Veuillez sélectioner une version des indicateurs macro économiques.</string>
+      <string name="rate_or_gfact_version_not_compatible">Version de taux de change ou d'IME incompatible.</string>
       <string name="time_config_not_supported">Cette configuration de périodes n'existe pas. Veuillez contacter votre administrateur Financial BI.</string>
       <string name="cannot_copy_folder">Un dossier ne peut pas être copié.</string>
       <string name="no_selected_version">Veuillez sélectioner une version.</string>
       <string name="cannot_select_folder">Vous ne pouvez pas sélectionner un dossier.</string>
+      <string name="invalid_parent">Le parent sélectionné n'est pas un dossier.</string>
     </category>
 
   </category>
@@ -355,7 +357,7 @@
       <string name="entities_orientation_unclear">L'organisation des entités n'est pas claire. Merci de vérifier que les entités sont disposés en lignes ou en colones.</string>
       <string name="periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
       <string name="employees_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
-
+      <string name="failed_compute">Le calcul de la feuille a échoué.</string>
     </category>
   </category>
 

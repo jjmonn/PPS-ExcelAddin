@@ -88,7 +88,6 @@ namespace FBI.MVC.Controller
 
     public void DownloadFacts(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
-      AddinModuleController.SetExcelInteractionState(false);
       EditedFactModel.Reload();
       EditedFactModel.DownloadFacts(PeriodsList, p_updateCells, p_clientId, p_productId, p_adjustmentId);
     }

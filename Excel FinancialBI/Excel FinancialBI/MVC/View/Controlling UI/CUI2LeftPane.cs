@@ -329,7 +329,6 @@ namespace FBI.MVC.View
         if (m_selectionTVList[(Tuple<AxisType, Type>)l_listItem.Value] != null)
         {
           Tuple<AxisType, Type> l_key = (Tuple<AxisType, Type>)l_listItem.Value;
-          bool l_test = l_key.GetHashCode() == new Tuple<AxisType, Type>( AxisType.Entities, typeof(AxisElem)).GetHashCode();
 
           AFbiTreeView l_tv = m_selectionTVList[l_key];
           if (l_tv.Loaded == false)

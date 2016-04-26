@@ -85,10 +85,19 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-    List<Account> GetDependantAccounts(UInt32 p_id)
+    SortedSet<Account> GetDependantAccounts(UInt32 p_id)
     {
-      List<Account> l_dependantAccounts = AccountModel.Instance.GetChildren(p_id);
+      SortedSet<Account> l_dependantAccounts = new SortedSet<Account>();
 
+      List<Account> l_children = AccountModel.Instance.GetChildren(p_id);
+
+      foreach (Account l_child in l_children)
+      {
+        SortedSet<Account> l_childDep = GetDependantAccounts(l_child.Id);
+
+        foreach (Account l_dep in l_childDep)
+          l_dependantAccounts.Add(l_dep);
+      }
       foreach (Account l_account in AccountModel.Instance.GetDictionary().Values)
       {
         FbiGrammar.ClearAccounts();
@@ -96,12 +105,13 @@ namespace FBI.MVC.Controller
         if (l_result && FbiGrammar.Accounts.Contains(p_id))
           l_dependantAccounts.Add(l_account);
       }
+      l_dependantAccounts.Remove(AccountModel.Instance.GetValue(p_id));
       return (l_dependantAccounts);
     }
 
     public bool DeleteAccount(UInt32 p_id)
     {
-      List<Account> l_dependantAccounts = GetDependantAccounts(p_id);
+      SortedSet<Account> l_dependantAccounts = GetDependantAccounts(p_id);
 
       if (l_dependantAccounts.Count > 0)
       {

@@ -310,5 +310,24 @@ namespace FBI.Utils
     }
 
     #endregion
+
+    static internal Range GetRealLastCell(Worksheet WS)
+    {
+	    long lRealLastRow = 0;
+	    long lRealLastColumn = 0;
+
+	    try
+      {
+		    lRealLastRow = WS.Cells.Find("*", WS.Cells[1, 1], Type.Missing, Type.Missing, XlSearchOrder.xlByRows, XlSearchDirection.xlPrevious).Row;
+
+        lRealLastColumn = WS.Cells.Find("*", WS.Cells[1, 1], Type.Missing, Type.Missing, XlSearchOrder.xlByColumns, XlSearchDirection.xlPrevious).Column;
+
+		    return WS.Cells[lRealLastRow, lRealLastColumn] as Range;
+	    }
+      catch
+      {
+		    return null;
+	    }
+    }
   }
 }

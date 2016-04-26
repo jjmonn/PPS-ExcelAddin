@@ -74,9 +74,9 @@ namespace FBI.Forms
       CheckAllParentNodes(this);
     }
 
-    public static void CheckNode(AFbiTreeView p_tv, UInt32 p_id)
+    public static void CheckNode(vTreeView p_tv, UInt32 p_id)
     {
-      vTreeNode l_node = p_tv.FindNode(p_id);
+      vTreeNode l_node = FindNode(p_tv, p_id);
 
       if (l_node != null)
         l_node.Checked = CheckState.Checked;
@@ -146,7 +146,7 @@ namespace FBI.Forms
     public static vTreeNode FindNode(vTreeView p_tv, UInt32 p_value)
     {
       foreach (vTreeNode l_node in p_tv.GetNodes())
-        if ((UInt32)l_node.Value == p_value)
+        if (l_node.Value != null && (UInt32)l_node.Value == p_value)
           return (l_node);
       return (null);
     }

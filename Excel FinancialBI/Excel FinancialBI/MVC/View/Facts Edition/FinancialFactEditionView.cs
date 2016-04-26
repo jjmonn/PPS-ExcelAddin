@@ -31,7 +31,13 @@ namespace FBI.MVC.View
     {
       base.SuscribeEvents();
       FactsModel.Instance.UpdateEvent += OnCommitResult;
+      m_controller.EditedFactModel.ComputeFailed += OnComputeFailed;
       m_controller.WorksheetSelectionChanged += OnWorksheetSelectionChanged;
+    }
+
+    void OnComputeFailed()
+    {
+      MsgBox.Show(Local.GetValue("upload.error.failed_compute"));
     }
 
     void OnWorksheetSelectionChanged(Range p_range)
@@ -44,10 +50,8 @@ namespace FBI.MVC.View
 
     protected override void SetEditedFactsStatus()
     {
-      AddinModuleController.SetExcelInteractionState(false);
       foreach (EditedFactBase l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
         m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
-      AddinModuleController.SetExcelInteractionState(true);
     }
 
     #region Model callbacks
@@ -70,18 +74,20 @@ namespace FBI.MVC.View
       }
       else
         MsgBox.Show(Local.GetValue("upload.error.commit_failed") + ": " + Error.GetMessage(p_status));
+      m_controller.EditedFactModel.m_nbRequest--;
+      AddinModuleController.SetExcelInteractionState(m_controller.EditedFactModel.m_nbRequest <= 0);
     }
 
     protected override void OnFactsDownloaded(bool p_success)
     {
       if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
         return;
-      AddinModuleController.SetExcelInteractionState(false);
       if (m_init == false)
         foreach (EditedFinancialFact l_fact in m_model.OutputFacts.Values)
           m_rangeHighlighter.FillCellColor(l_fact.Cell, EditedFactStatus.OutputEqual);
       base.OnFactsDownloaded(p_success);
-      AddinModuleController.SetExcelInteractionState(true);
+      m_controller.EditedFactModel.m_nbRequest--;
+      AddinModuleController.SetExcelInteractionState(m_controller.EditedFactModel.m_nbRequest <= 0);
     }
 
     #endregion
