@@ -45,7 +45,6 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_currencyCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_productFilterLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_clientFilterLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.m_versionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_currencyLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_entityLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_accountLabel = new VIBlend.WinForms.Controls.vLabel();
@@ -55,8 +54,9 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_accountTree = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.m_versionTree = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.m_clientTree = new VIBlend.WinForms.Controls.vTreeViewBox();
-      this.m_periodPicker = new VIBlend.WinForms.Controls.vDatePicker();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
+      this.m_versionLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.m_periodCB = new VIBlend.WinForms.Controls.vComboBox();
       this.TableLayoutPanel1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -68,7 +68,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.ButtonsIL.Images.SetKeyName(1, "imageres_89.ico");
       this.ButtonsIL.Images.SetKeyName(2, "plus.ico");
       // 
-      // validate_cmd
+      // m_validateButton
       // 
       this.m_validateButton.AllowAnimations = true;
       this.m_validateButton.BackColor = System.Drawing.Color.Transparent;
@@ -78,7 +78,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_validateButton.ImageKey = "submit 1 ok.ico";
       this.m_validateButton.ImageList = this.ButtonsIL;
       this.m_validateButton.Location = new System.Drawing.Point(379, 373);
-      this.m_validateButton.Name = "validate_cmd";
+      this.m_validateButton.Name = "m_validateButton";
       this.m_validateButton.RoundedCornersMask = ((byte)(15));
       this.m_validateButton.Size = new System.Drawing.Size(114, 27);
       this.m_validateButton.TabIndex = 10;
@@ -99,6 +99,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.TableLayoutPanel1.ColumnCount = 2;
       this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.48327F));
       this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.51673F));
+      this.TableLayoutPanel1.Controls.Add(this.m_periodCB, 1, 4);
       this.TableLayoutPanel1.Controls.Add(this.m_adjustmentTree, 1, 7);
       this.TableLayoutPanel1.Controls.Add(this.m_productTree, 1, 6);
       this.TableLayoutPanel1.Controls.Add(this.m_categoriesFilterTree, 1, 8);
@@ -106,17 +107,16 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.TableLayoutPanel1.Controls.Add(this.m_currencyCB, 1, 3);
       this.TableLayoutPanel1.Controls.Add(this.m_productFilterLabel, 0, 6);
       this.TableLayoutPanel1.Controls.Add(this.m_clientFilterLabel, 0, 5);
-      this.TableLayoutPanel1.Controls.Add(this.m_versionLabel, 0, 4);
       this.TableLayoutPanel1.Controls.Add(this.m_currencyLabel, 0, 3);
       this.TableLayoutPanel1.Controls.Add(this.m_entityLabel, 0, 0);
       this.TableLayoutPanel1.Controls.Add(this.m_accountLabel, 0, 1);
-      this.TableLayoutPanel1.Controls.Add(this.m_periodLabel, 0, 2);
       this.TableLayoutPanel1.Controls.Add(this.m_adjustmentFilterLabel, 0, 7);
       this.TableLayoutPanel1.Controls.Add(this.m_entityTree, 1, 0);
       this.TableLayoutPanel1.Controls.Add(this.m_accountTree, 1, 1);
-      this.TableLayoutPanel1.Controls.Add(this.m_versionTree, 1, 4);
       this.TableLayoutPanel1.Controls.Add(this.m_clientTree, 1, 5);
-      this.TableLayoutPanel1.Controls.Add(this.m_periodPicker, 1, 2);
+      this.TableLayoutPanel1.Controls.Add(this.m_versionTree, 1, 2);
+      this.TableLayoutPanel1.Controls.Add(this.m_periodLabel, 0, 4);
+      this.TableLayoutPanel1.Controls.Add(this.m_versionLabel, 0, 2);
       this.TableLayoutPanel1.Location = new System.Drawing.Point(37, 38);
       this.TableLayoutPanel1.Name = "TableLayoutPanel1";
       this.TableLayoutPanel1.RowCount = 9;
@@ -129,6 +129,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.TableLayoutPanel1.Size = new System.Drawing.Size(459, 314);
       this.TableLayoutPanel1.TabIndex = 39;
       // 
@@ -249,22 +250,6 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_clientFilterLabel.UseMnemonics = true;
       this.m_clientFilterLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
-      // m_versionLabel
-      // 
-      this.m_versionLabel.BackColor = System.Drawing.Color.Transparent;
-      this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
-      this.m_versionLabel.Ellipsis = false;
-      this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionLabel.Location = new System.Drawing.Point(3, 143);
-      this.m_versionLabel.Multiline = true;
-      this.m_versionLabel.Name = "m_versionLabel";
-      this.m_versionLabel.Size = new System.Drawing.Size(123, 24);
-      this.m_versionLabel.TabIndex = 34;
-      this.m_versionLabel.Text = "Version";
-      this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-      this.m_versionLabel.UseMnemonics = true;
-      this.m_versionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
       // m_currencyLabel
       // 
       this.m_currencyLabel.BackColor = System.Drawing.Color.Transparent;
@@ -320,7 +305,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_periodLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_periodLabel.Ellipsis = false;
       this.m_periodLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_periodLabel.Location = new System.Drawing.Point(3, 73);
+      this.m_periodLabel.Location = new System.Drawing.Point(3, 143);
       this.m_periodLabel.Multiline = true;
       this.m_periodLabel.Name = "m_periodLabel";
       this.m_periodLabel.Size = new System.Drawing.Size(123, 24);
@@ -386,7 +371,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_versionTree.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_versionTree.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_versionTree.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_versionTree.Location = new System.Drawing.Point(142, 143);
+      this.m_versionTree.Location = new System.Drawing.Point(142, 73);
       this.m_versionTree.Name = "m_versionTree";
       this.m_versionTree.Size = new System.Drawing.Size(314, 29);
       this.m_versionTree.TabIndex = 5;
@@ -410,34 +395,48 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_clientTree.UseThemeDropDownArrowColor = true;
       this.m_clientTree.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
-      // m_periodPicker
-      // 
-      this.m_periodPicker.BackColor = System.Drawing.Color.White;
-      this.m_periodPicker.BorderColor = System.Drawing.Color.Black;
-      this.m_periodPicker.Culture = new System.Globalization.CultureInfo("");
-      this.m_periodPicker.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_periodPicker.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_periodPicker.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.None;
-      this.m_periodPicker.FormatValue = "";
-      this.m_periodPicker.Location = new System.Drawing.Point(142, 73);
-      this.m_periodPicker.MaxDate = new System.DateTime(2100, 1, 1, 0, 0, 0, 0);
-      this.m_periodPicker.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
-      this.m_periodPicker.Name = "m_periodPicker";
-      this.m_periodPicker.ShowGrip = false;
-      this.m_periodPicker.Size = new System.Drawing.Size(314, 29);
-      this.m_periodPicker.TabIndex = 39;
-      this.m_periodPicker.Text = "vDatePicker1";
-      this.m_periodPicker.UseThemeBackColor = false;
-      this.m_periodPicker.UseThemeDropDownArrowColor = true;
-      this.m_periodPicker.Value = new System.DateTime(2016, 3, 16, 15, 9, 42, 424);
-      this.m_periodPicker.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      // 
       // m_versionsTreeviewImageList
       // 
       this.m_versionsTreeviewImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_versionsTreeviewImageList.ImageStream")));
       this.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent;
       this.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico");
       this.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico");
+      // 
+      // m_versionLabel
+      // 
+      this.m_versionLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_versionLabel.Ellipsis = false;
+      this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionLabel.Location = new System.Drawing.Point(3, 73);
+      this.m_versionLabel.Multiline = true;
+      this.m_versionLabel.Name = "m_versionLabel";
+      this.m_versionLabel.Size = new System.Drawing.Size(123, 24);
+      this.m_versionLabel.TabIndex = 40;
+      this.m_versionLabel.Text = "Version";
+      this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_versionLabel.UseMnemonics = true;
+      this.m_versionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_periodCB
+      // 
+      this.m_periodCB.BackColor = System.Drawing.Color.White;
+      this.m_periodCB.DisplayMember = "";
+      this.m_periodCB.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_periodCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_periodCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_periodCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_periodCB.DropDownWidth = 314;
+      this.m_periodCB.Location = new System.Drawing.Point(142, 143);
+      this.m_periodCB.Name = "m_periodCB";
+      this.m_periodCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_periodCB.Size = new System.Drawing.Size(314, 29);
+      this.m_periodCB.TabIndex = 41;
+      this.m_periodCB.UseThemeBackColor = false;
+      this.m_periodCB.UseThemeDropDownArrowColor = true;
+      this.m_periodCB.ValueMember = "";
+      this.m_periodCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_periodCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // FBIFunctionView
       // 
@@ -461,8 +460,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
 	public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
 	public VIBlend.WinForms.Controls.vLabel m_categoryFilterLabel;
 	public VIBlend.WinForms.Controls.vLabel m_productFilterLabel;
-	public VIBlend.WinForms.Controls.vLabel m_clientFilterLabel;
-	public VIBlend.WinForms.Controls.vLabel m_versionLabel;
+  public VIBlend.WinForms.Controls.vLabel m_clientFilterLabel;
 	public VIBlend.WinForms.Controls.vLabel m_currencyLabel;
 	public VIBlend.WinForms.Controls.vLabel m_entityLabel;
 	public VIBlend.WinForms.Controls.vLabel m_accountLabel;
@@ -477,7 +475,8 @@ partial class FBIFunctionView : System.Windows.Forms.Form
 	public VIBlend.WinForms.Controls.vTreeViewBox m_productTree;
 	public VIBlend.WinForms.Controls.vTreeViewBox m_clientTree;
   public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-  private VIBlend.WinForms.Controls.vDatePicker m_periodPicker;
+  public VIBlend.WinForms.Controls.vLabel m_versionLabel;
+  public VIBlend.WinForms.Controls.vComboBox m_periodCB;
 }
 
 }

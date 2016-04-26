@@ -22,6 +22,7 @@ namespace FBI.MVC.View
     FBIFunctionViewController m_controller;
     SafeDictionary<AxisType, vTreeViewBox> m_axisElemTV;
     SafeDictionary<UInt32, ListItem> m_currencyListItems = new SafeDictionary<uint, ListItem>();
+    SafeDictionary<Int32, ListItem> m_periodListItems = new SafeDictionary<int, ListItem>();
     bool m_editing = false;
 
     public FBIFunctionView()
@@ -39,7 +40,7 @@ namespace FBI.MVC.View
     {
       MultilangueSetup();
       InitTV();
-      m_periodPicker.FormatValue = "MM/yyyy";
+      LoadPeriods();
       SuscribeEvents();
       FBIFunctionExcelController.LastExecutedFunction = null;
       AddinModule.CurrentInstance.ExcelApp.ActiveCell.Formula = AddinModule.CurrentInstance.ExcelApp.ActiveCell.Formula;
@@ -52,9 +53,9 @@ namespace FBI.MVC.View
       m_axisElemTV[AxisType.Entities].TreeView.SelectedNode =
         FbiTreeView<AxisElem>.FindNode(m_axisElemTV[AxisType.Entities].TreeView, p_formula.EntityId);
       m_accountTree.TreeView.SelectedNode = FbiTreeView<Account>.FindNode(m_accountTree.TreeView, p_formula.AccountId);
-      m_periodPicker.Value = p_formula.Period;
       m_currencyCB.SelectedItem = m_currencyListItems[p_formula.CurrencyId];
       m_versionTree.TreeView.SelectedNode = FbiTreeView<Version>.FindNode(m_versionTree.TreeView, p_formula.VersionId);
+      m_periodCB.SelectedItem = m_periodListItems[(Int32)p_formula.Period.ToOADate()];
 
       foreach (KeyValuePair<AxisType, List<string>> l_axis in p_formula.AxisElems)
         foreach (string l_axisElem in l_axis.Value)
@@ -65,6 +66,21 @@ namespace FBI.MVC.View
           foreach (vTreeNode l_filterNode in l_axisNode.Nodes)
             CheckNode(l_filterNode, FilterValueModel.Instance.GetValueId(l_filterValue));
       }
+    }
+
+    public void LoadPeriods()
+    {
+      m_periodListItems.Clear();
+      m_periodCB.Items.Clear();
+      Version l_version = VersionModel.Instance.GetValue(SelectedVersion);
+
+      if (l_version == null)
+        return;
+      List<Int32> l_periodList = PeriodModel.GetPeriodList((Int32)l_version.StartPeriod, (Int32)l_version.NbPeriod, l_version.TimeConfiguration);
+
+      foreach (Int32 l_period in l_periodList)
+        m_periodListItems[l_period] = m_periodCB.Items.Add(PeriodModel.GetFormatedDate(l_period, l_version.TimeConfiguration));
+      m_periodCB.SelectedItem = m_periodListItems.FirstOrDefault().Value;
     }
 
     bool CheckNode(vTreeNode p_parentNode, UInt32 p_value)
@@ -110,8 +126,8 @@ namespace FBI.MVC.View
       m_axisElemTV[AxisType.Product].TreeView.NodeChecked += SetProductText;
       m_axisElemTV[AxisType.Adjustment].TextChanged += SetAdjustmentText;
       m_axisElemTV[AxisType.Adjustment].TreeView.NodeChecked += SetAdjustmentText;
+      m_versionTree.TreeView.AfterSelect += OnVersionSelectedChanged;
     }
-
 
     void InitTV()
     {
@@ -166,6 +182,11 @@ namespace FBI.MVC.View
 
     #region User callbacks
 
+    void OnVersionSelectedChanged(object sender, vTreeViewEventArgs e)
+    {
+      LoadPeriods();
+    }
+
     void SetClientText(object p_sender, EventArgs e) { SetAxisElemText(AxisType.Client); }
     void SetProductText(object p_sender, EventArgs e) { SetAxisElemText(AxisType.Product); }
     void SetAdjustmentText(object p_sender, EventArgs e) { SetAxisElemText(AxisType.Adjustment); }
@@ -214,7 +235,10 @@ namespace FBI.MVC.View
     {
       get
       {
-        return m_periodPicker.Value.Value.ToString("MM/dd/yyyy");
+        foreach (KeyValuePair<Int32, ListItem> l_pair in m_periodListItems)
+          if (l_pair.Value == m_periodCB.SelectedItem)
+            return (DateTime.FromOADate(l_pair.Key).ToString("MM/dd/yyyy"));
+        return (null);
       }
     }
 
