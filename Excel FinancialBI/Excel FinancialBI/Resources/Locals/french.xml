@@ -134,6 +134,7 @@
     <string name="msg_account_deletion_confirmation">Confirmation de la suppression de comptes.</string>
     <string name="msg_destination_cell_not_valid">Une cellue doit être sélectionnée dans Excel pour pouvoir envoyer la hiérarchie des comptes sur la feuille.</string>
     <string name="msg_accounts_drop">La hiérarchie des comptes va être envoyée: </string>
+    <string name="msg_formula_validation_confirmation">Enregister cette formule</string>
     <string name="title_formula_validation_confirmation">Confirmation de l'édition de la formule</string>
     <string name="msg_password_required">Modifier le type de formule de ce compte pourrait entraîner la perte de données, confirmez vous la conversion de ce compte en formule.</string>
     <string name="msg_new_tab_name">Nom du nouveau rapport: </string>

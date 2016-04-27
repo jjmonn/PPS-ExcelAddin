@@ -72,6 +72,17 @@ namespace FBI.MVC.Model
 
     private void CreateEditedFacts(Dimension<CRUDEntity> p_rowsDimension, Dimension<CRUDEntity> p_columnsDimension, Dimension<CRUDEntity> p_fixedDimension)
     {
+      SafeDictionary<UInt32, UInt32> l_periodIndexDic = new SafeDictionary<uint,uint>();
+      Version l_version = VersionModel.Instance.GetValue(m_versionId);
+
+      if (l_version == null)
+      {
+        System.Diagnostics.Debug.WriteLine("FinancialEditedFactsModel.CreateEditedFact: Invalid version");
+        return;
+      }
+      UInt32 l_periodIndex = 0;
+      foreach (int l_period in m_periodsList)
+        l_periodIndexDic[(UInt32)l_period] = l_periodIndex++;
       foreach (KeyValuePair<string, CRUDEntity> l_rowsKeyPair in p_rowsDimension.m_values)
       {
         foreach (KeyValuePair<string, CRUDEntity> l_columnsKeyPair in p_columnsDimension.m_values)
@@ -84,7 +95,10 @@ namespace FBI.MVC.Model
           {
             // Set Edited Value           
             Account.FormulaTypes l_formulaType = l_editedFact.Account.FormulaType;
-            if (l_formulaType == Account.FormulaTypes.HARD_VALUE_INPUT || (l_formulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT && m_periodsList.FirstOrDefault() == l_editedFact.Period))
+            if (l_formulaType == Account.FormulaTypes.HARD_VALUE_INPUT ||
+              (l_formulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT && 
+              (l_periodIndexDic[l_editedFact.Period] < (Int32)l_version.FormulaPeriodIndex ||
+              l_periodIndexDic[l_editedFact.Period] >= l_version.FormulaPeriodIndex + l_version.FormulaNbPeriod)))
               EditedFacts.Set(l_factCell.Address, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
             else if (l_formulaType != Account.FormulaTypes.TITLE)
               OutputFacts.Set(l_factCell.Address, new DimensionKey(l_editedFact.EntityId, l_editedFact.AccountId, l_editedFact.EmployeeId, (Int32)l_editedFact.Period), l_editedFact);
