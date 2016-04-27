@@ -93,7 +93,7 @@ namespace FBI.Network
           null);
         m_StreamSSL.AuthenticateAsClient("pps");
 
-        byte[] header = System.Text.Encoding.UTF8.GetBytes("NOWEBSOCKET");
+        byte[] header = System.Text.Encoding.UTF8.GetBytes("RAW");
 
         m_StreamSSL.Write(header, 0, header.Length);
         m_StreamSSL.Flush();
