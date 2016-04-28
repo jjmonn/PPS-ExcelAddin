@@ -43,6 +43,11 @@ namespace FBI.MVC.View
       m_areaController = new WorksheetAreaController(m_controller.Process, m_controller.VersionId, p_worksheet, m_controller.PeriodsList);
     }
 
+    ~AFactEditionView()
+    {
+      AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = true;
+    }
+
     public virtual void LoadView()
     {
       SuscribeEvents();
