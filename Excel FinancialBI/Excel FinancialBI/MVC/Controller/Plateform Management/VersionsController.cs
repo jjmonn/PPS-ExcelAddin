@@ -107,6 +107,12 @@ namespace FBI.MVC.Controller
         if (IsCompatibleVersion(p_version, GlobalFactVersionModel.Instance.GetValue(p_version.GlobalFactVersionId)) == false)
           return (false);
       }
+      if (p_version.FormulaPeriodIndex > p_version.NbPeriod || p_version.FormulaNbPeriod > p_version.NbPeriod || 
+        p_version.FormulaNbPeriod + p_version.FormulaPeriodIndex > p_version.NbPeriod || p_version.FormulaNbPeriod == 0)
+      {
+        Error = Local.GetValue("versions.error.formula_period_range_invalid");
+        return (false);
+      }
       return (true);
     }
 
@@ -133,7 +139,6 @@ namespace FBI.MVC.Controller
       if (VersionModel.Instance.GetValue(p_version.Id) == null)
       {
         Error = Local.GetValue("general.error.system");
-        System.Diagnostics.Debug.WriteLine("Refered version id does not exist, cannot be updated");
         return (false);
       }
       if (IsVersionValid(p_version) == false)

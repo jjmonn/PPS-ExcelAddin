@@ -25,11 +25,12 @@ namespace FBI.MVC.View
     private FbiTreeView<Version> m_versionsTreeview;
     private RightManager m_rightMgr = new RightManager();
     private bool m_isDisplaying;
+    SafeDictionary<Int32, ListItem> m_periodListItems = new SafeDictionary<int, ListItem>();
 
     public VersionsView()
     {
       InitializeComponent();
-      this.LoadView();
+      LoadView();
     }
 
     public void LoadView()
@@ -43,10 +44,12 @@ namespace FBI.MVC.View
       FbiTreeView<ExchangeRateVersion>.Load(m_exchangeRatesVersionVTreeviewbox.TreeView.Nodes, RatesVersionModel.Instance.GetDictionary());
       FbiTreeView<GlobalFactVersion>.Load(m_factsVersionVTreeviewbox.TreeView.Nodes, GlobalFactVersionModel.Instance.GetDictionary());
 
-      this.DefineUIPermissions(); 
-      this.DesactivateUnallowed();  
-      this.MultilanguageSetup();
-      this.SuscribeEvents();
+      AFbiTreeView.InitTVFormat(m_exchangeRatesVersionVTreeviewbox.TreeView);
+      AFbiTreeView.InitTVFormat(m_factsVersionVTreeviewbox.TreeView);
+      DefineUIPermissions(); 
+      DesactivateUnallowed();  
+      MultilanguageSetup();
+      SuscribeEvents();
     }
 
     private void DefineUIPermissions()
@@ -86,24 +89,26 @@ namespace FBI.MVC.View
       m_versionsTreeview.MouseClick += OnVersionTVMouseClick;
       m_lockCombobox.CheckedChanged += OnChangeVersionLock;
 
-      m_versionsTreeview.MouseDown += this.VersionsTV_MouseDown;
-      m_versionsTreeview.NodeDropped += this.VersionsTV_NodeDropped;
+      m_versionsTreeview.MouseDown += VersionsTV_MouseDown;
+      m_versionsTreeview.NodeDropped += VersionsTV_NodeDropped;
 
       m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect += OnChangeVersionExchangeRate;
       m_factsVersionVTreeviewbox.TreeView.AfterSelect += OnChangeVersionFactRate;
+      m_formulaPeriodIndexCB.SelectedItemChanged += OnSelectedPeriodIndexChanged;
+      m_nbFormulaPeriodCB.SelectedItemChanged += OnSelectedNbFormulaPeriodChanged;
 
       // Main menu events
-      this.m_newVersionMenuBT.Click += new System.EventHandler(this.OnClickNewVersion);
-      this.m_newFolderMenuBT.Click += new System.EventHandler(this.OnClickNewFolder);
-      this.m_renameMenuBT.Click += new System.EventHandler(this.OnClickRename);
-      this.m_deleteVersionMenuBT.Click += new System.EventHandler(this.OnClickDelete);
+      m_newVersionMenuBT.Click += new System.EventHandler(OnClickNewVersion);
+      m_newFolderMenuBT.Click += new System.EventHandler(OnClickNewFolder);
+      m_renameMenuBT.Click += new System.EventHandler(OnClickRename);
+      m_deleteVersionMenuBT.Click += new System.EventHandler(OnClickDelete);
 
       // Right click menu events
-      this.m_new_VersionRCMButton.Click += new System.EventHandler(this.OnClickNewVersion);
-      this.m_copyVersionRCMButton.Click += new System.EventHandler(this.OnClickCopyVersion);
-      this.m_newFolderRCMButton.Click += new System.EventHandler(this.OnClickNewFolder);
-      this.m_renameRCMButton.Click += new System.EventHandler(this.OnClickRename);
-      this.m_deleteRCMButton.Click += new System.EventHandler(this.OnClickDelete);
+      m_new_VersionRCMButton.Click += new System.EventHandler(OnClickNewVersion);
+      m_copyVersionRCMButton.Click += new System.EventHandler(OnClickCopyVersion);
+      m_newFolderRCMButton.Click += new System.EventHandler(OnClickNewFolder);
+      m_renameRCMButton.Click += new System.EventHandler(OnClickRename);
+      m_deleteRCMButton.Click += new System.EventHandler(OnClickDelete);
 
       Addin.SuscribeAutoLock(this);
     }
@@ -119,30 +124,63 @@ namespace FBI.MVC.View
 
     private void MultilanguageSetup()
     {
-      this.m_new_VersionRCMButton.Text = Local.GetValue("versions.add_version");
-      this.m_newFolderRCMButton.Text = Local.GetValue("versions.add_folder");
-      this.m_renameRCMButton.Text = Local.GetValue("general.rename");
-      this.m_deleteRCMButton.Text = Local.GetValue("general.delete");
-      this.m_globalFactsVersionLabel.Text = Local.GetValue("facts_versions.global_facts_version");
-      this.m_exchangeRatesVersionLabel.Text = Local.GetValue("facts_versions.exchange_rates_version");
-      this.m_numberOfYearsLabel.Text = Local.GetValue("facts_versions.nb_periods");
-      this.m_startingPeriodLabel.Text = Local.GetValue("facts_versions.starting_period");
-      this.m_periodConfigLabel.Text = Local.GetValue("facts_versions.period_config");
-      this.m_nameLabel.Text = Local.GetValue("facts_versions.version_name");
-      this.m_lockedLabel.Text = Local.GetValue("facts_versions.version_locked");
-      this.m_lockedDateLabel.Text = Local.GetValue("facts_versions.locked_date");
-      this.m_creationDateLabel.Text = Local.GetValue("facts_versions.creation_date");
-      this.VersionsToolStripMenuItem.Text = Local.GetValue("general.versions");
-      this.m_newVersionMenuBT.Text = Local.GetValue("versions.add_version");
-      this.m_newFolderMenuBT.Text = Local.GetValue("versions.add_folder");
-      this.m_copyVersionRCMButton.Text = Local.GetValue("versions.copy_version");
-      this.m_deleteVersionMenuBT.Text = Local.GetValue("general.delete");
-      this.m_renameMenuBT.Text = Local.GetValue("general.rename");
+      m_new_VersionRCMButton.Text = Local.GetValue("versions.add_version");
+      m_newFolderRCMButton.Text = Local.GetValue("versions.add_folder");
+      m_renameRCMButton.Text = Local.GetValue("general.rename");
+      m_deleteRCMButton.Text = Local.GetValue("general.delete");
+      m_globalFactsVersionLabel.Text = Local.GetValue("facts_versions.global_facts_version");
+      m_exchangeRatesVersionLabel.Text = Local.GetValue("facts_versions.exchange_rates_version");
+      m_numberOfYearsLabel.Text = Local.GetValue("facts_versions.nb_periods");
+      m_startingPeriodLabel.Text = Local.GetValue("facts_versions.starting_period");
+      m_periodConfigLabel.Text = Local.GetValue("facts_versions.period_config");
+      m_nameLabel.Text = Local.GetValue("facts_versions.version_name");
+      m_lockedLabel.Text = Local.GetValue("facts_versions.version_locked");
+      m_lockedDateLabel.Text = Local.GetValue("facts_versions.locked_date");
+      m_creationDateLabel.Text = Local.GetValue("facts_versions.creation_date");
+      VersionsToolStripMenuItem.Text = Local.GetValue("general.versions");
+      m_newVersionMenuBT.Text = Local.GetValue("versions.add_version");
+      m_newFolderMenuBT.Text = Local.GetValue("versions.add_folder");
+      m_copyVersionRCMButton.Text = Local.GetValue("versions.copy_version");
+      m_deleteVersionMenuBT.Text = Local.GetValue("general.delete");
+      m_renameMenuBT.Text = Local.GetValue("general.rename");
+      m_formulaPeriodLabel.Text = Local.GetValue("versions.formula_period_range");
+      m_formulaPeriodIndexLabel.Text = Local.GetValue("facts_versions.starting_period");
+      m_nbFormulaPeriodLabel.Text = Local.GetValue("facts_versions.end_period");
     }
 
     public void SetController(IController p_controller)
     {
-      this.m_controller = p_controller as VersionsController;
+      m_controller = p_controller as VersionsController;
+    }
+
+    public void LoadPeriods(Version p_version)
+    {
+      bool l_isDisplaying = m_isDisplaying;
+      m_isDisplaying = true;
+      m_periodListItems.Clear();
+      m_formulaPeriodIndexCB.Items.Clear();
+      m_nbFormulaPeriodCB.Items.Clear();
+
+      List<Int32> l_periodList = PeriodModel.GetPeriodList((Int32)p_version.StartPeriod, (Int32)p_version.NbPeriod, p_version.TimeConfiguration);
+
+      int l_index = 0;
+      foreach (Int32 l_period in l_periodList)
+      {
+        m_periodListItems[l_period] = m_formulaPeriodIndexCB.Items.Add(PeriodModel.GetFormatedDate(l_period, p_version.TimeConfiguration));
+        if (l_index == p_version.FormulaPeriodIndex)
+          m_formulaPeriodIndexCB.SelectedItem = m_periodListItems[l_period];
+        l_index++;
+      }
+      l_index = 0;
+      uint l_dest = (p_version.FormulaPeriodIndex + p_version.FormulaNbPeriod - 1);
+      foreach (ListItem l_item in m_periodListItems.Values)
+      {
+        m_nbFormulaPeriodCB.Items.Add(l_item);
+        if (l_index == l_dest)
+          m_nbFormulaPeriodCB.SelectedItem = l_item;
+        l_index++;
+      }
+      m_isDisplaying = l_isDisplaying;
     }
 
     #region Display version attributes
@@ -162,6 +200,7 @@ namespace FBI.MVC.View
       m_nbPeriodsTextbox.Text = p_version.NbPeriod.ToString();
       SetGlobalFactsVersion(p_version);
       SetExchangeVersion(p_version);
+      LoadPeriods(p_version);
 
       if (p_version.Locked)
       {
@@ -178,7 +217,7 @@ namespace FBI.MVC.View
 
     private void SetControlsEnabled(bool p_allowed)
     {
-      m_lockCombobox.Checked = p_allowed;
+      m_lockCombobox.Enabled = p_allowed;
       m_exchangeRatesVersionVTreeviewbox.Enabled = p_allowed;
       m_factsVersionVTreeviewbox.Enabled = p_allowed;
     }
@@ -286,6 +325,54 @@ namespace FBI.MVC.View
 
     #region User Callback
 
+    private void OnSelectedPeriodIndexChanged(object p_sender, EventArgs p_e)
+    {
+      if (m_isDisplaying)
+        return;
+      Version l_version = VersionModel.Instance.GetValue(m_controller.SelectedVersion);
+
+      if (l_version == null)
+        return;
+      l_version = l_version.Clone();
+      uint l_index = 0;
+
+      foreach (ListItem l_item in m_periodListItems.Values)
+      {
+        if (l_item == m_formulaPeriodIndexCB.SelectedItem)
+          break;
+        l_index++;
+      }
+      l_version.FormulaNbPeriod += l_version.FormulaPeriodIndex - l_index;
+      l_version.FormulaPeriodIndex = l_index;
+      if (m_controller.Update(l_version) == false)
+        MessageBox.Show(m_controller.Error);
+    }
+
+    private void OnSelectedNbFormulaPeriodChanged(object p_sender, EventArgs p_e)
+    {
+      if (m_isDisplaying)
+        return;
+      Version l_version = VersionModel.Instance.GetValue(m_controller.SelectedVersion);
+
+      if (l_version == null)
+        return;
+      l_version = l_version.Clone();
+      uint l_index = 1;
+
+      foreach (ListItem l_item in m_periodListItems.Values)
+      {
+        if (l_item == m_nbFormulaPeriodCB.SelectedItem)
+          break;
+        l_index++;
+      }
+      l_version.FormulaNbPeriod = l_index - l_version.FormulaPeriodIndex;
+      if (m_controller.Update(l_version) == false)
+      {
+        MessageBox.Show(m_controller.Error);
+        LoadPeriods(l_version);
+      }
+    }
+
     private void OnClickNewVersion(object sender, EventArgs e)
     {
       CreateVersion();
@@ -318,7 +405,7 @@ namespace FBI.MVC.View
       if (InvokeRequired)
       {
         VersionsTreeview_AfterSelect_Delegate MyDelegate = new VersionsTreeview_AfterSelect_Delegate(OnVersionTVSelectNode);
-        this.Invoke(MyDelegate, new object[] { sender, e });
+        Invoke(MyDelegate, new object[] { sender, e });
       }
       else
       {
@@ -340,7 +427,7 @@ namespace FBI.MVC.View
       if (InvokeRequired)
       {
         DeleteNode_Delegate MyDelegate = new DeleteNode_Delegate(DeleteNode);
-        this.Invoke(MyDelegate, new object[] { p_id });
+        Invoke(MyDelegate, new object[] { p_id });
       }
       else
       {
@@ -358,7 +445,7 @@ namespace FBI.MVC.View
       if (InvokeRequired)
       {
         UpdateNode_Delegate MyDelegate = new UpdateNode_Delegate(UpdateNode);
-        this.Invoke(MyDelegate, new object[] { p_version });
+        Invoke(MyDelegate, new object[] { p_version });
       }
       else
         m_versionsTreeview.FindAndAdd(p_version);

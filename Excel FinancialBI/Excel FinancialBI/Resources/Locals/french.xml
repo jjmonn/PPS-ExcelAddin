@@ -283,6 +283,7 @@
     <string name="add_version">Ajouter une version</string>
     <string name="add_folder">Ajouter un dossier</string>
     <string name="copy_version">Copier la version</string>
+    <string name="formula_period_range">Intervalle calculé</string>
 
     <!--messages-->
     <string name="msg_folder_name">Entrez le nom du nouveau dossier</string>
@@ -290,6 +291,7 @@
     <string name="warning_delete">Si vous supprimez cette version toutes les données associées à celle-ci seront suppriméees. Cette action est irréversible. Entrez votre mot de passe pour confirmer.</string>
 
     <category name="error">
+      <string name="formula_period_range_invalid">Intervalle calculé invalide: La période de fin ne peut pas être antérieur à la période de début.</string>
       <string name="rates_version_not_selected">Veuillez sélectioner une version des taux de change.</string>
       <string name="gfacts_version_not_selected">Veuillez sélectioner une version des indicateurs macro économiques.</string>
       <string name="rate_or_gfact_version_not_compatible">Version de taux de change ou d'IME incompatible.</string>
@@ -377,7 +379,8 @@
     <string name="nb_days">Nombre de jours</string>
     <string name="copy_from">Créer une copie de</string>
     <string name="starting_period">Période de départ</string>
-	  <string name="starting_month">Mois de départ</string>
+    <string name="end_period">Période de fin</string>
+    <string name="starting_month">Mois de départ</string>
     <string name="period_config">Configuration des périodes (annuel ou mensuel)</string>
     <string name="version_name">Nom de la version</string>
     <string name="version_new">Nouvelle Version</string>
