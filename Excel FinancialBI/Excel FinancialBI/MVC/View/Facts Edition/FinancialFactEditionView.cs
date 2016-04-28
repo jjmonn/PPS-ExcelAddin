@@ -52,6 +52,7 @@ namespace FBI.MVC.View
     {
       foreach (EditedFactBase l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
         m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
+      m_rangeHighlighter.Registered = true;
     }
 
     #region Model callbacks
