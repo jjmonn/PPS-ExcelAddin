@@ -338,7 +338,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          MessageBox.Show(Local.GetValue("accounts.error.update"));
+          MessageBox.Show(Local.GetValue("accounts.error.update") + "\r\n" + Error.GetMessage(p_status));
         }
       }
     }
