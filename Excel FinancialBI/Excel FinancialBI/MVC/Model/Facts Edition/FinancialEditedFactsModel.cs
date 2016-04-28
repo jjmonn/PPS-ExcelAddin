@@ -252,6 +252,7 @@ namespace FBI.MVC.Model
 
     void OnComputeFailed()
     {
+      RaiseFactDownloaded(false);
       m_nbRequest--;
       m_nbCompute--;
       AddinModuleController.SetExcelInteractionState(m_nbRequest <= 0);
