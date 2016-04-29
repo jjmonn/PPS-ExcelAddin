@@ -366,7 +366,8 @@ namespace FBI.MVC.Model
       }
 
       m_nbRequest++;
-      AddinModuleController.SetExcelInteractionState(false);
+      if (l_dic[CRUDAction.UPDATE].Count != 0 || l_dic[CRUDAction.DELETE].Count != 0)
+        AddinModuleController.SetExcelInteractionState(false);
       if (l_dic[CRUDAction.UPDATE].Count > 0)
         FactsModel.Instance.UpdateList(l_dic[CRUDAction.UPDATE], CRUDAction.UPDATE);
       if (l_dic[CRUDAction.DELETE].Count > 0)
