@@ -68,12 +68,13 @@ namespace FBI.MVC.View
       this.m_startPeriodTextbox = new VIBlend.WinForms.Controls.vComboBox();
       this.m_nbPeriodsTextbox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_factsVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
+      this.m_exchangeRatesVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
+      this.m_formulaPeriodLabel = new System.Windows.Forms.Label();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_nbFormulaPeriodCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_formulaPeriodIndexCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_nbFormulaPeriodLabel = new System.Windows.Forms.Label();
       this.m_formulaPeriodIndexLabel = new System.Windows.Forms.Label();
-      this.m_exchangeRatesVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
-      this.m_formulaPeriodLabel = new System.Windows.Forms.Label();
       this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
       this.VersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.m_newVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,7 +85,6 @@ namespace FBI.MVC.View
       this.m_deleteVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
       this.BackgroundWorker1 = new System.ComponentModel.BackgroundWorker();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
-      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_versionsRightClickMenu.SuspendLayout();
       this.TableLayoutPanel3.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
@@ -92,8 +92,8 @@ namespace FBI.MVC.View
       this.SplitContainer1.Panel2.SuspendLayout();
       this.SplitContainer1.SuspendLayout();
       this.TableLayoutPanel2.SuspendLayout();
-      this.MenuStrip1.SuspendLayout();
       this.tableLayoutPanel1.SuspendLayout();
+      this.MenuStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
       // ButtonsImageList
@@ -497,6 +497,51 @@ namespace FBI.MVC.View
       this.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
       this.m_factsVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
+      // m_exchangeRatesVersionVTreeviewbox
+      // 
+      this.m_exchangeRatesVersionVTreeviewbox.BackColor = System.Drawing.Color.White;
+      this.m_exchangeRatesVersionVTreeviewbox.BorderColor = System.Drawing.Color.Black;
+      this.m_exchangeRatesVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_exchangeRatesVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_exchangeRatesVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(290, 332);
+      this.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox";
+      this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(386, 23);
+      this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 25;
+      this.m_exchangeRatesVersionVTreeviewbox.Text = " ";
+      this.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false;
+      this.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
+      this.m_exchangeRatesVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_formulaPeriodLabel
+      // 
+      this.m_formulaPeriodLabel.AutoSize = true;
+      this.m_formulaPeriodLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_formulaPeriodLabel.Location = new System.Drawing.Point(3, 413);
+      this.m_formulaPeriodLabel.Name = "m_formulaPeriodLabel";
+      this.m_formulaPeriodLabel.Size = new System.Drawing.Size(281, 51);
+      this.m_formulaPeriodLabel.TabIndex = 28;
+      this.m_formulaPeriodLabel.Text = "label3";
+      this.m_formulaPeriodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
+      // tableLayoutPanel1
+      // 
+      this.tableLayoutPanel1.ColumnCount = 2;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.Controls.Add(this.m_nbFormulaPeriodCB, 1, 1);
+      this.tableLayoutPanel1.Controls.Add(this.m_formulaPeriodIndexCB, 0, 1);
+      this.tableLayoutPanel1.Controls.Add(this.m_nbFormulaPeriodLabel, 1, 0);
+      this.tableLayoutPanel1.Controls.Add(this.m_formulaPeriodIndexLabel, 0, 0);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(290, 416);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 2;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(386, 45);
+      this.tableLayoutPanel1.TabIndex = 29;
+      // 
       // m_nbFormulaPeriodCB
       // 
       this.m_nbFormulaPeriodCB.BackColor = System.Drawing.Color.White;
@@ -552,33 +597,6 @@ namespace FBI.MVC.View
       this.m_formulaPeriodIndexLabel.Size = new System.Drawing.Size(35, 13);
       this.m_formulaPeriodIndexLabel.TabIndex = 0;
       this.m_formulaPeriodIndexLabel.Text = "label1";
-      // 
-      // m_exchangeRatesVersionVTreeviewbox
-      // 
-      this.m_exchangeRatesVersionVTreeviewbox.BackColor = System.Drawing.Color.White;
-      this.m_exchangeRatesVersionVTreeviewbox.BorderColor = System.Drawing.Color.Black;
-      this.m_exchangeRatesVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_exchangeRatesVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_exchangeRatesVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(290, 332);
-      this.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox";
-      this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(386, 23);
-      this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 25;
-      this.m_exchangeRatesVersionVTreeviewbox.Text = " ";
-      this.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false;
-      this.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
-      this.m_exchangeRatesVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      // 
-      // m_formulaPeriodLabel
-      // 
-      this.m_formulaPeriodLabel.AutoSize = true;
-      this.m_formulaPeriodLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.m_formulaPeriodLabel.Location = new System.Drawing.Point(3, 413);
-      this.m_formulaPeriodLabel.Name = "m_formulaPeriodLabel";
-      this.m_formulaPeriodLabel.Size = new System.Drawing.Size(281, 51);
-      this.m_formulaPeriodLabel.TabIndex = 28;
-      this.m_formulaPeriodLabel.Text = "label3";
-      this.m_formulaPeriodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // MenuStrip1
       // 
@@ -647,24 +665,6 @@ namespace FBI.MVC.View
       this.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico");
       this.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico");
       // 
-      // tableLayoutPanel1
-      // 
-      this.tableLayoutPanel1.ColumnCount = 2;
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel1.Controls.Add(this.m_nbFormulaPeriodCB, 1, 1);
-      this.tableLayoutPanel1.Controls.Add(this.m_formulaPeriodIndexCB, 0, 1);
-      this.tableLayoutPanel1.Controls.Add(this.m_nbFormulaPeriodLabel, 1, 0);
-      this.tableLayoutPanel1.Controls.Add(this.m_formulaPeriodIndexLabel, 0, 0);
-      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.tableLayoutPanel1.Location = new System.Drawing.Point(290, 416);
-      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-      this.tableLayoutPanel1.RowCount = 2;
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-      this.tableLayoutPanel1.Size = new System.Drawing.Size(386, 45);
-      this.tableLayoutPanel1.TabIndex = 29;
-      // 
       // VersionsView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -681,10 +681,10 @@ namespace FBI.MVC.View
       this.SplitContainer1.ResumeLayout(false);
       this.TableLayoutPanel2.ResumeLayout(false);
       this.TableLayoutPanel2.PerformLayout();
-      this.MenuStrip1.ResumeLayout(false);
-      this.MenuStrip1.PerformLayout();
       this.tableLayoutPanel1.ResumeLayout(false);
       this.tableLayoutPanel1.PerformLayout();
+      this.MenuStrip1.ResumeLayout(false);
+      this.MenuStrip1.PerformLayout();
       this.ResumeLayout(false);
 
     }

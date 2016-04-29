@@ -15,6 +15,8 @@ namespace FBI.MVC.Model
   using Controller;
 
   public delegate void OnComputeFailed();
+  public delegate void ComputeProgressEvent(Int32 p_percentage);
+  public delegate void DownloadProgressEvent(Int32 p_percentage);
 
   class FinancialEditedFactsModel : AEditedFactsModel
   {
@@ -22,6 +24,8 @@ namespace FBI.MVC.Model
     SafeDictionary<DimensionKey, Fact> m_facts = new SafeDictionary<DimensionKey, Fact>();
     public MultiIndexDictionary<string, DimensionKey, EditedFinancialFact> OutputFacts { get; private set; }
     public event OnComputeFailed ComputeFailed;
+    public event ComputeProgressEvent ComputeProgress;
+    public event ComputeProgressEvent DownloadProgress;
     WorksheetAreaController m_dimensions = null;
     private bool m_updateCellsOnDownload;
     UInt32 m_versionId;
@@ -164,8 +168,12 @@ namespace FBI.MVC.Model
       SafeDictionary<DimensionKey, Fact> l_downloadedFactDic = new SafeDictionary<DimensionKey, Fact>();
       foreach (Fact l_fact in p_factsList)
         l_downloadedFactDic[new DimensionKey(l_fact.EntityId, l_fact.AccountId, (UInt32)AxisType.Employee, (Int32)l_fact.Period)] = l_fact;
+      int l_count = 0;
+      int l_nbFacts = EditedFacts.Count;
+
       foreach (DimensionKey l_key in EditedFacts.SecondaryKeys)
       {
+        l_count++;
         EditedFinancialFact l_editedFact = EditedFacts[l_key];
         if (l_editedFact != null)
         {
@@ -177,19 +185,17 @@ namespace FBI.MVC.Model
             l_fact = l_editedFact.Clone();
             l_fact.Value = 0;
           }
-          try
-          {
-            double l_editedValue = l_editedFact.EditedValue;
-            l_editedFact.UpdateFinancialFact(l_fact);
-            if (m_displayDiff)
-              l_editedFact.EditedValue = l_editedValue;
-            if (m_updateCellsOnDownload)
-              l_editedFact.Cell.Value2 = l_editedFact.Value;
-          }
-          catch (Exception e)
-          {
-            System.Diagnostics.Debug.WriteLine("FinancialEditedFactsModel::OnFinancialInputDownloaded", e.Message);
-          }
+
+          double l_editedValue = l_editedFact.EditedValue;
+          l_editedFact.UpdateFinancialFact(l_fact);
+          if (m_displayDiff)
+            l_editedFact.EditedValue = l_editedValue;
+          if (m_updateCellsOnDownload)
+            l_editedFact.Cell.Value2 = l_editedFact.Value;
+
+          if ((l_count % 50) == 0 && DownloadProgress != null)
+            DownloadProgress((int)((l_count / (double)l_nbFacts) * 100));
+
         }
       }
       foreach (KeyValuePair<DimensionKey, Fact> l_pair in l_downloadedFactDic)
@@ -275,8 +281,12 @@ namespace FBI.MVC.Model
           if (l_version != null)
             foreach (ComputeResult l_result in p_result.Values)
             {
+              Int32 l_count = 0;
+              int l_nbValues = l_result.Values.Count;
+
               foreach (KeyValuePair<ResultKey, double> l_valuePair in l_result.Values) // value first set to correct value but reset to 0
               {
+                l_count++;
                 if (l_valuePair.Key.PeriodType != l_version.TimeConfiguration)
                   continue;
                 DimensionKey l_key =
@@ -295,8 +305,12 @@ namespace FBI.MVC.Model
                   l_fact.Cell.Value2 = "+inf.";
                 else
                   l_fact.Cell.Value = l_valuePair.Value;
+                if ((l_count % 100) == 0 && ComputeProgress != null)
+                  ComputeProgress((int)((l_count / (double)l_nbValues) * 100));
               }
             }
+          if (ComputeProgress != null)
+            ComputeProgress(100);
           RaiseFactDownloaded(true);
         }
         else

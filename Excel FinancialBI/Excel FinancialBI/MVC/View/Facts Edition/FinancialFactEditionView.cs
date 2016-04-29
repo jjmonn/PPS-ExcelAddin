@@ -16,6 +16,8 @@ namespace FBI.MVC.View
 
   class FinancialFactEditionView : AFactEditionView<FinancialEditedFactsModel, FinancialFactEditionController>
   {
+    int m_computePercentage = 0;
+    int m_downloadPercentage = 0;
 
     public FinancialFactEditionView(FinancialFactEditionController p_controller, Worksheet p_worksheet) : base(p_controller, p_worksheet)
     {
@@ -33,6 +35,38 @@ namespace FBI.MVC.View
       FactsModel.Instance.UpdateEvent += OnCommitResult;
       m_controller.EditedFactModel.ComputeFailed += OnComputeFailed;
       m_controller.WorksheetSelectionChanged += OnWorksheetSelectionChanged;
+      m_controller.EditedFactModel.ComputeProgress += OnComputeProgress;
+      m_controller.EditedFactModel.DownloadProgress += OnDownloadProgress;
+    }
+
+    delegate void OnComputeProgress_delegate(int p_percentage);
+    void OnComputeProgress(int p_percentage)
+    {
+      if (m_progressBar.InvokeRequired)
+      {
+        OnComputeProgress_delegate func = new OnComputeProgress_delegate(OnComputeProgress);
+        m_progressBar.Invoke(func, p_percentage);
+      }
+      else
+      {
+        m_computePercentage = p_percentage;
+        m_progressBar.Value = (int)(m_computePercentage * 0.2) + (int)(m_downloadPercentage * 0.6);
+      }
+    }
+
+    delegate void OnDownloadProgress_delegate(int p_percentage);
+    void OnDownloadProgress(int p_percentage)
+    {
+      if (m_progressBar.InvokeRequired)
+      {
+        OnDownloadProgress_delegate func = new OnDownloadProgress_delegate(OnDownloadProgress);
+        m_progressBar.Invoke(func, p_percentage);
+      }
+      else
+      {
+        m_downloadPercentage = p_percentage;
+        m_progressBar.Value = (int)(m_computePercentage * 0.2) + (int)(m_downloadPercentage * 0.6);
+      }
     }
 
     void OnComputeFailed()
@@ -48,11 +82,29 @@ namespace FBI.MVC.View
         m_controller.DisplayAccountSP(l_account);
     }
 
+    delegate void SetEditedFactsStatus_delegate();
     protected override void SetEditedFactsStatus()
     {
-      foreach (EditedFactBase l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
-        m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
-      m_rangeHighlighter.Registered = true;
+      if (m_progressBar.InvokeRequired)
+      {
+        SetEditedFactsStatus_delegate func = new SetEditedFactsStatus_delegate(SetEditedFactsStatus);
+        m_progressBar.Invoke(func);
+      }
+      else
+      {
+        int l_count = 0;
+        int l_nbFacts = m_controller.EditedFactModel.EditedFacts.Count;
+        foreach (EditedFactBase l_editedFact in m_controller.EditedFactModel.EditedFacts.Values)
+        {
+          m_rangeHighlighter.FillCellColor(l_editedFact.Cell, l_editedFact.SetFactValueStatus());
+          if (l_count % 100 == 0)
+            m_progressBar.Value = (int)((l_count / (double)l_nbFacts * 100) * 0.2 + m_computePercentage * 0.2 + m_downloadPercentage * 0.6);
+          l_count++;
+        }
+        m_computePercentage = 0;
+        m_downloadPercentage = 0;
+        m_rangeHighlighter.Registered = true;
+      }
     }
 
     #region Model callbacks

@@ -18,12 +18,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>true</RegisterForComInterop>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -880,6 +881,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\PasswordBox.resx">
       <DependentUpon>PasswordBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\PPS Controls\PBarUI.dje-NE.resx">
+      <DependentUpon>PBarUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\PBarUI.resx">
       <DependentUpon>PBarUI.cs</DependentUpon>

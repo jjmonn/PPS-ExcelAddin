@@ -14,22 +14,22 @@ namespace FBI.MVC.View
   using FBI;
   using Utils;
 
-  public partial class PBarUI : Form, IView
+  public partial class PBarUI : Form
   {
-    public PBarUI()
+    public PBarUI(string p_title, Int32 p_maxValue)
     {
       InitializeComponent();
-      this.MultilangueSetup();
+      Text = p_title;
+      m_progressBar.Maximum = p_maxValue;
     }
 
-    private void MultilangueSetup()
+    public int Value
     {
-      this.Text = Local.GetValue("upload.uploading");
-    }
-
-    public void SetController(IController p_controller)
-    {
-
+      set { 
+        m_progressBar.Value = value;
+        m_progressBar.Refresh();
+      }
+      get { return (m_progressBar.Value); }
     }
   }
 }

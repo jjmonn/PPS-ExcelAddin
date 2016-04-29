@@ -33,6 +33,7 @@ namespace FBI.MVC.View
     protected WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
     protected WorksheetAreaController m_areaController;
     protected bool m_init = false;
+    protected PBarUI m_progressBar;
 
     public AFactEditionView(TController p_controller, Worksheet p_worksheet)
     {
@@ -40,6 +41,7 @@ namespace FBI.MVC.View
       m_controller = p_controller;
       m_worksheet = p_worksheet;
       m_model = m_controller.EditedFactModel;
+      m_progressBar = new PBarUI(Local.GetValue("general.loading"), 100);
       m_areaController = new WorksheetAreaController(m_controller.Process, m_controller.VersionId, p_worksheet, m_controller.PeriodsList);
     }
 
@@ -73,6 +75,8 @@ namespace FBI.MVC.View
 
     public void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
+      m_progressBar.Value = 0;
+      m_progressBar.Show();
       m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
       ActivateFactEditionRibbon();
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
@@ -81,6 +85,8 @@ namespace FBI.MVC.View
 
     public void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
+      m_progressBar.Value = 0;
+      m_progressBar.Show();
       m_controller.EditedFactModel.RegisterEditedFacts(m_areaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
       m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
     }
@@ -171,16 +177,26 @@ namespace FBI.MVC.View
       }
     }
 
+    delegate void OnFactsDownloaded_delegate(bool p_success);
     protected virtual void OnFactsDownloaded(bool p_success)
     {
-      if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
-        return;
-      if (p_success == true && m_init == false)
+      if (m_progressBar.InvokeRequired)
       {
-        m_init = true;
-        m_controller.AddinController.AssociateExcelWorksheetEvents(m_worksheet);
+        OnFactsDownloaded_delegate func = new OnFactsDownloaded_delegate(OnFactsDownloaded);
+        m_progressBar.Invoke(func, p_success);
       }
-      SetEditedFactsStatus();
+      else
+      {
+        if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
+          return;
+        if (p_success == true && m_init == false)
+        {
+          m_init = true;
+          m_controller.AddinController.AssociateExcelWorksheetEvents(m_worksheet);
+        }
+        SetEditedFactsStatus();
+        m_progressBar.Hide();
+      }
     }
 
     #endregion
