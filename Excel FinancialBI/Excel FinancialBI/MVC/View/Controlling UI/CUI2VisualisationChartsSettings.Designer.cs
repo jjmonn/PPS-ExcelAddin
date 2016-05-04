@@ -34,9 +34,7 @@ namespace FBI.MVC.View
 	{
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CUI2VisualisationChartsSettings));
-      this.m_chartTitleLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_chartTitle = new VIBlend.WinForms.Controls.vTextBox();
-      this.m_serieLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_serieColor = new VIBlend.WinForms.Controls.vColorPicker();
       this.m_AccountLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_ColorLabel = new VIBlend.WinForms.Controls.vLabel();
@@ -45,23 +43,9 @@ namespace FBI.MVC.View
       this.m_serie = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.m_addSerie = new VIBlend.WinForms.Controls.vButton();
       this.m_removeSerie = new VIBlend.WinForms.Controls.vButton();
+      this.m_chartTitleLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.m_serieLabel = new VIBlend.WinForms.Controls.vLabel();
       this.SuspendLayout();
-      // 
-      // m_chartTitleLabel
-      // 
-      this.m_chartTitleLabel.BackColor = System.Drawing.Color.Transparent;
-      this.m_chartTitleLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
-      this.m_chartTitleLabel.Ellipsis = false;
-      this.m_chartTitleLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_chartTitleLabel.Location = new System.Drawing.Point(17, 24);
-      this.m_chartTitleLabel.Multiline = true;
-      this.m_chartTitleLabel.Name = "m_chartTitleLabel";
-      this.m_chartTitleLabel.Size = new System.Drawing.Size(41, 25);
-      this.m_chartTitleLabel.TabIndex = 0;
-      this.m_chartTitleLabel.Text = "[CUI_Charts.chart_title]";
-      this.m_chartTitleLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-      this.m_chartTitleLabel.UseMnemonics = true;
-      this.m_chartTitleLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // m_chartTitle
       // 
@@ -80,22 +64,6 @@ namespace FBI.MVC.View
       this.m_chartTitle.TabIndex = 1;
       this.m_chartTitle.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
       this.m_chartTitle.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_serieLabel
-      // 
-      this.m_serieLabel.BackColor = System.Drawing.Color.Transparent;
-      this.m_serieLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
-      this.m_serieLabel.Ellipsis = false;
-      this.m_serieLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_serieLabel.Location = new System.Drawing.Point(17, 100);
-      this.m_serieLabel.Multiline = true;
-      this.m_serieLabel.Name = "m_serieLabel";
-      this.m_serieLabel.Size = new System.Drawing.Size(41, 25);
-      this.m_serieLabel.TabIndex = 2;
-      this.m_serieLabel.Text = "[CUI_Charts.serie_1]";
-      this.m_serieLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
-      this.m_serieLabel.UseMnemonics = true;
-      this.m_serieLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // m_serieColor
       // 
@@ -123,7 +91,7 @@ namespace FBI.MVC.View
       this.m_AccountLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_AccountLabel.Ellipsis = false;
       this.m_AccountLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_AccountLabel.Location = new System.Drawing.Point(86, 70);
+      this.m_AccountLabel.Location = new System.Drawing.Point(86, 69);
       this.m_AccountLabel.Multiline = true;
       this.m_AccountLabel.Name = "m_AccountLabel";
       this.m_AccountLabel.Size = new System.Drawing.Size(246, 25);
@@ -139,7 +107,7 @@ namespace FBI.MVC.View
       this.m_ColorLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_ColorLabel.Ellipsis = false;
       this.m_ColorLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_ColorLabel.Location = new System.Drawing.Point(347, 70);
+      this.m_ColorLabel.Location = new System.Drawing.Point(347, 69);
       this.m_ColorLabel.Multiline = true;
       this.m_ColorLabel.Name = "m_ColorLabel";
       this.m_ColorLabel.Size = new System.Drawing.Size(143, 25);
@@ -197,7 +165,7 @@ namespace FBI.MVC.View
       this.m_addSerie.Location = new System.Drawing.Point(86, 155);
       this.m_addSerie.Name = "m_addSerie";
       this.m_addSerie.RoundedCornersMask = ((byte)(15));
-      this.m_addSerie.Size = new System.Drawing.Size(105, 22);
+      this.m_addSerie.Size = new System.Drawing.Size(142, 22);
       this.m_addSerie.TabIndex = 14;
       this.m_addSerie.Text = "[chart.add_serie]";
       this.m_addSerie.UseVisualStyleBackColor = false;
@@ -218,11 +186,44 @@ namespace FBI.MVC.View
       this.m_removeSerie.UseVisualStyleBackColor = false;
       this.m_removeSerie.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
+      // m_chartTitleLabel
+      // 
+      this.m_chartTitleLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_chartTitleLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_chartTitleLabel.Ellipsis = false;
+      this.m_chartTitleLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_chartTitleLabel.Location = new System.Drawing.Point(17, 24);
+      this.m_chartTitleLabel.Multiline = true;
+      this.m_chartTitleLabel.Name = "m_chartTitleLabel";
+      this.m_chartTitleLabel.Size = new System.Drawing.Size(63, 25);
+      this.m_chartTitleLabel.TabIndex = 0;
+      this.m_chartTitleLabel.Text = "[CUI_Charts.chart_title]";
+      this.m_chartTitleLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_chartTitleLabel.UseMnemonics = true;
+      this.m_chartTitleLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_serieLabel
+      // 
+      this.m_serieLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_serieLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_serieLabel.Ellipsis = false;
+      this.m_serieLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_serieLabel.Location = new System.Drawing.Point(17, 98);
+      this.m_serieLabel.Multiline = true;
+      this.m_serieLabel.Name = "m_serieLabel";
+      this.m_serieLabel.Size = new System.Drawing.Size(63, 25);
+      this.m_serieLabel.TabIndex = 1;
+      this.m_serieLabel.Text = "[CUI_Charts.chart_title]";
+      this.m_serieLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_serieLabel.UseMnemonics = true;
+      this.m_serieLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
       // CUI2VisualisationChartsSettings
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(546, 207);
+      this.Controls.Add(this.m_serieLabel);
       this.Controls.Add(this.m_removeSerie);
       this.Controls.Add(this.m_addSerie);
       this.Controls.Add(this.m_serie);
@@ -230,7 +231,6 @@ namespace FBI.MVC.View
       this.Controls.Add(this.m_ColorLabel);
       this.Controls.Add(this.m_AccountLabel);
       this.Controls.Add(this.m_serieColor);
-      this.Controls.Add(this.m_serieLabel);
       this.Controls.Add(this.m_chartTitle);
       this.Controls.Add(this.m_chartTitleLabel);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -238,10 +238,8 @@ namespace FBI.MVC.View
       this.Text = "[CUI_Charts.charts_settings]";
       this.ResumeLayout(false);
 
-	}
-	public VIBlend.WinForms.Controls.vLabel m_chartTitleLabel;
+  }
   public VIBlend.WinForms.Controls.vTextBox m_chartTitle;
-	public VIBlend.WinForms.Controls.vLabel m_serieLabel;
   public VIBlend.WinForms.Controls.vColorPicker m_serieColor;
 	public VIBlend.WinForms.Controls.vLabel m_AccountLabel;
   public VIBlend.WinForms.Controls.vLabel m_ColorLabel;
@@ -250,6 +248,8 @@ namespace FBI.MVC.View
   public VIBlend.WinForms.Controls.vTreeViewBox m_serie;
   public VIBlend.WinForms.Controls.vButton m_addSerie;
   public VIBlend.WinForms.Controls.vButton m_removeSerie;
+  public VIBlend.WinForms.Controls.vLabel m_chartTitleLabel;
+  public VIBlend.WinForms.Controls.vLabel m_serieLabel;
 }
 
 }

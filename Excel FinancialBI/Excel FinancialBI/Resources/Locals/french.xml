@@ -75,13 +75,22 @@
 
   <category name="CUI_Charts">
     <category name="error">
+      <string name="no_name">Impossible de créer un graphique sans nom</string>
+      <string name="incomplete_series">Impossible de créer le graphique : Des comptes ajoutés sont incomplets</string>
+      <string name="invalid_serie">Impossible de créer le graphique : Des types de compte ajoutés sont invalides</string>
       <string name="create_panel">Impossible de créer le panel</string>
       <string name="same_panel">Vous ne pouvez pas ouvrir le même panel</string>
+      <string name="invalid_account">Compte invalide</string>
     </category>
+    <category name="warning">
+      <string name="multiple_account">Un compte est ajouté plusieurs fois dans le graphique. Il sera ignoré</string>
+    </category>
+    <string name="choose_version_or_deconstruction">Trop de comptes pour cette opération : Voulez-vous décomposer par versions ?</string>
+    <string name="choose_version">Choisissez une version :</string>
     <string name="charts_settings">Options du graphique</string>
-    <string name="chart_title">Titre</string>
-    <string name="serie_1">Série 1</string>
-    <string name="serie_2">Série 2</string>
+    <string name="add_serie">Ajouter une série</string>
+    <string name="serie">Série</string>
+    <string name="chart_title">Nom</string>
     <string name="CUI2_vizualization">Financial BI Visualisation</string>
   </category>
 
@@ -611,6 +620,7 @@
     <category name="error">
       <string name="bnf_is_fucked">Mauvais paramètre(s) pour la BNF. Contactez un administrateur</string>
       <string name="at">Input erroné au caractère</string>
+      <string name="on">sur la règle</string>
     </category>
   </category>
 

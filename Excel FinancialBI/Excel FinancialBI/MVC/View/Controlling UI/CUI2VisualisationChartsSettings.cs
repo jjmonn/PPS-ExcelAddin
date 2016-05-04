@@ -302,7 +302,7 @@ namespace FBI.MVC.View
       Account l_account;
 
       if ((l_account = AccountModel.Instance.GetValue(p_accountId)) == null)
-        return (Local.GetValue("CUI_Charts.error.account_invalid"));
+        return (Local.GetValue("CUI_Charts.error.invalid_account"));
       return (l_account.Name);
     }
 

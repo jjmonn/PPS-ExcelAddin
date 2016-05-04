@@ -25,6 +25,7 @@ namespace FBI.Utils
     private string m_concatenated = null;
 
     public string LastError = "";
+    private int m_errorPtr = 0;
 
     private const char CHAR_DELIM = '\'';
     private const char STRING_DELIM = '\"';
@@ -67,6 +68,7 @@ namespace FBI.Utils
 
     public bool Parse(string p_input, string p_bnfRule)
     {
+      m_errorPtr = 0;
       m_eventContent.Clear();
       Consumer p_bnf = new Consumer(p_bnfRule);
 
@@ -198,6 +200,7 @@ namespace FBI.Utils
         this.FillRule(p_bnf, l_rule);
         if (!this.EvalRule(p_bnf, l_rule))
         {
+          this.BuildLastError(p_bnf, l_rule);
           m_input.Set(l_inputPtr);
           return (false);
         }
@@ -217,14 +220,16 @@ namespace FBI.Utils
         if (this.EvalSimpleRuleList(l_splittedBnf))
           return (true);
       }
-      this.BuildLastError(p_bnf);
       return (false);
     }
 
-    private void BuildLastError(Consumer p_bnf)
+    private void BuildLastError(Consumer p_bnf, Rule p_rule)
     {
-      this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + "\n";
-      this.LastError += m_input.Str;
+      if (m_input.Ptr > m_errorPtr)
+      {
+        this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + " " + Local.GetValue("bnf.error.on") + " " + p_rule.Name + "\n";
+        this.LastError += m_input.Str + "\n";
+      }
     }
 
     private bool RuleDigit(Consumer p_bnf)
