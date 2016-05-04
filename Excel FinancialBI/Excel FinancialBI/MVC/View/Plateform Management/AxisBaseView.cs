@@ -105,6 +105,7 @@ namespace FBI.MVC.View
     {
       AxisElemModel.Instance.ReadEvent   += OnModelRead;
       AxisElemModel.Instance.DeleteEvent += OnModelDelete;
+      AxisElemModel.Instance.CreationEvent += OnModelCreate;
       AxisFilterModel.Instance.ReadEvent += OnModelReadAxisFilter;
       m_dgv.CellMouseClick += OnClickCell;
       m_expandAllMenu.Click += OnClickExpand;
@@ -124,6 +125,7 @@ namespace FBI.MVC.View
       AxisElemModel.Instance.ReadEvent -= OnModelRead;
       AxisElemModel.Instance.DeleteEvent -= OnModelDelete;
       AxisFilterModel.Instance.ReadEvent -= OnModelReadAxisFilter;
+      AxisElemModel.Instance.CreationEvent -= OnModelCreate;
     }
 
     #endregion
@@ -282,7 +284,7 @@ namespace FBI.MVC.View
         Forms.MsgBox.Show(Local.GetValue("axis.error.not_found"));
         return;
       }
-      string l_result = PasswordBox.Open(Local.GetValue("axis.creation_confirm"));
+      string l_result = PasswordBox.Open(Local.GetValue("axis.delete_confirm"));
 
       if (l_result != PasswordBox.Canceled && l_result != Addin.Password)
       {
@@ -297,7 +299,7 @@ namespace FBI.MVC.View
     {
       HierarchyItem l_row = m_hoveredRow;
 
-      if (l_row != null)
+      if (l_row != null && l_row.ItemValue != null)
         m_controller.ShowNewAxisUI((UInt32)l_row.ItemValue);
       else
         m_controller.ShowNewAxisUI();
@@ -306,6 +308,8 @@ namespace FBI.MVC.View
     private void OnDGVCellValueChanged(object sender, CellEventArgs args)
     {
       if (m_cellModif == false || args == null || args.Cell.Value == null)
+        return;
+      if (args.Cell.RowItem.ItemValue == null || args.Cell.ColumnItem.ItemValue == null)
         return;
       m_cellModif = false;
       UInt32 l_axisElemId = (UInt32)args.Cell.RowItem.ItemValue;
@@ -368,7 +372,7 @@ namespace FBI.MVC.View
 
     void OnClickRename(object sender, EventArgs e)
     {
-      if (m_hoveredRow == null)
+      if (m_hoveredRow == null || m_hoveredRow.ItemValue == null)
         return;
       UInt32 l_axisElemId = (UInt32)m_hoveredRow.ItemValue;
       AxisElem l_axisElem = AxisElemModel.Instance.GetValue(l_axisElemId);
@@ -386,6 +390,22 @@ namespace FBI.MVC.View
     #endregion
 
     #region Model Callback
+
+
+    delegate void OnModelCreate_delegate(ErrorMessage p_status, UInt32 p_id);
+    void OnModelCreate(ErrorMessage p_status, UInt32 p_id)
+    {
+      if (m_dgv.InvokeRequired)
+      {
+        OnModelCreate_delegate func = new OnModelCreate_delegate(OnModelCreate);
+        Invoke(func, p_status, p_id);
+      }
+      else
+      {
+        if (p_status != ErrorMessage.SUCCESS)
+          MessageBox.Show(Error.GetMessage(p_status));
+      }
+    }
 
     delegate void OnModelRead_delegate(ErrorMessage p_status, AxisElem p_attributes);
     void OnModelRead(ErrorMessage p_status, AxisElem p_attributes)

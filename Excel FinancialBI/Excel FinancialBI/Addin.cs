@@ -102,6 +102,8 @@ namespace FBI
     public static void Disconnect()
     {
       m_networkLauncher.Stop();
+      m_initTypeSet.Clear();
+      InitModels(false);
     }
 
     public static bool Connect(string p_userName, string p_password)
@@ -144,15 +146,19 @@ namespace FBI
     delegate void LockView_delegate(bool p_connected, ContainerControl p_control);
     public static void LockView(bool p_connected, ContainerControl p_control)
     {
-      if (p_control.InvokeRequired)
+      try
       {
-        LockView_delegate func = new LockView_delegate(LockView);
-        p_control.Invoke(func, p_connected, p_control);
+        if (p_control.InvokeRequired)
+        {
+          LockView_delegate func = new LockView_delegate(LockView);
+          p_control.Invoke(func, p_connected, p_control);
+        }
+        else
+        {
+          p_control.Enabled = p_connected;
+        }
       }
-      else
-      {
-        p_control.Enabled = p_connected;
-      }
+      catch { }
     }
 
     public static UInt32 VersionId

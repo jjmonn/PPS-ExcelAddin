@@ -458,7 +458,7 @@
       <string name="already_exist">Existe déjà.</string>
       <string name="not_implemented">Non implémenté.</string>
       <string name="invalid_attribute">Attribut(s) invalide(s).</string>
-      <string name="permision_denied">Permission non accordée.</string>
+      <string name="permission_denied">Permission non accordée.</string>
       <string name="dependent_parent">Un parent dépend de cet élément.</string>
       <string name="name_already_used">Nom déjà utilisé.</string>
       <string name="version_mismatch">Votre version de Financial BI est incompatible.</string>

@@ -135,6 +135,7 @@
     <string name="msg_destination_cell_not_valid">Une cellue doit être sélectionnée dans Excel pour pouvoir envoyer la hiérarchie des comptes sur la feuille.</string>
     <string name="msg_accounts_drop">La hiérarchie des comptes va être envoyée: </string>
     <string name="msg_formula_validation_confirmation">Enregister cette formule</string>
+    <string name="msg_formula_empty">La formule est vide.</string>
     <string name="title_formula_validation_confirmation">Confirmation de l'édition de la formule</string>
     <string name="msg_password_required">Modifier le type de formule de ce compte pourrait entraîner la perte de données, confirmez vous la conversion de ce compte en formule.</string>
     <string name="msg_new_tab_name">Nom du nouveau rapport: </string>
@@ -218,6 +219,7 @@
 
   <category name="axis">
     <string name="rename">Renommer l'element.</string>
+    <string name="delete_confirm">Vous allez supprimer toutes les données associées a cet element, entrez votre mot de passe pour confirmer.</string>
     <category name="error">
       <string name="axis_type_invalid">Type d'axe invalide.</string>
       <string name="not_found">Element introuvable.</string>
@@ -485,7 +487,7 @@
       <string name="already_exist">Existe déjà.</string>
       <string name="not_implemented">Non implémenté.</string>
       <string name="invalid_attribute">Attribut(s) invalide(s).</string>
-      <string name="permision_denied">Permission non accordée.</string>
+      <string name="permission_denied">Permission non accordée.</string>
       <string name="dependent_parent">Un parent dépend de cet élément.</string>
       <string name="name_already_used">Nom déjà utilisé.</string>
       <string name="version_mismatch">Votre version de Financial BI est incompatible.</string>

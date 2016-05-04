@@ -354,7 +354,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          Forms.MsgBox.Show("{CREATE}", "filters.new_value", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          MessageBox.Show(Error.GetMessage(p_status), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
           this.DesactivateUnallowed();
         }
       }
@@ -372,7 +372,7 @@ namespace FBI.MVC.View
       {
         if (p_status != ErrorMessage.SUCCESS)
         {
-          Forms.MsgBox.Show("{UPDATE}", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          MessageBox.Show(Error.GetMessage(p_status), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         this.DesactivateUnallowed();
       }
@@ -403,7 +403,7 @@ namespace FBI.MVC.View
           m_tree.Refresh();
           return;
         }
-        Forms.MsgBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show(Error.GetMessage(p_status), Local.GetValue("general.delete"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 

@@ -46,8 +46,8 @@ namespace FBI.MVC.Controller
 
     public void ShowNewAxisUI(UInt32 p_parentId = 0)
     {
-      if (p_parentId != 0)
-        m_newAxisUI.ParentAxisElemId = p_parentId;
+      m_newAxisUI.LoadView();
+      m_newAxisUI.ParentAxisElemId = p_parentId;
       m_newAxisUI.ShowDialog();
     }
 
