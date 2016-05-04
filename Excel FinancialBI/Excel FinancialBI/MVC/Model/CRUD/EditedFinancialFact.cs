@@ -32,7 +32,6 @@ namespace FBI.MVC.Model.CRUD
       Value = p_fact.Value;
       EditedValue = p_fact.Value;
       ClientId = p_fact.ClientId;
-      SetFactValueStatus();
     }
 
     public override EditedFactStatus SetFactValueStatus()

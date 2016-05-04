@@ -186,6 +186,7 @@ namespace FBI.MVC.Controller
       }
     }
 
+    public static bool GetExcelInteractionState() { return (m_interactive); }
     public static void SetExcelInteractionState(bool p_state)
     {
       try

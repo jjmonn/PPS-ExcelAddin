@@ -28,7 +28,7 @@ namespace FBI
 
     public override void ProcessChange(object target)
     {
-      if (m_editing)
+      if (m_editing || AddinModuleController.GetExcelInteractionState() == false)
         return;
       try
       {

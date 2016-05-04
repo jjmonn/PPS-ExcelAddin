@@ -57,18 +57,24 @@ namespace FBI.MVC.View
       this.m_startingPeriodLabel = new System.Windows.Forms.Label();
       this.m_periodConfigLabel = new System.Windows.Forms.Label();
       this.m_nameLabel = new System.Windows.Forms.Label();
-      this.m_CreationDateTextbox = new System.Windows.Forms.TextBox();
+      this.m_CreationDateTextbox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_lockedLabel = new System.Windows.Forms.Label();
       this.m_lockedDateLabel = new System.Windows.Forms.Label();
-      this.LockedDateT = new System.Windows.Forms.TextBox();
-      this.m_nameTextbox = new System.Windows.Forms.TextBox();
+      this.LockedDateT = new VIBlend.WinForms.Controls.vTextBox();
+      this.m_nameTextbox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_creationDateLabel = new System.Windows.Forms.Label();
       this.m_lockCombobox = new System.Windows.Forms.CheckBox();
-      this.m_timeConfigTB = new System.Windows.Forms.TextBox();
-      this.m_startPeriodTextbox = new System.Windows.Forms.ComboBox();
-      this.m_nbPeriodsTextbox = new System.Windows.Forms.TextBox();
-      this.m_exchangeRatesVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
+      this.m_timeConfigTB = new VIBlend.WinForms.Controls.vTextBox();
+      this.m_startPeriodTextbox = new VIBlend.WinForms.Controls.vComboBox();
+      this.m_nbPeriodsTextbox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_factsVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
+      this.m_exchangeRatesVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
+      this.m_formulaPeriodLabel = new System.Windows.Forms.Label();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.m_nbFormulaPeriodCB = new VIBlend.WinForms.Controls.vComboBox();
+      this.m_formulaPeriodIndexCB = new VIBlend.WinForms.Controls.vComboBox();
+      this.m_nbFormulaPeriodLabel = new System.Windows.Forms.Label();
+      this.m_formulaPeriodIndexLabel = new System.Windows.Forms.Label();
       this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
       this.VersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.m_newVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,6 +92,7 @@ namespace FBI.MVC.View
       this.SplitContainer1.Panel2.SuspendLayout();
       this.SplitContainer1.SuspendLayout();
       this.TableLayoutPanel2.SuspendLayout();
+      this.tableLayoutPanel1.SuspendLayout();
       this.MenuStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -163,19 +170,17 @@ namespace FBI.MVC.View
       this.TableLayoutPanel3.Controls.Add(this.MenuStrip1, 0, 0);
       this.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
       this.TableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
-      this.TableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.TableLayoutPanel3.Name = "TableLayoutPanel3";
       this.TableLayoutPanel3.RowCount = 2;
       this.TableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.863813F));
       this.TableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95.13618F));
-      this.TableLayoutPanel3.Size = new System.Drawing.Size(1399, 782);
+      this.TableLayoutPanel3.Size = new System.Drawing.Size(1049, 635);
       this.TableLayoutPanel3.TabIndex = 2;
       // 
       // SplitContainer1
       // 
       this.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.SplitContainer1.Location = new System.Drawing.Point(4, 42);
-      this.SplitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.SplitContainer1.Location = new System.Drawing.Point(3, 33);
       this.SplitContainer1.Name = "SplitContainer1";
       // 
       // SplitContainer1.Panel1
@@ -185,18 +190,16 @@ namespace FBI.MVC.View
       // SplitContainer1.Panel2
       // 
       this.SplitContainer1.Panel2.Controls.Add(this.TableLayoutPanel2);
-      this.SplitContainer1.Size = new System.Drawing.Size(1391, 736);
-      this.SplitContainer1.SplitterDistance = 390;
-      this.SplitContainer1.SplitterWidth = 5;
+      this.SplitContainer1.Size = new System.Drawing.Size(1043, 599);
+      this.SplitContainer1.SplitterDistance = 292;
       this.SplitContainer1.TabIndex = 2;
       // 
       // m_versionsTVPanel
       // 
       this.m_versionsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_versionsTVPanel.Location = new System.Drawing.Point(0, 0);
-      this.m_versionsTVPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_versionsTVPanel.Name = "m_versionsTVPanel";
-      this.m_versionsTVPanel.Size = new System.Drawing.Size(390, 736);
+      this.m_versionsTVPanel.Size = new System.Drawing.Size(292, 599);
       this.m_versionsTVPanel.TabIndex = 1;
       // 
       // TableLayoutPanel2
@@ -220,12 +223,13 @@ namespace FBI.MVC.View
       this.TableLayoutPanel2.Controls.Add(this.m_timeConfigTB, 1, 4);
       this.TableLayoutPanel2.Controls.Add(this.m_startPeriodTextbox, 1, 5);
       this.TableLayoutPanel2.Controls.Add(this.m_nbPeriodsTextbox, 1, 6);
-      this.TableLayoutPanel2.Controls.Add(this.m_exchangeRatesVersionVTreeviewbox, 1, 7);
       this.TableLayoutPanel2.Controls.Add(this.m_factsVersionVTreeviewbox, 1, 8);
-      this.TableLayoutPanel2.Location = new System.Drawing.Point(37, 22);
-      this.TableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.TableLayoutPanel2.Controls.Add(this.m_exchangeRatesVersionVTreeviewbox, 1, 7);
+      this.TableLayoutPanel2.Controls.Add(this.m_formulaPeriodLabel, 0, 9);
+      this.TableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 1, 9);
+      this.TableLayoutPanel2.Location = new System.Drawing.Point(28, 18);
       this.TableLayoutPanel2.Name = "TableLayoutPanel2";
-      this.TableLayoutPanel2.RowCount = 9;
+      this.TableLayoutPanel2.RowCount = 10;
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
@@ -234,142 +238,185 @@ namespace FBI.MVC.View
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
       this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-      this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
-      this.TableLayoutPanel2.Size = new System.Drawing.Size(905, 482);
+      this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+      this.TableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+      this.TableLayoutPanel2.Size = new System.Drawing.Size(679, 464);
       this.TableLayoutPanel2.TabIndex = 0;
       // 
       // m_globalFactsVersionLabel
       // 
       this.m_globalFactsVersionLabel.AutoSize = true;
-      this.m_globalFactsVersionLabel.Location = new System.Drawing.Point(4, 441);
-      this.m_globalFactsVersionLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_globalFactsVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_globalFactsVersionLabel.Location = new System.Drawing.Point(3, 383);
+      this.m_globalFactsVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_globalFactsVersionLabel.Name = "m_globalFactsVersionLabel";
-      this.m_globalFactsVersionLabel.Size = new System.Drawing.Size(126, 16);
+      this.m_globalFactsVersionLabel.Size = new System.Drawing.Size(281, 30);
       this.m_globalFactsVersionLabel.TabIndex = 24;
       this.m_globalFactsVersionLabel.Text = "Global facts version";
       // 
       // m_exchangeRatesVersionLabel
       // 
       this.m_exchangeRatesVersionLabel.AutoSize = true;
-      this.m_exchangeRatesVersionLabel.Location = new System.Drawing.Point(4, 387);
-      this.m_exchangeRatesVersionLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_exchangeRatesVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_exchangeRatesVersionLabel.Location = new System.Drawing.Point(3, 336);
+      this.m_exchangeRatesVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_exchangeRatesVersionLabel.Name = "m_exchangeRatesVersionLabel";
-      this.m_exchangeRatesVersionLabel.Size = new System.Drawing.Size(148, 16);
+      this.m_exchangeRatesVersionLabel.Size = new System.Drawing.Size(281, 40);
       this.m_exchangeRatesVersionLabel.TabIndex = 22;
       this.m_exchangeRatesVersionLabel.Text = "Exchange rates version";
       // 
       // m_numberOfYearsLabel
       // 
       this.m_numberOfYearsLabel.AutoSize = true;
-      this.m_numberOfYearsLabel.Location = new System.Drawing.Point(4, 333);
-      this.m_numberOfYearsLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_numberOfYearsLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_numberOfYearsLabel.Location = new System.Drawing.Point(3, 289);
+      this.m_numberOfYearsLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_numberOfYearsLabel.Name = "m_numberOfYearsLabel";
-      this.m_numberOfYearsLabel.Size = new System.Drawing.Size(119, 16);
+      this.m_numberOfYearsLabel.Size = new System.Drawing.Size(281, 40);
       this.m_numberOfYearsLabel.TabIndex = 20;
       this.m_numberOfYearsLabel.Text = "Number of periods";
       // 
       // m_startingPeriodLabel
       // 
       this.m_startingPeriodLabel.AutoSize = true;
-      this.m_startingPeriodLabel.Location = new System.Drawing.Point(4, 279);
-      this.m_startingPeriodLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_startingPeriodLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_startingPeriodLabel.Location = new System.Drawing.Point(3, 242);
+      this.m_startingPeriodLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_startingPeriodLabel.Name = "m_startingPeriodLabel";
-      this.m_startingPeriodLabel.Size = new System.Drawing.Size(95, 16);
+      this.m_startingPeriodLabel.Size = new System.Drawing.Size(281, 40);
       this.m_startingPeriodLabel.TabIndex = 17;
       this.m_startingPeriodLabel.Text = "Starting period";
       // 
       // m_periodConfigLabel
       // 
       this.m_periodConfigLabel.AutoSize = true;
-      this.m_periodConfigLabel.Location = new System.Drawing.Point(4, 225);
-      this.m_periodConfigLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_periodConfigLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_periodConfigLabel.Location = new System.Drawing.Point(3, 195);
+      this.m_periodConfigLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_periodConfigLabel.Name = "m_periodConfigLabel";
-      this.m_periodConfigLabel.Size = new System.Drawing.Size(87, 16);
+      this.m_periodConfigLabel.Size = new System.Drawing.Size(281, 40);
       this.m_periodConfigLabel.TabIndex = 15;
       this.m_periodConfigLabel.Text = "Period config";
       // 
       // m_nameLabel
       // 
       this.m_nameLabel.AutoSize = true;
+      this.m_nameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.m_nameLabel.Location = new System.Drawing.Point(4, 9);
-      this.m_nameLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_nameLabel.Location = new System.Drawing.Point(3, 7);
+      this.m_nameLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_nameLabel.Name = "m_nameLabel";
-      this.m_nameLabel.Size = new System.Drawing.Size(83, 13);
+      this.m_nameLabel.Size = new System.Drawing.Size(281, 40);
       this.m_nameLabel.TabIndex = 7;
       this.m_nameLabel.Text = "Version name";
       // 
       // m_CreationDateTextbox
       // 
+      this.m_CreationDateTextbox.BackColor = System.Drawing.Color.White;
+      this.m_CreationDateTextbox.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.m_CreationDateTextbox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.m_CreationDateTextbox.DefaultText = "Empty...";
       this.m_CreationDateTextbox.Enabled = false;
-      this.m_CreationDateTextbox.Location = new System.Drawing.Point(387, 60);
-      this.m_CreationDateTextbox.Margin = new System.Windows.Forms.Padding(4, 6, 4, 4);
-      this.m_CreationDateTextbox.MaximumSize = new System.Drawing.Size(532, 4);
-      this.m_CreationDateTextbox.MinimumSize = new System.Drawing.Size(372, 20);
+      this.m_CreationDateTextbox.Location = new System.Drawing.Point(290, 52);
+      this.m_CreationDateTextbox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+      this.m_CreationDateTextbox.MaximumSize = new System.Drawing.Size(400, 4);
+      this.m_CreationDateTextbox.MaxLength = 32767;
+      this.m_CreationDateTextbox.MinimumSize = new System.Drawing.Size(280, 20);
       this.m_CreationDateTextbox.Name = "m_CreationDateTextbox";
-      this.m_CreationDateTextbox.Size = new System.Drawing.Size(513, 22);
+      this.m_CreationDateTextbox.PasswordChar = '\0';
+      this.m_CreationDateTextbox.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.m_CreationDateTextbox.SelectionLength = 0;
+      this.m_CreationDateTextbox.SelectionStart = 0;
+      this.m_CreationDateTextbox.Size = new System.Drawing.Size(386, 20);
       this.m_CreationDateTextbox.TabIndex = 3;
+      this.m_CreationDateTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.m_CreationDateTextbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_lockedLabel
       // 
       this.m_lockedLabel.AutoSize = true;
-      this.m_lockedLabel.Location = new System.Drawing.Point(4, 117);
-      this.m_lockedLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_lockedLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_lockedLabel.Location = new System.Drawing.Point(3, 101);
+      this.m_lockedLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_lockedLabel.Name = "m_lockedLabel";
-      this.m_lockedLabel.Size = new System.Drawing.Size(98, 16);
+      this.m_lockedLabel.Size = new System.Drawing.Size(281, 40);
       this.m_lockedLabel.TabIndex = 10;
       this.m_lockedLabel.Text = "Version locked";
       // 
       // m_lockedDateLabel
       // 
       this.m_lockedDateLabel.AutoSize = true;
-      this.m_lockedDateLabel.Location = new System.Drawing.Point(4, 171);
-      this.m_lockedDateLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_lockedDateLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_lockedDateLabel.Location = new System.Drawing.Point(3, 148);
+      this.m_lockedDateLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_lockedDateLabel.Name = "m_lockedDateLabel";
-      this.m_lockedDateLabel.Size = new System.Drawing.Size(83, 16);
+      this.m_lockedDateLabel.Size = new System.Drawing.Size(281, 40);
       this.m_lockedDateLabel.TabIndex = 11;
       this.m_lockedDateLabel.Text = "Locked date";
       // 
       // LockedDateT
       // 
+      this.LockedDateT.BackColor = System.Drawing.Color.White;
+      this.LockedDateT.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.LockedDateT.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.LockedDateT.DefaultText = "Empty...";
       this.LockedDateT.Enabled = false;
-      this.LockedDateT.Location = new System.Drawing.Point(387, 168);
-      this.LockedDateT.Margin = new System.Windows.Forms.Padding(4, 6, 4, 4);
-      this.LockedDateT.MaximumSize = new System.Drawing.Size(532, 4);
-      this.LockedDateT.MinimumSize = new System.Drawing.Size(372, 20);
+      this.LockedDateT.Location = new System.Drawing.Point(290, 146);
+      this.LockedDateT.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+      this.LockedDateT.MaximumSize = new System.Drawing.Size(400, 4);
+      this.LockedDateT.MaxLength = 32767;
+      this.LockedDateT.MinimumSize = new System.Drawing.Size(280, 20);
       this.LockedDateT.Name = "LockedDateT";
-      this.LockedDateT.Size = new System.Drawing.Size(513, 20);
+      this.LockedDateT.PasswordChar = '\0';
+      this.LockedDateT.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.LockedDateT.SelectionLength = 0;
+      this.LockedDateT.SelectionStart = 0;
+      this.LockedDateT.Size = new System.Drawing.Size(386, 20);
       this.LockedDateT.TabIndex = 12;
+      this.LockedDateT.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.LockedDateT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_nameTextbox
       // 
       this.m_nameTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_nameTextbox.BackColor = System.Drawing.Color.White;
+      this.m_nameTextbox.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.m_nameTextbox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.m_nameTextbox.DefaultText = "Empty...";
       this.m_nameTextbox.Enabled = false;
-      this.m_nameTextbox.Location = new System.Drawing.Point(387, 6);
-      this.m_nameTextbox.Margin = new System.Windows.Forms.Padding(4, 6, 4, 4);
-      this.m_nameTextbox.MaximumSize = new System.Drawing.Size(532, 4);
-      this.m_nameTextbox.MinimumSize = new System.Drawing.Size(372, 20);
+      this.m_nameTextbox.Location = new System.Drawing.Point(290, 5);
+      this.m_nameTextbox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+      this.m_nameTextbox.MaximumSize = new System.Drawing.Size(400, 4);
+      this.m_nameTextbox.MaxLength = 32767;
+      this.m_nameTextbox.MinimumSize = new System.Drawing.Size(280, 20);
       this.m_nameTextbox.Name = "m_nameTextbox";
-      this.m_nameTextbox.Size = new System.Drawing.Size(514, 20);
+      this.m_nameTextbox.PasswordChar = '\0';
+      this.m_nameTextbox.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.m_nameTextbox.SelectionLength = 0;
+      this.m_nameTextbox.SelectionStart = 0;
+      this.m_nameTextbox.Size = new System.Drawing.Size(386, 20);
       this.m_nameTextbox.TabIndex = 13;
+      this.m_nameTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.m_nameTextbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_creationDateLabel
       // 
       this.m_creationDateLabel.AutoSize = true;
-      this.m_creationDateLabel.Location = new System.Drawing.Point(4, 63);
-      this.m_creationDateLabel.Margin = new System.Windows.Forms.Padding(4, 9, 4, 0);
+      this.m_creationDateLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_creationDateLabel.Location = new System.Drawing.Point(3, 54);
+      this.m_creationDateLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_creationDateLabel.Name = "m_creationDateLabel";
-      this.m_creationDateLabel.Size = new System.Drawing.Size(88, 16);
+      this.m_creationDateLabel.Size = new System.Drawing.Size(281, 40);
       this.m_creationDateLabel.TabIndex = 6;
       this.m_creationDateLabel.Text = "Creation date";
       // 
       // m_lockCombobox
       // 
       this.m_lockCombobox.AutoSize = true;
-      this.m_lockCombobox.Location = new System.Drawing.Point(387, 120);
-      this.m_lockCombobox.Margin = new System.Windows.Forms.Padding(4, 12, 4, 4);
+      this.m_lockCombobox.Location = new System.Drawing.Point(290, 104);
+      this.m_lockCombobox.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
       this.m_lockCombobox.Name = "m_lockCombobox";
       this.m_lockCombobox.Size = new System.Drawing.Size(15, 14);
       this.m_lockCombobox.TabIndex = 14;
@@ -378,47 +425,61 @@ namespace FBI.MVC.View
       // 
       // m_timeConfigTB
       // 
+      this.m_timeConfigTB.BackColor = System.Drawing.Color.White;
+      this.m_timeConfigTB.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.m_timeConfigTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.m_timeConfigTB.DefaultText = "Empty...";
       this.m_timeConfigTB.Enabled = false;
-      this.m_timeConfigTB.Location = new System.Drawing.Point(387, 220);
-      this.m_timeConfigTB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.m_timeConfigTB.Location = new System.Drawing.Point(290, 191);
+      this.m_timeConfigTB.MaxLength = 32767;
       this.m_timeConfigTB.Name = "m_timeConfigTB";
-      this.m_timeConfigTB.Size = new System.Drawing.Size(513, 22);
+      this.m_timeConfigTB.PasswordChar = '\0';
+      this.m_timeConfigTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.m_timeConfigTB.SelectionLength = 0;
+      this.m_timeConfigTB.SelectionStart = 0;
+      this.m_timeConfigTB.Size = new System.Drawing.Size(386, 20);
       this.m_timeConfigTB.TabIndex = 18;
+      this.m_timeConfigTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.m_timeConfigTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_startPeriodTextbox
       // 
+      this.m_startPeriodTextbox.BackColor = System.Drawing.Color.White;
+      this.m_startPeriodTextbox.DisplayMember = "";
+      this.m_startPeriodTextbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_startPeriodTextbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_startPeriodTextbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_startPeriodTextbox.DropDownWidth = 386;
       this.m_startPeriodTextbox.Enabled = false;
-      this.m_startPeriodTextbox.Location = new System.Drawing.Point(387, 274);
-      this.m_startPeriodTextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.m_startPeriodTextbox.Location = new System.Drawing.Point(290, 238);
       this.m_startPeriodTextbox.Name = "m_startPeriodTextbox";
-      this.m_startPeriodTextbox.Size = new System.Drawing.Size(513, 24);
+      this.m_startPeriodTextbox.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_startPeriodTextbox.Size = new System.Drawing.Size(386, 21);
       this.m_startPeriodTextbox.TabIndex = 19;
+      this.m_startPeriodTextbox.UseThemeBackColor = false;
+      this.m_startPeriodTextbox.UseThemeDropDownArrowColor = true;
+      this.m_startPeriodTextbox.ValueMember = "";
+      this.m_startPeriodTextbox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_startPeriodTextbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_nbPeriodsTextbox
       // 
+      this.m_nbPeriodsTextbox.BackColor = System.Drawing.Color.White;
+      this.m_nbPeriodsTextbox.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.m_nbPeriodsTextbox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.m_nbPeriodsTextbox.DefaultText = "Empty...";
       this.m_nbPeriodsTextbox.Enabled = false;
-      this.m_nbPeriodsTextbox.Location = new System.Drawing.Point(387, 328);
-      this.m_nbPeriodsTextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.m_nbPeriodsTextbox.Location = new System.Drawing.Point(290, 285);
+      this.m_nbPeriodsTextbox.MaxLength = 32767;
       this.m_nbPeriodsTextbox.Name = "m_nbPeriodsTextbox";
-      this.m_nbPeriodsTextbox.Size = new System.Drawing.Size(511, 22);
+      this.m_nbPeriodsTextbox.PasswordChar = '\0';
+      this.m_nbPeriodsTextbox.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.m_nbPeriodsTextbox.SelectionLength = 0;
+      this.m_nbPeriodsTextbox.SelectionStart = 0;
+      this.m_nbPeriodsTextbox.Size = new System.Drawing.Size(384, 20);
       this.m_nbPeriodsTextbox.TabIndex = 21;
-      // 
-      // m_exchangeRatesVersionVTreeviewbox
-      // 
-      this.m_exchangeRatesVersionVTreeviewbox.BackColor = System.Drawing.Color.White;
-      this.m_exchangeRatesVersionVTreeviewbox.BorderColor = System.Drawing.Color.Black;
-      this.m_exchangeRatesVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_exchangeRatesVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_exchangeRatesVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(387, 382);
-      this.m_exchangeRatesVersionVTreeviewbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-      this.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox";
-      this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(514, 28);
-      this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 25;
-      this.m_exchangeRatesVersionVTreeviewbox.Text = " ";
-      this.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false;
-      this.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
-      this.m_exchangeRatesVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_nbPeriodsTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.m_nbPeriodsTextbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_factsVersionVTreeviewbox
       // 
@@ -427,15 +488,115 @@ namespace FBI.MVC.View
       this.m_factsVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_factsVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_factsVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_factsVersionVTreeviewbox.Location = new System.Drawing.Point(387, 436);
-      this.m_factsVersionVTreeviewbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+      this.m_factsVersionVTreeviewbox.Location = new System.Drawing.Point(290, 379);
       this.m_factsVersionVTreeviewbox.Name = "m_factsVersionVTreeviewbox";
-      this.m_factsVersionVTreeviewbox.Size = new System.Drawing.Size(512, 28);
+      this.m_factsVersionVTreeviewbox.Size = new System.Drawing.Size(384, 23);
       this.m_factsVersionVTreeviewbox.TabIndex = 26;
       this.m_factsVersionVTreeviewbox.Text = " ";
       this.m_factsVersionVTreeviewbox.UseThemeBackColor = false;
       this.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
-      this.m_factsVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_factsVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_exchangeRatesVersionVTreeviewbox
+      // 
+      this.m_exchangeRatesVersionVTreeviewbox.BackColor = System.Drawing.Color.White;
+      this.m_exchangeRatesVersionVTreeviewbox.BorderColor = System.Drawing.Color.Black;
+      this.m_exchangeRatesVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_exchangeRatesVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_exchangeRatesVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(290, 332);
+      this.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox";
+      this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(386, 23);
+      this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 25;
+      this.m_exchangeRatesVersionVTreeviewbox.Text = " ";
+      this.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false;
+      this.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
+      this.m_exchangeRatesVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_formulaPeriodLabel
+      // 
+      this.m_formulaPeriodLabel.AutoSize = true;
+      this.m_formulaPeriodLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_formulaPeriodLabel.Location = new System.Drawing.Point(3, 413);
+      this.m_formulaPeriodLabel.Name = "m_formulaPeriodLabel";
+      this.m_formulaPeriodLabel.Size = new System.Drawing.Size(281, 51);
+      this.m_formulaPeriodLabel.TabIndex = 28;
+      this.m_formulaPeriodLabel.Text = "label3";
+      this.m_formulaPeriodLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
+      // tableLayoutPanel1
+      // 
+      this.tableLayoutPanel1.ColumnCount = 2;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.Controls.Add(this.m_nbFormulaPeriodCB, 1, 1);
+      this.tableLayoutPanel1.Controls.Add(this.m_formulaPeriodIndexCB, 0, 1);
+      this.tableLayoutPanel1.Controls.Add(this.m_nbFormulaPeriodLabel, 1, 0);
+      this.tableLayoutPanel1.Controls.Add(this.m_formulaPeriodIndexLabel, 0, 0);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(290, 416);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 2;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(386, 45);
+      this.tableLayoutPanel1.TabIndex = 29;
+      // 
+      // m_nbFormulaPeriodCB
+      // 
+      this.m_nbFormulaPeriodCB.BackColor = System.Drawing.Color.White;
+      this.m_nbFormulaPeriodCB.DisplayMember = "";
+      this.m_nbFormulaPeriodCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_nbFormulaPeriodCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_nbFormulaPeriodCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_nbFormulaPeriodCB.DropDownWidth = 187;
+      this.m_nbFormulaPeriodCB.Location = new System.Drawing.Point(196, 20);
+      this.m_nbFormulaPeriodCB.Name = "m_nbFormulaPeriodCB";
+      this.m_nbFormulaPeriodCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_nbFormulaPeriodCB.Size = new System.Drawing.Size(187, 22);
+      this.m_nbFormulaPeriodCB.TabIndex = 1;
+      this.m_nbFormulaPeriodCB.UseThemeBackColor = false;
+      this.m_nbFormulaPeriodCB.UseThemeDropDownArrowColor = true;
+      this.m_nbFormulaPeriodCB.ValueMember = "";
+      this.m_nbFormulaPeriodCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_nbFormulaPeriodCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_formulaPeriodIndexCB
+      // 
+      this.m_formulaPeriodIndexCB.BackColor = System.Drawing.Color.White;
+      this.m_formulaPeriodIndexCB.DisplayMember = "";
+      this.m_formulaPeriodIndexCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_formulaPeriodIndexCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_formulaPeriodIndexCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_formulaPeriodIndexCB.DropDownWidth = 187;
+      this.m_formulaPeriodIndexCB.Location = new System.Drawing.Point(3, 20);
+      this.m_formulaPeriodIndexCB.Name = "m_formulaPeriodIndexCB";
+      this.m_formulaPeriodIndexCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_formulaPeriodIndexCB.Size = new System.Drawing.Size(187, 22);
+      this.m_formulaPeriodIndexCB.TabIndex = 0;
+      this.m_formulaPeriodIndexCB.UseThemeBackColor = false;
+      this.m_formulaPeriodIndexCB.UseThemeDropDownArrowColor = true;
+      this.m_formulaPeriodIndexCB.ValueMember = "";
+      this.m_formulaPeriodIndexCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_formulaPeriodIndexCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_nbFormulaPeriodLabel
+      // 
+      this.m_nbFormulaPeriodLabel.AutoSize = true;
+      this.m_nbFormulaPeriodLabel.Location = new System.Drawing.Point(196, 0);
+      this.m_nbFormulaPeriodLabel.Name = "m_nbFormulaPeriodLabel";
+      this.m_nbFormulaPeriodLabel.Size = new System.Drawing.Size(35, 13);
+      this.m_nbFormulaPeriodLabel.TabIndex = 1;
+      this.m_nbFormulaPeriodLabel.Text = "label2";
+      // 
+      // m_formulaPeriodIndexLabel
+      // 
+      this.m_formulaPeriodIndexLabel.AutoSize = true;
+      this.m_formulaPeriodIndexLabel.Location = new System.Drawing.Point(3, 0);
+      this.m_formulaPeriodIndexLabel.Name = "m_formulaPeriodIndexLabel";
+      this.m_formulaPeriodIndexLabel.Size = new System.Drawing.Size(35, 13);
+      this.m_formulaPeriodIndexLabel.TabIndex = 0;
+      this.m_formulaPeriodIndexLabel.Text = "label1";
       // 
       // MenuStrip1
       // 
@@ -443,8 +604,7 @@ namespace FBI.MVC.View
             this.VersionsToolStripMenuItem});
       this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
       this.MenuStrip1.Name = "MenuStrip1";
-      this.MenuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-      this.MenuStrip1.Size = new System.Drawing.Size(1399, 24);
+      this.MenuStrip1.Size = new System.Drawing.Size(1049, 24);
       this.MenuStrip1.TabIndex = 0;
       this.MenuStrip1.Text = "MenuStrip1";
       // 
@@ -507,12 +667,11 @@ namespace FBI.MVC.View
       // 
       // VersionsView
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.Controls.Add(this.TableLayoutPanel3);
-      this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.Name = "VersionsView";
-      this.Size = new System.Drawing.Size(1399, 782);
+      this.Size = new System.Drawing.Size(1049, 635);
       this.m_versionsRightClickMenu.ResumeLayout(false);
       this.TableLayoutPanel3.ResumeLayout(false);
       this.TableLayoutPanel3.PerformLayout();
@@ -522,6 +681,8 @@ namespace FBI.MVC.View
       this.SplitContainer1.ResumeLayout(false);
       this.TableLayoutPanel2.ResumeLayout(false);
       this.TableLayoutPanel2.PerformLayout();
+      this.tableLayoutPanel1.ResumeLayout(false);
+      this.tableLayoutPanel1.PerformLayout();
       this.MenuStrip1.ResumeLayout(false);
       this.MenuStrip1.PerformLayout();
       this.ResumeLayout(false);
@@ -543,31 +704,37 @@ namespace FBI.MVC.View
     public System.Windows.Forms.ToolStripMenuItem m_deleteVersionMenuBT;
     public System.Windows.Forms.SplitContainer SplitContainer1;
     public System.Windows.Forms.Panel m_versionsTVPanel;
-    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
-    public System.Windows.Forms.Label m_exchangeRatesVersionLabel;
-    public System.Windows.Forms.Label m_numberOfYearsLabel;
-    public System.Windows.Forms.Label m_startingPeriodLabel;
-    public System.Windows.Forms.Label m_periodConfigLabel;
-    public System.Windows.Forms.Label m_nameLabel;
-    public System.Windows.Forms.TextBox m_CreationDateTextbox;
-    public System.Windows.Forms.Label m_lockedLabel;
-    public System.Windows.Forms.Label m_lockedDateLabel;
-    public System.Windows.Forms.TextBox LockedDateT;
-    public System.Windows.Forms.TextBox m_nameTextbox;
-    public System.Windows.Forms.Label m_creationDateLabel;
-    public System.Windows.Forms.CheckBox m_lockCombobox;
-    public System.Windows.Forms.TextBox m_timeConfigTB;
-    public System.Windows.Forms.ComboBox m_startPeriodTextbox;
-    public System.Windows.Forms.TextBox m_nbPeriodsTextbox;
     public System.Windows.Forms.ToolStripMenuItem m_renameMenuBT;
     public System.ComponentModel.BackgroundWorker BackgroundWorker1;
-    public System.Windows.Forms.Label m_globalFactsVersionLabel;
-    public VIBlend.WinForms.Controls.vTreeViewBox m_exchangeRatesVersionVTreeviewbox;
-    public VIBlend.WinForms.Controls.vTreeViewBox m_factsVersionVTreeviewbox;
 
     public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
     private System.Windows.Forms.ToolStripMenuItem m_copyVersionRCMButton;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+    public System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
+    public System.Windows.Forms.Label m_globalFactsVersionLabel;
+    public System.Windows.Forms.Label m_exchangeRatesVersionLabel;
+    public System.Windows.Forms.Label m_numberOfYearsLabel;
+    public System.Windows.Forms.Label m_startingPeriodLabel;
+    public System.Windows.Forms.Label m_periodConfigLabel;
+    public System.Windows.Forms.Label m_nameLabel;
+    public VIBlend.WinForms.Controls.vTextBox m_CreationDateTextbox;
+    public System.Windows.Forms.Label m_lockedLabel;
+    public System.Windows.Forms.Label m_lockedDateLabel;
+    public VIBlend.WinForms.Controls.vTextBox LockedDateT;
+    public VIBlend.WinForms.Controls.vTextBox m_nameTextbox;
+    public System.Windows.Forms.Label m_creationDateLabel;
+    public System.Windows.Forms.CheckBox m_lockCombobox;
+    public VIBlend.WinForms.Controls.vTextBox m_timeConfigTB;
+    public VIBlend.WinForms.Controls.vComboBox m_startPeriodTextbox;
+    public VIBlend.WinForms.Controls.vTextBox m_nbPeriodsTextbox;
+    public VIBlend.WinForms.Controls.vTreeViewBox m_exchangeRatesVersionVTreeviewbox;
+    public VIBlend.WinForms.Controls.vTreeViewBox m_factsVersionVTreeviewbox;
+    private System.Windows.Forms.Label m_nbFormulaPeriodLabel;
+    private System.Windows.Forms.Label m_formulaPeriodIndexLabel;
+    private VIBlend.WinForms.Controls.vComboBox m_nbFormulaPeriodCB;
+    private VIBlend.WinForms.Controls.vComboBox m_formulaPeriodIndexCB;
+    private System.Windows.Forms.Label m_formulaPeriodLabel;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
   }
 }

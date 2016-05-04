@@ -14,7 +14,9 @@
     DEPENDENT_PARENT,
     NAME_ALREADY_USED,
     SYNTAX,
-    VERSION_MISMATCH
+    VERSION_MISMATCH,
+    UNALLOWED_PROCESS,
+    CIRCULAR_DEP
   };
 
   static class Error
@@ -35,6 +37,7 @@
       m_messageList[ErrorMessage.DEPENDENT_PARENT] = Local.GetValue("general.error.dependent_parent");
       m_messageList[ErrorMessage.NAME_ALREADY_USED] = Local.GetValue("general.error.success");
       m_messageList[ErrorMessage.VERSION_MISMATCH] = Local.GetValue("general.error.version_mismatch");
+      m_messageList[ErrorMessage.CIRCULAR_DEP] = Local.GetValue("general.error.circular_dep");
     }
 
     public static string GetMessage(ErrorMessage p_error)

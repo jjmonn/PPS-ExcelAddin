@@ -24,6 +24,8 @@ namespace FBI.MVC.Model.CRUD
     public UInt32 RateVersionId { get; set; }
     public string CreatedAt { get; set; }
     public UInt32 GlobalFactVersionId { get; set; }
+    public UInt32 FormulaPeriodIndex { get; set; }
+    public UInt32 FormulaNbPeriod { get; set; }
 
     public Version() { }
     private Version(UInt32 p_id)
@@ -47,6 +49,8 @@ namespace FBI.MVC.Model.CRUD
       l_version.NbPeriod = p_packet.ReadUint16();
       l_version.CreatedAt = p_packet.ReadString();
       l_version.GlobalFactVersionId = p_packet.ReadUint32();
+      l_version.FormulaPeriodIndex = p_packet.ReadUint32();
+      l_version.FormulaNbPeriod = p_packet.ReadUint32();
 
       if (l_version.IsFolder == true)
           l_version.Image = 1;
@@ -72,6 +76,8 @@ namespace FBI.MVC.Model.CRUD
       p_packet.WriteUint16(NbPeriod);
       p_packet.WriteString(CreatedAt);
       p_packet.WriteUint32(GlobalFactVersionId);
+      p_packet.WriteUint32(FormulaPeriodIndex);
+      p_packet.WriteUint32(FormulaNbPeriod);
     }
 
     public void CopyFrom(Version p_model)
@@ -88,6 +94,8 @@ namespace FBI.MVC.Model.CRUD
       NbPeriod = p_model.NbPeriod;
       CreatedAt = p_model.CreatedAt;
       GlobalFactVersionId = p_model.GlobalFactVersionId;
+      FormulaPeriodIndex = p_model.FormulaPeriodIndex;
+      FormulaNbPeriod = p_model.FormulaNbPeriod;
       Image = p_model.Image;
     }
 
