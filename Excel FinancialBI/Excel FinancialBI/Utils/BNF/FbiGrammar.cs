@@ -33,21 +33,23 @@ namespace FBI.Utils
     {
       UInt32 l_accId;
       Account l_account;
-      string l_accountStr;
+      string l_str, l_tmp;
       Consumer l_consumer = new Consumer(p_account);
 
       if (!l_consumer.ReadText("acc") || !l_consumer.Save("accId") || !l_consumer.ReadNum() ||
-        !l_consumer.Stop("accId", out l_accountStr) || !l_consumer.ReadChar('T') ||
-        !UInt32.TryParse(l_accountStr, out l_accId))
+        !l_consumer.Stop("accId", out l_str) || !l_consumer.ReadChar('T') ||
+        !UInt32.TryParse(l_str, out l_accId))
         return (null);
       m_accounts.Add(l_accId); //Add to Accounts
       if ((l_account = AccountModel.Instance.GetValue(l_accId)) == null)
         return (null);
-      return ("\"" + l_account.Name + "\"[" +
+      l_str = ("\"" + l_account.Name + "\"[" +
         (l_consumer.ReadChar('n') ? "n" : "") +
         (l_consumer.ReadChar('p') ? "+" : "") +
-        (l_consumer.ReadChar('m') ? "-" : "") +
-        l_consumer.GetString() + "]");
+        (l_consumer.ReadChar('m') ? "-" : ""));
+      if (!l_consumer.Save("period") || !l_consumer.ReadNum() || !l_consumer.Stop("period", out l_tmp))
+        return (l_str + "]");
+      return (l_str + l_tmp + "]");
     }
 
     //"Account"[42] To acc366T42
@@ -59,13 +61,17 @@ namespace FBI.Utils
       Consumer l_consumer = new Consumer(p_account);
 
       if (!l_consumer.ReadChar('\"') || !l_consumer.Save("acc") || !l_consumer.ReadAccount() || !l_consumer.Stop("acc", out l_tmp) ||
-        !l_consumer.ReadChar('\"') || !l_consumer.ReadChar('['))
+        !l_consumer.ReadChar('\"'))
         return (null);
-      if ((l_account = AccountModel.Instance.GetValue(l_tmp)) == null)
+      l_consumer.ReadMultipleWhitespace();
+      if (!l_consumer.ReadChar('[') || (l_account = AccountModel.Instance.GetValue(l_tmp)) == null)
         return (null);
-      l_str = "acc" + l_account.Id.ToString() + "T" +
-        (l_consumer.ReadChar('n') ? "n" : "") +
-        (l_consumer.ReadChar('+') ? "p" : (l_consumer.ReadChar('-') ? "m" : ""));
+      l_str = "acc" + l_account.Id.ToString() + "T";
+      l_consumer.ReadMultipleWhitespace();
+      l_str += (l_consumer.ReadChar('n') ? "n" : "");
+      l_consumer.ReadMultipleWhitespace();
+      l_str += (l_consumer.ReadChar('+') ? "p" : (l_consumer.ReadChar('-') ? "m" : ""));
+      l_consumer.ReadMultipleWhitespace();
       if (!l_consumer.Save("period") || !l_consumer.ReadNum() || !l_consumer.Stop("period", out l_tmp))
         return (l_str);
       return (l_str + l_tmp);
@@ -82,9 +88,9 @@ namespace FBI.Utils
       p_bnf.AddEvent("GetServerAccount", GetServerAccount);
 
       p_bnf.AddRule("serverVal", "number | serverAccount~GetServerAccount | serverFunction");
-      p_bnf.AddRule("serverValue", "[ '-' ] serverVal");
+      p_bnf.AddRule("serverValue", "[ '-' ] $ serverVal");
       p_bnf.AddRule("serverPeriodAddSub", "'p' | 'm'");
-      p_bnf.AddRule("serverAccount", "\"acc\" num 'T' [ 'n' [ serverPeriodAddSub ] ] [ num ]");
+      p_bnf.AddRule("serverAccount", "\"acc\" num 'T' [ 'n' [ serverPeriodAddSub num ] ]");
 
       p_bnf.AddRule("serverFuncParams", "$ ',' $ +serverExpr $");
       p_bnf.AddRule("serverFunction", "funcName $ '(' $ +serverExpr [ *serverFuncParams ] $ ')'");
@@ -103,8 +109,8 @@ namespace FBI.Utils
       p_bnf.AddRule("humanValue", "[ '-' ] $ humanVal");
       p_bnf.AddRule("humanPeriodAddSub", "'+' | '-'");
       p_bnf.AddRule("humanPeriod1", "$ '[' $ num $ ']' $");
-      p_bnf.AddRule("humanPeriod2", "$ '[' $ 'n' $ [ humanPeriodAddSub ] $ [ num ] $ ']' $");
-      p_bnf.AddRule("humanPeriod", "humanPeriod1 | humanPeriod2");
+      p_bnf.AddRule("humanPeriod2", "$ '[' $ 'n' $ [ humanPeriodAddSub $ num ] $ ']' $");
+      p_bnf.AddRule("humanPeriod", "humanPeriod1 | $ humanPeriod2");
       p_bnf.AddRule("humanAccount", "'\"' account '\"' humanPeriod");
 
       p_bnf.AddRule("humanFuncParams", "$ ',' $ +humanExpr $");
