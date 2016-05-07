@@ -264,7 +264,11 @@ namespace FBI.MVC.View
       if (p_sender.GetType() == typeof(vButton))
       {
         vButton l_button = p_sender as vButton;
-        l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
+        if (m_filterPaneOpen)
+          l_button.Text = "+";
+        else
+          l_button.Text = "-";
+       // l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
       }
       if (m_filterPaneOpen)
       {
