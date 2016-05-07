@@ -28,6 +28,7 @@
     /// </summary>
     private void InitializeComponent()
     {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChartPanelSelection));
       this.m_list = new VIBlend.WinForms.Controls.vListBox();
       this.m_text = new VIBlend.WinForms.Controls.vTextBox();
       this.m_next = new VIBlend.WinForms.Controls.vButton();
@@ -116,6 +117,7 @@
       this.Controls.Add(this.m_list);
       this.Controls.Add(this.m_next);
       this.Controls.Add(this.m_text);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "ChartPanelSelection";
       this.Text = "ChartPanelSelection";
       this.ResumeLayout(false);
