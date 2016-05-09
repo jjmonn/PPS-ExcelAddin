@@ -207,7 +207,7 @@ namespace FBI.MVC.View
             }
           }
         }
-       if (m_computeConfig.Request.Process == Account.AccountProcess.RH)
+       if (m_computeConfig != null && m_computeConfig.Request.Process == Account.AccountProcess.RH)
           RemoveOrphanDimensions();
         foreach (vTabPage l_tab in m_tabCtrl.TabPages)
         {
