@@ -210,6 +210,7 @@ namespace FBI.Forms
 
     public void Assign(ChartSettings p_settings, Computation p_compute)
     {
+      Currency l_currency;
       List<Serie> l_series = Serie.FromChartSettings(p_settings);
       List<int> l_periods = PeriodModel.GetPeriodList(p_compute.Config.Request.StartPeriod,
         p_compute.Config.Request.NbPeriods,
@@ -224,6 +225,10 @@ namespace FBI.Forms
       }
       else
       {
+        if ((l_currency = CurrencyModel.Instance.GetValue(p_compute.Config.Request.CurrencyId)) != null)
+        {
+          this.ChartAreas[0].AxisY.LabelStyle.Format = "{### ### ### ### ### ###} " + l_currency.Symbol; //Bullshit to have spacing between numbers. There is a better way, no worries.
+        }
         this.Display(p_settings, l_series, p_compute, l_periods, l_displayPeriods);
       }
       m_settings = p_settings;
@@ -438,7 +443,8 @@ namespace FBI.Forms
       return (l_series);
     }
 
-    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null)
+    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null,
+      ChartValueType p_chartX = ChartValueType.Double, ChartValueType p_chartY = ChartValueType.String)
     {
       Series l_series = new Series();
 
@@ -449,6 +455,8 @@ namespace FBI.Forms
       {
         l_series.Color = p_color.Value;
       }
+      l_series.XValueType = p_chartX;
+      l_series.YValueType = p_chartY;
       return (l_series);
     }
 
