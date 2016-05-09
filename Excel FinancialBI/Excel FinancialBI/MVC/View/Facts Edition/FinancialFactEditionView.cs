@@ -103,7 +103,6 @@ namespace FBI.MVC.View
         }
         m_computePercentage = 0;
         m_downloadPercentage = 0;
-        m_rangeHighlighter.Registered = true;
       }
     }
 

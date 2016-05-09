@@ -20,9 +20,6 @@ namespace FBI.MVC.View
     object[] m_originalCellsColor = new object[4096];
     int m_nbRegistered = 0;
     Worksheet m_worksheet;
-    object m_obj;
-    string m_add;
-    public bool Registered { get; set; }
 
     public RangeHighlighter(Worksheet p_worksheet)
     {
@@ -146,21 +143,20 @@ namespace FBI.MVC.View
 
     private void RegisterCellOriginalFill(Range p_cell)
     {
-     if (Registered == false)
+      if (m_originalCellsAddress.Contains(p_cell.Address))
+        return;
+      m_originalCellsColor[m_nbRegistered] = p_cell.Interior.Color;
+      m_originalCellsAddress[m_nbRegistered] = p_cell.Address;
+      m_nbRegistered++;
+      if (m_nbRegistered >= m_originalCellsColor.Length)
       {
-        m_originalCellsColor[m_nbRegistered] = p_cell.Interior.Color;
-        m_originalCellsAddress[m_nbRegistered] =  p_cell.Address;
-        m_nbRegistered++;
-        if (m_nbRegistered >= m_originalCellsColor.Length)
-        {
-          object[] l_newColorTab = new object[m_originalCellsColor.Length * 2];
-          string[] l_newAddressTab = new string[m_originalCellsAddress.Length * 2];
+        object[] l_newColorTab = new object[m_originalCellsColor.Length * 2];
+        string[] l_newAddressTab = new string[m_originalCellsAddress.Length * 2];
 
-          Array.Copy(m_originalCellsColor, l_newColorTab, m_originalCellsColor.Length);
-          Array.Copy(m_originalCellsAddress, l_newAddressTab, m_originalCellsAddress.Length);
-          m_originalCellsColor = l_newColorTab;
-          m_originalCellsAddress = l_newAddressTab;
-        }
+        Array.Copy(m_originalCellsColor, l_newColorTab, m_originalCellsColor.Length);
+        Array.Copy(m_originalCellsAddress, l_newAddressTab, m_originalCellsAddress.Length);
+        m_originalCellsColor = l_newColorTab;
+        m_originalCellsAddress = l_newAddressTab;
       }
     }
 
@@ -182,7 +178,6 @@ namespace FBI.MVC.View
       }
       m_originalCellsColor = new object[4096];
       m_originalCellsAddress = new string[4096];
-      Registered = false;
     }
 
   }
