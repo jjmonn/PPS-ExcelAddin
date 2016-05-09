@@ -87,7 +87,6 @@ namespace FBI.MVC.View
       FilterModel.Instance.CreationEvent += OnModelCreate;
       FilterModel.Instance.DeleteEvent += OnModelDelete;
       FilterModel.Instance.UpdateEvent += OnModelUpdate;
-      Addin.SuscribeAutoLock(this);
     }
 
     protected override void OnClosed(EventArgs e)
@@ -212,7 +211,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          Forms.MsgBox.Show("", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          MessageBox.Show(Error.GetMessage(p_status), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
       }
     }
@@ -229,7 +228,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          Forms.MsgBox.Show("", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          MessageBox.Show(Error.GetMessage(p_status), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
       }
     }
@@ -258,7 +257,7 @@ namespace FBI.MVC.View
           }
           return;
         }
-        Forms.MsgBox.Show("{DELETE}", "general.delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show(Error.GetMessage(p_status), Local.GetValue("general.delete"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 

@@ -552,7 +552,7 @@ namespace FBI.MVC.View
       {
         vTreeNode l_node = m_accountTV.FindAtPosition(((MouseEventArgs)p_e).Location);
         if (l_node != null)
-          m_formulaTextBox.Text += "\"" + l_node.Text + "\"";
+          m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
       }
     }
 

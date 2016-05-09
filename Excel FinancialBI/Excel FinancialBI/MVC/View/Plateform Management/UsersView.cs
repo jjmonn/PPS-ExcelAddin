@@ -122,15 +122,16 @@ namespace FBI.MVC.View
       m_userDGV.InitializeRows<User>(UserModel.Instance, l_userMID);
       User l_currentUser = UserModel.Instance.GetCurrentUser();
 
-      foreach (User l_user in l_userMID.Values)
-      {
-        if (m_groupsIdItemDict.ContainsKey(l_user.GroupId))
-          m_userDGV.FillField<ListItem, ComboBoxEditor>(l_user.Id, 1, m_groupsIdItemDict[l_user.GroupId], 
-            (l_currentUser.Id != l_user.Id) ? m_allocatedComboxBoxEditor : null);
-        else
-          m_userDGV.FillField<ListItem, ComboBoxEditor>(l_user.Id, 1, null, (l_currentUser.Id != l_user.Id) ? m_allocatedComboxBoxEditor : null);
-        SetEntities(l_user);
-      }
+      if (l_currentUser != null)
+        foreach (User l_user in l_userMID.Values)
+        {
+          if (m_groupsIdItemDict.ContainsKey(l_user.GroupId))
+            m_userDGV.FillField<ListItem, ComboBoxEditor>(l_user.Id, 1, m_groupsIdItemDict[l_user.GroupId], 
+              (l_currentUser.Id != l_user.Id) ? m_allocatedComboxBoxEditor : null);
+          else
+            m_userDGV.FillField<ListItem, ComboBoxEditor>(l_user.Id, 1, null, (l_currentUser.Id != l_user.Id) ? m_allocatedComboxBoxEditor : null);
+          SetEntities(l_user);
+        }
 
       m_userDGV.CellChangedAndValidated += OnUserDGVCellChangedAndValidated;
       m_userDGV.CellEditorActivate += OnUserDGVCellEditorActivate;
