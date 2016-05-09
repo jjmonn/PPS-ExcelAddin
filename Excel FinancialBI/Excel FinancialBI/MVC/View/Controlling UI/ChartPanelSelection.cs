@@ -31,6 +31,7 @@ namespace FBI.MVC.View
     private void MultilangueSetup()
     {
       m_text.Text = "";
+      this.Text = Local.GetValue("CUI_Charts.panel_selection");
       m_save.Text = Local.GetValue("general.save");
       m_next.Text = Local.GetValue("general.next");
       m_delete.Text = Local.GetValue("general.delete");
