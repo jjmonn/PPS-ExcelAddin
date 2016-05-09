@@ -94,6 +94,7 @@
     <string name="CUI2_vizualization">Financial BI Visualisation</string>
     <string name="others">Autres</string>
     <string name="new_panel">Nouveau panel</string>
+    <string name="panel_selection">Sélectionnez un panel</string>
   </category>
 
   <category name="connection">
