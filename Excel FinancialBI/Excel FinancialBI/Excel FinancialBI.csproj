@@ -280,6 +280,7 @@
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIVisualizationController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\PeriodsComparisonsSelectionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\AFactEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FinancialFactEditionController.cs" />
@@ -456,6 +457,12 @@
     </Compile>
     <Compile Include="MVC\View\Controlling UI\CUIVisualization.Designer.cs">
       <DependentUpon>CUIVisualization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.Designer.cs">
+      <DependentUpon>PeriodsComparisonSelectionView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\DuplicatesUIDemo.cs">
       <SubType>Form</SubType>
@@ -809,6 +816,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\CUIVisualization.resx">
       <DependentUpon>CUIVisualization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.resx">
+      <DependentUpon>PeriodsComparisonSelectionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\ResultView.resx">
       <DependentUpon>ResultView.cs</DependentUpon>
