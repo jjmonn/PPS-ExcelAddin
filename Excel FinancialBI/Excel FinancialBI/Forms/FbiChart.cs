@@ -22,6 +22,7 @@ namespace FBI.Forms
     private const int ELEM_DISPLAYED = 4;
     private const int GRADIENT_MULTIPLIER = 2; //Used for stackColumn. Nb of stacks * GRADIENT_MULTIPLIER => Nb of steps of gradient
     private const int GRADIENT_DIVIDED = 225; //Used for lines. Nb of lines / GRADIENT_DIVIDED
+    private const int MAX_Y_AXIS = 2;
 
     private const int TITLE_SIZE = 12;
     private const int LEGEND_SIZE = 10;
@@ -210,7 +211,6 @@ namespace FBI.Forms
 
     public void Assign(ChartSettings p_settings, Computation p_compute)
     {
-      Currency l_currency;
       List<Serie> l_series = Serie.FromChartSettings(p_settings);
       List<int> l_periods = PeriodModel.GetPeriodList(p_compute.Config.Request.StartPeriod,
         p_compute.Config.Request.NbPeriods,
@@ -225,10 +225,6 @@ namespace FBI.Forms
       }
       else
       {
-        if ((l_currency = CurrencyModel.Instance.GetValue(p_compute.Config.Request.CurrencyId)) != null)
-        {
-          this.ChartAreas[0].AxisY.LabelStyle.Format = "{### ### ### ### ### ###} " + l_currency.Symbol; //Bullshit to have spacing between numbers. There is a better way, no worries.
-        }
         this.Display(p_settings, l_series, p_compute, l_periods, l_displayPeriods);
       }
       m_settings = p_settings;
@@ -256,22 +252,23 @@ namespace FBI.Forms
     {
       double l_value;
       Color l_color = Color.FromArgb(0, 0, 0, 0);
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series, p_settings.Versions.Count, p_series.Count);
 
-      foreach (UInt32 l_version in p_settings.Versions)
+      for (int i = 0; i < p_settings.Versions.Count; ++i)
       {
-        foreach (Serie l_serie in p_series)
+        for (int j = 0; j < p_series.Count; ++j)
         {
-          Series l_series = this.CreateSeries(this.GetChartType(p_settings), ColorUtils.Sub(l_serie.Color, l_color));
           foreach (int l_period in p_periods)
           {
-            l_value = this.GetValue(p_settings, p_compute, l_serie.Account, l_period, l_version);
-            l_series.Points.AddXY(p_displayPeriods[l_period], l_value);
+            l_value = this.GetValue(p_settings, p_compute, p_series[j].Account, l_period, p_settings.Versions[i]);
+            l_series[i][j].Points.AddXY(p_displayPeriods[l_period], l_value);
           }
-          l_series.LegendText = l_serie.Account.Name + "\n" + VersionModel.Instance.GetValue(l_version).Name;
-          this.Series.Add(l_series);
+          l_series[i][j].Color = ColorUtils.Sub(p_series[j].Color, l_color);
+          l_series[i][i + j].LegendText = p_series[j].Account.Name + "\n" + VersionModel.Instance.GetValue(p_settings.Versions[i]).Name;
         }
         l_color = ColorUtils.Add(l_color, GRADIENT_DIVIDED / p_settings.Versions.Count);
       }
+      this.AddSeries(l_series);
     }
 
     private void DisplayAsDeconstruction(ChartSettings p_settings, List<Serie> p_series,
@@ -280,7 +277,7 @@ namespace FBI.Forms
       List<Color> l_colors;
       ChartValues l_values;
       string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_series, p_compute, p_periods);
-      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series.Count, this.GetNumberOfDeconstruction(p_settings));
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series, p_series.Count, this.CountOfDeconstruction(p_settings));
 
       for (int i = 0; i < p_series.Count; ++i)
       {
@@ -310,7 +307,7 @@ namespace FBI.Forms
       List<Color> l_colors;
       ChartValues l_values;
       string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_series, p_compute, p_periods);
-      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_settings.Versions.Count, this.GetNumberOfDeconstruction(p_settings));
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series, p_settings.Versions.Count, this.CountOfDeconstruction(p_settings));
 
       for (int i = 0; i < p_settings.Versions.Count; ++i)
       {
@@ -336,12 +333,12 @@ namespace FBI.Forms
       this.AddSeries(l_series);
     }
 
-    private int GetNumberOfDeconstruction(ChartSettings p_settings)
+    private int CountOfDeconstruction(ChartSettings p_settings)
     {
       int l_nbValues = 0;
 
       if (!p_settings.HasDeconstruction)
-        return (ELEM_DISPLAYED);
+        return (1);
 
       if (p_settings.Deconstruction.Item1)
       {
@@ -428,7 +425,53 @@ namespace FBI.Forms
       }
     }
 
-    private ChartSeries CreateMultipleSeries(ChartSettings p_settings, Computation p_compute, int p_dim1, int p_dim2)
+    private string SymbolFromAccount(Account p_account, Computation p_compute)
+    {
+      switch (p_account.Type)
+      {
+        case Account.AccountType.MONETARY:
+          Currency l_currency = CurrencyModel.Instance.GetValue(p_compute.Config.Request.CurrencyId);
+          return (l_currency == null ? String.Empty : l_currency.Symbol);
+        case Account.AccountType.PERCENTAGE:
+          return ("%");
+      }
+      return (String.Empty);
+    }
+
+    /*private ChartSeries CreateMultipleSeries<T>(ChartSettings p_settings, Computation p_compute, List<T> p_list, List<Serie> p_series = null)
+    {
+      int l_nbOfAxis = 0;
+      bool l_isPrimaryAxis = false;
+      ChartSeries l_series = new ChartSeries();
+      int size = this.GetNumberOfDeconstruction(p_settings);
+      SafeDictionary<Account.AccountType, bool> l_axisType = new SafeDictionary<Account.AccountType, bool>();
+
+      if (p_series == null && p_list is List<Serie>)
+        p_series = ((List<Serie>)(object)p_list);
+      if (p_series != null)
+      {
+        foreach (Serie l_serie in p_series)
+        {
+          if (!l_axisType.ContainsKey(l_serie.Account.Type))
+            l_nbOfAxis += 1;
+          l_axisType[l_serie.Account.Type] = (l_nbOfAxis == 0 ? true : false);
+        }
+      }
+      for (int i = 0; i < p_list.Count; ++i)
+      {
+        l_series[i] = new List<Series>();
+        for (int j = 0; j < size; ++j)
+        {
+          l_isPrimaryAxis = (p_series == null || l_nbOfAxis > MAX_Y_AXIS ? true : l_axisType[p_series[i].Account.Type]);
+          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings), null, l_isPrimaryAxis));
+          //set format here !
+        }
+      }
+      return (l_series);
+    }*/
+
+    private ChartSeries CreateMultipleSeries(ChartSettings p_settings, Computation p_compute,
+      List<Serie> p_series, int p_dim1, int p_dim2)
     {
       ChartSeries l_series = new ChartSeries();
 
@@ -437,13 +480,24 @@ namespace FBI.Forms
         l_series[i] = new List<Series>();
         for (int j = 0; j < p_dim2; ++j)
         {
-          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings)));
+          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings), null, true));
         }
       }
+      this.ApplyMultipleAxis(l_series, p_compute, p_series);
       return (l_series);
     }
 
-    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null,
+    //Bullshit way of set axis. Will be redone
+    private void ApplyMultipleAxis(ChartSeries p_chartSeries, Computation p_compute, List<Serie> p_series)
+    {
+      string l_axisType = "";
+      Serie l_serie = p_series.FirstOrDefault();
+
+      l_axisType = (l_serie == null ? l_axisType : SymbolFromAccount(l_serie.Account, p_compute));
+      this.ChartAreas[0].AxisY.LabelStyle.Format = "{0:N}" + l_axisType;
+    }
+
+    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null, bool p_isPrimary = true,
       ChartValueType p_chartX = ChartValueType.Double, ChartValueType p_chartY = ChartValueType.String)
     {
       Series l_series = new Series();
@@ -455,6 +509,9 @@ namespace FBI.Forms
       {
         l_series.Color = p_color.Value;
       }
+      l_series.YAxisType = (p_isPrimary ?
+        System.Windows.Forms.DataVisualization.Charting.AxisType.Primary :
+        System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary);
       l_series.XValueType = p_chartX;
       l_series.YValueType = p_chartY;
       return (l_series);
