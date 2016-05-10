@@ -149,8 +149,7 @@ namespace FBI.MVC.Model
 
       RequestIdList.Clear();
       AddinModuleController.SetExcelInteractionState(false);
-      foreach (AxisElem l_entity in l_entitiesList)
-        RequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entity.Id, m_versionId, p_clientId, p_productId, p_adjustmentId));
+      RequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entitiesList, m_versionId, p_clientId, p_productId, p_adjustmentId));
       m_nbRequest++;
     }
 
