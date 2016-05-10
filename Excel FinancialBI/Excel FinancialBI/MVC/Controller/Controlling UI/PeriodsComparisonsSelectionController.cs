@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FBI.MVC.Controller
 {
-  class PeriodsComparisonsSelectionController : IController
+  class PeriodsComparisonsSelectionController// : IController
   {
 
 
