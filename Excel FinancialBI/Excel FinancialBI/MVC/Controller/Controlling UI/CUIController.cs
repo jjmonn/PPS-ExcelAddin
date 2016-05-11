@@ -73,6 +73,20 @@ namespace FBI.MVC.Controller
       m_openedPanels.Remove(p_panelid);
     }
 
+    Version SelectVersion(List<UInt32> p_versionList)
+    {
+      Version l_selectedVersion = null;
+
+      foreach (UInt32 l_versionId in p_versionList)
+      {
+        Version l_version = VersionModel.Instance.GetValue(l_versionId);
+
+        if (l_selectedVersion == null || l_version.StartPeriod < l_selectedVersion.StartPeriod)
+          l_selectedVersion = l_version;
+      }
+      return (l_selectedVersion);
+    }
+
     public bool Compute()
     {
       if (LeftPaneController.GetVersions() == null)
@@ -83,16 +97,22 @@ namespace FBI.MVC.Controller
 
       ComputeConfig l_config = new ComputeConfig();
       LegacyComputeRequest l_request = new LegacyComputeRequest();
-      Version l_version = VersionModel.Instance.GetValue(LeftPaneController.GetVersions()[0]);
+      Version l_version = SelectVersion(LeftPaneController.GetVersions());
 
       l_config.BaseTimeConfig = l_version.TimeConfiguration;
       if (Addin.Process == Account.AccountProcess.FINANCIAL)
        l_config.Periods = LeftPaneController.GetPeriods();
       l_request.Process = (Account.AccountProcess)Addin.Process;
-      l_request.StartPeriod = (l_request.Process == Account.AccountProcess.RH) ? 
-        LeftPaneController.GetStartPeriod() : (int)l_version.StartPeriod;
-      l_request.NbPeriods = (l_request.Process == Account.AccountProcess.RH) ? 
-        LeftPaneController.GetNbPeriod() : (int)l_version.NbPeriod;
+      if (l_request.Process == Account.AccountProcess.RH)
+      {
+        l_request.StartPeriod = LeftPaneController.GetStartPeriod();
+        l_request.NbPeriods = LeftPaneController.GetNbPeriod(); 
+      }
+      else
+      {
+        l_request.StartPeriod = (Int32)l_version.StartPeriod;
+        l_request.NbPeriods = l_version.NbPeriod;
+      }
       l_request.Versions = LeftPaneController.GetVersions();
       l_request.CurrencyId = LeftPaneController.GetCurrency();
       l_request.SortList = RightPaneController.GetSort();
