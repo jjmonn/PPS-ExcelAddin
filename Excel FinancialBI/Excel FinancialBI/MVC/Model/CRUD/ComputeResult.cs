@@ -35,7 +35,7 @@ namespace FBI.MVC.Model.CRUD
     public static ComputeResult BuildComputeResult(LegacyComputeRequest p_request, ByteBuffer p_packet, UInt32 p_versionId)
     {
       ComputeResult l_result = BaseBuildComputeResult(p_request, p_packet, p_versionId, p_request.EntityId);
-      l_result.FillResultData(p_packet);
+      l_result.FillResultData(p_packet, "", p_request.IsPeriodDiff);
       return (l_result);
     }
 
@@ -54,8 +54,12 @@ namespace FBI.MVC.Model.CRUD
       l_result.VersionId = p_versionId;
       l_result.m_request = p_request;
       l_result.m_version = VersionModel.Instance.GetValue(l_result.VersionId);
-      l_result.m_periodList = PeriodModel.GetPeriodList((Int32)p_request.StartPeriod, (Int32)p_request.NbPeriods, l_result.m_version.TimeConfiguration);
 
+      if (p_request.Process == Account.AccountProcess.RH || l_result.m_version == null)
+        l_result.m_periodList = PeriodModel.GetPeriodList((Int32)p_request.StartPeriod, (Int32)p_request.NbPeriods, l_result.m_version.TimeConfiguration);
+      else
+        l_result.m_periodList = PeriodModel.GetPeriodList((Int32)l_result.m_version.StartPeriod,
+          (Int32)l_result.m_version.NbPeriod, l_result.m_version.TimeConfiguration);
       if (l_result.m_version.TimeConfiguration == TimeConfig.DAYS || l_result.m_version.TimeConfiguration == TimeConfig.MONTHS) 
       {
         TimeConfig l_aggregationTimeConfig =
@@ -70,7 +74,7 @@ namespace FBI.MVC.Model.CRUD
       return (l_result);
     }
 
-    void FillResultData(ByteBuffer p_packet, SortKey p_sortKey = "")
+    void FillResultData(ByteBuffer p_packet, SortKey p_sortKey, bool p_usePeriodIndex)
     {
       bool l_isFiltered;
       SortKey l_currentLevelKey = "";
@@ -91,14 +95,14 @@ namespace FBI.MVC.Model.CRUD
         l_currentLevelKey = ResultKey.GetSortKey(l_isAxis, l_axis, l_value);
         p_sortKey += l_currentLevelKey;
       }
-      FillEntityData(p_packet, p_sortKey, l_currentLevelKey);
+      FillEntityData(p_packet, p_sortKey, l_currentLevelKey, "", p_usePeriodIndex);
 
       UInt32 l_nbChildResult = p_packet.ReadUint32();
       for (UInt32 i = 0; i < l_nbChildResult; ++i)
-        FillResultData(p_packet, p_sortKey);
+        FillResultData(p_packet, p_sortKey, p_usePeriodIndex);
     }
 
-    void FillEntityData(ByteBuffer p_packet, SortKey p_sortKey, SortKey p_currentLevelKey, SortKey p_entityKey = "")
+    void FillEntityData(ByteBuffer p_packet, SortKey p_sortKey, SortKey p_currentLevelKey, SortKey p_entityKey = "", bool p_usePeriodIndex = false)
     {
       UInt32 l_entityId = p_packet.ReadUint32();
       UInt32 l_nbAccount = p_packet.ReadUint32();
@@ -115,10 +119,11 @@ namespace FBI.MVC.Model.CRUD
         for (UInt16 j = 0; j < l_nbPeriod && j < m_periodList.Count; ++j)
         {
           double l_value = p_packet.ReadDouble();
+          Int32 l_period = (p_usePeriodIndex) ? j : m_periodList[j];
 
           if (firstLevel)
-            Values[new ResultKey(l_accountId, p_sortKey, "", m_version.TimeConfiguration, m_periodList[j], VersionId)] = l_value;
-          Values[new ResultKey(l_accountId, p_sortKey, p_entityKey, m_version.TimeConfiguration, m_periodList[j], VersionId)] = l_value;
+            Values[new ResultKey(l_accountId, p_sortKey, "", m_version.TimeConfiguration, l_period, VersionId)] = l_value;
+          Values[new ResultKey(l_accountId, p_sortKey, p_entityKey, m_version.TimeConfiguration, l_period, VersionId)] = l_value;
         }
 
         l_nbAggregation = p_packet.ReadUint32();
@@ -128,16 +133,17 @@ namespace FBI.MVC.Model.CRUD
         for (UInt16 j = 0; j < l_nbAggregation && j < m_aggregationPeriodList.Count; ++j)
         {
           double l_value = p_packet.ReadDouble();
+          Int32 l_period = (p_usePeriodIndex) ? j : m_aggregationPeriodList[j];
 
           if (firstLevel)
-            Values[new ResultKey(l_accountId, p_sortKey, "", l_aggregationTimeConfig, m_aggregationPeriodList[j], VersionId)] = l_value;
-          Values[new ResultKey(l_accountId, p_sortKey, p_entityKey, l_aggregationTimeConfig, m_aggregationPeriodList[j], VersionId)] = l_value;
+            Values[new ResultKey(l_accountId, p_sortKey, "", l_aggregationTimeConfig, l_period, VersionId)] = l_value;
+          Values[new ResultKey(l_accountId, p_sortKey, p_entityKey, l_aggregationTimeConfig, l_period, VersionId)] = l_value;
         }
       }
 
       UInt32 l_nbChildEntity = p_packet.ReadUint32();
       for (UInt32 j = 0; j < l_nbChildEntity; ++j)
-        FillEntityData(p_packet, p_sortKey, p_currentLevelKey, p_entityKey);
+        FillEntityData(p_packet, p_sortKey, p_currentLevelKey, p_entityKey, p_usePeriodIndex);
     }
 
     public static UInt32 GetDiffId(UInt32 p_idA, UInt32 p_idB)

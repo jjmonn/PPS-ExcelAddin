@@ -126,6 +126,14 @@ namespace FBI.MVC.Controller
       l_config.Rows = RightPaneController.GetRows();
       l_config.Columns = RightPaneController.GetColumns();
       l_config.Request = l_request;
+      /*
+      l_request.IsPeriodDiff = true;
+
+      List<Int32> l_periodAList = PeriodModel.GetPeriodList(42035, 12, TimeConfig.MONTHS);
+      List<Int32> l_periodBList = PeriodModel.GetPeriodList(42400, 12, TimeConfig.MONTHS);
+
+      for (int i = 0; i < 12; ++i)
+        l_request.PeriodDiffAssociations[l_periodAList[i]] = l_periodBList[i];*/
 
       if (CheckConfig(l_config) == false)
         return (false);
