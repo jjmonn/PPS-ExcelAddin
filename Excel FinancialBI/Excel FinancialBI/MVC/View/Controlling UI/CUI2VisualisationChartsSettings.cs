@@ -21,14 +21,13 @@ namespace FBI.MVC.View
 
   public partial class CUI2VisualisationChartsSettings : Form, IView
   {
-    private static readonly Int32 SEP_SIZE = 40;
+    private static readonly Int32 DEFAULT_SIZE = 30;
     private static readonly Color DEFAULT_COLOR = Color.Gray;
 
     private CUIVisualizationController m_controller;
-    private Int32 m_location = 0; //Default location (axis Y) of m_serieLabel
     private vTreeView m_treeView = new vTreeView();
 
-    private List<Control[]> m_series = new List<Control[]>(); //Containing controls of every serie. { Label, vTreeViewBox, vColorPicker }
+    private List<Control[]> m_series = new List<Control[]>(); //Containing controls of every serie. { Label, vTreeViewBox, vColorPicker, vButton }
     private ChartSettings m_chartSettings = null;
 
     public CUI2VisualisationChartsSettings()
@@ -42,14 +41,12 @@ namespace FBI.MVC.View
     {
       this.SuscribeEvents();
       FbiTreeView<Account>.Load(m_treeView.Nodes, AccountModel.Instance.GetDictionary());
-      m_series.Add(new Control[] { m_serieLabel, m_serie, m_serieColor });
       this.ResetView();
     }
 
     private void MultilangueSetup()
     {
       m_chartTitleLabel.Text = Local.GetValue("CUI_Charts.chart_title");
-      m_serieLabel.Text = Local.GetValue("CUI_Charts.serie");
       m_AccountLabel.Text = Local.GetValue("general.account");
       m_ColorLabel.Text = Local.GetValue("general.color");
       m_addSerie.Text = Local.GetValue("CUI_Charts.add_serie");
@@ -62,8 +59,6 @@ namespace FBI.MVC.View
       this.FormClosing += OnClosing;
       m_addSerie.Click += OnAddSerieClicked;
       m_saveButton.Click += OnSaveClicked;
-      m_removeSerie.Click += OnRemoveSerieClicked;
-      m_serie.Enter += OnvTreeViewBoxEnter;
     }
 
     public void Reload()
@@ -84,24 +79,22 @@ namespace FBI.MVC.View
 
     public void LoadSettings(ChartSettings p_settings)
     {
-      int i = 1;
       List<ChartAccount> l_accounts;
 
       m_chartSettings = p_settings;
-      if (p_settings == null)
-        return;
-      m_chartTitle.Text = p_settings.Name;
-      if ((l_accounts = ChartAccountModel.Instance.GetList(p_settings.Id)) == null)
-        return;
-      if (l_accounts.Count >= 1)
+      if (p_settings == null || (l_accounts = ChartAccountModel.Instance.GetList(p_settings.Id)) == null)
       {
-        m_serie.Text = this.AccountName(l_accounts[0].AccountId);
-        m_serieColor.SelectedColor = Color.FromArgb(l_accounts[0].Color);
+        this.AddDefaultEmptySerie();
+        return;
       }
-      while (i < l_accounts.Count)
+      m_chartTitle.Text = p_settings.Name;
+      if (l_accounts.Count == 0)
+      {
+        this.AddDefaultEmptySerie();
+      }
+      for (int i = 0; i < l_accounts.Count; ++i)
       {
         this.AddSerie(this.AccountName(l_accounts[i].AccountId), Color.FromArgb(l_accounts[i].Color));
-        ++i;
       }
     }
 
@@ -146,21 +139,15 @@ namespace FBI.MVC.View
 
     private void ResetView()
     {
-      m_serie.ResetText();
       m_chartTitle.ResetText();
-      m_serieColor.SelectedColor = DEFAULT_COLOR;
-      while (this.HasSeries())
-      {
-        this.RemoveLastSerie();
-      }
-      m_location = m_serieLabel.Location.Y;
+      for (int i = m_series.Count - 1; i >= 0; --i)
+        this.RemoveSerie(i, true);
     }
 
     #region Events
 
     private void OnClosing(object sender, FormClosingEventArgs e)
     {
-      this.ResetView();
       this.UnsuscribeEvents();
     }
 
@@ -176,7 +163,11 @@ namespace FBI.MVC.View
 
     private void OnRemoveSerieClicked(object sender, EventArgs e)
     {
-      this.RemoveLastSerie();
+      Int32 l_pos;
+      vButton l_button = (vButton)sender;
+
+      if ((l_pos = this.FindButtonFromSeries(l_button)) != -1)
+        this.RemoveSerie(l_pos);
     }
 
     private void OnvTreeViewBoxEnter(object sender, EventArgs e)
@@ -214,58 +205,64 @@ namespace FBI.MVC.View
 
     #region Utils
 
+    private void AddDefaultEmptySerie()
+    {
+      if (m_series.Count == 0)
+        this.AddSerie();
+    }
+
     private void AddSerie(string p_accountName = "", Color? p_color = null)
     {
-      vLabel l_text;
-      vTreeViewBox l_serie;
-      vColorPicker l_color;
+      vLabel l_text = new vLabel();
+      vTreeViewBox l_serie = this.GetSerievTVB(p_accountName);
+      vColorPicker l_color = this.GetSerieColorPicker(p_color);
+      vButton l_remove = GetSerieRemoveButton();
 
-      m_location += SEP_SIZE;
-      l_text = ControlUtils.Clone(m_serieLabel);
-      l_text.Location = new Point(m_serieLabel.Location.X, m_location);
-      l_serie = ControlUtils.Clone(m_serie);
-      l_serie.Location = new Point(m_serie.Location.X, m_location);
-      l_serie.Text = p_accountName;
-      l_serie.Enter += OnvTreeViewBoxEnter;
-      l_color = ControlUtils.Clone(m_serieColor);
-      l_color.Location = new Point(m_serieColor.Location.X, m_location);
-      l_color.SelectedColor = p_color ?? DEFAULT_COLOR;
+      l_text.Text = Local.GetValue("CUI_Charts.serie");
+      m_series.Add(new Control[] { l_text, l_serie, l_color, l_remove });
 
-      this.MoveStandardControls(SEP_SIZE);
-      m_series.Add(new Control[] { l_text, l_serie, l_color });
-      this.Controls.Add(l_text);
-      this.Controls.Add(l_serie);
-      this.Controls.Add(l_color);
+      m_flowPanel.Controls.Add(l_text);
+      m_flowPanel.Controls.Add(l_serie);
+      m_flowPanel.Controls.Add(l_color);
+      m_flowPanel.Controls.Add(l_remove);
+      this.MoveStandardControls(DEFAULT_SIZE);
     }
 
     //Move standard controls using m_location, and a p_loc value.
-    //Used to move 'save', 'remove', 'add' button and resize the window height.
+    //Used to move 'save', 'add' button and resize the window height.
     private void MoveStandardControls(Int32 p_loc)
     {
-      m_removeSerie.Location = new Point(m_removeSerie.Location.X, m_location);
       m_saveButton.Location = new Point(m_saveButton.Location.X, m_saveButton.Location.Y + p_loc);
       m_addSerie.Location = new Point(m_addSerie.Location.X, m_addSerie.Location.Y + p_loc);
+      m_flowPanel.Height += p_loc;
       this.Height += p_loc;
     }
 
-    private void RemoveLastSerie()
+    private void RemoveSerie(Int32 p_pos, bool p_force = false)
     {
-      Control[] l_lastSerie;
+      Control[] l_controls = m_series[p_pos];
 
-      if (!this.HasSeries())
-        return;
-
-      m_location -= SEP_SIZE;
-      l_lastSerie = m_series[m_series.Count - 1];//last serie created
-      m_series.Remove(l_lastSerie);
-      foreach (Control l_control in l_lastSerie)
-        this.Controls.Remove(l_control);
-      this.MoveStandardControls(-SEP_SIZE);
+      l_controls[1].ResetText();
+      ((vColorPicker)l_controls[2]).SelectedColor = DEFAULT_COLOR;
+      if (p_force || p_pos != 0 || (p_pos == 0 && m_series.Count > 1))
+      {
+        foreach (Control l_control in l_controls)
+          m_flowPanel.Controls.Remove(l_control);
+        m_series.RemoveAt(p_pos);
+        this.MoveStandardControls(-DEFAULT_SIZE);
+      }
     }
 
-    private bool HasSeries()
+    private Int32 FindButtonFromSeries(vButton p_button)
     {
-      return (m_series.Count > 1); //Don't remove the first serie !
+      Int32 i = 0;
+      foreach (Control[] l_control in m_series)
+      {
+        if (l_control[3] == p_button)
+          return (i);
+        ++i;
+      }
+      return (-1);
     }
 
     private bool AreTreeViewBoxesFilled()
@@ -347,6 +344,38 @@ namespace FBI.MVC.View
         }
       }
       return (true);
+    }
+
+    #endregion
+
+    #region STDControls
+
+    private vTreeViewBox GetSerievTVB(string p_name)
+    {
+      vTreeViewBox l_serie = new vTreeViewBox();
+
+      l_serie.Text = p_name;
+      l_serie.Size = new System.Drawing.Size(246, 23);
+      l_serie.Enter += OnvTreeViewBoxEnter;
+      return (l_serie);
+    }
+
+    private vColorPicker GetSerieColorPicker(Color? p_color)
+    {
+      vColorPicker l_color = new vColorPicker();
+
+      l_color.SelectedColor = p_color ?? DEFAULT_COLOR;
+      l_color.Size = new System.Drawing.Size(143, 23);
+      return (l_color);
+    }
+
+    private vButton GetSerieRemoveButton()
+    {
+      vButton l_remove = new vButton();
+
+      l_remove.Size = new System.Drawing.Size(23, 23);
+      l_remove.Click += OnRemoveSerieClicked;
+      return (l_remove);
     }
 
     #endregion
