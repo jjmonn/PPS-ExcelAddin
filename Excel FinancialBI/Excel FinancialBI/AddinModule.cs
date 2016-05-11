@@ -484,6 +484,9 @@ namespace FBI
         AddButtonToDropDown(ProductsDropDown, l_product.Id, l_product.Name);
       foreach (AxisElem l_adjustment in AxisElemModel.Instance.GetDictionary(AxisType.Adjustment).Values)
         AddButtonToDropDown(AdjustmentDropDown, l_adjustment.Id, l_adjustment.Name);
+      SubmissionAdjustmentId = (UInt32)AxisType.Adjustment;
+      SubmissionClientId = (UInt32)AxisType.Client;
+      SubmissionProductId = (UInt32)AxisType.Product;
     }
 
     public string SubmissionVersionName
