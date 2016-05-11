@@ -165,6 +165,29 @@ namespace FBI.MVC.Model.CRUD
       return (l_result);
     }
 
+    public static ComputeResult DiffRange(ComputeResult p_a, ComputeResult p_b, SafeDictionary<Int32, Int32> p_periods)
+    {
+      int l_periodNb = 0;
+      ComputeResult l_result = new ComputeResult();
+
+      l_result.IsDiff = true;
+      l_result.VersionDiff = new Tuple<VersionKey, VersionKey>(p_a.VersionId, p_b.VersionId);
+      l_result.VersionId = GetDiffId(p_a.VersionId, p_b.VersionId);
+      foreach (KeyValuePair<ResultKey, double> l_pair in p_a.Values)
+      {
+        if (p_periods.ContainsKey(l_pair.Key.Period) == false)
+          continue;
+        ResultKey l_bKey = new ResultKey(l_pair.Key.AccountId, l_pair.Key.SortHash, l_pair.Key.EntityHash,
+          l_pair.Key.PeriodType, p_periods[l_pair.Key.Period], p_b.VersionId);
+        double l_bValue = p_b.Values[l_bKey];
+
+        ResultKey l_key = new ResultKey(l_pair.Key.AccountId, l_pair.Key.SortHash, l_pair.Key.EntityHash,
+           l_pair.Key.PeriodType, ++l_periodNb, l_result.VersionId);
+        l_result.Values[l_key] = l_pair.Value - l_bValue;
+      }
+      return (l_result);
+    }
+
     public void DiffPeriod(Int32 l_periodA, Int32 l_periodB, UInt32 l_diffId)
     {
       SafeDictionary<ResultKey, List<Tuple<Int32, double>>> l_values = new SafeDictionary<ResultKey, List<Tuple<PeriodKey, double>>>();

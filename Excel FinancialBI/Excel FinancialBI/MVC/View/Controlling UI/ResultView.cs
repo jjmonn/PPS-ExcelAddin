@@ -56,7 +56,7 @@ namespace FBI.MVC.View
       m_tabCtrl.Dock = DockStyle.Fill;
 
       LogRightClick.Visible = (Addin.Process == Account.AccountProcess.FINANCIAL);
-      m_builderList.Add(typeof(PeriodModel), PeriodBuilder);
+      m_builderList.Add(typeof(PeriodModel), PeriodBuilderSelector);
       m_builderList.Add(typeof(VersionModel), VersionBuilder);
       m_builderList.Add(typeof(AxisElemModel), AxisElemBuilder);
       m_builderList.Add(typeof(FilterModel), FilterValueBuilder);
@@ -279,6 +279,15 @@ namespace FBI.MVC.View
 
     #region Builders
 
+    private void PeriodBuilderSelector(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
+        DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
+    {
+      if (m_computeConfig.Request.IsPeriodDiff)
+        PeriodCompareBuilder(p_dgv, p_tabId, p_conf, p_dimension, p_parent, p_parentKey);
+      else
+        PeriodBuilder(p_dgv, p_tabId, p_conf, p_dimension, p_parent, p_parentKey);
+    }
+
     private void PeriodBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
       DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
     {
@@ -286,6 +295,7 @@ namespace FBI.MVC.View
       List<int> l_periodList;
       string l_formatedDate;
       Int32 l_startPeriod = m_computeConfig.Request.StartPeriod;
+
       l_periodList = (l_conf.IsSubPeriod) ? PeriodModel.GetSubPeriods(l_conf.ParentType, l_conf.ParentPeriod) :
         PeriodModel.GetPeriodList(l_startPeriod,
         GetNbPeriod(m_computeConfig.Request.NbPeriods, l_conf.PeriodType, m_computeConfig.BaseTimeConfig), l_conf.PeriodType);
@@ -312,6 +322,26 @@ namespace FBI.MVC.View
           }
           InitDimension(p_dgv, p_tabId, p_conf.Child, p_dimension, l_newItem.Items, l_key);
         }
+      }
+    }
+
+    private void PeriodCompareBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
+      DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
+    {
+      PeriodConf l_conf = p_conf as PeriodConf;
+      string l_formatedDate;
+      int l_count = 0;
+
+      foreach (KeyValuePair<Int32, Int32> l_date in m_computeConfig.Request.PeriodDiffAssociations)
+      {
+        l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType) + " / " +
+          PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
+
+        ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, ++l_count, 0);
+        HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_formatedDate);
+
+        if (l_newItem != null)
+          InitDimension(p_dgv, p_tabId, p_conf.Child, p_dimension, l_newItem.Items, l_key);
       }
     }
 
