@@ -140,34 +140,6 @@ namespace FBI.MVC.Model.CRUD
       return (true);
     }
 
-    public Tuple<bool, AxisType, UInt32> LastSort
-    {
-      get
-      {
-        bool l_isAxis;
-        Int32 l_axisType;
-        UInt32 l_id;
-
-        Int32 l_beginPos = SortHash.LastIndexOf('#');
-
-        if (l_beginPos < 0 || l_beginPos == SortHash.Length)
-          return (null);
-        string l_str = SortHash.Substring(l_beginPos + 1);
-        l_isAxis = (l_str[0] == 't');
-        
-        Int32 l_endPos = l_str.IndexOf('v');
-        if (l_endPos < 0 || l_endPos == SortHash.Length)
-          return (null);
-        l_str = l_str.Substring(1, l_endPos - 1);
-        if (Int32.TryParse(l_str, out l_axisType) == false)
-          return (null);
-        l_str = l_str.Substring(l_endPos + 1);
-        if (UInt32.TryParse(l_str, out l_id) == false)
-          return (null);
-        return (new Tuple<bool, AxisType, TabKey>(l_isAxis, (AxisType)l_axisType, l_id));
-      }
-    }
-
     public UInt32 EntityId
     {
       get

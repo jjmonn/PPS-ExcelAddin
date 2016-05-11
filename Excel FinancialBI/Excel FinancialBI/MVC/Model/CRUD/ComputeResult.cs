@@ -155,7 +155,7 @@ namespace FBI.MVC.Model.CRUD
       foreach (KeyValuePair<ResultKey, double> l_pair in p_a.Values)
       {
         ResultKey l_bKey = new ResultKey(l_pair.Key.AccountId, l_pair.Key.SortHash, l_pair.Key.EntityHash,
-   l_pair.Key.PeriodType, l_pair.Key.Period, p_b.VersionId);
+          l_pair.Key.PeriodType, l_pair.Key.Period, p_b.VersionId);
         double l_bValue = p_b.Values[l_bKey];
 
        ResultKey l_key = new ResultKey(l_pair.Key.AccountId, l_pair.Key.SortHash, l_pair.Key.EntityHash,
@@ -163,6 +163,33 @@ namespace FBI.MVC.Model.CRUD
        l_result.Values[l_key] = l_pair.Value - l_bValue;
       }
       return (l_result);
+    }
+
+    public void DiffPeriod(Int32 l_periodA, Int32 l_periodB, UInt32 l_diffId)
+    {
+      SafeDictionary<ResultKey, List<Tuple<Int32, double>>> l_values = new SafeDictionary<ResultKey, List<Tuple<PeriodKey, double>>>();
+
+      foreach (KeyValuePair<ResultKey, double> l_pair in Values)
+      {
+        PeriodKey l_period = l_pair.Key.Period;
+
+        if (l_period == l_periodA || l_period == l_periodB)
+        {
+          ResultKey k = l_pair.Key;
+          ResultKey l_matchKey = new ResultKey(k.AccountId, k.SortHash, k.EntityHash, k.PeriodType, (Int32)l_diffId, k.VersionId, k.StrongVersion, k.Tab);
+          if (l_values[l_matchKey] == null)
+            l_values[l_matchKey] = new List<Tuple<PeriodKey,double>>();
+          l_values[l_matchKey].Add(new Tuple<PeriodKey, double>(l_period, l_pair.Value));
+        }
+      }
+      foreach (KeyValuePair<ResultKey, List<Tuple<Int32, double>>> l_pair in l_values)
+      {
+        if (l_pair.Value.Count < 1)
+          continue;
+        double l_val2 = (l_pair.Value.Count < 2) ? 0 : l_pair.Value[1].Item2;
+
+        Values[l_pair.Key] = l_pair.Value[0].Item2 - l_val2;
+      }
     }
   }
 }

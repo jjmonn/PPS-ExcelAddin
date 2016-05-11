@@ -394,7 +394,7 @@ namespace FBI.MVC.Model
       List<Int32> l_periods = new List<Int32>();
       while (p_startDate < p_endDate)
       {
-        l_periods.Add(PeriodModel.GetWeekIdFromPeriodId((Int32)p_startDate.ToOADate()));
+        l_periods.Add(PeriodModel.GetMonthIdFromPeriodId((Int32)p_startDate.ToOADate()));
         p_startDate = p_startDate.AddMonths(1);
       }
       return l_periods;
