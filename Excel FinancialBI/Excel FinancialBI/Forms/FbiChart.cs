@@ -264,7 +264,7 @@ namespace FBI.Forms
             l_series[i][j].Points.AddXY(p_displayPeriods[l_period], l_value);
           }
           l_series[i][j].Color = ColorUtils.Sub(p_series[j].Color, l_color);
-          l_series[i][i + j].LegendText = p_series[j].Account.Name + "\n" + VersionModel.Instance.GetValue(p_settings.Versions[i]).Name;
+          l_series[i][j].LegendText = p_series[j].Account.Name + "\n" + VersionModel.Instance.GetValue(p_settings.Versions[i]).Name;
         }
         l_color = ColorUtils.Add(l_color, GRADIENT_DIVIDED / p_settings.Versions.Count);
       }
