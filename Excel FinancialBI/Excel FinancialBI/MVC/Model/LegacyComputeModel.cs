@@ -92,19 +92,8 @@ namespace FBI.MVC.Model
 
           if (l_request.IsDiff && l_resultDic.Count == 2)
           {
-            ComputeResult l_diffA;
-            ComputeResult l_diffB;
-
-            if (l_request.IsPeriodDiff)
-            {
-              l_diffA = ComputeResult.DiffRange(l_resultList[0], l_resultList[1], l_request.PeriodDiffAssociations);
-              l_diffB = ComputeResult.DiffRange(l_resultList[1], l_resultList[0], l_request.PeriodDiffAssociations);
-            }
-            else
-            {
-              l_diffA = l_resultList[0] - l_resultList[1];
-              l_diffB = l_resultList[1] - l_resultList[0];
-            }
+            ComputeResult l_diffA = l_resultList[0] - l_resultList[1];
+            ComputeResult l_diffB = l_resultList[1] - l_resultList[0];
 
             l_resultDic[l_diffA.VersionId] = l_diffA;
             l_resultDic[l_diffB.VersionId] = l_diffB;
