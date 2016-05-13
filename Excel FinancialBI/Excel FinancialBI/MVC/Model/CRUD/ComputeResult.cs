@@ -146,7 +146,7 @@ namespace FBI.MVC.Model.CRUD
 
     public static UInt32 GetDiffId(UInt32 p_idA, UInt32 p_idB)
     {
-      return (p_idA * 1000 ^ p_idB * 2000);
+      return (p_idA * 1000 ^ p_idB * 20000);
     }
 
     public static ComputeResult operator-(ComputeResult p_a, ComputeResult p_b)

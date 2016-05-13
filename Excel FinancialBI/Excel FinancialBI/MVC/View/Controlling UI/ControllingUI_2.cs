@@ -212,7 +212,11 @@ namespace FBI.MVC.View
 
     private void OnPeriodComparisonClick(object sender, EventArgs e)
     {
-      m_controller.ShowPeriodDiff();
+      m_periodCompareBT.Checked = !m_periodCompareBT.Checked;
+      if (m_periodCompareBT.Checked)
+        m_controller.ShowPeriodDiff();
+      else
+        m_controller.PeriodDiff = false;
     }
 
     #endregion

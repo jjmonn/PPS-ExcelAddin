@@ -64,6 +64,8 @@ namespace FBI.MVC.View
         l_item.Value = l_period;
         l_item.Text = PeriodModel.GetFormatedDate(l_period, p_config);
         p_cb.Items.Add(l_item);
+        if (p_cb.SelectedItem == null)
+          p_cb.SelectedItem = l_item;
       }
     }
 
@@ -85,7 +87,7 @@ namespace FBI.MVC.View
       l_periodListB = PeriodModel.GetPeriodList((Int32)m_period2CB.SelectedItem.Value,
        m_periodList2.Count - GetPosInList(m_periodList2, (Int32)m_period2CB.SelectedItem.Value), m_version2.TimeConfiguration);
 
-      for (Int32 i = 0; i < l_periodListA.Count; ++i)
+      for (Int32 i = 0; i < l_periodListA.Count && i < l_periodListB.Count; ++i)
         l_periodDic[m_version1.TimeConfiguration][l_periodListA[i]] = l_periodListB[i];
 
       if (m_version1.TimeConfiguration != TimeUtils.GetParentConfig(m_version1.TimeConfiguration))
@@ -99,7 +101,7 @@ namespace FBI.MVC.View
         l_periodListB = PeriodModel.GetPeriodList((Int32)m_period2CB.SelectedItem.Value,
           GetPosInList(m_periodList2, (Int32)m_period2CB.SelectedItem.Value) / l_nbPeriod, l_timeConf);
 
-        for (Int32 i = 0; i < l_periodListA.Count; ++i)
+        for (Int32 i = 0; i < l_periodListA.Count && i < l_periodListB.Count; ++i)
           l_periodDic[l_timeConf][l_periodListA[i]] = l_periodListB[i];
       }
 

@@ -332,17 +332,18 @@ namespace FBI.MVC.View
       string l_formatedDate;
       int l_count = 0;
 
-      foreach (KeyValuePair<Int32, Int32> l_date in m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType])
-      {
-        l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType) + " / " +
-          PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
+      if (m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType] != null)
+        foreach (KeyValuePair<Int32, Int32> l_date in m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType])
+        {
+          l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType) + " / " +
+            PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
 
-        ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, ++l_count, 0);
-        HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_formatedDate);
+          ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, ++l_count, 0);
+          HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_formatedDate);
 
-        if (l_newItem != null)
-          InitDimension(p_dgv, p_tabId, p_conf.Child, p_dimension, l_newItem.Items, l_key);
-      }
+          if (l_newItem != null)
+            InitDimension(p_dgv, p_tabId, p_conf.Child, p_dimension, l_newItem.Items, l_key);
+        }
     }
 
     private void VersionBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
