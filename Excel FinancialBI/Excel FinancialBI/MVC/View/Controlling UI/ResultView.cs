@@ -332,7 +332,7 @@ namespace FBI.MVC.View
       string l_formatedDate;
       int l_count = 0;
 
-      foreach (KeyValuePair<Int32, Int32> l_date in m_computeConfig.Request.PeriodDiffAssociations)
+      foreach (KeyValuePair<Int32, Int32> l_date in m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType])
       {
         l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType) + " / " +
           PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);

@@ -64,6 +64,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_refreshButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_chartBT = new System.Windows.Forms.ToolStripMenuItem();
       this.ExpansionImageList = new System.Windows.Forms.ImageList(this.components);
+      this.periodComparisonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.EntitiesRCMenu.SuspendLayout();
       this.PeriodsRCMenu.SuspendLayout();
       this.AdjustmentsRCMenu.SuspendLayout();
@@ -350,7 +351,8 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.BusinessControlToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_versionComparisonButton,
             this.m_versionSwitchButton,
-            this.m_hideVersionButton});
+            this.m_hideVersionButton,
+            this.periodComparisonToolStripMenuItem});
       this.BusinessControlToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("BusinessControlToolStripMenuItem.Image")));
       this.BusinessControlToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.BusinessControlToolStripMenuItem.Name = "BusinessControlToolStripMenuItem";
@@ -403,6 +405,13 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent;
       this.ExpansionImageList.Images.SetKeyName(0, "add.ico");
       this.ExpansionImageList.Images.SetKeyName(1, "minus");
+      // 
+      // periodComparisonToolStripMenuItem
+      // 
+      this.periodComparisonToolStripMenuItem.Name = "periodComparisonToolStripMenuItem";
+      this.periodComparisonToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+      this.periodComparisonToolStripMenuItem.Text = "Period comparison";
+      this.periodComparisonToolStripMenuItem.Click += new System.EventHandler(this.OnPeriodComparisonClick);
       // 
       // ControllingUI_2
       // 
@@ -464,6 +473,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
   private VIBlend.WinForms.Controls.vLabel m_entityLabel;
   private VIBlend.WinForms.Controls.vButton m_expandLeftBT;
   private VIBlend.WinForms.Controls.vButton m_expandRightBT;
+  private System.Windows.Forms.ToolStripMenuItem periodComparisonToolStripMenuItem;
 }
 
 }

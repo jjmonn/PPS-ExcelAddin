@@ -62,8 +62,7 @@ namespace FBI.MVC.Model.CRUD
           (Int32)l_result.m_version.NbPeriod, l_result.m_version.TimeConfiguration);
       if (l_result.m_version.TimeConfiguration == TimeConfig.DAYS || l_result.m_version.TimeConfiguration == TimeConfig.MONTHS) 
       {
-        TimeConfig l_aggregationTimeConfig =
-          (l_result.m_version.TimeConfiguration == TimeConfig.DAYS) ? TimeConfig.WEEK : TimeConfig.YEARS;
+        TimeConfig l_aggregationTimeConfig = TimeUtils.GetParentConfig(l_result.m_version.TimeConfiguration);
         l_result.m_aggregationPeriodList = PeriodModel.GetPeriodList((Int32)p_request.StartPeriod, (Int32)p_request.NbPeriods, l_aggregationTimeConfig);
       }
       else
@@ -128,8 +127,7 @@ namespace FBI.MVC.Model.CRUD
 
         l_nbAggregation = p_packet.ReadUint32();
 
-        TimeConfig l_aggregationTimeConfig =
-          (m_version.TimeConfiguration == TimeConfig.DAYS) ? TimeConfig.WEEK : TimeConfig.YEARS;
+        TimeConfig l_aggregationTimeConfig = TimeUtils.GetParentConfig(m_version.TimeConfiguration);
         for (UInt16 j = 0; j < l_nbAggregation && j < m_aggregationPeriodList.Count; ++j)
         {
           double l_value = p_packet.ReadDouble();

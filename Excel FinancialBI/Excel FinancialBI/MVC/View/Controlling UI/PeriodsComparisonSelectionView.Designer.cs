@@ -30,14 +30,12 @@
     {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PeriodsComparisonSelectionView));
       this.m_version1Label = new VIBlend.WinForms.Controls.vLabel();
-      this.m_versionTreeView1 = new VIBlend.WinForms.Controls.vTreeViewBox();
-      this.m_periodComboBox1 = new System.Windows.Forms.ComboBox();
       this.m_period1Label = new VIBlend.WinForms.Controls.vLabel();
       this.m_groupbox1 = new VIBlend.WinForms.Controls.vGroupBox();
+      this.m_period1CB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_groupbox2 = new VIBlend.WinForms.Controls.vGroupBox();
+      this.m_period2CB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_version2Label = new VIBlend.WinForms.Controls.vLabel();
-      this.m_versionTreeView2 = new VIBlend.WinForms.Controls.vTreeViewBox();
-      this.m_periodComboBox2 = new System.Windows.Forms.ComboBox();
       this.m_period2Label = new VIBlend.WinForms.Controls.vLabel();
       this.m_validateButton = new VIBlend.WinForms.Controls.vButton();
       this.m_groupbox1.SuspendLayout();
@@ -53,36 +51,12 @@
       this.m_version1Label.Location = new System.Drawing.Point(6, 27);
       this.m_version1Label.Multiline = true;
       this.m_version1Label.Name = "m_version1Label";
-      this.m_version1Label.Size = new System.Drawing.Size(80, 20);
+      this.m_version1Label.Size = new System.Drawing.Size(177, 44);
       this.m_version1Label.TabIndex = 0;
       this.m_version1Label.Text = "Version";
       this.m_version1Label.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
       this.m_version1Label.UseMnemonics = true;
       this.m_version1Label.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_versionTreeView1
-      // 
-      this.m_versionTreeView1.BackColor = System.Drawing.Color.White;
-      this.m_versionTreeView1.BorderColor = System.Drawing.Color.Black;
-      this.m_versionTreeView1.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_versionTreeView1.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_versionTreeView1.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_versionTreeView1.Location = new System.Drawing.Point(6, 50);
-      this.m_versionTreeView1.Name = "m_versionTreeView1";
-      this.m_versionTreeView1.Size = new System.Drawing.Size(170, 23);
-      this.m_versionTreeView1.TabIndex = 2;
-      this.m_versionTreeView1.Text = "vTreeViewBox1";
-      this.m_versionTreeView1.UseThemeBackColor = false;
-      this.m_versionTreeView1.UseThemeDropDownArrowColor = true;
-      this.m_versionTreeView1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_periodComboBox1
-      // 
-      this.m_periodComboBox1.FormattingEnabled = true;
-      this.m_periodComboBox1.Location = new System.Drawing.Point(6, 126);
-      this.m_periodComboBox1.Name = "m_periodComboBox1";
-      this.m_periodComboBox1.Size = new System.Drawing.Size(170, 21);
-      this.m_periodComboBox1.TabIndex = 4;
       // 
       // m_period1Label
       // 
@@ -103,9 +77,8 @@
       // m_groupbox1
       // 
       this.m_groupbox1.BackColor = System.Drawing.Color.Transparent;
+      this.m_groupbox1.Controls.Add(this.m_period1CB);
       this.m_groupbox1.Controls.Add(this.m_version1Label);
-      this.m_groupbox1.Controls.Add(this.m_versionTreeView1);
-      this.m_groupbox1.Controls.Add(this.m_periodComboBox1);
       this.m_groupbox1.Controls.Add(this.m_period1Label);
       this.m_groupbox1.Location = new System.Drawing.Point(17, 27);
       this.m_groupbox1.Name = "m_groupbox1";
@@ -114,14 +87,33 @@
       this.m_groupbox1.TabStop = false;
       this.m_groupbox1.Text = "Column 1";
       this.m_groupbox1.UseThemeBorderColor = true;
-      this.m_groupbox1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_groupbox1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_period1CB
+      // 
+      this.m_period1CB.BackColor = System.Drawing.Color.White;
+      this.m_period1CB.DisplayMember = "";
+      this.m_period1CB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_period1CB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_period1CB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_period1CB.DropDownWidth = 177;
+      this.m_period1CB.Location = new System.Drawing.Point(6, 129);
+      this.m_period1CB.Name = "m_period1CB";
+      this.m_period1CB.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_period1CB.Size = new System.Drawing.Size(177, 23);
+      this.m_period1CB.TabIndex = 11;
+      this.m_period1CB.Text = "vComboBox1";
+      this.m_period1CB.UseThemeBackColor = false;
+      this.m_period1CB.UseThemeDropDownArrowColor = true;
+      this.m_period1CB.ValueMember = "";
+      this.m_period1CB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_period1CB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_groupbox2
       // 
       this.m_groupbox2.BackColor = System.Drawing.Color.Transparent;
+      this.m_groupbox2.Controls.Add(this.m_period2CB);
       this.m_groupbox2.Controls.Add(this.m_version2Label);
-      this.m_groupbox2.Controls.Add(this.m_versionTreeView2);
-      this.m_groupbox2.Controls.Add(this.m_periodComboBox2);
       this.m_groupbox2.Controls.Add(this.m_period2Label);
       this.m_groupbox2.Location = new System.Drawing.Point(227, 27);
       this.m_groupbox2.Name = "m_groupbox2";
@@ -130,7 +122,27 @@
       this.m_groupbox2.TabStop = false;
       this.m_groupbox2.Text = "Column 2";
       this.m_groupbox2.UseThemeBorderColor = true;
-      this.m_groupbox2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_groupbox2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_period2CB
+      // 
+      this.m_period2CB.BackColor = System.Drawing.Color.White;
+      this.m_period2CB.DisplayMember = "";
+      this.m_period2CB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_period2CB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_period2CB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_period2CB.DropDownWidth = 177;
+      this.m_period2CB.Location = new System.Drawing.Point(6, 129);
+      this.m_period2CB.Name = "m_period2CB";
+      this.m_period2CB.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_period2CB.Size = new System.Drawing.Size(177, 23);
+      this.m_period2CB.TabIndex = 12;
+      this.m_period2CB.Text = "vComboBox2";
+      this.m_period2CB.UseThemeBackColor = false;
+      this.m_period2CB.UseThemeDropDownArrowColor = true;
+      this.m_period2CB.ValueMember = "";
+      this.m_period2CB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_period2CB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_version2Label
       // 
@@ -141,36 +153,12 @@
       this.m_version2Label.Location = new System.Drawing.Point(6, 27);
       this.m_version2Label.Multiline = true;
       this.m_version2Label.Name = "m_version2Label";
-      this.m_version2Label.Size = new System.Drawing.Size(80, 20);
+      this.m_version2Label.Size = new System.Drawing.Size(177, 44);
       this.m_version2Label.TabIndex = 0;
       this.m_version2Label.Text = "Version";
       this.m_version2Label.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
       this.m_version2Label.UseMnemonics = true;
       this.m_version2Label.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_versionTreeView2
-      // 
-      this.m_versionTreeView2.BackColor = System.Drawing.Color.White;
-      this.m_versionTreeView2.BorderColor = System.Drawing.Color.Black;
-      this.m_versionTreeView2.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_versionTreeView2.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_versionTreeView2.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_versionTreeView2.Location = new System.Drawing.Point(6, 50);
-      this.m_versionTreeView2.Name = "m_versionTreeView2";
-      this.m_versionTreeView2.Size = new System.Drawing.Size(170, 23);
-      this.m_versionTreeView2.TabIndex = 2;
-      this.m_versionTreeView2.Text = "vTreeViewBox2";
-      this.m_versionTreeView2.UseThemeBackColor = false;
-      this.m_versionTreeView2.UseThemeDropDownArrowColor = true;
-      this.m_versionTreeView2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_periodComboBox2
-      // 
-      this.m_periodComboBox2.FormattingEnabled = true;
-      this.m_periodComboBox2.Location = new System.Drawing.Point(6, 126);
-      this.m_periodComboBox2.Name = "m_periodComboBox2";
-      this.m_periodComboBox2.Size = new System.Drawing.Size(170, 21);
-      this.m_periodComboBox2.TabIndex = 4;
       // 
       // m_period2Label
       // 
@@ -200,6 +188,7 @@
       this.m_validateButton.Text = "Validate";
       this.m_validateButton.UseVisualStyleBackColor = false;
       this.m_validateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_validateButton.Click += new System.EventHandler(this.OnValidate);
       // 
       // PeriodsComparisonSelectionView
       // 
@@ -221,15 +210,13 @@
     #endregion
 
     private VIBlend.WinForms.Controls.vLabel m_version1Label;
-    private VIBlend.WinForms.Controls.vTreeViewBox m_versionTreeView1;
-    private System.Windows.Forms.ComboBox m_periodComboBox1;
     private VIBlend.WinForms.Controls.vLabel m_period1Label;
     private VIBlend.WinForms.Controls.vGroupBox m_groupbox1;
     private VIBlend.WinForms.Controls.vGroupBox m_groupbox2;
     private VIBlend.WinForms.Controls.vLabel m_version2Label;
-    private VIBlend.WinForms.Controls.vTreeViewBox m_versionTreeView2;
-    private System.Windows.Forms.ComboBox m_periodComboBox2;
     private VIBlend.WinForms.Controls.vLabel m_period2Label;
     private VIBlend.WinForms.Controls.vButton m_validateButton;
+    private VIBlend.WinForms.Controls.vComboBox m_period1CB;
+    private VIBlend.WinForms.Controls.vComboBox m_period2CB;
   }
 }

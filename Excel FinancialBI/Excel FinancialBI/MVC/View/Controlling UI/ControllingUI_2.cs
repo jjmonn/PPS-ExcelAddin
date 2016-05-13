@@ -210,6 +210,11 @@ namespace FBI.MVC.View
       m_controller.ResultController.DropOnExcel(true);
     }
 
+    private void OnPeriodComparisonClick(object sender, EventArgs e)
+    {
+      m_controller.ShowPeriodDiff();
+    }
+
     #endregion
   }
 }
