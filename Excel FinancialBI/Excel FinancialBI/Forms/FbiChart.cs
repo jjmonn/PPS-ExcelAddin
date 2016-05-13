@@ -16,6 +16,7 @@ namespace FBI.Forms
   using ChartValue = Tuple<string, double>;
   using ChartValues = List<Tuple<string, double>>;
   using ChartSeries = SafeDictionary<int, List<Series>>;
+  using ChartAxisType = SafeDictionary<FBI.MVC.Model.CRUD.Account.AccountType, System.Windows.Forms.DataVisualization.Charting.AxisType>;
 
   public class FbiChart : Chart
   {
@@ -23,6 +24,7 @@ namespace FBI.Forms
     private const int GRADIENT_MULTIPLIER = 2; //Used for stackColumn. Nb of stacks * GRADIENT_MULTIPLIER => Nb of steps of gradient
     private const int GRADIENT_DIVIDED = 225; //Used for lines. Nb of lines / GRADIENT_DIVIDED
     private const int MAX_Y_AXIS = 2;
+    private const string STRING_AXIS_FORMAT = "{0:N}";
 
     private const int TITLE_SIZE = 12;
     private const int LEGEND_SIZE = 10;
@@ -425,9 +427,9 @@ namespace FBI.Forms
       }
     }
 
-    private string SymbolFromAccount(Account p_account, Computation p_compute)
+    private string SymbolFromAccountType(Account.AccountType p_type, Computation p_compute)
     {
-      switch (p_account.Type)
+      switch (p_type)
       {
         case Account.AccountType.MONETARY:
           Currency l_currency = CurrencyModel.Instance.GetValue(p_compute.Config.Request.CurrencyId);
@@ -438,66 +440,61 @@ namespace FBI.Forms
       return (String.Empty);
     }
 
-    /*private ChartSeries CreateMultipleSeries<T>(ChartSettings p_settings, Computation p_compute, List<T> p_list, List<Serie> p_series = null)
-    {
-      int l_nbOfAxis = 0;
-      bool l_isPrimaryAxis = false;
-      ChartSeries l_series = new ChartSeries();
-      int size = this.GetNumberOfDeconstruction(p_settings);
-      SafeDictionary<Account.AccountType, bool> l_axisType = new SafeDictionary<Account.AccountType, bool>();
-
-      if (p_series == null && p_list is List<Serie>)
-        p_series = ((List<Serie>)(object)p_list);
-      if (p_series != null)
-      {
-        foreach (Serie l_serie in p_series)
-        {
-          if (!l_axisType.ContainsKey(l_serie.Account.Type))
-            l_nbOfAxis += 1;
-          l_axisType[l_serie.Account.Type] = (l_nbOfAxis == 0 ? true : false);
-        }
-      }
-      for (int i = 0; i < p_list.Count; ++i)
-      {
-        l_series[i] = new List<Series>();
-        for (int j = 0; j < size; ++j)
-        {
-          l_isPrimaryAxis = (p_series == null || l_nbOfAxis > MAX_Y_AXIS ? true : l_axisType[p_series[i].Account.Type]);
-          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings), null, l_isPrimaryAxis));
-          //set format here !
-        }
-      }
-      return (l_series);
-    }*/
-
     private ChartSeries CreateMultipleSeries(ChartSettings p_settings, Computation p_compute,
       List<Serie> p_series, int p_dim1, int p_dim2)
     {
+      Int32 l_nbOfAxis = 0;
       ChartSeries l_series = new ChartSeries();
+      ChartAxisType l_axisType = new ChartAxisType();
+
+      //Set the account axis
+      foreach (Serie l_serie in p_series)
+      {
+        if (!l_axisType.ContainsKey(l_serie.Account.Type))
+        {
+          l_axisType[l_serie.Account.Type] = (l_nbOfAxis == 0 ? System.Windows.Forms.DataVisualization.Charting.AxisType.Primary :
+              System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary);
+          l_nbOfAxis += 1;
+        }
+      }
 
       for (int i = 0; i < p_dim1; ++i)
       {
         l_series[i] = new List<Series>();
         for (int j = 0; j < p_dim2; ++j)
         {
-          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings), null, true));
+          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings), null));
         }
       }
-      this.ApplyMultipleAxis(l_series, p_compute, p_series);
-      return (l_series);
+      return (this.ApplyMultipleAxis(l_series, p_settings, p_compute, p_series, l_nbOfAxis, l_axisType));
     }
 
-    //Bullshit way of set axis. Will be redone
-    private void ApplyMultipleAxis(ChartSeries p_chartSeries, Computation p_compute, List<Serie> p_series)
+    private ChartSeries ApplyMultipleAxis(ChartSeries p_chartSeries, ChartSettings p_settings, Computation p_compute,
+      List<Serie> p_series, Int32 p_nbOfAxis, ChartAxisType p_axisType)
     {
-      string l_axisType = "";
-      Serie l_serie = p_series.FirstOrDefault();
+      int i = 0;
+      string[] l_axisType = { String.Empty, String.Empty };
 
-      l_axisType = (l_serie == null ? l_axisType : SymbolFromAccount(l_serie.Account, p_compute));
-      this.ChartAreas[0].AxisY.LabelStyle.Format = "{0:N}" + l_axisType;
+      this.ChartAreas[0].AxisY.LabelStyle.Format = STRING_AXIS_FORMAT;
+      this.ChartAreas[0].AxisY2.LabelStyle.Format = STRING_AXIS_FORMAT;
+      if (p_nbOfAxis > MAX_Y_AXIS)
+        return (p_chartSeries);
+
+      foreach (var l_item in p_axisType)
+        l_axisType[i++] = this.SymbolFromAccountType(l_item.Key, p_compute);
+
+      foreach (List<Series> l_list in p_chartSeries.Values)
+      {
+        for (int j = 0; j < l_list.Count; ++j)
+          l_list[j].YAxisType = p_axisType[p_series[j].Account.Type];
+      }
+
+      this.ChartAreas[0].AxisY.LabelStyle.Format += l_axisType[0];
+      this.ChartAreas[0].AxisY2.LabelStyle.Format += l_axisType[1];
+      return (p_chartSeries);
     }
 
-    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null, bool p_isPrimary = true,
+    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null,
       ChartValueType p_chartX = ChartValueType.Double, ChartValueType p_chartY = ChartValueType.String)
     {
       Series l_series = new Series();
@@ -509,11 +506,6 @@ namespace FBI.Forms
       {
         l_series.Color = p_color.Value;
       }
-      l_series.YAxisType = (p_isPrimary ?
-        System.Windows.Forms.DataVisualization.Charting.AxisType.Primary :
-        System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary);
-      l_series.XValueType = p_chartX;
-      l_series.YValueType = p_chartY;
       return (l_series);
     }
 
