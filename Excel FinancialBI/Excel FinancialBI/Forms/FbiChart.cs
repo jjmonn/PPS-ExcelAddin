@@ -16,7 +16,7 @@ namespace FBI.Forms
   using ChartValue = Tuple<string, double>;
   using ChartValues = List<Tuple<string, double>>;
   using ChartSeries = SafeDictionary<int, List<Series>>;
-  using ChartAxisType = SafeDictionary<FBI.MVC.Model.CRUD.Account.AccountType, bool>;
+  using ChartAxisType = SafeDictionary<FBI.MVC.Model.CRUD.Account.AccountType, System.Windows.Forms.DataVisualization.Charting.AxisType>;
 
   public class FbiChart : Chart
   {
@@ -452,7 +452,8 @@ namespace FBI.Forms
       {
         if (!l_axisType.ContainsKey(l_serie.Account.Type))
         {
-          l_axisType[l_serie.Account.Type] = (l_nbOfAxis == 0 ? true : false);
+          l_axisType[l_serie.Account.Type] = (l_nbOfAxis == 0 ? System.Windows.Forms.DataVisualization.Charting.AxisType.Primary :
+              System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary);
           l_nbOfAxis += 1;
         }
       }
@@ -462,7 +463,7 @@ namespace FBI.Forms
         l_series[i] = new List<Series>();
         for (int j = 0; j < p_dim2; ++j)
         {
-          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings), null, true));
+          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings), null));
         }
       }
       return (this.ApplyMultipleAxis(l_series, p_settings, p_compute, p_series, l_nbOfAxis, l_axisType));
@@ -479,36 +480,21 @@ namespace FBI.Forms
       if (p_nbOfAxis > MAX_Y_AXIS)
         return (p_chartSeries);
 
-      foreach (KeyValuePair<Account.AccountType, bool> l_item in p_axisType)
+      foreach (var l_item in p_axisType)
         l_axisType[i++] = this.SymbolFromAccountType(l_item.Key, p_compute);
 
-      if (!p_settings.HasDeconstruction)
-        this.ApplyMultipleAxisVersion(p_chartSeries, p_series, p_axisType);
-      else
-        this.ApplyMultipleAxisDeconstruction(p_chartSeries, p_series, p_axisType);
+      foreach (List<Series> l_list in p_chartSeries.Values)
+      {
+        for (int j = 0; j < l_list.Count; ++j)
+          l_list[j].YAxisType = p_axisType[p_series[j].Account.Type];
+      }
 
       this.ChartAreas[0].AxisY.LabelStyle.Format += l_axisType[0];
       this.ChartAreas[0].AxisY2.LabelStyle.Format += l_axisType[1];
       return (p_chartSeries);
     }
 
-    private void ApplyMultipleAxisVersion(ChartSeries p_chartSeries,
-      List<Serie> p_series, ChartAxisType p_axisType)
-    {
-      foreach (List<Series> l_list in p_chartSeries.Values)
-      {
-        for (int i = 0; i < l_list.Count; ++i)
-          l_list[i].YAxisType = this.TypeAsBoolean(p_axisType[p_series[i].Account.Type]);
-      }
-    }
-
-    private void ApplyMultipleAxisDeconstruction(ChartSeries p_chartSeries,
-      List<Serie> p_series, ChartAxisType p_axisType)
-    {
-      //TODO
-    }
-
-    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null, bool p_isPrimary = true,
+    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null,
       ChartValueType p_chartX = ChartValueType.Double, ChartValueType p_chartY = ChartValueType.String)
     {
       Series l_series = new Series();
@@ -520,15 +506,7 @@ namespace FBI.Forms
       {
         l_series.Color = p_color.Value;
       }
-      l_series.YAxisType = this.TypeAsBoolean(p_isPrimary);
       return (l_series);
-    }
-
-    private System.Windows.Forms.DataVisualization.Charting.AxisType TypeAsBoolean(bool p_isPrimary)
-    {
-      return (p_isPrimary ?
-        System.Windows.Forms.DataVisualization.Charting.AxisType.Primary :
-        System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary);
     }
 
     #endregion
