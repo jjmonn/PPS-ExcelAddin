@@ -142,6 +142,7 @@ namespace FBI.MVC.View
       this.m_refreshButton.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
       this.m_chartBT.Text = Local.GetValue("CUI.charts");
       this.Text = Local.GetValue("CUI.financials");
+      m_periodCompareBT.Text = Local.GetValue("CUI.period_comparison");
     }
 
     delegate void OnComputeResult_delegate(ErrorMessage p_status, AComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result);

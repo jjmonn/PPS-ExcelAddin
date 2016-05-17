@@ -67,6 +67,7 @@
     <string name="selection">Sélection</string>
     <string name="switch_versions">Changer le sens de la comparaison</string>
     <string name="take_off_comparison">Enlever la comparaison des versions</string>
+    <string name="period_comparison">Comparaison de périodes</string>
     <string name="unselect_all">Tout désélectionner</string>
     <string name="update">Mettre à jour</string>
     <string name="version">Version</string>
