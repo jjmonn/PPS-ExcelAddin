@@ -57,6 +57,7 @@ namespace FBI.MVC.View
 
     public void LoadPeriodCB(vComboBox p_cb, List<Int32> p_periods, TimeConfig p_config)
     {
+      p_cb.Items.Clear();
       foreach (Int32 l_period in p_periods)
       {
         ListItem l_item = new ListItem();
@@ -112,7 +113,7 @@ namespace FBI.MVC.View
 
     public Int32 GetPosInList(List<Int32> p_list, Int32 p_value)
     {
-      Int32 l_nb = 0;
+      Int32 l_nb = 1;
       foreach (Int32 l_elem in p_list)
         if (l_elem == p_value)
           break;
