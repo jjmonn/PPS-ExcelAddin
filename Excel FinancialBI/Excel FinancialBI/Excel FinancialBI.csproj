@@ -280,7 +280,6 @@
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
     <Compile Include="MVC\Controller\CommitFollowUpController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIVisualizationController.cs" />
-    <Compile Include="MVC\Controller\Controlling UI\PeriodsComparisonsSelectionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\AFactEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FinancialFactEditionController.cs" />
