@@ -51,10 +51,9 @@ namespace FBI.MVC.View
       m_tabCtrl.BorderStyle = System.Windows.Forms.BorderStyle.None;
       m_tabCtrl.TabsAreaBackColor = System.Drawing.SystemColors.Control;
       m_tabCtrl.BackColor = System.Drawing.SystemColors.Control;
-
       Controls.Add(m_tabCtrl);
       m_tabCtrl.Dock = DockStyle.Fill;
-
+ 
       LogRightClick.Visible = (Addin.Process == Account.AccountProcess.FINANCIAL);
       m_builderList.Add(typeof(PeriodModel), PeriodBuilderSelector);
       m_builderList.Add(typeof(VersionModel), VersionBuilder);
@@ -159,7 +158,6 @@ namespace FBI.MVC.View
             continue;
           vTabPage l_tab = new vTabPage(l_account.Name);
           DGV l_dgv = new DGV();
-
           l_dgv.ContextMenuStrip = m_dgvMenu;
           l_tab.Controls.Add(l_dgv);
           m_tabCtrl.TabPages.Add(l_tab);
@@ -214,6 +212,7 @@ namespace FBI.MVC.View
           if (l_tab.Controls.Count > 0)
           {
             DGV l_dgv = l_tab.Controls[0] as DGV;
+            l_dgv.Select();
             l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
             l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
             l_dgv.Refresh();
