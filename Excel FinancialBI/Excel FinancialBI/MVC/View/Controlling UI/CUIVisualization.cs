@@ -147,7 +147,11 @@ namespace FBI.MVC.View
 
     private void Merge(Control p_control)
     {
-      if (p_control.Parent != null && p_control.GetType() == typeof(vSplitterPanel))
+      if (p_control.Parent == null)
+        return;
+
+      p_control.Controls.Clear();
+      if (p_control.GetType() == typeof(vSplitterPanel))
       {
         vSplitContainer l_split = (vSplitContainer)p_control.Parent;
         Control l_otherPanel = (l_split.Panel1 == p_control ? l_split.Panel2 : l_split.Panel1);
@@ -198,8 +202,10 @@ namespace FBI.MVC.View
       Control l_clickedControl = ((ContextMenuStrip)(((ToolStripMenuItem)sender).Owner)).SourceControl;
 
       if ((l_chart = (FbiChart)this.GetObjectFromControl(l_clickedControl, typeof(FbiChart))) != null && l_chart.HasSettings)
+      {
         m_controller.DChartSettings(l_chart.Settings.Id);
-      this.Merge(l_clickedControl);
+        this.Merge(l_clickedControl);
+      }
     }
 
     #region Model

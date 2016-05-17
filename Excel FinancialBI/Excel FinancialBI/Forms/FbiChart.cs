@@ -24,7 +24,6 @@ namespace FBI.Forms
     private const int GRADIENT_MULTIPLIER = 2; //Used for stackColumn. Nb of stacks * GRADIENT_MULTIPLIER => Nb of steps of gradient
     private const int GRADIENT_DIVIDED = 225; //Used for lines. Nb of lines / GRADIENT_DIVIDED
     private const int MAX_Y_AXIS = 2;
-    private const string STRING_AXIS_FORMAT = "{0:N}";
 
     private const int TITLE_SIZE = 12;
     private const int LEGEND_SIZE = 10;
@@ -88,6 +87,7 @@ namespace FBI.Forms
       l_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
       l_chartArea.AxisX.IsMarginVisible = false;
       l_chartArea.AxisY.IsMarginVisible = true;
+      l_chartArea.AxisY.LabelStyle.Format = FbiAccountFormat.Get(null, null);
       return (l_chartArea);
     }
 
@@ -396,19 +396,6 @@ namespace FBI.Forms
       }
     }
 
-    private string SymbolFromAccountType(Account.AccountType p_type, Computation p_compute)
-    {
-      switch (p_type)
-      {
-        case Account.AccountType.MONETARY:
-          Currency l_currency = CurrencyModel.Instance.GetValue(p_compute.Config.Request.CurrencyId);
-          return (l_currency == null ? String.Empty : l_currency.Symbol);
-        case Account.AccountType.PERCENTAGE:
-          return ("%");
-      }
-      return (String.Empty);
-    }
-
     private ChartSeries CreateMultipleSeries(ChartSettings p_settings, Computation p_compute,
       List<Serie> p_series, int p_dim1, int p_dim2)
     {
@@ -430,6 +417,7 @@ namespace FBI.Forms
       Int32 l_nbOfAxis = 0;
       ChartAxisType l_axisType = new ChartAxisType();
       string[] l_axisString = { String.Empty, String.Empty };
+      Currency l_currency = CurrencyModel.Instance.GetValue(p_compute.Config.Request.CurrencyId);
 
       //Set the account axis
       foreach (Serie l_serie in p_series)
@@ -442,13 +430,11 @@ namespace FBI.Forms
         }
       }
 
-      this.ChartAreas[0].AxisY.LabelStyle.Format = STRING_AXIS_FORMAT;
-      this.ChartAreas[0].AxisY2.LabelStyle.Format = STRING_AXIS_FORMAT;
       if (l_nbOfAxis > MAX_Y_AXIS)
         return (p_chartSeries);
 
       foreach (var l_item in l_axisType)
-        l_axisString[i++] = this.SymbolFromAccountType(l_item.Key, p_compute);
+        l_axisString[i++] = FbiAccountFormat.Get(l_item.Key, l_currency);
 
       //Fuck this...
       if (p_settings.HasDeconstruction && p_settings.Versions.Count > 1)
@@ -458,8 +444,8 @@ namespace FBI.Forms
       else
         this.ApplyMultipleAxisVersion(p_chartSeries, p_settings, p_series, l_axisType);
 
-      this.ChartAreas[0].AxisY.LabelStyle.Format += l_axisString[0];
-      this.ChartAreas[0].AxisY2.LabelStyle.Format += l_axisString[1];
+      this.ChartAreas[0].AxisY.LabelStyle.Format = l_axisString[0];
+      this.ChartAreas[0].AxisY2.LabelStyle.Format = l_axisString[1];
       return (p_chartSeries);
     }
 

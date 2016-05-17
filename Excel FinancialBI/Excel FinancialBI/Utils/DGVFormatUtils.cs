@@ -47,21 +47,8 @@ namespace FBI.Utils
 
         if (l_currency == null)
           continue;
-        switch ((l_account.Type))
-        {
-          case Account.AccountType.MONETARY:
-            l_formatString = "{0:" + l_currency.Symbol + "#,##0;(" + l_currency.Symbol + "#,##0)}";
-            break;
-          case Account.AccountType.PERCENTAGE:
-            l_formatString = "{0:P}";
-            break;
-          case Account.AccountType.NUMBER:
-            l_formatString = "{0:N}";
-            break;
-          default:
-            l_formatString = "{0:C0}";
-            break;
-        }
+
+        l_formatString = FbiAccountFormat.Get(l_account.Type, l_currency);
 
         if (l_row.ParentItem == null)
         {
