@@ -150,6 +150,7 @@ namespace FBI.MVC.View
       if (p_control.Parent == null)
         return;
 
+      p_control.Controls.Clear();
       if (p_control.GetType() == typeof(vSplitterPanel))
       {
         vSplitContainer l_split = (vSplitContainer)p_control.Parent;
@@ -161,8 +162,6 @@ namespace FBI.MVC.View
           l_container.Controls.Add(l_control);
         l_container.Controls.Remove(l_split);
       }
-      else if (p_control.GetType() == typeof(vPanel) || p_control.GetType() == typeof(Panel))
-        p_control.Controls.Clear();
     }
 
     #endregion

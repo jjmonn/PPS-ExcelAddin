@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace FBI.Utils
 {
+  using MVC.Model.CRUD;
+  using MVC.Model;
+
   class FbiAccountFormat
   {
     public Color textColor;
@@ -17,10 +20,8 @@ namespace FBI.Utils
     public bool bordersPresent;
     public UInt32 indent;
 
-
     public FbiAccountFormat(string p_formatCode)
     {
-
       switch (p_formatCode)
       {
         case "t":
@@ -60,8 +61,22 @@ namespace FBI.Utils
           indent = FBI.Properties.Settings.Default.detailIndent;
           break;
       }
-
     }
 
+    public static string Get(Account.AccountType? p_accountType, Currency p_currency)
+    {
+      if (p_currency == null || p_accountType == null)
+        return ("{0:N}");
+      switch (p_accountType)
+      {
+        case Account.AccountType.MONETARY:
+          return ("{0:" + p_currency.Symbol + "#,##0;(" + p_currency.Symbol + "#,##0)}");
+        case Account.AccountType.PERCENTAGE:
+          return ("{0:P}");
+        case Account.AccountType.NUMBER:
+          return ("{0:N}");
+      }
+      return ("{0:C0}");
+    }
   }
 }
