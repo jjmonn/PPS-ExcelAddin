@@ -334,18 +334,14 @@ namespace FBI.MVC.View
       if (m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType] != null)
         foreach (KeyValuePair<Int32, Int32> l_date in m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType])
         {
-          if (p_parentKey.VersionId == 0)
-          {
+          if (p_parentKey.VersionId == m_computeConfig.Request.Versions[0])
+            l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType);
+          else if (p_parentKey.VersionId == m_computeConfig.Request.Versions[1])
+            l_formatedDate = PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
+          else
             l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType) + " / " +
               PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
-          }
-          else
-          {
-            if (p_parentKey.VersionId == m_computeConfig.Request.Versions[0])
-              l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType);
-            else
-              l_formatedDate = PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
-          }
+
 
           ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, ++l_count, 0);
           HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_formatedDate);
