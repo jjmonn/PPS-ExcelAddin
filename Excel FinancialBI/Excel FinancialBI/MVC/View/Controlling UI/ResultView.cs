@@ -343,7 +343,7 @@ namespace FBI.MVC.View
               PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
 
 
-          ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, ++l_count, 0);
+          ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, l_count++, 0);
           HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_formatedDate);
 
           if (l_newItem != null)

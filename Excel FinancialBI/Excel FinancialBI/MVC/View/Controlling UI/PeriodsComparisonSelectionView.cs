@@ -76,6 +76,9 @@ namespace FBI.MVC.View
       SafeDictionary<TimeConfig, SafeDictionary<int, int>> l_periodDic = new SafeDictionary<TimeConfig, SafeDictionary<int, int>>();
       List<Int32> l_periodListA;
       List<Int32> l_periodListB;
+      TimeConfig l_minBaseTimeConf =
+        TimeUtils.IsParentConfig(m_version1.TimeConfiguration, m_version2.TimeConfiguration) ?
+        m_version2.TimeConfiguration : m_version1.TimeConfiguration;
 
       if (m_period1CB.SelectedItem == null || m_period2CB.SelectedItem == null)
         return;
@@ -88,13 +91,19 @@ namespace FBI.MVC.View
       l_periodListB = PeriodModel.GetPeriodList((Int32)m_period2CB.SelectedItem.Value,
        m_periodList2.Count - GetPosInList(m_periodList2, (Int32)m_period2CB.SelectedItem.Value), m_version2.TimeConfiguration);
 
-      for (Int32 i = 0; i < l_periodListA.Count && i < l_periodListB.Count; ++i)
-        l_periodDic[m_version1.TimeConfiguration][l_periodListA[i]] = l_periodListB[i];
+      if (m_version1.TimeConfiguration == m_version2.TimeConfiguration)
+        for (Int32 i = 0; i < l_periodListA.Count && i < l_periodListB.Count; ++i)
+          l_periodDic[m_version1.TimeConfiguration][l_periodListA[i]] = l_periodListB[i];
 
-      if (m_version1.TimeConfiguration != TimeUtils.GetParentConfig(m_version1.TimeConfiguration))
+      if (l_minBaseTimeConf != TimeUtils.GetParentConfig(l_minBaseTimeConf))
       {
-        TimeConfig l_timeConf = TimeUtils.GetParentConfig(m_version1.TimeConfiguration);
-        Int32 l_nbPeriod = TimeUtils.GetParentConfigNbPeriods(m_version1.TimeConfiguration, l_periodListA.Count);
+        TimeConfig l_timeConf = TimeUtils.GetParentConfig(l_minBaseTimeConf);
+        Int32 l_nbPeriod;
+        
+        if (l_periodListA.Count < l_periodListB.Count)
+          l_nbPeriod = TimeUtils.GetParentConfigNbPeriods(m_version1.TimeConfiguration, l_periodListA.Count);
+        else
+          l_nbPeriod = TimeUtils.GetParentConfigNbPeriods(m_version2.TimeConfiguration, l_periodListB.Count);
         l_periodDic[l_timeConf] = new SafeDictionary<int, int>();
 
         l_periodListA = PeriodModel.GetPeriodList((Int32)m_period1CB.SelectedItem.Value,
@@ -105,7 +114,6 @@ namespace FBI.MVC.View
         for (Int32 i = 0; i < l_periodListA.Count && i < l_periodListB.Count; ++i)
           l_periodDic[l_timeConf][l_periodListA[i]] = l_periodListB[i];
       }
-
       m_controller.PeriodDiffAssociations = l_periodDic;
       m_controller.Compute();
       Hide();
@@ -113,7 +121,7 @@ namespace FBI.MVC.View
 
     public Int32 GetPosInList(List<Int32> p_list, Int32 p_value)
     {
-      Int32 l_nb = 1;
+      Int32 l_nb = 0;
       foreach (Int32 l_elem in p_list)
         if (l_elem == p_value)
           break;

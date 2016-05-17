@@ -27,6 +27,15 @@ namespace FBI.MVC.Model.CRUD
       return (p_config);
     }
 
+    public static bool IsParentConfig(TimeConfig p_configA, TimeConfig p_configB)
+    {
+      if (p_configA == TimeConfig.YEARS && p_configB == TimeConfig.MONTHS)
+        return (true);
+      if (p_configA == TimeConfig.WEEK && p_configB == TimeConfig.DAYS)
+        return (true);
+      return (false);
+    }
+
     public static Int32 GetParentConfigNbPeriods(TimeConfig p_config, Int32 p_nbPeriods)
     {
       if (p_config == TimeConfig.MONTHS)
