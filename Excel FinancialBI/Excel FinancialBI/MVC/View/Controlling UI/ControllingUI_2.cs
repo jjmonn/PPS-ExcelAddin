@@ -51,7 +51,7 @@ namespace FBI.MVC.View
       ResultView l_resultView =  m_controller.ResultController.View as ResultView;
       this.SplitContainer1.Panel1.Controls.Add(l_leftPane);
       this.SplitContainer2.Panel2.Controls.Add(l_rightPane);
-      this.SplitContainer1.Panel2.Controls.Add(l_resultView);
+      vPanel1.Content.Controls.Add(l_resultView);
       l_leftPane.Dock = DockStyle.Fill;
       l_rightPane.Dock = DockStyle.Fill;
       l_resultView.Dock = DockStyle.Fill;
