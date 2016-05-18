@@ -145,7 +145,7 @@ namespace FBI.MVC.View
       // 
       this.SplitContainer2.Panel2.Controls.Add(this.GlobalFactsPanel);
       this.SplitContainer2.Panel2.Controls.Add(this.m_globalFactsLabel);
-      this.SplitContainer2.Panel2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+      this.SplitContainer2.Panel2.Margin = new System.Windows.Forms.Padding(3);
       this.SplitContainer2.Size = new System.Drawing.Size(734, 692);
       this.SplitContainer2.SplitterDistance = 556;
       this.SplitContainer2.SplitterWidth = 3;
@@ -176,7 +176,7 @@ namespace FBI.MVC.View
       this.m_accountDescriptionGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_accountDescriptionGroupbox.Location = new System.Drawing.Point(3, 522);
       this.m_accountDescriptionGroupbox.Name = "m_accountDescriptionGroupbox";
-      this.m_accountDescriptionGroupbox.Size = new System.Drawing.Size(555, 167);
+      this.m_accountDescriptionGroupbox.Size = new System.Drawing.Size(550, 167);
       this.m_accountDescriptionGroupbox.TabIndex = 20;
       this.m_accountDescriptionGroupbox.TabStop = false;
       this.m_accountDescriptionGroupbox.Text = "Account description";
@@ -198,7 +198,7 @@ namespace FBI.MVC.View
       this.m_descriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None;
       this.m_descriptionTextBox.SelectionLength = 0;
       this.m_descriptionTextBox.SelectionStart = 0;
-      this.m_descriptionTextBox.Size = new System.Drawing.Size(529, 100);
+      this.m_descriptionTextBox.Size = new System.Drawing.Size(524, 100);
       this.m_descriptionTextBox.TabIndex = 8;
       this.m_descriptionTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
       this.m_descriptionTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
@@ -211,8 +211,8 @@ namespace FBI.MVC.View
       this.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.SaveDescriptionBT.ImageKey = "1420498403_340208.ico";
       this.SaveDescriptionBT.ImageList = this.EditButtonsImagelist;
-      this.SaveDescriptionBT.Location = new System.Drawing.Point(349, 126);
-      this.SaveDescriptionBT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.SaveDescriptionBT.Location = new System.Drawing.Point(344, 126);
+      this.SaveDescriptionBT.Margin = new System.Windows.Forms.Padding(2);
       this.SaveDescriptionBT.Name = "SaveDescriptionBT";
       this.SaveDescriptionBT.RoundedCornersMask = ((byte)(15));
       this.SaveDescriptionBT.Size = new System.Drawing.Size(187, 28);
@@ -239,7 +239,7 @@ namespace FBI.MVC.View
       this.m_accountFormulaGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_accountFormulaGroupbox.Location = new System.Drawing.Point(3, 313);
       this.m_accountFormulaGroupbox.Name = "m_accountFormulaGroupbox";
-      this.m_accountFormulaGroupbox.Size = new System.Drawing.Size(555, 203);
+      this.m_accountFormulaGroupbox.Size = new System.Drawing.Size(550, 203);
       this.m_accountFormulaGroupbox.TabIndex = 19;
       this.m_accountFormulaGroupbox.TabStop = false;
       this.m_accountFormulaGroupbox.Text = "Account formula";
@@ -252,8 +252,8 @@ namespace FBI.MVC.View
       this.m_cancelFormulaEditionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_cancelFormulaEditionButton.ImageKey = "imageres_89.ico";
       this.m_cancelFormulaEditionButton.ImageList = this.EditButtonsImagelist;
-      this.m_cancelFormulaEditionButton.Location = new System.Drawing.Point(453, 162);
-      this.m_cancelFormulaEditionButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.m_cancelFormulaEditionButton.Location = new System.Drawing.Point(448, 162);
+      this.m_cancelFormulaEditionButton.Margin = new System.Windows.Forms.Padding(2);
       this.m_cancelFormulaEditionButton.Name = "m_cancelFormulaEditionButton";
       this.m_cancelFormulaEditionButton.RoundedCornersMask = ((byte)(15));
       this.m_cancelFormulaEditionButton.Size = new System.Drawing.Size(81, 28);
@@ -300,7 +300,7 @@ namespace FBI.MVC.View
       this.m_formulaTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None;
       this.m_formulaTextBox.SelectionLength = 0;
       this.m_formulaTextBox.SelectionStart = 0;
-      this.m_formulaTextBox.Size = new System.Drawing.Size(529, 106);
+      this.m_formulaTextBox.Size = new System.Drawing.Size(524, 106);
       this.m_formulaTextBox.TabIndex = 0;
       this.m_formulaTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
       this.m_formulaTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
@@ -313,8 +313,8 @@ namespace FBI.MVC.View
       this.m_validateFormulaButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_validateFormulaButton.ImageKey = "1420498403_340208.ico";
       this.m_validateFormulaButton.ImageList = this.EditButtonsImagelist;
-      this.m_validateFormulaButton.Location = new System.Drawing.Point(352, 162);
-      this.m_validateFormulaButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.m_validateFormulaButton.Location = new System.Drawing.Point(347, 162);
+      this.m_validateFormulaButton.Margin = new System.Windows.Forms.Padding(2);
       this.m_validateFormulaButton.Name = "m_validateFormulaButton";
       this.m_validateFormulaButton.RoundedCornersMask = ((byte)(15));
       this.m_validateFormulaButton.Size = new System.Drawing.Size(81, 28);
@@ -342,10 +342,10 @@ namespace FBI.MVC.View
       this.m_accountInformationGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_accountInformationGroupbox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
       this.m_accountInformationGroupbox.Location = new System.Drawing.Point(2, 28);
-      this.m_accountInformationGroupbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.m_accountInformationGroupbox.Margin = new System.Windows.Forms.Padding(2);
       this.m_accountInformationGroupbox.Name = "m_accountInformationGroupbox";
-      this.m_accountInformationGroupbox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-      this.m_accountInformationGroupbox.Size = new System.Drawing.Size(557, 280);
+      this.m_accountInformationGroupbox.Padding = new System.Windows.Forms.Padding(2);
+      this.m_accountInformationGroupbox.Size = new System.Drawing.Size(552, 280);
       this.m_accountInformationGroupbox.TabIndex = 17;
       this.m_accountInformationGroupbox.TabStop = false;
       this.m_accountInformationGroupbox.Text = "Account information";
@@ -548,7 +548,7 @@ namespace FBI.MVC.View
       this.Name_TB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.Name_TB.DefaultText = "Empty...";
       this.Name_TB.Location = new System.Drawing.Point(161, 41);
-      this.Name_TB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.Name_TB.Margin = new System.Windows.Forms.Padding(2);
       this.Name_TB.MaxLength = 32767;
       this.Name_TB.Name = "Name_TB";
       this.Name_TB.PasswordChar = '\0';
@@ -579,7 +579,7 @@ namespace FBI.MVC.View
       this.m_globalFactsLabel.Location = new System.Drawing.Point(3, 11);
       this.m_globalFactsLabel.Multiline = true;
       this.m_globalFactsLabel.Name = "m_globalFactsLabel";
-      this.m_globalFactsLabel.Size = new System.Drawing.Size(199, 16);
+      this.m_globalFactsLabel.Size = new System.Drawing.Size(201, 16);
       this.m_globalFactsLabel.TabIndex = 0;
       this.m_globalFactsLabel.Text = "Macro economic indicators";
       this.m_globalFactsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;

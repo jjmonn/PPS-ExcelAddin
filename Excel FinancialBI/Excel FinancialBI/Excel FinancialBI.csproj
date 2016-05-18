@@ -780,6 +780,7 @@
     <Compile Include="Utils\TreeNode.cs" />
     <Compile Include="Utils\TreeviewUtils.cs" />
     <Compile Include="Utils\ControlUtils.cs" />
+    <Compile Include="Utils\WinAPI.cs" />
     <Compile Include="Utils\WorksheetWriter.cs" />
   </ItemGroup>
   <ItemGroup>

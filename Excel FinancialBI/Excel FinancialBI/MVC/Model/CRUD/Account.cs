@@ -176,6 +176,11 @@ namespace FBI.MVC.Model.CRUD
         return 1;
     }
 
+    public override string ToString()
+    {
+      return Name;
+    }
+
     //public override bool Equals(object p_obj)
     //{
     //  if (p_obj.GetType() != this.GetType())
