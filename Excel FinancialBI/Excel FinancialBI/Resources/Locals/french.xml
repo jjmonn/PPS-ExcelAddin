@@ -631,7 +631,10 @@
     <category name="error">
       <string name="bnf_is_fucked">Mauvais paramètre(s) pour la BNF. Contactez un administrateur</string>
       <string name="at">Input erroné au caractère</string>
-      <string name="on">sur la règle</string>
+      <string name="operator">Un opérateur est manquant ou incorrect</string>
+      <string name="humanAccount">Le compte est erroné</string>v
+      <string name="humanPeriod">La période est erronée</string>
+      <string name="humanParam">Liste d'arguments invalide</string>
     </category>
   </category>
 
