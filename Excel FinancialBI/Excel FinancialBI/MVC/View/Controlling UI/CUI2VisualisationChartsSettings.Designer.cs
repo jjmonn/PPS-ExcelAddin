@@ -168,7 +168,9 @@ namespace FBI.MVC.View
       this.Controls.Add(this.m_AccountLabel);
       this.Controls.Add(this.m_chartTitle);
       this.Controls.Add(this.m_chartTitleLabel);
+      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+      this.MaximizeBox = false;
       this.Name = "CUI2VisualisationChartsSettings";
       this.Text = "[CUI_Charts.charts_settings]";
       this.ResumeLayout(false);
