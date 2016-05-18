@@ -201,11 +201,13 @@ namespace FBI.MVC.View
                 double l_value = p_data[l_key.VersionId].Values[l_key];
 
                 l_dgv.FillField(l_rowKey, l_columnKey, l_value);
+                if (ComputeResult.IsDiffId(l_key.VersionId))
+                  DGVFormatUtils.FormatValue(l_dgv, l_rowKey, l_columnKey);
               }
             }
           }
         }
-       if (m_computeConfig != null && m_computeConfig.Request.Process == Account.AccountProcess.RH)
+        if (m_computeConfig != null && m_computeConfig.Request.Process == Account.AccountProcess.RH)
           RemoveOrphanDimensions();
         foreach (vTabPage l_tab in m_tabCtrl.TabPages)
         {
