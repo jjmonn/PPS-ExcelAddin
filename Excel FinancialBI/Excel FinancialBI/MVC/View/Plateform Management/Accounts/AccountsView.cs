@@ -114,6 +114,9 @@ namespace FBI.MVC.View
       m_accountTV.MouseDown += OnAccountsTreeviewMouseDown;
       m_accountTV.NodeDropped += OnAccountsTreeviewNodeDropped;
       m_dropToExcelRightClickMenu.Click += OnDropSelectedAccountToExcel;
+      m_formulaTextBox.AllowDrop = true;
+      m_formulaTextBox.DragDrop += OnFormulaDragDrop;
+      m_formulaTextBox.DragOver += OnFormulaDragOver;
     }
 
     public void CloseView()
@@ -413,6 +416,21 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    void OnFormulaDragOver(object sender, DragEventArgs e)
+    {
+      if (e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true))
+        e.Effect = DragDropEffects.Move;
+    }
+
+    void OnFormulaDragDrop(object sender, DragEventArgs e)
+    {
+      if (!e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true))
+        return;
+      vTreeNode l_node = e.Data.GetData("VIBlend.WinForms.Controls.vTreeNode") as vTreeNode;
+
+      m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
+    }
 
     #region Click
 
