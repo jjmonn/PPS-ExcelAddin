@@ -227,8 +227,7 @@ namespace FBI.Utils
     {
       if (m_input.Ptr > m_errorPtr)
       {
-        this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + " " + Local.GetValue("bnf.error.on") + " " + p_rule.Name + "\n";
-        this.LastError += m_input.Str + "\n";
+        this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + ": " + Local.GetValue("bnf.error." + p_rule.Name);
       }
     }
 
