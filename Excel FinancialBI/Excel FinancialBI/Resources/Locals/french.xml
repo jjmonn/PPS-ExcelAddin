@@ -71,6 +71,7 @@
     <string name="unselect_all">Tout désélectionner</string>
     <string name="update">Mettre à jour</string>
     <string name="version">Version</string>
+    <string name="entity">Entité</string>
     <string name="warning_complexity">La requête demandée est complexe et peut-être longue à calculer. Confirmer la requête ?</string>
   </category>
 

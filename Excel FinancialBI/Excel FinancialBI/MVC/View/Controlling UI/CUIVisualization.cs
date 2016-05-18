@@ -240,7 +240,6 @@ namespace FBI.MVC.View
       this.OnChartAccountChanged(p_status, p_id, CUIVisualizationController.DELETE);
     }
 
-
     delegate void OnChartSettingsChanged_delegate(ErrorMessage p_status, UInt32 p_id, Int32 p_val);
     private void OnChartSettingsChanged(ErrorMessage p_status, UInt32 p_id, Int32 p_val)
     {

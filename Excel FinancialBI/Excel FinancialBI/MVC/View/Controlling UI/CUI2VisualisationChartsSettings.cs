@@ -18,7 +18,6 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Utils;
   using Network;
-  using Properties;
 
   public partial class CUI2VisualisationChartsSettings : Form, IView
   {
@@ -376,7 +375,8 @@ namespace FBI.MVC.View
 
       l_remove.Size = new System.Drawing.Size(23, 23);
       l_remove.Click += OnRemoveSerieClicked;
-      //BackgroundImage
+      l_remove.Image = (System.Drawing.Image)Properties.Resources.imageres_891; //Delete icon. Pls fix names of resources :(
+      l_remove.ImageAlign = ContentAlignment.TopCenter;
       return (l_remove);
     }
 
