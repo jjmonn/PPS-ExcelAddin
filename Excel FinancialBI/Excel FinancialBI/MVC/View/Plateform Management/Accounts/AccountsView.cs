@@ -65,7 +65,7 @@ namespace FBI.MVC.View
       try
       {
         m_accountTV = new FbiTreeView<Account>(AccountModel.Instance.GetDictionary(), null, true);
-        m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary());
+        m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary(), null, true);
 
         AccountsTVInit();
         GlobalFactsTVInit();
@@ -112,11 +112,13 @@ namespace FBI.MVC.View
       m_allocationKeyButton.Click += OnAllocationKeyButtonClick;
 
       m_accountTV.MouseDown += OnAccountsTreeviewMouseDown;
+      m_globalFactsTV.MouseDown += OnGlobalFactTVMouseDown;
       m_accountTV.NodeDropped += OnAccountsTreeviewNodeDropped;
       m_dropToExcelRightClickMenu.Click += OnDropSelectedAccountToExcel;
       m_formulaTextBox.AllowDrop = true;
       m_formulaTextBox.DragDrop += OnFormulaDragDrop;
       m_formulaTextBox.DragOver += OnFormulaDragOver;
+      m_globalFactsTV.MouseDoubleClick += OnGlobalFactTVMouseDoubleClick;
     }
 
     public void CloseView()
@@ -419,12 +421,16 @@ namespace FBI.MVC.View
 
     void OnFormulaDragOver(object sender, DragEventArgs e)
     {
+      if (!m_isEditingFormulaFlag)
+        return;
       if (e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true))
         e.Effect = DragDropEffects.Move;
     }
 
     void OnFormulaDragDrop(object sender, DragEventArgs e)
     {
+      if (!m_isEditingFormulaFlag)
+        return;
       if (!e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true))
         return;
       vTreeNode l_node = e.Data.GetData("VIBlend.WinForms.Controls.vTreeNode") as vTreeNode;
@@ -574,6 +580,16 @@ namespace FBI.MVC.View
       }
     }
 
+    private void OnGlobalFactTVMouseDoubleClick(object p_sender, EventArgs p_e)
+    {
+      if (m_isEditingFormulaFlag == true)
+      {
+        vTreeNode l_node = m_globalFactsTV.FindAtPosition(((MouseEventArgs)p_e).Location);
+        if (l_node != null)
+          m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
+      }
+    }
+
     void MoveAccount(vTreeNode p_node1, vTreeNode p_node2)
     {
       if (p_node1 == null || p_node2 == null)
@@ -658,6 +674,14 @@ namespace FBI.MVC.View
         m_currentNode = m_accountTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y));
       if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
         m_accountTV.DoDragDrop(m_currentNode, DragDropEffects.Move);
+    }
+
+    void OnGlobalFactTVMouseDown(object sender, MouseEventArgs p_e)
+    {
+      vTreeNode l_node = m_globalFactsTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y));
+      
+      if (l_node != null)
+        m_globalFactsTV.DoDragDrop(l_node, DragDropEffects.Move);
     }
 
     private void OnAccountsTreeviewNodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)
