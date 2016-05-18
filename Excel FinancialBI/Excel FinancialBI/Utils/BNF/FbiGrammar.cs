@@ -99,7 +99,7 @@ namespace FBI.Utils
       p_bnf.AddRule("serverParam", "serverValue $ | '(' $ serverExpr $ ')'");
       p_bnf.AddRule("serverList", "$ operator $ serverParam");
 
-      p_bnf.AddRule(TO_HUMAN, "*serverExpr");
+      p_bnf.AddRule(TO_HUMAN, "serverExpr | $");
 
       /* HUMAN RULES */
 
@@ -120,7 +120,7 @@ namespace FBI.Utils
       p_bnf.AddRule("humanParam", "humanValue $ | '(' $ humanExpr $ ')'");
       p_bnf.AddRule("humanList", "$ operator $ humanParam");
 
-      p_bnf.AddRule(TO_SERVER, "*humanExpr");
+      p_bnf.AddRule(TO_SERVER, "humanExpr | $");
     }
   }
 }
