@@ -149,6 +149,11 @@ namespace FBI.MVC.Model.CRUD
       return (p_idA * 1000 ^ p_idB * 20000);
     }
 
+    public static bool IsDiffId(UInt32 p_versionId)
+    {
+      return (p_versionId >= 20000);
+    }
+
     public static ComputeResult operator-(ComputeResult p_a, ComputeResult p_b)
     {
       ComputeResult l_result = new ComputeResult();
