@@ -372,7 +372,7 @@ namespace FBI.MVC.View
         l_point.Y += 15;
         m_autocomplete.Location = l_point;
       }
-      m_autocomplete.Height = 20 * l_list.Count;
+      m_autocomplete.Height = 2 + 20 * l_list.Count;
       m_autocomplete.Show();
     }
 
