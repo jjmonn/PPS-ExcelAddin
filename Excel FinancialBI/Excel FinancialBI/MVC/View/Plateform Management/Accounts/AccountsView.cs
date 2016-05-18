@@ -129,6 +129,7 @@ namespace FBI.MVC.View
       m_formulaTextBox.DragOver += OnFormulaDragOver;
       m_formulaTextBox.TextChanged += OnFormulaChanged;
       m_formulaTextBox.KeyUp += OnFormulaKeyUp;
+      m_formulaTextBox.GotFocus += OnFormulaClick;
       m_formulaTextBox.KeyDown += OnFormulaKeyDown;
       m_autocomplete.KeyUp += OnFormulaKeyUp;
       m_autocomplete.MouseDoubleClick += OnAutoCompleteMouseDoubleClick;
@@ -318,6 +319,22 @@ namespace FBI.MVC.View
       return (token);
     }
 
+    string FindCompleteToken()
+    {
+      int l_posToken;
+      bool l_endQuote;
+      string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+
+      if (!l_endQuote)
+      {
+        l_token = m_formulaTextBox.Text.Substring(l_posToken);
+        int l_pos = l_token.IndexOf("\"");
+        if (l_pos > 0)
+          return l_token.Substring(0, l_pos);
+      }
+      return (l_token);
+    }
+
     void OnFormulaChanged(object sender, EventArgs e)
     {
       if (m_isValidAutoComplete)
@@ -355,6 +372,7 @@ namespace FBI.MVC.View
         l_point.Y += 15;
         m_autocomplete.Location = l_point;
       }
+      m_autocomplete.Height = 20 * l_list.Count;
       m_autocomplete.Show();
     }
 
@@ -425,6 +443,21 @@ namespace FBI.MVC.View
         m_autocomplete.Hide();
         m_formulaTextBox.Focus();
         OnFormulaChanged(null, null);
+      }
+    }
+
+    void OnFormulaClick(object sender, EventArgs e)
+    {
+      string l_token = FindCompleteToken();
+
+      vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId(l_token));
+
+      if (l_node == null)
+       l_node = m_globalFactsTV.FindNode(GlobalFactModel.Instance.GetValueId(l_token));
+      if (l_node != null)
+      {
+        l_node.TreeView.SelectedNode = l_node;
+        l_node.TreeView.Refresh();
       }
     }
 
