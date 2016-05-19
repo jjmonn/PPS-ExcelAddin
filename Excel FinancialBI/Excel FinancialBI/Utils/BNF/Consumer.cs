@@ -183,7 +183,7 @@ namespace FBI.Utils
       return (true);
     }
 
-    public bool ReadAccount()
+    public bool ReadToken()
     {
       if (this.HasChar(Constants.FORBIDEN_CHARS))
         return (false);

@@ -46,7 +46,7 @@ namespace FBI.Utils
       m_internalRules["alnum"] = RuleAlNum;
       m_internalRules["print"] = RulePrintable;
       m_internalRules["identifier"] = RuleIdentifier;
-      m_internalRules["account"] = RuleAccount;
+      m_internalRules["token"] = RuleToken;
       m_internalRules["ws"] = RuleWhitespace;
       m_internalRules["$"] = RuleWhitespaces;
       m_internalRules["\'"] = RuleChar;
@@ -225,7 +225,7 @@ namespace FBI.Utils
 
     private void BuildLastError(Consumer p_bnf, Rule p_rule)
     {
-      if (m_input.Ptr > m_errorPtr)
+      if (m_input.Ptr > m_errorPtr && !m_internalRules.ContainsKey(p_rule.Name)) //Default rules are not considered as part of LastError
       {
         this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + ": " + Local.GetValue("bnf.error." + p_rule.Name);
       }
@@ -266,9 +266,9 @@ namespace FBI.Utils
       return (m_input.ReadIdentifier());
     }
 
-    private bool RuleAccount(Consumer p_bnf)
+    private bool RuleToken(Consumer p_bnf)
     {
-      return (m_input.ReadAccount());
+      return (m_input.ReadToken());
     }
 
     private bool RuleWhitespace(Consumer p_bnf)
