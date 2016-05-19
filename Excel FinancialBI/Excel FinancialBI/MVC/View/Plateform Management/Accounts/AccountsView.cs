@@ -49,6 +49,7 @@ namespace FBI.MVC.View
     UInt32 m_currentAccount = 0;
     vListBox m_autocomplete;
     CircularBuffer<string> m_formulaHistoric = new CircularBuffer<string>(100);
+    Stopwatch m_formulaDoubleClickClock = Stopwatch.StartNew();
 
     #endregion
 
@@ -131,9 +132,8 @@ namespace FBI.MVC.View
       m_formulaTextBox.DragOver += OnFormulaDragOver;
       m_formulaTextBox.TextChanged += OnFormulaChanged;
       m_formulaTextBox.KeyUp += OnFormulaKeyUp;
-      m_formulaTextBox.GotFocus += OnFormulaClick;
       m_formulaTextBox.KeyDown += OnFormulaKeyDown;
-      m_formulaTextBox.DoubleClick += OnFormulaMouseDoubleClick;
+      m_formulaTextBox.MouseDown += OnFormulaMouseDown;
       m_autocomplete.KeyUp += OnFormulaKeyUp;
       m_autocomplete.MouseDoubleClick += OnAutoCompleteMouseDoubleClick;
       m_globalFactsTV.MouseDoubleClick += OnGlobalFactTVMouseDoubleClick;
@@ -302,7 +302,7 @@ namespace FBI.MVC.View
       if (m_formulaTextBox.Text.LastOrDefault() == '\n' && selectionStart == m_formulaTextBox.Text.Length)
         selectionStart -= 2;
 
-      for (int i = 0; i < m_formulaTextBox.Text.Length && i < selectionStart; ++i)
+      for (int i = 0; i < m_formulaTextBox.Text.Length && i <= selectionStart; ++i)
       {
         if (m_formulaTextBox.Text[i] == '\"')
         {
@@ -467,7 +467,7 @@ namespace FBI.MVC.View
       }
     }
 
-    void OnFormulaClick(object sender, EventArgs e)
+    void OnFormulaClick()
     {
       string l_token = FindCompleteToken();
 
@@ -482,7 +482,16 @@ namespace FBI.MVC.View
       }
     }
 
-    void OnFormulaMouseDoubleClick(object sender, EventArgs e)
+    void OnFormulaMouseDown(object sender, EventArgs e)
+    {
+      if (m_formulaDoubleClickClock.ElapsedMilliseconds > 300)
+        m_formulaDoubleClickClock.Restart();
+      else
+        OnFormulaMouseDoubleClick();
+      OnFormulaClick();
+    }
+
+    void OnFormulaMouseDoubleClick()
     {
       string l_token = FindCompleteToken();
       int l_posToken;
@@ -495,6 +504,7 @@ namespace FBI.MVC.View
         m_formulaTextBox.SelectionLength = l_token.Length;
       }
     }
+
 
     #endregion
 
