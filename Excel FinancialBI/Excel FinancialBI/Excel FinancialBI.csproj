@@ -298,7 +298,7 @@
     <Compile Include="MVC\Controller\Plateform Management\CurrenciesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
-    <Compile Include="MVC\Controller\Plateform Management\EmployeeControler.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AxisOwnedController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\EntityController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExcelGlobalFactController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExcelRateController.cs" />
@@ -553,7 +553,7 @@
     <Compile Include="MVC\View\Plateform Management\AxisBaseView.Designer.cs">
       <DependentUpon>AxisBaseView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\EmployeeView.cs">
+    <Compile Include="MVC\View\Plateform Management\AxisOwnedView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\CurrenciesView.cs">

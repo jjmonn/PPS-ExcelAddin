@@ -79,8 +79,8 @@ namespace FBI.MVC.View
       if (p_args.Button == MouseButtons.Left)
         if (ModifierKeys.HasFlag(Keys.Control))
         {
-          m_dgv.DoDragDrop(l_row, DragDropEffects.Move);
           m_draggingRow = l_row;
+          m_dgv.DoDragDrop(l_row, DragDropEffects.Move);
         }
     }
 
