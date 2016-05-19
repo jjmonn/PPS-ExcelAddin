@@ -26,6 +26,7 @@ namespace FBI.MVC.View
     private CUIController m_controller = null;
     private int m_leftDistance = 30;
     private int m_rightDistance = 30;
+    public bool VersionComparaison { get { return (m_versionComparisonButton.Checked); } set { m_versionComparisonButton.Checked = value; } }
 
     #endregion
 
@@ -67,7 +68,6 @@ namespace FBI.MVC.View
       m_refreshButton.MouseDown += OnRefreshButtonMouseDown;
       m_versionComparisonButton.MouseDown += OnVersionComparisionButtonMouseDown;
       m_versionSwitchButton.MouseDown += OnVersionSwitchButtonMouseDown;
-      m_hideVersionButton.MouseDown += OnHideVersionButtonMouseDown;
       m_chartBT.MouseDown += OnChartButtonMouseDown;
       m_expandLeftBT.MouseDown += OnExpandLeftPane;
       m_expandRightBT.MouseDown += OnExpandRightPane;
@@ -138,7 +138,6 @@ namespace FBI.MVC.View
       this.BusinessControlToolStripMenuItem.ToolTipText = Local.GetValue("CUI.performance_review_tooltip");
       this.m_versionComparisonButton.Text = Local.GetValue("CUI.display_versions_comparison");
       this.m_versionSwitchButton.Text = Local.GetValue("CUI.switch_versions");
-      this.m_hideVersionButton.Text = Local.GetValue("CUI.take_off_comparison");
       this.m_refreshButton.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
       this.m_chartBT.Text = Local.GetValue("CUI.charts");
       this.Text = Local.GetValue("CUI.financials");
@@ -188,17 +187,13 @@ namespace FBI.MVC.View
 
     void OnVersionComparisionButtonMouseDown(object sender, MouseEventArgs e)
     {
-      m_controller.ResultController.DisplayVersionComparaison();
+      m_versionComparisonButton.Checked = !m_versionComparisonButton.Checked;
+      m_controller.DisplayVersionComparaison();
     }
 
     void OnVersionSwitchButtonMouseDown(object sender, MouseEventArgs e)
     {
       m_controller.ResultController.SwitchVersionComparaison();
-    }
-
-    void OnHideVersionButtonMouseDown(object sender, MouseEventArgs e)
-    {
-      m_controller.ResultController.HideVersionComparaison();
     }
 
     private void OnDropOnExcelClick(object sender, EventArgs e)
@@ -218,6 +213,7 @@ namespace FBI.MVC.View
         m_controller.ShowPeriodDiff();
       else
         m_controller.PeriodDiff = false;
+      m_controller.LeftPaneController.ReloadPeriods();
     }
 
     #endregion

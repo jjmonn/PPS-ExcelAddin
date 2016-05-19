@@ -39,6 +39,21 @@ namespace FBI.MVC.Controller
       m_view.LoadView();
     }
 
+    public bool PeriodDiff
+    {
+      get { return (m_parentController.PeriodDiff); }
+    }
+
+    public SafeDictionary<TimeConfig, SafeDictionary<Int32, Int32>> PeriodDiffAssociations
+    {
+      get { return (m_parentController.PeriodDiffAssociations); }
+    }
+
+    public void ReloadPeriods()
+    {
+      m_view.ReloadPeriods();
+    }
+
     public UInt32 GetCurrency()
     {
       SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();

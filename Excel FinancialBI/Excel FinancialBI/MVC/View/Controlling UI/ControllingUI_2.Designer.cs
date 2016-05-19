@@ -61,7 +61,6 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.BusinessControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.m_versionComparisonButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_versionSwitchButton = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_hideVersionButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_periodCompareBT = new System.Windows.Forms.ToolStripMenuItem();
       this.m_refreshButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_chartBT = new System.Windows.Forms.ToolStripMenuItem();
@@ -383,7 +382,6 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.BusinessControlToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_versionComparisonButton,
             this.m_versionSwitchButton,
-            this.m_hideVersionButton,
             this.m_periodCompareBT});
       this.BusinessControlToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("BusinessControlToolStripMenuItem.Image")));
       this.BusinessControlToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -404,12 +402,6 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_versionSwitchButton.Name = "m_versionSwitchButton";
       this.m_versionSwitchButton.Size = new System.Drawing.Size(257, 22);
       this.m_versionSwitchButton.Text = "[CUI.switch_versions]";
-      // 
-      // m_hideVersionButton
-      // 
-      this.m_hideVersionButton.Name = "m_hideVersionButton";
-      this.m_hideVersionButton.Size = new System.Drawing.Size(257, 22);
-      this.m_hideVersionButton.Text = "[CUI.take_off_comparison]";
       // 
       // m_periodCompareBT
       // 
@@ -494,8 +486,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
 	public System.Windows.Forms.ToolStripMenuItem m_refreshButton;
 	public System.Windows.Forms.ToolStripMenuItem BusinessControlToolStripMenuItem;
 	public System.Windows.Forms.ToolStripMenuItem m_versionComparisonButton;
-	public System.Windows.Forms.ToolStripMenuItem m_versionSwitchButton;
-	public System.Windows.Forms.ToolStripMenuItem m_hideVersionButton;
+  public System.Windows.Forms.ToolStripMenuItem m_versionSwitchButton;
 	public System.Windows.Forms.ToolStripMenuItem ExcelToolStripMenuItem;
   public System.Windows.Forms.ToolStripMenuItem DropOnExcelToolStripMenuItem;
 	public VIBlend.WinForms.Controls.vTextBox CurrencyTB;

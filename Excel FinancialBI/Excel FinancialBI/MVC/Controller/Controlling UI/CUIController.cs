@@ -79,6 +79,14 @@ namespace FBI.MVC.Controller
       m_openedPanels.Remove(p_panelid);
     }
 
+    public void DisplayVersionComparaison()
+    {
+      if (m_view.VersionComparaison)
+        ResultController.DisplayVersionComparaison();
+      else
+        ResultController.HideVersionComparaison();
+    }
+
     Version SelectVersion(List<UInt32> p_versionList)
     {
       Version l_selectedVersion = null;
@@ -139,6 +147,7 @@ namespace FBI.MVC.Controller
         return (false);
       LastConfig = l_config;
       ResultController.LoadDGV(l_config);
+      DisplayVersionComparaison();
       if (l_request.IsDiff)
       {
         if (LegacyComputeModel.Instance.ComputeDiff(l_request))

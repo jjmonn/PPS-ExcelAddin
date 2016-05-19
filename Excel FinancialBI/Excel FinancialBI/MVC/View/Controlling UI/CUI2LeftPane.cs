@@ -97,7 +97,6 @@ namespace FBI.MVC.View
 
     void InitPeriodTV()
     {
-
       FlatFBITreeView l_tv = new FlatFBITreeView(GetPeriods());
 
       l_tv.LoadFunction = () => { l_tv.SetItems(GetPeriods()); };
@@ -105,33 +104,60 @@ namespace FBI.MVC.View
       BaseInitTV<PeriodModel>(l_key, l_tv, m_selectionTableLayout.Controls, false, false, 0, true, false);
     }
 
+    public void ReloadPeriods()
+    {
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(PeriodModel));
+      if (m_selectionTVList[l_key] != null)
+      {
+        m_selectionTVList[l_key].Load();
+        m_selectionTVList[l_key].CheckAllParentNodes();
+      }
+    }
+
     SafeDictionary<Int32, string> GetPeriods()
     {
       DateTime l_periodBegin = m_controller.PeriodController.MinDate;
       DateTime l_periodEnd = m_controller.PeriodController.MaxDate;
       SafeDictionary<Int32, string> l_periodStringDic = new SafeDictionary<int, string>();
-
-      List<UInt32> l_versionList = m_controller.GetVersions();
       TimeConfig l_selectedConfig = TimeConfig.MONTHS;
 
-      if (l_versionList == null)
-        return (l_periodStringDic);
-      foreach (UInt32 l_versionId in l_versionList)
+      if (!m_controller.PeriodDiff)
       {
-        Version l_version = VersionModel.Instance.GetValue(l_versionId);
+        List<UInt32> l_versionList = m_controller.GetVersions();
 
-        if (l_version == null)
-          continue;
-        if ((UInt32)l_version.TimeConfiguration < (UInt32)l_selectedConfig)
-          l_selectedConfig = l_version.TimeConfiguration;
+        if (l_versionList == null)
+          return (l_periodStringDic);
+        foreach (UInt32 l_versionId in l_versionList)
+        {
+          Version l_version = VersionModel.Instance.GetValue(l_versionId);
+
+          if (l_version == null)
+            continue;
+          if ((UInt32)l_version.TimeConfiguration < (UInt32)l_selectedConfig)
+            l_selectedConfig = l_version.TimeConfiguration;
+        }
+
+        List<Int32> l_periodList = (l_selectedConfig == TimeConfig.MONTHS) ?
+          PeriodModel.GetMonthPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd) :
+          PeriodModel.GetYearsPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd);
+
+        foreach (Int32 l_period in l_periodList)
+          l_periodStringDic[l_period] = PeriodModel.GetFormatedDate(l_period, l_selectedConfig);
       }
+      else if (m_controller.PeriodDiffAssociations != null && m_controller.PeriodDiffAssociations.Count > 0)
+      {
+        l_selectedConfig = TimeUtils.GetLowestTimeConfig(m_controller.PeriodDiffAssociations.Keys.ToList());
+        int l_index = 0;
 
-      List<Int32> l_periodList = (l_selectedConfig == TimeConfig.MONTHS) ?
-        PeriodModel.GetMonthPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd) :
-        PeriodModel.GetYearsPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd);
+        foreach (KeyValuePair<Int32, Int32> l_pair in m_controller.PeriodDiffAssociations[l_selectedConfig])
+        {
+          l_periodStringDic[l_index] = PeriodModel.GetFormatedDate(l_pair.Key, l_selectedConfig) +
+            " / " + PeriodModel.GetFormatedDate(l_pair.Value, l_selectedConfig);
+          l_index++;
+        }
 
-      foreach (Int32 l_period in l_periodList)
-        l_periodStringDic[l_period] = PeriodModel.GetFormatedDate(l_period, l_selectedConfig);
+      }
+     
       return (l_periodStringDic);
     }
 
