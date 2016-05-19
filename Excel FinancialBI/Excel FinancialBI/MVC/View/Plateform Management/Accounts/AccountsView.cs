@@ -50,6 +50,7 @@ namespace FBI.MVC.View
     vListBox m_autocomplete;
     CircularBuffer<string> m_formulaHistoric = new CircularBuffer<string>(100);
     Stopwatch m_formulaDoubleClickClock = Stopwatch.StartNew();
+    int m_formulaSelectionStart = 0;
 
     #endregion
 
@@ -299,10 +300,7 @@ namespace FBI.MVC.View
       p_endQuote = false;
       p_position = m_formulaTextBox.Text.Length;
 
-      if (m_formulaTextBox.Text.LastOrDefault() == '\n' && selectionStart == m_formulaTextBox.Text.Length)
-        selectionStart -= 2;
-
-      for (int i = 0; i < m_formulaTextBox.Text.Length && i <= selectionStart; ++i)
+      for (int i = 0; i < m_formulaTextBox.Text.Length && i < selectionStart; ++i)
       {
         if (m_formulaTextBox.Text[i] == '\"')
         {
@@ -449,18 +447,27 @@ namespace FBI.MVC.View
     {
       if (m_autocomplete.SelectedItem != null)
       {
+        int l_selectionStart = m_formulaTextBox.SelectionStart;
+
+        if (m_formulaTextBox.Text[l_selectionStart - 1] == '\n')
+        {
+          l_selectionStart -= 2;
+          m_formulaTextBox.Text = m_formulaTextBox.Text.Remove(l_selectionStart, 2);
+          m_formulaTextBox.SelectionStart = l_selectionStart;
+        }
+
         int l_posToken;
         bool l_endQuote;
         string l_token =  FindCurrentFormulaToken(out l_posToken, out l_endQuote);
         string l_text = m_formulaTextBox.Text.Substring(0, l_posToken);
+
         l_text += m_autocomplete.SelectedItem.Text;
         if (!l_endQuote)
           l_text += "\""; 
         l_text += m_formulaTextBox.Text.Substring(l_posToken + l_token.Length);
         m_formulaTextBox.Text = l_text;
-        if (m_formulaTextBox.Text.LastOrDefault() == '\n')
-          m_formulaTextBox.Text = m_formulaTextBox.Text.Substring(0, m_formulaTextBox.Text.Length - 2);
-        m_formulaTextBox.SelectionStart = m_formulaTextBox.Text.Length;
+        l_selectionStart = l_selectionStart + m_autocomplete.SelectedItem.Text.Length - l_token.Length + 1;
+        m_formulaTextBox.SelectionStart = l_selectionStart;
         m_autocomplete.Hide();
         m_formulaTextBox.Focus();
         OnFormulaChanged(null, null);
@@ -485,18 +492,24 @@ namespace FBI.MVC.View
     void OnFormulaMouseDown(object sender, EventArgs e)
     {
       if (m_formulaDoubleClickClock.ElapsedMilliseconds > 300)
+      {
+        m_formulaSelectionStart = m_formulaTextBox.SelectionStart;
         m_formulaDoubleClickClock.Restart();
+      }
       else
+      {
+        m_formulaTextBox.SelectionStart = m_formulaSelectionStart;
         OnFormulaMouseDoubleClick();
+      }
       OnFormulaClick();
     }
 
     void OnFormulaMouseDoubleClick()
     {
-      string l_token = FindCompleteToken();
       int l_posToken;
       bool l_endQuote;
       FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+      string l_token = FindCompleteToken();
 
       if (!l_endQuote)
       {
