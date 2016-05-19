@@ -41,6 +41,7 @@ namespace FBI.MVC.View
     bool m_dragAndDropFlag = false;
     bool m_isDisplayingAccountFlag = false;
     bool m_isEditingFormulaFlag = false;
+    bool m_isValidAutoComplete = false;
     string m_saveFormula = "";
 
     SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
@@ -128,6 +129,8 @@ namespace FBI.MVC.View
       m_formulaTextBox.DragOver += OnFormulaDragOver;
       m_formulaTextBox.TextChanged += OnFormulaChanged;
       m_formulaTextBox.KeyUp += OnFormulaKeyUp;
+      m_formulaTextBox.GotFocus += OnFormulaClick;
+      m_formulaTextBox.KeyDown += OnFormulaKeyDown;
       m_autocomplete.KeyUp += OnFormulaKeyUp;
       m_autocomplete.MouseDoubleClick += OnAutoCompleteMouseDoubleClick;
       m_globalFactsTV.MouseDoubleClick += OnGlobalFactTVMouseDoubleClick;
@@ -285,13 +288,18 @@ namespace FBI.MVC.View
 
     #region Autocomplete
 
-    string FindCurrentFormulaToken(out int p_position)
+    string FindCurrentFormulaToken(out int p_position, out bool p_endQuote)
     {
       string token = "";
+      int selectionStart = m_formulaTextBox.SelectionStart;
       bool insideQuote = false;
-      p_position = 0;
+      p_endQuote = false;
+      p_position = m_formulaTextBox.Text.Length;
 
-      for (int i = 0; i < m_formulaTextBox.Text.Length && i < m_formulaTextBox.SelectionStart; ++i)
+      if (m_formulaTextBox.Text.LastOrDefault() == '\n' && selectionStart == m_formulaTextBox.Text.Length)
+        selectionStart -= 2;
+
+      for (int i = 0; i < m_formulaTextBox.Text.Length && i < selectionStart; ++i)
       {
         if (m_formulaTextBox.Text[i] == '\"')
         {
@@ -303,14 +311,37 @@ namespace FBI.MVC.View
         else
           if (insideQuote)
             token += m_formulaTextBox.Text[i];
+        p_endQuote = (m_formulaTextBox.Text[i] == '\"');
       }
+      p_endQuote = p_endQuote && !insideQuote;
+      if (p_endQuote)
+        p_position = selectionStart;
       return (token);
+    }
+
+    string FindCompleteToken()
+    {
+      int l_posToken;
+      bool l_endQuote;
+      string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+
+      if (!l_endQuote)
+      {
+        l_token = m_formulaTextBox.Text.Substring(l_posToken);
+        int l_pos = l_token.IndexOf("\"");
+        if (l_pos > 0)
+          return l_token.Substring(0, l_pos);
+      }
+      return (l_token);
     }
 
     void OnFormulaChanged(object sender, EventArgs e)
     {
+      if (m_isValidAutoComplete)
+        return;
       int l_posToken;
-      string l_token = FindCurrentFormulaToken(out l_posToken);
+      bool l_endQuote;
+      string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
       List<string> l_accountList = AccountModel.Instance.GetMatchings(l_token);
       List<string> l_globalFactList = GlobalFactModel.Instance.GetMatchings(l_token);
       List<string> l_list = new List<string>();
@@ -320,11 +351,19 @@ namespace FBI.MVC.View
       l_list.Sort();
       if (l_list.Count == 0)
       {
-        m_autocomplete.Items.Clear();
-        m_autocomplete.SelectedItem = null;
-        return;
+        if (l_endQuote)
+        {
+          l_list.Add("[n]");
+          l_list.Add("[n+1]");
+          l_list.Add("[n-1]");
+        }
+        else
+        {
+          m_autocomplete.Items.Clear();
+          m_autocomplete.SelectedItem = null;
+          return;
+        }
       }
-
       m_autocomplete.DataSource = l_list;
       m_autocomplete.SelectedItem = m_autocomplete.Items[0];
       System.Drawing.Point l_point = new System.Drawing.Point();
@@ -333,12 +372,14 @@ namespace FBI.MVC.View
         l_point.Y += 15;
         m_autocomplete.Location = l_point;
       }
+      m_autocomplete.Height = 2 + 20 * l_list.Count;
       m_autocomplete.Show();
     }
 
     void OnFormulaKeyUp(object sender, KeyEventArgs p_e)
     {
       int l_index = m_autocomplete.SelectedIndex;
+      m_isValidAutoComplete = false;
 
       if (!m_autocomplete.Visible)
         return;
@@ -363,6 +404,21 @@ namespace FBI.MVC.View
         m_autocomplete.Hide();
     }
 
+    void OnFormulaKeyDown(object sender, KeyEventArgs p_e)
+    {
+      int l_index = m_autocomplete.SelectedIndex;
+      m_isValidAutoComplete = false;
+
+      if (!m_autocomplete.Visible)
+        return;
+      switch (p_e.KeyCode)
+      {
+        case Keys.Return:
+          m_isValidAutoComplete = true;
+          break;
+      }
+    }
+
     void OnAutoCompleteMouseDoubleClick(object sender, MouseEventArgs e)
     {
       ValidateAutoComplete();
@@ -373,14 +429,35 @@ namespace FBI.MVC.View
       if (m_autocomplete.SelectedItem != null)
       {
         int l_posToken;
-        string l_token =  FindCurrentFormulaToken(out l_posToken);
+        bool l_endQuote;
+        string l_token =  FindCurrentFormulaToken(out l_posToken, out l_endQuote);
         string l_text = m_formulaTextBox.Text.Substring(0, l_posToken);
-        l_text += m_autocomplete.SelectedItem.Text + "\"[n]";
+        l_text += m_autocomplete.SelectedItem.Text;
+        if (!l_endQuote)
+          l_text += "\""; 
         l_text += m_formulaTextBox.Text.Substring(l_posToken + l_token.Length);
         m_formulaTextBox.Text = l_text;
+        if (m_formulaTextBox.Text.LastOrDefault() == '\n')
+          m_formulaTextBox.Text = m_formulaTextBox.Text.Substring(0, m_formulaTextBox.Text.Length - 2);
         m_formulaTextBox.SelectionStart = m_formulaTextBox.Text.Length;
         m_autocomplete.Hide();
         m_formulaTextBox.Focus();
+        OnFormulaChanged(null, null);
+      }
+    }
+
+    void OnFormulaClick(object sender, EventArgs e)
+    {
+      string l_token = FindCompleteToken();
+
+      vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId(l_token));
+
+      if (l_node == null)
+       l_node = m_globalFactsTV.FindNode(GlobalFactModel.Instance.GetValueId(l_token));
+      if (l_node != null)
+      {
+        l_node.TreeView.SelectedNode = l_node;
+        l_node.TreeView.Refresh();
       }
     }
 
