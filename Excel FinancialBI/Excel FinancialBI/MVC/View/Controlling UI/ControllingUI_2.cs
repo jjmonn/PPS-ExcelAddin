@@ -51,7 +51,7 @@ namespace FBI.MVC.View
       ResultView l_resultView =  m_controller.ResultController.View as ResultView;
       this.SplitContainer1.Panel1.Controls.Add(l_leftPane);
       this.SplitContainer2.Panel2.Controls.Add(l_rightPane);
-      this.SplitContainer1.Panel2.Controls.Add(l_resultView);
+      vPanel1.Content.Controls.Add(l_resultView);
       l_leftPane.Dock = DockStyle.Fill;
       l_rightPane.Dock = DockStyle.Fill;
       l_resultView.Dock = DockStyle.Fill;
@@ -142,6 +142,7 @@ namespace FBI.MVC.View
       this.m_refreshButton.ToolTipText = Local.GetValue("CUI.refresh_tooltip");
       this.m_chartBT.Text = Local.GetValue("CUI.charts");
       this.Text = Local.GetValue("CUI.financials");
+      m_periodCompareBT.Text = Local.GetValue("CUI.period_comparison");
     }
 
     delegate void OnComputeResult_delegate(ErrorMessage p_status, AComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result);
@@ -208,6 +209,15 @@ namespace FBI.MVC.View
     private void OnDropVisibleOnExcelClick(object sender, EventArgs e)
     {
       m_controller.ResultController.DropOnExcel(true);
+    }
+
+    private void OnPeriodComparisonClick(object sender, EventArgs e)
+    {
+      m_periodCompareBT.Checked = !m_periodCompareBT.Checked;
+      if (m_periodCompareBT.Checked)
+        m_controller.ShowPeriodDiff();
+      else
+        m_controller.PeriodDiff = false;
     }
 
     #endregion

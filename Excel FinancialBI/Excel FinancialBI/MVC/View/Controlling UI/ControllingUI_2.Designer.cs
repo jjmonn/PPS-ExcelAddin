@@ -44,6 +44,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.UnselectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
       this.m_expandLeftBT = new VIBlend.WinForms.Controls.vButton();
+      this.vPanel1 = new VIBlend.WinForms.Controls.vPanel();
       this.ButtonsImageList = new System.Windows.Forms.ImageList(this.components);
       this.MenuImageList = new System.Windows.Forms.ImageList(this.components);
       this.SplitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -61,6 +62,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_versionComparisonButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_versionSwitchButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_hideVersionButton = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_periodCompareBT = new System.Windows.Forms.ToolStripMenuItem();
       this.m_refreshButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_chartBT = new System.Windows.Forms.ToolStripMenuItem();
       this.ExpansionImageList = new System.Windows.Forms.ImageList(this.components);
@@ -69,7 +71,9 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.AdjustmentsRCMenu.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
       this.SplitContainer1.Panel1.SuspendLayout();
+      this.SplitContainer1.Panel2.SuspendLayout();
       this.SplitContainer1.SuspendLayout();
+      this.vPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer2)).BeginInit();
       this.SplitContainer2.Panel1.SuspendLayout();
       this.SplitContainer2.Panel2.SuspendLayout();
@@ -147,8 +151,12 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // SplitContainer1.Panel1
       // 
       this.SplitContainer1.Panel1.Controls.Add(this.m_expandLeftBT);
-      this.SplitContainer1.Size = new System.Drawing.Size(787, 463);
-      this.SplitContainer1.SplitterDistance = 144;
+      // 
+      // SplitContainer1.Panel2
+      // 
+      this.SplitContainer1.Panel2.Controls.Add(this.vPanel1);
+      this.SplitContainer1.Size = new System.Drawing.Size(786, 463);
+      this.SplitContainer1.SplitterDistance = 143;
       this.SplitContainer1.TabIndex = 8;
       // 
       // m_expandLeftBT
@@ -156,7 +164,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_expandLeftBT.AllowAnimations = true;
       this.m_expandLeftBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.m_expandLeftBT.BackColor = System.Drawing.Color.Transparent;
-      this.m_expandLeftBT.Location = new System.Drawing.Point(120, 3);
+      this.m_expandLeftBT.Location = new System.Drawing.Point(119, 3);
       this.m_expandLeftBT.Name = "m_expandLeftBT";
       this.m_expandLeftBT.RoundedCornersMask = ((byte)(15));
       this.m_expandLeftBT.Size = new System.Drawing.Size(21, 21);
@@ -164,6 +172,31 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_expandLeftBT.Text = "-";
       this.m_expandLeftBT.UseVisualStyleBackColor = false;
       this.m_expandLeftBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // vPanel1
+      // 
+      this.vPanel1.AllowAnimations = true;
+      this.vPanel1.BorderRadius = 0;
+      // 
+      // vPanel1.Content
+      // 
+      this.vPanel1.Content.AutoScroll = true;
+      this.vPanel1.Content.BackColor = System.Drawing.SystemColors.Control;
+      this.vPanel1.Content.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.vPanel1.Content.Location = new System.Drawing.Point(0, 0);
+      this.vPanel1.Content.Name = "Content";
+      this.vPanel1.Content.Size = new System.Drawing.Size(639, 463);
+      this.vPanel1.Content.TabIndex = 3;
+      this.vPanel1.CustomScrollersIntersectionColor = System.Drawing.Color.Empty;
+      this.vPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.vPanel1.Location = new System.Drawing.Point(0, 0);
+      this.vPanel1.Name = "vPanel1";
+      this.vPanel1.Opacity = 1F;
+      this.vPanel1.PanelBorderColor = System.Drawing.Color.Transparent;
+      this.vPanel1.Size = new System.Drawing.Size(639, 463);
+      this.vPanel1.TabIndex = 0;
+      this.vPanel1.Text = "vPanel1";
+      this.vPanel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // ButtonsImageList
       // 
@@ -197,7 +230,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // 
       this.SplitContainer2.Panel2.Controls.Add(this.m_expandRightBT);
       this.SplitContainer2.Size = new System.Drawing.Size(995, 469);
-      this.SplitContainer2.SplitterDistance = 790;
+      this.SplitContainer2.SplitterDistance = 789;
       this.SplitContainer2.TabIndex = 8;
       // 
       // m_expandRightBT
@@ -314,7 +347,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.MainMenu.Location = new System.Drawing.Point(0, 0);
       this.MainMenu.Name = "MainMenu";
       this.MainMenu.ShowItemToolTips = true;
-      this.MainMenu.Size = new System.Drawing.Size(546, 55);
+      this.MainMenu.Size = new System.Drawing.Size(454, 55);
       this.MainMenu.TabIndex = 0;
       this.MainMenu.Text = "[CUI.main_menu]";
       // 
@@ -350,7 +383,8 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.BusinessControlToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_versionComparisonButton,
             this.m_versionSwitchButton,
-            this.m_hideVersionButton});
+            this.m_hideVersionButton,
+            this.m_periodCompareBT});
       this.BusinessControlToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("BusinessControlToolStripMenuItem.Image")));
       this.BusinessControlToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.BusinessControlToolStripMenuItem.Name = "BusinessControlToolStripMenuItem";
@@ -376,6 +410,13 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_hideVersionButton.Name = "m_hideVersionButton";
       this.m_hideVersionButton.Size = new System.Drawing.Size(257, 22);
       this.m_hideVersionButton.Text = "[CUI.take_off_comparison]";
+      // 
+      // m_periodCompareBT
+      // 
+      this.m_periodCompareBT.Name = "m_periodCompareBT";
+      this.m_periodCompareBT.Size = new System.Drawing.Size(257, 22);
+      this.m_periodCompareBT.Text = "Period comparison";
+      this.m_periodCompareBT.Click += new System.EventHandler(this.OnPeriodComparisonClick);
       // 
       // m_refreshButton
       // 
@@ -421,8 +462,10 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.PeriodsRCMenu.ResumeLayout(false);
       this.AdjustmentsRCMenu.ResumeLayout(false);
       this.SplitContainer1.Panel1.ResumeLayout(false);
+      this.SplitContainer1.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).EndInit();
       this.SplitContainer1.ResumeLayout(false);
+      this.vPanel1.ResumeLayout(false);
       this.SplitContainer2.Panel1.ResumeLayout(false);
       this.SplitContainer2.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer2)).EndInit();
@@ -464,6 +507,8 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
   private VIBlend.WinForms.Controls.vLabel m_entityLabel;
   private VIBlend.WinForms.Controls.vButton m_expandLeftBT;
   private VIBlend.WinForms.Controls.vButton m_expandRightBT;
+  private System.Windows.Forms.ToolStripMenuItem m_periodCompareBT;
+  private VIBlend.WinForms.Controls.vPanel vPanel1;
 }
 
 }

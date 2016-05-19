@@ -52,6 +52,8 @@ namespace FBI.MVC.View
 
     private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
     {
+      if (p_e.Cell.ColumnItem.ItemValue == null || p_e.Cell.RowItem.ItemValue == null)
+        return;
       if ((UInt32)p_e.Cell.ColumnItem.ItemValue != 0)
         return;
       UInt32 l_entityId = (UInt32)p_e.Cell.RowItem.ItemValue;
@@ -74,6 +76,8 @@ namespace FBI.MVC.View
 
     void OnEntityCurrencyChanged(object p_sender, CellEventArgs p_args)
     {
+      if (p_args.Cell.ColumnItem.ItemValue == null || p_args.Cell.RowItem.ItemValue == null)
+        return;
       if ((UInt32)p_args.Cell.ColumnItem.ItemValue != 0)
         return;
       string l_currencyName = (string)p_args.Cell.Value;

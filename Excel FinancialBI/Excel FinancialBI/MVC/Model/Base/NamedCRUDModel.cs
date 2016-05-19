@@ -110,6 +110,21 @@ namespace FBI.MVC.Model
     {
       return m_CRUDDic;
     }
+
+    public List<string> GetMatchings(string p_name)
+    {
+      List<string> l_results = new List<string>();
+
+      if (p_name.Length == 0)
+        return (l_results);
+      string l_name = StringUtils.RemoveDiacritics(p_name);
+
+      foreach (T l_entity in GetDictionary().SortedValues)
+        if (String.Compare(StringUtils.RemoveDiacritics(l_entity.Name), 0, l_name, 0, l_name.Length) == 0)
+          l_results.Add(l_entity.Name);
+      return (l_results);
+    }
+
     #endregion
   }
 }

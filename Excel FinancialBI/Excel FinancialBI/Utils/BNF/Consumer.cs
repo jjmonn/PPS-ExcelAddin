@@ -118,7 +118,7 @@ namespace FBI.Utils
 
     public bool ReadText(string p_str)
     {
-      if (StringUtils.ContainsAt(m_str, m_ptr, p_str))
+      if (String.Compare(m_str, m_ptr, p_str, 0, p_str.Length) == 0)
         return (this.Incr(p_str.Length));
       return (false);
     }
@@ -183,7 +183,7 @@ namespace FBI.Utils
       return (true);
     }
 
-    public bool ReadAccount()
+    public bool ReadToken()
     {
       if (this.HasChar(Constants.FORBIDEN_CHARS))
         return (false);

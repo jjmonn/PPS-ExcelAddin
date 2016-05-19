@@ -16,12 +16,14 @@ namespace FBI.Forms
   using ChartValue = Tuple<string, double>;
   using ChartValues = List<Tuple<string, double>>;
   using ChartSeries = SafeDictionary<int, List<Series>>;
+  using ChartAxisType = SafeDictionary<FBI.MVC.Model.CRUD.Account.AccountType, System.Windows.Forms.DataVisualization.Charting.AxisType>;
 
   public class FbiChart : Chart
   {
     private const int ELEM_DISPLAYED = 4;
     private const int GRADIENT_MULTIPLIER = 2; //Used for stackColumn. Nb of stacks * GRADIENT_MULTIPLIER => Nb of steps of gradient
     private const int GRADIENT_DIVIDED = 225; //Used for lines. Nb of lines / GRADIENT_DIVIDED
+    private const int MAX_Y_AXIS = 2;
 
     private const int TITLE_SIZE = 12;
     private const int LEGEND_SIZE = 10;
@@ -85,6 +87,7 @@ namespace FBI.Forms
       l_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
       l_chartArea.AxisX.IsMarginVisible = false;
       l_chartArea.AxisY.IsMarginVisible = true;
+      l_chartArea.AxisY.LabelStyle.Format = FbiAccountFormat.Get(null, null);
       return (l_chartArea);
     }
 
@@ -114,13 +117,6 @@ namespace FBI.Forms
       get { return (m_settings != null); }
     }
 
-    private SeriesChartType GetChartType(ChartSettings p_settings)
-    {
-      if (p_settings.HasDeconstruction)
-        return (SeriesChartType.StackedColumn);
-      return (SeriesChartType.Spline);
-    }
-
     private ResultKey GetKey(ChartSettings p_settings, ComputeConfig p_config, Account p_account, int p_period, UInt32 p_version, UInt32 p_value = 0)
     {
       if (!p_settings.HasDeconstruction)
@@ -135,6 +131,29 @@ namespace FBI.Forms
       return (new ResultKey(p_account.Id, ResultKey.GetSortKey(p_settings.Deconstruction.Item1,
         p_settings.Deconstruction.Item2, p_value), "", p_config.BaseTimeConfig, p_period, p_version, true));
     }
+
+    public void Assign(ChartSettings p_settings, Computation p_compute)
+    {
+      List<Serie> l_series = Serie.FromChartSettings(p_settings);
+      List<int> l_periods = PeriodModel.GetPeriodList(p_compute.Config.Request.StartPeriod,
+        p_compute.Config.Request.NbPeriods,
+        p_compute.Config.BaseTimeConfig);
+      SafeDictionary<int, string> l_displayPeriods = PeriodUtils.ToList(l_periods, p_compute.Config.BaseTimeConfig);
+
+      this.SetChart(p_settings.Name);
+
+      if (this.IsAmbigious(p_settings, l_series))
+      {
+        this.Titles[0].Text = Local.GetValue("CUI_Charts.error.ambigious_settings");
+      }
+      else
+      {
+        this.Display(p_settings, l_series, p_compute, l_periods, l_displayPeriods);
+      }
+      m_settings = p_settings;
+    }
+
+    #region GetValue
 
     private ChartValues GetValuesVersion(ChartSettings p_settings, Computation p_compute,
       Account p_account, int p_period)
@@ -203,47 +222,19 @@ namespace FBI.Forms
       return (p_compute.Result[p_version].Values[this.GetKey(p_settings, p_compute.Config, p_account, p_period, p_version)]);
     }
 
-    public bool IsAmbigious(ChartSettings p_settings, List<Serie> p_series)
-    {
-      return (p_settings.Versions == null || p_settings.HasDeconstruction && p_settings.Versions.Count > 1 && p_series.Count > 1);
-    }
+    #endregion
 
-    public void Assign(ChartSettings p_settings, Computation p_compute)
-    {
-      List<Serie> l_series = Serie.FromChartSettings(p_settings);
-      List<int> l_periods = PeriodModel.GetPeriodList(p_compute.Config.Request.StartPeriod,
-        p_compute.Config.Request.NbPeriods,
-        p_compute.Config.BaseTimeConfig);
-      SafeDictionary<int, string> l_displayPeriods = PeriodUtils.ToList(l_periods, p_compute.Config.BaseTimeConfig);
-
-      this.SetChart(p_settings.Name);
-
-      if (this.IsAmbigious(p_settings, l_series))
-      {
-        this.Titles[0].Text = Local.GetValue("CUI_Charts.error.ambigious_settings");
-      }
-      else
-      {
-        this.Display(p_settings, l_series, p_compute, l_periods, l_displayPeriods);
-      }
-      m_settings = p_settings;
-    }
+    #region Display
 
     public void Display(ChartSettings p_settings, List<Serie> p_series,
       Computation p_compute, List<int> p_periods, SafeDictionary<int, string> p_displayPeriods)
     {
       if (p_settings.HasDeconstruction && p_settings.Versions.Count > 1)
-      {
         this.DisplayAsDeconstructionPerVersion(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
-      }
       else if (p_settings.HasDeconstruction)
-      {
         this.DisplayAsDeconstruction(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
-      }
       else
-      {
         this.DisplayAsVersion(p_settings, p_series, p_compute, p_periods, p_displayPeriods);
-      }
     }
 
     private void DisplayAsVersion(ChartSettings p_settings, List<Serie> p_series,
@@ -251,22 +242,23 @@ namespace FBI.Forms
     {
       double l_value;
       Color l_color = Color.FromArgb(0, 0, 0, 0);
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series, p_settings.Versions.Count, p_series.Count);
 
-      foreach (UInt32 l_version in p_settings.Versions)
+      for (int i = 0; i < p_settings.Versions.Count; ++i)
       {
-        foreach (Serie l_serie in p_series)
+        for (int j = 0; j < p_series.Count; ++j)
         {
-          Series l_series = this.CreateSeries(this.GetChartType(p_settings), ColorUtils.Sub(l_serie.Color, l_color));
           foreach (int l_period in p_periods)
           {
-            l_value = this.GetValue(p_settings, p_compute, l_serie.Account, l_period, l_version);
-            l_series.Points.AddXY(p_displayPeriods[l_period], l_value);
+            l_value = this.GetValue(p_settings, p_compute, p_series[j].Account, l_period, p_settings.Versions[i]);
+            l_series[i][j].Points.AddXY(p_displayPeriods[l_period], l_value);
           }
-          l_series.LegendText = l_serie.Account.Name + "\n" + VersionModel.Instance.GetValue(l_version).Name;
-          this.Series.Add(l_series);
+          l_series[i][j].Color = ColorUtils.Sub(p_series[j].Color, l_color);
+          l_series[i][j].LegendText = p_series[j].Account.Name + "\n" + VersionModel.Instance.GetValue(p_settings.Versions[i]).Name;
         }
         l_color = ColorUtils.Add(l_color, GRADIENT_DIVIDED / p_settings.Versions.Count);
       }
+      this.AddSeries(l_series);
     }
 
     private void DisplayAsDeconstruction(ChartSettings p_settings, List<Serie> p_series,
@@ -275,7 +267,7 @@ namespace FBI.Forms
       List<Color> l_colors;
       ChartValues l_values;
       string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_series, p_compute, p_periods);
-      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series.Count, this.GetNumberOfDeconstruction(p_settings));
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series, p_series.Count, this.CountOfDeconstruction(p_settings));
 
       for (int i = 0; i < p_series.Count; ++i)
       {
@@ -305,7 +297,7 @@ namespace FBI.Forms
       List<Color> l_colors;
       ChartValues l_values;
       string[] l_significantsKeys = this.GetSignificantKeys(p_settings, p_series, p_compute, p_periods);
-      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_settings.Versions.Count, this.GetNumberOfDeconstruction(p_settings));
+      ChartSeries l_series = this.CreateMultipleSeries(p_settings, p_compute, p_series, p_settings.Versions.Count, this.CountOfDeconstruction(p_settings));
 
       for (int i = 0; i < p_settings.Versions.Count; ++i)
       {
@@ -331,24 +323,7 @@ namespace FBI.Forms
       this.AddSeries(l_series);
     }
 
-    private int GetNumberOfDeconstruction(ChartSettings p_settings)
-    {
-      int l_nbValues = 0;
-
-      if (!p_settings.HasDeconstruction)
-        return (ELEM_DISPLAYED);
-
-      if (p_settings.Deconstruction.Item1)
-      {
-        l_nbValues = (p_settings.Deconstruction.Item3 == 0 && p_settings.Deconstruction.Item2 == AxisType.Entities ? 1 :
-          AxisElemModel.Instance.GetChildren(p_settings.Deconstruction.Item2, p_settings.Deconstruction.Item3).Count);
-      }
-      else
-      {
-        l_nbValues = FilterValueModel.Instance.GetDictionary(p_settings.Deconstruction.Item3).Count;
-      }
-      return (l_nbValues > ELEM_DISPLAYED ? ELEM_DISPLAYED : l_nbValues);
-    }
+    #endregion
 
     #region SignificantsUtils
 
@@ -417,13 +392,12 @@ namespace FBI.Forms
       foreach (KeyValuePair<int, List<Series>> l_list in p_series)
       {
         foreach (Series l_series in l_list.Value)
-        {
           this.Series.Add(l_series);
-        }
       }
     }
 
-    private ChartSeries CreateMultipleSeries(ChartSettings p_settings, Computation p_compute, int p_dim1, int p_dim2)
+    private ChartSeries CreateMultipleSeries(ChartSettings p_settings, Computation p_compute,
+      List<Serie> p_series, int p_dim1, int p_dim2)
     {
       ChartSeries l_series = new ChartSeries();
 
@@ -431,14 +405,85 @@ namespace FBI.Forms
       {
         l_series[i] = new List<Series>();
         for (int j = 0; j < p_dim2; ++j)
-        {
-          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings)));
-        }
+          l_series[i].Add(this.CreateSeries(this.GetChartType(p_settings), null));
       }
-      return (l_series);
+      return (this.ApplyMultipleAxis(l_series, p_settings, p_compute, p_series));
     }
 
-    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null)
+    private ChartSeries ApplyMultipleAxis(ChartSeries p_chartSeries, ChartSettings p_settings,
+      Computation p_compute, List<Serie> p_series)
+    {
+      int i = 0;
+      Int32 l_nbOfAxis = 0;
+      ChartAxisType l_axisType = new ChartAxisType();
+      string[] l_axisString = { String.Empty, String.Empty };
+      Currency l_currency = CurrencyModel.Instance.GetValue(p_compute.Config.Request.CurrencyId);
+
+      //Set the account axis
+      foreach (Serie l_serie in p_series)
+      {
+        if (!l_axisType.ContainsKey(l_serie.Account.Type))
+        {
+          l_axisType[l_serie.Account.Type] = (l_nbOfAxis == 0 ? System.Windows.Forms.DataVisualization.Charting.AxisType.Primary :
+              System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary);
+          l_nbOfAxis += 1;
+        }
+      }
+
+      if (l_nbOfAxis > MAX_Y_AXIS)
+        return (p_chartSeries);
+
+      foreach (var l_item in l_axisType)
+        l_axisString[i++] = FbiAccountFormat.Get(l_item.Key, l_currency);
+
+      //Fuck this...
+      if (p_settings.HasDeconstruction && p_settings.Versions.Count > 1)
+        this.ApplyMultipleAxisDeconstructionPerVersion(p_chartSeries, p_settings, p_series, l_axisType);
+      else if (p_settings.HasDeconstruction)
+        this.ApplyMultipleAxisDeconstruction(p_chartSeries, p_settings, p_series, l_axisType);
+      else
+        this.ApplyMultipleAxisVersion(p_chartSeries, p_settings, p_series, l_axisType);
+
+      this.ChartAreas[0].AxisY.LabelStyle.Format = l_axisString[0];
+      this.ChartAreas[0].AxisY2.LabelStyle.Format = l_axisString[1];
+      return (p_chartSeries);
+    }
+
+    private void ApplyMultipleAxisVersion(ChartSeries p_chartSeries, ChartSettings p_settings,
+      List<Serie> p_series, ChartAxisType p_axisType)
+    {
+      foreach (List<Series> l_list in p_chartSeries.Values)
+      {
+        for (int j = 0; j < l_list.Count; ++j)
+          l_list[j].YAxisType = p_axisType[p_series[j].Account.Type];
+      }
+    }
+
+    private void ApplyMultipleAxisDeconstruction(ChartSeries p_chartSeries, ChartSettings p_settings,
+      List<Serie> p_series, ChartAxisType p_axisType)
+    {
+      int i = 0;
+
+      foreach (List<Series> l_list in p_chartSeries.Values)
+      {
+        for (int j = 0; j < l_list.Count; ++j)
+          l_list[j].YAxisType = p_axisType[p_series[i].Account.Type];
+        ++i;
+      }
+    }
+
+    private void ApplyMultipleAxisDeconstructionPerVersion(ChartSeries p_chartSeries, ChartSettings p_settings,
+      List<Serie> p_series, ChartAxisType p_axisType)
+    {
+      foreach (List<Series> l_list in p_chartSeries.Values)
+      {
+        for (int j = 0; j < l_list.Count; ++j)
+          l_list[j].YAxisType = p_axisType[p_series[0].Account.Type];
+      }
+    }
+
+    private Series CreateSeries(SeriesChartType p_chartType, Color? p_color = null,
+      ChartValueType p_chartX = ChartValueType.Double, ChartValueType p_chartY = ChartValueType.String)
     {
       Series l_series = new Series();
 
@@ -450,6 +495,41 @@ namespace FBI.Forms
         l_series.Color = p_color.Value;
       }
       return (l_series);
+    }
+
+    #endregion
+
+    #region ChartSettingsUtils
+
+    public bool IsAmbigious(ChartSettings p_settings, List<Serie> p_series)
+    {
+      return (p_settings.Versions == null || p_settings.HasDeconstruction && p_settings.Versions.Count > 1 && p_series.Count > 1);
+    }
+
+    private int CountOfDeconstruction(ChartSettings p_settings)
+    {
+      int l_nbValues = 0;
+
+      if (!p_settings.HasDeconstruction)
+        return (1);
+
+      if (p_settings.Deconstruction.Item1)
+      {
+        l_nbValues = (p_settings.Deconstruction.Item3 == 0 && p_settings.Deconstruction.Item2 == AxisType.Entities ? 1 :
+          AxisElemModel.Instance.GetChildren(p_settings.Deconstruction.Item2, p_settings.Deconstruction.Item3).Count);
+      }
+      else
+      {
+        l_nbValues = FilterValueModel.Instance.GetDictionary(p_settings.Deconstruction.Item3).Count;
+      }
+      return (l_nbValues > ELEM_DISPLAYED ? ELEM_DISPLAYED : l_nbValues);
+    }
+
+    private SeriesChartType GetChartType(ChartSettings p_settings)
+    {
+      if (p_settings.HasDeconstruction)
+        return (SeriesChartType.StackedColumn);
+      return (SeriesChartType.Spline);
     }
 
     #endregion

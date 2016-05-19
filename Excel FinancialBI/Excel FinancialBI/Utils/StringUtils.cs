@@ -47,18 +47,6 @@ namespace FBI.Utils
       return stringBuilder.ToString().Normalize(NormalizationForm.FormC).ToLower();
     }
 
-    public static bool ContainsAt(string p_str, int p_index, string p_cmp)
-    {
-      Int32 i = 0;
-
-      while (i < p_cmp.Length && p_index < p_str.Length && p_str[p_index] == p_cmp[i])
-      {
-        ++i;
-        ++p_index;
-      }
-      return (i == p_cmp.Length);
-    }
-
     public static List<string> SplitToken(string p_str, char p_split, string p_tokens)
     {
       Int32 i = 0, j = 0;

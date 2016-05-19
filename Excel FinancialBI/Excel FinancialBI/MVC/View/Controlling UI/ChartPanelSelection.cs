@@ -15,11 +15,10 @@ namespace FBI.MVC.View
   using Controller;
   using Model;
   using Model.CRUD;
+  using Network;
 
   public partial class ChartPanelSelection : Form, IView
   {
-    private const UInt32 MAX_PANEL = 8;
-
     private CUIVisualizationController m_controller;
 
     public ChartPanelSelection()
@@ -30,8 +29,9 @@ namespace FBI.MVC.View
 
     private void MultilangueSetup()
     {
-      m_text.Text = "";
-      m_save.Text = Local.GetValue("general.save");
+      m_text.ResetText();
+      this.Text = Local.GetValue("CUI_Charts.panel_selection");
+      m_new.Text = Local.GetValue("CUI_Charts.new_panel");
       m_next.Text = Local.GetValue("general.next");
       m_delete.Text = Local.GetValue("general.delete");
     }
@@ -50,7 +50,7 @@ namespace FBI.MVC.View
     private void SuscribeEvents()
     {
       m_next.Click += OnNextClick;
-      m_save.Click += OnSaveClick;
+      m_new.Click += OnNewClick;
       m_delete.Click += OnDeleteClick;
       m_list.SelectedItemChanged += OnListChanged;
       this.FormClosed += OnClosed;
@@ -78,24 +78,35 @@ namespace FBI.MVC.View
 
     private void OnListChanged(object sender, EventArgs p_e)
     {
-      m_text.Text = ((UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID ? "" : m_list.SelectedItem.Text);
+      this.SetListItemIndex(m_list.SelectedItem);
     }
 
-    private void OnSaveClick(object sender, EventArgs e)
+    private void OnNewClick(object sender, EventArgs e)
     {
-      if (m_list.SelectedItem == null || m_text.Text.Trim() == "")
-        return;
-      if (!m_controller.CRUPanel((UInt32)m_list.SelectedItem.Value, m_text.Text.Trim()))
+      ListItem l_item;
+
+      l_item = m_list.Items.FirstOrDefault(x => x.Text == Local.GetValue("CUI_Charts.new_panel"));
+      if (l_item == null)
       {
-        MessageBox.Show("general.error.system");
+        m_controller.CRUPanel(ChartPanel.INVALID_ID, Local.GetValue("CUI_Charts.new_panel"));
+      }
+      else
+      {
+        m_list.SelectedItem = l_item;
+        m_list.Refresh();
       }
     }
 
     private void OnNextClick(object sender, EventArgs e)
     {
-      if (m_list.SelectedItem == null || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
+      if (m_list.SelectedItem == null || m_text.Text.Trim() == "" || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
         return;
 
+      if (!m_controller.CRUPanel((UInt32)m_list.SelectedItem.Value, m_text.Text.Trim()))
+      {
+        MessageBox.Show("general.error.system");
+        return;
+      }
       if (!m_controller.SetPanel((UInt32)m_list.SelectedItem.Value))
       {
         MessageBox.Show(Local.GetValue("CUI_Charts.error.same_panel"));
@@ -132,23 +143,41 @@ namespace FBI.MVC.View
       }
     }
 
-    private void OnDeletePanel(Network.ErrorMessage p_status, UInt32 p_id)
+    delegate void OnDeletePanel_delegate(ErrorMessage p_status, UInt32 p_id);
+    private void OnDeletePanel(ErrorMessage p_status, UInt32 p_id)
     {
-      if (p_status != Network.ErrorMessage.SUCCESS)
+      if (InvokeRequired)
       {
-        MessageBox.Show(Local.GetValue("general.error.system") + " " + Network.Error.GetMessage(p_status));
+        OnDeletePanel_delegate func = new OnDeletePanel_delegate(OnDeletePanel);
+        Invoke(func, p_status, p_id);
       }
       else
       {
-        this.DeleteListItem(p_id);
+        if (p_status != Network.ErrorMessage.SUCCESS)
+        {
+          MessageBox.Show(Local.GetValue("general.error.system") + " " + Network.Error.GetMessage(p_status));
+        }
+        else
+        {
+          this.DeleteListItem(p_id);
+        }
       }
     }
 
-    private void OnReadPanel(Network.ErrorMessage p_status, ChartPanel p_panel)
+    delegate void OnReadPanel_delegate(ErrorMessage p_status, ChartPanel p_panel);
+    private void OnReadPanel(ErrorMessage p_status, ChartPanel p_panel)
     {
-      if (p_status == Network.ErrorMessage.SUCCESS)
+      if (InvokeRequired)
       {
-        this.UpdateListItem(p_panel);
+        OnReadPanel_delegate func = new OnReadPanel_delegate(OnReadPanel);
+        Invoke(func, p_status, p_panel);
+      }
+      else
+      {
+        if (p_status == Network.ErrorMessage.SUCCESS)
+        {
+          this.UpdateListItem(p_panel);
+        }
       }
     }
 
@@ -156,22 +185,32 @@ namespace FBI.MVC.View
 
     #region Utils
 
+    private void SetListItemIndex(ListItem p_list)
+    {
+      if (p_list == null)
+      {
+        m_text.ResetText();
+      }
+      else
+      {
+        m_list.SelectedItem = p_list;
+        m_text.Text = p_list.Text;
+        m_list.Refresh();
+      }
+    }
+
     private void LoadListBox()
     {
-      List<Tuple<string, UInt32>> l_charts = new List<Tuple<string, uint>>();
+      List<Tuple<string, UInt32>> l_panels = new List<Tuple<string, uint>>();
 
       m_list.Controls.Clear();
       m_list.DisplayMember = "Item1";
       m_list.ValueMember = "Item2";
       foreach (ChartPanel l_panel in ChartPanelModel.Instance.GetDictionary().SortedValues)
       {
-        l_charts.Add(new Tuple<string, UInt32>(l_panel.Name, l_panel.Id));
+        l_panels.Add(new Tuple<string, UInt32>(l_panel.Name, l_panel.Id));
       }
-      for (Int32 i = l_charts.Count; i < MAX_PANEL; ++i)
-      {
-        l_charts.Add(new Tuple<string, UInt32>(Local.GetValue("CUI_Charts.new_panel"), ChartPanel.INVALID_ID));
-      }
-      m_list.DataSource = l_charts;
+      m_list.DataSource = l_panels;
       m_list.SelectedIndex = 0;
     }
 
@@ -189,10 +228,11 @@ namespace FBI.MVC.View
     {
       ListItem l_item;
 
-      if ((l_item = this.GetItem(p_panelId)) == null)
-        return;
-      l_item.Text = Local.GetValue("CUI_Charts.new_panel");
-      l_item.Value = ChartPanel.INVALID_ID;
+      if ((l_item = this.GetItem(p_panelId)) != null)
+      {
+        m_list.Items.Remove(l_item);
+ 
+      }
     }
 
     private void UpdateListItem(ChartPanel p_panel)
@@ -201,17 +241,15 @@ namespace FBI.MVC.View
 
       if (p_panel == null)
         return;
+
       if ((l_item = this.GetItem(p_panel.Id)) == null) //If doesn't exists within the listbox
       {
-        if ((l_item = m_list.SelectedItem) == null &&
-          (l_item = this.GetItem(ChartPanel.INVALID_ID)) == null) //Get selectedItem, or first with null value
-        {
-          MessageBox.Show("general.error.system");
-          return;
-        }
+        l_item = new ListItem();
         l_item.Value = p_panel.Id;
+        m_list.Items.Add(l_item);
       }
       l_item.Text = p_panel.Name;
+      this.SetListItemIndex(l_item);
     }
 
     #endregion

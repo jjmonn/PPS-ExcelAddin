@@ -25,6 +25,7 @@ namespace FBI.Utils
     private string m_concatenated = null;
 
     public string LastError = "";
+    private int m_errorPtr = 0;
 
     private const char CHAR_DELIM = '\'';
     private const char STRING_DELIM = '\"';
@@ -45,7 +46,7 @@ namespace FBI.Utils
       m_internalRules["alnum"] = RuleAlNum;
       m_internalRules["print"] = RulePrintable;
       m_internalRules["identifier"] = RuleIdentifier;
-      m_internalRules["account"] = RuleAccount;
+      m_internalRules["token"] = RuleToken;
       m_internalRules["ws"] = RuleWhitespace;
       m_internalRules["$"] = RuleWhitespaces;
       m_internalRules["\'"] = RuleChar;
@@ -67,6 +68,7 @@ namespace FBI.Utils
 
     public bool Parse(string p_input, string p_bnfRule)
     {
+      m_errorPtr = 0;
       m_eventContent.Clear();
       Consumer p_bnf = new Consumer(p_bnfRule);
 
@@ -198,6 +200,7 @@ namespace FBI.Utils
         this.FillRule(p_bnf, l_rule);
         if (!this.EvalRule(p_bnf, l_rule))
         {
+          this.BuildLastError(p_bnf, l_rule);
           m_input.Set(l_inputPtr);
           return (false);
         }
@@ -217,14 +220,15 @@ namespace FBI.Utils
         if (this.EvalSimpleRuleList(l_splittedBnf))
           return (true);
       }
-      this.BuildLastError(p_bnf);
       return (false);
     }
 
-    private void BuildLastError(Consumer p_bnf)
+    private void BuildLastError(Consumer p_bnf, Rule p_rule)
     {
-      this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + "\n";
-      this.LastError += m_input.Str;
+      if (m_input.Ptr > m_errorPtr && !m_internalRules.ContainsKey(p_rule.Name)) //Default rules are not considered as part of LastError
+      {
+        this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + ": " + Local.GetValue("bnf.error." + p_rule.Name);
+      }
     }
 
     private bool RuleDigit(Consumer p_bnf)
@@ -262,9 +266,9 @@ namespace FBI.Utils
       return (m_input.ReadIdentifier());
     }
 
-    private bool RuleAccount(Consumer p_bnf)
+    private bool RuleToken(Consumer p_bnf)
     {
-      return (m_input.ReadAccount());
+      return (m_input.ReadToken());
     }
 
     private bool RuleWhitespace(Consumer p_bnf)

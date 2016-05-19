@@ -241,24 +241,11 @@ namespace FBI.MVC.Model
       l_periodsList.Add(p_startPeriod);
       if ((p_nbPeriod <= 1))
         return (l_periodsList);
-      double l_currentYear = DateTime.FromOADate(p_startPeriod).Year;
-      Int32 l_currentMonth =  (Int32) DateTime.FromOADate(p_startPeriod).Month;
 
       for (Int32 i = 1; i <= p_nbPeriod - 1; i++)
       {
-        p_startPeriod += m_monthList[l_currentMonth % (12)];
-        // february of a leap year
-        if ((l_currentMonth == 1 && DateTime.IsLeapYear((Int32)l_currentYear)))
-        {
-          p_startPeriod += 1;
-        }
+        p_startPeriod = (Int32)DateTime.FromOADate(p_startPeriod).AddMonths(1).ToOADate();
         l_periodsList.Add(p_startPeriod);
-        if ((l_currentMonth == 12))
-        {
-          l_currentYear += 1;
-          l_currentMonth = 0;
-        }
-        l_currentMonth += 1;
       }
       return (l_periodsList);
     }
@@ -394,7 +381,7 @@ namespace FBI.MVC.Model
       List<Int32> l_periods = new List<Int32>();
       while (p_startDate < p_endDate)
       {
-        l_periods.Add(PeriodModel.GetWeekIdFromPeriodId((Int32)p_startDate.ToOADate()));
+        l_periods.Add(PeriodModel.GetMonthIdFromPeriodId((Int32)p_startDate.ToOADate()));
         p_startDate = p_startDate.AddMonths(1);
       }
       return l_periods;

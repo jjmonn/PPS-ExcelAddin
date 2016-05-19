@@ -58,7 +58,7 @@ namespace FBI.MVC.Model
         l_requestIdList.Remove(l_requestId);
         l_result = ComputeResult.BuildSourcedComputeResult(l_request, p_packet, m_requestAxisList[l_requestId]);
         m_requestAxisList.Remove(l_requestId);
-        m_resultDic[l_request][l_result.VersionId] = l_result;
+        m_resultDic[l_request][l_result.EntityId] = l_result;
         if (l_requestIdList.Count == 0)
         {
           SafeDictionary<UInt32, ComputeResult> l_resultDic = m_resultDic[l_request];

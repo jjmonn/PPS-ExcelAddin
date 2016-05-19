@@ -39,13 +39,17 @@ namespace FBI.MVC.Controller
     {
       ResetCache();
       Worksheet l_worksheet = AddinModule.CurrentInstance.ExcelApp.ActiveSheet as Worksheet;
+      XlCalculation l_mode = AddinModule.CurrentInstance.ExcelApp.Calculation;
 
+      AddinModule.CurrentInstance.ExcelApp.Calculation = XlCalculation.xlCalculationManual;
       if (l_worksheet != null)
       {
         Range l_range = l_worksheet.Range[l_worksheet.Cells[1, 1], WorksheetWriter.GetRealLastCell(l_worksheet)];
         foreach (Range l_cell in l_range)
           l_cell.Formula = l_cell.Formula;
       }
+      AddinModule.CurrentInstance.ExcelApp.Calculate();
+      AddinModule.CurrentInstance.ExcelApp.Calculation = l_mode;
     }
 
     static dynamic GetValue(object p_param, string p_name)
@@ -108,6 +112,7 @@ namespace FBI.MVC.Controller
       try
       {
         Range l_cell = AddinModule.CurrentInstance.ExcelApp.ActiveCell;
+
         FBIFunction l_function = new FBIFunction();
 
         l_function.EntityName = GetValue(p_entity, Local.GetValue("ppsbi.entity"));
@@ -137,7 +142,8 @@ namespace FBI.MVC.Controller
         Int32 l_requestId;
         m_results.Clear();
 
-        LastExecutedFunction = l_function;
+        if (LastExecutedFunction == null)
+          LastExecutedFunction = l_function;
         if (Compute(l_function, out l_requestId) == false)
           return (Local.GetValue("ppsbi.error.unable_to_compute"));
 

@@ -16,6 +16,36 @@ namespace FBI.MVC.Model.CRUD
     WEEK
   }
 
+  public class TimeUtils
+  {
+    public static TimeConfig GetParentConfig(TimeConfig p_config)
+    {
+      if (p_config == TimeConfig.MONTHS)
+        return (TimeConfig.YEARS);
+      if (p_config == TimeConfig.DAYS)
+        return (TimeConfig.WEEK);
+      return (p_config);
+    }
+
+    public static bool IsParentConfig(TimeConfig p_configA, TimeConfig p_configB)
+    {
+      if (p_configA == TimeConfig.YEARS && p_configB == TimeConfig.MONTHS)
+        return (true);
+      if (p_configA == TimeConfig.WEEK && p_configB == TimeConfig.DAYS)
+        return (true);
+      return (false);
+    }
+
+    public static Int32 GetParentConfigNbPeriods(TimeConfig p_config, Int32 p_nbPeriods)
+    {
+      if (p_config == TimeConfig.MONTHS)
+        return ((Int32)Math.Ceiling(p_nbPeriods / 12.0));
+      else if (p_config == TimeConfig.DAYS)
+        return ((Int32)Math.Ceiling(p_nbPeriods / 7.0));
+      return (p_nbPeriods);
+    }
+  }
+
   public class Version : BaseVersion, IComparable, NamedHierarchyCRUDEntity
   {
     public bool Locked { get; set; }

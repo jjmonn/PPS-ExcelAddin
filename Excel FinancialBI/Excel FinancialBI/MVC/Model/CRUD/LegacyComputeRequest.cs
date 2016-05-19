@@ -17,6 +17,8 @@ namespace FBI.MVC.Model.CRUD
     public List<Tuple<bool, AxisType, UInt32>> SortList { get; set; }
     public List<UInt32> Versions { get; set; }
     public bool IsDiff { get; set; }
+    public bool IsPeriodDiff { get; set; }
+    public SafeDictionary<TimeConfig, SafeDictionary<Int32, Int32>> PeriodDiffAssociations { get; set; }
 
     public LegacyComputeRequest()
     {
@@ -26,6 +28,10 @@ namespace FBI.MVC.Model.CRUD
       AxisElemList = new List<Tuple<AxisType, uint>>();
       SortList = new List<Tuple<bool, AxisType, uint>>();
       IsDiff = false;
+      IsPeriodDiff = false;
+      PeriodDiffAssociations = new SafeDictionary<TimeConfig, SafeDictionary<int, int>>();
+      foreach (TimeConfig config in Enum.GetValues(typeof(TimeConfig)))
+        PeriodDiffAssociations[config] = new SafeDictionary<int, int>();
     }
 
     public void Dump(ByteBuffer p_packet, UInt32 p_versionId)

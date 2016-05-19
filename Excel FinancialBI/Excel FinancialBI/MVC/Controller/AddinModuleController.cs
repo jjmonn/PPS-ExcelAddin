@@ -222,9 +222,9 @@ namespace FBI.MVC.Controller
     {
       if (m_factsEditionController != null)
       {
-        m_view.WorksheetEvents.RemoveConnection();
         m_factsEditionController.Close();
         m_factsEditionController = null;
+        m_view.WorksheetEvents.RemoveConnection();
       }
     }
 

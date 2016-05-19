@@ -264,7 +264,11 @@ namespace FBI.MVC.View
       if (p_sender.GetType() == typeof(vButton))
       {
         vButton l_button = p_sender as vButton;
-        l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
+        if (m_filterPaneOpen)
+          l_button.Text = "+";
+        else
+          l_button.Text = "-";
+       // l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
       }
       if (m_filterPaneOpen)
       {
@@ -306,7 +310,7 @@ namespace FBI.MVC.View
       {
         Version l_version = VersionModel.Instance.GetValue(l_versionId);
         Int32 l_lastPeriod;
-        if (l_version == null)
+        if (l_version == null || l_version.IsFolder)
           continue;
 
         l_lastPeriod = PeriodModel.GetLastPeriod((Int32)l_version.StartPeriod, (Int32)l_version.NbPeriod, l_version.TimeConfiguration);

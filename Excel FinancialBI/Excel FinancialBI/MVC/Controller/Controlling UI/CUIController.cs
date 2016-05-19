@@ -18,6 +18,7 @@ namespace FBI.MVC.Controller
     #region Variables
 
     private ControllingUI_2 m_view;
+    PeriodsComparisonSelectionView m_periodDiffView;
 
     public CUILeftPaneController LeftPaneController { get; set; }
     public CUIRightPaneController RightPaneController { get; set; }
@@ -25,6 +26,8 @@ namespace FBI.MVC.Controller
     public CUIVisualizationController VisualizationController { get; set; }
     public SafeDictionary<UInt32, ComputeResult> LastResult { get; set; }
     public ComputeConfig LastConfig { get; set; }
+    public SafeDictionary<TimeConfig, SafeDictionary<Int32, Int32>> PeriodDiffAssociations { get; set; }
+    public bool PeriodDiff { get; set; }
 
     public IView View { get { return (m_view); } }
     public string Error { get; set; }
@@ -37,7 +40,10 @@ namespace FBI.MVC.Controller
 
     public CUIController()
     {
+      PeriodDiff = false;
       this.m_view = new ControllingUI_2();
+      m_periodDiffView = new PeriodsComparisonSelectionView();
+      m_periodDiffView.SetController(this);
       this.m_view.SetController(this);
       this.LoadView();
     }
@@ -73,6 +79,20 @@ namespace FBI.MVC.Controller
       m_openedPanels.Remove(p_panelid);
     }
 
+    Version SelectVersion(List<UInt32> p_versionList)
+    {
+      Version l_selectedVersion = null;
+
+      foreach (UInt32 l_versionId in p_versionList)
+      {
+        Version l_version = VersionModel.Instance.GetValue(l_versionId);
+
+        if (l_selectedVersion == null || l_version.StartPeriod < l_selectedVersion.StartPeriod)
+          l_selectedVersion = l_version;
+      }
+      return (l_selectedVersion);
+    }
+
     public bool Compute()
     {
       if (LeftPaneController.GetVersions() == null)
@@ -83,16 +103,22 @@ namespace FBI.MVC.Controller
 
       ComputeConfig l_config = new ComputeConfig();
       LegacyComputeRequest l_request = new LegacyComputeRequest();
-      Version l_version = VersionModel.Instance.GetValue(LeftPaneController.GetVersions()[0]);
+      Version l_version = SelectVersion(LeftPaneController.GetVersions());
 
       l_config.BaseTimeConfig = l_version.TimeConfiguration;
       if (Addin.Process == Account.AccountProcess.FINANCIAL)
        l_config.Periods = LeftPaneController.GetPeriods();
       l_request.Process = (Account.AccountProcess)Addin.Process;
-      l_request.StartPeriod = (l_request.Process == Account.AccountProcess.RH) ? 
-        LeftPaneController.GetStartPeriod() : (int)l_version.StartPeriod;
-      l_request.NbPeriods = (l_request.Process == Account.AccountProcess.RH) ? 
-        LeftPaneController.GetNbPeriod() : (int)l_version.NbPeriod;
+      if (l_request.Process == Account.AccountProcess.RH)
+      {
+        l_request.StartPeriod = LeftPaneController.GetStartPeriod();
+        l_request.NbPeriods = LeftPaneController.GetNbPeriod(); 
+      }
+      else
+      {
+        l_request.StartPeriod = (Int32)l_version.StartPeriod;
+        l_request.NbPeriods = l_version.NbPeriod;
+      }
       l_request.Versions = LeftPaneController.GetVersions();
       l_request.CurrencyId = LeftPaneController.GetCurrency();
       l_request.SortList = RightPaneController.GetSort();
@@ -103,10 +129,12 @@ namespace FBI.MVC.Controller
       l_request.RateVersionId = l_version.RateVersionId;
       l_request.AxisHierarchy = true;
       l_request.IsDiff = (l_request.Versions.Count == 2);
+      l_request.IsPeriodDiff = PeriodDiff;
+      l_request.PeriodDiffAssociations = PeriodDiffAssociations;
       l_config.Rows = RightPaneController.GetRows();
       l_config.Columns = RightPaneController.GetColumns();
       l_config.Request = l_request;
-
+      
       if (CheckConfig(l_config) == false)
         return (false);
       LastConfig = l_config;
@@ -190,5 +218,20 @@ namespace FBI.MVC.Controller
       VisualizationController = new CUIVisualizationController(this);
     }
 
+    public void ShowPeriodDiff()
+    {
+      List<UInt32> l_versionList = LeftPaneController.GetVersions();
+      Version l_versionA;
+      Version l_versionB;
+
+      if (l_versionList == null || l_versionList.Count < 2)
+        return;
+      l_versionA = VersionModel.Instance.GetValue(l_versionList[0]);
+      l_versionB = VersionModel.Instance.GetValue(l_versionList[1]);
+      if (l_versionA == null || l_versionB == null)
+        return;
+      m_periodDiffView.LoadView(l_versionA, l_versionB);
+      m_periodDiffView.ShowDialog();
+    }
   }
 }

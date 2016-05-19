@@ -12,9 +12,30 @@ namespace FBI.Utils
 {
   using MVC.Model.CRUD;
   using MVC.Model;
+  using Forms;
 
   class DGVFormatUtils
   {
+    static internal void FormatValue(BaseFbiDataGridView<ResultKey> p_dgv, ResultKey p_row, ResultKey p_column)
+    {
+      try
+      {
+        double l_value = (double)p_dgv.GetCellValue(p_row, p_column);
+
+        GridCellStyle l_cellStyle = GridTheme.GetDefaultTheme(p_dgv.VIBlendTheme).GridCellStyle;
+
+        if (l_value < 0)
+          l_cellStyle.TextColor = Color.Red;
+        else
+          l_cellStyle.TextColor = Color.Green;
+        p_dgv.CellsArea.SetCellDrawStyle(p_dgv.Rows[p_row], p_dgv.Columns[p_column], l_cellStyle);
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("DGVFormatUtils.FormatValue: " + e.Message);
+      }
+    }
+
     static internal void FormatDGVs(vDataGridView vDGV, UInt32 currencyId)
     {
       string l_formatCode = null;
@@ -47,21 +68,8 @@ namespace FBI.Utils
 
         if (l_currency == null)
           continue;
-        switch ((l_account.Type))
-        {
-          case Account.AccountType.MONETARY:
-            l_formatString = "{0:" + l_currency.Symbol + "#,##0;(" + l_currency.Symbol + "#,##0)}";
-            break;
-          case Account.AccountType.PERCENTAGE:
-            l_formatString = "{0:P}";
-            break;
-          case Account.AccountType.NUMBER:
-            l_formatString = "{0:N}";
-            break;
-          default:
-            l_formatString = "{0:C0}";
-            break;
-        }
+
+        l_formatString = FbiAccountFormat.Get(l_account.Type, l_currency);
 
         if (l_row.ParentItem == null)
         {

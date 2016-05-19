@@ -56,14 +56,16 @@ namespace FBI.MVC.Model
       return l_requestId;
     }
 
-    public Int32 GetFactFinancial(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    public Int32 GetFactFinancial(List<AxisElem> p_entitiesList, UInt32 p_versionId, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       NetworkManager.SetCallback((UInt16)ServerMessage.SMSG_GET_FACT_ANSWER, GetFactAnswer);
       ByteBuffer l_packet = new ByteBuffer((UInt16)ClientMessage.CMSG_GET_FACT);
       Int32 l_requestId = l_packet.AssignRequestId();
 
       l_packet.WriteUint8((byte)Account.AccountProcess.FINANCIAL);
-      l_packet.WriteUint32(p_entityId);
+      l_packet.WriteInt32(p_entitiesList.Count);
+      foreach (AxisElem l_entity in p_entitiesList)
+        l_packet.WriteUint32(l_entity.Id);
       l_packet.WriteUint32(p_versionId);
       l_packet.WriteUint32(p_clientId);
       l_packet.WriteUint32(p_productId);

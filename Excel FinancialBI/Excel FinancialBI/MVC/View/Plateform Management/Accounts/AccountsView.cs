@@ -41,10 +41,15 @@ namespace FBI.MVC.View
     bool m_dragAndDropFlag = false;
     bool m_isDisplayingAccountFlag = false;
     bool m_isEditingFormulaFlag = false;
+    bool m_isValidAutoComplete = false;
+    bool m_restoreHistoric = false;
     string m_saveFormula = "";
 
     SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
     UInt32 m_currentAccount = 0;
+    vListBox m_autocomplete;
+    CircularBuffer<string> m_formulaHistoric = new CircularBuffer<string>(100);
+    Stopwatch m_formulaDoubleClickClock = Stopwatch.StartNew();
 
     #endregion
 
@@ -53,6 +58,13 @@ namespace FBI.MVC.View
     public AccountsView()
     {
       InitializeComponent();
+      m_autocomplete = new vListBox();
+
+      m_formulaTextBox.Controls.Add(m_autocomplete);
+      m_autocomplete.Width = 200;
+      m_autocomplete.Height = 200;
+      m_autocomplete.Visible = false;
+      m_autocomplete.BringToFront();
     }
     
     public void SetController(IController p_controller)
@@ -65,7 +77,7 @@ namespace FBI.MVC.View
       try
       {
         m_accountTV = new FbiTreeView<Account>(AccountModel.Instance.GetDictionary(), null, true);
-        m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary());
+        m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary(), null, true);
 
         AccountsTVInit();
         GlobalFactsTVInit();
@@ -112,8 +124,19 @@ namespace FBI.MVC.View
       m_allocationKeyButton.Click += OnAllocationKeyButtonClick;
 
       m_accountTV.MouseDown += OnAccountsTreeviewMouseDown;
+      m_globalFactsTV.MouseDown += OnGlobalFactTVMouseDown;
       m_accountTV.NodeDropped += OnAccountsTreeviewNodeDropped;
       m_dropToExcelRightClickMenu.Click += OnDropSelectedAccountToExcel;
+      m_formulaTextBox.AllowDrop = true;
+      m_formulaTextBox.DragDrop += OnFormulaDragDrop;
+      m_formulaTextBox.DragOver += OnFormulaDragOver;
+      m_formulaTextBox.TextChanged += OnFormulaChanged;
+      m_formulaTextBox.KeyUp += OnFormulaKeyUp;
+      m_formulaTextBox.KeyDown += OnFormulaKeyDown;
+      m_formulaTextBox.MouseDown += OnFormulaMouseDown;
+      m_autocomplete.KeyUp += OnFormulaKeyUp;
+      m_autocomplete.MouseDoubleClick += OnAutoCompleteMouseDoubleClick;
+      m_globalFactsTV.MouseDoubleClick += OnGlobalFactTVMouseDoubleClick;
     }
 
     public void CloseView()
@@ -266,6 +289,225 @@ namespace FBI.MVC.View
 
     #endregion
 
+    #region Autocomplete
+
+    string FindCurrentFormulaToken(out int p_position, out bool p_endQuote)
+    {
+      string token = "";
+      int selectionStart = m_formulaTextBox.SelectionStart;
+      bool insideQuote = false;
+      p_endQuote = false;
+      p_position = m_formulaTextBox.Text.Length;
+
+      if (m_formulaTextBox.Text.LastOrDefault() == '\n' && selectionStart == m_formulaTextBox.Text.Length)
+        selectionStart -= 2;
+
+      for (int i = 0; i < m_formulaTextBox.Text.Length && i <= selectionStart; ++i)
+      {
+        if (m_formulaTextBox.Text[i] == '\"')
+        {
+          insideQuote = !insideQuote;
+          token = "";
+          if (insideQuote)
+            p_position = i + 1;
+        }
+        else
+          if (insideQuote)
+            token += m_formulaTextBox.Text[i];
+        p_endQuote = (m_formulaTextBox.Text[i] == '\"');
+      }
+      p_endQuote = p_endQuote && !insideQuote;
+      if (p_endQuote)
+        p_position = selectionStart;
+      return (token);
+    }
+
+    string FindCompleteToken()
+    {
+      int l_posToken;
+      bool l_endQuote;
+      string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+
+      if (!l_endQuote)
+      {
+        l_token = m_formulaTextBox.Text.Substring(l_posToken);
+        int l_pos = l_token.IndexOf("\"");
+        if (l_pos > 0)
+          return l_token.Substring(0, l_pos);
+      }
+      return (l_token);
+    }
+
+    void OnFormulaChanged(object sender, EventArgs e)
+    {
+      if (m_isValidAutoComplete)
+        return;
+      if (!m_restoreHistoric)
+        m_formulaHistoric.Push(m_formulaTextBox.Text);
+      m_restoreHistoric = false;
+      int l_posToken;
+      bool l_endQuote;
+      string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+      List<string> l_accountList = AccountModel.Instance.GetMatchings(l_token);
+      List<string> l_globalFactList = GlobalFactModel.Instance.GetMatchings(l_token);
+      List<string> l_list = new List<string>();
+
+      l_list.AddRange(l_accountList);
+      l_list.AddRange(l_globalFactList);
+      l_list.Sort();
+      if (l_list.Count == 0)
+      {
+        if (l_endQuote)
+        {
+          l_list.Add("[n]");
+          l_list.Add("[n+1]");
+          l_list.Add("[n-1]");
+        }
+        else
+        {
+          m_autocomplete.Items.Clear();
+          m_autocomplete.SelectedItem = null;
+          return;
+        }
+      }
+      m_autocomplete.DataSource = l_list;
+      m_autocomplete.SelectedItem = m_autocomplete.Items[0];
+      System.Drawing.Point l_point = new System.Drawing.Point();
+      if (WinApi.GetCaretPos(out l_point))
+      {
+        l_point.Y += 15;
+        m_autocomplete.Location = l_point;
+      }
+      m_autocomplete.Height = 2 + 20 * l_list.Count;
+      m_autocomplete.Show();
+    }
+
+    void OnFormulaKeyUp(object sender, KeyEventArgs p_e)
+    {
+      int l_index = m_autocomplete.SelectedIndex;
+      m_isValidAutoComplete = false;
+
+      if (m_autocomplete.Visible)
+      {
+        switch (p_e.KeyCode)
+        {
+          case Keys.Escape:
+            m_autocomplete.Hide();
+            break;
+          case Keys.Return:
+            ValidateAutoComplete();
+            break;
+          case Keys.Down:
+            m_autocomplete.SelectedItem = m_autocomplete.Items[(l_index + 1) % m_autocomplete.Items.Count];
+            m_autocomplete.Refresh();
+            break;
+          case Keys.Up:
+            m_autocomplete.SelectedItem = m_autocomplete.Items[(l_index - 1 < 0) ? 0 : l_index - 1];
+            m_autocomplete.Refresh();
+            break;
+        }
+        if (m_autocomplete.Items.Count == 0)
+          m_autocomplete.Hide();
+      }
+    }
+
+    void OnFormulaKeyDown(object sender, KeyEventArgs p_e)
+    {
+      int l_index = m_autocomplete.SelectedIndex;
+      m_isValidAutoComplete = false;
+
+      switch (p_e.KeyCode)
+      {
+        case Keys.Return:
+          if (m_autocomplete.Visible)
+            m_isValidAutoComplete = true;
+          break;
+        case Keys.A:
+          if (p_e.Modifiers == Keys.Control)
+            m_formulaTextBox.SelectAll();
+          break;
+        case Keys.Z:
+          if (p_e.Modifiers == Keys.Control)
+          {
+            if (m_formulaHistoric.ContentSize > 0)
+            {
+              m_restoreHistoric = true;
+              m_formulaTextBox.Text = m_formulaHistoric.Top();
+              m_formulaHistoric.Pop();
+            }
+          }
+          break;
+      }
+    }
+
+    void OnAutoCompleteMouseDoubleClick(object sender, MouseEventArgs e)
+    {
+      ValidateAutoComplete();
+    }
+
+    void ValidateAutoComplete()
+    {
+      if (m_autocomplete.SelectedItem != null)
+      {
+        int l_posToken;
+        bool l_endQuote;
+        string l_token =  FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+        string l_text = m_formulaTextBox.Text.Substring(0, l_posToken);
+        l_text += m_autocomplete.SelectedItem.Text;
+        if (!l_endQuote)
+          l_text += "\""; 
+        l_text += m_formulaTextBox.Text.Substring(l_posToken + l_token.Length);
+        m_formulaTextBox.Text = l_text;
+        if (m_formulaTextBox.Text.LastOrDefault() == '\n')
+          m_formulaTextBox.Text = m_formulaTextBox.Text.Substring(0, m_formulaTextBox.Text.Length - 2);
+        m_formulaTextBox.SelectionStart = m_formulaTextBox.Text.Length;
+        m_autocomplete.Hide();
+        m_formulaTextBox.Focus();
+        OnFormulaChanged(null, null);
+      }
+    }
+
+    void OnFormulaClick()
+    {
+      string l_token = FindCompleteToken();
+
+      vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId(l_token));
+
+      if (l_node == null)
+       l_node = m_globalFactsTV.FindNode(GlobalFactModel.Instance.GetValueId(l_token));
+      if (l_node != null)
+      {
+        l_node.TreeView.SelectedNode = l_node;
+        l_node.TreeView.Refresh();
+      }
+    }
+
+    void OnFormulaMouseDown(object sender, EventArgs e)
+    {
+      if (m_formulaDoubleClickClock.ElapsedMilliseconds > 300)
+        m_formulaDoubleClickClock.Restart();
+      else
+        OnFormulaMouseDoubleClick();
+      OnFormulaClick();
+    }
+
+    void OnFormulaMouseDoubleClick()
+    {
+      string l_token = FindCompleteToken();
+      int l_posToken;
+      bool l_endQuote;
+      FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+
+      if (!l_endQuote)
+      {
+        m_formulaTextBox.SelectionStart = l_posToken;
+        m_formulaTextBox.SelectionLength = l_token.Length;
+      }
+    }
+
+
+    #endregion
+
     #region Events
 
     #region Account
@@ -414,6 +656,25 @@ namespace FBI.MVC.View
 
     #endregion
 
+    void OnFormulaDragOver(object sender, DragEventArgs e)
+    {
+      if (!m_isEditingFormulaFlag)
+        return;
+      if (e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true))
+        e.Effect = DragDropEffects.Move;
+    }
+
+    void OnFormulaDragDrop(object sender, DragEventArgs e)
+    {
+      if (!m_isEditingFormulaFlag)
+        return;
+      if (!e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true))
+        return;
+      vTreeNode l_node = e.Data.GetData("VIBlend.WinForms.Controls.vTreeNode") as vTreeNode;
+
+      m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
+    }
+
     #region Click
 
     private Range GetActiveCell()
@@ -507,6 +768,8 @@ namespace FBI.MVC.View
     private void OnFormulaEditionButtonClick(object p_sender, EventArgs p_e)
     {
       m_saveFormula = m_formulaTextBox.Text;
+      m_formulaHistoric.Clear();
+      m_formulaHistoric.Push(m_saveFormula);
       SetEditingFormulaUI(true);
     }
 
@@ -552,7 +815,17 @@ namespace FBI.MVC.View
       {
         vTreeNode l_node = m_accountTV.FindAtPosition(((MouseEventArgs)p_e).Location);
         if (l_node != null)
-          m_formulaTextBox.Text += "\"" + l_node.Text + "\"";
+          m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
+      }
+    }
+
+    private void OnGlobalFactTVMouseDoubleClick(object p_sender, EventArgs p_e)
+    {
+      if (m_isEditingFormulaFlag == true)
+      {
+        vTreeNode l_node = m_globalFactsTV.FindAtPosition(((MouseEventArgs)p_e).Location);
+        if (l_node != null)
+          m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
       }
     }
 
@@ -640,6 +913,14 @@ namespace FBI.MVC.View
         m_currentNode = m_accountTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y));
       if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
         m_accountTV.DoDragDrop(m_currentNode, DragDropEffects.Move);
+    }
+
+    void OnGlobalFactTVMouseDown(object sender, MouseEventArgs p_e)
+    {
+      vTreeNode l_node = m_globalFactsTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y));
+      
+      if (l_node != null)
+        m_globalFactsTV.DoDragDrop(l_node, DragDropEffects.Move);
     }
 
     private void OnAccountsTreeviewNodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)
@@ -1002,6 +1283,5 @@ namespace FBI.MVC.View
     }
 
     #endregion
-
   }
 }
