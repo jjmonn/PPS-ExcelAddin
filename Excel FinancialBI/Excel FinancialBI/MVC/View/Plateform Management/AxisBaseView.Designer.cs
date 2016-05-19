@@ -55,12 +55,14 @@ namespace FBI.MVC.View
       this.m_axisEditionButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_createNewAxisElemMenuTop = new System.Windows.Forms.ToolStripMenuItem();
       this.m_deleteAxisElemMenuTop = new System.Windows.Forms.ToolStripMenuItem();
-      this.ToolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
       this.ExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.m_dropToExcelMenuTop = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_axisOwnerRCM = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.m_createRCM = new System.Windows.Forms.ToolStripMenuItem();
       this.m_axisRightClickMenu.SuspendLayout();
       this.TableLayoutPanel1.SuspendLayout();
       this.MenuStrip1.SuspendLayout();
+      this.m_axisOwnerRCM.SuspendLayout();
       this.SuspendLayout();
       // 
       // EntitiesIL
@@ -194,8 +196,7 @@ namespace FBI.MVC.View
       // 
       this.m_axisEditionButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_createNewAxisElemMenuTop,
-            this.m_deleteAxisElemMenuTop,
-            this.ToolStripSeparator2});
+            this.m_deleteAxisElemMenuTop});
       this.m_axisEditionButton.Image = global::FBI.Properties.Resources.element_branch23;
       this.m_axisEditionButton.Name = "m_axisEditionButton";
       this.m_axisEditionButton.Size = new System.Drawing.Size(77, 20);
@@ -205,20 +206,15 @@ namespace FBI.MVC.View
       // 
       this.m_createNewAxisElemMenuTop.Image = global::FBI.Properties.Resources.plus;
       this.m_createNewAxisElemMenuTop.Name = "m_createNewAxisElemMenuTop";
-      this.m_createNewAxisElemMenuTop.Size = new System.Drawing.Size(108, 22);
+      this.m_createNewAxisElemMenuTop.Size = new System.Drawing.Size(156, 26);
       this.m_createNewAxisElemMenuTop.Text = "Create";
       // 
       // m_deleteAxisElemMenuTop
       // 
       this.m_deleteAxisElemMenuTop.Image = global::FBI.Properties.Resources.imageres_89;
       this.m_deleteAxisElemMenuTop.Name = "m_deleteAxisElemMenuTop";
-      this.m_deleteAxisElemMenuTop.Size = new System.Drawing.Size(108, 22);
+      this.m_deleteAxisElemMenuTop.Size = new System.Drawing.Size(156, 26);
       this.m_deleteAxisElemMenuTop.Text = "Delete";
-      // 
-      // ToolStripSeparator2
-      // 
-      this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(105, 6);
       // 
       // ExcelToolStripMenuItem
       // 
@@ -233,9 +229,24 @@ namespace FBI.MVC.View
       // 
       this.m_dropToExcelMenuTop.Image = global::FBI.Properties.Resources.excel_blue2;
       this.m_dropToExcelMenuTop.Name = "m_dropToExcelMenuTop";
-      this.m_dropToExcelMenuTop.Size = new System.Drawing.Size(156, 26);
+      this.m_dropToExcelMenuTop.Size = new System.Drawing.Size(146, 22);
       this.m_dropToExcelMenuTop.Text = "Drop on excel";
       this.m_dropToExcelMenuTop.Click += new System.EventHandler(this.OnDropToExcelClick);
+      // 
+      // m_axisOwnerRCM
+      // 
+      this.m_axisOwnerRCM.ImageScalingSize = new System.Drawing.Size(20, 20);
+      this.m_axisOwnerRCM.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_createRCM});
+      this.m_axisOwnerRCM.Name = "ContextMenuStripTGV";
+      this.m_axisOwnerRCM.Size = new System.Drawing.Size(157, 52);
+      // 
+      // m_createRCM
+      // 
+      this.m_createRCM.Image = global::FBI.Properties.Resources.element_branch2_add;
+      this.m_createRCM.Name = "m_createRCM";
+      this.m_createRCM.Size = new System.Drawing.Size(156, 26);
+      this.m_createRCM.Text = "Create";
       // 
       // AxisBaseView
       // 
@@ -249,6 +260,7 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.PerformLayout();
       this.MenuStrip1.ResumeLayout(false);
       this.MenuStrip1.PerformLayout();
+      this.m_axisOwnerRCM.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -264,7 +276,6 @@ namespace FBI.MVC.View
     public System.Windows.Forms.MenuStrip MenuStrip1;
     public System.Windows.Forms.ToolStripMenuItem m_axisEditionButton;
     public System.Windows.Forms.ToolStripMenuItem m_deleteAxisElemMenuTop;
-    public System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
     public System.Windows.Forms.ToolStripMenuItem ExcelToolStripMenuItem;
     public System.Windows.Forms.ToolStripMenuItem m_dropToExcelMenuTop;
     public System.Windows.Forms.ToolStripMenuItem m_renameAxisElemMenu;
@@ -275,5 +286,7 @@ namespace FBI.MVC.View
 
     protected System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
     public System.Windows.Forms.ToolStripMenuItem m_createNewAxisElemMenuTop;
+    public System.Windows.Forms.ContextMenuStrip m_axisOwnerRCM;
+    public System.Windows.Forms.ToolStripMenuItem m_createRCM;
   }
 }

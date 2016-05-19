@@ -44,12 +44,14 @@ namespace FBI.MVC.View
       l_splitContainer.Panel1.Controls.Add(m_ownerTV);
       l_splitContainer.Panel2.Controls.Add(m_dgv);
       m_ownerTV.Dock = DockStyle.Fill;
+      m_ownerTV.ContextMenuStrip = m_axisOwnerRCM;
       m_dgv.Dock = DockStyle.Fill;
       SuscribeEvents();
     }
 
     void SuscribeEvents()
     {
+      m_createRCM.Click += OnClickCreate;
       m_dgv.MouseDown += OnDGVMouseDown;
       m_ownerTV.NodeMouseDown += OnNodeSelect;
       m_ownerTV.Dropped += OnOwnerTVNodeDropped;

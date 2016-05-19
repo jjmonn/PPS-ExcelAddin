@@ -271,7 +271,7 @@ namespace FBI.MVC.View
       m_dgv.CellsArea.SetCellEditor(p_e.Cell.RowItem, p_e.Cell.ColumnItem, l_cb);
     }
 
-    private void OnClickDelete(object p_sender, EventArgs p_e)
+    protected void OnClickDelete(object p_sender, EventArgs p_e)
     {
       HierarchyItem l_row = m_hoveredRow;
 
@@ -295,7 +295,7 @@ namespace FBI.MVC.View
         Forms.MsgBox.Show(m_controller.Error);
     }
 
-    private void OnClickCreate(object sender, EventArgs e)
+    protected void OnClickCreate(object sender, EventArgs e)
     {
       HierarchyItem l_row = m_hoveredRow;
 
