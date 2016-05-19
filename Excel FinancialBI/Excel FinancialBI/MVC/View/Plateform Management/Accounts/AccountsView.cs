@@ -42,11 +42,13 @@ namespace FBI.MVC.View
     bool m_isDisplayingAccountFlag = false;
     bool m_isEditingFormulaFlag = false;
     bool m_isValidAutoComplete = false;
+    bool m_restoreHistoric = false;
     string m_saveFormula = "";
 
     SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
     UInt32 m_currentAccount = 0;
     vListBox m_autocomplete;
+    CircularBuffer<string> m_formulaHistoric = new CircularBuffer<string>(100);
 
     #endregion
 
@@ -131,6 +133,7 @@ namespace FBI.MVC.View
       m_formulaTextBox.KeyUp += OnFormulaKeyUp;
       m_formulaTextBox.GotFocus += OnFormulaClick;
       m_formulaTextBox.KeyDown += OnFormulaKeyDown;
+      m_formulaTextBox.DoubleClick += OnFormulaMouseDoubleClick;
       m_autocomplete.KeyUp += OnFormulaKeyUp;
       m_autocomplete.MouseDoubleClick += OnAutoCompleteMouseDoubleClick;
       m_globalFactsTV.MouseDoubleClick += OnGlobalFactTVMouseDoubleClick;
@@ -339,6 +342,9 @@ namespace FBI.MVC.View
     {
       if (m_isValidAutoComplete)
         return;
+      if (!m_restoreHistoric)
+        m_formulaHistoric.Push(m_formulaTextBox.Text);
+      m_restoreHistoric = false;
       int l_posToken;
       bool l_endQuote;
       string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
@@ -381,27 +387,28 @@ namespace FBI.MVC.View
       int l_index = m_autocomplete.SelectedIndex;
       m_isValidAutoComplete = false;
 
-      if (!m_autocomplete.Visible)
-        return;
-      switch (p_e.KeyCode)
+      if (m_autocomplete.Visible)
       {
-        case Keys.Escape:
+        switch (p_e.KeyCode)
+        {
+          case Keys.Escape:
+            m_autocomplete.Hide();
+            break;
+          case Keys.Return:
+            ValidateAutoComplete();
+            break;
+          case Keys.Down:
+            m_autocomplete.SelectedItem = m_autocomplete.Items[(l_index + 1) % m_autocomplete.Items.Count];
+            m_autocomplete.Refresh();
+            break;
+          case Keys.Up:
+            m_autocomplete.SelectedItem = m_autocomplete.Items[(l_index - 1 < 0) ? 0 : l_index - 1];
+            m_autocomplete.Refresh();
+            break;
+        }
+        if (m_autocomplete.Items.Count == 0)
           m_autocomplete.Hide();
-          break;
-        case Keys.Return:
-          ValidateAutoComplete();
-          break;
-        case Keys.Down:
-          m_autocomplete.SelectedItem = m_autocomplete.Items[(l_index + 1) % m_autocomplete.Items.Count];
-          m_autocomplete.Refresh();
-          break;
-        case Keys.Up:
-          m_autocomplete.SelectedItem = m_autocomplete.Items[(l_index - 1 < 0) ? 0 : l_index - 1];
-          m_autocomplete.Refresh();
-          break;
       }
-      if (m_autocomplete.Items.Count == 0)
-        m_autocomplete.Hide();
     }
 
     void OnFormulaKeyDown(object sender, KeyEventArgs p_e)
@@ -409,12 +416,26 @@ namespace FBI.MVC.View
       int l_index = m_autocomplete.SelectedIndex;
       m_isValidAutoComplete = false;
 
-      if (!m_autocomplete.Visible)
-        return;
       switch (p_e.KeyCode)
       {
         case Keys.Return:
-          m_isValidAutoComplete = true;
+          if (m_autocomplete.Visible)
+            m_isValidAutoComplete = true;
+          break;
+        case Keys.A:
+          if (p_e.Modifiers == Keys.Control)
+            m_formulaTextBox.SelectAll();
+          break;
+        case Keys.Z:
+          if (p_e.Modifiers == Keys.Control)
+          {
+            if (m_formulaHistoric.ContentSize > 0)
+            {
+              m_restoreHistoric = true;
+              m_formulaTextBox.Text = m_formulaHistoric.Top();
+              m_formulaHistoric.Pop();
+            }
+          }
           break;
       }
     }
@@ -458,6 +479,20 @@ namespace FBI.MVC.View
       {
         l_node.TreeView.SelectedNode = l_node;
         l_node.TreeView.Refresh();
+      }
+    }
+
+    void OnFormulaMouseDoubleClick(object sender, EventArgs e)
+    {
+      string l_token = FindCompleteToken();
+      int l_posToken;
+      bool l_endQuote;
+      FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+
+      if (!l_endQuote)
+      {
+        m_formulaTextBox.SelectionStart = l_posToken;
+        m_formulaTextBox.SelectionLength = l_token.Length;
       }
     }
 
@@ -723,6 +758,8 @@ namespace FBI.MVC.View
     private void OnFormulaEditionButtonClick(object p_sender, EventArgs p_e)
     {
       m_saveFormula = m_formulaTextBox.Text;
+      m_formulaHistoric.Clear();
+      m_formulaHistoric.Push(m_saveFormula);
       SetEditingFormulaUI(true);
     }
 
