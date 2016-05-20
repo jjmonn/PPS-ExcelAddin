@@ -19,21 +19,20 @@ namespace FBI.MVC.View
   using Utils;
   using Network;
 
-  public partial class EmployeeView : AxisBaseView<EmployeeController>
+  public partial class AxisOwnedView : AxisBaseView<AxisOwnedController>
   {
-    FbiTreeView<AxisElem> m_entitiesTV;
+    FbiTreeView<AxisElem> m_ownerTV;
     HierarchyItem m_draggingRow;
 
-    public EmployeeView()
+    public AxisOwnedView()
     {
-
     }
 
     public override void LoadView()
     {
       base.LoadView();
-      m_entitiesTV = new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(AxisType.Entities), null, true);
-      m_entitiesTV.ImageList = EntitiesIL;
+      m_ownerTV = new FbiTreeView<AxisElem>(AxisElemModel.Instance.GetDictionary(m_controller.OwnerType), null, true);
+      m_ownerTV.ImageList = EntitiesIL;
 
       vSplitContainer l_splitContainer = new vSplitContainer();
       l_splitContainer.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
@@ -42,18 +41,21 @@ namespace FBI.MVC.View
       l_splitContainer.SplitterSize = 2;
       l_splitContainer.SplitterDistance = 50;
 
-      l_splitContainer.Panel1.Controls.Add(m_entitiesTV);
+      l_splitContainer.Panel1.Controls.Add(m_ownerTV);
       l_splitContainer.Panel2.Controls.Add(m_dgv);
-      m_entitiesTV.Dock = DockStyle.Fill;
+      m_ownerTV.Dock = DockStyle.Fill;
+      m_ownerTV.ContextMenuStrip = m_axisOwnerRCM;
       m_dgv.Dock = DockStyle.Fill;
       SuscribeEvents();
     }
 
     void SuscribeEvents()
     {
+      m_createRCM.Click += OnClickCreate;
       m_dgv.MouseDown += OnDGVMouseDown;
-      m_entitiesTV.NodeMouseDown += OnNodeSelect;
-      m_entitiesTV.Dropped += OnTVNodeDropped;
+      m_ownerTV.NodeMouseDown += OnNodeSelect;
+      m_ownerTV.Dropped += OnOwnerTVNodeDropped;
+      m_ownerTV.DragOver += OnOwnerTVDragOver;
       AxisElemModel.Instance.CreationEvent += OnModelCreateAxisElem;
       AxisOwnerModel.Instance.ReadEvent += OnModelReadAxisOwner;
       AxisOwnerModel.Instance.CreationEvent += OnModelCreateAxisOwner;
@@ -79,51 +81,57 @@ namespace FBI.MVC.View
       if (p_args.Button == MouseButtons.Left)
         if (ModifierKeys.HasFlag(Keys.Control))
         {
-          m_dgv.DoDragDrop(l_row, DragDropEffects.Move);
           m_draggingRow = l_row;
+          m_dgv.DoDragDrop(l_row, DragDropEffects.Move);
         }
     }
 
-    void OnTVNodeDropped(object p_sender, DragEventArgs p_e)
+
+    void OnOwnerTVDragOver(object sender, DragEventArgs e)
     {
-      vTreeNode l_node = m_entitiesTV.FindAtPosition(new Point(p_e.X, p_e.Y));
+      e.Effect = DragDropEffects.Move;
+    }
+
+    void OnOwnerTVNodeDropped(object p_sender, DragEventArgs p_e)
+    {
+      vTreeNode l_node = m_ownerTV.FindAtPosition(PointToClient(new Point(p_e.X, p_e.Y - 25)));
 
       if (l_node == null || m_draggingRow == null)
         return;
-      UInt32 l_employeeId = (UInt32)m_draggingRow.ItemValue;
+      UInt32 l_axisId = (UInt32)m_draggingRow.ItemValue;
 
       m_draggingRow = null;
-      AxisElem l_entity = AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)l_node.Value);
+      AxisElem l_owner = AxisElemModel.Instance.GetValue(m_controller.OwnerType, (UInt32)l_node.Value);
 
-      if (l_entity == null)
+      if (l_owner == null)
         return;
 
-      AxisOwner l_axisOwner = AxisOwnerModel.Instance.GetValue(l_employeeId);
+      AxisOwner l_axisOwner = AxisOwnerModel.Instance.GetValue(l_axisId);
       if (l_axisOwner == null)
         return;
       l_axisOwner = l_axisOwner.Clone();
-      l_axisOwner.OwnerId = l_entity.Id;
+      l_axisOwner.OwnerId = l_owner.Id;
       if (m_controller.UpdateAxisOwner(l_axisOwner) == false)
         Forms.MsgBox.Show(m_controller.Error);
     }
 
     void OnNodeSelect(object p_sender, vTreeViewMouseEventArgs p_args)
     {
-      m_controller.SelectedEntity = (UInt32)p_args.Node.Value;
-      DisplayEmployees(m_controller.SelectedEntity);
+      m_controller.SelectedOwner = (UInt32)p_args.Node.Value;
+      DisplayAxis(m_controller.SelectedOwner);
     }
 
-    void DisplayEmployees(UInt32 p_entityId)
+    void DisplayAxis(UInt32 p_ownerId)
     {
-      AxisElem l_entity = AxisElemModel.Instance.GetValue(p_entityId);
+      AxisElem l_owner = AxisElemModel.Instance.GetValue(p_ownerId);
 
-      if (l_entity == null || l_entity.AllowEdition == false)
+      if (l_owner == null || l_owner.AllowEdition == false)
         return;
       MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemDic = new MultiIndexDictionary<uint, string, AxisElem>();
 
       foreach (AxisOwner l_axisOwner in AxisOwnerModel.Instance.GetDictionary().Values)
       {
-        if (l_axisOwner.OwnerId != p_entityId)
+        if (l_axisOwner.OwnerId != p_ownerId)
           continue;
         AxisElem l_axisElem = AxisElemModel.Instance.GetValue(l_axisOwner.Id);
 
@@ -131,7 +139,7 @@ namespace FBI.MVC.View
           continue;
         l_axisElemDic.Set(l_axisElem.Id, l_axisElem.Name, l_axisElem);
       }
-      LoadDGV(l_axisElemDic, AxisFilterModel.Instance.GetDictionary(AxisType.Employee).SortedValues);
+      LoadDGV(l_axisElemDic, AxisFilterModel.Instance.GetDictionary(m_controller.AxisType).SortedValues);
     }
 
     #endregion
@@ -148,7 +156,7 @@ namespace FBI.MVC.View
       AxisOwner l_axisOwner = new AxisOwner();
 
       l_axisOwner.Id = p_id;
-      l_axisOwner.OwnerId = m_controller.SelectedEntity;
+      l_axisOwner.OwnerId = m_controller.SelectedOwner;
       if (m_controller.CreateAxisOwner(l_axisOwner) == false)
         Forms.MsgBox.Show(m_controller.Error);
     }
@@ -163,7 +171,7 @@ namespace FBI.MVC.View
       }
       else
       {
-        if (p_axisOwner.OwnerId != m_controller.SelectedEntity)
+        if (p_axisOwner.OwnerId != m_controller.SelectedOwner)
         {
           m_dgv.DeleteRow(p_axisOwner.Id);
           m_dgv.Refresh();

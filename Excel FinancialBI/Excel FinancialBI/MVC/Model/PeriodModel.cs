@@ -239,12 +239,15 @@ namespace FBI.MVC.Model
     {
       List<Int32> l_periodsList = new List<Int32>();
       l_periodsList.Add(p_startPeriod);
-      if ((p_nbPeriod <= 1))
+      if (p_nbPeriod <= 1)
         return (l_periodsList);
 
       for (Int32 i = 1; i <= p_nbPeriod - 1; i++)
       {
-        p_startPeriod = (Int32)DateTime.FromOADate(p_startPeriod).AddMonths(1).ToOADate();
+        DateTime date = DateTime.FromOADate(p_startPeriod).AddMonths(1);
+        while (date.Day != DateTime.DaysInMonth(date.Year, date.Month))
+          date = date.AddDays(1);
+        p_startPeriod = (Int32)date.ToOADate();
         l_periodsList.Add(p_startPeriod);
       }
       return (l_periodsList);

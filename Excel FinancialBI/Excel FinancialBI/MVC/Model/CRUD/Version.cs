@@ -36,6 +36,20 @@ namespace FBI.MVC.Model.CRUD
       return (false);
     }
 
+    public static TimeConfig GetLowestTimeConfig(List<TimeConfig> p_list)
+    {
+      TimeConfig l_config = TimeConfig.YEARS;
+
+      foreach (TimeConfig elem in p_list)
+      {
+        if (elem == TimeConfig.MONTHS && l_config == TimeConfig.YEARS)
+          l_config = elem;
+        if (elem == TimeConfig.DAYS && (l_config == TimeConfig.WEEK || l_config == TimeConfig.YEARS))
+          l_config = elem;
+      }
+      return (l_config);
+    }
+
     public static Int32 GetParentConfigNbPeriods(TimeConfig p_config, Int32 p_nbPeriods)
     {
       if (p_config == TimeConfig.MONTHS)

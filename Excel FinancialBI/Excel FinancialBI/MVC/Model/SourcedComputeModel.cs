@@ -49,12 +49,13 @@ namespace FBI.MVC.Model
     {
       Int32 l_requestId = p_packet.GetRequestId();
       Tuple<AComputeRequest, List<Int32>> l_requestTuple = FindComputeRequest(l_requestId);
-      SourcedComputeRequest l_request = l_requestTuple.Item1 as SourcedComputeRequest;
-      List<Int32> l_requestIdList = l_requestTuple.Item2;
       ComputeResult l_result = null;
 
-      if (l_request != null)
+      if (l_requestTuple != null && l_requestTuple.Item1 != null)
       {
+        List<Int32> l_requestIdList = l_requestTuple.Item2;
+        SourcedComputeRequest l_request = l_requestTuple.Item1 as SourcedComputeRequest;
+
         l_requestIdList.Remove(l_requestId);
         l_result = ComputeResult.BuildSourcedComputeResult(l_request, p_packet, m_requestAxisList[l_requestId]);
         m_requestAxisList.Remove(l_requestId);
@@ -69,6 +70,8 @@ namespace FBI.MVC.Model
             ComputeCompleteEvent(p_packet.GetError(), l_request, l_resultDic);
         }
       }
+      else
+        ComputeCompleteEvent(ErrorMessage.SYSTEM, null, null);
     }
   }
 }

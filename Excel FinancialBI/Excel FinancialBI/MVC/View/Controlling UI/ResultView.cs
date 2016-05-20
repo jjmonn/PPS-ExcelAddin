@@ -130,7 +130,10 @@ namespace FBI.MVC.View
         return;
       DGV l_dgv = m_tabCtrl.SelectedTab.Controls[0] as DGV;
 
-      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      foreach (HierarchyItem l_column in l_dgv.ColumnsHierarchy.Items)
+        l_column.Width = 1;
+      l_dgv.Refresh();
+      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
       l_dgv.Refresh();
       l_dgv.Select();
     }
@@ -215,7 +218,7 @@ namespace FBI.MVC.View
           {
             DGV l_dgv = l_tab.Controls[0] as DGV;
             l_dgv.Select();
-            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
             l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
             l_dgv.Refresh();
             l_tab.Refresh();
@@ -237,6 +240,7 @@ namespace FBI.MVC.View
           DGV l_dgv = l_tab.Controls[0] as DGV;
           SetHierachyItemVisible(p_versionId, p_visible, l_dgv.Rows);
           SetHierachyItemVisible(p_versionId, p_visible, l_dgv.Columns);
+          l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
         }
       }
     }
@@ -332,6 +336,7 @@ namespace FBI.MVC.View
       PeriodConf l_conf = p_conf as PeriodConf;
       string l_formatedDate;
       int l_count = 0;
+      TimeConfig l_lowestConfig = TimeUtils.GetLowestTimeConfig(m_computeConfig.Request.PeriodDiffAssociations.Keys.ToList());
 
       if (m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType] != null)
         foreach (KeyValuePair<Int32, Int32> l_date in m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType])
@@ -346,6 +351,8 @@ namespace FBI.MVC.View
 
 
           ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, l_count++, 0);
+          if (l_lowestConfig == l_conf.PeriodType && m_computeConfig.Periods != null && m_computeConfig.Periods.Contains(l_count - 1) == false)
+            continue;
           HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_formatedDate);
 
           if (l_newItem != null)
