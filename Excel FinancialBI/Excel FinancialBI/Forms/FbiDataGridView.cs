@@ -347,11 +347,26 @@ namespace FBI.Forms
 
     public HierarchyItem SetDimension<J>(Dimension p_dimension, UInt32 p_id, string p_name, UInt32 p_parentId = 0, ICRUDModel<J> p_model = null, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
     {
+      List<Tuple<UInt32, UInt32, object>> cellValues = new List<Tuple<UInt32, UInt32, object>>();
+      HierarchyItem l_item = null;
+
       if (p_dimension == Dimension.COLUMN)
-        return SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
+      {
+        if (m_columnsDic[p_id] != null)
+          foreach (UInt32 l_row in Rows.Keys)
+            cellValues.Add(new Tuple<UInt32, UInt32, object>(l_row, p_id, GetCellValue(l_row, p_id)));
+        l_item = SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
+      }
       else if (p_dimension == Dimension.ROW)
-        return SetDimension<J>(RowsHierarchy.Items, m_rowsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
-      return (null);
+      {
+        if (m_rowsDic[p_id] != null)
+          foreach (UInt32 l_column in Columns.Keys)
+            cellValues.Add(new Tuple<UInt32, UInt32, object>(p_id, l_column, GetCellValue(p_id, l_column)));
+        l_item = SetDimension<J>(RowsHierarchy.Items, m_rowsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
+      }
+      foreach (Tuple<UInt32, UInt32, object> l_cell in cellValues)
+        FillField(l_cell.Item1, l_cell.Item2, l_cell.Item3);
+      return (l_item);
     }
 
     HierarchyItem CloneItem(HierarchyItem p_item)
@@ -415,8 +430,12 @@ namespace FBI.Forms
       l_dimClone.ItemValue = p_id;
       l_dimClone.Caption = p_name;
       l_dimClone.Width = p_width;
-      m_hierarchyItemDic.Remove(l_dim);
-      m_hierarchyItemDic[l_dimClone] = p_id;
+      if (l_dim != l_dimClone)
+      {
+        l_dim.Caption = "[DELETED]" + l_dim.Caption;
+        m_hierarchyItemDic.Remove(l_dim);
+        m_hierarchyItemDic[l_dimClone] = p_id;
+      }
       return (l_dim);
     }
   }

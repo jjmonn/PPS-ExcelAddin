@@ -13,6 +13,7 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Utils;
   using Forms;
+  using Network;
 
   class EntityView : AxisBaseView<EntityController>
   {
@@ -25,6 +26,13 @@ namespace FBI.MVC.View
     {
       m_dgv.CellMouseClick += OnClickCell;
       m_dgv.CellChangedAndValidated += OnEntityCurrencyChanged;
+      EntityCurrencyModel.Instance.ReadEvent += OnModelReadEntityCurrency;
+    }
+
+    public override void CloseView()
+    {
+      base.CloseView();
+      EntityCurrencyModel.Instance.ReadEvent -= OnModelReadEntityCurrency;
     }
 
     public override void LoadView()
@@ -48,6 +56,23 @@ namespace FBI.MVC.View
         m_dgv.FillField(l_entity.Id, 0, CurrencyModel.Instance.GetValueName(l_entityCurrency.CurrencyId));
       }
       m_dgv.Refresh();
+    }
+
+    protected override void OnCopyDown(object p_cellValue, UInt32 p_rowValue, UInt32 p_columnValue)
+    {
+      if (p_columnValue != 0)
+        base.OnCopyDown(p_cellValue, p_rowValue, p_columnValue);
+      else
+      {
+        EntityCurrency l_entityCurrency = EntityCurrencyModel.Instance.GetValue(p_rowValue);
+        Currency l_currency = CurrencyModel.Instance.GetValue((string)p_cellValue);
+
+        if (l_entityCurrency == null || l_currency == null)
+          return;
+        l_entityCurrency = l_entityCurrency.Clone();
+        l_entityCurrency.CurrencyId = l_currency.Id;
+        m_controller.UpdateEntityCurrency(l_entityCurrency);
+      }
     }
 
     private void OnClickCell(object p_sender, CellMouseEventArgs p_e)
@@ -91,6 +116,27 @@ namespace FBI.MVC.View
       l_entity.CurrencyId = l_currency.Id;
       if (m_controller.UpdateEntityCurrency(l_entity) == false)
         Forms.MsgBox.Show(m_controller.Error);
+    }
+
+    delegate void OnModelReadEntityCurrency_delegate(ErrorMessage p_status, EntityCurrency p_attributes);
+    void OnModelReadEntityCurrency(ErrorMessage p_status, EntityCurrency p_attributes)
+    {
+      if (m_dgv.InvokeRequired)
+      {
+        OnModelReadEntityCurrency_delegate func = new OnModelReadEntityCurrency_delegate(OnModelReadEntityCurrency);
+        Invoke(func, p_status, p_attributes);
+      }
+      else
+      {
+        if (p_status == ErrorMessage.SUCCESS && p_attributes != null)
+        {
+          m_dgv.FillField(p_attributes.Id, 0, CurrencyModel.Instance.GetValueName(p_attributes.CurrencyId));
+          m_dgv.Refresh();
+          DesactivateUnallowed();
+        }
+        else
+          MsgBox.Show(Local.GetValue("general.error.system"));
+      }
     }
   }
 }

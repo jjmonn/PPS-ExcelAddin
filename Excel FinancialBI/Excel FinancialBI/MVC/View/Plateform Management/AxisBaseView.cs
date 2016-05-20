@@ -86,7 +86,7 @@ namespace FBI.MVC.View
       this.m_axisEditionButton.Text = Local.GetValue("general.edition");
     }
 
-    private void DesactivateUnallowed()
+    protected void DesactivateUnallowed()
     {
       this.m_rightMgr.Enable(UserModel.Instance.GetCurrentUserRights());
     }
@@ -355,19 +355,21 @@ namespace FBI.MVC.View
 
       if (l_cell == null)
         return;
-      UInt32 l_filterId = (UInt32)m_dgv.HoveredColumn.ItemValue;
-      FilterValue l_filterValue = FilterValueModel.Instance.GetValue((string)l_cell.Value);
 
       HierarchyItemsCollection l_collection = (m_dgv.HoveredRow.ParentItem == null) ? m_dgv.RowsHierarchy.Items : m_dgv.HoveredRow.ParentItem.Items;
       for (int i = m_dgv.HoveredRow.ItemIndex; i < l_collection.Count; ++i)
-      {
-        UInt32 l_axisElemId = (UInt32)l_collection[i].ItemValue;
-        AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_controller.AxisType, l_axisElemId, l_filterId);
+        OnCopyDown(l_cell.Value, (UInt32)l_collection[i].ItemValue, (UInt32)m_dgv.HoveredColumn.ItemValue);
+    }
 
-        if (l_axisFilter == null || l_filterValue == null)
-          continue;
-        m_controller.UpdateAxisFilter(l_axisFilter, l_filterValue.Id);
-      }
+    protected virtual void OnCopyDown(object p_cellValue, UInt32 p_rowValue, UInt32 p_columnValue)
+    {
+      UInt32 l_filterId = p_columnValue;
+      AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_controller.AxisType, p_rowValue, l_filterId);
+      FilterValue l_filterValue = FilterValueModel.Instance.GetValue((string)p_cellValue);
+
+      if (l_axisFilter == null || l_filterValue == null)
+        return;
+      m_controller.UpdateAxisFilter(l_axisFilter, l_filterValue.Id);
     }
 
     void OnClickRename(object sender, EventArgs e)

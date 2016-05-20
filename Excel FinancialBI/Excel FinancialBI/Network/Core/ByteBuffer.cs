@@ -68,7 +68,6 @@ namespace FBI.Network
       ErrorMessage error = (ErrorMessage)m_header.error;
       ServerMessage opcode = (ServerMessage)m_header.opcode;
 
-      System.Diagnostics.Debug.WriteLine(opcode.ToString() + "(" + (UInt32)(opcode) + ") : " + error.ToString());
       return error;
     }
     public ByteBuffer() { }

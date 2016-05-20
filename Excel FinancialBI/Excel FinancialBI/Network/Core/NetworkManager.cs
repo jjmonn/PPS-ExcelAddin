@@ -223,7 +223,7 @@ namespace FBI.Network
         System.Diagnostics.Debug.WriteLine("Undefined packet type " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
       else
       {
-        System.Diagnostics.Debug.WriteLine("Receive defined " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
+        System.Diagnostics.Debug.WriteLine("Receive defined " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")" + ": " + l_packet.GetError());
         for (int i = 0; i < l_callback.Count; i++)
           l_callback.ElementAt(i)(l_packet.Clone());
       }
