@@ -127,6 +127,8 @@ namespace FBI.MVC.Controller
         l_request.StartPeriod = (Int32)l_version.StartPeriod;
         l_request.NbPeriods = l_version.NbPeriod;
       }
+      l_request.Periods = LeftPaneController.GetPeriods();
+      l_request.PeriodFilter = l_request.Periods != null;
       l_request.Versions = LeftPaneController.GetVersions();
       l_request.CurrencyId = LeftPaneController.GetCurrency();
       l_request.SortList = RightPaneController.GetSort();
