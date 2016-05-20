@@ -100,7 +100,7 @@ namespace FBI.MVC.View
 
     private void OnNextClick(object sender, EventArgs e)
     {
-      if (m_list.SelectedItem == null || m_text.Text.Trim() == "" || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
+      if (m_list.SelectedItem == null || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
         return;
 
       m_controller.CRUPanel((UInt32)m_list.SelectedItem.Value, m_text.Text.Trim());
