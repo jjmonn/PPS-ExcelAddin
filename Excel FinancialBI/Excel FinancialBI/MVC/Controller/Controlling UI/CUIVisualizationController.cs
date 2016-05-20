@@ -111,6 +111,8 @@ namespace FBI.MVC.Controller
     {
       ChartPanel l_panel;
 
+      if (p_panelName == "")
+        return (false);
       if (p_panelId == ChartPanel.INVALID_ID)
       {
         l_panel = new ChartPanel();

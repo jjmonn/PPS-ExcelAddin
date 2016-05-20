@@ -88,7 +88,8 @@ namespace FBI.MVC.View
       l_item = m_list.Items.FirstOrDefault(x => x.Text == Local.GetValue("CUI_Charts.new_panel"));
       if (l_item == null)
       {
-        m_controller.CRUPanel(ChartPanel.INVALID_ID, Local.GetValue("CUI_Charts.new_panel"));
+        string l_panelName = m_text.Text.Trim() == "" ? Local.GetValue("CUI_Charts.new_panel") : m_text.Text.Trim();
+        m_controller.CRUPanel(ChartPanel.INVALID_ID, l_panelName);
       }
       else
       {
@@ -102,11 +103,7 @@ namespace FBI.MVC.View
       if (m_list.SelectedItem == null || m_text.Text.Trim() == "" || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
         return;
 
-      if (!m_controller.CRUPanel((UInt32)m_list.SelectedItem.Value, m_text.Text.Trim()))
-      {
-        MessageBox.Show("general.error.system");
-        return;
-      }
+      m_controller.CRUPanel((UInt32)m_list.SelectedItem.Value, m_text.Text.Trim());
       if (!m_controller.SetPanel((UInt32)m_list.SelectedItem.Value))
       {
         MessageBox.Show(Local.GetValue("CUI_Charts.error.same_panel"));
