@@ -214,6 +214,9 @@ namespace FBI.MVC.Model
       l_sourcedComputeRequest.NbPeriods = l_version.NbPeriod;
       l_sourcedComputeRequest.GlobalFactVersionId = l_version.GlobalFactVersionId;
       l_sourcedComputeRequest.RateVersionId = l_version.RateVersionId;
+      l_sourcedComputeRequest.ClientId = ClientId;
+      l_sourcedComputeRequest.ProductId = ProductId;
+      l_sourcedComputeRequest.AdjustmentId = AdjustmentId;
       List<Fact> l_factsList = new List<Fact>();
       foreach (EditedFinancialFact l_editedFact in EditedFacts.Values)
         if (l_editedFact.EditedValue != 0)
