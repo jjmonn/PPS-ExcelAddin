@@ -300,6 +300,9 @@ namespace FBI.MVC.View
       List<int> l_periodList;
       string l_formatedDate;
       Int32 l_startPeriod = m_computeConfig.Request.StartPeriod;
+      PeriodConf l_childConf = (p_conf.Child != null) ? p_conf.Child as PeriodConf : null;
+
+      TimeConfig l_lowestConfig = (l_childConf != null) ? l_childConf.PeriodType : l_conf.PeriodType;
 
       l_periodList = (l_conf.IsSubPeriod) ? PeriodModel.GetSubPeriods(l_conf.ParentType, l_conf.ParentPeriod) :
         PeriodModel.GetPeriodList(l_startPeriod,
@@ -308,7 +311,7 @@ namespace FBI.MVC.View
 
       foreach (int l_date in l_periodList)
       {
-        if (m_computeConfig.Periods != null && m_computeConfig.Periods.Contains(l_date) == false)
+        if (l_lowestConfig == l_conf.PeriodType &&  m_computeConfig.Periods != null && m_computeConfig.Periods.Contains(l_date) == false)
           continue;
         if (l_includeWeekEnds == false && PeriodModel.IsWeekEnd(l_date))
           continue;
@@ -319,12 +322,8 @@ namespace FBI.MVC.View
 
         if (l_newItem != null)
         {
-          if (p_conf.Child != null && p_conf.Child.ModelType == typeof(PeriodModel))
-          {
-            PeriodConf l_childConf = p_conf.Child as PeriodConf;
-
+          if (l_childConf != null && l_childConf.ModelType == typeof(PeriodModel))
             l_childConf.ParentPeriod = (l_periodList[0] == l_date) ? l_startPeriod : l_date;
-          }
           InitDimension(p_dgv, p_tabId, p_conf.Child, p_dimension, l_newItem.Items, l_key);
         }
       }
