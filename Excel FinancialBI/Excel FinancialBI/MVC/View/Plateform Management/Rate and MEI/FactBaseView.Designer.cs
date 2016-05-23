@@ -100,49 +100,49 @@ namespace FBI.MVC.View
             this.m_deleteVersionRCM,
             this.m_renameBT});
       this.m_versionMenu.Name = "VersionsRCMenu";
-      this.m_versionMenu.Size = new System.Drawing.Size(176, 146);
+      this.m_versionMenu.Size = new System.Drawing.Size(151, 146);
       // 
       // select_version
       // 
       this.select_version.Name = "select_version";
-      this.select_version.Size = new System.Drawing.Size(175, 26);
+      this.select_version.Size = new System.Drawing.Size(150, 26);
       this.select_version.Text = "Select version";
       // 
       // ToolStripSeparator2
       // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(172, 6);
+      this.ToolStripSeparator2.Size = new System.Drawing.Size(147, 6);
       // 
       // m_addRatesVersionRCM
       // 
       this.m_addRatesVersionRCM.Image = global::FBI.Properties.Resources.elements3_add;
       this.m_addRatesVersionRCM.Name = "m_addRatesVersionRCM";
-      this.m_addRatesVersionRCM.Size = new System.Drawing.Size(175, 26);
+      this.m_addRatesVersionRCM.Size = new System.Drawing.Size(150, 26);
       this.m_addRatesVersionRCM.Text = "New version";
       // 
       // m_addFolderRCM
       // 
       this.m_addFolderRCM.Image = global::FBI.Properties.Resources.folder_open_add;
       this.m_addFolderRCM.Name = "m_addFolderRCM";
-      this.m_addFolderRCM.Size = new System.Drawing.Size(175, 26);
+      this.m_addFolderRCM.Size = new System.Drawing.Size(150, 26);
       this.m_addFolderRCM.Text = "New folder)";
       // 
       // ToolStripSeparator6
       // 
       this.ToolStripSeparator6.Name = "ToolStripSeparator6";
-      this.ToolStripSeparator6.Size = new System.Drawing.Size(172, 6);
+      this.ToolStripSeparator6.Size = new System.Drawing.Size(147, 6);
       // 
       // m_deleteVersionRCM
       // 
       this.m_deleteVersionRCM.Image = global::FBI.Properties.Resources.elements3_delete;
       this.m_deleteVersionRCM.Name = "m_deleteVersionRCM";
-      this.m_deleteVersionRCM.Size = new System.Drawing.Size(175, 26);
+      this.m_deleteVersionRCM.Size = new System.Drawing.Size(150, 26);
       this.m_deleteVersionRCM.Text = "Delete";
       // 
       // m_renameBT
       // 
       this.m_renameBT.Name = "m_renameBT";
-      this.m_renameBT.Size = new System.Drawing.Size(175, 26);
+      this.m_renameBT.Size = new System.Drawing.Size(150, 26);
       this.m_renameBT.Text = "Rename";
       // 
       // m_dgvMenu
@@ -152,20 +152,20 @@ namespace FBI.MVC.View
             this.m_importExcelRightClick,
             this.m_copyValueDown});
       this.m_dgvMenu.Name = "dgvRCM";
-      this.m_dgvMenu.Size = new System.Drawing.Size(160, 56);
+      this.m_dgvMenu.Size = new System.Drawing.Size(140, 56);
       // 
       // m_importExcelRightClick
       // 
       this.m_importExcelRightClick.Image = global::FBI.Properties.Resources.excel;
       this.m_importExcelRightClick.Name = "m_importExcelRightClick";
-      this.m_importExcelRightClick.Size = new System.Drawing.Size(159, 26);
+      this.m_importExcelRightClick.Size = new System.Drawing.Size(139, 26);
       this.m_importExcelRightClick.Text = "Import";
       // 
       // m_copyValueDown
       // 
       this.m_copyValueDown.Image = global::FBI.Properties.Resources.Download;
       this.m_copyValueDown.Name = "m_copyValueDown";
-      this.m_copyValueDown.Size = new System.Drawing.Size(159, 26);
+      this.m_copyValueDown.Size = new System.Drawing.Size(139, 26);
       this.m_copyValueDown.Text = "Copy down";
       // 
       // TableLayoutPanel4
@@ -179,24 +179,25 @@ namespace FBI.MVC.View
       this.TableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
       this.TableLayoutPanel4.Name = "TableLayoutPanel4";
       this.TableLayoutPanel4.RowCount = 2;
-      this.TableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+      this.TableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
       this.TableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.TableLayoutPanel4.Size = new System.Drawing.Size(1181, 745);
+      this.TableLayoutPanel4.Size = new System.Drawing.Size(886, 605);
       this.TableLayoutPanel4.TabIndex = 5;
       // 
       // m_mainContainer
       // 
       this.m_mainContainer.BackColor = System.Drawing.SystemColors.Control;
       this.m_mainContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.m_mainContainer.Location = new System.Drawing.Point(0, 39);
+      this.m_mainContainer.Location = new System.Drawing.Point(0, 32);
       this.m_mainContainer.Margin = new System.Windows.Forms.Padding(0);
       this.m_mainContainer.Name = "m_mainContainer";
       // 
       // m_mainContainer.Panel2
       // 
       this.m_mainContainer.Panel2.BackColor = System.Drawing.SystemColors.Control;
-      this.m_mainContainer.Size = new System.Drawing.Size(1181, 706);
-      this.m_mainContainer.SplitterDistance = 254;
+      this.m_mainContainer.Size = new System.Drawing.Size(886, 573);
+      this.m_mainContainer.SplitterDistance = 126;
+      this.m_mainContainer.SplitterWidth = 3;
       this.m_mainContainer.TabIndex = 7;
       // 
       // TableLayoutPanel5
@@ -204,16 +205,16 @@ namespace FBI.MVC.View
       this.TableLayoutPanel5.ColumnCount = 3;
       this.TableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 97.02381F));
       this.TableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.976191F));
-      this.TableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 280F));
+      this.TableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 211F));
       this.TableLayoutPanel5.Controls.Add(this.MenuStrip1, 0, 0);
       this.TableLayoutPanel5.Controls.Add(this.m_versionNamePanel, 2, 0);
       this.TableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
       this.TableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
-      this.TableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
+      this.TableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0, 0, 4, 0);
       this.TableLayoutPanel5.Name = "TableLayoutPanel5";
       this.TableLayoutPanel5.RowCount = 1;
       this.TableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.TableLayoutPanel5.Size = new System.Drawing.Size(1176, 39);
+      this.TableLayoutPanel5.Size = new System.Drawing.Size(882, 32);
       this.TableLayoutPanel5.TabIndex = 2;
       // 
       // MenuStrip1
@@ -226,8 +227,7 @@ namespace FBI.MVC.View
             this.ToolStripMenuItem1});
       this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
       this.MenuStrip1.Name = "MenuStrip1";
-      this.MenuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-      this.MenuStrip1.Size = new System.Drawing.Size(203, 28);
+      this.MenuStrip1.Size = new System.Drawing.Size(177, 28);
       this.MenuStrip1.TabIndex = 5;
       this.MenuStrip1.Text = "MenuStrip1";
       // 
@@ -235,14 +235,14 @@ namespace FBI.MVC.View
       // 
       this.m_versionTopMenu.Image = global::FBI.Properties.Resources.elements2;
       this.m_versionTopMenu.Name = "m_versionTopMenu";
-      this.m_versionTopMenu.Size = new System.Drawing.Size(95, 24);
+      this.m_versionTopMenu.Size = new System.Drawing.Size(82, 24);
       this.m_versionTopMenu.Text = "Versions";
       // 
       // m_importExcelMenu
       // 
       this.m_importExcelMenu.Image = global::FBI.Properties.Resources.excel_blue2;
       this.m_importExcelMenu.Name = "m_importExcelMenu";
-      this.m_importExcelMenu.Size = new System.Drawing.Size(86, 24);
+      this.m_importExcelMenu.Size = new System.Drawing.Size(75, 24);
       this.m_importExcelMenu.Text = "Import";
       // 
       // ToolStripMenuItem1
@@ -255,29 +255,28 @@ namespace FBI.MVC.View
       this.m_versionNamePanel.Controls.Add(this.VersionLabel);
       this.m_versionNamePanel.Controls.Add(this.rates_version_TB);
       this.m_versionNamePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.m_versionNamePanel.Location = new System.Drawing.Point(895, 0);
+      this.m_versionNamePanel.Location = new System.Drawing.Point(670, 0);
       this.m_versionNamePanel.Margin = new System.Windows.Forms.Padding(0);
       this.m_versionNamePanel.Name = "m_versionNamePanel";
-      this.m_versionNamePanel.Size = new System.Drawing.Size(281, 39);
+      this.m_versionNamePanel.Size = new System.Drawing.Size(212, 32);
       this.m_versionNamePanel.TabIndex = 6;
       // 
       // VersionLabel
       // 
       this.VersionLabel.AutoSize = true;
-      this.VersionLabel.Location = new System.Drawing.Point(11, 9);
-      this.VersionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.VersionLabel.Location = new System.Drawing.Point(8, 7);
       this.VersionLabel.Name = "VersionLabel";
-      this.VersionLabel.Size = new System.Drawing.Size(56, 17);
+      this.VersionLabel.Size = new System.Drawing.Size(42, 13);
       this.VersionLabel.TabIndex = 3;
       this.VersionLabel.Text = "Version";
       // 
       // rates_version_TB
       // 
       this.rates_version_TB.Enabled = false;
-      this.rates_version_TB.Location = new System.Drawing.Point(72, 4);
+      this.rates_version_TB.Location = new System.Drawing.Point(54, 3);
       this.rates_version_TB.Margin = new System.Windows.Forms.Padding(1);
       this.rates_version_TB.Name = "rates_version_TB";
-      this.rates_version_TB.Size = new System.Drawing.Size(172, 22);
+      this.rates_version_TB.Size = new System.Drawing.Size(130, 20);
       this.rates_version_TB.TabIndex = 2;
       // 
       // m_versionsTreeviewImageList
@@ -295,37 +294,36 @@ namespace FBI.MVC.View
             this.m_deleteGFact,
             this.m_renameGFact});
       this.m_gfactMenu.Name = "m_gfactMenu";
-      this.m_gfactMenu.Size = new System.Drawing.Size(139, 82);
+      this.m_gfactMenu.Size = new System.Drawing.Size(122, 82);
       // 
       // m_newGFact
       // 
       this.m_newGFact.Image = global::FBI.Properties.Resources.elements_add;
       this.m_newGFact.Name = "m_newGFact";
-      this.m_newGFact.Size = new System.Drawing.Size(138, 26);
+      this.m_newGFact.Size = new System.Drawing.Size(121, 26);
       this.m_newGFact.Text = "New";
       // 
       // m_deleteGFact
       // 
       this.m_deleteGFact.Image = global::FBI.Properties.Resources.elements_delete;
       this.m_deleteGFact.Name = "m_deleteGFact";
-      this.m_deleteGFact.Size = new System.Drawing.Size(138, 26);
+      this.m_deleteGFact.Size = new System.Drawing.Size(121, 26);
       this.m_deleteGFact.Text = "Delete";
       // 
       // m_renameGFact
       // 
       this.m_renameGFact.Name = "m_renameGFact";
-      this.m_renameGFact.Size = new System.Drawing.Size(138, 26);
+      this.m_renameGFact.Size = new System.Drawing.Size(121, 26);
       this.m_renameGFact.Text = "Rename";
       // 
       // FactBaseView
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.ButtonFace;
       this.Controls.Add(this.TableLayoutPanel4);
-      this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.Name = "FactBaseView";
-      this.Size = new System.Drawing.Size(1181, 745);
+      this.Size = new System.Drawing.Size(886, 605);
       this.m_versionMenu.ResumeLayout(false);
       this.m_dgvMenu.ResumeLayout(false);
       this.TableLayoutPanel4.ResumeLayout(false);
