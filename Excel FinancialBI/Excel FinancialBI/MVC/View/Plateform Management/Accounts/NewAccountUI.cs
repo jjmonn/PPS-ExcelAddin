@@ -140,14 +140,14 @@ namespace FBI.MVC.View
         }
       }
 
-      Account.ConsolidationOptions l_concolidation;
+      Account.ConsolidationOptions l_consolidation;
 
       if (m_aggregationRadioButton.Checked)
-        l_concolidation = Account.ConsolidationOptions.AGGREGATION;
+        l_consolidation = Account.ConsolidationOptions.AGGREGATION;
       else if (m_nonRadioButton.Checked)
-        l_concolidation = Account.ConsolidationOptions.NONE;
+        l_consolidation = Account.ConsolidationOptions.NONE;
       else
-        l_concolidation = Account.ConsolidationOptions.RECOMPUTATION;
+        l_consolidation = Account.ConsolidationOptions.RECOMPUTATION;
 
       Account.PeriodAggregationOptions l_period;
 
@@ -158,7 +158,7 @@ namespace FBI.MVC.View
 
       if (m_controller.CreateAccount(l_parentId, NameTextBox.Text, (Account.AccountProcess)ProcessComboBox.SelectedItem.Value,
         (Account.FormulaTypes)FormulaComboBox.SelectedItem.Value, "",
-        (Account.AccountType)TypeComboBox.SelectedItem.Value, l_concolidation, l_period,
+        (Account.AccountType)TypeComboBox.SelectedItem.Value, l_consolidation, l_period,
         "t", (UInt32)((Account.FormulaTypes)FormulaComboBox.SelectedItem.Value), l_itemPosition) == false)
         MsgBox.Show(m_controller.Error);
       Close();

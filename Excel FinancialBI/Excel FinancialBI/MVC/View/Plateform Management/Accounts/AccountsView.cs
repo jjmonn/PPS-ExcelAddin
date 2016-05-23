@@ -731,7 +731,7 @@ namespace FBI.MVC.View
     private void OnAllocationKeyButtonClick(object p_sender, EventArgs p_e)
     {
       if (m_accountTV.SelectedNode != null)
-        m_controller.CreateAllocationKeysView(m_accountTV.SelectedNode);
+        m_controller.ShowView(m_accountTV.SelectedNode);
     }
 
     private void OnValidateFormulaButtonClick(object p_sender, EventArgs p_e)

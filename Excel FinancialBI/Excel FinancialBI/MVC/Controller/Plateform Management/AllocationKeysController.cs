@@ -26,20 +26,29 @@ namespace FBI.MVC.Controller
 
     #region Initialize
 
-    public AllocationKeysController(Account p_account)
+    public AllocationKeysController()
     {
-      this.m_account = p_account;
-      if (this.m_account == null)
-        return;
       this.m_view = new AllocationKeysView();
       this.m_view.SetController(this);
-      this.LoadView();
+      LoadView();
     }
 
     public override void LoadView()
     {
-      this.m_view.LoadView(this.m_account);
+      m_view.LoadView();
+    }
+
+    public void ShowView(Account p_account)
+    {
+      this.m_account = p_account;
+      this.m_view.ShowView(this.m_account);
       this.m_view.ShowDialog();
+    }
+
+    public override void Close()
+    {
+      base.Close();
+      m_view.CloseView();
     }
 
     #endregion
