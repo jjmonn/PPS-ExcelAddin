@@ -121,7 +121,7 @@
     <string name="formula_type_formula">Formula</string>
     <string name="formula_type_sub">Aggregation de comptes</string>
     <string name="formula_type_title">Titre</string>
-    <string name="formula_type_first">Compte de bilan</string>
+    <string name="formula_type_first">Intervalle calculé</string>
     <string name="type_monetary">Monétaire</string>
     <string name="type_number">Nombre</string>
     <string name="type_percentage">Pourcentage</string>
@@ -159,7 +159,7 @@
     <string name="format">Format du compte</string>
     <string name="recomputation">Recalculer</string>
     <string name="aggregation">Aggréger</string>
-    <string name="end_of_period_rate">Taux de find de période</string>
+    <string name="end_of_period_rate">Taux de fin de période</string>
     <string name="average_rate">Taux moyen</string>
     <string name="title_new_account">Nouveau Compte</string>
     <string name="msg_name_empty">Le nom du compte ne peut pas être vide.</string>
@@ -232,7 +232,7 @@
   </category>
 
   <category name="axis">
-    <string name="rename">Renommer l'element.</string>
+    <string name="rename">Renommer</string>
     <string name="delete_confirm">Vous allez supprimer toutes les données associées a cet element, entrez votre mot de passe pour confirmer.</string>
     <category name="error">
       <string name="axis_type_invalid">Type d'axe invalide.</string>
@@ -532,7 +532,7 @@
     <string name="description">Description</string>
     <string name="drop_on_excel">Transferer vers excel</string>
     <string name="economic_indicators">Indicateurs Macro Economiques</string>
-    <string name="edition">Rapport</string>
+    <string name="edition">Edition</string>
     <string name="employees">Employées</string>
     <string name="employees_filters">Catégories d'employées</string>
     <string name="entities">Entités</string>

@@ -150,9 +150,14 @@ namespace FBI.MVC.Controller
 
     public bool CreateAccount(Account p_account)
     {
-      Account l_account = AccountModel.Instance.GetDictionary().SortedValues.Last();
+      if (AccountModel.Instance.GetDictionary().Count == 0)
+        p_account.ItemPosition = 0;
+      else
+      {
+        Account l_account = AccountModel.Instance.GetDictionary().SortedValues.Last();
+        p_account.ItemPosition = l_account.ItemPosition + 1;
+      }
 
-      p_account.ItemPosition = l_account.ItemPosition + 1;
       if (CheckAccountValidity(p_account) == false)
       {
         Error = Local.GetValue("accounts.error.create") + ": " + Error;

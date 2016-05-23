@@ -580,9 +580,10 @@ namespace FBI.MVC.View
       l_newFolderVersion.Name = Interaction.InputBox(Local.GetValue("versions.msg_folder_name"));
       l_newFolderVersion.IsFolder = true;
       l_newFolderVersion.ParentId = m_controller.SelectedVersion;
-      l_newFolderVersion.NbPeriod = 1;
       l_newFolderVersion.FormulaPeriodIndex = 0;
       l_newFolderVersion.FormulaNbPeriod = 1;
+      l_newFolderVersion.NbPeriod = 1;
+
       if (m_controller.Create(l_newFolderVersion) == false)
         MsgBox.Show(m_controller.Error);
     }
