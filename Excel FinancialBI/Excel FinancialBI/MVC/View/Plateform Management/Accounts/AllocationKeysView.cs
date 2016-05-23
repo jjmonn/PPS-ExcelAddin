@@ -46,7 +46,13 @@ namespace FBI.MVC.View
       m_controller = p_controller as AllocationKeysController;
     }
 
-    public void LoadView(Account p_account)
+    public void LoadView()
+    {
+      MultilangueSetup();
+      SuscribeEvents();
+    }
+
+    public void ShowView(Account p_account)
     {
       m_account = p_account;
       if (m_account == null)
@@ -56,16 +62,12 @@ namespace FBI.MVC.View
       m_accountTextBox.Enabled = false;
 
       DGVInit();
-      MultilangueSetup();
-
-      SuscribeEvents();
     }
 
     void SuscribeEvents()
     {
       EntityDistributionModel.Instance.ReadEvent += OnModelRead;
       EntityDistributionModel.Instance.UpdateEvent += OnModelUpdate;
-      Addin.SuscribeAutoLock(this);
     }
 
     public void CloseView()
@@ -78,6 +80,8 @@ namespace FBI.MVC.View
     {
       MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemMID = AxisElemModel.Instance.GetDictionary(AxisType.Entities);
 
+      m_allocationsKeysDGV.ClearColumns();
+      m_allocationsKeysDGV.ClearRows();
       m_allocationsKeysDGV.InitializeRows<AxisElem>(AxisElemModel.Instance, l_axisElemMID);
       m_allocationsKeysDGV.SetDimension(FbiDataGridView.Dimension.COLUMN, 42, Local.GetValue("allocationKeys.repartition_column_name"));
       m_allocationsKeysDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);

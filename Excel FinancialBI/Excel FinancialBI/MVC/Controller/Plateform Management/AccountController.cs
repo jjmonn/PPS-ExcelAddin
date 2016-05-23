@@ -21,6 +21,7 @@ namespace FBI.MVC.Controller
     public override IView View { get { return (m_view); } }
     private const string ACCOUNTS_FORBIDDEN_CHARACTERS = "+-*=<>^?:;![]";
     public BNF m_bnf = new BNF();
+    AllocationKeysController m_allocationKeyController;
 
     #endregion
 
@@ -31,6 +32,7 @@ namespace FBI.MVC.Controller
       m_view = new AccountsView();
       m_view.SetController(this);
       FbiGrammar.AddGrammar(m_bnf);
+      m_allocationKeyController = new AllocationKeysController();
       this.LoadView();
     }
 
@@ -51,13 +53,13 @@ namespace FBI.MVC.Controller
       l_newUi.ShowDialog();
     }
 
-    public void CreateAllocationKeysView(vTreeNode p_node)
+    public void ShowView(vTreeNode p_node)
     {
       Account l_account = AccountModel.Instance.GetValue(p_node.Text);
 
       if (l_account != null)
         if (l_account.FormulaType == Account.FormulaTypes.HARD_VALUE_INPUT || l_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
-          new AllocationKeysController(l_account);
+          m_allocationKeyController.ShowView(l_account);
     }
 
     #endregion
@@ -77,6 +79,8 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("accounts.error.update") + ": " + Error;
         return (false);
       }
+      p_account.ConversionOptionId = (p_account.Type == Account.AccountType.MONETARY) ? p_account.ConversionOptionId :
+        Account.ConversionOptions.NO_CONVERSION;
       if (AccountModel.Instance.Update(p_account) == false)
       {
         Error = Local.GetValue("accounts.error.update") + ": " + Local.GetValue("general.error.system");
@@ -182,6 +186,7 @@ namespace FBI.MVC.Controller
       l_new.Type = p_type;
       l_new.ConsolidationOptionId = p_consolidationOptionId;
       l_new.PeriodAggregationOptionId = p_periodAggregationOptionId;
+      l_new.ConversionOptionId = (p_type == Account.AccountType.MONETARY) ? Account.ConversionOptions.AVERAGE_RATE : Account.ConversionOptions.NO_CONVERSION;
       l_new.FormatId = p_formatId;
       l_new.Image = p_image;
       l_new.ItemPosition = p_itemPosition;
