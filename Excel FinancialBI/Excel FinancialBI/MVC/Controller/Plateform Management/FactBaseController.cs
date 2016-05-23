@@ -77,7 +77,7 @@ namespace FBI.MVC.Controller
 
         if (l_parentVersion == null || l_parentVersion.IsFolder == false)
         {
-          Error = Local.GetValue("version.error.parent_is_not_folder");
+          Error = Local.GetValue("version.error.invalid_parent");
           return (false);
         }
       }

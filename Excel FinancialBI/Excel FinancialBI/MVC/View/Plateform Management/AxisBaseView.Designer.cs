@@ -204,7 +204,7 @@ namespace FBI.MVC.View
       // 
       // m_createNewAxisElemMenuTop
       // 
-      this.m_createNewAxisElemMenuTop.Image = global::FBI.Properties.Resources.plus;
+      this.m_createNewAxisElemMenuTop.Image = global::FBI.Properties.Resources.add1;
       this.m_createNewAxisElemMenuTop.Name = "m_createNewAxisElemMenuTop";
       this.m_createNewAxisElemMenuTop.Size = new System.Drawing.Size(156, 26);
       this.m_createNewAxisElemMenuTop.Text = "Create";
@@ -239,13 +239,13 @@ namespace FBI.MVC.View
       this.m_axisOwnerRCM.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_createRCM});
       this.m_axisOwnerRCM.Name = "ContextMenuStripTGV";
-      this.m_axisOwnerRCM.Size = new System.Drawing.Size(157, 52);
+      this.m_axisOwnerRCM.Size = new System.Drawing.Size(113, 30);
       // 
       // m_createRCM
       // 
       this.m_createRCM.Image = global::FBI.Properties.Resources.element_branch2_add;
       this.m_createRCM.Name = "m_createRCM";
-      this.m_createRCM.Size = new System.Drawing.Size(156, 26);
+      this.m_createRCM.Size = new System.Drawing.Size(112, 26);
       this.m_createRCM.Text = "Create";
       // 
       // AxisBaseView

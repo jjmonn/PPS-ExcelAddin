@@ -160,7 +160,7 @@ namespace FBI.MVC.View
 
     void OnRenameVersionClick(object p_sender, EventArgs p_args)
     {
-      string l_result = Interaction.InputBox(Local.GetValue("version.rename"));
+      string l_result = Interaction.InputBox(Local.GetValue("general.rename"));
 
       if (l_result == "")
         return;

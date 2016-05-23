@@ -89,6 +89,7 @@
   <ItemGroup>
     <Content Include="Resources\Add file.png" />
     <Content Include="Resources\add.ico" />
+    <None Include="Resources\add1.ico" />
     <Content Include="Resources\add3.ico" />
     <Content Include="Resources\arrow_1.png" />
     <Content Include="Resources\arrow_down.ico" />
