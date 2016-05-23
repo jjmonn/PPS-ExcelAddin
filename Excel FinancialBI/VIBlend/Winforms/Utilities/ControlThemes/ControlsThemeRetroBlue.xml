@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ControlTheme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<StyleNormal>
+		<FillStyle xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;224;232;243</Color1>
+			<Color2>ARGBColor;255;192;210;239</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+		<BorderColor>ARGBColor;255;146;160;173</BorderColor>
+		<TextColor>ARGBColor;255;62;75;84</TextColor>
+		<TextAlignment>MiddleCenter</TextAlignment>
+		<TextWrap>true</TextWrap>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>8.25</Size>
+			<Style>Regular</Style>
+		</Font>
+	</StyleNormal>
+	<StyleHighlight>
+		<FillStyle xsi:type="FillStyleGradient">
+      <Color1>ARGBColor;255;234;242;253</Color1>
+      <Color2>ARGBColor;255;212;230;255</Color2>
+      <LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+		<BorderColor>ARGBColor;255;126;140;153</BorderColor>
+		<TextColor>ARGBColor;255;62;75;84</TextColor>
+		<TextAlignment>MiddleCenter</TextAlignment>
+		<TextWrap>true</TextWrap>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>8.25</Size>
+			<Style>Regular</Style>
+		</Font>
+	</StyleHighlight>
+	<StylePressed>
+		<FillStyle xsi:type="FillStyleGradient">
+      <Color1>ARGBColor;255;204;212;223</Color1>
+      <Color2>ARGBColor;255;172;190;219</Color2>
+      <LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+		<BorderColor>ARGBColor;255;116;150;123</BorderColor>
+		<TextColor>ARGBColor;255;62;75;84</TextColor>
+		<TextAlignment>MiddleCenter</TextAlignment>
+		<TextWrap>true</TextWrap>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>8.25</Size>
+			<Style>Regular</Style>
+		</Font>
+	</StylePressed>
+	<StyleDisabled>
+		<FillStyle xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;243;243;243</Color1>
+			<Color2>ARGBColor;255;219;219;219</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+		<BorderColor>ARGBColor;255;110;110;110</BorderColor>
+		<TextColor>ARGBColor;255;92;92;92</TextColor>
+		<TextAlignment>MiddleCenter</TextAlignment>
+		<TextWrap>true</TextWrap>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>8.25</Size>
+			<Style>Regular</Style>
+		</Font>
+	</StyleDisabled>
+
+	<StyleDisabledPressed>
+		<FillStyle xsi:type="FillStyleGradientEx">
+			<Color1>ARGBColor;255;209;209;209</Color1>
+			<Color2>ARGBColor;255;191;191;191</Color2>
+			<Color3>ARGBColor;255;180;180;180</Color3>
+			<Color4>ARGBColor;255;215;215;215</Color4>
+			<GradientAngle>90</GradientAngle>
+			<GradientOffset>0.3</GradientOffset>
+			<GradientOffset2>0.5</GradientOffset2>
+		</FillStyle>
+		<BorderColor>ARGBColor;255;121;121;121</BorderColor>
+		<TextColor>ARGBColor;255;121;121;121</TextColor>
+		<TextAlignment>MiddleCenter</TextAlignment>
+		<TextWrap>true</TextWrap>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>8.25</Size>
+			<Style>Regular</Style>
+		</Font>
+	</StyleDisabledPressed>
+  <FillStyleSetter>
+    <Name>RibbonTabBackground</Name>
+    <FillStyle xsi:type="FillStyleGradient">
+      <Color1>ARGBColor;255;224;232;243</Color1>
+      <Color2>ARGBColor;255;239;247;255</Color2>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.2</GradientOffset>
+      <GradientOffset2>0.2</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <ColorSetter>
+    <Name>TabControlPressedBorder</Name>
+    <Color>ARGBColor;255;126;140;153</Color>
+  </ColorSetter>
+  <ColorSetter>
+    <Name>TabControlPressedAndHighlightedBorder</Name>
+    <Color>ARGBColor;255;126;140;153</Color>
+  </ColorSetter>
+  <ColorSetter>
+    <Name>TabControlHighlightBorder</Name>
+    <Color>ARGBColor;200;126;140;153</Color>
+  </ColorSetter>
+  <ColorSetter>
+    <Name>TabControlNormalBorder</Name>
+    <Color>ARGBColor;0;153;187;232</Color>
+  </ColorSetter>
+  <FillStyleSetter>
+    <Name>TabControlNormal</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;0;0;0;0</Color1>
+      <Color2>ARGBColor;0;0;0;0</Color2>
+      <Color3>ARGBColor;0;0;0;0</Color3>
+      <Color4>ARGBColor;0;0;0;0</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.4</GradientOffset>
+      <GradientOffset2>0.4</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <FillStyleSetter>
+    <Name>TabControlPressedAndHighlighted</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;245;250;255</Color1>
+      <Color2>ARGBColor;255;238;245;253</Color2>
+      <Color3>ARGBColor;255;230;238;248</Color3>
+      <Color4>ARGBColor;255;226;235;247</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.4</GradientOffset>
+      <GradientOffset2>0.4</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <FillStyleSetter>
+    <Name>TabControlBackGround</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;224;232;243</Color1>
+      <Color2>ARGBColor;255;224;232;243</Color2>
+      <Color3>ARGBColor;255;224;232;243</Color3>
+      <Color4>ARGBColor;255;224;232;243</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.4</GradientOffset>
+      <GradientOffset2>0.4</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <FillStyleSetter>
+    <Name>TabControlHighlight</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;105;203;217;226</Color1>
+      <Color2>ARGBColor;155;227;208;153</Color2>
+      <Color3>ARGBColor;205;227;208;153</Color3>
+      <Color4>ARGBColor;255;227;208;153</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.4</GradientOffset>
+      <GradientOffset2>0.4</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <FillStyleSetter>
+    <Name>TabControlPressed</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;245;250;255</Color1>
+      <Color2>ARGBColor;255;238;245;253</Color2>
+      <Color3>ARGBColor;255;230;238;248</Color3>
+      <Color4>ARGBColor;255;226;235;247</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.4</GradientOffset>
+      <GradientOffset2>0.4</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  
+	<Radius>1</Radius>
+	<ShapeType>RoundedRectangle</ShapeType>
+	<Opacity>0</Opacity>
+	<Animated>true</Animated>
+
+	<!-- Color Setters -->
+	<ColorSetter>
+		<Name>ScrollBarBorderNormal</Name>
+		<Color>ARGBColor;255;200;200;200</Color>
+	</ColorSetter>
+	<ColorSetter>
+		<Name>ScrollBorderNormal</Name>
+		<Color>ARGBColor;255;155;155;155</Color>
+	</ColorSetter>
+	<ColorSetter>
+		<Name>ScrollBorderHighlight</Name>
+		<Color>ARGBColor;255;192;210;239</Color>
+	</ColorSetter>
+	<ColorSetter>
+		<Name>ScrollBorderPressed</Name>
+		<Color>ARGBColor;255;162;180;209</Color>
+	</ColorSetter>
+  <FillStyleSetter>
+    <Name>MenuHighlight</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;224;232;243</Color1>
+      <Color2>ARGBColor;255;224;232;243</Color2>
+      <Color3>ARGBColor;255;224;232;243</Color3>
+      <Color4>ARGBColor;255;224;232;243</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.4</GradientOffset>
+      <GradientOffset2>0.4</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <FillStyleSetter>
+    <Name>MenuPressed</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;204;212;223</Color1>
+      <Color2>ARGBColor;255;204;212;223</Color2>
+      <Color3>ARGBColor;255;204;212;223</Color3>
+      <Color4>ARGBColor;255;204;212;223</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.4</GradientOffset>
+      <GradientOffset2>0.4</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <FillStyleSetter>
+    <Name>ApplicationButtonPressed</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;243;228;206</Color1>
+      <Color2>ARGBColor;255;206;167;107</Color2>
+      <Color3>ARGBColor;255;188;118;11</Color3>
+      <Color4>ARGBColor;255;204;100;6</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.3</GradientOffset>
+      <GradientOffset2>0.3</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <FillStyleSetter>
+    <Name>ApplicationButtonHighlight</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;255;251;231</Color1>
+      <Color2>ARGBColor;255;239;209;116</Color2>
+      <Color3>ARGBColor;255;235;200;90</Color3>
+      <Color4>ARGBColor;255;236;200;35</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.3</GradientOffset>
+      <GradientOffset2>0.3</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <FillStyleSetter>
+    <Name>ApplicationButtonNormal</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;154;194;229</Color1>
+      <Color2>ARGBColor;255;131;170;211</Color2>
+      <Color3>ARGBColor;255;63;113;182</Color3>
+      <Color4>ARGBColor;255;158;224;255</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.3</GradientOffset>
+      <GradientOffset2>0.3</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+	<!-- FillStyle Setters -->
+  <!--Ribbon Settings-->
+  <FillStyleSetter>
+    <Name>RibbonTitle</Name>
+    <FillStyle xsi:type="FillStyleGradientEx">
+      <Color1>ARGBColor;255;152;180;208</Color1>
+      <Color2>ARGBColor;255;152;180;208</Color2>
+      <Color3>ARGBColor;255;192;210;239</Color3>
+      <Color4>ARGBColor;255;192;210;239</Color4>
+      <GradientAngle>90</GradientAngle>
+      <GradientOffset>0.2</GradientOffset>
+      <GradientOffset2>0.6</GradientOffset2>
+    </FillStyle>
+  </FillStyleSetter>
+  <ColorSetter>
+    <Name>RibbonFormBorder</Name>
+    <Color>ARGBColor;255;200;202;152</Color>
+  </ColorSetter>
+  <!-- End of ribbon settings -->
+ 
+  
+	<FillStyleSetter>
+		<Name>ScrollButtonNormal</Name>
+		<FillStyle xsi:type="FillStyleSolid">
+			<Color>ARGBColor;255;192;210;239</Color>
+		</FillStyle>
+	</FillStyleSetter>
+	<FillStyleSetter>
+		<Name>ScrollElementNormal</Name>
+		<FillStyle xsi:type="FillStyleSolid">
+			<Color>ARGBColor;255;255;255;255</Color>
+		</FillStyle>
+	</FillStyleSetter>
+	<FillStyleSetter>
+		<Name>ScrollNormal</Name>
+		<FillStyle xsi:type="FillStyleSolid">
+			<Color>ARGBColor;255;192;210;239</Color>
+		</FillStyle>
+	</FillStyleSetter>
+	<FillStyleSetter>
+		<Name>ScrollHighlight</Name>
+		<FillStyle xsi:type="FillStyleSolid">
+			<Color>ARGBColor;255;172;190;219</Color>
+		</FillStyle>
+	</FillStyleSetter>
+	<FillStyleSetter>
+		<Name>ScrollPressed</Name>
+		<FillStyle xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;245;245;245</Color1>
+			<Color2>ARGBColor;255;192;210;239</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+	</FillStyleSetter>
+
+	<FillStyleSetter>
+		<Name>ProgressFill</Name>
+		<FillStyle xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;255;213;140</Color1>
+			<Color2>ARGBColor;255;255;173;86</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+	</FillStyleSetter>
+
+	<!-- NamedValue Setters -->
+	<NamedValueSetter>
+		<Name>ScrollBarShowButtonBorder</Name>
+		<Value>true</Value>
+	</NamedValueSetter>
+
+	<NamedValueSetter>
+		<Name>ScrollBarThumbCornersRadius</Name>
+		<Value>1</Value>
+	</NamedValueSetter>
+
+
+
+</ControlTheme>

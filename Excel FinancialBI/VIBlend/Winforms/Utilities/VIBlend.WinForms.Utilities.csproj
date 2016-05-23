@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\WINDOWS\assembly\GAC_MSIL\VIBlend.WinForms.Utilities\10.1.0.0__970a5af59bc48043\VIBlend.WinForms.Utilities.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F912DCC3-CF58-4B89-83D1-DDDCEB5BA6D0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>VIBlend.WinForms.Utilities</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationVersion>10.1.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>VIBlend.Utilities</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>VIBlend.Winforms.Utilities.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="VIBlend\WinForms\Controls\vColorTable.cs" />
+    <Compile Include="IFill.cs" />
+    <Compile Include="ControlThemeSerializer.cs" />
+    <Compile Include="IBorder.cs" />
+    <Compile Include="IShape.cs" />
+    <Compile Include="IDrawText.cs" />
+    <Compile Include="IDraw.cs" />
+    <Compile Include="TrialForm.cs" />
+    <Compile Include="VisualStyle.cs" />
+    <Compile Include="NamedValue.cs" />
+    <Compile Include="NamedFillStyle.cs" />
+    <Compile Include="NamedColor.cs" />
+    <Compile Include="VIBLEND_THEME.cs" />
+    <Compile Include="ColorFormat.cs" />
+    <Compile Include="ThemeCacheKey.cs" />
+    <Compile Include="ThemeCache.cs" />
+    <Compile Include="ControlTheme.cs" />
+    <Compile Include="Licensing.cs" />
+    <Compile Include="License.cs" />
+    <Compile Include="RoundedCornersMask.cs" />
+    <Compile Include="ControlState.cs" />
+    <Compile Include="GradientStyles.cs" />
+    <Compile Include="BackgroundElement.cs" />
+    <Compile Include="NativeFunctions.cs" />
+    <Compile Include="XmlFont.cs" />
+    <Compile Include="PaintHelper.cs" />
+    <Compile Include="Shapes.cs" />
+    <Compile Include="GridCellStyle.cs" />
+    <Compile Include="vColors.cs" />
+    <Compile Include="vTextBoxBase.cs" />
+    <Compile Include="FillStyle.cs" />
+    <Compile Include="FillStyleSolid.cs" />
+    <Compile Include="FillStyleGradient.cs" />
+    <Compile Include="FillStyleGradientEx.cs" />
+    <Compile Include="vDropDownForm.cs" />
+    <Compile Include="IScrollableControlBase.cs" />
+    <Compile Include="vControlBase.cs" />
+    <Compile Include="vDropDownControlBase.cs" />
+    <Compile Include="vEditorControlBase.cs" />
+    <Compile Include="ControlThemeDeserializer.cs" />
+    <Compile Include="GridTheme.cs" />
+    <Compile Include="HierarchyItemStyle.cs" />
+    <Compile Include="ScrollableControlMiniBase.cs" />
+    <Compile Include="ScrollableControlBase.cs" />
+    <Compile Include="vButtonEditBase.cs" />
+    <Compile Include="AnimationState.cs" />
+    <Compile Include="AnimationManager.cs" />
+    <Compile Include="AnimationColorCalculator.cs" />
+    <Compile Include="Encrypt\Rsa.cs" />
+    <Compile Include="Encrypt\LargeInteger.cs" />
+    <Compile Include="Encrypt\EMSA_PKCS1_v1_5_Decoder.cs" />
+    <Compile Include="Encrypt\RSAParameters.cs" />
+    <Compile Include="Encrypt\RsaManaged.cs" />
+    <Compile Include="Properties\Settings.cs" />
+    <Compile Include="Properties\Resources.cs" />
+    <Compile Include="vGeneral\Program.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ControlThemes\ControlsThemeBlack.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeBlueBlend.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeEcoGreen.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeExpressionDark.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeMetroBlue.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeMetroGreen.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeMetroOrange.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeNero.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2003Blue.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2003Olive.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2003Silver.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2007Black.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2007Blue.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2007Green.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2007Silver.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2010Black.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2010Blue.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOffice2010Silver.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeOrange.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemePurple.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeRedPassion.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeRetro.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeRetroBlue.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeSteel.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeUltraBlue.xml" />
+    <EmbeddedResource Include="ControlThemes\ControlsThemeVistaBlue.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeBlackPearl.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeBlueBlend.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeExpressionDark.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeMetroBlue.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeMetroGreen.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeMetroOrange.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeNero.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2003Blue.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2003Olive.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2003Silver.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2007Black.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2007Blue.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2007Green.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2007Silver.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2010Black.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2010Blue.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOffice2010Silver.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeOrangeFresh.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemePurple.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeRedPassion.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeRetro.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeRetroBlue.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeSteel.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeSuperGreen.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeUltraBlue.xml" />
+    <EmbeddedResource Include="GridThemes\GridThemeVistaBlue.xml" />
+    <EmbeddedResource Include="Properties\Resources.resx" />
+    <EmbeddedResource Include="Resources\keys\public.xml" />
+    <EmbeddedResource Include="TrialForm.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VIBlend.Winforms.Utilities.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

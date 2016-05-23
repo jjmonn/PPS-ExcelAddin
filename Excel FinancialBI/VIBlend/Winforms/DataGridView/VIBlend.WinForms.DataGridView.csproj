@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\WINDOWS\assembly\GAC_MSIL\VIBlend.WinForms.DataGridView\10.1.0.0__84a1a092e92851e6\VIBlend.WinForms.DataGridView.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5AC772B1-F41F-4A3B-97E0-3E4472B2A32F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>VIBlend.WinForms.DataGridView</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>VIBlend.WinForms.DataGridView</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>10.1.0.0</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>VIBlend.Winforms.DataGridView.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PropertyBagEx`1.cs" />
+    <Compile Include="HierarchyItemPaintEventArgs.cs" />
+    <Compile Include="IEditor.cs" />
+    <Compile Include="ComboBoxEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataGridLocalizationBase.cs" />
+    <Compile Include="DataGridLocalization.cs" />
+    <Compile Include="LocalizationNames.cs" />
+    <Compile Include="ICell.cs" />
+    <Compile Include="CellEventArgs.cs" />
+    <Compile Include="CellCancelEventArgs.cs" />
+    <Compile Include="EditorActivationCancelEventArgs.cs" />
+    <Compile Include="EditorActivationFlags.cs" />
+    <Compile Include="vDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DateTimePickerEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ColorPickerEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HierarchyItemEventArgs.cs" />
+    <Compile Include="HierarchyItemDragEventArgs.cs" />
+    <Compile Include="HierarchyItemCancelEventArgs.cs" />
+    <Compile Include="GridToolTipEventArgs.cs" />
+    <Compile Include="CheckBoxEditor.cs" />
+    <Compile Include="CollectionChangedReason.cs" />
+    <Compile Include="CollectionChangedEventArgs.cs" />
+    <Compile Include="CellPaintEventArgs.cs" />
+    <Compile Include="ActiveEditor.cs" />
+    <Compile Include="BoundItemsCollection`1.cs" />
+    <Compile Include="BoundFieldEventArgs.cs" />
+    <Compile Include="HeaderGroupsAlignment.cs" />
+    <Compile Include="GroupHeaderDragEventArgs.cs" />
+    <Compile Include="GroupHeaderDragCancelEventArgs.cs" />
+    <Compile Include="HierarchyItemFilter.cs" />
+    <Compile Include="SortingDirection.cs" />
+    <Compile Include="Hierarchy.cs" />
+    <Compile Include="HierarchyItemMouseEventArgs.cs" />
+    <Compile Include="MaskEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DragPositionInTarget.cs" />
+    <Compile Include="ColumnChooser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CellEditorType.cs" />
+    <Compile Include="FixedPointEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NumberEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BindingProgressEventArgs.cs" />
+    <Compile Include="PivotTotalsMode.cs" />
+    <Compile Include="BoundFieldFilter.cs" />
+    <Compile Include="BoundField.cs" />
+    <Compile Include="PivotFieldFunction.cs" />
+    <Compile Include="BoundValueField.cs" />
+    <Compile Include="GridBindingState.cs" />
+    <Compile Include="vDataGridViewPivotDesign.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PivotValueFieldTextNeededEventHandler.cs" />
+    <Compile Include="PivotValueFieldTextNeededEventArgs.cs" />
+    <Compile Include="PivotDesignPanelLocalizationBase.cs" />
+    <Compile Include="PivotDesignPanelLocalization.cs" />
+    <Compile Include="PivotDesignLocalizationNames.cs" />
+    <Compile Include="vDataGridViewSearchHeader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PercentageEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CellMouseEventArgs.cs" />
+    <Compile Include="ButtonEditor.cs" />
+    <Compile Include="GridLinesDisplayMode.cs" />
+    <Compile Include="ImagePositions.cs" />
+    <Compile Include="CellValueNeededEventArgs.cs" />
+    <Compile Include="CellsArea.cs" />
+    <Compile Include="RowColItemPair.cs" />
+    <Compile Include="CollectionStorage.cs" />
+    <Compile Include="HierarchyItemsCollection.cs" />
+    <Compile Include="AutoResizeMode.cs" />
+    <Compile Include="GridItemSortMode.cs" />
+    <Compile Include="HierarchyItem.cs" />
+    <Compile Include="nsCollection`1.cs" />
+    <Compile Include="CellParsingEventArgs.cs" />
+    <Compile Include="DisplaySettings.cs" />
+    <Compile Include="GridCellDataSource.cs" />
+    <Compile Include="CellSpan.cs" />
+    <Compile Include="GridCell.cs" />
+    <Compile Include="ColumnsHierarchy.cs" />
+    <Compile Include="DataGridGroupHeaderItem.cs" />
+    <Compile Include="GridCellCFColorScale.cs" />
+    <Compile Include="CellColorMap.cs" />
+    <Compile Include="RowsHierarchy.cs" />
+    <Compile Include="TrackBarEditor.cs" />
+    <Compile Include="vDataGridViewGroupsHeader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProgressBarEditor.cs" />
+    <Compile Include="NumericUpDownEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CurrencyEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CellValueChangingEventArgs.cs" />
+    <Compile Include="HierarchyItemDragCancelEventArgs.cs" />
+    <Compile Include="FilterDisplayMode.cs" />
+    <Compile Include="TextBoxEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataExport\IExportWriter.cs" />
+    <Compile Include="DataExport\CSVExportWriter.cs" />
+    <Compile Include="DataExport\HTMLExportWriter.cs" />
+    <Compile Include="DataExport\ExcelXMLExportWriter.cs" />
+    <Compile Include="DataExport\XMLExportWriter.cs" />
+    <Compile Include="DataExport\GridExport.cs" />
+    <Compile Include="Filters\FilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Filters\FilterOperator.cs" />
+    <Compile Include="Filters\IFilterBase.cs" />
+    <Compile Include="Filters\IFilter`1.cs" />
+    <Compile Include="Filters\FilterGroup`1.cs" />
+    <Compile Include="Filters\StringFilterComparisonOperator.cs" />
+    <Compile Include="Filters\StringFilter.cs" />
+    <Compile Include="Filters\NumericComparisonOperator.cs" />
+    <Compile Include="Filters\NumericFilter.cs" />
+    <Compile Include="Filters\DateTimeComparisonOperator.cs" />
+    <Compile Include="Filters\DateTimeFilter.cs" />
+    <Compile Include="Filters\SetFilter`1.cs" />
+    <Compile Include="Properties\Settings.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ColumnChooser.resx" />
+    <EmbeddedResource Include="CROSSCURSOR.CUR" />
+    <EmbeddedResource Include="Filters\FilterForm.resx" />
+    <EmbeddedResource Include="Resources\colormap.bmp" />
+    <EmbeddedResource Include="Resources\columnArea.png" />
+    <EmbeddedResource Include="Resources\fieldsArea.png" />
+    <EmbeddedResource Include="Resources\icon_arrowdown.ico" />
+    <EmbeddedResource Include="Resources\icon_arrowleft.ico" />
+    <EmbeddedResource Include="Resources\icon_arrowright.ico" />
+    <EmbeddedResource Include="Resources\icon_arrowup.ico" />
+    <EmbeddedResource Include="Resources\icon_filter.ico" />
+    <EmbeddedResource Include="Resources\icon_filterClear.ico" />
+    <EmbeddedResource Include="Resources\icon_remove.png" />
+    <EmbeddedResource Include="Resources\icon_sortASC.ico" />
+    <EmbeddedResource Include="Resources\icon_sortClear.ico" />
+    <EmbeddedResource Include="Resources\icon_sortDESC.ico" />
+    <EmbeddedResource Include="Resources\rowArea.png" />
+    <EmbeddedResource Include="SuperGridCtrl.resx" />
+    <EmbeddedResource Include="vDataGridView.ico" />
+    <EmbeddedResource Include="vDataGridView.resx" />
+    <EmbeddedResource Include="vDataGridViewGroupsHeader.ico" />
+    <EmbeddedResource Include="vDataGridViewPivotDesign.ico" />
+    <EmbeddedResource Include="vDataGridViewPivotDesign.resx" />
+    <EmbeddedResource Include="vDataGridViewSearchHeader.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VIBlend.Winforms.DataGridView.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Controls\VIBlend.WinForms.Controls.csproj">
+      <Project>{31575bb8-4562-4200-b325-21de86ced827}</Project>
+      <Name>VIBlend.WinForms.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\VIBlend.WinForms.Utilities.csproj">
+      <Project>{f912dcc3-cf58-4b89-83d1-dddceb5ba6d0}</Project>
+      <Name>VIBlend.WinForms.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

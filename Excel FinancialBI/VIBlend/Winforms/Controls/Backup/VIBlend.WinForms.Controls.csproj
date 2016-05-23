@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Program Files (x86)\VIBlend\Windows Forms Controls v.10.1.0.0\VIBlend.WinForms.Controls.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{31575BB8-4562-4200-B325-21DE86CED827}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>VIBlend.WinForms.Controls</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationVersion>10.1.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>VIBlend.WinForms.Controls</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="VIBlend.WinForms.Utilities" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MenuExtender\vMenuExtender.cs" />
+    <Compile Include="TextBox\vTextBox.cs" />
+    <Compile Include="TextBox\vRichTextBox.cs" />
+    <Compile Include="MonthCalendar\vAppointment.cs" />
+    <Compile Include="MonthCalendar\RecurrenceRange.cs" />
+    <Compile Include="RibbonBar\RibbonBar\vToolTip.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGlassForm\RibbonGlassForm.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGallery\vRibbonGallery.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Layouts\vHorizontalLayoutPanel.cs" />
+    <Compile Include="Buttons\vButton.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Buttons\vRibbonFooterButton.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Buttons\vRibbonDropDownButton.cs" />
+    <Compile Include="ProgressBar\vCirclularProgressBar.cs" />
+    <Compile Include="NumericEditors\InputBase.cs" />
+    <Compile Include="NumericEditors\vFixedPointEditor.cs" />
+    <Compile Include="NavPane\ExplorerBarPane\vExplorerBarItemHeader.cs" />
+    <Compile Include="Label\vLabel.cs" />
+    <Compile Include="Label\vLabelItem.cs" />
+    <Compile Include="ComboAndListBox\vComboBox.cs" />
+    <Compile Include="ComboAndListBox\vFontComboBox.cs" />
+    <Compile Include="TreeView\DrawNodeEventArgs.cs" />
+    <Compile Include="NumericUpDown\vNumericUpDownControlBase.cs" />
+    <Compile Include="MenuExtender\MenuPainter.cs" />
+    <Compile Include="ComboAndListBox\ListItemComparer.cs" />
+    <Compile Include="ComboAndListBox\ListItem.cs" />
+    <Compile Include="ComboAndListBox\ListItemsCollection.cs" />
+    <Compile Include="ColorPicker\ColorStringFormatEventArgs.cs" />
+    <Compile Include="Boxes\vControlBox.cs" />
+    <Compile Include="ColorPicker\vColorPicker.cs" />
+    <Compile Include="ColorPicker\ColorEventArgs.cs" />
+    <Compile Include="NumericEditors\vPercentageEditor.cs" />
+    <Compile Include="NumericEditors\StringUtility.cs" />
+    <Compile Include="DateTimeEditor\vFormatEditorItems.cs" />
+    <Compile Include="DateTimeEditor\1vFormatEditorItems.cs" />
+    <Compile Include="DateTimeEditor\2vFormatEditorItems.cs" />
+    <Compile Include="DateTimeEditor\3vFormatEditorItems.cs" />
+    <Compile Include="TreeView\TreeNode.cs" />
+    <Compile Include="ScrollBars\ScrollBar.cs" />
+    <Compile Include="ScrollBars\HScrollBar.cs" />
+    <Compile Include="DateTimePicker\vDatePicker.cs" />
+    <Compile Include="SplitContainer\vSplitContainerBase.cs" />
+    <Compile Include="SplitContainer\vSplitContainer.cs" />
+    <Compile Include="SplitContainer\SpltterControl.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGallery\RibbonBarGalleryGroup.cs" />
+    <Compile Include="Panel\vPanel.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Layouts\vFlowLayoutPanel.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Buttons\vCirtularButton.cs" />
+    <Compile Include="Form\vControlsBoundsHelper.cs" />
+    <Compile Include="ComboAndListBox\vListBox.cs" />
+    <Compile Include="ComboAndListBox\vRadioListBox.cs" />
+    <Compile Include="TabControl\vTabControl.cs" />
+    <Compile Include="Workspace\WorkspaceItem.cs" />
+    <Compile Include="TabControl\vTabPage.cs" />
+    <Compile Include="ComboAndListBox\vSizingControl.cs" />
+    <Compile Include="ComboAndListBox\vDropDownBase.cs" />
+    <Compile Include="Buttons\vToggleButton.cs" />
+    <Compile Include="TabControl\EventArguments\TabEventArgs.cs" />
+    <Compile Include="MonthCalendar\YearPattern.cs" />
+    <Compile Include="Form\vForm.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonForm.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Helpers\RibbonPaintHelper.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Buttons\vArrowButton.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Layouts\vVerticalLayoutPanel.cs" />
+    <Compile Include="NavPane\ExplorerBarPane\vExplorerBar.cs" />
+    <Compile Include="ComboAndListBox\ItemCheckChangingEventArgs.cs" />
+    <Compile Include="ComboAndListBox\ItemCheckChangedEventArgs.cs" />
+    <Compile Include="Buttons\vRepeatButton.cs" />
+    <Compile Include="TreeView\TreeViewEventArgs.cs" />
+    <Compile Include="TreeView\1TreeViewEventArgs.cs" />
+    <Compile Include="TreeView\2TreeViewEventArgs.cs" />
+    <Compile Include="TreeView\3TreeViewEventArgs.cs" />
+    <Compile Include="TreeView\4TreeViewEventArgs.cs" />
+    <Compile Include="TreeView\5TreeViewEventArgs.cs" />
+    <Compile Include="SplitContainer\SizeType.cs" />
+    <Compile Include="MonthCalendar\DayPatternConverter.cs" />
+    <Compile Include="RibbonBar\RibbonBar\ApplicationButton\vApplicationMenuItemCollection.cs" />
+    <Compile Include="NumericEditors\vNumberEditor.cs" />
+    <Compile Include="NavPane\ExplorerBarPane\ExplorerBarItemsCollection.cs" />
+    <Compile Include="ComboAndListBox\vCheckedListBox.cs" />
+    <Compile Include="ComboAndListBox\ListItemMouseEventArgs.cs" />
+    <Compile Include="Workspace\WorkspaceCell.cs" />
+    <Compile Include="RibbonBar\RibbonBar\vToolStripDropDown.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGroup\RibbonGroupFooter.cs" />
+    <Compile Include="RibbonBar\RibbonBar\KeyTip\MouseAndKeyboardFilter.cs" />
+    <Compile Include="RibbonBar\RibbonBar\KeyTip\KeyTipEventArgs.cs" />
+    <Compile Include="RibbonBar\RibbonBar\KeyTip\KeyTip.cs" />
+    <Compile Include="NavPane\OutlookItemsCollection.cs" />
+    <Compile Include="NavPane\EventArgs\DrawNavPaneEventArgs.cs" />
+    <Compile Include="NavPane\EventArgs\DrawOutlookNavPaneEventArgs.cs" />
+    <Compile Include="NavPane\EventArgs\DrawOutlookNavPaneStatusEventArgs.cs" />
+    <Compile Include="NavPane\EventArgs\DrawOutlookNavPaneResizeItemEventArgs.cs" />
+    <Compile Include="NavPane\EventArgs\DrawExplorerBarEventArgs.cs" />
+    <Compile Include="DateTimeEditor\vFormatItem.cs" />
+    <Compile Include="ComboAndListBox\ListItemFormatEventArgs.cs" />
+    <Compile Include="ProgressBar\vProgressBar.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGroup\RibbonGroup.cs" />
+    <Compile Include="RatingControl\vRatingControl.cs" />
+    <Compile Include="NumericEditors\EditorState.cs" />
+    <Compile Include="NavPane\vOutlookItem.cs" />
+    <Compile Include="DateTimePicker\vDateTimePicker.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGlassForm\NativeMethods.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGlassForm\1NativeMethods.cs" />
+    <Compile Include="NavPane\vNavPaneHeader.cs" />
+    <Compile Include="NavPane\NavPaneItemsCollection.cs" />
+    <Compile Include="Label\vLabelItemCollection.cs" />
+    <Compile Include="ImageReflectionControl\vImageReflectionControl.cs" />
+    <Compile Include="CheckBox\vCheckBox.cs" />
+    <Compile Include="FieldSet\vFieldSet.cs" />
+    <Compile Include="MenuExtender\MenuWin32API.cs" />
+    <Compile Include="MenuExtender\1MenuWin32API.cs" />
+    <Compile Include="MenuExtender\2MenuWin32API.cs" />
+    <Compile Include="Separator\vSeparator.cs" />
+    <Compile Include="TabControl\EventArguments\TabMouseEventArgs.cs" />
+    <Compile Include="MonthCalendar\WeekPattern.cs" />
+    <Compile Include="MonthCalendar\SuperCell.cs" />
+    <Compile Include="MonthCalendar\MonthPattern.cs" />
+    <Compile Include="RibbonBar\RibbonBar\ApplicationButton\vRibbonBarApplicationButton.cs" />
+    <Compile Include="NumericEditors\ValueChangedEventArgs.cs" />
+    <Compile Include="NumericEditors\1ValueChangedEventArgs.cs" />
+    <Compile Include="NavPane\vOutlookHeader.cs" />
+    <Compile Include="MonthCalendar\SelectionEventArgs.cs" />
+    <Compile Include="MonthCalendar\DateCancelEventArgs.cs" />
+    <Compile Include="MonthCalendar\SelectionCancelEventArgs.cs" />
+    <Compile Include="FieldSet\vOptionsFieldSet.cs" />
+    <Compile Include="ComboAndListBox\ListItemDragCancelEventArgs.cs" />
+    <Compile Include="TreeView\TreeNodeCollection.cs" />
+    <Compile Include="RadioButton\vRadioButton.cs" />
+    <Compile Include="MenuExtender\vMenuControl.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Buttons\vToggleCircularButton.cs" />
+    <Compile Include="NavPane\vOutlookNavPaneEventArgs.cs" />
+    <Compile Include="NavPane\1vOutlookNavPaneEventArgs.cs" />
+    <Compile Include="Label\vMultiLabel.cs" />
+    <Compile Include="DateTimeEditor\vDateTimeEditor.cs" />
+    <Compile Include="Slider\vTrackBar.cs" />
+    <Compile Include="NumericUpDown\vNumericUpDownControl.cs" />
+    <Compile Include="MenuExtender\vContextMenu.cs" />
+    <Compile Include="TabControl\TabContext.cs" />
+    <Compile Include="TabControl\EventArguments\TabCancelEventArgs.cs" />
+    <Compile Include="TabControl\EventArguments\DragCancelEventArgs.cs" />
+    <Compile Include="TabControl\ToolTipEventArgs.cs" />
+    <Compile Include="MonthCalendar\DayPattern.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGroup\RibbonGroupPanel.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGlassForm\GlassText.cs" />
+    <Compile Include="NumericEditors\UndoRedoManager.cs" />
+    <Compile Include="NavPane\vOutlookStatusItem.cs" />
+    <Compile Include="Workspace\WorkspaceArea.cs" />
+    <Compile Include="RibbonBar\RibbonBar\vRibbonBar.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Buttons\vRibbonButton.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGallery\GalleryButton.cs" />
+    <Compile Include="RibbonBar\RibbonBar\QAT\QuickAccessToolbar.cs" />
+    <Compile Include="NavPane\vNavPane.cs" />
+    <Compile Include="NavPane\LinearInterpolation.cs" />
+    <Compile Include="NavPane\EasedInterpolation.cs" />
+    <Compile Include="NavPane\ExponentialInterpolation.cs" />
+    <Compile Include="DesignTime\Fallback.cs" />
+    <Compile Include="DesignTime\1Fallback.cs" />
+    <Compile Include="TreeView\LineStates.cs" />
+    <Compile Include="TextBox\vRichTextBoxBase.cs" />
+    <Compile Include="Renderer\vRenderer.cs" />
+    <Compile Include="Renderer\1vRenderer.cs" />
+    <Compile Include="Renderer\2vRenderer.cs" />
+    <Compile Include="NavPane\vOutlookNavPane.cs" />
+    <Compile Include="MaskBox\vMaskBox.cs" />
+    <Compile Include="Form\vFormButton.cs" />
+    <Compile Include="ComboAndListBox\ListItemDragEventArgs.cs" />
+    <Compile Include="TreeView\TreeView.cs" />
+    <Compile Include="TreeView\1TreeView.cs" />
+    <Compile Include="TreeView\2TreeView.cs" />
+    <Compile Include="ScrollBars\VScrollBar.cs" />
+    <Compile Include="ColorPicker\ColorBox.cs" />
+    <Compile Include="ColorPicker\ColorPickerPanel.cs" />
+    <Compile Include="MonthCalendar\CalendarPaintEventArgs.cs" />
+    <Compile Include="TabControl\TabCollection.cs" />
+    <Compile Include="MonthCalendar\YearPatternConverter.cs" />
+    <Compile Include="Panel\vInnerPanel.cs" />
+    <Compile Include="NumericEditors\vCurrencyEditor.cs" />
+    <Compile Include="NavPane\vNavPaneItem.cs" />
+    <Compile Include="Buttons\vSplitButton.cs" />
+    <Compile Include="GroupBox\vGroupBox.cs" />
+    <Compile Include="SplitContainer\vSplitterPanel.cs" />
+    <Compile Include="MonthCalendar\vMonthCalendar.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGroup\RibbonGroupContent.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGallery\GalleryButtonsCollection.cs" />
+    <Compile Include="NumericEditors\vDecimalEditor.cs" />
+    <Compile Include="NavPane\ExplorerBarPane\vExplorerBarItem.cs" />
+    <Compile Include="ComboAndListBox\ListItemChangingEventArgs.cs" />
+    <Compile Include="Boxes\vTreeViewBox.cs" />
+    <Compile Include="TabControl\EventArguments\DrawTabControlTitleEventArgs.cs" />
+    <Compile Include="TabControl\EventArguments\DrawTabPageEventArgs.cs" />
+    <Compile Include="RibbonBar\RibbonBar\RibbonGlassForm\RibbonGlassFormHelper.cs" />
+    <Compile Include="RibbonBar\RibbonBar\Helpers\TextHelper.cs" />
+    <Compile Include="RibbonBar\RibbonBar\ApplicationButton\vApplicationMenuItem.cs" />
+    <Compile Include="NavPane\vOutlookResizeItem.cs" />
+    <Compile Include="NavPane\vNavPaneEventArgs.cs" />
+    <Compile Include="NavPane\1vNavPaneEventArgs.cs" />
+    <Compile Include="NavPane\ExplorerBarPane\vExplorerBarEventArgs.cs" />
+    <Compile Include="NavPane\ExplorerBarPane\vExplorerBarCancelEventArgs.cs" />
+    <Compile Include="BubbleBar\vBubbleBar.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
+    <Compile Include="Properties\Settings.Designer.cs" />
+    <Compile Include="vTreeViewAction.cs" />
+    <Compile Include="StartDayOfWeek.cs" />
+    <Compile Include="SpinDirection.cs" />
+    <Compile Include="MenuItemImageSize.cs" />
+    <Compile Include="InsertType.cs" />
+    <Compile Include="IDateTimeEditor.cs" />
+    <Compile Include="ScrollBarAction.cs" />
+    <Compile Include="SizingDirection.cs" />
+    <Compile Include="vCalendarView.cs" />
+    <Compile Include="SpinType.cs" />
+    <Compile Include="ItemCheckChangingEventHandler.cs" />
+    <Compile Include="ItemCheckChangedEventHandler.cs" />
+    <Compile Include="SizeUnitType.cs" />
+    <Compile Include="KeyTipEventHandler.cs" />
+    <Compile Include="vRatingControlShapes.cs" />
+    <Compile Include="EditorStateType.cs" />
+    <Compile Include="ListBoxDropType.cs" />
+    <Compile Include="RecurrenceRule.cs" />
+    <Compile Include="MenuWin32APIs.cs" />
+    <Compile Include="ValueChangedEditorEventHandler.cs" />
+    <Compile Include="ValueChangingEditorEventHandler.cs" />
+    <Compile Include="vTabPageAlignment.cs" />
+    <Compile Include="vRibbonHorizontalLayoutPanel.cs" />
+    <Compile Include="ButtonDefaultColorSchemes.cs" />
+    <Compile Include="DefaultDateTimePatterns.cs" />
+    <Compile Include="DateTimeItemType.cs" />
+    <Compile Include="RibbonStyle.cs" />
+    <Compile Include="Interpolation.cs" />
+    <Compile Include="EdgeBehaviorEnum.cs" />
+    <Compile Include="LineState.cs" />
+    <Compile Include="vTabPageTextOrientation.cs" />
+    <Compile Include="DayNameFormat.cs" />
+    <Compile Include="DefaultMasks.cs" />
+    <Compile Include="vFormButtonType.cs" />
+    <Compile Include="vTreeViewMouseEventHandler.cs" />
+    <Compile Include="vTreeViewEventHandler.cs" />
+    <Compile Include="vTreeViewCancelEventHandler.cs" />
+    <Compile Include="vTreeViewDragCancelEventHandler.cs" />
+    <Compile Include="vTreeViewDragEventHandler.cs" />
+    <Compile Include="vTreeViewLabelEditEventHandler.cs" />
+    <Compile Include="CalendarPaintHandler.cs" />
+    <Compile Include="LabelItemStyle.cs" />
+    <Compile Include="ToolTipShownHandler.cs" />
+    <Compile Include="TabsShape.cs" />
+    <Compile Include="IFormatEditItem.cs" />
+    <Compile Include="ButtonBorderStyle.cs" />
+    <Compile Include="BubbleBarPosition.cs" />
+    <Compile Include="vApplicationMenuItemType.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ControlIcons\CheckedListBox.ico" />
+    <EmbeddedResource Include="ControlIcons\CircularProgressBar.ico" />
+    <EmbeddedResource Include="ControlIcons\ColorPicker.ico" />
+    <EmbeddedResource Include="ControlIcons\ColorPickerPanel.ico" />
+    <EmbeddedResource Include="ControlIcons\ControlBox.ico" />
+    <EmbeddedResource Include="ControlIcons\DatePicker.ico" />
+    <EmbeddedResource Include="ControlIcons\DateTimeEditor.ico" />
+    <EmbeddedResource Include="ControlIcons\DateTimePicker.ico" />
+    <EmbeddedResource Include="ControlIcons\GroupBox.ico" />
+    <EmbeddedResource Include="ControlIcons\ImageReflection.ico" />
+    <EmbeddedResource Include="ControlIcons\ImageReflectionControl.ico" />
+    <EmbeddedResource Include="ControlIcons\KeyTip.ico" />
+    <EmbeddedResource Include="ControlIcons\Label.ico" />
+    <EmbeddedResource Include="ControlIcons\MaskedTextBox.ico" />
+    <EmbeddedResource Include="ControlIcons\MultiLabel.ico" />
+    <EmbeddedResource Include="ControlIcons\OptionsFieldSet.ico" />
+    <EmbeddedResource Include="ControlIcons\Panel.ico" />
+    <EmbeddedResource Include="ControlIcons\QuickAccessToolbar.ico" />
+    <EmbeddedResource Include="ControlIcons\RadioListBox.ico" />
+    <EmbeddedResource Include="ControlIcons\RatingControl.ico" />
+    <EmbeddedResource Include="ControlIcons\RepeatButton.ico" />
+    <EmbeddedResource Include="ControlIcons\RichTextBox.ico" />
+    <EmbeddedResource Include="ControlIcons\Separator.ico" />
+    <EmbeddedResource Include="ControlIcons\SplitButton.ico" />
+    <EmbeddedResource Include="ControlIcons\TextBox.ico" />
+    <EmbeddedResource Include="ControlIcons\ToggleButton.ico" />
+    <EmbeddedResource Include="ControlIcons\vApplicationMenuItem.ico" />
+    <EmbeddedResource Include="ControlIcons\vArrowButton.ico" />
+    <EmbeddedResource Include="ControlIcons\vBubbleBar.ico" />
+    <EmbeddedResource Include="ControlIcons\vButton.ico" />
+    <EmbeddedResource Include="ControlIcons\vCheckBox.ico" />
+    <EmbeddedResource Include="ControlIcons\vCircularButton.ico" />
+    <EmbeddedResource Include="ControlIcons\vColorPicker.ico" />
+    <EmbeddedResource Include="ControlIcons\vComboBox.ico" />
+    <EmbeddedResource Include="ControlIcons\vContextMenu.ico" />
+    <EmbeddedResource Include="ControlIcons\vCurrencyEditor.ico" />
+    <EmbeddedResource Include="ControlIcons\vDecimalEditor.ico" />
+    <EmbeddedResource Include="ControlIcons\VerticalSplitter.ico" />
+    <EmbeddedResource Include="ControlIcons\vExplorerBar.ico" />
+    <EmbeddedResource Include="ControlIcons\vFieldSet.ico" />
+    <EmbeddedResource Include="ControlIcons\vFixedPointEditor.ico" />
+    <EmbeddedResource Include="ControlIcons\vFlowLayoutPanel.ico" />
+    <EmbeddedResource Include="ControlIcons\vFontComboBox.ico" />
+    <EmbeddedResource Include="ControlIcons\vHorizontalLayoutPanel.ico" />
+    <EmbeddedResource Include="ControlIcons\vHScrollBar.ico" />
+    <EmbeddedResource Include="ControlIcons\vListBox.ico" />
+    <EmbeddedResource Include="ControlIcons\vMenuControl.ico" />
+    <EmbeddedResource Include="ControlIcons\vMenuExtender.ico" />
+    <EmbeddedResource Include="ControlIcons\vMonthCalendar.ico" />
+    <EmbeddedResource Include="ControlIcons\vNavPane.ico" />
+    <EmbeddedResource Include="ControlIcons\vNumberEditor.ico" />
+    <EmbeddedResource Include="ControlIcons\vNumericUpDown.ico" />
+    <EmbeddedResource Include="ControlIcons\vOutlookNavPane.ico" />
+    <EmbeddedResource Include="ControlIcons\vPercentageEditor.ico" />
+    <EmbeddedResource Include="ControlIcons\vProgressBar.ico" />
+    <EmbeddedResource Include="ControlIcons\vRadioButton.ico" />
+    <EmbeddedResource Include="ControlIcons\vRendererComponent.ico" />
+    <EmbeddedResource Include="ControlIcons\vRibbonApplicationButton.ico" />
+    <EmbeddedResource Include="ControlIcons\vRibbonBar.ico" />
+    <EmbeddedResource Include="ControlIcons\vRibbonBarGallery.ico" />
+    <EmbeddedResource Include="ControlIcons\vRibbonButton.ico" />
+    <EmbeddedResource Include="ControlIcons\vRibbonGroup.ico" />
+    <EmbeddedResource Include="ControlIcons\vSplitContainer.ico" />
+    <EmbeddedResource Include="ControlIcons\vTabControl.ico" />
+    <EmbeddedResource Include="ControlIcons\vTextBox.ico" />
+    <EmbeddedResource Include="ControlIcons\vTooltip.ico" />
+    <EmbeddedResource Include="ControlIcons\vTrackBar.ico" />
+    <EmbeddedResource Include="ControlIcons\vTreeNode.ico" />
+    <EmbeddedResource Include="ControlIcons\vTreeView.ico" />
+    <EmbeddedResource Include="ControlIcons\vTreeViewBox.ico" />
+    <EmbeddedResource Include="ControlIcons\vVerticalLayoutPanel.ico" />
+    <EmbeddedResource Include="ControlIcons\vVScrollBar.ico" />
+    <EmbeddedResource Include="MenuExtender\MenuCheckMark.ico" />
+    <EmbeddedResource Include="MenuExtender\MenuRadioMark.ico" />
+    <EmbeddedResource Include="NavPane\arrow_down.png" />
+    <EmbeddedResource Include="NavPane\arrow_top.png" />
+    <EmbeddedResource Include="OfficeRibbonForm.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx" />
+    <EmbeddedResource Include="RibbonForm.resx" />
+    <EmbeddedResource Include="TabControl\action_delete.png" />
+    <EmbeddedResource Include="vMenuExtender.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
