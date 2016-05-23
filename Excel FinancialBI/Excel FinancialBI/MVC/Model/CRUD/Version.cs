@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace FBI.MVC.Model.CRUD
 {
   using Network;
+  using Utils;
 
   public enum TimeConfig
   {
@@ -57,6 +58,37 @@ namespace FBI.MVC.Model.CRUD
       else if (p_config == TimeConfig.DAYS)
         return ((Int32)Math.Ceiling(p_nbPeriods / 7.0));
       return (p_nbPeriods);
+    }
+
+    public static string GetLocal(TimeConfig p_config)
+    {
+      switch (p_config)
+      {
+        case TimeConfig.DAYS:
+          return (Local.GetValue("period.day"));
+        case TimeConfig.WEEK:
+          return (Local.GetValue("period.week"));
+        case TimeConfig.MONTHS:
+          return (Local.GetValue("period.month"));
+        case TimeConfig.YEARS:
+          return (Local.GetValue("period.year"));
+        default:
+          return ("");
+      }
+    }
+
+    public static TimeConfig Parse(string p_config)
+    {
+
+      if (p_config == Local.GetValue("period.day"))
+        return (TimeConfig.DAYS);
+      if (p_config == Local.GetValue("period.week"))
+        return (TimeConfig.WEEK);
+      if (p_config == Local.GetValue("period.month"))
+        return (TimeConfig.MONTHS);
+      if (p_config == Local.GetValue("period.year"))
+        return (TimeConfig.YEARS);
+      return ((TimeConfig)0);
     }
   }
 

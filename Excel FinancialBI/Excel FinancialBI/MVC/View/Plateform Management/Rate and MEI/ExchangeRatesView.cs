@@ -76,7 +76,7 @@ namespace FBI.MVC.View
       {
         Currency l_currency = CurrencyModel.Instance.GetValue(l_currencyId);
 
-        if (l_currency != null)
+        if (l_currency != null && l_currency.Id != CurrencyModel.Instance.GetMainCurrency())
           m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, l_currency.Id, l_currency.Name);
       }
     }

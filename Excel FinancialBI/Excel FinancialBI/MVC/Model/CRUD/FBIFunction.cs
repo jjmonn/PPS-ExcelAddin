@@ -11,6 +11,7 @@ namespace FBI.MVC.Model.CRUD
 
   public class FBIFunction
   {
+    public TimeConfig Aggregation { get; set; }
     public DateTime Period { get; set; }
     public UInt32 EntityId { get; set; }
     public UInt32 AccountId { get; set; }
@@ -23,6 +24,12 @@ namespace FBI.MVC.Model.CRUD
     { 
       get { return (Period.ToString("MM/dd/yyyy")); }
       set { Period = DateTime.Parse(value); }
+    }
+
+    public string AggregationString
+    {
+      get { return (TimeUtils.GetLocal(Aggregation)); }
+      set { Aggregation = TimeUtils.Parse(value); }
     }
 
     public string EntityName

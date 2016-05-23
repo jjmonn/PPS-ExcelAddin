@@ -38,6 +38,7 @@ namespace FBI.MVC.Controller
 
         l_func += "\"" + m_view.SelectedEntity + "\",";
         l_func += "\"" + m_view.SelectedAccount + "\",";
+        l_func += "\"" + TimeUtils.GetLocal(m_view.SelectedAggregation) + "\",";
         l_func += "\"" + m_view.SelectedPeriod + "\",";
         l_func += "\"" + m_view.SelectedCurrency + "\",";
         l_func += "\"" + m_view.SelectedVersion + "\",";
@@ -59,6 +60,7 @@ namespace FBI.MVC.Controller
         IsValidAccount(m_view.SelectedAccount) &&
         IsValidCurrency(m_view.SelectedCurrency) &&
         IsValidVersion(m_view.SelectedVersion) &&
+        IsValidAggregation(m_view.SelectedAggregation, VersionModel.Instance.GetValue(m_view.SelectedVersion)) &&
         IsValidAxisElemList(AxisType.Client, m_view.GetSelectedAxisElem(AxisType.Client)) &&
         IsValidAxisElemList(AxisType.Product, m_view.GetSelectedAxisElem(AxisType.Product)) &&
         IsValidAxisElemList(AxisType.Adjustment, m_view.GetSelectedAxisElem(AxisType.Adjustment)) &&
