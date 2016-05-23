@@ -24,6 +24,8 @@ namespace FBI.MVC.View
   {
     FbiDataGridView m_dgv = new FbiDataGridView();
     CurrenciesController m_controller;
+    CheckBoxEditor m_editor = new CheckBoxEditor();
+
     public CurrenciesView()
     {
       InitializeComponent();
@@ -42,8 +44,9 @@ namespace FBI.MVC.View
 
       this.Controls.Add(m_dgv);
       this.MultilangueSetup();
+      SuscribeEvents();
     }
-
+  
     private void MultilangueSetup()
     {
       this.SetMainCurrencyCallBack.Text = Local.GetValue("currencies.set_main_currency");
@@ -61,7 +64,7 @@ namespace FBI.MVC.View
         m_dgv.SetDimension<Currency>(FbiDataGridView.Dimension.ROW, l_currency.Id, "", 0, null, 0);
         if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_CURRENCIES) == true)
         {
-          m_dgv.FillField(l_currency.Id, 0, l_currency.InUse, new CheckBoxEditor());
+          m_dgv.FillField(l_currency.Id, 0, l_currency.InUse, m_editor);
           m_dgv.FillField(l_currency.Id, 1, l_currency.Name, new TextBoxEditor());
           m_dgv.FillField(l_currency.Id, 2, l_currency.Symbol, new TextBoxEditor());
         }
@@ -77,6 +80,7 @@ namespace FBI.MVC.View
     private void SuscribeEvents()
     {
       m_dgv.CellChangedAndValidated += OnDgvCellChangedAndValidated;
+      m_editor.CheckedChanged += OnCheckChanged;
       CurrencyModel.Instance.ReadEvent += OnModelRead;
       CurrencyModel.Instance.DeleteEvent += OnModelDelete;
       Addin.SuscribeAutoLock(this);
@@ -112,12 +116,19 @@ namespace FBI.MVC.View
     {
       UInt32 l_currencyId = (UInt32)args.Cell.RowItem.ItemValue;
       UInt32 l_columnId = (UInt32)args.Cell.ColumnItem.ItemValue;
-      if (l_columnId == 0)
-        ChangeInUseValue(l_currencyId, (bool)args.Cell.Value);
-      else if (l_columnId == 1)
+      if (l_columnId == 1)
         ChangeNameValue(l_currencyId, (string)args.Cell.Value);
-      else
+      else if (l_columnId == 2)
         ChangeSymbolValue(l_currencyId, (string)args.Cell.Value);
+    }
+
+    void OnCheckChanged(object sender, EventArgs args)
+    {
+      if (m_dgv.HoveredRow == null || m_dgv.HoveredRow.ItemValue == null)
+        return;
+      UInt32 l_currencyId = (UInt32)m_dgv.HoveredRow.ItemValue;
+
+      ChangeInUseValue(l_currencyId, (bool)m_editor.EditorValue);
     }
 
     private void ChangeInUseValue(uint p_currencyId, bool p_newValue)
@@ -140,7 +151,8 @@ namespace FBI.MVC.View
 
     private void UpdateOrAddCurrencyRow(Currency p_currency)
     {
-      m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, p_currency.Id, "", 0, AxisElemModel.Instance, 0);
+      if (m_dgv.Rows.ContainsKey(p_currency.Id) == false)
+        m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, p_currency.Id, "", 0, AxisElemModel.Instance, 0);
       m_dgv.FillField(p_currency.Id, 0, p_currency.InUse);
       m_dgv.FillField(p_currency.Id, 1, p_currency.Name);
       m_dgv.FillField(p_currency.Id, 2, p_currency.Symbol);
