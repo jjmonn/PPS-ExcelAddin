@@ -31,7 +31,6 @@
       this.components = new System.ComponentModel.Container();
       this.FinancialBI = new AddinExpress.MSO.ADXExcelFunctionCategory(this.components);
       this.FBI = new AddinExpress.MSO.ADXExcelFunctionDescriptor(this.components);
-      this.adxExcelParameterDescriptor1 = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
       this.adxExcelParameterDescriptor2 = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
       this.adxExcelParameterDescriptor3 = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
       this.adxExcelParameterDescriptor4 = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
@@ -41,6 +40,8 @@
       this.adxExcelParameterDescriptor8 = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
       this.adxExcelParameterDescriptor9 = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
       this.adxExcelParameterDescriptor10 = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
+      this.adxExcelParameterDescriptor1 = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
+      this.p_aggregation = new AddinExpress.MSO.ADXExcelParameterDescriptor(this.components);
       // 
       // FinancialBI
       // 
@@ -52,6 +53,7 @@
       this.FBI.FunctionName = "FBI";
       this.FBI.ParameterDescriptors.Add(this.adxExcelParameterDescriptor2);
       this.FBI.ParameterDescriptors.Add(this.adxExcelParameterDescriptor3);
+      this.FBI.ParameterDescriptors.Add(this.p_aggregation);
       this.FBI.ParameterDescriptors.Add(this.adxExcelParameterDescriptor4);
       this.FBI.ParameterDescriptors.Add(this.adxExcelParameterDescriptor5);
       this.FBI.ParameterDescriptors.Add(this.adxExcelParameterDescriptor6);
@@ -59,12 +61,6 @@
       this.FBI.ParameterDescriptors.Add(this.adxExcelParameterDescriptor8);
       this.FBI.ParameterDescriptors.Add(this.adxExcelParameterDescriptor9);
       this.FBI.ParameterDescriptors.Add(this.adxExcelParameterDescriptor10);
-      // 
-      // adxExcelParameterDescriptor1
-      // 
-      this.adxExcelParameterDescriptor1.AcceptAsArray = false;
-      this.adxExcelParameterDescriptor1.Description = "A random first parameter";
-      this.adxExcelParameterDescriptor1.ParameterName = "p_a";
       // 
       // adxExcelParameterDescriptor2
       // 
@@ -107,6 +103,16 @@
       // 
       this.adxExcelParameterDescriptor10.ParameterName = "p_categoriesFilters";
       // 
+      // adxExcelParameterDescriptor1
+      // 
+      this.adxExcelParameterDescriptor1.AcceptAsArray = false;
+      this.adxExcelParameterDescriptor1.Description = "A random first parameter";
+      this.adxExcelParameterDescriptor1.ParameterName = "p_a";
+      // 
+      // p_aggregation
+      // 
+      this.p_aggregation.AcceptAsArray = false;
+      // 
       // FinancialBiXLL
       // 
       this.AddinName = "FinancialBiXLL";
@@ -127,6 +133,7 @@
         private AddinExpress.MSO.ADXExcelParameterDescriptor adxExcelParameterDescriptor8;
         private AddinExpress.MSO.ADXExcelParameterDescriptor adxExcelParameterDescriptor9;
         private AddinExpress.MSO.ADXExcelParameterDescriptor adxExcelParameterDescriptor10;
+        private AddinExpress.MSO.ADXExcelParameterDescriptor p_aggregation;
     }
 }
 

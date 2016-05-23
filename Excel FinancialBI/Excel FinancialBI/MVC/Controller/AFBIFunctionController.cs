@@ -40,6 +40,21 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
+    protected bool IsValidAggregation(TimeConfig p_config, Version p_version)
+    {
+      if (Enum.IsDefined(typeof(TimeConfig), p_config) == false)
+      {
+        Error = Local.GetValue("ppsbi.error.invalid_aggregation");
+        return (false);
+      }
+      else if (p_version.TimeConfiguration != p_config && TimeUtils.GetParentConfig(p_version.TimeConfiguration) != p_config)
+      {
+        Error = Local.GetValue("ppsbi.error.aggregation_not_match") + TimeUtils.GetLocal(p_config);
+        return (false);
+      }
+      return (true);
+    }
+
     protected bool IsValidCurrency(string p_currency)
     {
       Currency l_currency = CurrencyModel.Instance.GetValue(p_currency);

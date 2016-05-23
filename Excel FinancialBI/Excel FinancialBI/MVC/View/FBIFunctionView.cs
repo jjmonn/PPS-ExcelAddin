@@ -23,6 +23,7 @@ namespace FBI.MVC.View
     SafeDictionary<AxisType, vTreeViewBox> m_axisElemTV;
     SafeDictionary<UInt32, ListItem> m_currencyListItems = new SafeDictionary<uint, ListItem>();
     SafeDictionary<Int32, ListItem> m_periodListItems = new SafeDictionary<int, ListItem>();
+    SafeDictionary<ListItem, TimeConfig> m_aggregationListItems = new SafeDictionary<ListItem, TimeConfig>();
     bool m_editing = false;
 
     public FBIFunctionView()
@@ -40,7 +41,9 @@ namespace FBI.MVC.View
     {
       MultilangueSetup();
       InitTV();
+      LoadAggregations();
       LoadPeriods();
+      LoadCurrencies();
       SuscribeEvents();
       FBIFunctionExcelController.LastExecutedFunction = null;
       AddinModule.CurrentInstance.ExcelApp.ActiveCell.Formula = AddinModule.CurrentInstance.ExcelApp.ActiveCell.Formula;
@@ -55,6 +58,12 @@ namespace FBI.MVC.View
       m_accountTree.TreeView.SelectedNode = FbiTreeView<Account>.FindNode(m_accountTree.TreeView, p_formula.AccountId);
       m_currencyCB.SelectedItem = m_currencyListItems[p_formula.CurrencyId];
       m_versionTree.TreeView.SelectedNode = FbiTreeView<Version>.FindNode(m_versionTree.TreeView, p_formula.VersionId);
+      foreach (KeyValuePair<ListItem, TimeConfig> l_pair in m_aggregationListItems)
+        if (l_pair.Value == p_formula.Aggregation)
+        {
+          m_aggregationCB.SelectedItem = l_pair.Key;
+          break;
+        }
       m_periodCB.SelectedItem = m_periodListItems[(Int32)p_formula.Period.ToOADate()];
 
       foreach (KeyValuePair<AxisType, List<string>> l_axis in p_formula.AxisElems)
@@ -66,21 +75,6 @@ namespace FBI.MVC.View
           foreach (vTreeNode l_filterNode in l_axisNode.Nodes)
             CheckNode(l_filterNode, FilterValueModel.Instance.GetValueId(l_filterValue));
       }
-    }
-
-    public void LoadPeriods()
-    {
-      m_periodListItems.Clear();
-      m_periodCB.Items.Clear();
-      Version l_version = VersionModel.Instance.GetValue(SelectedVersion);
-
-      if (l_version == null)
-        return;
-      List<Int32> l_periodList = PeriodModel.GetPeriodList((Int32)l_version.StartPeriod, (Int32)l_version.NbPeriod, l_version.TimeConfiguration);
-
-      foreach (Int32 l_period in l_periodList)
-        m_periodListItems[l_period] = m_periodCB.Items.Add(PeriodModel.GetFormatedDate(l_period, l_version.TimeConfiguration));
-      m_periodCB.SelectedItem = m_periodListItems.FirstOrDefault().Value;
     }
 
     bool CheckNode(vTreeNode p_parentNode, UInt32 p_value)
@@ -106,6 +100,7 @@ namespace FBI.MVC.View
       this.m_categoryFilterLabel.Text = Local.GetValue("ppsbi.categories_filter");
       this.m_productFilterLabel.Text = Local.GetValue("ppsbi.products_filter");
       this.m_clientFilterLabel.Text = Local.GetValue("ppsbi.clients_filter");
+      this.m_aggregationLabel.Text = Local.GetValue("ppsbi.aggregation");
       this.m_versionLabel.Text = Local.GetValue("general.version");
       this.m_currencyLabel.Text = Local.GetValue("general.currency");
       this.m_entityLabel.Text = Local.GetValue("general.entity");
@@ -127,11 +122,32 @@ namespace FBI.MVC.View
       m_axisElemTV[AxisType.Adjustment].TextChanged += SetAdjustmentText;
       m_axisElemTV[AxisType.Adjustment].TreeView.NodeChecked += SetAdjustmentText;
       m_versionTree.TreeView.AfterSelect += OnVersionSelectedChanged;
+      m_aggregationCB.TextChanged += OnAggregationSelectedChanged;
     }
 
-    void InitTV()
+    public void LoadPeriods()
     {
-      FbiTreeView<Account>.Load(m_accountTree.TreeView.Nodes, AccountModel.Instance.GetDictionary());
+      m_periodListItems.Clear();
+      m_periodCB.Items.Clear();
+      Version l_version = VersionModel.Instance.GetValue(SelectedVersion);
+
+      m_periodCB.Enabled = (l_version != null && l_version.IsFolder == false && Enum.IsDefined(typeof(TimeConfig), SelectedAggregation));
+      if (m_periodCB.Enabled == false)
+        return;
+      List<Int32> l_periodList;
+
+      if (TimeUtils.IsParentConfig(SelectedAggregation, l_version.TimeConfiguration))
+        l_periodList = PeriodModel.GetPeriodList((Int32)l_version.StartPeriod,
+          TimeUtils.GetParentConfigNbPeriods(l_version.TimeConfiguration, (Int32)l_version.NbPeriod), SelectedAggregation);
+      else
+        l_periodList = PeriodModel.GetPeriodList((Int32)l_version.StartPeriod, (Int32)l_version.NbPeriod, SelectedAggregation);
+      foreach (Int32 l_period in l_periodList)
+        m_periodListItems[l_period] = m_periodCB.Items.Add(PeriodModel.GetFormatedDate(l_period, SelectedAggregation));
+      m_periodCB.SelectedItem = m_periodListItems.FirstOrDefault().Value;
+    }
+
+    void LoadCurrencies()
+    {
       foreach (UInt32 l_currencyId in CurrencyModel.Instance.GetUsedCurrencies())
       {
         ListItem l_item = m_currencyCB.Items.Add(CurrencyModel.Instance.GetValueName(l_currencyId));
@@ -140,6 +156,35 @@ namespace FBI.MVC.View
         if (l_currencyId == Properties.Settings.Default.currentCurrency)
           m_currencyCB.SelectedItem = l_item;
       }
+    }
+
+    void LoadAggregations()
+    {
+      Version l_version = VersionModel.Instance.GetValue(SelectedVersion);
+
+      m_aggregationListItems.Clear();
+      m_aggregationCB.Items.Clear();
+      m_aggregationCB.Enabled = (l_version != null && l_version.IsFolder == false);
+      if (!m_aggregationCB.Enabled)
+        return;
+      ListItem l_item = m_aggregationCB.Items.Add(TimeUtils.GetLocal(l_version.TimeConfiguration));
+
+      m_aggregationListItems[l_item] = l_version.TimeConfiguration;
+      m_aggregationCB.SelectedItem = l_item;
+
+      TimeConfig l_parentConfig = TimeUtils.GetParentConfig(l_version.TimeConfiguration);
+      if (l_version.TimeConfiguration != l_parentConfig)
+      {
+        l_item = m_aggregationCB.Items.Add(TimeUtils.GetLocal(l_parentConfig));
+
+        m_aggregationListItems[l_item] = l_parentConfig;
+      }
+    }
+
+    void InitTV()
+    {
+      FbiTreeView<Account>.Load(m_accountTree.TreeView.Nodes, AccountModel.Instance.GetDictionary());
+
       FbiTreeView<Version>.Load(m_versionTree.TreeView.Nodes, VersionModel.Instance.GetDictionary());
       m_versionTree.TreeView.SelectedNode = FbiTreeView<Version>.FindNode(m_versionTree.TreeView, Properties.Settings.Default.version_id);
 
@@ -183,6 +228,12 @@ namespace FBI.MVC.View
     #region User callbacks
 
     void OnVersionSelectedChanged(object sender, vTreeViewEventArgs e)
+    {
+      LoadPeriods();
+      LoadAggregations();
+    }
+
+    void OnAggregationSelectedChanged(object sender, EventArgs e)
     {
       LoadPeriods();
     }
@@ -308,6 +359,16 @@ namespace FBI.MVC.View
       get
       {
         return (m_currencyCB.Text);
+      }
+    }
+
+    public TimeConfig SelectedAggregation
+    {
+      get
+      {
+        if (m_aggregationCB.SelectedItem != null && m_aggregationListItems.ContainsKey(m_aggregationCB.SelectedItem))
+          return (m_aggregationListItems[m_aggregationCB.SelectedItem]);
+        return (TimeConfig)0;
       }
     }
 

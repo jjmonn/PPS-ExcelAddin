@@ -100,13 +100,14 @@ namespace FBI.MVC.Controller
               IsValidAccount(p_function.AccountName) &&
               IsValidCurrency(p_function.CurrencyName) &&
               IsValidVersion(p_function.VersionName) &&
+              IsValidAggregation(p_function.Aggregation, VersionModel.Instance.GetValue(p_function.VersionId)) &&
               IsValidAxisElemList(AxisType.Client, p_function.AxisElems[AxisType.Client]) &&
               IsValidAxisElemList(AxisType.Product, p_function.AxisElems[AxisType.Product]) &&
               IsValidAxisElemList(AxisType.Adjustment, p_function.AxisElems[AxisType.Adjustment]) &&
               IsValidFilterValueList(p_function.Filters));
     }
 
-    public object FBI(object p_entity, object p_account, object p_period, object p_currency, object p_version,
+    public object FBI(object p_entity, object p_account, object p_aggregation, object p_period, object p_currency, object p_version,
           object p_clientsFilters, object p_productsFilters, object p_adjustmentsFilters, object p_categoriesFilters)
     {
       try
@@ -115,6 +116,7 @@ namespace FBI.MVC.Controller
 
         FBIFunction l_function = new FBIFunction();
 
+        l_function.AggregationString = GetValue(p_aggregation, Local.GetValue("ppsbi.aggregation"));
         l_function.EntityName = GetValue(p_entity, Local.GetValue("ppsbi.entity"));
         l_function.AccountName = GetValue(p_account, Local.GetValue("ppsbi.account"));
         dynamic l_period = GetValue(p_period, Local.GetValue("ppsbi.period"));
@@ -132,7 +134,7 @@ namespace FBI.MVC.Controller
         Version l_version = VersionModel.Instance.GetValue(l_function.VersionId);
 
         if (l_version == null)
-          return ("general.error.system");
+          return (Local.GetValue("general.error.system"));
         if (l_version.TimeConfiguration <= TimeConfig.MONTHS)
           l_function.Period = l_function.Period.AddDays(DateTime.DaysInMonth(l_function.Period.Year, l_function.Period.Month) - l_function.Period.Day);
         if (l_version.TimeConfiguration <= TimeConfig.YEARS)
@@ -147,7 +149,7 @@ namespace FBI.MVC.Controller
         if (Compute(l_function, out l_requestId) == false)
           return (Local.GetValue("ppsbi.error.unable_to_compute"));
 
-        ResultKey l_key = new ResultKey(l_function.AccountId, "", "", l_version.TimeConfiguration,
+        ResultKey l_key = new ResultKey(l_function.AccountId, "", "", l_function.Aggregation,
           (int)l_function.Period.ToOADate(), l_version.Id, true);
 
         if (m_results[l_requestId] == null)

@@ -4,6 +4,12 @@
     <string name="currencies">Devises</string>
   </category>
 
+  <category name="period">
+    <string name="year">Année</string>
+    <string name="month">Mois</string>
+    <string name="week">Semaine</string>
+    <string name="day">Jour</string>
+  </category>
   <category name="CUI">
     <category name="dimension">
       <string name="account">Comptes</string>
@@ -447,6 +453,7 @@
     <string name="version">Version</string>
     <string name="account">Compte</string>
     <string name="entity">Entité</string>
+    <string name="aggregation">Aggregation</string>
     <string name="title">Edition de la fonction Excel Financial BI</string>
     <string name="computing">calcul...</string>
     <category name="error">
@@ -459,6 +466,8 @@
       <string name="invalid_axis_elem">Filtre sélectionné invalide.</string>
       <string name="invalid_filter_value">Catégorie sélectionnée invalide.</string>
       <string name="invalid_parameter">invalide.</string>
+      <string name="invalid_aggregation">Aggrégation invalide.</string>
+      <string name="aggregation_not_match">Paramètre aggrégation incompatible: </string>
     </category>
   </category>
 

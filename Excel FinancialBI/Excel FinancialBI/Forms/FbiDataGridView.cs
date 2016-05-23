@@ -376,7 +376,7 @@ namespace FBI.Forms
       l_clone.ItemValue = p_item.ItemValue;
       l_clone.Width = p_item.Width;
       l_clone.Caption = p_item.Caption;
-      iterate_clone:
+    iterate_clone:
       foreach (HierarchyItem l_child in p_item.Items)
       {
         HierarchyItem l_newChild = CloneItem(l_child);
@@ -430,13 +430,10 @@ namespace FBI.Forms
       l_dimClone.ItemValue = p_id;
       l_dimClone.Caption = p_name;
       l_dimClone.Width = p_width;
-      if (l_dim != l_dimClone)
-      {
-        l_dim.Caption = "[DELETED]" + l_dim.Caption;
-        m_hierarchyItemDic.Remove(l_dim);
-        m_hierarchyItemDic[l_dimClone] = p_id;
-      }
-      return (l_dim);
+
+      m_hierarchyItemDic.Remove(l_dim);
+      m_hierarchyItemDic[l_dimClone] = p_id;
+      return (l_dimClone);
     }
   }
 }

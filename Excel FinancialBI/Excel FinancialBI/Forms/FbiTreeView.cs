@@ -250,6 +250,7 @@ namespace FBI.Forms
     public static bool Load(vTreeNodeCollection p_nodes, MultiIndexDictionary<UInt32, String, T> p_items,
       MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
+      AFbiTreeView.InitTVFormat(p_nodes.GetOwnerTree());
       SafeDictionary<UInt32, Utils.TreeNode<UInt32>> l_virtualHierarchy = LoadVirtualTree(p_items);
 
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))

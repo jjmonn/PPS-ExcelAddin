@@ -71,7 +71,7 @@ namespace FBI
                 }
             }
 
-            public static object FBI(object p_entity, object p_account, object p_period, object p_currency, object p_version,
+            public static object FBI(object p_entity, object p_account, object p_aggregation, object p_period, object p_currency, object p_version,
               object p_clientsFilters, object p_productsFilters, object p_adjustmentsFilters, object p_categoriesFilters)
             {
               try
@@ -80,7 +80,7 @@ namespace FBI
 
                 if (Network.NetworkManager.IsConnected() == false || l_module == null)
                   return ("Not connected");
-                return (l_module.FBIFunctionController.FBI(p_entity, p_account, p_period, p_currency, p_version, 
+                return (l_module.FBIFunctionController.FBI(p_entity, p_account, p_aggregation, p_period, p_currency, p_version, 
                   p_clientsFilters, p_productsFilters, p_adjustmentsFilters, p_categoriesFilters));
               }
               catch (Exception e)
