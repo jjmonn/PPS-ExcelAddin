@@ -113,6 +113,8 @@ namespace FBI.MVC.Controller
 
       if (p_panelName == "")
         return (false);
+      if (ChartPanelModel.Instance.GetDictionary().Values.FirstOrDefault(x => x.Name == p_panelName) != null) //Already a panel named like that, cannot update !
+        return (false);
       if (p_panelId == ChartPanel.INVALID_ID)
       {
         l_panel = new ChartPanel();
