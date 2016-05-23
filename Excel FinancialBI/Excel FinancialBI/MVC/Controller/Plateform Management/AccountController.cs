@@ -79,8 +79,10 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("accounts.error.update") + ": " + Error;
         return (false);
       }
-      p_account.ConversionOptionId = (p_account.Type == Account.AccountType.MONETARY) ? p_account.ConversionOptionId :
-        Account.ConversionOptions.NO_CONVERSION;
+      if (p_account.Type != Account.AccountType.MONETARY)
+        p_account.ConversionOptionId = Account.ConversionOptions.NO_CONVERSION;
+      else if (p_account.ConversionOptionId == Account.ConversionOptions.NO_CONVERSION)
+        p_account.ConversionOptionId = Account.ConversionOptions.AVERAGE_RATE;
       if (AccountModel.Instance.Update(p_account) == false)
       {
         Error = Local.GetValue("accounts.error.update") + ": " + Local.GetValue("general.error.system");
