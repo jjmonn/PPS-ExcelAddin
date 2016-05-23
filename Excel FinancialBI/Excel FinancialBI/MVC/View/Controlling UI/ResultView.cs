@@ -130,10 +130,7 @@ namespace FBI.MVC.View
         return;
       DGV l_dgv = m_tabCtrl.SelectedTab.Controls[0] as DGV;
 
-      foreach (HierarchyItem l_column in l_dgv.ColumnsHierarchy.Items)
-        l_column.Width = 1;
-      l_dgv.Refresh();
-      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
+      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
       l_dgv.Refresh();
       l_dgv.Select();
     }
@@ -218,7 +215,7 @@ namespace FBI.MVC.View
           {
             DGV l_dgv = l_tab.Controls[0] as DGV;
             l_dgv.Select();
-            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
+            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
             l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
             l_dgv.Refresh();
             l_tab.Refresh();
@@ -240,7 +237,7 @@ namespace FBI.MVC.View
           DGV l_dgv = l_tab.Controls[0] as DGV;
           SetHierachyItemVisible(p_versionId, p_visible, l_dgv.Rows);
           SetHierachyItemVisible(p_versionId, p_visible, l_dgv.Columns);
-          l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
+          l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
         }
       }
     }

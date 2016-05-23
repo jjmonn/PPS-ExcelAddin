@@ -19,6 +19,7 @@ namespace FBI.MVC.Model.CRUD
     public bool IsDiff { get; set; }
     public bool IsPeriodDiff { get; set; }
     public SafeDictionary<TimeConfig, SafeDictionary<Int32, Int32>> PeriodDiffAssociations { get; set; }
+    public UInt32 MainDiffVersion { get; set; }
     public bool PeriodFilter { get; set; }
     public List<Int32> Periods;
 
@@ -42,12 +43,23 @@ namespace FBI.MVC.Model.CRUD
     {
       base.Dump(p_packet, p_versionId, EntityId);
 
+      Version l_version = VersionModel.Instance.GetValue(p_versionId);
       p_packet.WriteBool(PeriodFilter);
       if (PeriodFilter)
       {
         p_packet.WriteInt32(Periods.Count);
         foreach (Int32 l_period in Periods)
-          p_packet.WriteInt32(l_period);
+        {
+          Int32 l_value;
+
+          if (IsPeriodDiff)
+            l_value = (MainDiffVersion != p_versionId) ?
+               PeriodDiffAssociations[l_version.TimeConfiguration].ElementAt(l_period).Key :
+               PeriodDiffAssociations[l_version.TimeConfiguration].ElementAt(l_period).Value;
+          else
+            l_value = l_period;
+          p_packet.WriteInt32(l_value);
+        }
       }
       bool l_entityDecomposition = SortList.Contains(new Tuple<bool, AxisType, UInt32>(true, AxisType.Entities, 0));
 
