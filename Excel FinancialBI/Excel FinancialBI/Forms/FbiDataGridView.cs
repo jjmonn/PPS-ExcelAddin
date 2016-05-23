@@ -347,17 +347,51 @@ namespace FBI.Forms
 
     public HierarchyItem SetDimension<J>(Dimension p_dimension, UInt32 p_id, string p_name, UInt32 p_parentId = 0, ICRUDModel<J> p_model = null, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
     {
+      List<Tuple<UInt32, UInt32, object>> cellValues = new List<Tuple<UInt32, UInt32, object>>();
+      HierarchyItem l_item = null;
+
       if (p_dimension == Dimension.COLUMN)
-        return SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
+      {
+        if (m_columnsDic[p_id] != null)
+          foreach (UInt32 l_row in Rows.Keys)
+            cellValues.Add(new Tuple<UInt32, UInt32, object>(l_row, p_id, GetCellValue(l_row, p_id)));
+        l_item = SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
+      }
       else if (p_dimension == Dimension.ROW)
-        return SetDimension<J>(RowsHierarchy.Items, m_rowsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
-      return (null);
+      {
+        if (m_rowsDic[p_id] != null)
+          foreach (UInt32 l_column in Columns.Keys)
+            cellValues.Add(new Tuple<UInt32, UInt32, object>(p_id, l_column, GetCellValue(p_id, l_column)));
+        l_item = SetDimension<J>(RowsHierarchy.Items, m_rowsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId, p_width);
+      }
+      foreach (Tuple<UInt32, UInt32, object> l_cell in cellValues)
+        FillField(l_cell.Item1, l_cell.Item2, l_cell.Item3);
+      return (l_item);
+    }
+
+    HierarchyItem CloneItem(HierarchyItem p_item)
+    {
+      HierarchyItem l_clone = new HierarchyItem();
+
+      l_clone.ItemValue = p_item.ItemValue;
+      l_clone.Width = p_item.Width;
+      l_clone.Caption = p_item.Caption;
+      iterate_clone:
+      foreach (HierarchyItem l_child in p_item.Items)
+      {
+        HierarchyItem l_newChild = CloneItem(l_child);
+        p_item.Items.Remove(l_child);
+        l_clone.Items.Add(l_newChild);
+        goto iterate_clone;
+      }
+      return (l_clone);
     }
 
     HierarchyItem SetDimension<J>(HierarchyItemsCollection p_dimension, SafeDictionary<UInt32, HierarchyItem> p_saveDic, UInt32 p_id,
       string p_name, ICRUDModel<J> p_model = null, bool p_hasParent = false, UInt32 p_parentId = 0, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
     {
       HierarchyItem l_dim;
+      HierarchyItem l_dimClone;
 
       if (p_saveDic.ContainsKey(p_id) == false)
       {
@@ -365,6 +399,7 @@ namespace FBI.Forms
         if (l_dim == null)
           return (null);
         p_saveDic[p_id] = l_dim;
+        l_dimClone = l_dim;
       }
       else
       {
@@ -373,6 +408,8 @@ namespace FBI.Forms
           l_dim.ParentItem.Items.Remove(l_dim);
         else
           p_dimension.Remove(l_dim);
+        l_dimClone = CloneItem(l_dim);
+        p_saveDic[p_id] = l_dimClone;
       }
       if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
       {
@@ -386,14 +423,19 @@ namespace FBI.Forms
         else
           l_parent = SetDimension(p_dimension, p_saveDic, parentEntity.Id, p_name, p_model, p_hasParent, parentEntity.ParentId);
         if (l_parent != null)
-          l_parent.Items.Add(l_dim);
+          l_parent.Items.Add(l_dimClone);
       }
       else
-        p_dimension.Add(l_dim);
-      l_dim.ItemValue = p_id;
-      l_dim.Caption = p_name;
-      l_dim.Width = p_width;
-      m_hierarchyItemDic[l_dim] = p_id;
+        p_dimension.Add(l_dimClone);
+      l_dimClone.ItemValue = p_id;
+      l_dimClone.Caption = p_name;
+      l_dimClone.Width = p_width;
+      if (l_dim != l_dimClone)
+      {
+        l_dim.Caption = "[DELETED]" + l_dim.Caption;
+        m_hierarchyItemDic.Remove(l_dim);
+        m_hierarchyItemDic[l_dimClone] = p_id;
+      }
       return (l_dim);
     }
   }

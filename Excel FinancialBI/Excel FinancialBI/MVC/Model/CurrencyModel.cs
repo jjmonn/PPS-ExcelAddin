@@ -163,6 +163,20 @@ namespace FBI.MVC.Model
       return (m_usedCurrencies);
     }
 
+    public MultiIndexDictionary<UInt32, string, Currency> GetUsedCurrenciesDic()
+    {
+      MultiIndexDictionary<UInt32, string, Currency> l_dic = new MultiIndexDictionary<uint, string, Currency>();
+
+      foreach (UInt32 l_currencyId in m_usedCurrencies)
+      {
+        Currency l_currency = GetValue(l_currencyId);
+
+        if (l_currency != null)
+          l_dic.Set(l_currency.Id, l_currency.Name, l_currency);
+      }
+      return (l_dic);
+    }
+
     #endregion
   }
 }

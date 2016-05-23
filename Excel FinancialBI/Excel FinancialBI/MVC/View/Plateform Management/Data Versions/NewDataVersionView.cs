@@ -51,6 +51,7 @@ namespace FBI.MVC.View
       this.m_startingPeriodDatePicker.Value = DateTime.Now;
 
       MultilangueSetup();
+      SuscribeEvents();
     }
 
     void SuscribeEvents()
@@ -119,6 +120,8 @@ namespace FBI.MVC.View
       l_version.RateVersionId = (UInt32)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
       l_version.GlobalFactVersionId = (UInt32)m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value;
       l_version.CreatedAt = DateTime.Now.ToShortDateString();
+      l_version.FormulaPeriodIndex = 1;
+      l_version.FormulaNbPeriod = l_version.NbPeriod - l_version.FormulaPeriodIndex;
       if (m_controller.Create(l_version) == false)
       {
         Forms.MsgBox.Show(m_controller.Error);

@@ -28,7 +28,7 @@ namespace FBI
     public static dynamic HostApplication { get; set; }
     public static AddinModule AddinModule { get; set; }
 
-    static void SelectLanguage()
+    public static void SelectLanguage()
     {
       switch (Settings.Default.language)
       {
@@ -68,6 +68,9 @@ namespace FBI
       SuscribeModel<Version>(VersionModel.Instance, p_suscribeEvent);
       SuscribeModel<ExchangeRate>(ExchangeRateModel.Instance, p_suscribeEvent);
       SuscribeModel<LegalHoliday>(LegalHolidayModel.Instance, p_suscribeEvent);
+      SuscribeModel<ChartPanel>(ChartPanelModel.Instance, p_suscribeEvent);
+      SuscribeModel<ChartSettings>(ChartSettingsModel.Instance, p_suscribeEvent);
+      SuscribeModel<ChartAccount>(ChartAccountModel.Instance, p_suscribeEvent);
     }
 
     static void SuscribeModel<T>(ICRUDModel<T> p_model, bool p_suscribeEvent) where T : class, CRUDEntity
@@ -99,6 +102,8 @@ namespace FBI
     public static void Disconnect()
     {
       m_networkLauncher.Stop();
+      m_initTypeSet.Clear();
+      InitModels(false);
     }
 
     public static bool Connect(string p_userName, string p_password)
@@ -141,15 +146,19 @@ namespace FBI
     delegate void LockView_delegate(bool p_connected, ContainerControl p_control);
     public static void LockView(bool p_connected, ContainerControl p_control)
     {
-      if (p_control.InvokeRequired)
+      try
       {
-        LockView_delegate func = new LockView_delegate(LockView);
-        p_control.Invoke(func, p_connected, p_control);
+        if (p_control.InvokeRequired)
+        {
+          LockView_delegate func = new LockView_delegate(LockView);
+          p_control.Invoke(func, p_connected, p_control);
+        }
+        else
+        {
+          p_control.Enabled = p_connected;
+        }
       }
-      else
-      {
-        p_control.Enabled = p_connected;
-      }
+      catch { }
     }
 
     public static UInt32 VersionId

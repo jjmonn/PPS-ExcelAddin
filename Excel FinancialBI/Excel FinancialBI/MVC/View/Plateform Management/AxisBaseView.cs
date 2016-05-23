@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using VIBlend.WinForms.DataGridView;
 using System.Threading;
 using Microsoft.VisualBasic;
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI.MVC.View
 {
@@ -27,10 +28,20 @@ namespace FBI.MVC.View
     bool m_cellModif = false;
     RightManager m_rightMgr = new RightManager();
     HierarchyItem m_hoveredRow = null;
+    static SafeDictionary<AxisType, string> m_axisNames = null;
 
     public AxisBaseView()
     {
       InitializeComponent();
+      if (m_axisNames == null)
+      {
+        m_axisNames = new SafeDictionary<AxisType, string>();
+        m_axisNames[AxisType.Adjustment] = Local.GetValue("general.adjustments");
+        m_axisNames[AxisType.Client] = Local.GetValue("general.clients");
+        m_axisNames[AxisType.Employee] = Local.GetValue("general.employees");
+        m_axisNames[AxisType.Entities] = Local.GetValue("general.entities");
+        m_axisNames[AxisType.Product] = Local.GetValue("general.products");
+      }
     }
 
     public virtual void SetController(IController p_controller)
@@ -75,7 +86,7 @@ namespace FBI.MVC.View
       this.m_axisEditionButton.Text = Local.GetValue("general.edition");
     }
 
-    private void DesactivateUnallowed()
+    protected void DesactivateUnallowed()
     {
       this.m_rightMgr.Enable(UserModel.Instance.GetCurrentUserRights());
     }
@@ -94,6 +105,7 @@ namespace FBI.MVC.View
     {
       AxisElemModel.Instance.ReadEvent   += OnModelRead;
       AxisElemModel.Instance.DeleteEvent += OnModelDelete;
+      AxisElemModel.Instance.CreationEvent += OnModelCreate;
       AxisFilterModel.Instance.ReadEvent += OnModelReadAxisFilter;
       m_dgv.CellMouseClick += OnClickCell;
       m_expandAllMenu.Click += OnClickExpand;
@@ -113,6 +125,7 @@ namespace FBI.MVC.View
       AxisElemModel.Instance.ReadEvent -= OnModelRead;
       AxisElemModel.Instance.DeleteEvent -= OnModelDelete;
       AxisFilterModel.Instance.ReadEvent -= OnModelReadAxisFilter;
+      AxisElemModel.Instance.CreationEvent -= OnModelCreate;
     }
 
     #endregion
@@ -222,7 +235,7 @@ namespace FBI.MVC.View
     {
       if (p_args.Button == MouseButtons.Right)
       {
-        Point l_location = PointToScreen(p_args.Location);
+        System.Drawing.Point l_location = PointToScreen(p_args.Location);
 
         l_location.Y += 30;
         m_hoveredRow = m_dgv.HitTestRow(p_args.Location);
@@ -258,7 +271,7 @@ namespace FBI.MVC.View
       m_dgv.CellsArea.SetCellEditor(p_e.Cell.RowItem, p_e.Cell.ColumnItem, l_cb);
     }
 
-    private void OnClickDelete(object p_sender, EventArgs p_e)
+    protected void OnClickDelete(object p_sender, EventArgs p_e)
     {
       HierarchyItem l_row = m_hoveredRow;
 
@@ -271,7 +284,7 @@ namespace FBI.MVC.View
         Forms.MsgBox.Show(Local.GetValue("axis.error.not_found"));
         return;
       }
-      string l_result = PasswordBox.Open(Local.GetValue("axis.creation_confirm"));
+      string l_result = PasswordBox.Open(Local.GetValue("axis.delete_confirm"));
 
       if (l_result != PasswordBox.Canceled && l_result != Addin.Password)
       {
@@ -282,11 +295,11 @@ namespace FBI.MVC.View
         Forms.MsgBox.Show(m_controller.Error);
     }
 
-    private void OnClickCreate(object sender, EventArgs e)
+    protected void OnClickCreate(object sender, EventArgs e)
     {
       HierarchyItem l_row = m_hoveredRow;
 
-      if (l_row != null)
+      if (l_row != null && l_row.ItemValue != null)
         m_controller.ShowNewAxisUI((UInt32)l_row.ItemValue);
       else
         m_controller.ShowNewAxisUI();
@@ -295,6 +308,8 @@ namespace FBI.MVC.View
     private void OnDGVCellValueChanged(object sender, CellEventArgs args)
     {
       if (m_cellModif == false || args == null || args.Cell.Value == null)
+        return;
+      if (args.Cell.RowItem.ItemValue == null || args.Cell.ColumnItem.ItemValue == null)
         return;
       m_cellModif = false;
       UInt32 l_axisElemId = (UInt32)args.Cell.RowItem.ItemValue;
@@ -340,24 +355,28 @@ namespace FBI.MVC.View
 
       if (l_cell == null)
         return;
-      UInt32 l_filterId = (UInt32)m_dgv.HoveredColumn.ItemValue;
-      FilterValue l_filterValue = FilterValueModel.Instance.GetValue((string)l_cell.Value);
 
       HierarchyItemsCollection l_collection = (m_dgv.HoveredRow.ParentItem == null) ? m_dgv.RowsHierarchy.Items : m_dgv.HoveredRow.ParentItem.Items;
       for (int i = m_dgv.HoveredRow.ItemIndex; i < l_collection.Count; ++i)
-      {
-        UInt32 l_axisElemId = (UInt32)l_collection[i].ItemValue;
-        AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_controller.AxisType, l_axisElemId, l_filterId);
+        OnCopyDown(l_cell.Value, (UInt32)l_collection[i].ItemValue, (UInt32)m_dgv.HoveredColumn.ItemValue);
+    }
 
-        if (l_axisFilter == null || l_filterValue == null)
-          continue;
-        m_controller.UpdateAxisFilter(l_axisFilter, l_filterValue.Id);
-      }
+    protected virtual void OnCopyDown(object p_cellValue, UInt32 p_rowValue, UInt32 p_columnValue)
+    {
+      UInt32 l_filterId = p_columnValue;
+      AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_controller.AxisType, p_rowValue, l_filterId);
+      FilterValue l_filterValue = FilterValueModel.Instance.GetValue((string)p_cellValue);
+
+      if (l_axisFilter == null || l_filterValue == null)
+        return;
+      m_controller.UpdateAxisFilter(l_axisFilter, l_filterValue.Id);
     }
 
     void OnClickRename(object sender, EventArgs e)
     {
-      UInt32 l_axisElemId = (UInt32)m_dgv.HoveredRow.ItemValue;
+      if (m_hoveredRow == null || m_hoveredRow.ItemValue == null)
+        return;
+      UInt32 l_axisElemId = (UInt32)m_hoveredRow.ItemValue;
       AxisElem l_axisElem = AxisElemModel.Instance.GetValue(l_axisElemId);
 
       if (l_axisElem == null)
@@ -373,6 +392,22 @@ namespace FBI.MVC.View
     #endregion
 
     #region Model Callback
+
+
+    delegate void OnModelCreate_delegate(ErrorMessage p_status, UInt32 p_id);
+    void OnModelCreate(ErrorMessage p_status, UInt32 p_id)
+    {
+      if (m_dgv.InvokeRequired)
+      {
+        OnModelCreate_delegate func = new OnModelCreate_delegate(OnModelCreate);
+        Invoke(func, p_status, p_id);
+      }
+      else
+      {
+        if (p_status != ErrorMessage.SUCCESS)
+          MessageBox.Show(Error.GetMessage(p_status));
+      }
+    }
 
     delegate void OnModelRead_delegate(ErrorMessage p_status, AxisElem p_attributes);
     void OnModelRead(ErrorMessage p_status, AxisElem p_attributes)
@@ -458,5 +493,15 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    private void OnDropToExcelClick(object sender, EventArgs e)
+    {
+      Range l_destination = WorksheetWriter.CreateReceptionWS(m_axisNames[m_controller.AxisType], new string[]{ "" }, new string[]{ "" });
+      int i = 0;
+      bool l_expanded = false;
+
+      if (l_destination != null)
+        WorksheetWriter.CopyDGVToExcelGeneric(m_dgv, l_destination, "", ref i, ref l_expanded);
+    }
   }
 }

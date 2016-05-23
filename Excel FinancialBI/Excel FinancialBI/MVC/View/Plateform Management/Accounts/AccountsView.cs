@@ -20,7 +20,6 @@ namespace FBI.MVC.View
   using Model;
   using Network;
   using Model.CRUD;
-  using Utils.BNF;
 
   public partial class AccountsView : UserControl, IPlatformMgtView
   {
@@ -42,11 +41,16 @@ namespace FBI.MVC.View
     bool m_dragAndDropFlag = false;
     bool m_isDisplayingAccountFlag = false;
     bool m_isEditingFormulaFlag = false;
+    bool m_isValidAutoComplete = false;
+    bool m_restoreHistoric = false;
     string m_saveFormula = "";
 
-    SimpleBnf m_bnf = new SimpleBnf();
-    FbiGrammar m_grammar = new FbiGrammar();
     SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
+    UInt32 m_currentAccount = 0;
+    vListBox m_autocomplete;
+    CircularBuffer<string> m_formulaHistoric = new CircularBuffer<string>(100);
+    Stopwatch m_formulaDoubleClickClock = Stopwatch.StartNew();
+    int m_formulaSelectionStart = 0;
 
     #endregion
 
@@ -55,6 +59,13 @@ namespace FBI.MVC.View
     public AccountsView()
     {
       InitializeComponent();
+      m_autocomplete = new vListBox();
+
+      m_formulaTextBox.Controls.Add(m_autocomplete);
+      m_autocomplete.Width = 200;
+      m_autocomplete.Height = 200;
+      m_autocomplete.Visible = false;
+      m_autocomplete.BringToFront();
     }
     
     public void SetController(IController p_controller)
@@ -67,7 +78,7 @@ namespace FBI.MVC.View
       try
       {
         m_accountTV = new FbiTreeView<Account>(AccountModel.Instance.GetDictionary(), null, true);
-        m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary());
+        m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary(), null, true);
 
         AccountsTVInit();
         GlobalFactsTVInit();
@@ -75,7 +86,7 @@ namespace FBI.MVC.View
       }
       catch (Exception e)
       {
-        Forms.MsgBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.Message + e.StackTrace);
       }
 
@@ -114,8 +125,19 @@ namespace FBI.MVC.View
       m_allocationKeyButton.Click += OnAllocationKeyButtonClick;
 
       m_accountTV.MouseDown += OnAccountsTreeviewMouseDown;
+      m_globalFactsTV.MouseDown += OnGlobalFactTVMouseDown;
       m_accountTV.NodeDropped += OnAccountsTreeviewNodeDropped;
       m_dropToExcelRightClickMenu.Click += OnDropSelectedAccountToExcel;
+      m_formulaTextBox.AllowDrop = true;
+      m_formulaTextBox.DragDrop += OnFormulaDragDrop;
+      m_formulaTextBox.DragOver += OnFormulaDragOver;
+      m_formulaTextBox.TextChanged += OnFormulaChanged;
+      m_formulaTextBox.KeyUp += OnFormulaKeyUp;
+      m_formulaTextBox.KeyDown += OnFormulaKeyDown;
+      m_formulaTextBox.MouseDown += OnFormulaMouseDown;
+      m_autocomplete.KeyUp += OnFormulaKeyUp;
+      m_autocomplete.MouseDoubleClick += OnAutoCompleteMouseDoubleClick;
+      m_globalFactsTV.MouseDoubleClick += OnGlobalFactTVMouseDoubleClick;
     }
 
     public void CloseView()
@@ -268,6 +290,237 @@ namespace FBI.MVC.View
 
     #endregion
 
+    #region Autocomplete
+
+    string FindCurrentFormulaToken(out int p_position, out bool p_endQuote)
+    {
+      string token = "";
+      int selectionStart = m_formulaTextBox.SelectionStart;
+      bool insideQuote = false;
+      p_endQuote = false;
+      p_position = m_formulaTextBox.Text.Length;
+
+      for (int i = 0; i < m_formulaTextBox.Text.Length && i < selectionStart; ++i)
+      {
+        if (m_formulaTextBox.Text[i] == '\"')
+        {
+          insideQuote = !insideQuote;
+          token = "";
+          if (insideQuote)
+            p_position = i + 1;
+        }
+        else
+          if (insideQuote)
+            token += m_formulaTextBox.Text[i];
+        p_endQuote = (m_formulaTextBox.Text[i] == '\"');
+      }
+      p_endQuote = p_endQuote && !insideQuote;
+      if (p_endQuote)
+        p_position = selectionStart;
+      return (token);
+    }
+
+    string FindCompleteToken()
+    {
+      int l_posToken;
+      bool l_endQuote;
+      string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+
+      if (!l_endQuote)
+      {
+        l_token = m_formulaTextBox.Text.Substring(l_posToken);
+        int l_pos = l_token.IndexOf("\"");
+        if (l_pos > 0)
+          return l_token.Substring(0, l_pos);
+      }
+      return (l_token);
+    }
+
+    void OnFormulaChanged(object sender, EventArgs e)
+    {
+      if (m_isValidAutoComplete)
+        return;
+      if (!m_restoreHistoric)
+        m_formulaHistoric.Push(m_formulaTextBox.Text);
+      m_restoreHistoric = false;
+      int l_posToken;
+      bool l_endQuote;
+      string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+      List<string> l_accountList = AccountModel.Instance.GetMatchings(l_token);
+      List<string> l_globalFactList = GlobalFactModel.Instance.GetMatchings(l_token);
+      List<string> l_list = new List<string>();
+
+      l_list.AddRange(l_accountList);
+      l_list.AddRange(l_globalFactList);
+      l_list.Sort();
+      if (l_list.Count == 0)
+      {
+        if (l_endQuote)
+        {
+          l_list.Add("[n]");
+          l_list.Add("[n+1]");
+          l_list.Add("[n-1]");
+        }
+        else
+        {
+          m_autocomplete.Items.Clear();
+          m_autocomplete.SelectedItem = null;
+          return;
+        }
+      }
+      m_autocomplete.DataSource = l_list;
+      m_autocomplete.SelectedItem = m_autocomplete.Items[0];
+      System.Drawing.Point l_point = new System.Drawing.Point();
+      if (WinApi.GetCaretPos(out l_point))
+      {
+        l_point.Y += 15;
+        m_autocomplete.Location = l_point;
+      }
+      m_autocomplete.Height = 2 + 20 * l_list.Count;
+      m_autocomplete.Show();
+    }
+
+    void OnFormulaKeyUp(object sender, KeyEventArgs p_e)
+    {
+      int l_index = m_autocomplete.SelectedIndex;
+      m_isValidAutoComplete = false;
+
+      if (m_autocomplete.Visible)
+      {
+        switch (p_e.KeyCode)
+        {
+          case Keys.Escape:
+            m_autocomplete.Hide();
+            break;
+          case Keys.Return:
+            ValidateAutoComplete();
+            break;
+          case Keys.Down:
+            m_autocomplete.SelectedItem = m_autocomplete.Items[(l_index + 1) % m_autocomplete.Items.Count];
+            m_autocomplete.Refresh();
+            break;
+          case Keys.Up:
+            m_autocomplete.SelectedItem = m_autocomplete.Items[(l_index - 1 < 0) ? 0 : l_index - 1];
+            m_autocomplete.Refresh();
+            break;
+        }
+        if (m_autocomplete.Items.Count == 0)
+          m_autocomplete.Hide();
+      }
+    }
+
+    void OnFormulaKeyDown(object sender, KeyEventArgs p_e)
+    {
+      int l_index = m_autocomplete.SelectedIndex;
+      m_isValidAutoComplete = false;
+
+      switch (p_e.KeyCode)
+      {
+        case Keys.Return:
+          if (m_autocomplete.Visible)
+            m_isValidAutoComplete = true;
+          break;
+        case Keys.A:
+          if (p_e.Modifiers == Keys.Control)
+            m_formulaTextBox.SelectAll();
+          break;
+        case Keys.Z:
+          if (p_e.Modifiers == Keys.Control)
+          {
+            if (m_formulaHistoric.ContentSize > 0)
+            {
+              m_restoreHistoric = true;
+              m_formulaTextBox.Text = m_formulaHistoric.Top();
+              m_formulaHistoric.Pop();
+            }
+          }
+          break;
+      }
+    }
+
+    void OnAutoCompleteMouseDoubleClick(object sender, MouseEventArgs e)
+    {
+      ValidateAutoComplete();
+    }
+
+    void ValidateAutoComplete()
+    {
+      if (m_autocomplete.SelectedItem != null)
+      {
+        int l_selectionStart = m_formulaTextBox.SelectionStart;
+
+        if (m_formulaTextBox.Text[l_selectionStart - 1] == '\n')
+        {
+          l_selectionStart -= 2;
+          m_formulaTextBox.Text = m_formulaTextBox.Text.Remove(l_selectionStart, 2);
+          m_formulaTextBox.SelectionStart = l_selectionStart;
+        }
+
+        int l_posToken;
+        bool l_endQuote;
+        string l_token =  FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+        string l_text = m_formulaTextBox.Text.Substring(0, l_posToken);
+
+        l_text += m_autocomplete.SelectedItem.Text;
+        if (!l_endQuote)
+          l_text += "\""; 
+        l_text += m_formulaTextBox.Text.Substring(l_posToken + l_token.Length);
+        m_formulaTextBox.Text = l_text;
+        l_selectionStart = l_selectionStart + m_autocomplete.SelectedItem.Text.Length - l_token.Length + 1;
+        m_formulaTextBox.SelectionStart = l_selectionStart;
+        m_autocomplete.Hide();
+        m_formulaTextBox.Focus();
+        OnFormulaChanged(null, null);
+      }
+    }
+
+    void OnFormulaClick()
+    {
+      string l_token = FindCompleteToken();
+
+      vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId(l_token));
+
+      if (l_node == null)
+       l_node = m_globalFactsTV.FindNode(GlobalFactModel.Instance.GetValueId(l_token));
+      if (l_node != null)
+      {
+        l_node.TreeView.SelectedNode = l_node;
+        l_node.TreeView.Refresh();
+      }
+    }
+
+    void OnFormulaMouseDown(object sender, EventArgs e)
+    {
+      if (m_formulaDoubleClickClock.ElapsedMilliseconds > 300)
+      {
+        m_formulaSelectionStart = m_formulaTextBox.SelectionStart;
+        m_formulaDoubleClickClock.Restart();
+      }
+      else
+      {
+        m_formulaTextBox.SelectionStart = m_formulaSelectionStart;
+        OnFormulaMouseDoubleClick();
+      }
+      OnFormulaClick();
+    }
+
+    void OnFormulaMouseDoubleClick()
+    {
+      int l_posToken;
+      bool l_endQuote;
+      FindCurrentFormulaToken(out l_posToken, out l_endQuote);
+      string l_token = FindCompleteToken();
+
+      if (!l_endQuote)
+      {
+        m_formulaTextBox.SelectionStart = l_posToken;
+        m_formulaTextBox.SelectionLength = l_token.Length;
+      }
+    }
+
+
+    #endregion
+
     #region Events
 
     #region Account
@@ -285,7 +538,7 @@ namespace FBI.MVC.View
       else
       {
         if (p_status != ErrorMessage.SUCCESS)
-          Forms.MsgBox.Show(Local.GetValue("accounts.error.create") + "\r\n" + Error.GetMessage(p_status));
+          MsgBox.Show(Local.GetValue("accounts.error.create") + "\r\n" + Error.GetMessage(p_status));
       }
     }
 
@@ -340,7 +593,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          Forms.MsgBox.Show(Local.GetValue("accounts.error.update"));
+          MessageBox.Show(Local.GetValue("accounts.error.update") + "\r\n" + Error.GetMessage(p_status));
         }
       }
     }
@@ -357,7 +610,7 @@ namespace FBI.MVC.View
       {
         if (p_status != Network.ErrorMessage.SUCCESS)
         {
-          Forms.MsgBox.Show(Error.GetMessage(p_status));
+          MessageBox.Show(Error.GetMessage(p_status));
           return;
         }
         vTreeNode l_toDelete = m_accountTV.FindNode(p_id);
@@ -387,23 +640,23 @@ namespace FBI.MVC.View
         return;
 
       string l_result = PasswordBox.Open(Local.GetValue("accounts.msg_account_deletion1") + "\n\r" + "\n"
-         + Local.GetValue("accounts.msg_account_deletion4")
+         + Local.GetValue("accounts.msg_account_deletion2")
          , Local.GetValue("accounts.msg_account_deletion_confirmation"));
       if (l_result != PasswordBox.Canceled && l_result != Addin.Password)
         MsgBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-      else if (m_controller.DeleteAccount((UInt32)m_accountTV.SelectedNode.Value) == false)
+      else if (l_result != PasswordBox.Canceled && m_controller.DeleteAccount((UInt32)m_accountTV.SelectedNode.Value) == false)
         MsgBox.Show(m_controller.Error);
     }
 
     private void OnNameTextBoxKeyDown(object p_sender, KeyEventArgs p_e)
-    {
+    {      
       if (p_e.KeyCode == Keys.Enter)
       {
         if (m_currentNode != null)
         {
           Account l_currentAccount;
 
-          if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null)
+          if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null)
           {
             l_currentAccount = l_currentAccount.Clone();
             l_currentAccount.Name = Name_TB.Text;
@@ -415,6 +668,25 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    void OnFormulaDragOver(object sender, DragEventArgs e)
+    {
+      if (!m_isEditingFormulaFlag)
+        return;
+      if (e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true))
+        e.Effect = DragDropEffects.Move;
+    }
+
+    void OnFormulaDragDrop(object sender, DragEventArgs e)
+    {
+      if (!m_isEditingFormulaFlag)
+        return;
+      if (!e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true))
+        return;
+      vTreeNode l_node = e.Data.GetData("VIBlend.WinForms.Controls.vTreeNode") as vTreeNode;
+
+      m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
+    }
 
     #region Click
 
@@ -476,27 +748,26 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           if (m_formulaTextBox.Text == "")
           {
-            l_currentAccount.Formula = m_grammar.Formula;
+            l_currentAccount.Formula = "";
             if (m_controller.UpdateAccount(l_currentAccount) == false)
               MsgBox.Show(m_controller.Error); 
             SetEditingFormulaUI(false);
             return;
           }
-          m_bnf.AddRule("fbi_to_grammar", m_grammar.ToGrammar);
-          if (m_bnf.Parse("fbi_to_grammar", m_formulaTextBox.Text))
+          if (m_controller.m_bnf.Parse(m_formulaTextBox.Text, FbiGrammar.TO_SERVER))
           {
-            l_currentAccount.Formula = m_grammar.Formula;
+            l_currentAccount.Formula = m_controller.m_bnf.Concatenated;
             if (m_controller.UpdateAccount(l_currentAccount) == false)
               MsgBox.Show(m_controller.Error); 
             SetEditingFormulaUI(false);
           }
           else
-            MsgBox.Show(m_grammar.LastError);
+            MsgBox.Show(m_controller.m_bnf.LastError);
         }
       }
     }
@@ -510,6 +781,8 @@ namespace FBI.MVC.View
     private void OnFormulaEditionButtonClick(object p_sender, EventArgs p_e)
     {
       m_saveFormula = m_formulaTextBox.Text;
+      m_formulaHistoric.Clear();
+      m_formulaHistoric.Push(m_saveFormula);
       SetEditingFormulaUI(true);
     }
 
@@ -535,7 +808,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.Description = m_descriptionTextBox.Text;
@@ -555,7 +828,17 @@ namespace FBI.MVC.View
       {
         vTreeNode l_node = m_accountTV.FindAtPosition(((MouseEventArgs)p_e).Location);
         if (l_node != null)
-          m_formulaTextBox.Text += "\"" + l_node.Text + "\"";
+          m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
+      }
+    }
+
+    private void OnGlobalFactTVMouseDoubleClick(object p_sender, EventArgs p_e)
+    {
+      if (m_isEditingFormulaFlag == true)
+      {
+        vTreeNode l_node = m_globalFactsTV.FindAtPosition(((MouseEventArgs)p_e).Location);
+        if (l_node != null)
+          m_formulaTextBox.Text += "\"" + l_node.Text + "\"[n]";
       }
     }
 
@@ -626,6 +909,7 @@ namespace FBI.MVC.View
         m_currentNode = p_e.Node;
         if (m_currentNode != null)
         {
+          m_currentAccount = (UInt32)m_currentNode.Value;
           DesactivateUnallowed();
           DisplayAttributes();
         }
@@ -642,6 +926,14 @@ namespace FBI.MVC.View
         m_currentNode = m_accountTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y));
       if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
         m_accountTV.DoDragDrop(m_currentNode, DragDropEffects.Move);
+    }
+
+    void OnGlobalFactTVMouseDown(object sender, MouseEventArgs p_e)
+    {
+      vTreeNode l_node = m_globalFactsTV.FindAtPosition(new System.Drawing.Point(p_e.X, p_e.Y));
+      
+      if (l_node != null)
+        m_globalFactsTV.DoDragDrop(l_node, DragDropEffects.Move);
     }
 
     private void OnAccountsTreeviewNodeDropped(vTreeNode p_draggedNode, vTreeNode p_targetNode)
@@ -684,7 +976,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.Process = (Account.AccountProcess)((vComboBox)p_sender).SelectedItem.Value;
@@ -702,7 +994,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.Type = (Account.AccountType)((vComboBox)p_sender).SelectedItem.Value;
@@ -728,7 +1020,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.ConversionOptionId = (Account.ConversionOptions)((vComboBox)p_sender).SelectedItem.Value;
@@ -744,7 +1036,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           l_currentAccount.ConsolidationOptionId = (Account.ConsolidationOptions)((vComboBox)p_sender).SelectedItem.Value;
@@ -760,7 +1052,7 @@ namespace FBI.MVC.View
       {
         Account l_currentAccount;
 
-        if ((l_currentAccount = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           l_currentAccount = l_currentAccount.Clone();
           Account.FormulaTypes l_value = (Account.FormulaTypes)((vComboBox)p_sender).SelectedItem.Value;
@@ -775,7 +1067,7 @@ namespace FBI.MVC.View
               if (l_result == PasswordBox.Canceled || l_result != Addin.Password)
               {
                 if (l_result != PasswordBox.Canceled)
-                  Forms.MsgBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"),
+                  MessageBox.Show(Local.GetValue("accounts.msg_incorrect_password"), Local.GetValue("general.accounts"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (m_controller.UpdateAccount(l_currentAccount) == false)
                   MsgBox.Show(m_controller.Error); 
@@ -883,7 +1175,7 @@ namespace FBI.MVC.View
     {
       if ((m_currentNode != null) && m_isEditingFormulaFlag == false)
       {
-        Account l_account = AccountModel.Instance.GetValue((UInt32)m_currentNode.Value);
+        Account l_account = AccountModel.Instance.GetValue(m_currentAccount);
 
         if (l_account == null)
           return;
@@ -938,11 +1230,10 @@ namespace FBI.MVC.View
 
         // Formula TB
         m_formulaTextBox.Text = "";
-        m_bnf.AddRule("fbi_to_human_grammar", m_grammar.ToHuman);
-        if (m_bnf.Parse("fbi_to_human_grammar", l_account.Formula))
-          m_formulaTextBox.Text = m_grammar.Formula;
+        if (m_controller.m_bnf.Parse(l_account.Formula, FbiGrammar.TO_HUMAN))
+          m_formulaTextBox.Text = m_controller.m_bnf.Concatenated;
         else
-          Forms.MsgBox.Show(m_grammar.LastError);
+          m_formulaTextBox.Text = m_controller.m_bnf.LastError;
 
         //Description
         m_descriptionTextBox.Text = l_account.Description;
@@ -1005,6 +1296,5 @@ namespace FBI.MVC.View
     }
 
     #endregion
-
   }
 }

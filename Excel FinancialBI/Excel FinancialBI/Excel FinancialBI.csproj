@@ -18,12 +18,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>true</RegisterForComInterop>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -247,6 +248,9 @@
     <Compile Include="Forms\AFbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\FbiChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -258,6 +262,15 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\FbiTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\FbiUserBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FbiUserBox.Designer.cs">
+      <DependentUpon>FbiUserBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FlatFBITreeView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
@@ -285,7 +298,7 @@
     <Compile Include="MVC\Controller\Plateform Management\CurrenciesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
-    <Compile Include="MVC\Controller\Plateform Management\EmployeeControler.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AxisOwnedController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\EntityController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExcelGlobalFactController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExcelRateController.cs" />
@@ -301,6 +314,8 @@
     <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Controller\SettingsController.cs" />
+    <Compile Include="MVC\Model\ChartAccountModel.cs" />
+    <Compile Include="MVC\Model\ChartPanelModel.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AComputeModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
@@ -312,6 +327,10 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\CRUD\ChartAccount.cs" />
+    <Compile Include="MVC\Model\CRUD\ChartPanel.cs" />
+    <Compile Include="MVC\Model\CRUD\ChartSettings.cs" />
+    <Compile Include="MVC\Model\CRUD\Serie.cs" />
     <Compile Include="MVC\Model\CRUD\FBIFunction.cs" />
     <Compile Include="MVC\Model\CRUD\LegalHoliday.cs" />
     <Compile Include="MVC\Model\DuplicateRHAllocation.cs" />
@@ -386,6 +405,7 @@
     <Compile Include="MVC\Model\CRUD\ResultKey.cs" />
     <Compile Include="MVC\Model\SourcedComputeModel.cs" />
     <Compile Include="MVC\Model\LegalHolidayModel.cs" />
+    <Compile Include="MVC\Model\ChartSettingsModel.cs" />
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
@@ -400,6 +420,12 @@
     </Compile>
     <Compile Include="MVC\View\Connection\ConnectionSidePane.Designer.cs">
       <DependentUpon>ConnectionSidePane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ChartPanelSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ChartPanelSelection.Designer.cs">
+      <DependentUpon>ChartPanelSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Controlling UI\ControllingUI_2.cs">
       <SubType>Form</SubType>
@@ -430,6 +456,12 @@
     </Compile>
     <Compile Include="MVC\View\Controlling UI\CUIVisualization.Designer.cs">
       <DependentUpon>CUIVisualization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.Designer.cs">
+      <DependentUpon>PeriodsComparisonSelectionView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\DuplicatesUIDemo.cs">
       <SubType>Form</SubType>
@@ -521,7 +553,7 @@
     <Compile Include="MVC\View\Plateform Management\AxisBaseView.Designer.cs">
       <DependentUpon>AxisBaseView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\EmployeeView.cs">
+    <Compile Include="MVC\View\Plateform Management\AxisOwnedView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\CurrenciesView.cs">
@@ -727,21 +759,29 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Utils\BNF\BnfConsumer.cs" />
+    <Compile Include="Utils\ArrayUtils.cs" />
+    <Compile Include="Utils\BNF\BNF.cs" />
+    <Compile Include="Utils\BNF\Consumer.cs" />
     <Compile Include="Utils\BNF\FbiGrammar.cs" />
-    <Compile Include="Utils\BNF\SimpleBnf.cs" />
+    <Compile Include="Utils\BNF\Rule.cs" />
+    <Compile Include="Utils\CircularBuffer.cs" />
+    <Compile Include="Utils\ColorGradient.cs" />
     <Compile Include="Utils\CustomComponentResourceManager.cs" />
+    <Compile Include="Utils\DGVFormatUtils.cs" />
     <Compile Include="Utils\ExcelFormatting.cs" />
     <Compile Include="Utils\ExcelUtils.cs" />
     <Compile Include="Utils\Formats.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\Local.cs" />
     <Compile Include="Utils\MultiIndexDictionary.cs" />
+    <Compile Include="Utils\PeriodUtils.cs" />
     <Compile Include="Utils\RightManager.cs" />
     <Compile Include="Utils\SafeDictionary.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\TreeNode.cs" />
     <Compile Include="Utils\TreeviewUtils.cs" />
+    <Compile Include="Utils\ControlUtils.cs" />
+    <Compile Include="Utils\WinAPI.cs" />
     <Compile Include="Utils\WorksheetWriter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -751,11 +791,17 @@
     <EmbeddedResource Include="FinancialBiXLL.resx">
       <DependentUpon>FinancialBiXLL.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FbiUserBox.resx">
+      <DependentUpon>FbiUserBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
       <DependentUpon>CommitFollowUpView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Connection\ConnectionSidePane.resx">
       <DependentUpon>ConnectionSidePane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\ChartPanelSelection.resx">
+      <DependentUpon>ChartPanelSelection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\ControllingUI_2.resx">
       <DependentUpon>ControllingUI_2.cs</DependentUpon>
@@ -771,6 +817,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\CUIVisualization.resx">
       <DependentUpon>CUIVisualization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.resx">
+      <DependentUpon>PeriodsComparisonSelectionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\ResultView.resx">
       <DependentUpon>ResultView.cs</DependentUpon>
@@ -843,6 +892,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\PasswordBox.resx">
       <DependentUpon>PasswordBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\PPS Controls\PBarUI.dje-NE.resx">
+      <DependentUpon>PBarUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\PBarUI.resx">
       <DependentUpon>PBarUI.cs</DependentUpon>

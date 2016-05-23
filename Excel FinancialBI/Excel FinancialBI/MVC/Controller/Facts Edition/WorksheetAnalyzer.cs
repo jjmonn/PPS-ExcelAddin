@@ -68,6 +68,7 @@ namespace FBI.MVC.Model
     private void SnapshotBackgroundWorker_DoWork()//object sender, DoWorkEventArgs e)
     {
       Range l_cell;
+      m_dimensions.InitPeriods();
       for (UInt32 l_rowIndex = 1; l_rowIndex <= m_lastCell.Row; l_rowIndex++)
       {
         for (UInt32 l_columnIndex = 1; l_columnIndex <= m_lastCell.Column; l_columnIndex++)
@@ -100,7 +101,7 @@ namespace FBI.MVC.Model
     private delegate void ReportProgress_Delegate(object sender, ProgressChangedEventArgs e);
     private void SnapshotBackgroundWorker_ReportProgress(object sender, ProgressChangedEventArgs e)
     {
-       if (m_progressBarView.InvokeRequired)
+      if (m_progressBarView.InvokeRequired)
       {
         ReportProgress_Delegate MyDelegate = new ReportProgress_Delegate(SnapshotBackgroundWorker_ReportProgress);
         m_progressBarView.Invoke(MyDelegate, new object[] { sender, e});
@@ -127,7 +128,6 @@ namespace FBI.MVC.Model
     public void Cancel()
     {
       m_snapshotBackgroundWorker.CancelAsync();
-
     }
 
     #endregion

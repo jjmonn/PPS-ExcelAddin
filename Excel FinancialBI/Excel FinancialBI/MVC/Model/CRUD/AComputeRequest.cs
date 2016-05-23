@@ -38,15 +38,24 @@ namespace FBI.MVC.Model.CRUD
 
     public void Dump(ByteBuffer p_packet, UInt32 p_versionId, UInt32 p_entityId)
     {
+      Version l_version = VersionModel.Instance.GetValue(p_versionId);
+
       p_packet.WriteUint32((UInt32)Process);
       p_packet.WriteUint32(p_versionId);
       p_packet.WriteUint32(GlobalFactVersionId);
       p_packet.WriteUint32(RateVersionId);
       p_packet.WriteUint32(p_entityId);
       p_packet.WriteUint32(CurrencyId);
-      p_packet.WriteInt32(StartPeriod);
-      p_packet.WriteInt32(NbPeriods);
-
+      if (Process == Account.AccountProcess.RH || l_version == null)
+      {
+        p_packet.WriteInt32(StartPeriod);
+        p_packet.WriteInt32(NbPeriods);
+      }
+      else
+      {
+        p_packet.WriteUint32(l_version.StartPeriod);
+        p_packet.WriteUint32(l_version.NbPeriod);
+      }
       p_packet.WriteUint32((UInt32)AccountList.Count);
       foreach (UInt32 l_account in AccountList)
         p_packet.WriteUint32(l_account);

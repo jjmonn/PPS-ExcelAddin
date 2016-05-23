@@ -110,7 +110,7 @@ namespace FBI.MVC.Model
         case CRUD.TimeConfig.YEARS:
           return DateTime.FromOADate(p_period).ToString("yyyy");
         case CRUD.TimeConfig.MONTHS:
-          return DateTime.FromOADate(p_period).ToString("mm yyyy");
+          return DateTime.FromOADate(p_period).ToString("MMMM yyyy");
         case CRUD.TimeConfig.WEEK:
           return Utils.Local.GetValue("general.week") + " " + GetWeekNumberFromDateId(p_period) + ", " + DateTime.FromOADate(p_period).ToString("yyyy");
         case CRUD.TimeConfig.DAYS:
@@ -239,26 +239,16 @@ namespace FBI.MVC.Model
     {
       List<Int32> l_periodsList = new List<Int32>();
       l_periodsList.Add(p_startPeriod);
-      if ((p_nbPeriod <= 1))
+      if (p_nbPeriod <= 1)
         return (l_periodsList);
-      double l_currentYear = DateTime.FromOADate(p_startPeriod).Year;
-      Int32 l_currentMonth =  (Int32) DateTime.FromOADate(p_startPeriod).Month;
 
       for (Int32 i = 1; i <= p_nbPeriod - 1; i++)
       {
-        p_startPeriod += m_monthList[l_currentMonth % (12)];
-        // february of a leap year
-        if ((l_currentMonth == 1 && DateTime.IsLeapYear((Int32)l_currentYear)))
-        {
-          p_startPeriod += 1;
-        }
+        DateTime date = DateTime.FromOADate(p_startPeriod).AddMonths(1);
+        while (date.Day != DateTime.DaysInMonth(date.Year, date.Month))
+          date = date.AddDays(1);
+        p_startPeriod = (Int32)date.ToOADate();
         l_periodsList.Add(p_startPeriod);
-        if ((l_currentMonth == 12))
-        {
-          l_currentYear += 1;
-          l_currentMonth = 0;
-        }
-        l_currentMonth += 1;
       }
       return (l_periodsList);
     }
@@ -387,6 +377,29 @@ namespace FBI.MVC.Model
       }
       return l_periods;
 
+    }
+
+    static public List<Int32> GetMonthPeriodListFromPeriodsRange(System.DateTime p_startDate, System.DateTime p_endDate)
+    {
+      List<Int32> l_periods = new List<Int32>();
+      while (p_startDate < p_endDate)
+      {
+        l_periods.Add(PeriodModel.GetMonthIdFromPeriodId((Int32)p_startDate.ToOADate()));
+        p_startDate = p_startDate.AddMonths(1);
+      }
+      return l_periods;
+    }
+
+    static public List<Int32> GetYearsPeriodListFromPeriodsRange(System.DateTime p_startDate, System.DateTime p_endDate)
+    {
+      List<Int32> l_periods = new List<Int32>();
+      while (p_startDate < p_endDate)
+      {
+        l_periods.Add((Int32)p_startDate.ToOADate());
+        p_startDate = p_startDate.AddYears(1);
+      }
+      l_periods.Add((Int32)p_startDate.ToOADate());
+      return l_periods;
     }
 
     #endregion

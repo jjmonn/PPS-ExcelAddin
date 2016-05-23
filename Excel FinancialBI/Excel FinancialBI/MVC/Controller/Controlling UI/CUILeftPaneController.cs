@@ -39,6 +39,21 @@ namespace FBI.MVC.Controller
       m_view.LoadView();
     }
 
+    public bool PeriodDiff
+    {
+      get { return (m_parentController.PeriodDiff); }
+    }
+
+    public SafeDictionary<TimeConfig, SafeDictionary<Int32, Int32>> PeriodDiffAssociations
+    {
+      get { return (m_parentController.PeriodDiffAssociations); }
+    }
+
+    public void ReloadPeriods()
+    {
+      m_view.ReloadPeriods();
+    }
+
     public UInt32 GetCurrency()
     {
       SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();
@@ -53,8 +68,8 @@ namespace FBI.MVC.Controller
       SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();
       List<UInt32> l_list = new List<uint>();
 
-      if (l_dic == null)
-        return (l_list);
+      if (l_dic[typeof(Version)] == null)
+        return (null);
       foreach (UInt32 l_versionId in l_dic[typeof(Version)])
       {
         Version l_version = VersionModel.Instance.GetValue(l_versionId);
@@ -62,6 +77,18 @@ namespace FBI.MVC.Controller
         if (l_version != null && !l_version.IsFolder)
           l_list.Add(l_versionId);
       }
+      return (l_list);
+    }
+
+    public List<Int32> GetPeriods()
+    {
+      SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();
+      List<Int32> l_list = new List<int>();
+
+      if (l_dic[typeof(PeriodModel)] == null)
+        return (null);
+      foreach (UInt32 l_period in l_dic[typeof(PeriodModel)])
+        l_list.Add((Int32)l_period);
       return (l_list);
     }
 

@@ -20,6 +20,7 @@ namespace FBI.MVC.Controller
 
     public override IView View { get { return (m_view); } }
     private const string ACCOUNTS_FORBIDDEN_CHARACTERS = "+-*=<>^?:;![]";
+    public BNF m_bnf = new BNF();
 
     #endregion
 
@@ -29,6 +30,7 @@ namespace FBI.MVC.Controller
     {
       m_view = new AccountsView();
       m_view.SetController(this);
+      FbiGrammar.AddGrammar(m_bnf);
       this.LoadView();
     }
 
@@ -83,9 +85,33 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
+    SortedSet<Account> GetDependantAccounts(UInt32 p_id)
+    {
+      SortedSet<Account> l_dependantAccounts = new SortedSet<Account>();
+
+      List<Account> l_children = AccountModel.Instance.GetChildren(p_id);
+
+      foreach (Account l_child in l_children)
+      {
+        SortedSet<Account> l_childDep = GetDependantAccounts(l_child.Id);
+
+        foreach (Account l_dep in l_childDep)
+          l_dependantAccounts.Add(l_dep);
+      }
+      foreach (Account l_account in AccountModel.Instance.GetDictionary().Values)
+      {
+        FbiGrammar.ClearAccounts();
+        bool l_result = m_bnf.Parse(l_account.Formula, FbiGrammar.TO_HUMAN);
+        if (l_result && FbiGrammar.Accounts.Contains(p_id))
+          l_dependantAccounts.Add(l_account);
+      }
+      l_dependantAccounts.Remove(AccountModel.Instance.GetValue(p_id));
+      return (l_dependantAccounts);
+    }
+
     public bool DeleteAccount(UInt32 p_id)
     {
-      List<Account> l_dependantAccounts = AccountModel.Instance.GetChildren(p_id);
+      SortedSet<Account> l_dependantAccounts = GetDependantAccounts(p_id);
 
       if (l_dependantAccounts.Count > 0)
       {
@@ -124,6 +150,9 @@ namespace FBI.MVC.Controller
 
     public bool CreateAccount(Account p_account)
     {
+      Account l_account = AccountModel.Instance.GetDictionary().SortedValues.Last();
+
+      p_account.ItemPosition = l_account.ItemPosition + 1;
       if (CheckAccountValidity(p_account) == false)
       {
         Error = Local.GetValue("accounts.error.create") + ": " + Error;

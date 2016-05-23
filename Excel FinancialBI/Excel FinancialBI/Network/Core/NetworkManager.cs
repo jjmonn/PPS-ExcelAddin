@@ -92,6 +92,17 @@ namespace FBI.Network
           new RemoteCertificateValidationCallback(ValidateServerCertificate),
           null);
         m_StreamSSL.AuthenticateAsClient("pps");
+
+        byte[] header = System.Text.Encoding.UTF8.GetBytes("RAW");
+
+        m_StreamSSL.Write(header, 0, header.Length);
+        m_StreamSSL.Flush();
+
+        byte[] answer = new byte[5];
+        int ret = m_StreamSSL.Read(answer, 0, answer.Length);
+        if (ret < answer.Length)
+          return (false);
+        return (System.Text.Encoding.UTF8.GetString(answer) == "READY");
       }
       catch (Exception e)
       {
@@ -103,18 +114,6 @@ namespace FBI.Network
         Debug.WriteLine("SSL authentication failed");
         return (false);
       }
-
-      byte[] header = System.Text.Encoding.UTF8.GetBytes("NOWEBSOCKET");
-
-      m_StreamSSL.Write(header, 0, header.Length);
-      m_StreamSSL.Flush();
-
-      byte[] answer = new byte[5];
-      int ret = m_StreamSSL.Read(answer, 0, answer.Length);
-
-      if (ret < answer.Length)
-        return (false);
-      return (System.Text.Encoding.UTF8.GetString(answer) == "READY");
     }
 
     public static bool Send(ByteBuffer p_data)
@@ -224,7 +223,7 @@ namespace FBI.Network
         System.Diagnostics.Debug.WriteLine("Undefined packet type " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
       else
       {
-        System.Diagnostics.Debug.WriteLine("Receive defined " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
+        System.Diagnostics.Debug.WriteLine("Receive defined " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")" + ": " + l_packet.GetError());
         for (int i = 0; i < l_callback.Count; i++)
           l_callback.ElementAt(i)(l_packet.Clone());
       }

@@ -80,22 +80,38 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("general.error.name_in_use");
         return (false);
       }
+      if (p_version.ParentId != 0)
+      {
+        Version l_parent = VersionModel.Instance.GetValue(p_version.ParentId);
+
+        if (l_parent == null || l_parent.IsFolder == false)
+        {
+          Error = Local.GetValue("versions.error.invalid_parent");
+          return (false);
+        }
+      }
       if (p_version.IsFolder == false)
       {
         if (Enum.IsDefined(typeof(TimeConfig), p_version.TimeConfiguration) == false)
         {
-          Error = Local.GetValue("version.error.invalid_time_config");
+          Error = Local.GetValue("versions.error.invalid_time_config");
           return (false);
         }
         if (p_version.NbPeriod <= 0)
         {
-          Error = Local.GetValue("version.error.invalid_nb_period");
+          Error = Local.GetValue("versions.error.invalid_nb_period");
           return (false);
         }
         if (IsCompatibleVersion(p_version, RatesVersionModel.Instance.GetValue(p_version.RateVersionId)) == false)
           return (false);
         if (IsCompatibleVersion(p_version, GlobalFactVersionModel.Instance.GetValue(p_version.GlobalFactVersionId)) == false)
           return (false);
+      }
+      if (p_version.FormulaPeriodIndex > p_version.NbPeriod || p_version.FormulaNbPeriod > p_version.NbPeriod || 
+        p_version.FormulaNbPeriod + p_version.FormulaPeriodIndex > p_version.NbPeriod || p_version.FormulaNbPeriod == 0)
+      {
+        Error = Local.GetValue("versions.error.formula_period_range_invalid");
+        return (false);
       }
       return (true);
     }
@@ -123,7 +139,6 @@ namespace FBI.MVC.Controller
       if (VersionModel.Instance.GetValue(p_version.Id) == null)
       {
         Error = Local.GetValue("general.error.system");
-        System.Diagnostics.Debug.WriteLine("Refered version id does not exist, cannot be updated");
         return (false);
       }
       if (IsVersionValid(p_version) == false)
@@ -192,7 +207,7 @@ namespace FBI.MVC.Controller
           break;
 
         default :
-          System.Diagnostics.Debug.WriteLine("Verison creation : starting period setup. Time configuration not handled.");
+          System.Diagnostics.Debug.WriteLine("Version creation : starting period setup. Time configuration not handled.");
           break;
       }
     }

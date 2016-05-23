@@ -17,6 +17,10 @@ namespace FBI.MVC.Model.CRUD
     public List<Tuple<bool, AxisType, UInt32>> SortList { get; set; }
     public List<UInt32> Versions { get; set; }
     public bool IsDiff { get; set; }
+    public bool IsPeriodDiff { get; set; }
+    public SafeDictionary<TimeConfig, SafeDictionary<Int32, Int32>> PeriodDiffAssociations { get; set; }
+    public bool PeriodFilter { get; set; }
+    public List<Int32> Periods;
 
     public LegacyComputeRequest()
     {
@@ -26,12 +30,25 @@ namespace FBI.MVC.Model.CRUD
       AxisElemList = new List<Tuple<AxisType, uint>>();
       SortList = new List<Tuple<bool, AxisType, uint>>();
       IsDiff = false;
+      IsPeriodDiff = false;
+      PeriodFilter = false;
+      Periods = new List<int>();
+      PeriodDiffAssociations = new SafeDictionary<TimeConfig, SafeDictionary<int, int>>();
+      foreach (TimeConfig config in Enum.GetValues(typeof(TimeConfig)))
+        PeriodDiffAssociations[config] = new SafeDictionary<int, int>();
     }
 
     public void Dump(ByteBuffer p_packet, UInt32 p_versionId)
     {
       base.Dump(p_packet, p_versionId, EntityId);
 
+      p_packet.WriteBool(PeriodFilter);
+      if (PeriodFilter)
+      {
+        p_packet.WriteInt32(Periods.Count);
+        foreach (Int32 l_period in Periods)
+          p_packet.WriteInt32(l_period);
+      }
       bool l_entityDecomposition = SortList.Contains(new Tuple<bool, AxisType, UInt32>(true, AxisType.Entities, 0));
 
       if (l_entityDecomposition)
@@ -56,7 +73,8 @@ namespace FBI.MVC.Model.CRUD
       {
         p_packet.WriteInt32((Int32)l_sort.Item2);
         p_packet.WriteBool(l_sort.Item1);
-        p_packet.WriteUint32(l_sort.Item3);
+        if (!l_sort.Item1)
+          p_packet.WriteUint32(l_sort.Item3);
       }
       if (l_entityDecomposition)
         SortList.Add(new Tuple<bool, AxisType, UInt32>(true, AxisType.Entities, 0));

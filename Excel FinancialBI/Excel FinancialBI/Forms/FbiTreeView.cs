@@ -53,12 +53,32 @@ namespace FBI.Forms
       return (true);
     }
 
+    vTreeNode CloneNode(vTreeNode p_item)
+    {
+      vTreeNode l_clone = new vTreeNode();
+
+      l_clone.Value = p_item.Value;
+      l_clone.ImageIndex = p_item.ImageIndex;
+      l_clone.Text = p_item.Text;
+    iterate_clone:
+      foreach (vTreeNode l_child in p_item.Nodes)
+      {
+        vTreeNode l_newChild = CloneNode(l_child);
+        p_item.Nodes.Remove(l_child);
+        l_clone.Nodes.Add(l_newChild);
+        goto iterate_clone;
+      }
+      return (l_clone);
+    }
+
+
     public void FindAndAdd(NamedHierarchyCRUDEntity p_value)
     {
-      vTreeNode l_newNode = FindNode(p_value.Id);
+      vTreeNode l_prevNode = FindNode(p_value.Id);
       vTreeNode l_parentNode = FindNode(p_value.ParentId);
+      vTreeNode l_newNode;
 
-      if (l_newNode == null)
+      if (l_prevNode == null)
       {
         l_newNode = new vTreeNode();
         l_newNode.Value = p_value.Id;
@@ -66,6 +86,20 @@ namespace FBI.Forms
           l_parentNode.Nodes.Add(l_newNode);
         else
           Nodes.Add(l_newNode);
+      }
+      else
+      {
+        if (l_prevNode.Parent != l_parentNode)
+        {
+          l_newNode = CloneNode(l_prevNode);
+          l_prevNode.Remove();
+          if (l_parentNode != null)
+            l_parentNode.Nodes.Add(l_newNode);
+          else
+            Nodes.Add(l_newNode);
+        }
+        else
+          l_newNode = l_prevNode;
       }
       l_newNode.Text = p_value.Name;
       l_newNode.ImageIndex = (int)p_value.Image;
@@ -288,6 +322,5 @@ namespace FBI.Forms
       }
       return (true);
     }
-
   }
 }

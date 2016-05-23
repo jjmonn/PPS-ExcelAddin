@@ -38,19 +38,21 @@ namespace FBI.MVC.View
       this.Panel1 = new System.Windows.Forms.Panel();
       this.m_refreshButton = new VIBlend.WinForms.Controls.vButton();
       this.ImageList1 = new System.Windows.Forms.ImageList(this.components);
-      this.VersionTB = new VIBlend.WinForms.Controls.vTextBox();
-      this.CurrencyTB = new VIBlend.WinForms.Controls.vTextBox();
-      this.EntityTB = new VIBlend.WinForms.Controls.vTextBox();
       this.m_currencyLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_versionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_entityLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.panel2 = new System.Windows.Forms.Panel();
+      this.m_panel = new System.Windows.Forms.Panel();
+      this.VersionTB = new VIBlend.WinForms.Controls.vTextBox();
+      this.CurrencyTB = new VIBlend.WinForms.Controls.vTextBox();
+      this.EntityTB = new VIBlend.WinForms.Controls.vTextBox();
       this.m_chartsRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_editChartButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_dropChartOnExcelButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_panelRightClick = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_horizontalSplitBT = new System.Windows.Forms.ToolStripMenuItem();
       this.m_splitVerticalBT = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_chartEdit = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_delete = new System.Windows.Forms.ToolStripMenuItem();
       this.TableLayoutPanel1.SuspendLayout();
       this.Panel1.SuspendLayout();
       this.m_chartsRightClickMenu.SuspendLayout();
@@ -63,7 +65,7 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.ColumnCount = 1;
       this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
       this.TableLayoutPanel1.Controls.Add(this.Panel1, 0, 0);
-      this.TableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
+      this.TableLayoutPanel1.Controls.Add(this.m_panel, 0, 1);
       this.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.TableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
       this.TableLayoutPanel1.Name = "TableLayoutPanel1";
@@ -75,15 +77,12 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-      this.TableLayoutPanel1.Size = new System.Drawing.Size(688, 380);
+      this.TableLayoutPanel1.Size = new System.Drawing.Size(733, 358);
       this.TableLayoutPanel1.TabIndex = 1;
       // 
       // Panel1
       // 
       this.Panel1.Controls.Add(this.m_refreshButton);
-      this.Panel1.Controls.Add(this.VersionTB);
-      this.Panel1.Controls.Add(this.CurrencyTB);
-      this.Panel1.Controls.Add(this.EntityTB);
       this.Panel1.Controls.Add(this.m_currencyLabel);
       this.Panel1.Controls.Add(this.m_versionLabel);
       this.Panel1.Controls.Add(this.m_entityLabel);
@@ -91,7 +90,7 @@ namespace FBI.MVC.View
       this.Panel1.Location = new System.Drawing.Point(0, 0);
       this.Panel1.Margin = new System.Windows.Forms.Padding(0);
       this.Panel1.Name = "Panel1";
-      this.Panel1.Size = new System.Drawing.Size(688, 25);
+      this.Panel1.Size = new System.Drawing.Size(733, 25);
       this.Panel1.TabIndex = 1;
       // 
       // m_refreshButton
@@ -99,7 +98,7 @@ namespace FBI.MVC.View
       this.m_refreshButton.AllowAnimations = true;
       this.m_refreshButton.BackColor = System.Drawing.Color.Transparent;
       this.m_refreshButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.m_refreshButton.ImageKey = "refresh classic green.ico";
+      this.m_refreshButton.ImageKey = "(none)";
       this.m_refreshButton.ImageList = this.ImageList1;
       this.m_refreshButton.Location = new System.Drawing.Point(3, 0);
       this.m_refreshButton.Name = "m_refreshButton";
@@ -118,69 +117,6 @@ namespace FBI.MVC.View
       this.ImageList1.Images.SetKeyName(0, "Export classic green bigger.ico");
       this.ImageList1.Images.SetKeyName(1, "refresh classic green.ico");
       // 
-      // VersionTB
-      // 
-      this.VersionTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.VersionTB.BackColor = System.Drawing.Color.White;
-      this.VersionTB.BoundsOffset = new System.Drawing.Size(1, 1);
-      this.VersionTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
-      this.VersionTB.DefaultText = "Empty...";
-      this.VersionTB.Enabled = false;
-      this.VersionTB.Location = new System.Drawing.Point(530, 1);
-      this.VersionTB.MaxLength = 32767;
-      this.VersionTB.Name = "VersionTB";
-      this.VersionTB.PasswordChar = '\0';
-      this.VersionTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
-      this.VersionTB.SelectionLength = 0;
-      this.VersionTB.SelectionStart = 0;
-      this.VersionTB.Size = new System.Drawing.Size(154, 23);
-      this.VersionTB.TabIndex = 12;
-      this.VersionTB.Text = " ";
-      this.VersionTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-      this.VersionTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // CurrencyTB
-      // 
-      this.CurrencyTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.CurrencyTB.BackColor = System.Drawing.Color.White;
-      this.CurrencyTB.BoundsOffset = new System.Drawing.Size(1, 1);
-      this.CurrencyTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
-      this.CurrencyTB.DefaultText = "Empty...";
-      this.CurrencyTB.Enabled = false;
-      this.CurrencyTB.Location = new System.Drawing.Point(401, 1);
-      this.CurrencyTB.MaxLength = 32767;
-      this.CurrencyTB.Name = "CurrencyTB";
-      this.CurrencyTB.PasswordChar = '\0';
-      this.CurrencyTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
-      this.CurrencyTB.SelectionLength = 0;
-      this.CurrencyTB.SelectionStart = 0;
-      this.CurrencyTB.Size = new System.Drawing.Size(69, 23);
-      this.CurrencyTB.TabIndex = 11;
-      this.CurrencyTB.Text = " ";
-      this.CurrencyTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-      this.CurrencyTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // EntityTB
-      // 
-      this.EntityTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.EntityTB.BackColor = System.Drawing.Color.White;
-      this.EntityTB.BoundsOffset = new System.Drawing.Size(1, 1);
-      this.EntityTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
-      this.EntityTB.DefaultText = "Empty...";
-      this.EntityTB.Enabled = false;
-      this.EntityTB.Location = new System.Drawing.Point(198, 1);
-      this.EntityTB.MaxLength = 32767;
-      this.EntityTB.Name = "EntityTB";
-      this.EntityTB.PasswordChar = '\0';
-      this.EntityTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
-      this.EntityTB.SelectionLength = 0;
-      this.EntityTB.SelectionStart = 0;
-      this.EntityTB.Size = new System.Drawing.Size(136, 23);
-      this.EntityTB.TabIndex = 10;
-      this.EntityTB.Text = " ";
-      this.EntityTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-      this.EntityTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
       // m_currencyLabel
       // 
       this.m_currencyLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -188,10 +124,10 @@ namespace FBI.MVC.View
       this.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_currencyLabel.Ellipsis = false;
       this.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_currencyLabel.Location = new System.Drawing.Point(340, 5);
+      this.m_currencyLabel.Location = new System.Drawing.Point(385, 5);
       this.m_currencyLabel.Multiline = true;
       this.m_currencyLabel.Name = "m_currencyLabel";
-      this.m_currencyLabel.Size = new System.Drawing.Size(55, 16);
+      this.m_currencyLabel.Size = new System.Drawing.Size(130, 16);
       this.m_currencyLabel.TabIndex = 9;
       this.m_currencyLabel.Text = "Currency";
       this.m_currencyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -205,10 +141,10 @@ namespace FBI.MVC.View
       this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_versionLabel.Ellipsis = false;
       this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionLabel.Location = new System.Drawing.Point(476, 5);
+      this.m_versionLabel.Location = new System.Drawing.Point(521, 5);
       this.m_versionLabel.Multiline = true;
       this.m_versionLabel.Name = "m_versionLabel";
-      this.m_versionLabel.Size = new System.Drawing.Size(58, 16);
+      this.m_versionLabel.Size = new System.Drawing.Size(200, 16);
       this.m_versionLabel.TabIndex = 8;
       this.m_versionLabel.Text = "Version";
       this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -222,23 +158,89 @@ namespace FBI.MVC.View
       this.m_entityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_entityLabel.Ellipsis = false;
       this.m_entityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_entityLabel.Location = new System.Drawing.Point(156, 5);
+      this.m_entityLabel.Location = new System.Drawing.Point(201, 5);
       this.m_entityLabel.Multiline = true;
       this.m_entityLabel.Name = "m_entityLabel";
-      this.m_entityLabel.Size = new System.Drawing.Size(33, 13);
+      this.m_entityLabel.Size = new System.Drawing.Size(178, 13);
       this.m_entityLabel.TabIndex = 7;
       this.m_entityLabel.Text = "Entity";
       this.m_entityLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
       this.m_entityLabel.UseMnemonics = true;
       this.m_entityLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
-      // panel2
+      // m_panel
       // 
-      this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.panel2.Location = new System.Drawing.Point(3, 28);
-      this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(682, 349);
-      this.panel2.TabIndex = 2;
+      this.m_panel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_panel.Location = new System.Drawing.Point(3, 28);
+      this.m_panel.Name = "m_panel";
+      this.m_panel.Size = new System.Drawing.Size(727, 327);
+      this.m_panel.TabIndex = 2;
+      // 
+      // VersionTB
+      // 
+      this.VersionTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.VersionTB.BackColor = System.Drawing.Color.White;
+      this.VersionTB.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.VersionTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.VersionTB.DefaultText = "Empty...";
+      this.VersionTB.Enabled = false;
+      this.VersionTB.Location = new System.Drawing.Point(707, 1);
+      this.VersionTB.Margin = new System.Windows.Forms.Padding(4);
+      this.VersionTB.MaxLength = 32767;
+      this.VersionTB.Name = "VersionTB";
+      this.VersionTB.PasswordChar = '\0';
+      this.VersionTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.VersionTB.SelectionLength = 0;
+      this.VersionTB.SelectionStart = 0;
+      this.VersionTB.Size = new System.Drawing.Size(205, 28);
+      this.VersionTB.TabIndex = 12;
+      this.VersionTB.Text = " ";
+      this.VersionTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.VersionTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // CurrencyTB
+      // 
+      this.CurrencyTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.CurrencyTB.BackColor = System.Drawing.Color.White;
+      this.CurrencyTB.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.CurrencyTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.CurrencyTB.DefaultText = "Empty...";
+      this.CurrencyTB.Enabled = false;
+      this.CurrencyTB.Location = new System.Drawing.Point(535, 1);
+      this.CurrencyTB.Margin = new System.Windows.Forms.Padding(4);
+      this.CurrencyTB.MaxLength = 32767;
+      this.CurrencyTB.Name = "CurrencyTB";
+      this.CurrencyTB.PasswordChar = '\0';
+      this.CurrencyTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.CurrencyTB.SelectionLength = 0;
+      this.CurrencyTB.SelectionStart = 0;
+      this.CurrencyTB.Size = new System.Drawing.Size(92, 28);
+      this.CurrencyTB.TabIndex = 11;
+      this.CurrencyTB.Text = " ";
+      this.CurrencyTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.CurrencyTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // EntityTB
+      // 
+      this.EntityTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.EntityTB.BackColor = System.Drawing.Color.White;
+      this.EntityTB.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.EntityTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.EntityTB.DefaultText = "Empty...";
+      this.EntityTB.Enabled = false;
+      this.EntityTB.Location = new System.Drawing.Point(264, 1);
+      this.EntityTB.Margin = new System.Windows.Forms.Padding(4);
+      this.EntityTB.MaxLength = 32767;
+      this.EntityTB.Name = "EntityTB";
+      this.EntityTB.PasswordChar = '\0';
+      this.EntityTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.EntityTB.SelectionLength = 0;
+      this.EntityTB.SelectionStart = 0;
+      this.EntityTB.Size = new System.Drawing.Size(181, 28);
+      this.EntityTB.TabIndex = 10;
+      this.EntityTB.Text = " ";
+      this.EntityTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.EntityTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // m_chartsRightClickMenu
       // 
@@ -266,9 +268,11 @@ namespace FBI.MVC.View
       // 
       this.m_panelRightClick.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_horizontalSplitBT,
-            this.m_splitVerticalBT});
+            this.m_splitVerticalBT,
+            this.m_chartEdit,
+            this.m_delete});
       this.m_panelRightClick.Name = "m_chartsRightClickMenu";
-      this.m_panelRightClick.Size = new System.Drawing.Size(156, 48);
+      this.m_panelRightClick.Size = new System.Drawing.Size(156, 114);
       // 
       // m_horizontalSplitBT
       // 
@@ -282,13 +286,27 @@ namespace FBI.MVC.View
       this.m_splitVerticalBT.Size = new System.Drawing.Size(155, 22);
       this.m_splitVerticalBT.Text = "Split Vertical";
       // 
+      // m_chartEdit
+      // 
+      this.m_chartEdit.Name = "m_chartEdit";
+      this.m_chartEdit.Size = new System.Drawing.Size(155, 22);
+      this.m_chartEdit.Text = "Chart";
+      // 
+      // m_delete
+      // 
+      this.m_delete.Name = "m_delete";
+      this.m_delete.Size = new System.Drawing.Size(155, 22);
+      this.m_delete.Text = "Delete";
+      // 
       // CUIVisualization
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(688, 380);
+      this.ClientSize = new System.Drawing.Size(733, 358);
       this.Controls.Add(this.TableLayoutPanel1);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "CUIVisualization";
+      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
       this.TableLayoutPanel1.ResumeLayout(false);
       this.Panel1.ResumeLayout(false);
       this.m_chartsRightClickMenu.ResumeLayout(false);
@@ -312,8 +330,10 @@ namespace FBI.MVC.View
   public VIBlend.WinForms.Controls.vLabel m_currencyLabel;
   public VIBlend.WinForms.Controls.vLabel m_versionLabel;
   public VIBlend.WinForms.Controls.vLabel m_entityLabel;
-  private System.Windows.Forms.Panel panel2;
+  private System.Windows.Forms.Panel m_panel;
   private System.Windows.Forms.ToolStripMenuItem m_splitVerticalBT;
+  private System.Windows.Forms.ToolStripMenuItem m_chartEdit;
+  private System.Windows.Forms.ToolStripMenuItem m_delete;
 }
 
 }

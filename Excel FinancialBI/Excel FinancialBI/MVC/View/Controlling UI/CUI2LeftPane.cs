@@ -82,8 +82,83 @@ namespace FBI.MVC.View
       InitCBListItem<Filter>(Local.GetValue("CUI.dimension.entity_cat"), AxisType.Entities);
       SelectionCB.SelectedItem = InitCBListItem<Version>(Local.GetValue("CUI.dimension.versions"));
       InitCBListItem<Currency>(Local.GetValue("CUI.dimension.currencies"));
-       
+
+      if (Addin.Process == Account.AccountProcess.FINANCIAL)
+        InitPeriodCB();
+
       SelectionCB.DropDownList = true;
+    }
+
+    void InitPeriodCB()
+    {
+      ListItem l_item = InitCBListItem<PeriodModel>(Local.GetValue("CUI.dimension.period"));
+      InitPeriodTV();
+    }
+
+    void InitPeriodTV()
+    {
+      FlatFBITreeView l_tv = new FlatFBITreeView(GetPeriods());
+
+      l_tv.LoadFunction = () => { l_tv.SetItems(GetPeriods()); };
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(PeriodModel));
+      BaseInitTV<PeriodModel>(l_key, l_tv, m_selectionTableLayout.Controls, false, false, 0, true, false);
+    }
+
+    public void ReloadPeriods()
+    {
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(PeriodModel));
+      if (m_selectionTVList[l_key] != null)
+      {
+        m_selectionTVList[l_key].Load();
+        m_selectionTVList[l_key].CheckAllParentNodes();
+      }
+    }
+
+    SafeDictionary<Int32, string> GetPeriods()
+    {
+      DateTime l_periodBegin = m_controller.PeriodController.MinDate;
+      DateTime l_periodEnd = m_controller.PeriodController.MaxDate;
+      SafeDictionary<Int32, string> l_periodStringDic = new SafeDictionary<int, string>();
+      TimeConfig l_selectedConfig = TimeConfig.MONTHS;
+
+      if (!m_controller.PeriodDiff)
+      {
+        List<UInt32> l_versionList = m_controller.GetVersions();
+
+        if (l_versionList == null)
+          return (l_periodStringDic);
+        foreach (UInt32 l_versionId in l_versionList)
+        {
+          Version l_version = VersionModel.Instance.GetValue(l_versionId);
+
+          if (l_version == null)
+            continue;
+          if ((UInt32)l_version.TimeConfiguration < (UInt32)l_selectedConfig)
+            l_selectedConfig = l_version.TimeConfiguration;
+        }
+
+        List<Int32> l_periodList = (l_selectedConfig == TimeConfig.MONTHS) ?
+          PeriodModel.GetMonthPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd) :
+          PeriodModel.GetYearsPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd);
+
+        foreach (Int32 l_period in l_periodList)
+          l_periodStringDic[l_period] = PeriodModel.GetFormatedDate(l_period, l_selectedConfig);
+      }
+      else if (m_controller.PeriodDiffAssociations != null && m_controller.PeriodDiffAssociations.Count > 0)
+      {
+        l_selectedConfig = TimeUtils.GetLowestTimeConfig(m_controller.PeriodDiffAssociations.Keys.ToList());
+        int l_index = 0;
+
+        foreach (KeyValuePair<Int32, Int32> l_pair in m_controller.PeriodDiffAssociations[l_selectedConfig])
+        {
+          l_periodStringDic[l_index] = PeriodModel.GetFormatedDate(l_pair.Key, l_selectedConfig) +
+            " / " + PeriodModel.GetFormatedDate(l_pair.Value, l_selectedConfig);
+          l_index++;
+        }
+
+      }
+     
+      return (l_periodStringDic);
     }
 
     private void TreeViewInit()
@@ -99,7 +174,12 @@ namespace FBI.MVC.View
       InitTVAxisElem(AxisElemModel.Instance, AxisType.Adjustment);
       InitFilterTV(AxisType.Adjustment);
       InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, true, true);
-      InitTV(CurrencyModel.Instance, m_selectionTableLayout.Controls, false, Properties.Settings.Default.currentCurrency, false, true);
+
+      FbiTreeView<Currency> l_currencyTV = new FbiTreeView<Currency>(CurrencyModel.Instance.GetUsedCurrenciesDic(), null, false, true);
+      Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(Currency));
+      BaseInitTV<Currency>(l_key, l_currencyTV, m_selectionTableLayout.Controls, false, false, Properties.Settings.Default.currentCurrency, false, true);
+
+      m_selectionTVList[new Tuple<AxisType, Type>(AxisType.Entities, typeof(AxisElem))].ImageList = EntitiesTVImageList;
     }
 
     private void InitPeriodRangeSelection()
@@ -114,7 +194,6 @@ namespace FBI.MVC.View
     }
 
     ListItem InitCBListItem<T>(string p_text, AxisType p_axis = (AxisType)0)
-      where T : class, NamedCRUDEntity
     {
       ListItem l_listItem = new ListItem();
       l_listItem.Text = p_text;
@@ -211,7 +290,11 @@ namespace FBI.MVC.View
       if (p_sender.GetType() == typeof(vButton))
       {
         vButton l_button = p_sender as vButton;
-        l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
+        if (m_filterPaneOpen)
+          l_button.Text = "+";
+        else
+          l_button.Text = "-";
+       // l_button.ImageIndex = (m_filterPaneOpen) ? 0 : 1;
       }
       if (m_filterPaneOpen)
       {
@@ -253,7 +336,7 @@ namespace FBI.MVC.View
       {
         Version l_version = VersionModel.Instance.GetValue(l_versionId);
         Int32 l_lastPeriod;
-        if (l_version == null)
+        if (l_version == null || l_version.IsFolder)
           continue;
 
         l_lastPeriod = PeriodModel.GetLastPeriod((Int32)l_version.StartPeriod, (Int32)l_version.NbPeriod, l_version.TimeConfiguration);
@@ -276,7 +359,6 @@ namespace FBI.MVC.View
         if (m_selectionTVList[(Tuple<AxisType, Type>)l_listItem.Value] != null)
         {
           Tuple<AxisType, Type> l_key = (Tuple<AxisType, Type>)l_listItem.Value;
-          bool l_test = l_key.GetHashCode() == new Tuple<AxisType, Type>( AxisType.Entities, typeof(AxisElem)).GetHashCode();
 
           AFbiTreeView l_tv = m_selectionTVList[l_key];
           if (l_tv.Loaded == false)
@@ -295,7 +377,7 @@ namespace FBI.MVC.View
 
       foreach (KeyValuePair<Tuple<AxisType, Type>, AFbiTreeView> l_tv in m_selectionTVList)
       {
-        bool l_allChecked = true;
+        bool l_allChecked = l_tv.Key.Item2 == typeof(Filter) || l_tv.Key.Item2 == typeof(AxisElem);
 
         foreach (vTreeNode l_topNode in l_tv.Value.Nodes)
           if (l_topNode.Checked != CheckState.Checked)

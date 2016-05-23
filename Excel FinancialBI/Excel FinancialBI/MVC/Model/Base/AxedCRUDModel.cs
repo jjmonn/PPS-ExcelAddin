@@ -111,10 +111,10 @@ namespace FBI.MVC.Model
     {
       foreach (MultiIndexDictionary<UInt32, string, T> axis in m_CRUDDic.Values)
       {
-        if (axis.ContainsSecondaryKey(p_name) == false)
+        if (axis.ContainsSecondaryKey(StringUtils.RemoveDiacritics(p_name)) == false)
           continue;
 
-        return (axis[p_name]);
+        return (axis[StringUtils.RemoveDiacritics(p_name)]);
       }
       return (null);
     }

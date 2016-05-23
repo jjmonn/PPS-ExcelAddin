@@ -8,7 +8,7 @@
     <Setting Name="tablesFontSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">8</Value>
     </Setting>
-    <Setting Name="dgvFontSize" Type="System.Double" Scope="User">
+    <Setting Name="dgvFontSize" Type="System.Single" Scope="User">
       <Value Profile="(Default)">8.5</Value>
     </Setting>
     <Setting Name="user" Type="System.String" Scope="User">
@@ -209,7 +209,7 @@
     <Setting Name="processId" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="language" Type="System.Int32" Scope="User">
+    <Setting Name="language" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="FactsEditionInputsRedFill" Type="System.Drawing.Color" Scope="User">
@@ -229,6 +229,9 @@
     </Setting>
     <Setting Name="includeWeekEnds" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="chartBorderWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
     </Setting>
   </Settings>
 </SettingsFile>

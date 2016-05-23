@@ -3,76 +3,272 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace FBI.MVC.Controller
 {
+  using Forms;
+  using Model;
   using Model.CRUD;
   using View;
-  using GraphSortedDic = SafeDictionary<UInt32, SafeDictionary<Int32, SafeDictionary<Tuple<bool, Model.CRUD.AxisType, UInt32>, double>>>;
-  using GraphUnSortedDic = SafeDictionary<UInt32, SafeDictionary<Int32, List<double>>>;
+  using Utils;
 
   class CUIVisualizationController : IController
   {
+    public const Int32 CREATE = 0;
+    public const Int32 UPDATE = 1;
+    public const Int32 DELETE = 2;
+
     CUIVisualization m_view;
 
     public string Error { get; set; }
     public IView View { get { return (m_view); } }
 
-    SafeDictionary<ResultKey, double> m_values;
-    SafeDictionary<ResultKey, double> m_accountValues;
+    CUI2VisualisationChartsSettings m_viewChartSettings;
+    ChartPanelSelection m_viewPanelSelection;
+    CUIController m_parentController;
 
-    public CUIVisualizationController()
+    private UInt32 m_panel = 0;
+
+    private UInt32[] m_chartSettings = { 0, 0 };
+    private UInt32[] m_chartAccounts = { 0, 0 };
+
+    public CUIVisualizationController(CUIController p_parentController)
     {
+      m_parentController = p_parentController;
       m_view = new CUIVisualization();
       m_view.SetController(this);
-      LoadView();
+      m_viewChartSettings = new CUI2VisualisationChartsSettings();
+      m_viewPanelSelection = new ChartPanelSelection();
+      m_viewChartSettings.SetController(this);
+      m_viewPanelSelection.SetController(this);
+      this.LoadView();
     }
 
     void LoadView()
     {
       m_view.LoadView();
-      m_view.Show();
+      m_viewPanelSelection.LoadView();
+      if (m_viewPanelSelection.ShowDialog() != DialogResult.Cancel)
+      {
+        m_view.Show();
+        m_view.LoadPanel(m_panel);
+      }
     }
 
-
-    void LoadData(SafeDictionary<ResultKey, double> p_values)
+    public FbiChart.Computation LastComputation
     {
-      m_values = p_values;
-      SelectAccount(1);
+      get
+      {
+        return (new FbiChart.Computation(m_parentController.LastConfig,
+          m_parentController.LastResult));
+      }
     }
 
-    public void SelectAccount(UInt32 p_accountId)
+    public ComputeConfig LastConfig
     {
-      m_accountValues = new SafeDictionary<ResultKey, double>();
-
-      foreach (KeyValuePair<ResultKey, double> l_pair in m_values)
-        if (l_pair.Key.AccountId == p_accountId)
-          m_accountValues[l_pair.Key] = l_pair.Value;
+      get { return (m_parentController.LastConfig); }
     }
 
-    GraphSortedDic BuildSortedValues(bool p_isAxis, AxisType p_axis, UInt32 p_id = 0)
+    public SafeDictionary<UInt32, ComputeResult> LastResult
     {
-      GraphSortedDic l_sortedValues = new GraphSortedDic();
+      get { return (m_parentController.LastResult); }
+    }
 
-      foreach (KeyValuePair<ResultKey, double> l_pair in m_accountValues)
-        if (l_pair.Key.IsSort(p_isAxis, p_axis, p_id))
+    public UInt32 PanelId
+    {
+      get { return (m_panel); }
+    }
+
+    public UInt32[] ExpectedChartSettings
+    {
+      get { return (m_chartSettings); }
+    }
+
+    public UInt32[] ExpectedChartAccounts
+    {
+      get { return (m_chartAccounts); }
+    }
+
+    public bool SetPanel(UInt32 p_panelId)
+    {
+      if (m_parentController.AddPanel(p_panelId))
+      {
+        m_panel = p_panelId;
+        return (true);
+      }
+      return (false);
+    }
+
+    public void ClosePanel()
+    {
+      m_parentController.RemovePanel(m_panel);
+    }
+
+    public bool CRUPanel(UInt32 p_panelId, string p_panelName)
+    {
+      ChartPanel l_panel;
+
+      if (p_panelId == ChartPanel.INVALID_ID)
+      {
+        l_panel = new ChartPanel();
+        l_panel.Name = p_panelName;
+        l_panel.UserId = UserModel.Instance.GetCurrentUser().Id;
+        return (ChartPanelModel.Instance.Create(l_panel));
+      }
+      if ((l_panel = ChartPanelModel.Instance.GetValue(p_panelId)) == null)
+        return (false);
+      l_panel.Name = p_panelName;
+      return (ChartPanelModel.Instance.Update(l_panel));
+    }
+
+    public bool DPanel(UInt32 p_panelId)
+    {
+      return (ChartPanelModel.Instance.Delete(p_panelId));
+    }
+
+    public bool CRUDChartAccounts(ChartSettings p_settings, List<Tuple<string, Color>> p_accountList)
+    {
+      Account l_account;
+      List<UInt32> l_accountIds = new List<UInt32>();
+      var l_chartAccounts = ChartAccountModel.Instance.GetDictionary(p_settings.Id);
+
+      ArrayUtils.Set<UInt32>(m_chartAccounts, 0);
+      foreach (Tuple<string, Color> l_item in p_accountList)
+      {
+        if ((l_account = AccountModel.Instance.GetValue(l_item.Item1)) == null)
         {
-          Tuple<bool, AxisType, UInt32> l_sort = l_pair.Key.LastSort;
-
-          if (l_sort != null)
-            l_sortedValues[l_pair.Key.VersionId][l_pair.Key.Period][l_sort] = l_pair.Value;
+          Error = Local.GetValue("CUI_Charts.error.invalid_account");
+          return (false);
         }
-      return (l_sortedValues);
+        l_accountIds.Add(l_account.Id);
+      }
+      this.DChartAccounts(l_accountIds, l_chartAccounts); //Delete first, because we don't want to consider them into the 'expected' arguments
+      return (this.CRUChartAccounts(p_settings, l_chartAccounts, l_accountIds, p_accountList));
     }
 
-    GraphUnSortedDic BuildUnsortedValues()
+    private bool CRUChartAccounts(ChartSettings p_settings, SafeDictionary<UInt32, ChartAccount> p_chartAccounts,
+      List<UInt32> l_accountIds, List<Tuple<string, Color>> p_accountList)
     {
-      GraphUnSortedDic l_values = new GraphUnSortedDic();
+      for (int i = 0; i < l_accountIds.Count; ++i)
+      {
+        if (!this.CRUChartAccount(p_settings, p_chartAccounts, l_accountIds[i], p_accountList[i]))
+          return (false);
+      }
+      return (true);
+    }
 
-      foreach (KeyValuePair<ResultKey, double> l_pair in m_accountValues)
-        if (l_pair.Key.SortHash == "")
-          l_values[l_pair.Key.VersionId][l_pair.Key.Period].Add(l_pair.Value);
-      return (l_values);
+    private bool CRUChartAccount(ChartSettings p_settings, SafeDictionary<UInt32, ChartAccount> p_chartAccounts,
+      UInt32 p_accountId, Tuple<string, Color> p_value)
+    {
+      UInt32 l_chartAccId;
+      ChartAccount l_chartAccount;
+      bool l_create = false;
+
+      if (this.HasAccount(p_chartAccounts, p_accountId, out l_chartAccId))
+      {
+        l_chartAccount = p_chartAccounts[l_chartAccId];
+        m_chartAccounts[UPDATE]++;
+      }
+      else
+      {
+        l_create = true;
+        l_chartAccount = new ChartAccount();
+        m_chartAccounts[CREATE]++;
+      }
+      l_chartAccount.AccountId = p_accountId;
+      l_chartAccount.Color = p_value.Item2.ToArgb();
+      l_chartAccount.ChartId = p_settings.Id;
+      return (l_create ? ChartAccountModel.Instance.Create(l_chartAccount) :
+         ChartAccountModel.Instance.Update(l_chartAccount));
+    }
+
+    private void DChartAccounts(List<UInt32> p_accountIds, SafeDictionary<UInt32, ChartAccount> p_chartAccounts)
+    {
+      HashSet<UInt32> l_unused = new HashSet<uint>();
+
+      if (p_chartAccounts == null)
+        return;
+      foreach (var l_account in p_chartAccounts)
+      {
+        if (!p_accountIds.Contains(l_account.Value.AccountId))
+          l_unused.Add(l_account.Key);
+      }
+      foreach (var l_accountId in l_unused)
+      {
+        ChartAccountModel.Instance.Delete(l_accountId);
+      }
+    }
+
+    public bool CRUChartSettings(ChartSettings p_settings, string p_name)
+    {
+      ArrayUtils.Set<UInt32>(m_chartSettings, 0);
+      if (p_settings == null)
+      {
+        p_settings = new ChartSettings();
+        p_settings.PanelId = m_panel;
+        p_settings.Name = p_name;
+        m_chartSettings[CREATE]++;
+        return (ChartSettingsModel.Instance.Create(p_settings));
+      }
+      p_settings.Name = p_name;
+      m_chartSettings[UPDATE]++;
+      return (ChartSettingsModel.Instance.Update(p_settings));
+    }
+
+    public bool DChartSettings(UInt32 p_settingsId)
+    {
+      return (ChartSettingsModel.Instance.Delete(p_settingsId));
+    }
+
+    private bool HasAccount(SafeDictionary<UInt32, ChartAccount> p_chartAccounts, UInt32 p_accountId, out UInt32 p_id)
+    {
+      p_id = 0;
+      if (p_chartAccounts == null)
+        return (false);
+      foreach (var l_item in p_chartAccounts)
+      {
+        if (l_item.Value.AccountId == p_accountId)
+        {
+          p_id = l_item.Key;
+          return (true);
+        }
+      }
+      return (false);
+    }
+
+    public bool IsLastConfigAmbigious(ChartSettings p_settings)
+    {
+      var l_chart = ChartAccountModel.Instance.GetDictionary(p_settings.Id);
+
+      if (l_chart == null)
+        return (false);
+      return (this.LastConfig.Request.SortList.Count >= 1 &&
+        this.LastConfig.Request.Versions.Count > 1 &&
+        l_chart.Count > 1);
+    }
+
+    public bool ApplyLastCompute(ChartSettings p_settings, bool p_bypass = false)
+    {
+      if (this.LastConfig == null || this.LastResult == null)
+        return (false);
+
+      if (!this.IsLastConfigAmbigious(p_settings) || p_bypass)
+      {
+        p_settings.HasDeconstruction = this.LastConfig.Request.SortList.Count >= 1;
+        p_settings.Versions = this.LastConfig.Request.Versions;
+        p_settings.Deconstruction = (p_settings.HasDeconstruction ? this.LastConfig.Request.SortList[0] : null);
+      }
+      return (true);
+    }
+
+    public void ShowSettingsView(ChartSettings p_settings)
+    {
+      m_viewChartSettings.Reload();
+      m_viewChartSettings.LoadSettings(p_settings);
+      m_viewChartSettings.ShowDialog();
     }
   }
 }

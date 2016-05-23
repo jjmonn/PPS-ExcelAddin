@@ -43,9 +43,12 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.SelectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.UnselectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
+      this.m_expandLeftBT = new VIBlend.WinForms.Controls.vButton();
+      this.vPanel1 = new VIBlend.WinForms.Controls.vPanel();
       this.ButtonsImageList = new System.Windows.Forms.ImageList(this.components);
       this.MenuImageList = new System.Windows.Forms.ImageList(this.components);
       this.SplitContainer2 = new System.Windows.Forms.SplitContainer();
+      this.m_expandRightBT = new VIBlend.WinForms.Controls.vButton();
       this.Panel1 = new System.Windows.Forms.Panel();
       this.m_entityLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_currencyLabel = new VIBlend.WinForms.Controls.vLabel();
@@ -58,7 +61,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.BusinessControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.m_versionComparisonButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_versionSwitchButton = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_hideVersionButton = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_periodCompareBT = new System.Windows.Forms.ToolStripMenuItem();
       this.m_refreshButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_chartBT = new System.Windows.Forms.ToolStripMenuItem();
       this.ExpansionImageList = new System.Windows.Forms.ImageList(this.components);
@@ -66,9 +69,13 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.PeriodsRCMenu.SuspendLayout();
       this.AdjustmentsRCMenu.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
+      this.SplitContainer1.Panel1.SuspendLayout();
+      this.SplitContainer1.Panel2.SuspendLayout();
       this.SplitContainer1.SuspendLayout();
+      this.vPanel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer2)).BeginInit();
       this.SplitContainer2.Panel1.SuspendLayout();
+      this.SplitContainer2.Panel2.SuspendLayout();
       this.SplitContainer2.SuspendLayout();
       this.Panel1.SuspendLayout();
       this.MainMenu.SuspendLayout();
@@ -80,13 +87,13 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.EntitiesRCMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RefreshRightClick});
       this.EntitiesRCMenu.Name = "ContextMenuStripEntitiesNodes";
-      this.EntitiesRCMenu.Size = new System.Drawing.Size(159, 30);
+      this.EntitiesRCMenu.Size = new System.Drawing.Size(145, 30);
       // 
       // RefreshRightClick
       // 
       this.RefreshRightClick.Image = ((System.Drawing.Image)(resources.GetObject("RefreshRightClick.Image")));
       this.RefreshRightClick.Name = "RefreshRightClick";
-      this.RefreshRightClick.Size = new System.Drawing.Size(158, 26);
+      this.RefreshRightClick.Size = new System.Drawing.Size(144, 26);
       this.RefreshRightClick.Text = "[CUI.refresh]";
       // 
       // PeriodsRCMenu
@@ -96,18 +103,18 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
             this.SelectAllToolStripMenuItem,
             this.UnselectAllToolStripMenuItem});
       this.PeriodsRCMenu.Name = "periodsRightClickMenu";
-      this.PeriodsRCMenu.Size = new System.Drawing.Size(182, 52);
+      this.PeriodsRCMenu.Size = new System.Drawing.Size(166, 48);
       // 
       // SelectAllToolStripMenuItem
       // 
       this.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem";
-      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
+      this.SelectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
       this.SelectAllToolStripMenuItem.Text = "[CUI.select_all]";
       // 
       // UnselectAllToolStripMenuItem
       // 
       this.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem";
-      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
+      this.UnselectAllToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
       this.UnselectAllToolStripMenuItem.Text = "[CUI.unselect_all]";
       // 
       // AdjustmentsRCMenu
@@ -117,18 +124,18 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
             this.SelectAllToolStripMenuItem1,
             this.UnselectAllToolStripMenuItem1});
       this.AdjustmentsRCMenu.Name = "AdjustmentsRCM";
-      this.AdjustmentsRCMenu.Size = new System.Drawing.Size(182, 52);
+      this.AdjustmentsRCMenu.Size = new System.Drawing.Size(166, 48);
       // 
       // SelectAllToolStripMenuItem1
       // 
       this.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1";
-      this.SelectAllToolStripMenuItem1.Size = new System.Drawing.Size(181, 24);
+      this.SelectAllToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
       this.SelectAllToolStripMenuItem1.Text = "[CUI.select_all]";
       // 
       // UnselectAllToolStripMenuItem1
       // 
       this.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1";
-      this.UnselectAllToolStripMenuItem1.Size = new System.Drawing.Size(181, 24);
+      this.UnselectAllToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
       this.UnselectAllToolStripMenuItem1.Text = "[CUI.unselect_all]";
       // 
       // SplitContainer1
@@ -139,9 +146,56 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.SplitContainer1.BackColor = System.Drawing.SystemColors.Control;
       this.SplitContainer1.Location = new System.Drawing.Point(0, 3);
       this.SplitContainer1.Name = "SplitContainer1";
-      this.SplitContainer1.Size = new System.Drawing.Size(782, 474);
-      this.SplitContainer1.SplitterDistance = 144;
+      // 
+      // SplitContainer1.Panel1
+      // 
+      this.SplitContainer1.Panel1.Controls.Add(this.m_expandLeftBT);
+      // 
+      // SplitContainer1.Panel2
+      // 
+      this.SplitContainer1.Panel2.Controls.Add(this.vPanel1);
+      this.SplitContainer1.Size = new System.Drawing.Size(786, 463);
+      this.SplitContainer1.SplitterDistance = 143;
       this.SplitContainer1.TabIndex = 8;
+      // 
+      // m_expandLeftBT
+      // 
+      this.m_expandLeftBT.AllowAnimations = true;
+      this.m_expandLeftBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_expandLeftBT.BackColor = System.Drawing.Color.Transparent;
+      this.m_expandLeftBT.Location = new System.Drawing.Point(119, 3);
+      this.m_expandLeftBT.Name = "m_expandLeftBT";
+      this.m_expandLeftBT.RoundedCornersMask = ((byte)(15));
+      this.m_expandLeftBT.Size = new System.Drawing.Size(21, 21);
+      this.m_expandLeftBT.TabIndex = 0;
+      this.m_expandLeftBT.Text = "-";
+      this.m_expandLeftBT.UseVisualStyleBackColor = false;
+      this.m_expandLeftBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // vPanel1
+      // 
+      this.vPanel1.AllowAnimations = true;
+      this.vPanel1.BorderRadius = 0;
+      // 
+      // vPanel1.Content
+      // 
+      this.vPanel1.Content.AutoScroll = true;
+      this.vPanel1.Content.BackColor = System.Drawing.SystemColors.Control;
+      this.vPanel1.Content.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.vPanel1.Content.Location = new System.Drawing.Point(0, 0);
+      this.vPanel1.Content.Name = "Content";
+      this.vPanel1.Content.Size = new System.Drawing.Size(639, 463);
+      this.vPanel1.Content.TabIndex = 3;
+      this.vPanel1.CustomScrollersIntersectionColor = System.Drawing.Color.Empty;
+      this.vPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.vPanel1.Location = new System.Drawing.Point(0, 0);
+      this.vPanel1.Name = "vPanel1";
+      this.vPanel1.Opacity = 1F;
+      this.vPanel1.PanelBorderColor = System.Drawing.Color.Transparent;
+      this.vPanel1.Size = new System.Drawing.Size(639, 463);
+      this.vPanel1.TabIndex = 0;
+      this.vPanel1.Text = "vPanel1";
+      this.vPanel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // ButtonsImageList
       // 
@@ -170,9 +224,26 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // SplitContainer2.Panel1
       // 
       this.SplitContainer2.Panel1.Controls.Add(this.SplitContainer1);
-      this.SplitContainer2.Size = new System.Drawing.Size(988, 480);
-      this.SplitContainer2.SplitterDistance = 785;
+      // 
+      // SplitContainer2.Panel2
+      // 
+      this.SplitContainer2.Panel2.Controls.Add(this.m_expandRightBT);
+      this.SplitContainer2.Size = new System.Drawing.Size(995, 469);
+      this.SplitContainer2.SplitterDistance = 789;
       this.SplitContainer2.TabIndex = 8;
+      // 
+      // m_expandRightBT
+      // 
+      this.m_expandRightBT.AllowAnimations = true;
+      this.m_expandRightBT.BackColor = System.Drawing.Color.Transparent;
+      this.m_expandRightBT.Location = new System.Drawing.Point(3, 3);
+      this.m_expandRightBT.Name = "m_expandRightBT";
+      this.m_expandRightBT.RoundedCornersMask = ((byte)(15));
+      this.m_expandRightBT.Size = new System.Drawing.Size(21, 21);
+      this.m_expandRightBT.TabIndex = 1;
+      this.m_expandRightBT.Text = "-";
+      this.m_expandRightBT.UseVisualStyleBackColor = false;
+      this.m_expandRightBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // Panel1
       // 
@@ -185,7 +256,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.Panel1.Dock = System.Windows.Forms.DockStyle.Top;
       this.Panel1.Location = new System.Drawing.Point(0, 0);
       this.Panel1.Name = "Panel1";
-      this.Panel1.Size = new System.Drawing.Size(988, 61);
+      this.Panel1.Size = new System.Drawing.Size(995, 61);
       this.Panel1.TabIndex = 9;
       // 
       // m_entityLabel
@@ -195,7 +266,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_entityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_entityLabel.Ellipsis = false;
       this.m_entityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_entityLabel.Location = new System.Drawing.Point(615, 9);
+      this.m_entityLabel.Location = new System.Drawing.Point(622, 9);
       this.m_entityLabel.Multiline = true;
       this.m_entityLabel.Name = "m_entityLabel";
       this.m_entityLabel.Size = new System.Drawing.Size(69, 18);
@@ -212,7 +283,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_currencyLabel.Ellipsis = false;
       this.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_currencyLabel.Location = new System.Drawing.Point(832, 9);
+      this.m_currencyLabel.Location = new System.Drawing.Point(839, 9);
       this.m_currencyLabel.Multiline = true;
       this.m_currencyLabel.Name = "m_currencyLabel";
       this.m_currencyLabel.Size = new System.Drawing.Size(69, 18);
@@ -230,7 +301,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.CurrencyTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.CurrencyTB.DefaultText = "";
       this.CurrencyTB.Enabled = false;
-      this.CurrencyTB.Location = new System.Drawing.Point(907, 5);
+      this.CurrencyTB.Location = new System.Drawing.Point(914, 5);
       this.CurrencyTB.MaxLength = 32767;
       this.CurrencyTB.Name = "CurrencyTB";
       this.CurrencyTB.PasswordChar = '\0';
@@ -250,7 +321,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.EntityTB.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.EntityTB.DefaultText = "";
       this.EntityTB.Enabled = false;
-      this.EntityTB.Location = new System.Drawing.Point(690, 5);
+      this.EntityTB.Location = new System.Drawing.Point(697, 5);
       this.EntityTB.MaxLength = 32767;
       this.EntityTB.Name = "EntityTB";
       this.EntityTB.PasswordChar = '\0';
@@ -275,7 +346,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.MainMenu.Location = new System.Drawing.Point(0, 0);
       this.MainMenu.Name = "MainMenu";
       this.MainMenu.ShowItemToolTips = true;
-      this.MainMenu.Size = new System.Drawing.Size(607, 59);
+      this.MainMenu.Size = new System.Drawing.Size(454, 55);
       this.MainMenu.TabIndex = 0;
       this.MainMenu.Text = "[CUI.main_menu]";
       // 
@@ -287,7 +358,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.ExcelToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("ExcelToolStripMenuItem.Image")));
       this.ExcelToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem";
-      this.ExcelToolStripMenuItem.Size = new System.Drawing.Size(141, 55);
+      this.ExcelToolStripMenuItem.Size = new System.Drawing.Size(124, 51);
       this.ExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]";
       this.ExcelToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       this.ExcelToolStripMenuItem.ToolTipText = "[CUI.drop_on_excel_tooltip]";
@@ -295,25 +366,27 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // DropOnExcelToolStripMenuItem
       // 
       this.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem";
-      this.DropOnExcelToolStripMenuItem.Size = new System.Drawing.Size(294, 24);
+      this.DropOnExcelToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
       this.DropOnExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]";
+      this.DropOnExcelToolStripMenuItem.Click += new System.EventHandler(this.OnDropOnExcelClick);
       // 
       // DropOnlyTheVisibleItemsOnExcelToolStripMenuItem
       // 
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Name = "DropOnlyTheVisibleItemsOnExcelToolStripMenuItem";
-      this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = new System.Drawing.Size(294, 24);
+      this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
       this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = "Drop only the visible items on Excel";
+      this.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Click += new System.EventHandler(this.OnDropVisibleOnExcelClick);
       // 
       // BusinessControlToolStripMenuItem
       // 
       this.BusinessControlToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_versionComparisonButton,
             this.m_versionSwitchButton,
-            this.m_hideVersionButton});
+            this.m_periodCompareBT});
       this.BusinessControlToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("BusinessControlToolStripMenuItem.Image")));
       this.BusinessControlToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.BusinessControlToolStripMenuItem.Name = "BusinessControlToolStripMenuItem";
-      this.BusinessControlToolStripMenuItem.Size = new System.Drawing.Size(177, 55);
+      this.BusinessControlToolStripMenuItem.Size = new System.Drawing.Size(156, 51);
       this.BusinessControlToolStripMenuItem.Text = "[CUI.performance_review]";
       this.BusinessControlToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       this.BusinessControlToolStripMenuItem.ToolTipText = "[CUI.performance_review_tooltip]";
@@ -321,20 +394,21 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       // m_versionComparisonButton
       // 
       this.m_versionComparisonButton.Name = "m_versionComparisonButton";
-      this.m_versionComparisonButton.Size = new System.Drawing.Size(287, 24);
+      this.m_versionComparisonButton.Size = new System.Drawing.Size(257, 22);
       this.m_versionComparisonButton.Text = "[CUI.display_versions_comparison]";
       // 
       // m_versionSwitchButton
       // 
       this.m_versionSwitchButton.Name = "m_versionSwitchButton";
-      this.m_versionSwitchButton.Size = new System.Drawing.Size(287, 24);
+      this.m_versionSwitchButton.Size = new System.Drawing.Size(257, 22);
       this.m_versionSwitchButton.Text = "[CUI.switch_versions]";
       // 
-      // m_hideVersionButton
+      // m_periodCompareBT
       // 
-      this.m_hideVersionButton.Name = "m_hideVersionButton";
-      this.m_hideVersionButton.Size = new System.Drawing.Size(287, 24);
-      this.m_hideVersionButton.Text = "[CUI.take_off_comparison]";
+      this.m_periodCompareBT.Name = "m_periodCompareBT";
+      this.m_periodCompareBT.Size = new System.Drawing.Size(257, 22);
+      this.m_periodCompareBT.Text = "Period comparison";
+      this.m_periodCompareBT.Click += new System.EventHandler(this.OnPeriodComparisonClick);
       // 
       // m_refreshButton
       // 
@@ -342,7 +416,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_refreshButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.m_refreshButton.Name = "m_refreshButton";
       this.m_refreshButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
-      this.m_refreshButton.Size = new System.Drawing.Size(97, 55);
+      this.m_refreshButton.Size = new System.Drawing.Size(85, 51);
       this.m_refreshButton.Text = "[CUI.refresh]";
       this.m_refreshButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       this.m_refreshButton.ToolTipText = "[CUI.refresh_tooltip]";
@@ -352,7 +426,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.m_chartBT.Image = ((System.Drawing.Image)(resources.GetObject("m_chartBT.Image")));
       this.m_chartBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
       this.m_chartBT.Name = "m_chartBT";
-      this.m_chartBT.Size = new System.Drawing.Size(92, 55);
+      this.m_chartBT.Size = new System.Drawing.Size(81, 51);
       this.m_chartBT.Text = "[CUI.charts]";
       this.m_chartBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
       // 
@@ -369,7 +443,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
       this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.ClientSize = new System.Drawing.Size(988, 540);
+      this.ClientSize = new System.Drawing.Size(995, 529);
       this.Controls.Add(this.Panel1);
       this.Controls.Add(this.SplitContainer2);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -379,9 +453,13 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
       this.EntitiesRCMenu.ResumeLayout(false);
       this.PeriodsRCMenu.ResumeLayout(false);
       this.AdjustmentsRCMenu.ResumeLayout(false);
+      this.SplitContainer1.Panel1.ResumeLayout(false);
+      this.SplitContainer1.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).EndInit();
       this.SplitContainer1.ResumeLayout(false);
+      this.vPanel1.ResumeLayout(false);
       this.SplitContainer2.Panel1.ResumeLayout(false);
+      this.SplitContainer2.Panel2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer2)).EndInit();
       this.SplitContainer2.ResumeLayout(false);
       this.Panel1.ResumeLayout(false);
@@ -408,8 +486,7 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
 	public System.Windows.Forms.ToolStripMenuItem m_refreshButton;
 	public System.Windows.Forms.ToolStripMenuItem BusinessControlToolStripMenuItem;
 	public System.Windows.Forms.ToolStripMenuItem m_versionComparisonButton;
-	public System.Windows.Forms.ToolStripMenuItem m_versionSwitchButton;
-	public System.Windows.Forms.ToolStripMenuItem m_hideVersionButton;
+  public System.Windows.Forms.ToolStripMenuItem m_versionSwitchButton;
 	public System.Windows.Forms.ToolStripMenuItem ExcelToolStripMenuItem;
   public System.Windows.Forms.ToolStripMenuItem DropOnExcelToolStripMenuItem;
 	public VIBlend.WinForms.Controls.vTextBox CurrencyTB;
@@ -419,6 +496,10 @@ partial class ControllingUI_2 : System.Windows.Forms.Form
   public System.Windows.Forms.ToolStripMenuItem DropOnlyTheVisibleItemsOnExcelToolStripMenuItem;
   private VIBlend.WinForms.Controls.vLabel m_currencyLabel;
   private VIBlend.WinForms.Controls.vLabel m_entityLabel;
+  private VIBlend.WinForms.Controls.vButton m_expandLeftBT;
+  private VIBlend.WinForms.Controls.vButton m_expandRightBT;
+  private System.Windows.Forms.ToolStripMenuItem m_periodCompareBT;
+  private VIBlend.WinForms.Controls.vPanel vPanel1;
 }
 
 }

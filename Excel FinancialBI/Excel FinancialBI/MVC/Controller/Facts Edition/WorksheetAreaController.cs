@@ -40,6 +40,7 @@ namespace FBI.MVC.Model
     public UInt32 VersionId { get; private set; }
     public Account.AccountProcess Process { get; private set; }
     private Worksheet m_worksheet;
+    SafeDictionary<DimensionType, string> m_errors;
 
     public WorksheetAreaController(Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
     {
@@ -60,6 +61,41 @@ namespace FBI.MVC.Model
     {
       foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
         Dimensions[l_dim].m_values.Clear();
+    }
+
+    public string GetDimensionError()
+    {
+      if (m_errors == null)
+      {
+        m_errors = new SafeDictionary<DimensionType, string>();
+        m_errors[DimensionType.ACCOUNT] = Local.GetValue("upload.error.accounts_orientation_unclear");
+        if (Process == Account.AccountProcess.FINANCIAL)
+         m_errors[DimensionType.ENTITY] = Local.GetValue("upload.error.entities_orientation_unclear");
+        else
+          m_errors[DimensionType.EMPLOYEE] = Local.GetValue("upload.error.employees_orientation_unclear");
+        m_errors[DimensionType.PERIOD] = Local.GetValue("upload.error.periods_orientation_unclear");
+      }
+      foreach (KeyValuePair<DimensionType, Dimension<CRUDEntity>> l_dim in Dimensions)
+        if (m_errors.Keys.Contains(l_dim.Key) && l_dim.Value.m_values.Count == 0)
+          return (m_errors[l_dim.Key]);
+      return (Local.GetValue("general.error.success"));
+    }
+
+    public Account GetAccount(Range p_cell)
+    {
+      foreach (KeyValuePair<string, CRUDEntity> l_pair in Accounts.m_values)
+      {
+        Range l_range = m_worksheet.get_Range(l_pair.Key);
+
+        if (l_range != null)
+        {
+          if (Orientation.Vertical == DimensionType.ACCOUNT && l_range.Row == p_cell.Row)
+            return (l_pair.Value as Account);
+          else if (Orientation.Horizontal == DimensionType.ACCOUNT && l_range.Column == p_cell.Column)
+            return (l_pair.Value as Account);
+        }
+      }
+      return (null);
     }
 
     #region Dimensions identification methods
@@ -91,8 +127,13 @@ namespace FBI.MVC.Model
       if (Entities.m_values.Count > 0) // only register the first entity found
         return;
       if (RegisterEntity(p_cell) == true)
-      return;
-  }
+        return;
+    }
+
+    public void InitPeriods()
+    {
+      m_periodsDatesList = PeriodModel.GetPeriodsList(VersionId);
+    }
 
     public bool RegisterVersion(Range p_cell)
     {

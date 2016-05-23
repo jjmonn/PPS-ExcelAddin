@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using VIBlend.WinForms.DataGridView;
 using VIBlend.WinForms.Controls;
+using Microsoft.Office.Interop.Excel;
 
 namespace FBI.MVC.View
 {
@@ -50,12 +51,11 @@ namespace FBI.MVC.View
       m_tabCtrl.BorderStyle = System.Windows.Forms.BorderStyle.None;
       m_tabCtrl.TabsAreaBackColor = System.Drawing.SystemColors.Control;
       m_tabCtrl.BackColor = System.Drawing.SystemColors.Control;
-
       Controls.Add(m_tabCtrl);
       m_tabCtrl.Dock = DockStyle.Fill;
-
+ 
       LogRightClick.Visible = (Addin.Process == Account.AccountProcess.FINANCIAL);
-      m_builderList.Add(typeof(PeriodModel), PeriodBuilder);
+      m_builderList.Add(typeof(PeriodModel), PeriodBuilderSelector);
       m_builderList.Add(typeof(VersionModel), VersionBuilder);
       m_builderList.Add(typeof(AxisElemModel), AxisElemBuilder);
       m_builderList.Add(typeof(FilterModel), FilterValueBuilder);
@@ -130,7 +130,10 @@ namespace FBI.MVC.View
         return;
       DGV l_dgv = m_tabCtrl.SelectedTab.Controls[0] as DGV;
 
-      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      foreach (HierarchyItem l_column in l_dgv.ColumnsHierarchy.Items)
+        l_column.Width = 1;
+      l_dgv.Refresh();
+      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
       l_dgv.Refresh();
       l_dgv.Select();
     }
@@ -158,7 +161,6 @@ namespace FBI.MVC.View
             continue;
           vTabPage l_tab = new vTabPage(l_account.Name);
           DGV l_dgv = new DGV();
-
           l_dgv.ContextMenuStrip = m_dgvMenu;
           l_tab.Controls.Add(l_dgv);
           m_tabCtrl.TabPages.Add(l_tab);
@@ -167,6 +169,7 @@ namespace FBI.MVC.View
           InitDimension(l_dgv, l_account.Id, p_config.Rows, DGVDimension.ROW, l_dgv.RowsHierarchy.Items, new ResultKey(0, "", "", 0, 0, 0, false, l_account.Id));
           InitDimension(l_dgv, l_account.Id, p_config.Columns, DGVDimension.COLUMN, l_dgv.ColumnsHierarchy.Items,
             new ResultKey(0, "", "", 0, 0, (m_computeConfig.Request.Versions.Count <= 1) ? m_computeConfig.Request.Versions[0] : 0, false, l_account.Id));
+          DGVFormatUtils.FormatDGVs(l_dgv, m_computeConfig.Request.CurrencyId);
           l_dgv.Refresh();
         }
     }
@@ -201,19 +204,24 @@ namespace FBI.MVC.View
                 double l_value = p_data[l_key.VersionId].Values[l_key];
 
                 l_dgv.FillField(l_rowKey, l_columnKey, l_value);
+                if (ComputeResult.IsDiffId(l_key.VersionId))
+                  DGVFormatUtils.FormatValue(l_dgv, l_rowKey, l_columnKey);
               }
             }
           }
         }
-       if (m_computeConfig.Request.Process == Account.AccountProcess.RH)
+        if (m_computeConfig != null && m_computeConfig.Request.Process == Account.AccountProcess.RH)
           RemoveOrphanDimensions();
         foreach (vTabPage l_tab in m_tabCtrl.TabPages)
         {
           if (l_tab.Controls.Count > 0)
           {
             DGV l_dgv = l_tab.Controls[0] as DGV;
-            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+            l_dgv.Select();
+            l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
             l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+            l_dgv.Refresh();
+            l_tab.Refresh();
           }
         }
       }
@@ -232,6 +240,7 @@ namespace FBI.MVC.View
           DGV l_dgv = l_tab.Controls[0] as DGV;
           SetHierachyItemVisible(p_versionId, p_visible, l_dgv.Rows);
           SetHierachyItemVisible(p_versionId, p_visible, l_dgv.Columns);
+          l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_CELL_CONTENT);
         }
       }
     }
@@ -275,6 +284,15 @@ namespace FBI.MVC.View
 
     #region Builders
 
+    private void PeriodBuilderSelector(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
+        DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
+    {
+      if (m_computeConfig.Request.IsPeriodDiff)
+        PeriodCompareBuilder(p_dgv, p_tabId, p_conf, p_dimension, p_parent, p_parentKey);
+      else
+        PeriodBuilder(p_dgv, p_tabId, p_conf, p_dimension, p_parent, p_parentKey);
+    }
+
     private void PeriodBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
       DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
     {
@@ -282,6 +300,10 @@ namespace FBI.MVC.View
       List<int> l_periodList;
       string l_formatedDate;
       Int32 l_startPeriod = m_computeConfig.Request.StartPeriod;
+      PeriodConf l_childConf = (p_conf.Child != null) ? p_conf.Child as PeriodConf : null;
+
+      TimeConfig l_lowestConfig = (l_childConf != null) ? l_childConf.PeriodType : l_conf.PeriodType;
+
       l_periodList = (l_conf.IsSubPeriod) ? PeriodModel.GetSubPeriods(l_conf.ParentType, l_conf.ParentPeriod) :
         PeriodModel.GetPeriodList(l_startPeriod,
         GetNbPeriod(m_computeConfig.Request.NbPeriods, l_conf.PeriodType, m_computeConfig.BaseTimeConfig), l_conf.PeriodType);
@@ -289,6 +311,8 @@ namespace FBI.MVC.View
 
       foreach (int l_date in l_periodList)
       {
+        if (l_lowestConfig == l_conf.PeriodType &&  m_computeConfig.Periods != null && m_computeConfig.Periods.Contains(l_date) == false)
+          continue;
         if (l_includeWeekEnds == false && PeriodModel.IsWeekEnd(l_date))
           continue;
         l_formatedDate = PeriodModel.GetFormatedDate(l_date, l_conf.PeriodType);
@@ -298,15 +322,41 @@ namespace FBI.MVC.View
 
         if (l_newItem != null)
         {
-          if (p_conf.Child != null && p_conf.Child.ModelType == typeof(PeriodModel))
-          {
-            PeriodConf l_childConf = p_conf.Child as PeriodConf;
-
+          if (l_childConf != null && l_childConf.ModelType == typeof(PeriodModel))
             l_childConf.ParentPeriod = (l_periodList[0] == l_date) ? l_startPeriod : l_date;
-          }
           InitDimension(p_dgv, p_tabId, p_conf.Child, p_dimension, l_newItem.Items, l_key);
         }
       }
+    }
+
+    private void PeriodCompareBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
+      DGVDimension p_dimension, HierarchyItemsCollection p_parent, ResultKey p_parentKey)
+    {
+      PeriodConf l_conf = p_conf as PeriodConf;
+      string l_formatedDate;
+      int l_count = 0;
+      TimeConfig l_lowestConfig = TimeUtils.GetLowestTimeConfig(m_computeConfig.Request.PeriodDiffAssociations.Keys.ToList());
+
+      if (m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType] != null)
+        foreach (KeyValuePair<Int32, Int32> l_date in m_computeConfig.Request.PeriodDiffAssociations[l_conf.PeriodType])
+        {
+          if (p_parentKey.VersionId == m_computeConfig.Request.Versions[0])
+            l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType);
+          else if (p_parentKey.VersionId == m_computeConfig.Request.Versions[1])
+            l_formatedDate = PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
+          else
+            l_formatedDate = PeriodModel.GetFormatedDate(l_date.Key, l_conf.PeriodType) + " / " +
+              PeriodModel.GetFormatedDate(l_date.Value, l_conf.PeriodType);
+
+
+          ResultKey l_key = p_parentKey + new ResultKey(0, "", "", l_conf.PeriodType, l_count++, 0);
+          if (l_lowestConfig == l_conf.PeriodType && m_computeConfig.Periods != null && m_computeConfig.Periods.Contains(l_count - 1) == false)
+            continue;
+          HierarchyItem l_newItem = SetDimension(p_dgv, p_dimension, p_parent, l_key, l_formatedDate);
+
+          if (l_newItem != null)
+            InitDimension(p_dgv, p_tabId, p_conf.Child, p_dimension, l_newItem.Items, l_key);
+        }
     }
 
     private void VersionBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf,
@@ -494,5 +544,31 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    internal void DropOnExcel(bool p_copyOnlyExpanded)
+    {
+      if (m_controller.Config != null)
+      {
+        string l_entityName = AxisElemModel.Instance.GetValueName(m_controller.Config.Request.EntityId);
+        string l_versionName = VersionModel.Instance.GetValueName(m_controller.Config.Request.Versions[0]);
+        Currency l_currency = CurrencyModel.Instance.GetValue(m_controller.Config.Request.CurrencyId);
+
+        if (l_currency == null)
+          return;
+        Range destination = WorksheetWriter.CreateReceptionWS(l_entityName,
+        new string[] { Local.GetValue("CUI.entity"), Local.GetValue("CUI.version"), Local.GetValue("CUI.currency") },
+        new string[] { l_entityName, l_versionName, l_currency.Name });
+
+        Int32 i = 1;
+        foreach (vTabPage l_tab in m_tabCtrl.TabPages)
+        {
+          vDataGridView DGV = l_tab.Controls[0] as vDataGridView;
+          WorksheetWriter.CopyDGVToExcelGeneric(DGV, destination, l_currency.Symbol, ref i, ref p_copyOnlyExpanded);
+        }
+        destination.Worksheet.Columns.AutoFit();
+        destination.Worksheet.Outline.ShowLevels(RowLevels: 1);
+        AddinModule.CurrentInstance.ExcelApp.ActiveWindow.Activate();
+      }
+    }
   }
 }

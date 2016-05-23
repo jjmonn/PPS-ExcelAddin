@@ -16,6 +16,50 @@ namespace FBI.MVC.Model.CRUD
     WEEK
   }
 
+  public class TimeUtils
+  {
+    public static TimeConfig GetParentConfig(TimeConfig p_config)
+    {
+      if (p_config == TimeConfig.MONTHS)
+        return (TimeConfig.YEARS);
+      if (p_config == TimeConfig.DAYS)
+        return (TimeConfig.WEEK);
+      return (p_config);
+    }
+
+    public static bool IsParentConfig(TimeConfig p_configA, TimeConfig p_configB)
+    {
+      if (p_configA == TimeConfig.YEARS && p_configB == TimeConfig.MONTHS)
+        return (true);
+      if (p_configA == TimeConfig.WEEK && p_configB == TimeConfig.DAYS)
+        return (true);
+      return (false);
+    }
+
+    public static TimeConfig GetLowestTimeConfig(List<TimeConfig> p_list)
+    {
+      TimeConfig l_config = TimeConfig.YEARS;
+
+      foreach (TimeConfig elem in p_list)
+      {
+        if (elem == TimeConfig.MONTHS && l_config == TimeConfig.YEARS)
+          l_config = elem;
+        if (elem == TimeConfig.DAYS && (l_config == TimeConfig.WEEK || l_config == TimeConfig.YEARS))
+          l_config = elem;
+      }
+      return (l_config);
+    }
+
+    public static Int32 GetParentConfigNbPeriods(TimeConfig p_config, Int32 p_nbPeriods)
+    {
+      if (p_config == TimeConfig.MONTHS)
+        return ((Int32)Math.Ceiling(p_nbPeriods / 12.0));
+      else if (p_config == TimeConfig.DAYS)
+        return ((Int32)Math.Ceiling(p_nbPeriods / 7.0));
+      return (p_nbPeriods);
+    }
+  }
+
   public class Version : BaseVersion, IComparable, NamedHierarchyCRUDEntity
   {
     public bool Locked { get; set; }
@@ -24,6 +68,8 @@ namespace FBI.MVC.Model.CRUD
     public UInt32 RateVersionId { get; set; }
     public string CreatedAt { get; set; }
     public UInt32 GlobalFactVersionId { get; set; }
+    public UInt32 FormulaPeriodIndex { get; set; }
+    public UInt32 FormulaNbPeriod { get; set; }
 
     public Version() { }
     private Version(UInt32 p_id)
@@ -47,6 +93,8 @@ namespace FBI.MVC.Model.CRUD
       l_version.NbPeriod = p_packet.ReadUint16();
       l_version.CreatedAt = p_packet.ReadString();
       l_version.GlobalFactVersionId = p_packet.ReadUint32();
+      l_version.FormulaPeriodIndex = p_packet.ReadUint32();
+      l_version.FormulaNbPeriod = p_packet.ReadUint32();
 
       if (l_version.IsFolder == true)
           l_version.Image = 1;
@@ -72,6 +120,8 @@ namespace FBI.MVC.Model.CRUD
       p_packet.WriteUint16(NbPeriod);
       p_packet.WriteString(CreatedAt);
       p_packet.WriteUint32(GlobalFactVersionId);
+      p_packet.WriteUint32(FormulaPeriodIndex);
+      p_packet.WriteUint32(FormulaNbPeriod);
     }
 
     public void CopyFrom(Version p_model)
@@ -88,6 +138,8 @@ namespace FBI.MVC.Model.CRUD
       NbPeriod = p_model.NbPeriod;
       CreatedAt = p_model.CreatedAt;
       GlobalFactVersionId = p_model.GlobalFactVersionId;
+      FormulaPeriodIndex = p_model.FormulaPeriodIndex;
+      FormulaNbPeriod = p_model.FormulaNbPeriod;
       Image = p_model.Image;
     }
 

@@ -16,7 +16,9 @@ namespace FBI.MVC.View
   public class RangeHighlighter
   {
     Int32 DIMENSIONS_COLORS = Color.FromArgb(215, 239, 253).ToArgb();
-    SafeDictionary<Range, Object> m_originalCellsColor = new SafeDictionary<Range, Object>();
+    string[] m_originalCellsAddress = new string[4096];
+    object[] m_originalCellsColor = new object[4096];
+    int m_nbRegistered = 0;
     Worksheet m_worksheet;
 
     public RangeHighlighter(Worksheet p_worksheet)
@@ -37,6 +39,10 @@ namespace FBI.MVC.View
 
         case EditedFactStatus.OutputDifferent :
           FillOutputCellRed(p_cell);
+          break;
+
+        case EditedFactStatus.OutputEqual :
+          FillOutputBaseColor(p_cell);
           break;
 
         case EditedFactStatus.InputEqual :
@@ -70,15 +76,23 @@ namespace FBI.MVC.View
     {
       foreach (DimensionType l_dim in Enum.GetValues(typeof(DimensionType)))
       {
-        foreach (string l_cellAdress in p_areaController.Dimensions[l_dim].m_values.Keys)
+        foreach (KeyValuePair<string, CRUDEntity> l_pair in p_areaController.Dimensions[l_dim].m_values)
         {
-          Range l_cell = m_worksheet.Range[l_cellAdress];
+          Range l_cell = m_worksheet.Range[l_pair.Key];
           if (l_cell == null)
             return;
           RegisterCellOriginalFill(l_cell);
           l_cell.Interior.Color = Properties.Settings.Default.FactsEditionDimensionsFill;
         }
       }
+    }
+
+    public void FillOutputBaseColor(Range p_cell)
+    {
+      if (p_cell == null)
+        return;
+      RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionOutputsBackColor;
     }
 
     public void FillInputsBaseColor(Range p_cell)
@@ -129,24 +143,41 @@ namespace FBI.MVC.View
 
     private void RegisterCellOriginalFill(Range p_cell)
     {
-      if (!m_originalCellsColor.ContainsKey(p_cell)) // only add if color has not been yet changed
-        m_originalCellsColor.Add(p_cell, p_cell.Interior.Color); 
+      if (m_originalCellsAddress.Contains(p_cell.Address))
+        return;
+      m_originalCellsColor[m_nbRegistered] = p_cell.Interior.Color;
+      m_originalCellsAddress[m_nbRegistered] = p_cell.Address;
+      m_nbRegistered++;
+      if (m_nbRegistered >= m_originalCellsColor.Length)
+      {
+        object[] l_newColorTab = new object[m_originalCellsColor.Length * 2];
+        string[] l_newAddressTab = new string[m_originalCellsAddress.Length * 2];
+
+        Array.Copy(m_originalCellsColor, l_newColorTab, m_originalCellsColor.Length);
+        Array.Copy(m_originalCellsAddress, l_newAddressTab, m_originalCellsAddress.Length);
+        m_originalCellsColor = l_newColorTab;
+        m_originalCellsAddress = l_newAddressTab;
+      }
     }
 
     public void RevertToOriginalColors()
     {
-      foreach (KeyValuePair<Range, Object> l_keyPair in m_originalCellsColor)
+      for (int i = 0; i < m_nbRegistered; ++i)
       {
         try
         {
-          l_keyPair.Key.Interior.Color = l_keyPair.Value;
+          Range l_cell = m_worksheet.get_Range(m_originalCellsAddress[i]);
+
+          if (l_cell != null)
+            l_cell.Interior.Color = m_originalCellsColor[i];
         }
         catch (Exception e)
         {
           System.Diagnostics.Debug.WriteLine("revert to original color: " + e.Message);
         }
       }
-      m_originalCellsColor.Clear();
+      m_originalCellsColor = new object[4096];
+      m_originalCellsAddress = new string[4096];
     }
 
   }

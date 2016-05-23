@@ -55,11 +55,18 @@ namespace FBI.MVC.Controller
       }
     }
 
-    private void AfterAxisElemCreation(ErrorMessage status, UInt32 id)
+    delegate void AfterAxisElemCreation_delegate(ErrorMessage p_status, UInt32 p_id);
+    private void AfterAxisElemCreation(ErrorMessage p_status, UInt32 p_id)
     {
-      if (status == ErrorMessage.SUCCESS)
+      if (m_view.InvokeRequired)
       {
-        AxisElem l_axisElem = AxisElemModel.Instance.GetValue(id);
+        AfterAxisElemCreation_delegate func = new AfterAxisElemCreation_delegate(AfterAxisElemCreation);
+        m_view.Invoke(func, p_status, p_id);
+        return;
+      }
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        AxisElem l_axisElem = AxisElemModel.Instance.GetValue(p_id);
         if (l_axisElem == null)
           return;
 

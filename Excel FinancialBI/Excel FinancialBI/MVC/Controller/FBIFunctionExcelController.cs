@@ -16,19 +16,45 @@ namespace FBI.MVC.Controller
 
   public class FBIFunctionExcelController : AFBIFunctionController
   {
-    static System.Threading.EventWaitHandle m_waitResult;
+    static System.Threading.ManualResetEvent m_waitResult;
     public override IView View { get { return (null); } }
     SafeDictionary<Int32, ComputeResult> m_results;
+    static string m_lastParameter ="";
+    static List<Tuple<LegacyComputeRequest, ComputeResult>> m_computeCache = new List<Tuple<LegacyComputeRequest, ComputeResult>>();
+    public static FBIFunction LastExecutedFunction { get; set; }
 
     public FBIFunctionExcelController()
     {
       m_results = new SafeDictionary<int, ComputeResult>();
-      m_waitResult = new System.Threading.AutoResetEvent(false);
+      m_waitResult = new System.Threading.ManualResetEvent(false);
       LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
     }
 
-    static dynamic GetValue(object p_param)
+    void ResetCache()
     {
+      m_computeCache.Clear();
+    }
+
+    public void Refresh()
+    {
+      ResetCache();
+      Worksheet l_worksheet = AddinModule.CurrentInstance.ExcelApp.ActiveSheet as Worksheet;
+      XlCalculation l_mode = AddinModule.CurrentInstance.ExcelApp.Calculation;
+
+      AddinModule.CurrentInstance.ExcelApp.Calculation = XlCalculation.xlCalculationManual;
+      if (l_worksheet != null)
+      {
+        Range l_range = l_worksheet.Range[l_worksheet.Cells[1, 1], WorksheetWriter.GetRealLastCell(l_worksheet)];
+        foreach (Range l_cell in l_range)
+          l_cell.Formula = l_cell.Formula;
+      }
+      AddinModule.CurrentInstance.ExcelApp.Calculate();
+      AddinModule.CurrentInstance.ExcelApp.Calculation = l_mode;
+    }
+
+    static dynamic GetValue(object p_param, string p_name)
+    {
+      m_lastParameter = p_name;
       if (p_param.GetType() == typeof(ADXExcelRef))
       {
         ADXExcelRef l_ref = p_param as ADXExcelRef;
@@ -37,7 +63,7 @@ namespace FBI.MVC.Controller
         Range l_range = AddinModule.CurrentInstance.ExcelApp.Range[l_address];
 
         if (l_range != null)
-          return (GetValue(l_range.Value));
+          return (GetValue(l_range.Value, p_name));
         else
           return ("");
       }
@@ -45,13 +71,13 @@ namespace FBI.MVC.Controller
         return (p_param);
     }
 
-    static List<string> GetValueList(object p_param)
+    static List<string> GetValueList(object p_param, string p_name)
     {
       List<string> l_list = new List<string>();
       if (p_param.GetType().IsArray == false)
       {
         if ((string)p_param != "")
-          l_list.Add((string)GetValue(p_param));
+          l_list.Add((string)GetValue(p_param, p_name));
       }
       else
       {
@@ -61,7 +87,7 @@ namespace FBI.MVC.Controller
         foreach (object l_param in l_paramList)
         {
           if ((string)l_param != "")
-            l_list.Add((string)GetValue(l_param));
+            l_list.Add((string)GetValue(l_param, p_name));
         }
       }
       return (l_list);
@@ -86,44 +112,52 @@ namespace FBI.MVC.Controller
       try
       {
         Range l_cell = AddinModule.CurrentInstance.ExcelApp.ActiveCell;
+
         FBIFunction l_function = new FBIFunction();
 
-        l_function.EntityName = GetValue(p_entity);
-        l_function.AccountName = GetValue(p_account);
-        dynamic l_period = GetValue(p_period);
+        l_function.EntityName = GetValue(p_entity, Local.GetValue("ppsbi.entity"));
+        l_function.AccountName = GetValue(p_account, Local.GetValue("ppsbi.account"));
+        dynamic l_period = GetValue(p_period, Local.GetValue("ppsbi.period"));
         if (l_period.GetType() == typeof(string))
           l_function.PeriodString = l_period;
         else
-          l_function.Period = GetValue(p_period);
-        l_function.CurrencyName = GetValue(p_currency);
-        l_function.VersionName = GetValue(p_version);
-        l_function.AxisElems[AxisType.Client] = GetValueList(p_clientsFilters);
-        l_function.AxisElems[AxisType.Product] = GetValueList(p_productsFilters);
-        l_function.AxisElems[AxisType.Adjustment] = GetValueList(p_adjustmentsFilters);
-        l_function.Filters = GetValueList(p_categoriesFilters);
+          l_function.Period = l_period;
+        l_function.CurrencyName = GetValue(p_currency, Local.GetValue("ppsbi.currency"));
+        l_function.VersionName = GetValue(p_version, Local.GetValue("ppsbi.version"));
+        l_function.AxisElems[AxisType.Client] = GetValueList(p_clientsFilters, Local.GetValue("ppsbi.clients_filter"));
+        l_function.AxisElems[AxisType.Product] = GetValueList(p_productsFilters, Local.GetValue("ppsbi.products_filter"));
+        l_function.AxisElems[AxisType.Adjustment] = GetValueList(p_adjustmentsFilters, Local.GetValue("ppsbi.adjustments_filter"));
+        l_function.Filters = GetValueList(p_categoriesFilters, Local.GetValue("ppsbi.categories_filter"));
 
+        Version l_version = VersionModel.Instance.GetValue(l_function.VersionId);
+
+        if (l_version == null)
+          return ("general.error.system");
+        if (l_version.TimeConfiguration <= TimeConfig.MONTHS)
+          l_function.Period = l_function.Period.AddDays(DateTime.DaysInMonth(l_function.Period.Year, l_function.Period.Month) - l_function.Period.Day);
+        if (l_version.TimeConfiguration <= TimeConfig.YEARS)
+          l_function.Period = l_function.Period.AddMonths(12 - l_function.Period.Month);
         if (IsValidFunction(l_function) == false)
           return (Error);
         Int32 l_requestId;
+        m_results.Clear();
+
+        if (LastExecutedFunction == null)
+          LastExecutedFunction = l_function;
         if (Compute(l_function, out l_requestId) == false)
           return (Local.GetValue("ppsbi.error.unable_to_compute"));
-
-        m_waitResult.WaitOne();
-
-        Version l_version = VersionModel.Instance.GetValue(l_function.VersionId);
 
         ResultKey l_key = new ResultKey(l_function.AccountId, "", "", l_version.TimeConfiguration,
           (int)l_function.Period.ToOADate(), l_version.Id, true);
 
         if (m_results[l_requestId] == null)
-          return (Error);
+          return (Error = Local.GetValue("general.error.system"));
         return (m_results[l_requestId].Values[l_key]);
       }
       catch
       {
-        return (null);
+        return (m_lastParameter + " " + Local.GetValue("ppsbi.error.invalid_parameter"));
       }
-
     }
 
     bool Compute(FBIFunction p_function, out Int32 p_requestId)
@@ -154,18 +188,32 @@ namespace FBI.MVC.Controller
       l_request.Versions.Add(p_function.VersionId);
       l_request.Process = Account.AccountProcess.FINANCIAL;
       l_request.StartPeriod = (int)p_function.Period.ToOADate();
-      l_request.NbPeriods = 1;
+      l_request.NbPeriods = l_version.NbPeriod;
       l_request.EntityId = p_function.EntityId;
       l_request.CurrencyId = p_function.CurrencyId;
       l_request.GlobalFactVersionId = l_version.GlobalFactVersionId;
       l_request.RateVersionId = l_version.RateVersionId;
 
-      List<Int32> l_requestIdList = new List<int>();
-      bool l_success = LegacyComputeModel.Instance.Compute(l_request, l_requestIdList);
+      ComputeResult l_result = FindInCache(l_request);
+      if (l_result != null)
+      {
+        SafeDictionary<UInt32, ComputeResult> l_dic = new SafeDictionary<UInt32, ComputeResult>();
+        l_dic[(UInt32)l_result.RequestId] = l_result;
+        p_requestId = l_result.RequestId;
+        OnComputeResult(ErrorMessage.SUCCESS, l_request, l_dic);
+      }
+      else
+      {
+        List<Int32> l_requestIdList = new List<int>();
+        m_waitResult = new System.Threading.ManualResetEvent(false);
+        bool l_success = LegacyComputeModel.Instance.Compute(l_request, l_requestIdList);
 
-      if (l_success == false)
-        return (false);
-      p_requestId = l_requestIdList.FirstOrDefault();
+        if (l_success == false)
+          return (false);
+        p_requestId = l_requestIdList.FirstOrDefault();
+        if (m_waitResult.WaitOne(2000) == false)
+          return (false);
+      }
       return (true);
     }
 
@@ -177,8 +225,32 @@ namespace FBI.MVC.Controller
         return;
       }
       foreach (ComputeResult l_result in p_result.Values)
+      {
+        m_computeCache.Add(new Tuple<LegacyComputeRequest, ComputeResult>(p_request, l_result));
         m_results[l_result.RequestId] = l_result;
+      }
       m_waitResult.Set();
+    }
+
+    ComputeResult FindInCache(LegacyComputeRequest p_request)
+    {
+      foreach (Tuple<LegacyComputeRequest, ComputeResult> l_pair in m_computeCache)
+      {
+        LegacyComputeRequest l_request = l_pair.Item1;
+
+        if (l_request.EntityId == p_request.EntityId &&
+          l_request.CurrencyId == p_request.CurrencyId &&
+          l_request.RateVersionId == p_request.RateVersionId &&
+          l_request.GlobalFactVersionId == p_request.GlobalFactVersionId &&
+          !l_request.AccountList.Except(p_request.AccountList).Any() && l_request.AccountList.Count == p_request.AccountList.Count &&
+          l_request.AxisHierarchy == p_request.AxisHierarchy &&
+          !l_request.FilterList.Except(p_request.FilterList).Any() && l_request.FilterList.Count == p_request.FilterList.Count &&
+          !l_request.AxisElemList.Except(p_request.AxisElemList).Any() && l_request.AxisElemList.Count == p_request.AxisElemList.Count &&
+          !l_request.SortList.Except(p_request.SortList).Any() && l_request.SortList.Count == p_request.SortList.Count &&
+          !l_request.Versions.Except(p_request.Versions).Any() && l_request.Versions.Count == p_request.Versions.Count)
+          return (l_pair.Item2);
+      }
+      return (null);
     }
   }
 }

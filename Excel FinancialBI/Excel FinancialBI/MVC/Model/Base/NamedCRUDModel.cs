@@ -13,6 +13,19 @@ namespace FBI.MVC.Model
   public class NamedCRUDModel<T> : ICRUDModel<T> where T : class, NamedCRUDEntity
   {
     protected MultiIndexDictionary<UInt32, string, T> m_CRUDDic = new MultiIndexDictionary<UInt32, string, T>();
+    bool m_caseSensitive;
+
+    protected NamedCRUDModel(bool p_caseSensitiveName = false)
+    {
+      m_caseSensitive = p_caseSensitiveName;
+    }
+
+    string GetName(string p_name)
+    {
+      if (m_caseSensitive)
+        return (p_name);
+      return (StringUtils.RemoveDiacritics(p_name));
+    }
 
     #region "CRUD"
 
@@ -26,7 +39,7 @@ namespace FBI.MVC.Model
         {
           T tmp_crud = Build(p_packet) as T;
 
-          m_CRUDDic.Set(tmp_crud.Id, StringUtils.RemoveDiacritics(tmp_crud.Name), tmp_crud);
+          m_CRUDDic.Set(tmp_crud.Id, GetName(tmp_crud.Name), tmp_crud);
         }
 
         IsInit = true;
@@ -45,7 +58,7 @@ namespace FBI.MVC.Model
       {
         T tmp_crud = Build(p_packet) as T;
 
-        m_CRUDDic.Set(tmp_crud.Id, StringUtils.RemoveDiacritics(tmp_crud.Name), tmp_crud);
+        m_CRUDDic.Set(tmp_crud.Id, GetName(tmp_crud.Name), tmp_crud);
         RaiseReadEvent(p_packet.GetError(), tmp_crud);
       }
       else
@@ -69,9 +82,9 @@ namespace FBI.MVC.Model
     public UInt32 GetValueId(string p_name)
     {
 
-      if (m_CRUDDic[StringUtils.RemoveDiacritics(p_name)] == null)
+      if (m_CRUDDic[GetName(p_name)] == null)
         return 0;
-      return m_CRUDDic[StringUtils.RemoveDiacritics(p_name)].Id;
+      return m_CRUDDic[GetName(p_name)].Id;
     }
 
     public string GetValueName(UInt32 p_id)
@@ -85,7 +98,7 @@ namespace FBI.MVC.Model
     {
       if (p_name == null)
         return null;
-      return m_CRUDDic[StringUtils.RemoveDiacritics(p_name)];
+      return m_CRUDDic[GetName(p_name)];
     }
 
     public override T GetValue(UInt32 p_id)
@@ -97,6 +110,21 @@ namespace FBI.MVC.Model
     {
       return m_CRUDDic;
     }
+
+    public List<string> GetMatchings(string p_name)
+    {
+      List<string> l_results = new List<string>();
+
+      if (p_name.Length == 0)
+        return (l_results);
+      string l_name = StringUtils.RemoveDiacritics(p_name);
+
+      foreach (T l_entity in GetDictionary().SortedValues)
+        if (String.Compare(StringUtils.RemoveDiacritics(l_entity.Name), 0, l_name, 0, l_name.Length) == 0)
+          l_results.Add(l_entity.Name);
+      return (l_results);
+    }
+
     #endregion
   }
 }

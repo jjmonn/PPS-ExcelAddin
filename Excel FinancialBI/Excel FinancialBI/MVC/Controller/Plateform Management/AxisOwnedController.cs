@@ -11,13 +11,15 @@ namespace FBI.MVC.Controller
   using View;
   using Utils;
 
-  public class EmployeeController : AxisBaseController<EmployeeView, EmployeeController>
+  public class AxisOwnedController : AxisBaseController<AxisOwnedView, AxisOwnedController>
   {
-    public UInt32 SelectedEntity { get; set; }
+    public UInt32 SelectedOwner { get; set; }
+    public AxisType OwnerType { get; private set; }
 
-    public EmployeeController() : base(AxisType.Employee)
+    public AxisOwnedController(AxisType p_axisOwnerType, AxisType p_axisType) : base(p_axisType)
     {
-      m_view = new EmployeeView();
+      OwnerType = p_axisOwnerType;
+      m_view = new AxisOwnedView();
       m_view.SetController(this);
       LoadView();
     }
@@ -31,7 +33,7 @@ namespace FBI.MVC.Controller
     public bool IsAxisOwnerValid(AxisOwner p_axisOwner)
     {
       AxisElem l_axisElem = AxisElemModel.Instance.GetValue(p_axisOwner.Id);
-      AxisElem l_owner = AxisElemModel.Instance.GetValue(AxisType.Entities, p_axisOwner.OwnerId);
+      AxisElem l_owner = AxisElemModel.Instance.GetValue(OwnerType, p_axisOwner.OwnerId);
 
       if (l_axisElem == null)
       {

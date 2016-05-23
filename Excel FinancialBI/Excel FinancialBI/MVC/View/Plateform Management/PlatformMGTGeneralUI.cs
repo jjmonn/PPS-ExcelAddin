@@ -114,7 +114,7 @@ namespace FBI.MVC.View
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<EmployeeView, EmployeeController>(new EmployeeController());
+      m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(AxisType.Entities, AxisType.Employee));
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)
@@ -124,7 +124,7 @@ namespace FBI.MVC.View
 
     private void ProductsBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Product));
+      m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(AxisType.Client, AxisType.Product));
     }
 
     private void AdjustmentsBT_Click(object sender, EventArgs e)
@@ -181,6 +181,11 @@ namespace FBI.MVC.View
     private void GlobalFact_BT_Click(object sender, EventArgs e)
     {
       m_controller.SwitchView<GlobalFactView, GlobalFactController>(new GlobalFactController());
+    }
+
+    private void PlatformMGTGeneralUI_FormClosed(object sender, FormClosedEventArgs e)
+    {
+      m_controller.Close();
     }
 
   }

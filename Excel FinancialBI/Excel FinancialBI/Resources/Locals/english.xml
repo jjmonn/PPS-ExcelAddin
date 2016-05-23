@@ -23,6 +23,7 @@
       <string name="month">Months</string>
       <string name="day">Days</string>
       <string name="year">Years</string>
+      <string name="period">Period</string>
     </category>
 
     <category name="error">
@@ -73,6 +74,10 @@
   </category>
 
   <category name="CUI_Charts">
+    <category name="error">
+      <string name="create_panel">Cannot create panel</string>
+      <string name="same_panel">Cannot open the same panel</string>
+    </category>
     <string name="charts_settings">Graphics settings</string>
     <string name="chart_title">Title</string>
     <string name="serie_1">Serie 1</string>
@@ -416,28 +421,26 @@
   </category>
 
   <category name="settings">
-    <string name="Settings">Réglages</string>
-    <string name="port_number">Numéro de port</string>
-    <string name="server_address">Adresse du serveur</string>
-    <string name="display_options">Options d'affichage</string>
-    <string name="report_format">Format des rapports</string>
-    <string name="preferences">Préférences</string>
-    <string name="consolidation_currency">Devise de consolidation</string>
-    <string name="settings">Paramètres</string>
-    <string name="format_preview">Prévisualisation du format</string>
-    <string name="text_color">Couleur du texte</string>
-    <string name="background_color">Couleur du fonds</string>
-    <string name="bold">Gras</string>
-    <string name="italic">Italique</string>
-    <string name="border">Bordures</string>
-    <string name="title">Titre</string>
+    <string name="settings">Settings</string>
+    <string name="currency">Consolidation currency</string>
+    <string name="port_number">Port number</string>
+    <string name="server_address">Server adress</string>
+    <string name="display_options">Display settings</string>
+    <string name="report_format">Report formats</string>
+    <string name="preferences">Preferences</string>
+    <string name="format_preview">Format preview</string>
+    <string name="text_color">Text color</string>
+    <string name="background_color">Background color</string>
+    <string name="bold">Bold</string>
+    <string name="italic">Italic</string>
+    <string name="border">Borders</string>
+    <string name="title">Title</string>
     <string name="important">Important</string>
     <string name="normal">Normal</string>
-    <string name="detail">Détail</string>
-    <string name="language">Langue</string>
-    <string name="french">Français</string>
-    <string name="english">Anglais</string>
-    <string name="msg_excel_reboot">Excel doit être redémarré afin de prendre en compte la sélection de la langue.</string>
+    <string name="detail">Detail</string>
+    <string name="language">Language</string>
+    <string name="french">French</string>
+    <string name="english">English</string>
   </category>
 
   <category name="allocationKeys">
@@ -455,7 +458,7 @@
       <string name="already_exist">Existe déjà.</string>
       <string name="not_implemented">Non implémenté.</string>
       <string name="invalid_attribute">Attribut(s) invalide(s).</string>
-      <string name="permision_denied">Permission non accordée.</string>
+      <string name="permission_denied">Permission non accordée.</string>
       <string name="dependent_parent">Un parent dépend de cet élément.</string>
       <string name="name_already_used">Nom déjà utilisé.</string>
       <string name="version_mismatch">Votre version de Financial BI est incompatible.</string>
@@ -463,6 +466,9 @@
       <string name="name_too_long">Nom trop long.</string>
       <string name="invalid_name">Nom invalide.</string>
     </category>
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
     <string name="account">Compte</string>
     <string name="accounts">Comptes</string>
     <string name="auto_resize_columns">Ajuster automatiquement la largeur des colonnes</string>

@@ -3,7 +3,7 @@
   <category name="Platform Management">
     <string name="currencies">Devises</string>
   </category>
- 
+
   <category name="CUI">
     <category name="dimension">
       <string name="account">Comptes</string>
@@ -23,8 +23,9 @@
       <string name="month">Mois</string>
       <string name="day">Jours</string>
       <string name="year">Années</string>
+      <string name="period">Période</string>
     </category>
-    
+
     <category name="error">
       <string name="system">Une erreur est survenue au cours du calcul. Veuillez contacter votre administrateur si le problème persiste.</string>
       <string name="out_of_memory">Impossible de charger toutes les données, requête trop complexe.</string>
@@ -36,7 +37,7 @@
       <string name="period_range">Période invalide.</string>
       <string name="version_process_invalid">Une ou plusieurs version(s) selectionnée(s) n'est pas compatible avec votre processus (Financier / Ressources Humaines)</string>
     </category>
-    
+
     <string name="adjust_columns_size">Ajuster la largeur des colonnes</string>
     <string name="automatic_columns_adjustment">Ajustement automatique de la largeur des colones</string>
     <string name="charts">Graphiques</string>
@@ -66,18 +67,36 @@
     <string name="selection">Sélection</string>
     <string name="switch_versions">Changer le sens de la comparaison</string>
     <string name="take_off_comparison">Enlever la comparaison des versions</string>
+    <string name="period_comparison">Comparaison de périodes</string>
     <string name="unselect_all">Tout désélectionner</string>
     <string name="update">Mettre à jour</string>
     <string name="version">Version</string>
+    <string name="entity">Entité</string>
     <string name="warning_complexity">La requête demandée est complexe et peut-être longue à calculer. Confirmer la requête ?</string>
   </category>
 
   <category name="CUI_Charts">
+    <category name="error">
+      <string name="no_name">Impossible de créer un graphique sans nom</string>
+      <string name="incomplete_series">Impossible de créer le graphique : Des comptes ajoutés sont incomplets</string>
+      <string name="invalid_serie">Impossible de créer le graphique : Des types de compte ajoutés sont invalides</string>
+      <string name="create_panel">Impossible de créer le panel</string>
+      <string name="same_panel">Vous ne pouvez pas ouvrir le même panel</string>
+      <string name="invalid_account">Compte invalide</string>
+    </category>
+    <category name="warning">
+      <string name="multiple_account">Un compte est ajouté plusieurs fois dans le graphique. Il sera ignoré</string>
+    </category>
+    <string name="choose_version_or_deconstruction">Trop de comptes pour cette opération : Voulez-vous décomposer par versions ?</string>
+    <string name="choose_version">Choisissez une version :</string>
     <string name="charts_settings">Options du graphique</string>
-    <string name="chart_title">Titre</string>
-    <string name="serie_1">Série 1</string>
-    <string name="serie_2">Série 2</string>
-    <string name="CUI2_vizualization">Financial BI Visualisation</string>   
+    <string name="add_serie">Ajouter une série</string>
+    <string name="serie">Série</string>
+    <string name="chart_title">Nom</string>
+    <string name="CUI2_vizualization">Financial BI Visualisation</string>
+    <string name="other">Autres</string>
+    <string name="new_panel">Nouveau panel</string>
+    <string name="panel_selection">Sélectionnez un panel</string>
   </category>
 
   <category name="connection">
@@ -129,6 +148,8 @@
     <string name="msg_account_deletion_confirmation">Confirmation de la suppression de comptes.</string>
     <string name="msg_destination_cell_not_valid">Une cellue doit être sélectionnée dans Excel pour pouvoir envoyer la hiérarchie des comptes sur la feuille.</string>
     <string name="msg_accounts_drop">La hiérarchie des comptes va être envoyée: </string>
+    <string name="msg_formula_validation_confirmation">Enregister cette formule</string>
+    <string name="msg_formula_empty">La formule est vide.</string>
     <string name="title_formula_validation_confirmation">Confirmation de l'édition de la formule</string>
     <string name="msg_password_required">Modifier le type de formule de ce compte pourrait entraîner la perte de données, confirmez vous la conversion de ce compte en formule.</string>
     <string name="msg_new_tab_name">Nom du nouveau rapport: </string>
@@ -209,9 +230,10 @@
     </category>
 
   </category>
-   
+
   <category name="axis">
     <string name="rename">Renommer l'element.</string>
+    <string name="delete_confirm">Vous allez supprimer toutes les données associées a cet element, entrez votre mot de passe pour confirmer.</string>
     <category name="error">
       <string name="axis_type_invalid">Type d'axe invalide.</string>
       <string name="not_found">Element introuvable.</string>
@@ -233,7 +255,7 @@
     <string name="msg_delete_category">Supprimer la catégorie</string>
     <string name="confirmation_delete">Etes-vous sûr ?</string>
     <string name="create_sub_category">Créer une nouvelle catégorie sous la catégorie sélectionée</string>
-  
+
     <!--messages-->
     <string name="msg_new_category_name">Entrez le nom de la nouvelle catégorie :</string>
     <string name="msg_new_value_name">Entrez le nom de la nouvelle valeur :</string>
@@ -277,20 +299,25 @@
     <string name="add_version">Ajouter une version</string>
     <string name="add_folder">Ajouter un dossier</string>
     <string name="copy_version">Copier la version</string>
+    <string name="formula_period_range">Intervalle calculé</string>
 
     <!--messages-->
     <string name="msg_folder_name">Entrez le nom du nouveau dossier</string>
     <string name="msg_new_name">Entrez le nouveau nom</string>
+    <string name="warning_delete">Si vous supprimez cette version toutes les données associées à celle-ci seront suppriméees. Cette action est irréversible. Entrez votre mot de passe pour confirmer.</string>
 
     <category name="error">
+      <string name="formula_period_range_invalid">Intervalle calculé invalide: La période de fin ne peut pas être antérieur à la période de début.</string>
       <string name="rates_version_not_selected">Veuillez sélectioner une version des taux de change.</string>
       <string name="gfacts_version_not_selected">Veuillez sélectioner une version des indicateurs macro économiques.</string>
+      <string name="rate_or_gfact_version_not_compatible">Version de taux de change ou d'IME incompatible.</string>
       <string name="time_config_not_supported">Cette configuration de périodes n'existe pas. Veuillez contacter votre administrateur Financial BI.</string>
       <string name="cannot_copy_folder">Un dossier ne peut pas être copié.</string>
       <string name="no_selected_version">Veuillez sélectioner une version.</string>
       <string name="cannot_select_folder">Vous ne pouvez pas sélectionner un dossier.</string>
+      <string name="invalid_parent">Le parent sélectionné n'est pas un dossier.</string>
     </category>
-    
+
   </category>
 
   <category name="process">
@@ -298,9 +325,10 @@
     <string name="process_financial">Processus Financier</string>
     <string name="process_selection">Selection du Process</string>
   </category>
-  
+
 
   <category name="upload">
+    <string name="change_axis_elem">Voulez vous télécharger les données correspondantes à cet ajustement/ produit/ client (attention les données non envoyées seront perdues)</string>
     <string name="periods">Périodes</string>
     <string name="rates">Taux</string>
     <string name="values">Valeurs</string>
@@ -325,6 +353,7 @@
 	  <string name="title_client_selection">Selection des Clients</string>
 	  <string name="title_upload_error_messages">Erreur d'import</string>
 
+    <string name="msg_error_worksheet_closed">La worksheet n'existe plus.</string>
     <string name="msg_invalidEntity">L'entité sélectionée n'est pas valide.</string>
     <string name="msg_invalidRHAccount">Le compte sélectionné n'est pas valide.</string>
     <string name="msg_select_entity">Une entité doit êter sélectionnée.</string>
@@ -334,11 +363,6 @@
     <string name="msg_snapshot_error">Le snapshot n'a pas réussi car les dimensions suivantes n'ont pas été identifiées sur la feuille de calcul: </string>
     <string name="msg_entity_not_computed1">Le serveur a renvoyé une erreur.</string>
     <string name="msg_report_error">Une erreur est survenue dans le calcul de ce rapport. Il est possible que vous n'ayez pas les droits pour accéder à l'entité sélectionnée.</string>
-    <string name="msg_accounts_orientation_unclear">L'organisation des comptes n'est pas claire. Merci de vérifier que les comptes sont disposés en lignes ou en colones.</string>
-    <string name="msg_entities_orientation_unclear">L'organisation des entités n'est pas claire. Merci de vérifier que les entités sont disposés en lignes ou en colones.</string>
-    <string name="msg_periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
-    <string name="msg_products_orientation_unclear">L'organisation des produits n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
-    <string name="msg_employees_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
     <string name="msg_entity_not_found">Aucune BU n'a été identifiée sur la feuille.</string>
     <string name="msg_error_upload">Une erreur est survenue dans Excel et le rapport ne peut pas être affiché.</string>
     <string name="msg_invalid_value_for_client">Cette valeur n'est pas valide pour un nom de client: </string>
@@ -346,7 +370,13 @@
     <string name="msg_no_account_selected">Aucun compte n'a été sélectioné.</string>
 	  <string name="msg_uploading">Importation ...</string>
     <category name="error">
+      <string name="dimension_identification">Impossible d'identifier toutes les dimensions nécéssaires.</string>
       <string name="commit_failed">Impossible d'enregistrer la feuille</string>
+      <string name="accounts_orientation_unclear">L'organisation des comptes n'est pas claire. Merci de vérifier que les comptes sont disposés en lignes ou en colones.</string>
+      <string name="entities_orientation_unclear">L'organisation des entités n'est pas claire. Merci de vérifier que les entités sont disposés en lignes ou en colones.</string>
+      <string name="periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
+      <string name="employees_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
+      <string name="failed_compute">Le calcul de la feuille a échoué.</string>
     </category>
   </category>
 
@@ -365,7 +395,8 @@
     <string name="nb_days">Nombre de jours</string>
     <string name="copy_from">Créer une copie de</string>
     <string name="starting_period">Période de départ</string>
-	  <string name="starting_month">Mois de départ</string>
+    <string name="end_period">Période de fin</string>
+    <string name="starting_month">Mois de départ</string>
     <string name="period_config">Configuration des périodes (annuel ou mensuel)</string>
     <string name="version_name">Nom de la version</string>
     <string name="version_new">Nouvelle Version</string>
@@ -383,7 +414,7 @@
       <string name="unknown_version">Version inconnue</string>
     </category>
   </category>
-  
+
   <category name="period">
 	<string name="month1">Janvier</string>
 	<string name="month2">Février</string>
@@ -411,6 +442,11 @@
     <string name="products_filter">Filtre produits</string>
     <string name="clients_filter">Filtre clients</string>
     <string name="adjustments_filter">Filtre ajustements</string>
+    <string name="period">Période</string>
+    <string name="currency">Devise</string>
+    <string name="version">Version</string>
+    <string name="account">Compte</string>
+    <string name="entity">Entité</string>
     <string name="title">Edition de la fonction Excel Financial BI</string>
     <string name="computing">calcul...</string>
     <category name="error">
@@ -422,21 +458,21 @@
       <string name="invalid_version">Version sélectionnée invalide (Verifiez que la version selectionnée n'est pas un dossier)</string>
       <string name="invalid_axis_elem">Filtre sélectionné invalide.</string>
       <string name="invalid_filter_value">Catégorie sélectionnée invalide.</string>
+      <string name="invalid_parameter">invalide.</string>
     </category>
   </category>
 
   <category name="settings">
-    <string name="Settings">Réglages</string>
+    <string name="settings">Réglages</string>
+    <string name="currency">Devise de consolidation</string>
     <string name="port_number">Numéro de port</string>
     <string name="server_address">Adresse du serveur</string>
     <string name="display_options">Options d'affichage</string>
     <string name="report_format">Format des rapports</string>
     <string name="preferences">Préférences</string>
-    <string name="consolidation_currency">Devise de consolidation</string>
-    <string name="settings">Paramètres</string>
     <string name="format_preview">Prévisualisation du format</string>
     <string name="text_color">Couleur du texte</string>
-    <string name="background_color">Couleur du fonds</string>
+    <string name="background_color">Couleur du fond</string>
     <string name="bold">Gras</string>
     <string name="italic">Italique</string>
     <string name="border">Bordures</string>
@@ -447,7 +483,6 @@
     <string name="language">Langue</string>
     <string name="french">Français</string>
     <string name="english">Anglais</string>
-    <string name="msg_excel_reboot">Excel doit être redémarré afin de prendre en compte la sélection de la langue.</string>
   </category>
 
   <category name="allocationKeys">
@@ -459,13 +494,14 @@
 
   <category name="general">
     <category name="error">
+      <string name="circular_dep">Référence circulaire.</string>
       <string name="system">Erreur système.</string>
       <string name="success">Succès</string>
       <string name="not_found">Introuvable.</string>
       <string name="already_exist">Existe déjà.</string>
       <string name="not_implemented">Non implémenté.</string>
       <string name="invalid_attribute">Attribut(s) invalide(s).</string>
-      <string name="permision_denied">Permission non accordée.</string>
+      <string name="permission_denied">Permission non accordée.</string>
       <string name="dependent_parent">Un parent dépend de cet élément.</string>
       <string name="name_already_used">Nom déjà utilisé.</string>
       <string name="version_mismatch">Votre version de Financial BI est incompatible.</string>
@@ -532,6 +568,7 @@
     <string name="week">Semaine</string>
     <string name="snapshot">Snapshot</string>
     <string name="upload">Edition</string>
+    <string name="next">Suivant</string>
   </category>
 
   <category name="entity">
@@ -588,6 +625,17 @@
       <string name="entity_must_be_editable">L'entité sélectionnée ne doit pas être parente.</string>
       <string name="account_must_be_input">Le compte sélectionné doit être de type Input.</string>
       <string name="no_period">Période non définie.</string>
+    </category>
+  </category>
+
+  <category name="bnf">
+    <category name="error">
+      <string name="bnf_is_fucked">Mauvais paramètre(s) pour la BNF. Contactez un administrateur</string>
+      <string name="at">Input erroné au caractère</string>
+      <string name="operator">Un opérateur est manquant ou incorrect</string>
+      <string name="humanAccount">Le compte est erroné</string>v
+      <string name="humanPeriod">La période est erronée</string>
+      <string name="humanParam">Liste d'arguments invalide</string>
     </category>
   </category>
 

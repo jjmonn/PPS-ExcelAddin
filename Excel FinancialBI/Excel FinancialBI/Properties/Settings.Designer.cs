@@ -12,7 +12,7 @@ namespace FBI.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -50,9 +50,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("8.5")]
-        public double dgvFontSize {
+        public float dgvFontSize {
             get {
-                return ((double)(this["dgvFontSize"]));
+                return ((float)(this["dgvFontSize"]));
             }
             set {
                 this["dgvFontSize"] = value;
@@ -854,9 +854,9 @@ namespace FBI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int language {
+        public uint language {
             get {
-                return ((int)(this["language"]));
+                return ((uint)(this["language"]));
             }
             set {
                 this["language"] = value;
@@ -932,6 +932,18 @@ namespace FBI.Properties {
             }
             set {
                 this["includeWeekEnds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int chartBorderWidth {
+            get {
+                return ((int)(this["chartBorderWidth"]));
+            }
+            set {
+                this["chartBorderWidth"] = value;
             }
         }
     }

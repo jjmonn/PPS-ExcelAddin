@@ -34,6 +34,7 @@ namespace FBI.MVC.View
 
     public void LoadView()
     {
+      m_parentAxisElemTreeviewBox.TreeView.Nodes.Clear();
       switch (m_controller.AxisType)
       {
         case AxisType.Entities:
@@ -98,10 +99,15 @@ namespace FBI.MVC.View
     {
       set
       {
-        vTreeNode parentAxisNode =  FbiTreeView<AxisElem>.FindNode(m_parentAxisElemTreeviewBox.TreeView, value);
-        if (parentAxisNode == null)
-          return;
-        m_parentAxisElemTreeviewBox.TreeView.SelectedNode = parentAxisNode;
+        vTreeNode parentAxisNode = FbiTreeView<AxisElem>.FindNode(m_parentAxisElemTreeviewBox.TreeView, value);
+        try
+        {
+          m_parentAxisElemTreeviewBox.TreeView.SelectedNode = parentAxisNode;
+          if (parentAxisNode == null)
+            MultilangueSetup();
+        }
+        catch // throw exception when setting SelectedNode to null but do work anyway
+        { }
       }
     }
 
@@ -115,7 +121,7 @@ namespace FBI.MVC.View
       UInt32 l_parentAxisId = 0;
       if ((m_parentAxisElemTreeviewBox.TreeView.SelectedNode != null))
         if (m_controller.AxisType == AxisType.Entities || m_controller.AxisType == AxisType.Client)
-          l_parentAxisId = (UInt32)m_parentAxisElemTreeviewBox.TreeView.SelectedNode.Value;
+            l_parentAxisId = (UInt32)m_parentAxisElemTreeviewBox.TreeView.SelectedNode.Value;
       AxisElem l_newElem = new AxisElem();
 
       l_newElem.Name = m_nameTextBox.Text;

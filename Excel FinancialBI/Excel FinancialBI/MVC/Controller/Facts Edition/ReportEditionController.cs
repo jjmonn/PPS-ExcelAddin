@@ -113,8 +113,7 @@ namespace FBI.MVC.Controller
       {
         l_result = InputReportCreationProcessFinancial(l_entityCurrency);
         if (l_result)
-          m_addinController.LaunchFinancialSnapshot(true, Properties.Settings.Default.version_id);
-        AddinModuleController.SetExcelInteractionState(true);
+          m_addinController.LaunchFinancialSnapshot(false, true, Properties.Settings.Default.version_id);
         return l_result;
       }
       else

@@ -13,6 +13,9 @@ namespace FBI.MVC.Model.CRUD
     public List<Fact> FactList { get; set; }
     public UInt32 VersionId { get; set; }
     public List<UInt32> EntityList { get; set; }
+    public UInt32 ProductId { get; set; }
+    public UInt32 ClientId { get; set; }
+    public UInt32 AdjustmentId { get; set; }
 
     public SourcedComputeRequest()
     {
@@ -31,6 +34,10 @@ namespace FBI.MVC.Model.CRUD
         p_packet.WriteUint32(l_fact.Period);
         p_packet.WriteDouble(l_fact.Value);
       }
+
+      p_packet.WriteUint32(ClientId);
+      p_packet.WriteUint32(ProductId);
+      p_packet.WriteUint32(AdjustmentId);
     }
   }
 }
