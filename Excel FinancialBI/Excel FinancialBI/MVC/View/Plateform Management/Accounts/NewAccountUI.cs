@@ -154,7 +154,12 @@ namespace FBI.MVC.View
       if (m_endOfPeriodRadioButton.Checked)
         l_period = Account.PeriodAggregationOptions.END_PERIOD;
       else
-        l_period = Account.PeriodAggregationOptions.AVERAGE_PERIOD;
+      {
+        if ((Account.AccountProcess)ProcessComboBox.SelectedItem.Value == Account.AccountProcess.RH)
+          l_period = Account.PeriodAggregationOptions.AVERAGE_PERIOD;
+        else
+          l_period = Account.PeriodAggregationOptions.SUM_OF_PERIODS;
+      }
 
       if (m_controller.CreateAccount(l_parentId, NameTextBox.Text, (Account.AccountProcess)ProcessComboBox.SelectedItem.Value,
         (Account.FormulaTypes)FormulaComboBox.SelectedItem.Value, "",

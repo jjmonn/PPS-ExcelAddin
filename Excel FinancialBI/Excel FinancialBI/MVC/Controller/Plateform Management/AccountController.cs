@@ -79,10 +79,14 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("accounts.error.update") + ": " + Error;
         return (false);
       }
+      
       if (p_account.Type != Account.AccountType.MONETARY)
         p_account.ConversionOptionId = Account.ConversionOptions.NO_CONVERSION;
       else if (p_account.ConversionOptionId == Account.ConversionOptions.NO_CONVERSION)
         p_account.ConversionOptionId = Account.ConversionOptions.AVERAGE_RATE;
+      if (p_account.Type == Account.AccountType.PERCENTAGE)
+        p_account.PeriodAggregationOptionId = Account.PeriodAggregationOptions.NO_AGGREGATION;
+
       if (AccountModel.Instance.Update(p_account) == false)
       {
         Error = Local.GetValue("accounts.error.update") + ": " + Local.GetValue("general.error.system");
@@ -193,6 +197,8 @@ namespace FBI.MVC.Controller
       l_new.Type = p_type;
       l_new.ConsolidationOptionId = p_consolidationOptionId;
       l_new.PeriodAggregationOptionId = p_periodAggregationOptionId;
+      if (l_new.Type == Account.AccountType.PERCENTAGE)
+        l_new.PeriodAggregationOptionId = Account.PeriodAggregationOptions.NO_AGGREGATION;
       l_new.ConversionOptionId = (p_type == Account.AccountType.MONETARY) ? Account.ConversionOptions.AVERAGE_RATE : Account.ConversionOptions.NO_CONVERSION;
       l_new.FormatId = p_formatId;
       l_new.Image = p_image;

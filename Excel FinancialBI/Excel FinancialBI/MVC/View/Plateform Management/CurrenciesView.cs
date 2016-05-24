@@ -64,7 +64,8 @@ namespace FBI.MVC.View
         m_dgv.SetDimension<Currency>(FbiDataGridView.Dimension.ROW, l_currency.Id, "", 0, null, 0);
         if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_CURRENCIES) == true)
         {
-          m_dgv.FillField(l_currency.Id, 0, l_currency.InUse, m_editor);
+          if (l_currency.Id != CurrencyModel.Instance.GetMainCurrency())
+            m_dgv.FillField(l_currency.Id, 0, l_currency.InUse, m_editor);
           m_dgv.FillField(l_currency.Id, 1, l_currency.Name, new TextBoxEditor());
           m_dgv.FillField(l_currency.Id, 2, l_currency.Symbol, new TextBoxEditor());
         }

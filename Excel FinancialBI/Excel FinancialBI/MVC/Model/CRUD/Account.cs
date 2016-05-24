@@ -18,7 +18,7 @@ namespace FBI.MVC.Model.CRUD
     {
       FINANCIAL = 0x01,
       RH        = 0x02
-    }
+    }    
 
     public enum FormulaTypes
     {
@@ -40,7 +40,8 @@ namespace FBI.MVC.Model.CRUD
     {
       SUM_OF_PERIODS = 1,
       END_PERIOD,
-      AVERAGE_PERIOD
+      AVERAGE_PERIOD,
+      NO_AGGREGATION
     }
 
     public enum ConsolidationOptions
