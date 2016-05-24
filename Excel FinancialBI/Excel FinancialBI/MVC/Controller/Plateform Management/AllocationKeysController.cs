@@ -42,7 +42,6 @@ namespace FBI.MVC.Controller
     {
       this.m_account = p_account;
       this.m_view.ShowView(this.m_account);
-      this.m_view.ShowDialog();
     }
 
     public override void Close()
@@ -55,19 +54,22 @@ namespace FBI.MVC.Controller
 
     #region Server
 
-    bool CheckAllocationKey(UInt32 p_entityId, double p_entityValue)
+    bool CheckEntityDistribution(UInt32 p_entityId, double p_entityValue)
     {
+      AxisElem l_entity = AxisElemModel.Instance.GetValue(p_entityId);
+      Account l_account = AccountModel.Instance.GetValue(m_account.Id);
+
       if (TotalPercentageValid(p_entityId) + p_entityValue > 100)
       {
         Error = Local.GetValue("allocationKeys.msg_percentageOver100");
         return (false);
       }
-      if (AxisElemModel.Instance.GetValue(p_entityId) == null)
+      if (l_entity == null || AxisElemModel.Instance.IsParent(l_entity.Id))
       {
         Error = Local.GetValue("general.error.invalid_attribute");
         return (false);
       }
-      if (AccountModel.Instance.GetValue(m_account.Id) == null)
+      if (l_account == null || l_account.FormulaType != Account.FormulaTypes.HARD_VALUE_INPUT)
       {
         Error = Local.GetValue("general.error.invalid_attribute");
         return (false);
@@ -75,11 +77,11 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-    public bool UpdateAllocationKey(UInt32 p_entityId, double p_entityValue)
+    public bool UpdateEntityDistribution(UInt32 p_entityId, double p_entityValue)
     {
       EntityDistribution l_entityDistribution;
 
-      if (CheckAllocationKey(p_entityId, p_entityValue) == false)
+      if (CheckEntityDistribution(p_entityId, p_entityValue) == false)
         return (false);
       if ((l_entityDistribution = EntityDistributionModel.Instance.GetValue(p_entityId, this.m_account.Id)) == null)
       {
@@ -98,7 +100,7 @@ namespace FBI.MVC.Controller
           return (true);
       }
       Error = Local.GetValue("general.error.system");
-      return (true);
+      return (false);
     }
 
     #endregion

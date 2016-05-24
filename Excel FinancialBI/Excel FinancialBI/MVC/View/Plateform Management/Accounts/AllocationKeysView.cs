@@ -26,7 +26,7 @@ namespace FBI.MVC.View
 
     private AllocationKeysController m_controller = null;
 
-    private FbiDataGridView m_allocationsKeysDGV = new FbiDataGridView();
+    private FbiDataGridView m_dgv = new FbiDataGridView();
     private TextBoxEditor m_allocatedTextBoxEditor = new TextBoxEditor();
     private TextBoxEditor m_allocatedTextBoxEditorDisabled = new TextBoxEditor();
     private Account m_account = null;
@@ -62,12 +62,15 @@ namespace FBI.MVC.View
       m_accountTextBox.Enabled = false;
 
       DGVInit();
+      ShowDialog();
     }
 
     void SuscribeEvents()
     {
       EntityDistributionModel.Instance.ReadEvent += OnModelRead;
       EntityDistributionModel.Instance.UpdateEvent += OnModelUpdate;
+      m_dgv.CellChangedAndValidated += OnDGVCellChanged;
+      m_dgv.CellBeginEdit += OnCellBeginEdit;
     }
 
     public void CloseView()
@@ -80,38 +83,42 @@ namespace FBI.MVC.View
     {
       MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemMID = AxisElemModel.Instance.GetDictionary(AxisType.Entities);
 
-      m_allocationsKeysDGV.ClearColumns();
-      m_allocationsKeysDGV.ClearRows();
-      m_allocationsKeysDGV.InitializeRows<AxisElem>(AxisElemModel.Instance, l_axisElemMID);
-      m_allocationsKeysDGV.SetDimension(FbiDataGridView.Dimension.COLUMN, 42, Local.GetValue("allocationKeys.repartition_column_name"));
-      m_allocationsKeysDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
-      m_allocationsKeysDGV.RowsHierarchy.ExpandAllItems();
-      m_allocationsKeysDGV.Refresh();
+      m_dgv.ClearColumns();
+      m_dgv.ClearRows();
+      m_dgv.InitializeRows<AxisElem>(AxisElemModel.Instance, l_axisElemMID);
+      m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, 42, Local.GetValue("allocationKeys.repartition_column_name"));
+      m_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      m_dgv.RowsHierarchy.ExpandAllItems();
+      m_dgv.Refresh();
 
-      GridCellStyle l_nonEditionCellStyle = GridTheme.GetDefaultTheme(m_allocationsKeysDGV.VIBlendTheme).GridCellStyle;
+      GridCellStyle l_nonEditionCellStyle = GridTheme.GetDefaultTheme(m_dgv.VIBlendTheme).GridCellStyle;
       l_nonEditionCellStyle.FillStyle = new FillStyleSolid(Color.DarkGray);
       l_nonEditionCellStyle.TextColor = Color.White;
 
-      GridCellStyle l_editableCellStyle = VIBlend.Utilities.GridTheme.GetDefaultTheme(m_allocationsKeysDGV.VIBlendTheme).GridCellStyle;
+      GridCellStyle l_editableCellStyle = VIBlend.Utilities.GridTheme.GetDefaultTheme(m_dgv.VIBlendTheme).GridCellStyle;
       l_editableCellStyle.TextColor = Color.DarkBlue;
 
-      foreach (HierarchyItem l_row in m_allocationsKeysDGV.RowsHierarchy.Items)
-        SpecificyAllocationKeysEditionEnabling(l_row, l_nonEditionCellStyle, l_editableCellStyle);
+      InitRows(m_dgv.RowsHierarchy.Items, l_nonEditionCellStyle, l_editableCellStyle);
 
       foreach (AxisElem l_entity in l_axisElemMID.SortedValues)
         FillPercentage(l_entity);
 
-      ChangeAllParentsPercentages();
-
-      m_allocationsKeysDGV.Dock = DockStyle.Fill;
-      m_DGVPanel.Controls.Add(m_allocationsKeysDGV);
-
-      m_allocationsKeysDGV.CellChangedAndValidated += OnAllocationsKeysDGVCellChangedAndValidated;
-      m_allocationsKeysDGV.CellEditorActivate += OnAllocationsKeysDGVCellEditorActivate;
-      m_allocationsKeysDGV.CellEditorDeActivate += OnAllocationsKeysDGVCellEditorDeActivate;
+      m_dgv.Dock = DockStyle.Fill;
+      m_DGVPanel.Controls.Add(m_dgv);
     }
 
-    private void SpecificyAllocationKeysEditionEnabling(HierarchyItem p_row, GridCellStyle p_nonEditionCellStyle, GridCellStyle p_editableCellStyle)
+    void InitRows(HierarchyItemsCollection p_items, GridCellStyle p_nonEditionCellStyle, GridCellStyle p_editableCellStyle)
+    {
+      foreach (HierarchyItem l_row in p_items)
+      {
+        SetEditionEnabling(l_row, p_nonEditionCellStyle, p_editableCellStyle);
+        l_row.CellsFormatString = "{0:P}";
+        if (l_row.Items.Count > 0)
+          InitRows(l_row.Items, p_nonEditionCellStyle, p_editableCellStyle);
+      }
+    }
+
+    private void SetEditionEnabling(HierarchyItem p_row, GridCellStyle p_nonEditionCellStyle, GridCellStyle p_editableCellStyle)
     {
       p_row.CellsTextAlignment = ContentAlignment.MiddleRight;
 
@@ -121,18 +128,18 @@ namespace FBI.MVC.View
       if (l_entity.AllowEdition == false)
       {
         p_row.Enabled = false;
-        if (m_allocationsKeysDGV.ColumnsHierarchy.Items != null)
-          m_allocationsKeysDGV.CellsArea.SetCellDrawStyle(p_row, m_allocationsKeysDGV.ColumnsHierarchy.Items[0], p_nonEditionCellStyle);
+        if (m_dgv.ColumnsHierarchy.Items != null)
+          m_dgv.CellsArea.SetCellDrawStyle(p_row, m_dgv.ColumnsHierarchy.Items[0], p_nonEditionCellStyle);
       }
       else
       {
         p_row.CellsEditor = m_allocatedTextBoxEditor;
-        if (m_allocationsKeysDGV.ColumnsHierarchy.Items != null)
-          m_allocationsKeysDGV.CellsArea.SetCellDrawStyle(p_row, m_allocationsKeysDGV.ColumnsHierarchy.Items[0], p_editableCellStyle);
+        if (m_dgv.ColumnsHierarchy.Items != null)
+          m_dgv.CellsArea.SetCellDrawStyle(p_row, m_dgv.ColumnsHierarchy.Items[0], p_editableCellStyle);
       }
 
       foreach (HierarchyItem l_childrenRow in p_row.Items)
-        SpecificyAllocationKeysEditionEnabling(l_childrenRow, p_nonEditionCellStyle, p_editableCellStyle);
+        SetEditionEnabling(l_childrenRow, p_nonEditionCellStyle, p_editableCellStyle);
     }
 
     private void MultilangueSetup()
@@ -149,7 +156,7 @@ namespace FBI.MVC.View
     private void OnModelUpdate(ErrorMessage p_status, uint p_id)
     {
       if (p_status != ErrorMessage.SUCCESS)
-        MsgBox.Show(Local.GetValue("allocationKeys.msg_error_update"));
+        MsgBox.Show(Local.GetValue("allocationKeys.msg_error_update") + ": " + Error.GetMessage(p_status));
     }
 
     delegate void OnModelRead_delegate(ErrorMessage p_status, EntityDistribution p_attributes);
@@ -165,9 +172,8 @@ namespace FBI.MVC.View
         if (p_status == ErrorMessage.SUCCESS)
         {
           AxisElem l_entity = AxisElemModel.Instance.GetValue(p_attributes.EntityId);
-          if (l_entity != null)
-            ChangeParentPercentage(l_entity.ParentId);
           FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, p_attributes.EntityId));
+          m_dgv.Refresh();
         }
       }
     }
@@ -176,20 +182,24 @@ namespace FBI.MVC.View
 
     #region DataGridView
 
-    private void OnAllocationsKeysDGVCellChangedAndValidated(object p_sender, CellEventArgs p_args)
+    void OnCellBeginEdit(object sender, CellCancelEventArgs p_args)
+    {
+      double l_value = (double)p_args.Cell.Value;
+
+      p_args.Cell.Value = l_value * 100;
+    }
+
+    private void OnDGVCellChanged(object p_sender, CellEventArgs p_args)
     {
       if (!m_isFillingPercentage)
-        CheckUpdateAllocationKey(p_args);
-    }
+      {
+        double l_value;
 
-    private void OnAllocationsKeysDGVCellEditorActivate(object p_sender, EditorActivationCancelEventArgs p_args)
-    {
-      p_args.Cell.Value = ((string)p_args.Cell.Value).Replace(" %", "");
-    }
-
-    private void OnAllocationsKeysDGVCellEditorDeActivate(object p_sender, EditorActivationCancelEventArgs p_args)
-    {
-      FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)p_args.Cell.RowItem.ItemValue));
+        if (!double.TryParse((string)p_args.Cell.Value, out l_value))
+          l_value = 0;
+        FillPercentage(AxisElemModel.Instance.GetValue((UInt32)p_args.Cell.RowItem.ItemValue));
+        UpdateEntityDistribution((UInt32)p_args.Cell.RowItem.ItemValue, l_value);
+      }
     }
 
     #endregion
@@ -198,14 +208,10 @@ namespace FBI.MVC.View
 
     #region Utils
 
-    public void CheckUpdateAllocationKey(CellEventArgs p_args)
+    public void UpdateEntityDistribution(UInt32 p_entityId, double p_value)
     {
-      double l_value = 0.0;
-
-      if (Double.TryParse((string)p_args.Cell.Value, out l_value))
-        if (m_controller.UpdateAllocationKey((UInt32)p_args.Cell.RowItem.ItemValue, l_value) == false)
-          MsgBox.Show(m_controller.Error);
-      FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, (UInt32)p_args.Cell.RowItem.ItemValue));
+      if (m_controller.UpdateEntityDistribution(p_entityId, p_value) == false)
+        MsgBox.Show(m_controller.Error);
     }
 
     private void FillPercentage(AxisElem p_entity)
@@ -217,53 +223,32 @@ namespace FBI.MVC.View
       EntityDistribution l_entityDistrib = EntityDistributionModel.Instance.GetValue(p_entity.Id, m_account.Id);
 
       if (l_entityDistrib == null)
-      {
-        if (p_entity.AllowEdition)
-          m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_entity.Id, 42, "0 %", m_allocatedTextBoxEditor);
-        else
-          m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_entity.Id, 42, "0 %", null);
-      }
+        m_dgv.FillField<double, TextBoxEditor>(p_entity.Id, 42, 0, (p_entity.AllowEdition) ? m_allocatedTextBoxEditor : null);
       else
-      {
-        if (p_entity.AllowEdition)
-          m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_entity.Id, 42, l_entityDistrib.Percentage.ToString() + " %", m_allocatedTextBoxEditor);
-        else
-          m_allocationsKeysDGV.FillField<string, TextBoxEditor>(p_entity.Id, 42, l_entityDistrib.Percentage.ToString() + " %", null);
-      }
+        m_dgv.FillField<double, TextBoxEditor>(p_entity.Id, 42, 
+          l_entityDistrib.Percentage / 100.0, (p_entity.AllowEdition) ? m_allocatedTextBoxEditor : null);
+
+      FillParents(p_entity.Id, 42);
       m_isFillingPercentage = false;
     }
 
-    private void ChangeAllParentsPercentages()
+    private void FillParents(UInt32 p_rowId, UInt32 p_colId)
     {
-      MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemMID = AxisElemModel.Instance.GetDictionary(AxisType.Entities);
+      if (!m_dgv.Rows.ContainsKey(p_rowId) || m_dgv.Rows[p_rowId].ParentItem == null)
+        return;
+      HierarchyItem l_parent = m_dgv.Rows[p_rowId].ParentItem;
 
-      foreach (AxisElem l_entity in l_axisElemMID.SortedValues)
+      double l_value = 0;
+
+      foreach (HierarchyItem l_item in l_parent.Items)
       {
-        if (l_entity.ParentId != 0)
-          ChangeParentPercentage(l_entity.ParentId);
+        object l_tmp = m_dgv.GetCellValue((UInt32)l_item.ItemValue, p_colId);
+
+        if (l_tmp != null)
+          l_value += (double)l_tmp;
       }
-    }
-
-    private void ChangeParentPercentage(UInt32 p_parentId)
-    {
-      MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemMID = AxisElemModel.Instance.GetDictionary(AxisType.Entities);
-      double l_percentage = 0.0;
-
-      foreach (AxisElem l_entity in l_axisElemMID.SortedValues)
-      {
-        if (l_entity.ParentId == p_parentId)
-        {
-          EntityDistribution l_entityDistrib = EntityDistributionModel.Instance.GetValue(l_entity.Id, m_account.Id);
-
-          if (l_entityDistrib != null)
-            l_percentage += l_entityDistrib.Percentage;
-        }
-      }
-      TextBoxEditor l_block = new TextBoxEditor();
-
-      FillPercentage(AxisElemModel.Instance.GetValue(AxisType.Entities, p_parentId));
-      if (m_controller.UpdateAllocationKey(p_parentId, l_percentage) == false)
-        MsgBox.Show(m_controller.Error);
+      m_dgv.FillField((UInt32)l_parent.ItemValue, p_colId, l_value);
+      FillParents((UInt32)l_parent.ItemValue, p_colId);
     }
 
     #endregion

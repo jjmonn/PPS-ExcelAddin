@@ -283,7 +283,10 @@ namespace FBI.Forms
     void OnCellChanged(object p_sender, CellEventArgs p_args)
     {
       if (CellChangedAndValidated != null && m_cellValue != p_args.Cell.FormattedText && m_validated)
+      {
+        m_validated = false;
         CellChangedAndValidated(p_sender, p_args);
+      }
       m_validated = false;
       m_cellValue = null;
     }
