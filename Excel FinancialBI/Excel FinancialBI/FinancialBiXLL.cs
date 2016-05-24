@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Windows.Forms;
 using AddinExpress.MSO;
+using Microsoft.Office.Interop;
+using Microsoft.Office;
 
 namespace FBI
 {
@@ -77,7 +79,10 @@ namespace FBI
               try
               {
                 AddinModule l_module = AddinModule.CurrentInstance;
+                Microsoft.Office.Interop.Excel.Application l_app = (dynamic)CurrentInstance.HostApplication;
 
+                if (l_app.ActiveSheet != l_module.ExcelApp.ActiveSheet)
+                  return ("invalid worksheet");
                 if (Network.NetworkManager.IsConnected() == false || l_module == null)
                   return ("Not connected");
                 return (l_module.FBIFunctionController.FBI(p_entity, p_account, p_aggregation, p_period, p_currency, p_version, 
