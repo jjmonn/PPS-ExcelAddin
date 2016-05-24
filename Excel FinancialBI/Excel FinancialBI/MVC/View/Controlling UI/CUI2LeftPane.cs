@@ -28,6 +28,7 @@ namespace FBI.MVC.View
     SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>> m_TVFormatData = new SafeDictionary<Tuple<AxisType, Type>, Tuple<bool, bool, UInt32>>();
     int m_SPDistance = 250;
     bool m_filterPaneOpen = true;
+    bool m_checkingCurrency = false;
 
     #endregion
 
@@ -176,10 +177,22 @@ namespace FBI.MVC.View
       InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, true, true);
 
       FbiTreeView<Currency> l_currencyTV = new FbiTreeView<Currency>(CurrencyModel.Instance.GetUsedCurrenciesDic(), null, false, true);
+      l_currencyTV.NodeChecked += OnCurrencyChecked;
       Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(Currency));
       BaseInitTV<Currency>(l_key, l_currencyTV, m_selectionTableLayout.Controls, false, false, Properties.Settings.Default.currentCurrency, false, true);
 
       m_selectionTVList[new Tuple<AxisType, Type>(AxisType.Entities, typeof(AxisElem))].ImageList = EntitiesTVImageList;
+    }
+
+    void OnCurrencyChecked(object sender, vTreeViewEventArgs p_e)
+    {
+      if (m_checkingCurrency)
+        return;
+      m_checkingCurrency = true;
+      foreach (vTreeNode l_node in p_e.Node.TreeView.GetNodes())
+        l_node.Checked = CheckState.Unchecked;
+      p_e.Node.Checked = CheckState.Checked;
+      m_checkingCurrency = false;
     }
 
     private void InitPeriodRangeSelection()
