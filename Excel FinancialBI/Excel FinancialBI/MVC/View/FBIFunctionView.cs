@@ -200,6 +200,7 @@ namespace FBI.MVC.View
       m_productTree.TreeView.TriStateMode = true;
       m_adjustmentTree.TreeView.TriStateMode = true;
       m_categoriesFilterTree.TreeView.TriStateMode = true;
+      AFbiTreeView.InitTVFormat(m_categoriesFilterTree.TreeView);
       AddCategorieFilterTV(Local.GetValue("general.clients_filters"), AxisType.Client);
       AddCategorieFilterTV(Local.GetValue("general.products_filters"), AxisType.Product);
       AddCategorieFilterTV(Local.GetValue("general.adjustments_filters"), AxisType.Adjustment);
