@@ -389,7 +389,7 @@ namespace FBI.MVC.Model
 
       if (l_fact == null)
         return (null);
-      return (l_fact.Value);
+      return (l_fact.EditedValue);
     }
   }
 }
