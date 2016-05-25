@@ -295,6 +295,9 @@
 
   <category name="currencies">
     <string name="set_main_currency">Définir comme devise principale</string>
+    <category name="error">
+      <string name="currency_used">Cette devise est utilisé</string>
+    </category>
   </category>
 
   <category name="versions">

@@ -84,6 +84,7 @@ namespace FBI.MVC.View
       m_editor.CheckedChanged += OnCheckChanged;
       CurrencyModel.Instance.ReadEvent += OnModelRead;
       CurrencyModel.Instance.DeleteEvent += OnModelDelete;
+      CurrencyModel.Instance.UpdateEvent += OnModelUpdate;
       Addin.SuscribeAutoLock(this);
     }
 
@@ -91,6 +92,7 @@ namespace FBI.MVC.View
     {
       CurrencyModel.Instance.ReadEvent -= OnModelRead;
       CurrencyModel.Instance.DeleteEvent -= OnModelDelete;
+      CurrencyModel.Instance.UpdateEvent -= OnModelUpdate;
     }
 
     delegate void OnModelDelete_delegate(ErrorMessage p_status, UInt32 p_id);
@@ -157,6 +159,7 @@ namespace FBI.MVC.View
       m_dgv.FillField(p_currency.Id, 0, p_currency.InUse);
       m_dgv.FillField(p_currency.Id, 1, p_currency.Name);
       m_dgv.FillField(p_currency.Id, 2, p_currency.Symbol);
+      m_editor.EditorValue = p_currency.InUse;
     }
 
     delegate void OnModelRead_delegate(ErrorMessage p_status, Currency p_attributes);
@@ -187,5 +190,32 @@ namespace FBI.MVC.View
       }
     }
 
+    delegate void OnModelUpdate_delegate(ErrorMessage p_status, uint p_id);
+    void OnModelUpdate(ErrorMessage p_status, uint p_id)
+    {
+      if (InvokeRequired)
+      {
+        OnModelUpdate_delegate func = new OnModelUpdate_delegate(OnModelUpdate);
+        Invoke(func, p_status, p_id);
+      }
+      else
+      {
+        Currency l_currency = CurrencyModel.Instance.GetValue(p_id);
+
+        switch (p_status)
+        {
+          case ErrorMessage.SUCCESS:
+            return;
+          case ErrorMessage.PERMISSION_DENIED:
+            MessageBox.Show(Local.GetValue("currencies.error.currency_used") + ": " + Error.GetMessage(p_status));
+            break;
+          default:
+            MessageBox.Show(Error.GetMessage(p_status));
+            break;
+        }
+        if (l_currency != null)
+          UpdateOrAddCurrencyRow(l_currency);
+      }
+    }
   }
 }
