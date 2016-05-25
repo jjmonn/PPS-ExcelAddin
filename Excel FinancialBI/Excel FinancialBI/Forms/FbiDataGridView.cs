@@ -372,29 +372,10 @@ namespace FBI.Forms
       return (l_item);
     }
 
-    HierarchyItem CloneItem(HierarchyItem p_item)
-    {
-      HierarchyItem l_clone = new HierarchyItem();
-
-      l_clone.ItemValue = p_item.ItemValue;
-      l_clone.Width = p_item.Width;
-      l_clone.Caption = p_item.Caption;
-    iterate_clone:
-      foreach (HierarchyItem l_child in p_item.Items)
-      {
-        HierarchyItem l_newChild = CloneItem(l_child);
-        p_item.Items.Remove(l_child);
-        l_clone.Items.Add(l_newChild);
-        goto iterate_clone;
-      }
-      return (l_clone);
-    }
-
     HierarchyItem SetDimension<J>(HierarchyItemsCollection p_dimension, SafeDictionary<UInt32, HierarchyItem> p_saveDic, UInt32 p_id,
       string p_name, ICRUDModel<J> p_model = null, bool p_hasParent = false, UInt32 p_parentId = 0, int p_width = COLUMNS_WIDTH) where J : class, NamedCRUDEntity
     {
       HierarchyItem l_dim;
-      HierarchyItem l_dimClone;
 
       if (p_saveDic.ContainsKey(p_id) == false)
       {
@@ -402,7 +383,6 @@ namespace FBI.Forms
         if (l_dim == null)
           return (null);
         p_saveDic[p_id] = l_dim;
-        l_dimClone = l_dim;
       }
       else
       {
@@ -411,8 +391,6 @@ namespace FBI.Forms
           l_dim.ParentItem.Items.Remove(l_dim);
         else
           p_dimension.Remove(l_dim);
-        l_dimClone = CloneItem(l_dim);
-        p_saveDic[p_id] = l_dimClone;
       }
       if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
       {
@@ -426,17 +404,17 @@ namespace FBI.Forms
         else
           l_parent = SetDimension(p_dimension, p_saveDic, parentEntity.Id, p_name, p_model, p_hasParent, parentEntity.ParentId);
         if (l_parent != null)
-          l_parent.Items.Add(l_dimClone);
+          l_parent.Items.Add(l_dim);
       }
       else
-        p_dimension.Add(l_dimClone);
-      l_dimClone.ItemValue = p_id;
-      l_dimClone.Caption = p_name;
-      l_dimClone.Width = p_width;
+        p_dimension.Add(l_dim);
+      l_dim.ItemValue = p_id;
+      l_dim.Caption = p_name;
+      l_dim.Width = p_width;
 
       m_hierarchyItemDic.Remove(l_dim);
-      m_hierarchyItemDic[l_dimClone] = p_id;
-      return (l_dimClone);
+      m_hierarchyItemDic[l_dim] = p_id;
+      return (l_dim);
     }
   }
 }

@@ -1299,7 +1299,8 @@ namespace VIBlend.WinForms.DataGridView
     {
       Dictionary<HierarchyItem, Hierarchy.ItemSelection>.Enumerator enumerator = this.selectedItems.GetEnumerator();
       while (enumerator.MoveNext())
-        this.selectedItems[enumerator.Current.Key].IsSelected = false;
+        if (this.selectedItems.ContainsKey(enumerator.Current.Key))
+          this.selectedItems[enumerator.Current.Key].IsSelected = false;
     }
 
     /// <summary>
