@@ -66,21 +66,19 @@ namespace FBI.Utils
           if ((l_account != null))
           {
             FbiAccountFormat l_format = null;
-            switch (l_account.FormatId)
+            switch (l_account.FormulaType)
             {
-              case "t":
+              case Account.FormulaTypes.TITLE:
                 l_format = l_titleFormat;
                 break;
-              case "i":
+              case Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS:
                 l_format = l_importantFormat;
                 break;
-
-              case "n":
-                l_format = l_normalFormat;
+              case Account.FormulaTypes.FORMULA:
+                l_format = l_importantFormat;
                 break;
-
-              case "d":
-                l_format = l_detailFormat;
+              default:
+                l_format = l_normalFormat;
                 break;
             }
 

@@ -38,7 +38,6 @@ namespace FBI.Utils
 
     static internal void FormatDGVs(vDataGridView vDGV, UInt32 currencyId)
     {
-      string l_formatCode = null;
       string l_formatString = null;
       Int32 indent = default(Int32);
       foreach (HierarchyItem l_row in vDGV.RowsHierarchy.Items)
@@ -47,7 +46,6 @@ namespace FBI.Utils
 
         if (l_account == null)
           continue;
-        l_formatCode = l_account.FormatId;
 
         VIBlend.Utilities.HierarchyItemStyle l_HANStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).HierarchyItemStyleNormal;
         VIBlend.Utilities.HierarchyItemStyle l_HASStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).HierarchyItemStyleSelected;
@@ -73,18 +71,18 @@ namespace FBI.Utils
 
         if (l_row.ParentItem == null)
         {
-          FormatRow(l_row, l_formatCode, l_formatString, l_CAStyle, l_HANStyle, l_HASStyle, indent, l_CAStyle, l_CEStyle, l_HANStyle,
+          FormatRow(l_row, l_formatString, l_CAStyle, l_HANStyle, l_HASStyle, indent, l_CAStyle, l_CEStyle, l_HANStyle,
           l_HASStyle, l_HENStyle, l_HESStyle);
         }
         else
         {
-          FormatRow(l_row, l_formatCode, l_formatString, l_CEStyle, l_HENStyle, l_HESStyle, indent, l_CAStyle, l_CEStyle, l_HANStyle,
+          FormatRow(l_row, l_formatString, l_CEStyle, l_HENStyle, l_HESStyle, indent, l_CAStyle, l_CEStyle, l_HANStyle,
           l_HASStyle, l_HENStyle, l_HESStyle);
         }
       }
     }
 
-    static private void FormatRow(HierarchyItem p_row, string p_formatCode, string p_formatString, GridCellStyle p_CStyle, HierarchyItemStyle p_HNStyle,
+    static private void FormatRow(HierarchyItem p_row, string p_formatString, GridCellStyle p_CStyle, HierarchyItemStyle p_HNStyle,
       HierarchyItemStyle p_HSStyle, Int32 p_indent, GridCellStyle p_CAStyle, GridCellStyle p_CEStyle, HierarchyItemStyle p_HANStyle,
       HierarchyItemStyle p_HASStyle, HierarchyItemStyle p_HENStyle, HierarchyItemStyle p_HESStyle)
     {
@@ -120,7 +118,7 @@ namespace FBI.Utils
       }
       foreach (HierarchyItem l_subRow in p_row.Items)
       {
-        FormatRow(l_subRow, p_formatCode, p_formatString, p_CEStyle, p_HENStyle, p_HESStyle, p_indent, p_CAStyle, p_CEStyle, p_HANStyle,
+        FormatRow(l_subRow, p_formatString, p_CEStyle, p_HENStyle, p_HESStyle, p_indent, p_CAStyle, p_CEStyle, p_HANStyle,
         p_HASStyle, p_HENStyle, p_HESStyle);
       }
     }

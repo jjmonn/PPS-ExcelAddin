@@ -79,7 +79,7 @@ namespace FBI.MVC.Model.CRUD
     public ConsolidationOptions ConsolidationOptionId { get; set; }
     public ConversionOptions ConversionOptionId { get; set; }
     public PeriodAggregationOptions PeriodAggregationOptionId { get; set; }
-    public string FormatId { get; set; }
+    public string FormatId { private get; set; }  //< Obsolete
     public UInt32 Image { get; set; }
     public Int32 ItemPosition { get; set; }
     public Int32 AccountTab { get; set; }
