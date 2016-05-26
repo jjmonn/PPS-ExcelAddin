@@ -94,6 +94,7 @@ namespace FBI.MVC.View
       l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
       l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
       l_dgv.Refresh();
+      l_dgv.Refresh();
     }
 
     void OnLogClick(object p_sender, EventArgs p_e)

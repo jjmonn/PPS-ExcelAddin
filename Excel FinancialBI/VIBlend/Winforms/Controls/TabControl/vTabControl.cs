@@ -3416,7 +3416,8 @@ namespace VIBlend.WinForms.Controls
         this.DeleteSelectedItem();
       this.HandleDropDown();
       this.Refresh();
-      this.OnTabDisplay(new vTabMouseEventArgs(page, e));
+      if (page != null)
+        this.OnTabDisplay(new vTabMouseEventArgs(page, e));
     }
 
     /// <summary>Opens the TabControl's popup.</summary>
