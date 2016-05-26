@@ -130,7 +130,10 @@ namespace FBI.MVC.View
       if (l_version == null || l_version.IsFolder)
         m_dgv.Clear();
       else
-        DisplayVersion(l_version.Id);
+      {
+        if (DisplayVersion(l_version.Id))
+          rates_version_TB.Text = l_version.Name;
+      }
     }
 
     void OnMouseClick(object p_sender, MouseEventArgs p_event)
@@ -239,6 +242,6 @@ namespace FBI.MVC.View
     #endregion
 
     public abstract void SetController(IController p_controller);
-    protected abstract void DisplayVersion(UInt32 p_versionId);
+    protected abstract bool DisplayVersion(UInt32 p_versionId);
   }
 }

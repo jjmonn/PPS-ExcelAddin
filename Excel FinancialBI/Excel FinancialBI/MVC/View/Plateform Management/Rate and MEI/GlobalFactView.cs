@@ -103,7 +103,7 @@ namespace FBI.MVC.View
         }
     }
 
-    protected override void DisplayVersion(UInt32 p_versionId)
+    protected override bool DisplayVersion(UInt32 p_versionId)
     {
       List<Int32> l_monthList = GlobalFactVersionModel.Instance.GetMonthsList(p_versionId);
       List<GlobalFact> l_gfactList = GlobalFactModel.Instance.GetDictionary().SortedValues;
@@ -111,12 +111,13 @@ namespace FBI.MVC.View
       if (l_monthList == null)
       {
         Forms.MsgBox.Show(Local.GetValue("exchange_rate_version.error.not_found"));
-        return;
+        return false;
       }
       InitPeriods(l_monthList);
       InitGlobalFacts(l_gfactList);
       InitGlobalFactData(m_controller.SelectedVersion, l_monthList, l_gfactList);
       m_dgv.Refresh();
+      return (true);
     }
 
     #endregion

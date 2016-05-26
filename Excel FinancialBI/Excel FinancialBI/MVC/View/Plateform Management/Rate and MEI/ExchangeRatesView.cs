@@ -95,7 +95,7 @@ namespace FBI.MVC.View
         }
     }
 
-    protected override void DisplayVersion(UInt32 p_versionId)
+    protected override bool DisplayVersion(UInt32 p_versionId)
     {
       List<Int32> l_monthList = RatesVersionModel.Instance.GetMonthsList(p_versionId);
       SortedSet<UInt32> l_currencies = CurrencyModel.Instance.GetUsedCurrencies();
@@ -103,12 +103,13 @@ namespace FBI.MVC.View
       if (l_monthList == null)
       {
         Forms.MsgBox.Show(Local.GetValue("exchange_rate_version.error.not_found"));
-        return;
+        return false;
       }
       InitPeriods(l_monthList);
       InitCurrencies(l_currencies);
       InitRates(p_versionId, l_monthList, l_currencies);
       m_dgv.Refresh();
+      return (true);
     }
 
     #endregion
