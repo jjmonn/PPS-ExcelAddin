@@ -64,7 +64,7 @@ namespace FBI.MVC.View
 
     public void SuscribeEvents()
     {
-      LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeResult;
+      m_controller.ComputeCompleteEvent += OnComputeResult;
       m_refreshButton.MouseDown += OnRefreshButtonMouseDown;
       m_versionComparisonButton.MouseDown += OnVersionComparisionButtonMouseDown;
       m_versionSwitchButton.MouseDown += OnVersionSwitchButtonMouseDown;
@@ -114,7 +114,7 @@ namespace FBI.MVC.View
     override protected void OnClosed(EventArgs e)
     {
       base.OnClosed(e);
-      LegacyComputeModel.Instance.ComputeCompleteEvent -= OnComputeResult;
+      m_controller.Close();
     }
 
     private void MultilangueSetup()

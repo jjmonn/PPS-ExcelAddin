@@ -20,6 +20,7 @@ namespace FBI.MVC.Controller
     private ControllingUI_2 m_view;
     PeriodsComparisonSelectionView m_periodDiffView;
 
+    public event LegacyComputeModel.ComputeCompleteEventHandler ComputeCompleteEvent;
     public CUILeftPaneController LeftPaneController { get; set; }
     public CUIRightPaneController RightPaneController { get; set; }
     public ResultController ResultController { get; set; }
@@ -33,6 +34,7 @@ namespace FBI.MVC.Controller
     public string Error { get; set; }
 
     private List<UInt32> m_openedPanels = new List<UInt32>();
+    private List<Int32> m_requestIdList = new List<int>();
 
     #endregion
 
@@ -46,6 +48,29 @@ namespace FBI.MVC.Controller
       m_periodDiffView.SetController(this);
       this.m_view.SetController(this);
       this.LoadView();
+      LegacyComputeModel.Instance.ComputeCompleteEvent += OnComputeCompleteEvent;
+    }
+
+    void OnComputeCompleteEvent(ErrorMessage p_status, LegacyComputeRequest p_request, SafeDictionary<uint, ComputeResult> p_result)
+    {
+      if (ComputeCompleteEvent != null)
+      {
+        bool l_found = false;
+
+        foreach (ComputeResult l_result in p_result.Values)
+          if (m_requestIdList.Contains(l_result.RequestId))
+          {
+            l_found = true;
+            m_requestIdList.Remove(l_result.RequestId);
+          }
+        if (l_found)
+          ComputeCompleteEvent(p_status, p_request, p_result);
+      }
+    }
+
+    public void Close()
+    {
+      LegacyComputeModel.Instance.ComputeCompleteEvent -= OnComputeCompleteEvent;
     }
 
     private void LoadView()
@@ -153,11 +178,11 @@ namespace FBI.MVC.Controller
       DisplayVersionComparaison();
       if (l_request.IsDiff)
       {
-        if (LegacyComputeModel.Instance.ComputeDiff(l_request))
+        if (LegacyComputeModel.Instance.ComputeDiff(l_request, m_requestIdList))
           return (true);
       }
       else
-        if (LegacyComputeModel.Instance.Compute(l_request))
+        if (LegacyComputeModel.Instance.Compute(l_request, m_requestIdList))
           return (true);
       Error = Local.GetValue("general.error.system");
       return (false);

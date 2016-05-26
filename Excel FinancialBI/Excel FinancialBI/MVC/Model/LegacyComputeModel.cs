@@ -25,12 +25,12 @@ namespace FBI.MVC.Model
       NetworkManager.SetCallback((UInt16)ServerMessage.SMSG_COMPUTE_RESULT, OnComputeResult);
     }
 
-    public bool ComputeDiff(LegacyComputeRequest p_request)
+    public bool ComputeDiff(LegacyComputeRequest p_request, List<Int32> p_requestIdList = null)
     {
       if (p_request.Versions.Count > 2)
         return (false);
       p_request.IsDiff = true;
-      return Compute(p_request);
+      return Compute(p_request, p_requestIdList);
     }
 
     public bool Compute(LegacyComputeRequest p_request, List<Int32> p_requestIdList = null)

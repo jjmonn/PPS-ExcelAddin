@@ -44,13 +44,27 @@ namespace FBI.MVC.Model
       OutputFacts = new MultiIndexDictionary<string, DimensionKey, EditedFinancialFact>();
 
       FactsModel.Instance.ReadEvent += OnFinancialInputDownloaded;
-      SourcedComputeModel.Instance.ComputeCompleteEvent += OnFinancialOutputsComputed;
+      SourcedComputeModel.Instance.ComputeCompleteEvent += OnComputeCompleteEvent;
     }
 
     public override void Close()
     {
       FactsModel.Instance.ReadEvent -= OnFinancialInputDownloaded;
-      SourcedComputeModel.Instance.ComputeCompleteEvent -= OnFinancialOutputsComputed;
+      SourcedComputeModel.Instance.ComputeCompleteEvent -= OnComputeCompleteEvent;
+    }
+
+    void OnComputeCompleteEvent(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result)
+    {
+      bool l_found = false;
+
+      foreach (ComputeResult l_result in p_result.Values)
+        if (RequestIdList.Contains(l_result.RequestId))
+        {
+          l_found = true;
+          RequestIdList.Remove(l_result.RequestId);
+        }
+      if (l_found)
+        OnFinancialOutputsComputed(p_status, p_request, p_result);
     }
 
     public override void RegisterEditedFacts(WorksheetAreaController p_dimensions, UInt32 p_versionId, bool p_displayInitialDifferences, UInt32 p_RHAccountId = 0)
@@ -243,7 +257,7 @@ namespace FBI.MVC.Model
       m_nbRequest++;
       m_nbCompute++;
       AddinModuleController.SetExcelInteractionState(false);
-      if (SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest) == false)
+      if (SourcedComputeModel.Instance.Compute(l_sourcedComputeRequest, RequestIdList) == false)
         OnComputeFailed();
       else
       {
