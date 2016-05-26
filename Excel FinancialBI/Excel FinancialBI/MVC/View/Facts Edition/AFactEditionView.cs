@@ -155,7 +155,17 @@ namespace FBI.MVC.View
       if (l_result2 == null)
         l_result2 = m_model.CellBelongToInput(p_cell); 
       if (l_result2 != null)
-        p_cell.Value2 = l_result2;
+      {
+        try
+        {
+          if ((double)p_cell.Value2 != l_result2)
+            p_cell.Value2 = l_result2;
+        }
+        catch (InvalidCastException)
+        {
+          p_cell.Value2 = l_result2;
+        }
+      }
       IsEditingExcel = false;
     }
 
