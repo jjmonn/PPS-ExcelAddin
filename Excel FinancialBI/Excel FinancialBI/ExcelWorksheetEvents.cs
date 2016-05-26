@@ -38,8 +38,7 @@ namespace FBI
         {
           if (l_range.Count > MAX_NB_ROWS)
             return;
-          foreach (Range l_cell in l_range.Cells)
-            m_factsEditionController.RaiseWorksheetChangingEvent(l_cell);
+          RaiseCellEvent(l_range);
         }
         m_factsEditionController.RaiseWorksheetChangedEvent();
         m_editing = false;
@@ -51,6 +50,14 @@ namespace FBI
       }
     }
 
+    void RaiseCellEvent(Range p_range)
+    {
+      foreach (Range l_cell in p_range.Cells)
+      {
+        m_factsEditionController.RaiseWorksheetChangingEvent(l_cell);
+        RaiseCellEvent(l_cell.DirectDependents);
+      }
+    }
 
     public override void ProcessBeforeRightClick(object target, AddinExpress.MSO.ADXCancelEventArgs e)
     {
