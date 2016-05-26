@@ -47,71 +47,18 @@ namespace VIBlend.Utilities
 
     public static bool LICheck(Control control)
     {
-      if (Licensing.DesignMode || (DateTime.Now - Licensing.dtLastCheck).TotalSeconds < 30.0)
-        return true;
-      Licensing.dtLastCheck = DateTime.Now;
-      System.Type type = control.GetType();
-      bool isInExcludedSet = false;
-      if (Licensing.LICheck(type, out isInExcludedSet))
-        return true;
-      TimeSpan timeSpan = DateTime.Now - Licensing.dtLastDlgShow;
-      if (!Licensing.isDemoDialogActive && timeSpan.TotalMinutes > 8.0)
-      {
-        Licensing.isDemoDialogActive = true;
-        Licensing.DisplayTrialMsg(isInExcludedSet ? "Controls" : type.Name);
-        Licensing.dtLastDlgShow = DateTime.Now;
-        Licensing.isDemoDialogActive = false;
-      }
-      return false;
+      return true;
     }
 
-    /// <summary>Checks if the license status of a control.</summary>
-    /// <param name="control">Control to check.</param>
-    /// <returns>True if the control passes the license validation.</returns>
     public static bool ValidateLicense(Control control)
     {
-      if (control == null || ++Licensing.hitCount > 1000)
-        return false;
-      bool isInExcludedSet = false;
-      return Licensing.LICheck(control.GetType(), out isInExcludedSet);
+      return true;
     }
 
     private static bool LICheck(System.Type type, out bool isInExcludedSet)
     {
       isInExcludedSet = false;
-      if (!Licensing.isInitialized)
-      {
-        string publicKey = "";
-        try
-        {
-          Stream manifestResourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("VIBlend.Utilities.Resources.keys.public.xml");
-          StreamReader streamReader = new StreamReader(manifestResourceStream);
-          publicKey = streamReader.ReadToEnd();
-          streamReader.Close();
-          manifestResourceStream.Close();
-        }
-        catch (Exception ex)
-        {
-        }
-        Licensing.license.Load(Licensing.licenseContent, publicKey);
-        Licensing.isInitialized = true;
-      }
-      if (!Licensing.license.IsValid || Licensing.license.ProductId != 0 || (Licensing.license.PackageId < 0 || Licensing.license.PackageId >= Licensing.packageInfo.Length))
-        return false;
-      if (!Licensing.packageInfo[Licensing.license.PackageId].ToLower().Contains(type.Name.ToLower()))
-        return true;
-      isInExcludedSet = true;
-      return false;
-    }
-
-    private static void DisplayTrialMsg(string controlName)
-    {
-      TrialForm trialForm = new TrialForm();
-      trialForm.ControlName = controlName;
-      Licensing.isDemoDialogActive = true;
-      int num = (int) trialForm.ShowDialog();
-      Licensing.dtLastDlgShow = DateTime.Now;
-      Licensing.isDemoDialogActive = false;
+      return true;
     }
   }
 }

@@ -81,11 +81,20 @@ namespace FBI.MVC.View
       ColumnsAutoSize.Click += OnColumnAutoSizeClick;
       ColumnsAutoFitBT.Click += OnAutoFitClick;
       LogRightClick.Click += OnLogClick;
+      m_tabCtrl.TabDisplay += OnTabDisplay;
     }
 
     #endregion
 
     #region User Callbacks
+
+    void OnTabDisplay(object sender, vTabMouseEventArgs p_e)
+    {
+      DGV l_dgv = p_e.TabPage.Controls[0] as DGV;
+      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      l_dgv.Refresh();
+    }
 
     void OnLogClick(object p_sender, EventArgs p_e)
     {

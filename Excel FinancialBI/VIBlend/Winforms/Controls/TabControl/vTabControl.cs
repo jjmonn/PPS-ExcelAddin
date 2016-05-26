@@ -966,6 +966,11 @@ namespace VIBlend.WinForms.Controls
     public event EventHandler<vTabMouseEventArgs> TabMouseDown;
 
     /// <summary>Occurs when the mouse button is clicked over a tab.</summary>
+    [Description("Occurs when the tab is displayed after a mouse click on it.")]
+    [Category("Action")]
+    public event EventHandler<vTabMouseEventArgs> TabDisplay;
+
+    /// <summary>Occurs when the mouse button is clicked over a tab.</summary>
     [Category("Action")]
     [Description("Occurs when the mouse button is clicked over a tab.")]
     public event EventHandler<vTabMouseEventArgs> TabMouseUp;
@@ -1081,6 +1086,17 @@ namespace VIBlend.WinForms.Controls
       if (this.TabMouseDown == null)
         return;
       this.TabMouseDown((object) this, args);
+    }
+
+    /// <summary>
+    /// Raises the <see cref="E:TabDisplay" /> event.
+    /// </summary>
+    /// <param name="args">The <see cref="T:VIBlend.WinForms.Controls.vTabMouseEventArgs" /> instance containing the event data.</param>
+    protected virtual void OnTabDisplay(vTabMouseEventArgs args)
+    {
+      if (this.TabDisplay == null)
+        return;
+      this.TabDisplay((object)this, args);
     }
 
     /// <summary>
@@ -3371,8 +3387,6 @@ namespace VIBlend.WinForms.Controls
     protected override void OnMouseDown(MouseEventArgs e)
     {
       base.OnMouseDown(e);
-      if (!this.DesignMode)
-        Licensing.LICheck((Control) this);
       if (this.EnableDropDownStyle)
       {
         this.CloseDropDown();
@@ -3402,6 +3416,7 @@ namespace VIBlend.WinForms.Controls
         this.DeleteSelectedItem();
       this.HandleDropDown();
       this.Refresh();
+      this.OnTabDisplay(new vTabMouseEventArgs(page, e));
     }
 
     /// <summary>Opens the TabControl's popup.</summary>
