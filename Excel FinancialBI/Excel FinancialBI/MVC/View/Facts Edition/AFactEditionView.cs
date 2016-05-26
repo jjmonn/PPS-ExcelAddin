@@ -196,6 +196,7 @@ namespace FBI.MVC.View
         }
         SetEditedFactsStatus();
         m_progressBar.Hide();
+        AddinModule.CurrentInstance.ExcelApp.Visible = true;
       }
     }
 

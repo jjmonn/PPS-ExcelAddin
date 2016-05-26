@@ -182,36 +182,33 @@ namespace FBI.Utils
       dest_range.Worksheet.Range[dest_range.Worksheet.Cells[1, 1], dest_range.Offset[i, j]].Columns.AutoFit();
     }
 
-    static internal void SetupColumnsTitles(HierarchyItem column, Range range, ref Int32 i, ref Int32 j, ref Int32 parent_j, ref bool p_copyOnlyExpanded)
+    static internal void SetupColumnsTitles(HierarchyItem column, Range range, ref Int32 p_x, ref Int32 p_y, ref Int32 parent_y, ref bool p_copyOnlyExpanded)
     {
-      range.Offset[i, j].Value = column.Caption;
-      range.Offset[i, j].Font.Bold = true;
+      range.Offset[p_x, p_y].Value = column.Caption;
+      range.Offset[p_x, p_y].Font.Bold = true;
       // FormatRangeFromHierarchyItem(range.Offset(i, j), column)
-      j = j + 1;
+      p_y = p_y + 1;
 
       if (p_copyOnlyExpanded == false | p_copyOnlyExpanded == true & column.Expanded == true)
       {
         if (column.Items.Count > 0)
         {
+          p_x = p_x + 1;
           foreach (HierarchyItem sub_column in column.Items)
-          {
-            i = i + 1;
-            SetupColumnsTitles(sub_column, range, ref i, ref j, ref parent_j, ref p_copyOnlyExpanded);
-          }
-          parent_j = parent_j + column.Items.Count;
+            SetupColumnsTitles(sub_column, range, ref p_x, ref p_y, ref parent_y, ref p_copyOnlyExpanded);
+          parent_y = parent_y + column.Items.Count;
         }
       }
     }
 
-
-    static internal void SetupRowsTitles(HierarchyItem row, Range range, ref Int32 i, ref Int32 j, ref bool p_copyOnlyExpanded)
+    static internal void SetupRowsTitles(HierarchyItem row, Range range, ref Int32 p_x, ref Int32 p_y, ref bool p_copyOnlyExpanded)
     {
 
-      range.Offset[i, j].Value = row.Caption;
-      FormatRangeFromHierarchyItem(range.Offset[i, j], row);
-      i = i + 1;
+      range.Offset[p_x, p_y].Value = row.Caption;
+      FormatRangeFromHierarchyItem(range.Offset[p_x, p_y], row);
+      p_x = p_x + 1;
       Int32 sub_rows_nb = 0;
-      Int32 group_start_row = i + range.Row - 1;
+      Int32 group_start_row = p_x + range.Row - 1;
 
 
       if (p_copyOnlyExpanded == false | p_copyOnlyExpanded == true & row.Expanded == true)
@@ -219,7 +216,7 @@ namespace FBI.Utils
 
         foreach (HierarchyItem sub_row in row.Items)
         {
-          SetupRowsTitles(sub_row, range, ref i, ref j, ref p_copyOnlyExpanded);
+          SetupRowsTitles(sub_row, range, ref p_x, ref p_y, ref p_copyOnlyExpanded);
           sub_rows_nb = sub_rows_nb + sub_row.Items.Count;
         }
         if (row.Items.Count > 0)
@@ -233,30 +230,29 @@ namespace FBI.Utils
       }
     }
 
-    static internal void CopyRowHierarchy(HierarchyItem row, Range range, string p_currencySymbol, ref Int32 i, ref Int32 j, ref bool p_copyOnlyExpanded)
+    static internal void CopyRowHierarchy(HierarchyItem row, Range range, string p_currencySymbol, ref Int32 p_x, ref Int32 p_y, ref bool p_copyOnlyExpanded)
     {
-      j = 1;
+      p_y = 1;
       Worksheet ws = range.Worksheet;
       foreach (HierarchyItem column in row.DataGridView.ColumnsHierarchy.Items)
-        CopyColumnHierarchy(row, column, range, ref i, ref j, ref p_copyOnlyExpanded);
-      FormatRangeFromGridCell(ws.Range[range.Offset[i, 1], range.Offset[i, j]], row, p_currencySymbol);
-      i = i + 1;
-
+        CopyColumnHierarchy(row, column, range, ref p_x, ref p_y, ref p_copyOnlyExpanded);
+      FormatRangeFromGridCell(ws.Range[range.Offset[p_x, 1], range.Offset[p_x, p_y]], row, p_currencySymbol);
+      p_x++;
 
       if (p_copyOnlyExpanded == false | p_copyOnlyExpanded == false && row.Expanded == true)
         foreach (HierarchyItem sub_row in row.Items)
-          CopyRowHierarchy(sub_row, range, p_currencySymbol, ref i, ref j, ref p_copyOnlyExpanded);
+          CopyRowHierarchy(sub_row, range, p_currencySymbol, ref p_x, ref p_y, ref p_copyOnlyExpanded);
     }
 
 
-    static internal void CopyColumnHierarchy(HierarchyItem row, HierarchyItem column, Range range, ref Int32 i, ref Int32 j, ref bool p_copyOnlyExpanded)
+    static internal void CopyColumnHierarchy(HierarchyItem row, HierarchyItem column, Range range, ref Int32 p_x, ref Int32 p_y, ref bool p_copyOnlyExpanded)
     {
-      range.Offset[i, j].Value = row.DataGridView.CellsArea.GetCellValue(row, column);
-      j = j + 1;
+      range.Offset[p_x, p_y].Value = row.DataGridView.CellsArea.GetCellValue(row, column);
+      p_y++; 
 
       if (p_copyOnlyExpanded == false | p_copyOnlyExpanded == true && column.Expanded == true)
         foreach (HierarchyItem sub_column in column.Items)
-          CopyColumnHierarchy(row, sub_column, range, ref i, ref j, ref p_copyOnlyExpanded);
+          CopyColumnHierarchy(row, sub_column, range, ref p_x, ref p_y, ref p_copyOnlyExpanded);
     }
 
     static internal void FormatRangeFromGridCell(Range xlRange, HierarchyItem item, string p_currencySymbol)
@@ -291,7 +287,7 @@ namespace FBI.Utils
 
     static internal void FormatRangeFromHierarchyItem(Range xlRange, HierarchyItem item)
     {
-      if ((item.HierarchyItemStyleNormal != null))
+      if (item.HierarchyItemStyleNormal != null)
       {
         xlRange.Interior.Color = item.HierarchyItemStyleNormal.FillStyle.Colors[0];
         xlRange.Font.Color = item.HierarchyItemStyleNormal.TextColor.ToArgb();
