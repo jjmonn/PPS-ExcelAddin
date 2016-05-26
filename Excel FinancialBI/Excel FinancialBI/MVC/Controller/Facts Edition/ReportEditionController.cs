@@ -65,8 +65,6 @@ namespace FBI.MVC.Controller
       AxisElem l_entity = AxisElemModel.Instance.GetValue(p_entityId);
       if (l_entity == null)
         return (false);
-      if (l_entity.AllowEdition == false)
-        return (false);
       m_entity = l_entity;
       return (true);
     }
@@ -106,19 +104,17 @@ namespace FBI.MVC.Controller
     //  m_addinModuleController.SetExcelInteractionState(false);
       bool l_result = false;
       EntityCurrency l_entityCurrency = EntityCurrencyModel.Instance.GetValue(m_entity.Id);
-      if (l_entityCurrency == null)
-        return false;
 
       if (m_process == Account.AccountProcess.FINANCIAL)
       {
-        l_result = InputReportCreationProcessFinancial(l_entityCurrency);
+        l_result = InputReportCreationProcessFinancial((l_entityCurrency != null ) ? l_entityCurrency.CurrencyId : CurrencyModel.Instance.GetMainCurrency());
         if (l_result)
           m_addinController.LaunchFinancialSnapshot(false, true, Properties.Settings.Default.version_id);
         return l_result;
       }
       else
       {
-        l_result = InputReportCreationProcessRH(l_entityCurrency);
+        l_result = InputReportCreationProcessRH();
         if (l_result)
           m_addinController.LaunchRHSnapshot(true, m_version.Id, true, m_periodList, m_RHAccount.Id);
         AddinModuleController.SetExcelInteractionState(true);
@@ -126,9 +122,9 @@ namespace FBI.MVC.Controller
       }
     }
 
-    private bool InputReportCreationProcessFinancial(EntityCurrency p_entityCurrency)
+    private bool InputReportCreationProcessFinancial(UInt32 p_currencyId)
     {
-	    Currency l_currency = CurrencyModel.Instance.GetValue(p_entityCurrency.CurrencyId);
+      Currency l_currency = CurrencyModel.Instance.GetValue(p_currencyId);
       if (l_currency == null)
         return (false);
 
@@ -158,7 +154,7 @@ namespace FBI.MVC.Controller
         ExcelFormatting.FormatFinancialExcelRange(p_destinationcell, p_currency.Id, DateTime.FromOADate(p_periodList.ElementAt(0)));
 	 }
 
-    private bool InputReportCreationProcessRH(EntityCurrency p_entityCurrency)
+    private bool InputReportCreationProcessRH()
 {
       string[] l_headerNames = new string[] {Local.GetValue("general.account"), Local.GetValue("general.entity"),Local.GetValue("general.version")};
       string[] l_headerValues = new string[] {m_RHAccount.Name, m_entity.Name, m_version.Name};
