@@ -55,7 +55,7 @@ namespace FBI
       foreach (Range l_cell in p_range.Cells)
       {
         m_factsEditionController.RaiseWorksheetChangingEvent(l_cell);
-        RaiseCellEvent(l_cell.DirectDependents);
+        try { RaiseCellEvent(l_cell.DirectDependents); } catch { }
       }
     }
 

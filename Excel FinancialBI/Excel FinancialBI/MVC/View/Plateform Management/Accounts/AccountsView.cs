@@ -797,6 +797,8 @@ namespace FBI.MVC.View
 
       string l_nameAccount = Interaction.InputBox(Local.GetValue("accounts.msg_new_tab_name"),
                                                  Local.GetValue("accounts.title_new_tab_name"), "");
+      if (l_nameAccount == "")
+        return;
       if (m_controller.CreateAccount(0, l_nameAccount, Account.AccountProcess.FINANCIAL, Account.FormulaTypes.TITLE, "", Account.AccountType.DATE, Account.ConsolidationOptions.AGGREGATION,
         Account.PeriodAggregationOptions.AVERAGE_PERIOD, "t", (UInt32)Account.FormulaTypes.TITLE, m_accountTV.Nodes.Count) == false)
         MsgBox.Show(m_controller.Error);
