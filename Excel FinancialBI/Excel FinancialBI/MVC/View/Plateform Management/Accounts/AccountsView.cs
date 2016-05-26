@@ -557,7 +557,7 @@ namespace FBI.MVC.View
           vTreeNode l_oldNode = m_accountTV.FindNode(p_attributes.Id);
           l_oldNode.Text = p_attributes.Name;
           l_oldNode.ImageIndex = (Int32)p_attributes.Image;
-          if (m_currentNode == l_oldNode)
+          if (m_currentNode == l_oldNode && !m_isEditingFormulaFlag)
           {
             DesactivateUnallowed();
             DisplayAttributes();
@@ -793,8 +793,6 @@ namespace FBI.MVC.View
 
     private void OnAddCategoryClick(object p_sender, EventArgs p_e)
     {
-      m_isEditingFormulaFlag = false;
-
       string l_nameAccount = Interaction.InputBox(Local.GetValue("accounts.msg_new_tab_name"),
                                                  Local.GetValue("accounts.title_new_tab_name"), "");
       if (l_nameAccount == "")
