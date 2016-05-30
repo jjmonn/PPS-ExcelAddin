@@ -45,6 +45,13 @@ namespace FBI.MVC.Model
 
       FactsModel.Instance.ReadEvent += OnFinancialInputDownloaded;
       SourcedComputeModel.Instance.ComputeCompleteEvent += OnComputeCompleteEvent;
+      Addin.ConnectionStateEvent += OnConnectionChanged;
+    }
+
+    void OnConnectionChanged(bool p_connected)
+    {
+      m_nbRequest = 0;
+      m_nbCompute = 0;
     }
 
     public override void Close()
