@@ -102,7 +102,8 @@ namespace FBI.MVC.View
 
       foreach (AxisElem l_entity in l_axisElemMID.SortedValues)
         FillPercentage(l_entity);
-
+      foreach (AxisElem l_entity in l_axisElemMID.SortedValues)
+        FillParents(l_entity.Id, 42);
       m_dgv.Dock = DockStyle.Fill;
       m_DGVPanel.Controls.Add(m_dgv);
     }
