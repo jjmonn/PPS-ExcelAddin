@@ -233,5 +233,8 @@
     <Setting Name="chartBorderWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
+    <Setting Name="FactsEditionInputsOrangeFill" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">255, 128, 0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

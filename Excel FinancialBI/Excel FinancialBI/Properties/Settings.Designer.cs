@@ -946,5 +946,17 @@ namespace FBI.Properties {
                 this["chartBorderWidth"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255, 128, 0")]
+        public global::System.Drawing.Color FactsEditionInputsOrangeFill {
+            get {
+                return ((global::System.Drawing.Color)(this["FactsEditionInputsOrangeFill"]));
+            }
+            set {
+                this["FactsEditionInputsOrangeFill"] = value;
+            }
+        }
     }
 }

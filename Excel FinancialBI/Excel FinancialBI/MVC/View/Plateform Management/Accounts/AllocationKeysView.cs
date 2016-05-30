@@ -216,7 +216,7 @@ namespace FBI.MVC.View
 
     private void FillPercentage(AxisElem p_entity)
     {
-      if (p_entity == null)
+      if (p_entity == null || m_account == null)
         return;
       m_isFillingPercentage = true;
 
@@ -248,6 +248,7 @@ namespace FBI.MVC.View
           l_value += (double)l_tmp;
       }
       m_dgv.FillField((UInt32)l_parent.ItemValue, p_colId, l_value);
+
       FillParents((UInt32)l_parent.ItemValue, p_colId);
     }
 

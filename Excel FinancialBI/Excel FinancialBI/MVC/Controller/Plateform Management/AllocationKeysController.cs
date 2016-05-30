@@ -88,14 +88,14 @@ namespace FBI.MVC.Controller
         l_entityDistribution = new EntityDistribution();
         l_entityDistribution.AccountId = this.m_account.Id;
         l_entityDistribution.EntityId = p_entityId;
-        l_entityDistribution.Percentage = (byte)p_entityValue;
+        l_entityDistribution.Percentage = p_entityValue;
         if (EntityDistributionModel.Instance.Create(l_entityDistribution))
           return (true);
       }
       else
       {
         if (p_entityValue != -1)
-          l_entityDistribution.Percentage = (byte)p_entityValue;
+          l_entityDistribution.Percentage = p_entityValue;
         if (EntityDistributionModel.Instance.Update(l_entityDistribution))
           return (true);
       }

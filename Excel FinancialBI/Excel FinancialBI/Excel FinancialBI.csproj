@@ -755,6 +755,7 @@
     <Compile Include="Utils\DGVFormatUtils.cs" />
     <Compile Include="Utils\ExcelFormatting.cs" />
     <Compile Include="Utils\ExcelUtils.cs" />
+    <Compile Include="Utils\ExchangeRateQuery.cs" />
     <Compile Include="Utils\Formats.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\Local.cs" />

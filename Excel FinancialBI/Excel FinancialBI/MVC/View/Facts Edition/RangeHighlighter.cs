@@ -41,6 +41,10 @@ namespace FBI.MVC.View
           FillOutputCellRed(p_cell);
           break;
 
+        case EditedFactStatus.Warning:
+          FillInputCellOrange(p_cell);
+          break;
+
         case EditedFactStatus.OutputEqual :
           FillOutputBaseColor(p_cell);
           break;
@@ -110,6 +114,15 @@ namespace FBI.MVC.View
 
       RegisterCellOriginalFill(p_cell);
       p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputsRedFill;
+    }
+
+    public void FillInputCellOrange(Range p_cell)
+    {
+      if (p_cell == null)
+        return;
+
+      RegisterCellOriginalFill(p_cell);
+      p_cell.Interior.Color = Properties.Settings.Default.FactsEditionInputsOrangeFill;
     }
 
     private void FillOutputCellRed(Range p_cell)
