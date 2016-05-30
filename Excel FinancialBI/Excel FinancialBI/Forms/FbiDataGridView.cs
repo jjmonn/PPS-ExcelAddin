@@ -106,6 +106,12 @@ namespace FBI.Forms
       CellMouseLeave += OnMouseLeaveCell;
       CellValidating += OnCellValidating;
       CellValueChanged += OnCellChanged;
+      Resize += OnResize;
+    }
+
+    void OnResize(object sender, EventArgs e)
+    {
+      ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
     }
 
     void InitDGVDisplay()
