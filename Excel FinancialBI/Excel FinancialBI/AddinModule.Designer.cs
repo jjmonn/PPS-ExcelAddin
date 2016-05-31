@@ -121,6 +121,8 @@
       this.m_PDCRefreshSnapthshotButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonRHExitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.adxRibbonButton5 = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_accountSnapshotBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
       // m_financialbiRibbon
       // 
@@ -242,6 +244,7 @@
       // 
       this.adxRibbonMenu1.Caption = "adxRibbonMenu1";
       this.adxRibbonMenu1.Controls.Add(this.m_directoryRibbonButton);
+      this.adxRibbonMenu1.Controls.Add(this.m_accountSnapshotBT);
       this.adxRibbonMenu1.Id = "adxRibbonMenu_16f054e7735b4e8487ab527f0db53df6";
       this.adxRibbonMenu1.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.adxRibbonMenu1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -970,6 +973,21 @@
       this.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor";
       this.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       // 
+      // adxRibbonButton5
+      // 
+      this.adxRibbonButton5.Caption = "Directory Snapshot";
+      this.adxRibbonButton5.Id = "adxRibbonButton_3c5c89ebdd9a4ea595bbc1e5a46be7ed";
+      this.adxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.adxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      // 
+      // m_accountSnapshotBT
+      // 
+      this.m_accountSnapshotBT.Caption = "Account Snapshot";
+      this.m_accountSnapshotBT.Id = "adxRibbonButton_5a91020eb3464abb923d5e7faf7c5c71";
+      this.m_accountSnapshotBT.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_accountSnapshotBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_accountSnapshotBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_accountSnapshot_OnClick);
+      // 
       // AddinModule
       // 
       this.AddinName = "FinancialBI";
@@ -1077,6 +1095,8 @@
     public AddinExpress.MSO.ADXRibbonDropDown ClientsDropDown;
     public AddinExpress.MSO.ADXRibbonDropDown ProductsDropDown;
     public AddinExpress.MSO.ADXRibbonGroup StateSelectionGroup;
+    private AddinExpress.MSO.ADXRibbonButton m_accountSnapshotBT;
+    private AddinExpress.MSO.ADXRibbonButton adxRibbonButton5;
     
 
   }

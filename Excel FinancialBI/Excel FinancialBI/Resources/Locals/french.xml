@@ -523,6 +523,7 @@
       <string name="no_version_selected">Aucune version n'est selectionnée.</string>
       <string name="server_disconnected">Connexion au serveur distant perdue. Veuillez-vous assurer que vos dernières actions ont bien été enregistrées.</string>
     </category>
+    <string name="account_snapshot">Importer des comptes depuis Excel.</string>
     <string name="account">Compte</string>
     <string name="accounts">Comptes</string>
     <string name="auto_resize_columns">Ajuster automatiquement la largeur des colonnes</string>

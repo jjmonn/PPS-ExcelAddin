@@ -9,6 +9,7 @@ namespace FBI.MVC.View
 {
   using Model.CRUD;
   using Model;
+  using Controller;
 
   class AccountSnapshot : IView
   {
@@ -32,6 +33,7 @@ namespace FBI.MVC.View
     const int m_nbColumns = 200;
     const int m_nbRows = 1000;
 
+    AccountSnapshotController m_controller;
     SafeDictionary<string, Column> m_columnNameDic;
     SafeDictionary<Column, int> m_columnScanDic;
     Worksheet m_worksheet;
@@ -44,6 +46,11 @@ namespace FBI.MVC.View
       m_worksheet = p_worksheet;
       BuildColumnNameDic();
       BuildPropertiesDic();
+    }
+
+    public void SetController(IController p_controller)
+    {
+      m_controller = p_controller as AccountSnapshotController;
     }
 
     void BuildPropertiesDic()
@@ -77,10 +84,10 @@ namespace FBI.MVC.View
     {
       m_columnScanDic = new SafeDictionary<Column, int>();
 
-      for (int l_row = 0; l_row < m_nbRows && m_beginRow < 0; l_row++)
-        for (int l_col = 0; l_col < m_nbColumns; l_col++)
+      for (int l_row = 1; l_row < m_nbRows && m_beginRow < 0; l_row++)
+        for (int l_col = 1; l_col < m_nbColumns; l_col++)
           {
-            Column l_colFound = GetColumn(m_worksheet.Cells[l_row, l_col]);
+            Column l_colFound = GetColumn(((Range)m_worksheet.Cells[l_row, l_col]).Value2);
 
             if (l_colFound != Column.UNDEFINED)
             {
@@ -98,7 +105,7 @@ namespace FBI.MVC.View
         try
         {
           string l_value = p_value as string;
-          l_value = Utils.StringUtils.RemoveDiacritics(l_value);
+          l_value = Utils.StringUtils.RemoveDiacritics(l_value).ToUpper();
 
           if (m_columnNameDic.ContainsKey(l_value))
             return (m_columnNameDic[l_value]);
@@ -109,7 +116,7 @@ namespace FBI.MVC.View
       return (Column.UNDEFINED);
     }
 
-    public List<Account> ExtractAccounts(SafeDictionary<Column, Action<Account, object>> p_propertiesFunc)
+    public List<Account> ExtractAccounts()
     {
       List<Account> l_list = new List<Account>();
 
@@ -118,18 +125,15 @@ namespace FBI.MVC.View
         Account l_account = null;
 
         foreach (KeyValuePair<Column, int> l_column in m_columnScanDic)
-          if (p_propertiesFunc.ContainsKey(l_column.Key))
+          if (m_propertiesDic.ContainsKey(l_column.Key))
           {
-            if (l_account == null)
-              l_account = new Account();
-            object l_value = m_worksheet.Cells[l_row, l_column.Value];
+            object l_value = ((Range)m_worksheet.Cells[l_row, l_column.Value]).Value2;
 
             if (l_value != null)
             {
-              try
-              {
-                p_propertiesFunc[l_column.Key](l_account, l_value);
-              }
+              if (l_account == null)
+                l_account = new Account();
+              try { m_propertiesDic[l_column.Key](l_account, l_value); }
               catch (InvalidCastException) { }
             }
           }
