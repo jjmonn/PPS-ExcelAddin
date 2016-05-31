@@ -441,7 +441,7 @@ namespace VIBlend.WinForms.Controls
             this.deleteButton.Image = (Image) bitmap;
           this.SetLayout();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
         }
         finally

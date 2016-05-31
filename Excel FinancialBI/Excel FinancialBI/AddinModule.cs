@@ -73,6 +73,7 @@ namespace FBI
       m_settingsRibbonButton.Caption = Local.GetValue("general.settings");
       m_configurationGroup.Caption = Local.GetValue("general.configuration");
       m_accountSnapshotBT.Caption = Local.GetValue("general.account_snapshot");
+      m_reportAccount.Caption = Local.GetValue("general.report_account");
     }
 
     void SuscribeEvents()
@@ -573,6 +574,15 @@ namespace FBI
       AccountSnapshotController l_snapshot = new AccountSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
 
       if (l_snapshot.LaunchSnapshot() == false)
+        MessageBox.Show(l_snapshot.Error);
+      l_snapshot.Close();
+    }
+
+    private void m_reportAccount_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      AccountSnapshotController l_snapshot = new AccountSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
+
+      if (l_snapshot.CreateReport() == false)
         MessageBox.Show(l_snapshot.Error);
       l_snapshot.Close();
     }

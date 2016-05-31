@@ -22,6 +22,12 @@ namespace FBI.MVC.Controller
       m_view.SetController(this);
     }
 
+    public bool CreateReport()
+    {
+      m_view.CreateReport();
+      return (true);
+    }
+
     public bool LaunchSnapshot()
     {
       List<Account> l_list;
@@ -34,8 +40,14 @@ namespace FBI.MVC.Controller
           if (CreateAccount(l_account) == false)
             return (false);
         }
-        else if (UpdateAccount(l_account) == false)
-          return (false);
+        else
+        {
+          Account l_base = AccountModel.Instance.GetValue(l_account.Name);
+
+          l_base.CopyFrom(l_account);
+          if (UpdateAccount(l_base) == false)
+            return (false);
+        }
       return (true);
     }
   }

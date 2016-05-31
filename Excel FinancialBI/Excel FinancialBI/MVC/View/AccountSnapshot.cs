@@ -10,6 +10,7 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Model;
   using Controller;
+  using Utils;
 
   class AccountSnapshot : IView
   {
@@ -24,7 +25,6 @@ namespace FBI.MVC.View
       CONVERSION_OPTION,
       PERIOD_AGGREGATION_OPTION,
       ITEM_POSITION,
-      ACCOUNT_TAB,
       DESCRIPTION,
       PROCESS,
       UNDEFINED
@@ -38,12 +38,15 @@ namespace FBI.MVC.View
     SafeDictionary<Column, int> m_columnScanDic;
     Worksheet m_worksheet;
     int m_beginRow = -1;
+    BNF m_bnf;
 
     SafeDictionary<Column, Action<Account, object>> m_propertiesDic;
 
     public AccountSnapshot(Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
+      m_bnf = new BNF();
+      FbiGrammar.AddGrammar(m_bnf);
       BuildColumnNameDic();
       BuildPropertiesDic();
     }
@@ -66,7 +69,6 @@ namespace FBI.MVC.View
       m_propertiesDic[Column.CONVERSION_OPTION] = ReadConversionOption;
       m_propertiesDic[Column.PERIOD_AGGREGATION_OPTION] = ReadPeriodAggregationOption;
       m_propertiesDic[Column.ITEM_POSITION] = ReadItemPosition;
-      m_propertiesDic[Column.ACCOUNT_TAB] = ReadAccountTab;
       m_propertiesDic[Column.DESCRIPTION] = ReadDescription;
       m_propertiesDic[Column.PROCESS] = ReadProcess;
     }
@@ -76,6 +78,58 @@ namespace FBI.MVC.View
       m_columnNameDic = new SafeDictionary<string,Column>();
       foreach (Column l_col in Enum.GetValues(typeof(Column)))
         m_columnNameDic[l_col.ToString()] = l_col;
+    }
+
+    public void CreateReport()
+    {
+      List<Account> l_accountList = AccountModel.Instance.GetDictionary().SortedValues;
+
+      Range l_beginCell = Addin.AddinModule.ExcelApp.ActiveCell;
+
+      int l_index = 0;
+      foreach (Column l_column in Enum.GetValues(typeof(Column)))
+        if (l_column != Column.UNDEFINED)
+          m_worksheet.Cells[l_beginCell.Row, l_beginCell.Column + l_index++] = l_column.ToString();
+      l_index = 1;
+      foreach (Account l_account in l_accountList)
+      {
+        if (!m_bnf.Parse(l_account.Formula, FbiGrammar.TO_HUMAN))
+          continue;
+        WriteReportValue(l_beginCell, Column.NAME, l_account.Name, l_index);
+        WriteReportValue(l_beginCell, Column.PARENT, AccountModel.Instance.GetValueName(l_account.ParentId), l_index);
+        WriteReportValue(l_beginCell, Column.FORMULA_TYPE, ((Account.FormulaTypes)l_account.FormulaType).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.FORMULA_TYPE, ((Account.FormulaTypes)l_account.FormulaType).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.FORMULA, m_bnf.Concatenated, l_index);
+        WriteReportValue(l_beginCell, Column.TYPE, ((Account.AccountType)l_account.Type).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.CONSOLIDATION_OPTION, ((Account.ConsolidationOptions)l_account.ConsolidationOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.CONVERSION_OPTION, ((Account.ConversionOptions)l_account.ConversionOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.PERIOD_AGGREGATION_OPTION, ((Account.PeriodAggregationOptions)l_account.PeriodAggregationOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.ITEM_POSITION, l_account.ItemPosition.ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.DESCRIPTION, l_account.Description, l_index);
+        WriteReportValue(l_beginCell, Column.PROCESS, ((Account.AccountProcess)l_account.Process).ToString(), l_index);
+
+        l_index++;
+      }
+    }
+
+    void WriteReportValue(Range p_baseCell, Column p_column, string p_value, int p_row)
+    {
+      Array l_cols = Enum.GetValues(typeof(Column));
+
+      for (int i = 0; i < l_cols.Length; ++i)
+      {
+        Range l_cell = (Range)m_worksheet.Cells[p_baseCell.Row, p_baseCell.Column + i];
+
+        try
+        {
+          if ((string)l_cell.Value2 == p_column.ToString())
+          {
+            l_cell = (Range)m_worksheet.Cells[p_baseCell.Row + p_row, p_baseCell.Column + i];
+            l_cell.Value2 = p_value;
+          }
+        }
+        catch (InvalidCastException) { }
+      }
     }
 
     #region Scan
@@ -155,42 +209,39 @@ namespace FBI.MVC.View
 
     void ReadParent(Account p_account, object p_value)
     {
-      p_account.ParentId = AccountModel.Instance.GetValueId(p_value as string);
+      p_account.ParentId = AccountModel.Instance.GetValueId((string)p_value);
     }
 
     void ReadFormulaType(Account p_account, object p_value)
     {
-      p_account.FormulaType = (Account.FormulaTypes)Enum.Parse(typeof(Account.FormulaTypes), p_value as string, true);
+      p_account.FormulaType = (Account.FormulaTypes)Enum.Parse(typeof(Account.FormulaTypes), (string)p_value, true);
     }
 
     void ReadFormula(Account p_account, object p_value)
     {
-      p_account.Formula = p_value as string;
+      if (!m_bnf.Parse((string)p_value, FbiGrammar.TO_SERVER))
+        return;
+      p_account.Formula = m_bnf.Concatenated;
     }
 
     void ReadConsolidationOption(Account p_account, object p_value)
     {
-      p_account.ConsolidationOptionId = (Account.ConsolidationOptions)Enum.Parse(typeof(Account.ConsolidationOptions), p_value as string, true);
+      p_account.ConsolidationOptionId = (Account.ConsolidationOptions)Enum.Parse(typeof(Account.ConsolidationOptions), (string)p_value, true);
     }
 
     void ReadConversionOption(Account p_account, object p_value)
     {
-      p_account.ConversionOptionId = (Account.ConversionOptions)Enum.Parse(typeof(Account.ConversionOptions), p_value as string, true);
+      p_account.ConversionOptionId = (Account.ConversionOptions)Enum.Parse(typeof(Account.ConversionOptions), (string)p_value, true);
     }
 
     void ReadPeriodAggregationOption(Account p_account, object p_value)
     {
-      p_account.PeriodAggregationOptionId = (Account.PeriodAggregationOptions)Enum.Parse(typeof(Account.PeriodAggregationOptions), p_value as string, true);
+      p_account.PeriodAggregationOptionId = (Account.PeriodAggregationOptions)Enum.Parse(typeof(Account.PeriodAggregationOptions), (string)p_value, true);
     }
 
     void ReadItemPosition(Account p_account, object p_value)
     {
-      p_account.ItemPosition = (Int32)p_value;
-    }
-
-    void ReadAccountTab(Account p_account, object p_value)
-    {
-      p_account.AccountTab = (Int32)p_value;
+      p_account.ItemPosition = (Int32)(double)p_value;
     }
 
     void ReadDescription(Account p_account, object p_value)
@@ -200,12 +251,12 @@ namespace FBI.MVC.View
 
     void ReadProcess(Account p_account, object p_value)
     {
-      p_account.Process = (Account.AccountProcess)Enum.Parse(typeof(Account.AccountProcess), p_value as string, true);
+      p_account.Process = (Account.AccountProcess)Enum.Parse(typeof(Account.AccountProcess), (string)p_value, true);
     }
 
     void ReadType(Account p_account, object p_value)
     {
-      p_account.Type = (Account.AccountType)Enum.Parse(typeof(Account.AccountType), p_value as string, true);
+      p_account.Type = (Account.AccountType)Enum.Parse(typeof(Account.AccountType), (string)p_value, true);
     }
 
     #endregion
