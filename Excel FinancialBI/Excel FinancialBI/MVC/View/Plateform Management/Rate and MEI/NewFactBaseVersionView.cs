@@ -56,7 +56,7 @@ namespace FBI.MVC.View
     {
       TVersion l_newVersion = new TVersion();
 
-      l_newVersion.StartPeriod = (UInt32)m_startPeriod.Value.GetValueOrDefault().ToOADate();
+      l_newVersion.StartPeriod = (UInt32)m_startPeriod.Value.ToOADate();
       l_newVersion.NbPeriod =(UInt16)m_nbPeriod.Value;
       l_newVersion.NbPeriod *= 12;
       l_newVersion.Name =  (string)NameTB.Text;
