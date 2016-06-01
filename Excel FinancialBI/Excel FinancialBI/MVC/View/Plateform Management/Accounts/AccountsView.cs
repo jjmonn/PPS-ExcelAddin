@@ -54,12 +54,13 @@ namespace FBI.MVC.View
     {
       Color.Blue,
       Color.Purple,
-      Color.Red,
       Color.Orange,
       Color.Green,
-      Color.Red,
       Color.RoyalBlue,
-      Color.SeaGreen
+      Color.SeaGreen,
+      Color.Olive,
+      Color.MidnightBlue,
+      Color.MediumVioletRed
     };
 
     #endregion
@@ -329,6 +330,31 @@ namespace FBI.MVC.View
       return (token);
     }
 
+    Dictionary<int, string> GetTokenList()
+    {
+      string l_token = "";
+      int l_selectionStart = 0;
+      bool l_insideQuote = false;
+      Dictionary<int, string> l_tokenList = new Dictionary<int, string>();
+
+      for (int i = 0; i < m_formulaTextBox.Text.Length; ++i)
+      {
+        if (m_formulaTextBox.Text[i] == '\"')
+        {
+          l_insideQuote = !l_insideQuote;
+          if (l_insideQuote)
+            l_selectionStart = i;
+          else
+            l_tokenList[l_selectionStart + 1] = l_token;
+          l_token = "";
+        }
+        else
+          if (l_insideQuote)
+            l_token += m_formulaTextBox.Text[i];
+      }
+      return (l_tokenList);
+    }
+
     string FindCompleteToken()
     {
       int l_posToken;
@@ -349,6 +375,9 @@ namespace FBI.MVC.View
     {
       if (m_isValidAutoComplete)
         return;
+
+      ColorFormula();
+
       int l_posToken;
       bool l_endQuote;
       string l_token = FindCurrentFormulaToken(out l_posToken, out l_endQuote);
@@ -453,19 +482,55 @@ namespace FBI.MVC.View
       }
     }
 
-    void OnFormulaClick()
+    void RestoreAccountTVColors()
     {
-      string l_token = FindCompleteToken();
+      foreach (vTreeNode l_node in m_accountTV.GetNodes())
+        l_node.UseThemeTextColor = true;
+    }
 
-      vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId(l_token));
+    void ColorTokenInAccountTV(string p_token, Color p_color)
+    {
+      vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId(p_token));
 
       if (l_node == null)
-       l_node = m_globalFactsTV.FindNode(GlobalFactModel.Instance.GetValueId(l_token));
+        l_node = m_globalFactsTV.FindNode(GlobalFactModel.Instance.GetValueId(p_token));
       if (l_node != null)
       {
-        l_node.TreeView.SelectedNode = l_node;
-        l_node.TreeView.Refresh();
+        l_node.UseThemeTextColor = false;
+        l_node.ForeColor = p_color;
       }
+    }
+
+    void ColorFormula()
+    {
+      RestoreAccountTVColors();
+
+      if (!m_formulaTextBox.Enabled)
+        return;
+      int l_selectionStart = m_formulaTextBox.TextBox.SelectionStart;
+      int l_selectionLenght = m_formulaTextBox.TextBox.SelectionLength;
+      int l_colorIndex = 0;
+      Dictionary<int, string> l_tokenList = GetTokenList();
+
+      foreach (KeyValuePair<int, string> l_pair in l_tokenList)
+      {
+        m_formulaTextBox.TextBox.SelectionLength = l_pair.Value.Length;
+        m_formulaTextBox.TextBox.SelectionStart = l_pair.Key;
+        if (AccountModel.Instance.GetValue(l_pair.Value) == null)
+        {
+          m_formulaTextBox.TextBox.SelectionColor = Color.Red;
+          m_formulaTextBox.TextBox.SelectionBackColor = Color.LightGray;
+        }
+        else
+        {
+          m_formulaTextBox.TextBox.SelectionBackColor = Color.Transparent;
+          ColorTokenInAccountTV(l_pair.Value, m_formulaColor[l_colorIndex]);
+          m_formulaTextBox.TextBox.SelectionColor = m_formulaColor[l_colorIndex++];
+        }
+      }
+
+      m_formulaTextBox.TextBox.SelectionLength = l_selectionLenght;
+      m_formulaTextBox.TextBox.SelectionStart = l_selectionStart;
     }
 
     void OnFormulaMouseDown(object sender, EventArgs e)
@@ -480,10 +545,14 @@ namespace FBI.MVC.View
         m_formulaTextBox.TextBox.SelectionStart = m_formulaSelectionStart;
         OnFormulaMouseDoubleClick();
       }
-      OnFormulaClick();
     }
 
     void OnFormulaMouseDoubleClick()
+    {
+      SelectCurrentToken();
+    }
+
+    bool SelectCurrentToken()
     {
       int l_posToken;
       bool l_endQuote;
@@ -494,7 +563,9 @@ namespace FBI.MVC.View
       {
         m_formulaTextBox.TextBox.SelectionStart = l_posToken;
         m_formulaTextBox.TextBox.SelectionLength = l_token.Length;
+        return (true);
       }
+      return (false);
     }
 
 
@@ -1268,6 +1339,7 @@ namespace FBI.MVC.View
         m_formulaTextBox.BackColor = Color.LightGray;
       else
         m_formulaTextBox.BackColor = Color.White;
+      ColorFormula();
     }
 
     #endregion
