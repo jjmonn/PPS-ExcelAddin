@@ -510,9 +510,10 @@ namespace FBI.MVC.View
       int l_selectionStart = m_formulaTextBox.TextBox.SelectionStart;
       int l_selectionLenght = m_formulaTextBox.TextBox.SelectionLength;
       int l_colorIndex = 0;
-      Dictionary<int, string> l_tokenList = GetTokenList();
+      Dictionary<int, string> l_tokenDic = GetTokenList();
+      List<string> l_tokenList = l_tokenDic.Values.ToList();
 
-      foreach (KeyValuePair<int, string> l_pair in l_tokenList)
+      foreach (KeyValuePair<int, string> l_pair in l_tokenDic)
       {
         m_formulaTextBox.TextBox.SelectionLength = l_pair.Value.Length;
         m_formulaTextBox.TextBox.SelectionStart = l_pair.Key;
@@ -523,9 +524,10 @@ namespace FBI.MVC.View
         }
         else
         {
+          l_colorIndex = l_tokenList.IndexOf(l_pair.Value);
           m_formulaTextBox.TextBox.SelectionBackColor = Color.Transparent;
           ColorTokenInAccountTV(l_pair.Value, m_formulaColor[l_colorIndex]);
-          m_formulaTextBox.TextBox.SelectionColor = m_formulaColor[l_colorIndex++];
+          m_formulaTextBox.TextBox.SelectionColor = m_formulaColor[l_colorIndex];
         }
       }
 
