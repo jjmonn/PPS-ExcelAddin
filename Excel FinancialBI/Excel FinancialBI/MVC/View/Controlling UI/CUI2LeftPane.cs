@@ -83,6 +83,7 @@ namespace FBI.MVC.View
       InitCBListItem<Filter>(Local.GetValue("CUI.dimension.entity_cat"), AxisType.Entities);
       SelectionCB.SelectedItem = InitCBListItem<Version>(Local.GetValue("CUI.dimension.versions"));
       InitCBListItem<Currency>(Local.GetValue("CUI.dimension.currencies"));
+      InitCBListItem<Account>(Local.GetValue("CUI.dimension.account"));
 
       if (Addin.Process == Account.AccountProcess.FINANCIAL)
         InitPeriodCB();
@@ -175,6 +176,7 @@ namespace FBI.MVC.View
       InitTVAxisElem(AxisElemModel.Instance, AxisType.Adjustment);
       InitFilterTV(AxisType.Adjustment);
       InitTV(VersionModel.Instance, m_selectionTableLayout.Controls, true, Properties.Settings.Default.version_id, true, true);
+      InitTV(AccountModel.Instance, m_selectionTableLayout.Controls, false, 0, false, true, true);
 
       FbiTreeView<Currency> l_currencyTV = new FbiTreeView<Currency>(CurrencyModel.Instance.GetUsedCurrenciesDic(), null, false, true);
       l_currencyTV.NodeChecked += OnCurrencyChecked;
@@ -245,13 +247,13 @@ namespace FBI.MVC.View
     }
 
     void InitTV<T>(NamedCRUDModel<T> p_model, ControlCollection p_control, bool p_hideParentCB,
-      UInt32 p_checkedValue, bool p_visible = false, bool p_load = false) 
+      UInt32 p_checkedValue, bool p_visible = false, bool p_load = false, bool p_checkAll = false) 
       where T : class, NamedCRUDEntity
     {
       FbiTreeView<T> l_tv = new FbiTreeView<T>(p_model.GetDictionary(), null, false, p_load);
       Tuple<AxisType, Type> l_key = new Tuple<AxisType, Type>((AxisType)0, typeof(T));
 
-      BaseInitTV<T>(l_key, l_tv, p_control, p_visible, p_hideParentCB, p_checkedValue, false, p_load);
+      BaseInitTV<T>(l_key, l_tv, p_control, p_visible, p_hideParentCB, p_checkedValue, p_checkAll, p_load);
     }
 
     void BaseInitTV<T>(Tuple<AxisType, Type> p_key, AFbiTreeView p_tv, ControlCollection p_control, bool p_visible, 
@@ -400,7 +402,7 @@ namespace FBI.MVC.View
           continue;
 
         foreach (vTreeNode l_node in l_tv.Value.GetNodes())
-          if (l_node.Checked == CheckState.Checked)
+          if (l_node.Checked != CheckState.Unchecked)
           {
             if (l_checkedElements[l_tv.Key.Item2] == null)
               l_checkedElements[l_tv.Key.Item2] = new List<uint>();
