@@ -65,10 +65,7 @@ namespace FBI.MVC.Model.CRUD
 
       if (l_cmpCurrency == null)
         return 0;
-      if (l_cmpCurrency.Id > Id)
-        return -1;
-      else
-        return 1;
+      return string.Compare(Name.ToUpper(), l_cmpCurrency.Name.ToUpper());
     }
   }
 }
