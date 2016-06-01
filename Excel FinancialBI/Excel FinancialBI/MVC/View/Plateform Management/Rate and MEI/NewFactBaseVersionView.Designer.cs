@@ -44,9 +44,8 @@ namespace FBI.MVC.View
       this.ButtonIcons = new System.Windows.Forms.ImageList(this.components);
       this.ValidateBT = new System.Windows.Forms.Button();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
-      this.m_circularProgress = new VIBlend.WinForms.Controls.vCircularProgressBar();
       this.m_creationBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-      this.m_startPeriod = new VIBlend.WinForms.Controls.vDatePicker();
+      this.m_startPeriod = new System.Windows.Forms.DateTimePicker();
       this.m_nbPeriod = new VIBlend.WinForms.Controls.vNumericUpDown();
       this.SuspendLayout();
       // 
@@ -127,44 +126,18 @@ namespace FBI.MVC.View
       this.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico");
       this.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico");
       // 
-      // m_circularProgress
-      // 
-      this.m_circularProgress.AllowAnimations = true;
-      this.m_circularProgress.BackColor = System.Drawing.Color.Transparent;
-      this.m_circularProgress.IndicatorsCount = 8;
-      this.m_circularProgress.Location = new System.Drawing.Point(325, 77);
-      this.m_circularProgress.Maximum = 100;
-      this.m_circularProgress.Minimum = 0;
-      this.m_circularProgress.Name = "m_circularProgress";
-      this.m_circularProgress.Size = new System.Drawing.Size(75, 75);
-      this.m_circularProgress.TabIndex = 27;
-      this.m_circularProgress.Text = "VCircularProgressBar1";
-      this.m_circularProgress.UseThemeBackground = false;
-      this.m_circularProgress.Value = 0;
-      this.m_circularProgress.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE;
-      this.m_circularProgress.Visible = false;
-      // 
       // m_startPeriod
       // 
       this.m_startPeriod.BackColor = System.Drawing.Color.White;
-      this.m_startPeriod.BorderColor = System.Drawing.Color.Black;
-      this.m_startPeriod.Culture = new System.Globalization.CultureInfo("");
-      this.m_startPeriod.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_startPeriod.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_startPeriod.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.None;
-      this.m_startPeriod.FormatValue = "MMM yyyy";
+      this.m_startPeriod.CustomFormat = "MMM yyyy";
+      this.m_startPeriod.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
       this.m_startPeriod.Location = new System.Drawing.Point(153, 79);
       this.m_startPeriod.MaxDate = new System.DateTime(2100, 1, 1, 0, 0, 0, 0);
       this.m_startPeriod.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
       this.m_startPeriod.Name = "m_startPeriod";
-      this.m_startPeriod.ShowGrip = false;
       this.m_startPeriod.Size = new System.Drawing.Size(100, 20);
       this.m_startPeriod.TabIndex = 28;
-      this.m_startPeriod.Text = "vDatePicker1";
-      this.m_startPeriod.UseThemeBackColor = false;
-      this.m_startPeriod.UseThemeDropDownArrowColor = true;
-      this.m_startPeriod.Value = new System.DateTime(2016, 2, 9, 14, 54, 2, 872);
-      this.m_startPeriod.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_startPeriod.Value = new System.DateTime(2016, 12, 30, 0, 0, 0, 0);
       // 
       // m_nbPeriod
       // 
@@ -183,14 +156,13 @@ namespace FBI.MVC.View
       this.m_nbPeriod.UseThemeForeColor = true;
       this.m_nbPeriod.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
-      // NewVersionBaseView
+      // NewFactBaseVersionView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(392, 211);
       this.Controls.Add(this.m_nbPeriod);
       this.Controls.Add(this.m_startPeriod);
-      this.Controls.Add(this.m_circularProgress);
       this.Controls.Add(this.CancelBT);
       this.Controls.Add(this.ValidateBT);
       this.Controls.Add(this.NameTB);
@@ -198,7 +170,7 @@ namespace FBI.MVC.View
       this.Controls.Add(this.m_startingPeriodLabel);
       this.Controls.Add(this.m_nameLabel);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.Name = "NewVersionBaseView";
+      this.Name = "NewFactBaseVersionView";
       this.Text = "new_version";
       this.ResumeLayout(false);
       this.PerformLayout();
@@ -212,9 +184,8 @@ namespace FBI.MVC.View
     public System.Windows.Forms.Button ValidateBT;
     public System.Windows.Forms.ImageList ButtonIcons;
     public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-    public VIBlend.WinForms.Controls.vCircularProgressBar m_circularProgress;
     public System.ComponentModel.BackgroundWorker m_creationBackgroundWorker;
-    protected VIBlend.WinForms.Controls.vDatePicker m_startPeriod;
+    protected System.Windows.Forms.DateTimePicker m_startPeriod;
     protected VIBlend.WinForms.Controls.vNumericUpDown m_nbPeriod;
   }
 }

@@ -60,7 +60,6 @@ namespace FBI.MVC.View
       this.m_CancelButton.Click += new EventHandler(this.CancelBT_Click);
       this.m_createVersionButton.Click += new EventHandler(this.CreateVersionBT_Click);
       this.m_timeConfigCB.SelectedItemChanged += new EventHandler(this.m_timeConfigCB_SelectedItemChanged);
-      this.m_startingPeriodDatePicker.Calendar.MouseClick += new MouseEventHandler(this.m_startingPeriodDatePicker_MouseClick);
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewDataVersionUI_FormClosing);
     }
 
@@ -122,6 +121,7 @@ namespace FBI.MVC.View
       l_version.CreatedAt = DateTime.Now.ToShortDateString();
       l_version.FormulaPeriodIndex = 1;
       l_version.FormulaNbPeriod = l_version.NbPeriod - (uint)1;
+
       if (m_controller.Create(l_version) == false)
       {
         Forms.MsgBox.Show(m_controller.Error);
@@ -133,22 +133,6 @@ namespace FBI.MVC.View
     private void CancelBT_Click(object sender, EventArgs e)
     {
       this.Hide();
-    }
-
-    private void m_startingPeriodDatePicker_MouseClick(object sender, MouseEventArgs e)
-    {
-      TimeConfig l_timeConfig = (TimeConfig)m_timeConfigCB.SelectedItem.Value;
-      switch (l_timeConfig)
-      {
-        case TimeConfig.MONTHS:
-          // e.location -> get the item clicked then
-          // case month clicked: automatically set the period to end of month
-          break;
-
-        case TimeConfig.YEARS:
-          // case year click: automatically set the period to end of year
-          break;
-      }
     }
 
     private void NewDataVersionUI_FormClosing(object sender, FormClosingEventArgs e)

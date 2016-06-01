@@ -148,7 +148,7 @@ namespace FBI.MVC.View
 
     void OnCreateFolderClick(object p_sender, EventArgs p_args)
     {
-      string l_result = Interaction.InputBox(Local.GetValue("version.create_folder"));
+      string l_result = Interaction.InputBox(Local.GetValue("versions.new_folder"));
 
       if (l_result == "")
         return;

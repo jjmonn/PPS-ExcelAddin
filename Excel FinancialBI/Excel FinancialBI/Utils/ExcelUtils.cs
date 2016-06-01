@@ -103,7 +103,7 @@ namespace FBI.Utils
 
 		    foreach (vTreeNode childNode in Node.Nodes) 
         {
-			    WriteAccountOnWorksheet(childNode, ref p_range, IndentLevel);
+			    WriteAccountOnWorksheet(childNode, ref p_range, IndentLevel + 1);
 		    }
 	    }
 	    p_range.Columns.AutoFit();
