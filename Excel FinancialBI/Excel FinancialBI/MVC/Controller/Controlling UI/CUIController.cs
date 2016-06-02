@@ -57,12 +57,13 @@ namespace FBI.MVC.Controller
       {
         bool l_found = false;
 
-        foreach (ComputeResult l_result in p_result.Values)
-          if (m_requestIdList.Contains(l_result.RequestId))
-          {
-            l_found = true;
-            m_requestIdList.Remove(l_result.RequestId);
-          }
+        if (!(l_found = (p_status != ErrorMessage.SUCCESS)))
+          foreach (ComputeResult l_result in p_result.Values)
+            if (m_requestIdList.Contains(l_result.RequestId))
+            {
+              l_found = true;
+              m_requestIdList.Remove(l_result.RequestId);
+            }
         if (l_found)
           ComputeCompleteEvent(p_status, p_request, p_result);
       }
