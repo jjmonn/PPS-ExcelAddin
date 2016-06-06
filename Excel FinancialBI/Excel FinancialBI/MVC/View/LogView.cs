@@ -78,18 +78,21 @@ namespace FBI.MVC.View
       }
       else
       {
+        uint i = 0;
+
         foreach (FactLog l_log in p_factLogList)
         {
           DateTime l_date = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
 
-          l_date.AddSeconds(l_log.Date);
-          m_logDataGridView.SetDimension<Currency>(FbiDataGridView.Dimension.ROW, l_log.Id, "", 0, null, 0);
-          m_logDataGridView.FillField(l_log.Id, (UInt32)Column.USERNAME, l_log.User);
-          m_logDataGridView.FillField(l_log.Id, (UInt32)Column.DATE, l_date.ToShortDateString());
-          m_logDataGridView.FillField(l_log.Id, (UInt32)Column.CLIENT, l_log.ClientId);
-          m_logDataGridView.FillField(l_log.Id, (UInt32)Column.PRODUCT, l_log.ProductId);
-          m_logDataGridView.FillField(l_log.Id, (UInt32)Column.ADJUSTMENT, l_log.AdjustmentId);
-          m_logDataGridView.FillField(l_log.Id, (UInt32)Column.VALUE, l_log.Value);
+          l_date = l_date.AddSeconds(l_log.Date);
+          m_logDataGridView.SetDimension<Currency>(FbiDataGridView.Dimension.ROW, i, "", 0, null, 0);
+          m_logDataGridView.FillField(i, (UInt32)Column.USERNAME, l_log.User);
+          m_logDataGridView.FillField(i, (UInt32)Column.DATE, l_date.ToShortDateString());
+          m_logDataGridView.FillField(i, (UInt32)Column.CLIENT, AxisElemModel.Instance.GetValueName(l_log.ClientId));
+          m_logDataGridView.FillField(i, (UInt32)Column.PRODUCT, AxisElemModel.Instance.GetValueName(l_log.ProductId));
+          m_logDataGridView.FillField(i, (UInt32)Column.ADJUSTMENT, AxisElemModel.Instance.GetValueName(l_log.AdjustmentId));
+          m_logDataGridView.FillField(i, (UInt32)Column.VALUE, l_log.Value);
+          ++i;
         }
       }
     }
