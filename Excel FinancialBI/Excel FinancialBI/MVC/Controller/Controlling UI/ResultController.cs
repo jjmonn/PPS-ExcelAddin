@@ -10,41 +10,26 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  class ResultController : IController
+  class ResultController : AResultController<ResultView>
   {
     CUIController m_parentController;
-    ResultView m_view;
-    public string Error { get; set; }
-    public IView View { get { return (m_view); } }
-    public ComputeConfig Config { get; set; }
-    UInt32 m_displayedVersionCompare = 0;
     LogController m_logController;
+    UInt32 m_displayedVersionCompare = 0;
 
     public ResultController(CUIController p_controller)
     {
-      Config = null;
-      m_logController = new LogController();
       m_parentController = p_controller;
-      m_view = new ResultView();
-      m_view.SetController(this);
-      LoadView();
+      m_logController = new LogController();
     }
 
-    void LoadView()
+    public bool ShowLog(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_accountId, UInt32 p_period)
     {
-      m_view.LoadView();
-    }
-
-    public void LoadDGV(ComputeConfig p_config)
-    {
-      m_displayedVersionCompare = 0;
-      Config = p_config;
-      m_view.PrepareDgv(p_config);
-    }
-
-    public void DisplayResult(SafeDictionary<UInt32, ComputeResult> p_result)
-    {
-      m_view.FillDGV(p_result);
+      if (m_logController.ShowView(p_entityId, p_versionId, p_accountId, p_period) == false)
+      {
+        Error = m_logController.Error;
+        return (false);
+      }
+      return (true);
     }
 
     public bool DisplayVersionComparaison()
@@ -86,19 +71,10 @@ namespace FBI.MVC.Controller
       m_view.SetVersionVisible(versionDiff2, false);
     }
 
-    public bool ShowLog(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_accountId, UInt32 p_period)
+    public override void LoadDGV(ComputeConfig p_config)
     {
-      if (m_logController.ShowView(p_entityId, p_versionId, p_accountId, p_period) == false)
-      {
-        Error = m_logController.Error;
-        return (false);
-      }
-      return (true);
-    }
-
-    public void DropOnExcel(bool p_copyOnlyExpanded)
-    {
-      m_view.DropOnExcel(p_copyOnlyExpanded);
+      m_displayedVersionCompare = 0;
+      base.LoadDGV(p_config);
     }
   }
 }

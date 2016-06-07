@@ -1,6 +1,6 @@
 ﻿namespace FBI.MVC.View
 {
-  partial class ResultView
+  partial class AResultView<TController>
   {
     /// <summary> 
     /// Required designer variable.
@@ -29,7 +29,7 @@
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResultView));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AResultView));
       this.m_dgvMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.ExpandAllRightClick = new System.Windows.Forms.ToolStripMenuItem();
       this.CollapseAllRightClick = new System.Windows.Forms.ToolStripMenuItem();

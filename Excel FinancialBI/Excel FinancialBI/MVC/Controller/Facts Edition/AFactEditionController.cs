@@ -48,6 +48,7 @@ namespace FBI.MVC.Controller
     public UInt32 RHAccountId { get; set; }
     protected StatusReportInterfaceUI m_statusView;
     public Worksheet Worksheet { get; set; }
+    public ReportController ReportController { get; set; }
 
     public AFactEditionController(AddinModuleController p_addinModuleController, Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
     {
@@ -57,6 +58,7 @@ namespace FBI.MVC.Controller
       EntityId = 0;
       Process = p_process;
       RHAccountId = 0;
+      ReportController = new ReportController();
     }
 
     public void RaiseWorksheetSelectionChangedEvent(Range p_range)
@@ -115,6 +117,11 @@ namespace FBI.MVC.Controller
     {
       if (m_statusView != null)
         m_statusView.Show();
+    }
+
+    public void ShowReportView()
+    {
+      ReportController.ShowView();
     }
 
     private void OnCommitError(string p_address, ErrorMessage p_error)
