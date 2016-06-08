@@ -163,13 +163,15 @@ namespace FBI.MVC.View
         }
     }
 
-    public delegate void FillDGV_delegate(SafeDictionary<uint, ComputeResult> p_data);
-    public void FillDGV(SafeDictionary<uint, ComputeResult> p_data)
+    public delegate void FillDGV_delegate(SafeDictionary<uint, ComputeResult> p_data, bool p_sourced = false);
+    public void FillDGV(SafeDictionary<uint, ComputeResult> p_data, bool p_sourced = false)
     {
+      if (!IsHandleCreated && m_tabCtrl.InvokeRequired)
+        return;
       if (m_tabCtrl.InvokeRequired)
       {
         FillDGV_delegate func = new FillDGV_delegate(FillDGV);
-        Invoke(func, p_data);
+        Invoke(func, p_data, p_sourced);
       }
       else
       {
@@ -183,14 +185,16 @@ namespace FBI.MVC.View
               foreach (ResultKey l_columnKey in l_dgv.Columns.Keys)
               {
                 ResultKey l_key = l_rowKey + l_columnKey;
+                UInt32 l_dataKey = (p_sourced) ? l_key.EntityId : l_key.VersionId;
 
+                if (p_sourced && m_computeConfig.Request.EntityId == 0)
+                  l_dataKey = p_data.Keys.FirstOrDefault();
                 l_key.RemoveTab();
-                if (p_data[l_key.VersionId] == null)
+                if (p_data[l_dataKey] == null)
                   continue;
-
-                if (p_data[l_key.VersionId].Values.ContainsKey(l_key) == false)
+                if (p_data[l_dataKey].Values.ContainsKey(l_key) == false)
                   continue;
-                double l_value = p_data[l_key.VersionId].Values[l_key];
+                double l_value = p_data[l_dataKey].Values[l_key];
 
                 l_dgv.FillField(l_rowKey, l_columnKey, l_value);
                 if (ComputeResult.IsDiffId(l_key.VersionId))

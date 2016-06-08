@@ -12,7 +12,7 @@ namespace FBI.MVC.View
   {
     void LoadView();
     void PrepareDgv(ComputeConfig p_config);
-    void FillDGV(SafeDictionary<uint, ComputeResult> p_data);
+    void FillDGV(SafeDictionary<uint, ComputeResult> p_data, bool p_sourced = false);
     void DropOnExcel(bool p_copyOnlyExpanded);
   }
 }

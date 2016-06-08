@@ -228,6 +228,12 @@ namespace FBI.MVC.Controller
       }
     }
 
+    public void DisplayReport()
+    {
+      if (m_factsEditionController != null)
+        m_factsEditionController.ShowReportView();
+    }
+
     #region Utils
 
     public Version GetCurrentVersion()

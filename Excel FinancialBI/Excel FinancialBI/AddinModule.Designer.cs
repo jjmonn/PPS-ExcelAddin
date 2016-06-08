@@ -97,7 +97,6 @@
       this.SubmissionOptionsBT = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
       this.AdxRibbonMenu5 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
       this.m_reportUploadAccountInfoButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.ShowReportBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.RefreshInputsBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonGroup9 = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.CloseBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -121,6 +120,7 @@
       this.m_PDCRefreshSnapthshotButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdxRibbonRHExitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_displayReportBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
       // m_financialbiRibbon
       // 
@@ -737,8 +737,8 @@
       // 
       this.AdxRibbonMenu5.Caption = "AdxRibbonMenu5";
       this.AdxRibbonMenu5.Controls.Add(this.m_reportUploadAccountInfoButton);
-      this.AdxRibbonMenu5.Controls.Add(this.ShowReportBT);
       this.AdxRibbonMenu5.Controls.Add(this.RefreshInputsBT);
+      this.AdxRibbonMenu5.Controls.Add(this.m_displayReportBT);
       this.AdxRibbonMenu5.Id = "adxRibbonMenu_22c008855d864379ba85629a938602dc";
       this.AdxRibbonMenu5.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.AdxRibbonMenu5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -750,16 +750,6 @@
       this.m_reportUploadAccountInfoButton.ImageList = this.SubmissionRibbonIL;
       this.m_reportUploadAccountInfoButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_reportUploadAccountInfoButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      // 
-      // ShowReportBT
-      // 
-      this.ShowReportBT.Caption = "Display Report";
-      this.ShowReportBT.Id = "adxRibbonButton_85590099a4f24030b2944f997d3926c9";
-      this.ShowReportBT.ImageList = this.SubmissionRibbonIL;
-      this.ShowReportBT.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.ShowReportBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.ShowReportBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
-      this.ShowReportBT.Visible = false;
       // 
       // RefreshInputsBT
       // 
@@ -970,6 +960,14 @@
       this.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor";
       this.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       // 
+      // m_displayReportBT
+      // 
+      this.m_displayReportBT.Caption = "Display report";
+      this.m_displayReportBT.Id = "adxRibbonButton_eb71050fe85e4943b21132b9bbc0a424";
+      this.m_displayReportBT.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_displayReportBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_displayReportBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_displayReportBT_OnClick);
+      // 
       // AddinModule
       // 
       this.AddinName = "FinancialBI";
@@ -1043,7 +1041,6 @@
     private AddinExpress.MSO.ADXRibbonSplitButton SubmissionOptionsBT;
     private AddinExpress.MSO.ADXRibbonMenu AdxRibbonMenu5;
     private AddinExpress.MSO.ADXRibbonButton m_reportUploadAccountInfoButton;
-    private AddinExpress.MSO.ADXRibbonButton ShowReportBT;
     private AddinExpress.MSO.ADXRibbonButton RefreshInputsBT;
     private AddinExpress.MSO.ADXRibbonGroup AdxRibbonGroup9;
     private AddinExpress.MSO.ADXRibbonButton CloseBT;
@@ -1077,6 +1074,7 @@
     public AddinExpress.MSO.ADXRibbonDropDown ClientsDropDown;
     public AddinExpress.MSO.ADXRibbonDropDown ProductsDropDown;
     public AddinExpress.MSO.ADXRibbonGroup StateSelectionGroup;
+    private AddinExpress.MSO.ADXRibbonButton m_displayReportBT;
     
 
   }

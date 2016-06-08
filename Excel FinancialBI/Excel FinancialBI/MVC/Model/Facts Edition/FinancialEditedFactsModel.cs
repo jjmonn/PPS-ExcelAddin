@@ -35,6 +35,7 @@ namespace FBI.MVC.Model
     public int m_nbRequest = 0;
     public int m_nbCompute = 0;
     UInt32 m_computeId = 0;
+    public event SourcedComputeModel.ComputeCompleteEventHandler ComputeCompleteEvent;
 
     #region Initialize
 
@@ -261,6 +262,7 @@ namespace FBI.MVC.Model
         l_entitiesList.Add(l_entity.Id);
       }
       l_sourcedComputeRequest.EntityList = l_entitiesList;
+      ComputeRequest = l_sourcedComputeRequest;
       m_nbRequest++;
       m_nbCompute++;
       AddinModuleController.SetExcelInteractionState(false);
@@ -297,6 +299,7 @@ namespace FBI.MVC.Model
           return;
         if (p_status == ErrorMessage.SUCCESS)
         {
+          ComputeRes = p_result;
           Version l_version = VersionModel.Instance.GetValue(m_versionId);
 
           if (l_version != null)
@@ -332,6 +335,8 @@ namespace FBI.MVC.Model
             }
           if (ComputeProgress != null)
             ComputeProgress(100);
+          if (ComputeCompleteEvent != null)
+            ComputeCompleteEvent(p_status, p_request, p_result);
           RaiseFactDownloaded(true);
         }
         else

@@ -567,6 +567,11 @@ namespace FBI
       m_controller.ShowStatusView();
     }
 
+    private void m_displayReportBT_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.DisplayReport();
+    }
+
   }
 }
 

@@ -76,7 +76,7 @@ namespace FBI.MVC.View
 
     void OnWorksheetSelectionChanged(Range p_range)
     {
-      Account l_account = m_areaController.GetAccount(p_range);
+      Account l_account = AreaController.GetAccount(p_range);
 
       if (l_account != null)
         m_controller.DisplayAccountSP(l_account);

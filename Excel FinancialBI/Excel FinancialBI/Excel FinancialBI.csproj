@@ -472,6 +472,12 @@
     <Compile Include="MVC\View\Facts Edition\ReportView.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="MVC\View\Facts Edition\ReportViewContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Facts Edition\ReportViewContainer.Designer.cs">
+      <DependentUpon>ReportViewContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\Facts Edition\RHFactEditionView.cs" />
     <Compile Include="MVC\View\FBIFunctionView.cs">
       <SubType>Form</SubType>
@@ -821,6 +827,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\DuplicatesUIDemo.resx">
       <DependentUpon>DuplicatesUIDemo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Facts Edition\ReportViewContainer.resx">
+      <DependentUpon>ReportViewContainer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\FBIFunctionView.resx">
       <DependentUpon>FBIFunctionView.cs</DependentUpon>
