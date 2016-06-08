@@ -19,6 +19,7 @@ namespace FBI.MVC.View
 
     protected override void SuscribeEvents()
     {
+      base.SuscribeEvents();
       m_controller.ComputeCompleteEvent += OnComputeCompleteEvent;
     }
 

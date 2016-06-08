@@ -17,6 +17,7 @@ namespace FBI.MVC.Controller
     void LoadDGV(ComputeConfig p_config);
     void DisplayResult(SafeDictionary<UInt32, ComputeResult> p_result);
     void DropOnExcel(bool p_copyOnlyExpanded);
+    bool ShowLog(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_accountId, UInt32 p_period);
     ComputeConfig Config { get; set; }
   };
 
@@ -26,6 +27,7 @@ namespace FBI.MVC.Controller
     public string Error { get; set; }
     public IView View { get { return (m_view); } }
     public ComputeConfig Config { get; set; }
+    LogController m_logController;
 
     public AResultController()
     {
@@ -33,6 +35,17 @@ namespace FBI.MVC.Controller
       m_view = new TView();
       m_view.SetController(this);
       LoadView();
+      m_logController = new LogController();
+    }
+
+    public bool ShowLog(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_accountId, UInt32 p_period)
+    {
+      if (m_logController.ShowView(p_entityId, p_versionId, p_accountId, p_period) == false)
+      {
+        Error = m_logController.Error;
+        return (false);
+      }
+      return (true);
     }
 
     public void LoadView()

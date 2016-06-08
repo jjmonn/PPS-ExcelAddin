@@ -13,23 +13,11 @@ namespace FBI.MVC.Controller
   class ResultController : AResultController<ResultView>
   {
     CUIController m_parentController;
-    LogController m_logController;
     UInt32 m_displayedVersionCompare = 0;
 
     public ResultController(CUIController p_controller)
     {
       m_parentController = p_controller;
-      m_logController = new LogController();
-    }
-
-    public bool ShowLog(UInt32 p_entityId, UInt32 p_versionId, UInt32 p_accountId, UInt32 p_period)
-    {
-      if (m_logController.ShowView(p_entityId, p_versionId, p_accountId, p_period) == false)
-      {
-        Error = m_logController.Error;
-        return (false);
-      }
-      return (true);
     }
 
     public bool DisplayVersionComparaison()

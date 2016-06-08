@@ -16,5 +16,11 @@ namespace FBI.MVC.View
     {
       InitializeComponent();
     }
+
+    private void ReportViewContainer_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      e.Cancel = true;
+      Hide();
+    }
   }
 }

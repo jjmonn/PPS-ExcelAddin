@@ -58,7 +58,7 @@ namespace FBI.MVC.Controller
       l_request.Process = p_request.Process;
 
       if (p_thirdDim == DimensionType.ENTITY)
-        l_request.EntityId = 0;
+        l_request.EntityId = p_request.EntityList.FirstOrDefault();
       else
       {
         AxisElem l_topEntity = AxisElemModel.Instance.GetTopEntity();

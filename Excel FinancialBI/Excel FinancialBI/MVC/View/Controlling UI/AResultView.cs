@@ -81,11 +81,29 @@ namespace FBI.MVC.View
       ColumnsAutoSize.Click += OnColumnAutoSizeClick;
       ColumnsAutoFitBT.Click += OnAutoFitClick;
       m_tabCtrl.TabDisplay += OnTabDisplay;
+      LogRightClick.Click += OnLogClick;
     }
 
     #endregion
 
     #region User Callbacks
+
+    void OnLogClick(object p_sender, EventArgs p_e)
+    {
+      if (m_tabCtrl.SelectedTab == null || m_tabCtrl.SelectedTab.Controls.Count <= 0)
+        return;
+      DGV l_dgv = m_tabCtrl.SelectedTab.Controls[0] as DGV;
+      HierarchyItem l_row = l_dgv.HoveredRow;
+      HierarchyItem l_column = l_dgv.HoveredColumn;
+
+      if (l_row == null || l_column == null)
+        return;
+      ResultKey l_key = l_dgv.HierarchyItems[l_row] + l_dgv.HierarchyItems[l_column];
+
+      if (m_controller.ShowLog((l_key.EntityId == 0)
+        ? m_computeConfig.Request.EntityId : l_key.EntityId, l_key.VersionId, l_key.AccountId, (UInt32)l_key.Period) == false)
+        MessageBox.Show(m_controller.Error);
+    }
 
     void OnTabDisplay(object sender, vTabMouseEventArgs p_e)
     {
@@ -187,7 +205,7 @@ namespace FBI.MVC.View
                 ResultKey l_key = l_rowKey + l_columnKey;
                 UInt32 l_dataKey = (p_sourced) ? l_key.EntityId : l_key.VersionId;
 
-                if (p_sourced && m_computeConfig.Request.EntityId == 0)
+                if (p_sourced && p_data.Keys.Count <= 1)
                   l_dataKey = p_data.Keys.FirstOrDefault();
                 l_key.RemoveTab();
                 if (p_data[l_dataKey] == null)
