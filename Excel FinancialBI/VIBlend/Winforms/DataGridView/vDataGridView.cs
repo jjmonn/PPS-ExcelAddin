@@ -374,7 +374,7 @@ namespace VIBlend.WinForms.DataGridView
           this.Invalidate();
           this.OnPropertyChanged("VIBlendTheme");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
         }
       }
@@ -2084,14 +2084,14 @@ namespace VIBlend.WinForms.DataGridView
       {
         this.filteringWindow.comboBoxFilters1.Items.Clear();
       }
-      catch (Exception ex)
+      catch (Exception)
       {
       }
       try
       {
         this.filteringWindow.comboBoxFilters2.Items.Clear();
       }
-      catch (Exception ex)
+      catch (Exception)
       {
       }
       foreach (string ItemText in stringList)
@@ -3340,7 +3340,7 @@ namespace VIBlend.WinForms.DataGridView
               this.crossCursor = new Cursor(manifestResourceStream);
               break;
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
               manifestResourceStream.Position = 0L;
             }
@@ -4593,7 +4593,7 @@ namespace VIBlend.WinForms.DataGridView
           conversionType = typeof (string);
         this.activeEditor.Cell.EditValue = Convert.ChangeType(this.activeEditor.Cell.EditValue, conversionType);
       }
-      catch (Exception ex)
+      catch (Exception)
       {
       }
       if (this.CellEditorDeActivate != null)
@@ -5092,7 +5092,7 @@ namespace VIBlend.WinForms.DataGridView
             return icon;
         }
       }
-      catch (Exception ex)
+      catch (Exception)
       {
       }
       finally
@@ -5297,7 +5297,7 @@ namespace VIBlend.WinForms.DataGridView
       {
         this.BindingProgressChanged((object) this, new BindingProgressEventArgs(recordsProcessed, totalNumberOfRecords));
       }
-      catch (Exception ex)
+      catch (Exception)
       {
       }
     }
@@ -5954,7 +5954,7 @@ namespace VIBlend.WinForms.DataGridView
           this.BoundFields.Add(boundField);
         }
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         this.boundFields.Clear();
         this.BoundFields.Clear();
@@ -6004,7 +6004,7 @@ namespace VIBlend.WinForms.DataGridView
           local_1.ItemChanged += new ItemChangedEventHandler(this.mngr_ItemChanged);
           local_1.ListChanged += new ListChangedEventHandler(this.mngr_ListChanged);
         }
-        catch (ArgumentException exception_0)
+        catch (ArgumentException)
         {
           return;
         }
@@ -6648,7 +6648,7 @@ namespace VIBlend.WinForms.DataGridView
           }
         }
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         return (object) null;
       }
@@ -6737,7 +6737,7 @@ namespace VIBlend.WinForms.DataGridView
           return;
         item.Width = bf.Width;
       }
-      catch (Exception ex)
+      catch (Exception)
       {
       }
     }

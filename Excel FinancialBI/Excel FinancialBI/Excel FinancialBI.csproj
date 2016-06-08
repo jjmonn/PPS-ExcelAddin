@@ -258,6 +258,7 @@
     <Compile Include="Forms\FlatFBITreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\AccountSnapshotController.cs" />
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
     <Compile Include="MVC\Controller\AFBIFunctionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
@@ -394,6 +395,7 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
+    <Compile Include="MVC\View\AccountSnapshot.cs" />
     <Compile Include="MVC\View\CommitFollowUpView.cs">
       <SubType>Form</SubType>
     </Compile>
