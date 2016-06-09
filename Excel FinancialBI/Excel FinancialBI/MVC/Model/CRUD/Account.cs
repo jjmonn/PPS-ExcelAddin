@@ -86,16 +86,19 @@ namespace FBI.MVC.Model.CRUD
     public string Description { get; set; }
     public AccountProcess Process { get; set; }
 
-    public Account() { Process = AccountProcess.FINANCIAL; }
-    private Account(UInt32 p_id)
+    public Account() 
     {
-      Id = p_id;
       Type = AccountType.NUMBER;
       ConsolidationOptionId = ConsolidationOptions.AGGREGATION;
       ConversionOptionId = ConversionOptions.END_OF_PERIOD_RATE;
       PeriodAggregationOptionId = PeriodAggregationOptions.SUM_OF_PERIODS;
       Process = AccountProcess.FINANCIAL;
       FormulaType = FormulaTypes.HARD_VALUE_INPUT;
+    }
+
+    private Account(UInt32 p_id)
+    {
+      Id = p_id;
     }
 
     public static CRUDEntity BuildAccount(ByteBuffer p_packet)

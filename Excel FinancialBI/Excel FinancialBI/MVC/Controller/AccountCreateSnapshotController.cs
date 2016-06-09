@@ -11,14 +11,12 @@ namespace FBI.MVC.Controller
   using Excel;
   using Model.CRUD;
 
-  class AccountCreateSnapshotController : IController 
+  class AccountCreateSnapshotController : AccountController 
   {
-    List<Account> m_accountList;
+    SafeDictionary<string, Account> m_accountList;
     WorksheetExtractor m_extractor;
     AccountSnapshotSelectionView m_selectionView;
     AccountSnapshotPropertiesView m_propertiesView;
-    public string Error { get; set; }
-    public IView View { get { return (m_selectionView); } }
 
     public AccountCreateSnapshotController(Worksheet p_worksheet)
     {
@@ -37,7 +35,7 @@ namespace FBI.MVC.Controller
       m_selectionView.Show();
     }
 
-    public void SelectAccounts(List<Account> p_accountList)
+    public void SelectAccounts(SafeDictionary<string, Account> p_accountList)
     {
       m_accountList = p_accountList;
       m_selectionView.Hide();

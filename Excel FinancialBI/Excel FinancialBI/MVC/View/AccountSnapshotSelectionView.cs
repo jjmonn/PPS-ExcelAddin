@@ -41,8 +41,25 @@ namespace FBI.MVC.View
       m_validateBT.Text = Local.GetValue("general.export_selected_account");
     }
 
+    void SubscribeEvents()
+    {
+      m_dgv.CellMouseClick += OnCellMouseClick;
+    }
+
+    void OnCellMouseClick(object p_sender, CellMouseEventArgs p_args)
+    {
+      uint l_row = (uint)p_args.Cell.RowItem.ItemValue;
+      uint l_column = 1;
+
+      bool l_currentState = (bool)m_dgv.GetCellValue(l_row, l_column);
+      m_dgv.FillField(l_row, l_column, !l_currentState);
+      m_editor.EditorValue = !l_currentState;
+      m_dgv.Refresh();
+    }
+
     public void LoadView()
     {
+      SubscribeEvents();
       LoadLocals();
 
       m_dgv.RowsHierarchy.Visible = false;
@@ -70,7 +87,7 @@ namespace FBI.MVC.View
 
     private void OnValidate(object sender, EventArgs e)
     {
-      List<Account> l_accountList = new List<Account>();
+      SafeDictionary<string, Account> l_accountList = new SafeDictionary<string, Account>();
       foreach (uint l_row in m_dgv.Rows.Keys)
       {
         if ((bool)m_dgv.GetCellValue(l_row, 1))
@@ -78,7 +95,7 @@ namespace FBI.MVC.View
           Account l_account = new Account();
 
           l_account.Name = (string)m_dgv.GetCellValue(l_row, 0);
-          l_accountList.Add(l_account);
+          l_accountList[l_account.Name] = l_account;
         }
       }
       m_controller.SelectAccounts(l_accountList);

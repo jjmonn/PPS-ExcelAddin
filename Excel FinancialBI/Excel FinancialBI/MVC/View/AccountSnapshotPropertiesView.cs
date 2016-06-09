@@ -39,6 +39,7 @@ namespace FBI.MVC.View
     ComboBoxEditor m_accountTypeCB = new ComboBoxEditor();
     ComboBoxEditor m_currencyOptionCB = new ComboBoxEditor();
     ComboBoxEditor m_consolidationOptionCB = new ComboBoxEditor();
+    SafeDictionary<string, Account> m_accountlist;
 
     public AccountSnapshotPropertiesView()
     {
@@ -89,8 +90,9 @@ namespace FBI.MVC.View
       p_cb.DropDownList = true;
     }
 
-    public void LoadView(List<Account> p_accounts)
+    public void LoadView(SafeDictionary<string, Account> p_accounts)
     {
+      m_accountlist = p_accounts;
       m_dgv.RowsHierarchy.Visible = false;
       m_dgv.ColumnsHierarchy.Visible = false;
       m_dgv.Dock = DockStyle.Fill;
@@ -104,7 +106,7 @@ namespace FBI.MVC.View
       m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.CONSOLIDATION_OPTION, "consolidation option");
 
       uint l_index = 0;
-      foreach (Account l_account in p_accounts)
+      foreach (Account l_account in p_accounts.Values)
       {
         m_dgv.SetDimension(DGVDimension.ROW, l_index, "");
         m_dgv.FillField(l_index, (uint)Column.NAME, l_account.Name);
@@ -126,7 +128,13 @@ namespace FBI.MVC.View
 
     private void OnValidate(object sender, EventArgs e)
     {
-    
+      foreach (uint l_row in m_dgv.Rows.Keys)
+      {
+        Account l_account = m_accountlist[(string)m_dgv.GetCellValue(l_row, (uint)Column.NAME)];
+
+        ComboBoxEditor l_item = (ComboBoxEditor)m_dgv.GetCellEditor(l_row, (uint)Column.FORMULA_TYPE);
+        l_account.FormulaType = (Account.FormulaTypes)l_item.SelectedItem.Value;
+      }
     }
 
   }
