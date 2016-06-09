@@ -165,9 +165,9 @@ namespace FBI
       get { return AddinExpress.MSO.ADXAddinModule.CurrentInstance as AddinModule; }
     }
 
-    public Excel._Application ExcelApp
+    public Microsoft.Office.Interop.Excel._Application ExcelApp
     {
-      get { return (HostApplication as Excel._Application); }
+      get { return (HostApplication as Microsoft.Office.Interop.Excel._Application); }
     }
 
     #region Side panes accessors
@@ -571,7 +571,7 @@ namespace FBI
 
     private void m_accountSnapshot_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      AccountSnapshotController l_snapshot = new AccountSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
+      AccountEditSnapshotController l_snapshot = new AccountEditSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
 
       if (l_snapshot.LaunchSnapshot() == false)
         MessageBox.Show(l_snapshot.Error);
@@ -580,11 +580,16 @@ namespace FBI
 
     private void m_reportAccount_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      AccountSnapshotController l_snapshot = new AccountSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
+      AccountEditSnapshotController l_snapshot = new AccountEditSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
 
       if (l_snapshot.CreateReport() == false)
         MessageBox.Show(l_snapshot.Error);
       l_snapshot.Close();
+    }
+
+    private void m_snapshotCreateAccounts_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      AccountCreateSnapshotController l_snapshot = new AccountCreateSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
     }
   }
 }

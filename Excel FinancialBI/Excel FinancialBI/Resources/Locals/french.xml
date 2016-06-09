@@ -583,6 +583,7 @@
     <string name="snapshot">Snapshot</string>
     <string name="upload">Edition</string>
     <string name="next">Suivant</string>
+    <string name="export_selected_account">Créer les comptes sélectionnés</string>
   </category>
 
   <category name="entity">

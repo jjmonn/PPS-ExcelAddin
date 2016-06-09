@@ -10,15 +10,15 @@ namespace FBI.Excel
 {
   class WorksheetExtractor
   {
-    SafeDictionary<Type, List<KeyValuePair<string, object>>> m_extracted;
+    SafeDictionary<Type, SafeDictionary<string, object>> m_extracted;
     Worksheet m_worksheet;
 
-    public readonly SafeDictionary<Type, List<KeyValuePair<string, object>>> Extracted { get { return (m_extracted); } }
+    public SafeDictionary<Type, SafeDictionary<string, object>> Extracted { get { return (m_extracted); } }
 
     public WorksheetExtractor(Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
-      m_extracted = new SafeDictionary<Type, List<KeyValuePair<string, object>>>();
+      m_extracted = new SafeDictionary<Type, SafeDictionary<string, object>>();
     }
 
     public void Clear()
@@ -27,18 +27,37 @@ namespace FBI.Excel
     }
 
     public void Extract(Range p_range)
-    { 
+    {
       foreach (Range l_cell in p_range.Cells)
       {
-        object l_value = GetValue(l_cell.Value2);
+        Tuple<object, string> l_value = GetValue(l_cell.Value2, (string)l_cell.Text);
 
         if (l_value == null)
           continue;
-        m_extracted[l_value.GetType()].Add(new KeyValuePair<string, object>(l_cell.Address, l_value));
+
+        Type l_type = l_value.Item1.GetType();
+        if (l_type == typeof(double))
+        {
+          DateTime l_out;
+
+          if (DateTime.TryParse(l_value.Item2, out l_out))
+          {
+            InsertValue(typeof(DateTime), l_out, l_cell.Address);
+            continue;
+          }
+        }
+        InsertValue(l_type, l_value.Item1, l_cell.Address);
       }
     }
 
-    static dynamic GetValue(object p_param)
+    void InsertValue(Type p_type, object p_value, string p_address)
+    {
+      if (m_extracted[p_type] == null)
+        m_extracted[p_type] = new SafeDictionary<string, object>();
+      m_extracted[p_type][p_address] = p_value;
+    }
+
+    static Tuple<object, string> GetValue(object p_param, string p_text)
     {
       if (p_param == null)
         return (null);
@@ -50,12 +69,19 @@ namespace FBI.Excel
         Range l_range = AddinModule.CurrentInstance.ExcelApp.Range[l_address];
 
         if (l_range != null)
-          return (GetValue(l_range.Value));
+          return (GetValue(l_range.Value, (string)l_range.Text));
         else
           return (null);
       }
       else
-        return (p_param);
+        return (new Tuple<object, string>(p_param, p_text));
+    }
+
+    public List<object> GetExtractedValues<T>()
+    {
+      if (m_extracted[typeof(T)] == null)
+        return (new List<object>());
+      return (m_extracted[typeof(T)].Values.ToList());
     }
   }
 }

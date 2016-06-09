@@ -90,6 +90,12 @@ namespace FBI.MVC.Model.CRUD
     private Account(UInt32 p_id)
     {
       Id = p_id;
+      Type = AccountType.NUMBER;
+      ConsolidationOptionId = ConsolidationOptions.AGGREGATION;
+      ConversionOptionId = ConversionOptions.END_OF_PERIOD_RATE;
+      PeriodAggregationOptionId = PeriodAggregationOptions.SUM_OF_PERIODS;
+      Process = AccountProcess.FINANCIAL;
+      FormulaType = FormulaTypes.HARD_VALUE_INPUT;
     }
 
     public static CRUDEntity BuildAccount(ByteBuffer p_packet)
