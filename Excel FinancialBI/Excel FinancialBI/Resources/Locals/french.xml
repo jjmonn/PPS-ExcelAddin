@@ -170,9 +170,9 @@
     <string name="title_new_account">Nouveau Compte</string>
     <string name="msg_name_empty">Le nom du compte ne peut pas être vide.</string>
     <category name="error">
-      <string name="create">Impossible de créer le compte.</string>
-      <string name="update">Impossible de modifier le compte.</string>
-      <string name="delete">Impossible de supprimer le compte.</string>
+      <string name="create">Impossible de créer le compte</string>
+      <string name="update">Impossible de modifier le compte</string>
+      <string name="delete">Impossible de supprimer le compte</string>
       <string name="drop_failed">L'envoie des comptes vers Excel a échoué.</string>
     </category>
   </category>

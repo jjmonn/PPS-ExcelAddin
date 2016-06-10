@@ -42,5 +42,11 @@ namespace FBI.MVC.Controller
       m_propertiesView.LoadView(m_accountList);
       m_propertiesView.Show();
     }
+
+    public override void Close()
+    {
+      base.Close();
+      m_propertiesView.CloseView();
+    }
   }
 }

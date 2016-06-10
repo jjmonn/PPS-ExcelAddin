@@ -39,15 +39,14 @@
       // 
       this.tableLayoutPanel1.ColumnCount = 1;
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
       this.tableLayoutPanel1.Controls.Add(this.m_dgv, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.m_validateBT, 0, 1);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
       this.tableLayoutPanel1.RowCount = 2;
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.57426F));
-      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.425743F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
       this.tableLayoutPanel1.Size = new System.Drawing.Size(692, 404);
       this.tableLayoutPanel1.TabIndex = 2;
       // 
@@ -56,10 +55,10 @@
       this.m_validateBT.AllowAnimations = true;
       this.m_validateBT.BackColor = System.Drawing.Color.Transparent;
       this.m_validateBT.Dock = System.Windows.Forms.DockStyle.Right;
-      this.m_validateBT.Location = new System.Drawing.Point(494, 376);
+      this.m_validateBT.Location = new System.Drawing.Point(494, 377);
       this.m_validateBT.Name = "m_validateBT";
       this.m_validateBT.RoundedCornersMask = ((byte)(15));
-      this.m_validateBT.Size = new System.Drawing.Size(195, 25);
+      this.m_validateBT.Size = new System.Drawing.Size(195, 24);
       this.m_validateBT.TabIndex = 1;
       this.m_validateBT.Text = "vButton1";
       this.m_validateBT.UseVisualStyleBackColor = false;
@@ -122,7 +121,7 @@
       this.m_dgv.SelectionBorderEnabled = true;
       this.m_dgv.SelectionBorderWidth = 2;
       this.m_dgv.SelectionMode = VIBlend.WinForms.DataGridView.vDataGridView.SELECTION_MODE.FULL_ROW_SELECT;
-      this.m_dgv.Size = new System.Drawing.Size(686, 367);
+      this.m_dgv.Size = new System.Drawing.Size(686, 368);
       this.m_dgv.TabIndex = 0;
       this.m_dgv.Text = "vDataGridView1";
       this.m_dgv.ToolTipDuration = 5000;
