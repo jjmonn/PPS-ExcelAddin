@@ -102,7 +102,8 @@ namespace FBI.MVC.View
         m_controller.VersionId = m_areaController.VersionId;
         if (m_areaController.Entities.m_values == null || m_areaController.Entities.m_values.Count != 1)
           m_controller.EntityId = 0;
-        m_controller.EntityId = m_areaController.Entities.m_values.First().Value.Id;
+        else
+          m_controller.EntityId = m_areaController.Entities.m_values.First().Value.Id;
         if (m_areaController.IsValid() == false)
           return m_areaController.GetDimensionError();
         m_controller.EditedFactModel.RegisterEditedFacts(m_areaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
