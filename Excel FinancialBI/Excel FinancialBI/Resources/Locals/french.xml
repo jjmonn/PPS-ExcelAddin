@@ -519,7 +519,7 @@
       <string name="version_mismatch">Votre version de Financial BI est incompatible.</string>
       <string name="name_empty">Nom vide.</string>
       <string name="name_too_long">Nom trop long.</string>
-      <string name="invalid_name">Nom invalide.</string>
+      <string name="invalid_name">Nom invalide  (Ne peux pas contenir de , ou ").</string>
       <string name="no_version_selected">Aucune version n'est selectionnée.</string>
       <string name="server_disconnected">Connexion au serveur distant perdue. Veuillez-vous assurer que vos dernières actions ont bien été enregistrées.</string>
     </category>
