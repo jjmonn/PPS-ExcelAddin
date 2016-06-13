@@ -74,6 +74,7 @@ namespace FBI
       m_configurationGroup.Caption = Local.GetValue("general.configuration");
       m_accountSnapshotBT.Caption = Local.GetValue("general.account_snapshot");
       m_reportAccount.Caption = Local.GetValue("general.report_account");
+      m_snapshotCreateAccounts.Caption = Local.GetValue("general.account_snapshot_import");
     }
 
     void SuscribeEvents()

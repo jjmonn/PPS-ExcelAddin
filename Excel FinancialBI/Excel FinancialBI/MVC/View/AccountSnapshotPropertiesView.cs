@@ -42,12 +42,15 @@ namespace FBI.MVC.View
     TextBoxEditor m_textBoxEditor;
     GridCell m_selectedCell = null;
     bool m_checkingAccount = false;
+    FbiDataGridView m_dgv = new FbiDataGridView();
 
     public AccountSnapshotPropertiesView()
     {
       InitializeComponent();
       LoadLocals();
       LoadEditors();
+      m_dgvPanel.Controls.Add(m_dgv);
+      m_dgv.Dock = DockStyle.Fill;
     }
 
     public void SetController(IController p_controller)
@@ -58,6 +61,7 @@ namespace FBI.MVC.View
     void LoadLocals()
     {
       m_validateBT.Text = Local.GetValue("general.export_selected_account");
+      this.Text = Local.GetValue("general.account_snapshot_properties");
     }
 
     void LoadEditors()
@@ -107,17 +111,16 @@ namespace FBI.MVC.View
     {
       m_accountlist = p_accounts;
       m_dgv.RowsHierarchy.Visible = false;
-      m_dgv.ColumnsHierarchy.Visible = false;
       m_dgv.Dock = DockStyle.Fill;
 
       m_dgv.ClearColumns();
       m_dgv.ClearRows();
-      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.NAME, "name");
-      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.PARENT, "parent");
-      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.FORMULA_TYPE, "formula type");
-      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.ACCOUNT_TYPE, "account type");
-      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.CURRENCY_OPTION, "currency option");
-      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.CONSOLIDATION_OPTION, "consolidation option");
+      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.NAME, Local.GetValue("accounts.name"));
+      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.PARENT, Local.GetValue("accounts.parent"));
+      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.FORMULA_TYPE, Local.GetValue("accounts.formula_type"));
+      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.ACCOUNT_TYPE, Local.GetValue("accounts.type"));
+      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.CURRENCY_OPTION, Local.GetValue("accounts.currencies_conversion"));
+      m_dgv.SetDimension(DGVDimension.COLUMN, (uint)Column.CONSOLIDATION_OPTION, Local.GetValue("accounts.consolidation_option"));
 
       uint l_index = 0;
       foreach (Account l_account in p_accounts.Values)
@@ -204,6 +207,8 @@ namespace FBI.MVC.View
     {
       if ((uint)p_args.Cell.ColumnItem.ItemValue == (uint)Column.PARENT)
       {
+        if (p_args.Cell.RowItem.Enabled == false)
+          return;
         m_selectedCell = p_args.Cell;
         DisplayParents(true);
         vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId((string)p_args.Cell.Value));;
@@ -220,6 +225,8 @@ namespace FBI.MVC.View
       {
         Account l_account = m_accountlist[(string)m_dgv.GetCellValue(l_row, (uint)Column.NAME)];
 
+        if (l_account == null)
+          continue;
         l_account.FormulaType = GetSelectedValue<Account.FormulaTypes>(l_row, Column.FORMULA_TYPE);
         l_account.ConsolidationOptionId = GetSelectedValue<Account.ConsolidationOptions>(l_row, Column.CONSOLIDATION_OPTION);
         l_account.ConversionOptionId = GetSelectedValue<Account.ConversionOptions>(l_row, Column.CURRENCY_OPTION);
@@ -228,8 +235,9 @@ namespace FBI.MVC.View
         l_list.Add(l_account);
       }
 
-      if (!m_controller.CreateAccountList(l_list))
-        MessageBox.Show(m_controller.Error);
+      if (l_list.Count > 0)
+        if (!m_controller.CreateAccountList(l_list))
+          MessageBox.Show(m_controller.Error);
     }
 
     T GetSelectedValue<T>(uint p_row, Column p_column)
@@ -243,32 +251,51 @@ namespace FBI.MVC.View
 
     void DisplayParents(bool p_status)
     {
+      m_accountTV.Visible = (p_status);
       m_topPanel.ColumnCount = (p_status) ? 2 : 1;
     }
 
+    delegate void OnUpdateList_delegate(Network.ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<uint, Network.ErrorMessage>> p_updateResults);
     void OnUpdateList(Network.ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<uint, Network.ErrorMessage>> p_updateResults)
     {
-      if (p_status != Network.ErrorMessage.SUCCESS)
+      if (m_dgv.InvokeRequired)
       {
-        MessageBox.Show(Network.Error.GetMessage(p_status));
-        return;
+        OnUpdateList_delegate func = new OnUpdateList_delegate(OnUpdateList);
+        m_dgv.Invoke(func, p_status, p_updateResults);
       }
-      GridCellStyle l_red = GridTheme.GetDefaultTheme(m_dgv.VIBlendTheme).GridCellStyle;
-      GridCellStyle l_green = GridTheme.GetDefaultTheme(m_dgv.VIBlendTheme).GridCellStyle;
-
-      l_red.FillStyle = new FillStyleSolid(Color.Red);
-      l_green.FillStyle = new FillStyleSolid(Color.Green);
-      foreach (HierarchyItem l_row in m_dgv.RowsHierarchy.Items)
-        l_row.CellsStyle = l_red;
-      foreach (KeyValuePair<uint, Network.ErrorMessage> l_pair in p_updateResults[CRUDAction.CREATE])
+      else
       {
-        HierarchyItem l_row = FindRow(AccountModel.Instance.GetValueName(l_pair.Key));
+        if (p_status != Network.ErrorMessage.SUCCESS)
+        {
+          MessageBox.Show(Network.Error.GetMessage(p_status));
+          return;
+        }
+        GridCellStyle l_red = GridTheme.GetDefaultTheme(m_dgv.VIBlendTheme).GridCellStyle;
+        GridCellStyle l_green = GridTheme.GetDefaultTheme(m_dgv.VIBlendTheme).GridCellStyle;
 
-        if (l_row != null)
-          l_row.CellsStyle = l_green;
+        l_red.FillStyle = new FillStyleSolid(Color.Red);
+        l_green.FillStyle = new FillStyleSolid(Color.LightGreen);
+        foreach (HierarchyItem l_row in m_dgv.RowsHierarchy.Items)
+          if (l_row.Enabled)
+            l_row.CellsStyle = l_red;
+        if (p_updateResults[CRUDAction.CREATE] != null)
+          foreach (KeyValuePair<uint, Network.ErrorMessage> l_pair in p_updateResults[CRUDAction.CREATE])
+          {
+            string l_name = AccountModel.Instance.GetValueName(l_pair.Key);
+            HierarchyItem l_row = FindRow(l_name);
+
+            if (l_row != null)
+            {
+              foreach (GridCell l_cell in l_row.Cells)
+                l_cell.Editor = null;
+              l_row.Enabled = false;
+              l_row.CellsStyle = l_green;
+            }
+            m_accountlist.Remove(l_name);
+          }
+        m_dgv.Select();
+        m_dgv.Refresh();
       }
-      m_dgv.Select();
-      m_dgv.Refresh();
     }
 
     HierarchyItem FindRow(string p_name)

@@ -18,17 +18,21 @@ namespace FBI.MVC.View
   using Utils;
   using Model.CRUD;
   using Model;
+  using Forms;
 
   public partial class AccountSnapshotSelectionView : Form, IView
   {
     AccountCreateSnapshotController m_controller;
     List<object> m_values;
     CheckBoxEditor m_editor = new CheckBoxEditor();
+    FbiDataGridView m_dgv = new FbiDataGridView();
 
     public AccountSnapshotSelectionView(List<object> p_values)
     {
       InitializeComponent();
       m_values = p_values;
+      tableLayoutPanel1.Controls.Add(m_dgv);
+      m_dgv.SelectionMode = vDataGridView.SELECTION_MODE.FULL_ROW_SELECT;
     }
 
     public void SetController(IController p_controller)
@@ -39,6 +43,7 @@ namespace FBI.MVC.View
     void LoadLocals()
     {
       m_validateBT.Text = Local.GetValue("general.export_selected_account");
+      this.Text = Local.GetValue("general.account_snapshot_selection");
     }
 
     void SubscribeEvents()
@@ -82,7 +87,6 @@ namespace FBI.MVC.View
 
       m_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
       m_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
-      this.Size = new Size(m_dgv.ColumnsHierarchy.Width + ((this.Height < m_dgv.RowsHierarchy.Height) ? 28 : 0), this.Height);
     }
 
     private void OnValidate(object sender, EventArgs e)
