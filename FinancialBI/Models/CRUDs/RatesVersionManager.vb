@@ -14,7 +14,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Public Class RatesVersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
+Class RatesVersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Init"
 
@@ -57,12 +57,14 @@ Public Class RatesVersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCR
 
     End Sub
 
-    Friend Function GetMonthsList(ByRef versionId As UInt32) As List(Of Int32)
+    Friend Function GetMonthsList(ByRef versionId As UInt32) As Int32()
 
         Dim l_version As ExchangeRateVersion = GetValue(versionId)
-        If l_version Is Nothing Then Return New List(Of Int32)
-
-        Return Period.GetMonthlyPeriodsList(l_version.StartPeriod, l_version.NbPeriod, True)
+        If l_version Is Nothing Then
+            Dim l_emptyMonthsPeriodsArray As Int32() = {}
+            Return l_emptyMonthsPeriodsArray
+        End If
+        Return Period.GetMonthsList(l_version.StartPeriod, l_version.NbPeriod, CRUD.TimeConfig.MONTHS)
 
     End Function
 

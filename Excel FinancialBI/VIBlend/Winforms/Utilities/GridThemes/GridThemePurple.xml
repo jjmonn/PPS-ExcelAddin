@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridTheme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="GridTheme">
+	<!-- Hierarchy Item Styles -->
+	<HierarchyItemStyleNormal>
+		<FillStyle xsi:type="FillStyleGradientEx">
+			<Color1>ARGBColor;255;131;207;245</Color1>
+			<Color2>ARGBColor;255;111;187;228</Color2>
+			<Color3>ARGBColor;255;111;187;228</Color3>
+			<Color4>ARGBColor;255;149;223;237</Color4>
+			<GradientAngle>90</GradientAngle>
+			<GradientOffset>0.4</GradientOffset>
+			<GradientOffset2>0.5</GradientOffset2>
+		</FillStyle>
+		<FillStyleHighlight xsi:type="FillStyleGradientEx">
+			<Color1>ARGBColor;255;178;228;236</Color1>
+			<Color2>ARGBColor;255;91;167;208</Color2>
+			<Color3>ARGBColor;255;91;167;208</Color3>
+			<Color4>ARGBColor;255;119;203;217</Color4>
+			<GradientAngle>90</GradientAngle>
+			<GradientOffset>0.4</GradientOffset>
+			<GradientOffset2>0.5</GradientOffset2>
+		</FillStyleHighlight>
+		<BorderColor>ARGBColor;255;121;157;182</BorderColor>
+		<BorderColorHighlighted>ARGBColor;255;101;137;162</BorderColorHighlighted>
+		<TextColor>ARGBColor;255;0;0;0</TextColor>
+		<TextColorHighlighted>ARGBColor;255;0;0;0</TextColorHighlighted>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>10</Size>
+			<Style>Regular</Style>
+		</Font>
+	</HierarchyItemStyleNormal>
+	<HierarchyItemStyleSelected>
+		<FillStyle xsi:type="FillStyleGradientEx">
+			<Color1>ARGBColor;255;255;215;137</Color1>
+			<Color2>ARGBColor;255;255;158;77</Color2>
+			<Color3>ARGBColor;255;255;158;77</Color3>
+			<Color4>ARGBColor;255;255;198;117</Color4>
+			<GradientAngle>90</GradientAngle>
+			<GradientOffset>0.4</GradientOffset>
+			<GradientOffset2>0.6</GradientOffset2>
+		</FillStyle>
+		<FillStyleHighlight xsi:type="FillStyleGradientEx">
+			<Color1>ARGBColor;255;255;185;107</Color1>
+			<Color2>ARGBColor;255;255;128;47</Color2>
+			<Color3>ARGBColor;255;255;128;47</Color3>
+			<Color4>ARGBColor;255;255;168;87</Color4>
+			<GradientAngle>90</GradientAngle>
+			<GradientOffset>0.4</GradientOffset>
+			<GradientOffset2>0.6</GradientOffset2>
+		</FillStyleHighlight>
+		<BorderColor>ARGBColor;255;200;170;100</BorderColor>
+		<BorderColorHighlighted>ARGBColor;255;255;128;43</BorderColorHighlighted>
+		<TextColor>ARGBColor;255;0;0;0</TextColor>
+		<TextColorHighlighted>ARGBColor;255;0;0;0</TextColorHighlighted>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>10</Size>
+			<Style>Regular</Style>
+		</Font>
+	</HierarchyItemStyleSelected>
+	<HierarchyItemStyleDisabled>
+		<FillStyle xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;249;252;253</Color1>
+			<Color2>ARGBColor;255;211;219;233</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+		<FillStyleHighlight xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;223;226;228</Color1>
+			<Color2>ARGBColor;255;188;197;210</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyleHighlight>
+		<BorderColor>ARGBColor;255;168;178;181</BorderColor>
+		<BorderColorHighlighted>ARGBColor;255;203;180;253</BorderColorHighlighted>
+		<TextColor>ARGBColor;255;128;84;114</TextColor>
+		<TextColorHighlighted>ARGBColor;255;128;84;114</TextColorHighlighted>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>10</Size>
+			<Style>Regular</Style>
+		</Font>
+	</HierarchyItemStyleDisabled>
+
+	<!-- Hierarchy AttributeItem Styles -->
+	<HierarchyAttributeItemStyleNormal>
+		<FillStyle xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;218;219;230</Color1>
+			<Color2>ARGBColor;255;153;153;180</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+		<FillStyleHighlight xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;255;255;255</Color1>
+			<Color2>ARGBColor;255;139;146;173</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyleHighlight>
+		<BorderColor>ARGBColor;255;61;61;92</BorderColor>
+		<BorderColorHighlighted>ARGBColor;255;61;61;92</BorderColorHighlighted>
+		<TextColor>ARGBColor;255;0;0;0</TextColor>
+		<TextColorHighlighted>ARGBColor;255;0;0;0</TextColorHighlighted>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>10</Size>
+			<Style>Regular</Style>
+		</Font>
+	</HierarchyAttributeItemStyleNormal>
+	<HierarchyAttributeItemStyleSelected>
+		<FillStyle xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;255;255;255</Color1>
+			<Color2>ARGBColor;255;242;98;49</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+		<FillStyleHighlight xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;255;255;255</Color1>
+			<Color2>ARGBColor;255;252;108;59</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyleHighlight>
+		<BorderColor>ARGBColor;255;61;61;92</BorderColor>
+		<BorderColorHighlighted>ARGBColor;255;61;61;92</BorderColorHighlighted>
+		<TextColor>ARGBColor;255;0;0;0</TextColor>
+		<TextColorHighlighted>ARGBColor;255;0;0;0</TextColorHighlighted>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>10</Size>
+			<Style>Regular</Style>
+		</Font>
+	</HierarchyAttributeItemStyleSelected>
+	<HierarchyAttributeItemStyleDisabled>
+		<FillStyle xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;255;255;255</Color1>
+			<Color2>ARGBColor;255;242;98;49</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyle>
+		<FillStyleHighlight xsi:type="FillStyleGradient">
+			<Color1>ARGBColor;255;255;255;255</Color1>
+			<Color2>ARGBColor;255;252;108;59</Color2>
+			<LinearGradientMode>Vertical</LinearGradientMode>
+		</FillStyleHighlight>
+		<BorderColor>ARGBColor;255;240;71;15</BorderColor>
+		<BorderColorHighlighted>ARGBColor;255;240;71;15</BorderColorHighlighted>
+		<TextColor>ARGBColor;255;0;0;0</TextColor>
+		<TextColorHighlighted>ARGBColor;255;0;0;0</TextColorHighlighted>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>10</Size>
+			<Style>Regular</Style>
+		</Font>
+	</HierarchyAttributeItemStyleDisabled>
+
+
+	<!-- Grid Cell Styles -->
+	<GridCellStyle>
+		<FillStyle xsi:type="FillStyleSolid">
+			<Color>ARGBColor;255;255;255;255</Color>
+		</FillStyle>
+		<FillStyleSelected xsi:type="FillStyleSolid">
+			<Color>ARGBColor;255;219;253;255</Color>
+		</FillStyleSelected>
+		<BorderColor>ARGBColor;255;208;215;229</BorderColor>
+		<BorderColorSelected>ARGBColor;255;208;215;229</BorderColorSelected>
+		<TextColor>ARGBColor;255;0;0;0</TextColor>
+		<TextColorSelected>ARGBColor;255;0;0;0</TextColorSelected>
+		<Font>
+			<FontFamily>Microsoft Sans Serif</FontFamily>
+			<GraphicsUnit>Point</GraphicsUnit>
+			<Size>8.25</Size>
+			<Style>Regular</Style>
+		</Font>
+	</GridCellStyle>
+
+</GridTheme>

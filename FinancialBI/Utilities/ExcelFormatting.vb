@@ -27,7 +27,7 @@ Friend Class ExcelFormatting
 
     ' Identify the current range and 
     ' Param: REPORT_FORMAT_CODE or INPUT_FORMAT_CODE
-    Friend Shared Sub FormatExcelRange(ByRef first_range_cell As Excel.Range, _
+    Friend Shared Sub FormatFinancialExcelRange(ByRef first_range_cell As Excel.Range, _
                                         ByRef currency As Int32, _
                                         Optional ByRef startingDate As Date = Nothing)
 
@@ -37,6 +37,23 @@ Friend Class ExcelFormatting
         If l_lastCell IsNot Nothing Then
             l_Range = ws.Range(first_range_cell, l_lastCell)
             FormatExcelRangeAs(l_Range, currency, startingDate)
+        Else
+            'MsgBox() ?
+        End If
+
+    End Sub
+
+    ' Identify the current range and 
+    ' Param: REPORT_FORMAT_CODE or INPUT_FORMAT_CODE
+    Friend Shared Sub FormatRHExcelRange(ByRef first_range_cell As Excel.Range)
+
+        Dim ws As Excel.Worksheet = first_range_cell.Worksheet
+        Dim l_Range As Excel.Range
+        Dim l_lastCell As Excel.Range = GeneralUtilities.GetRealLastCell(ws)
+        If l_lastCell IsNot Nothing Then
+            l_Range = ws.Range(first_range_cell, l_lastCell)
+            ' to be reimplemented ?
+            '    FormatExcelRangeAs(l_Range, Currency, startingDate)
         Else
             'MsgBox() ?
         End If

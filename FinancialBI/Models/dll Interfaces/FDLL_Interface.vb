@@ -102,24 +102,26 @@ Friend Class FDLL_Interface
 
     Friend Function GetOutputMatrix(ByRef accounts_id_list) As Dictionary(Of String, Double())
 
-        Dim tmpDict As New SafeDictionary(Of String, Double())
-        For Each account_id In accounts_id_list
-            Dim tmpDataArray() As Double
-            ' Gérer la possibilité d'un plantage au niveau c++ !!
-            ' ne doit pas faire planter tout le programme si un account ne pas pas être retourné
-            ' -> si passage en réseau le tout sera retourné en array donc ok
-            ReturnAccountArrayFDll(tmpDataArray, objptr, account_id)
-            tmpDict.Add(account_id, tmpDataArray)
-        Next
-        Return tmpDict
+        'Dim tmpDict As New SafeDictionary(Of String, Double())
+        'For Each account_id In accounts_id_list
+        '    Dim tmpDataArray() As Double
+        '    ' Gérer la possibilité d'un plantage au niveau c++ !!
+        '    ' ne doit pas faire planter tout le programme si un account ne pas pas être retourné
+        '    ' -> si passage en réseau le tout sera retourné en array donc ok
+        '    'ReturnAccountArrayFDll(tmpDataArray, objptr, account_id)
+        '    'tmpDict.Add(account_id, tmpDataArray)
+        'Next
+        'Return tmpDict
+        Return Nothing
 
     End Function
 
     Friend Function GetAccountArray(ByRef account_id As String) As Double()
 
-        Dim tmpDataArray() As Double
-        ReturnAccountArrayFDll(tmpDataArray, objptr, account_id)
-        Return tmpDataArray
+        'Dim tmpDataArray() As Double
+        'ReturnAccountArrayFDll(tmpDataArray, objptr, account_id)
+        'Return tmpDataArray
+        Return Nothing
 
     End Function
 

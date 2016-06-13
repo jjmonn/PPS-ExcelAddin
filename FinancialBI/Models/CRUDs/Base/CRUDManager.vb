@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Public MustInherit Class CRUDManager
+MustInherit Class CRUDManager
 
 #Region "Instance variables"
 
@@ -159,7 +159,7 @@ Public MustInherit Class CRUDManager
             ReadAnswer(packet)
         Catch ex As Exception
             Diagnostics.Debug.WriteLine("ReadAnswer: " & ex.Message)
-            Diagnostics.Debug.WriteLine("ReadAnswer: " & ex.InnerException.Message)
+            If (ex.InnerException IsNot Nothing) Then Diagnostics.Debug.WriteLine("ReadAnswer: " & ex.InnerException.Message)
         End Try
     End Sub
 
@@ -168,7 +168,7 @@ Public MustInherit Class CRUDManager
             UpdateAnswer(packet)
         Catch ex As Exception
             Diagnostics.Debug.WriteLine("UpdateAnswer: " & ex.Message)
-            Diagnostics.Debug.WriteLine("UpdateAnswer: " & ex.InnerException.Message)
+            If (ex.InnerException IsNot Nothing) Then Diagnostics.Debug.WriteLine("UpdateAnswer: " & ex.InnerException.Message)
         End Try
     End Sub
 
@@ -177,7 +177,7 @@ Public MustInherit Class CRUDManager
             UpdateListAnswer(packet)
         Catch ex As Exception
             Diagnostics.Debug.WriteLine("UpdateListAnswer: " & ex.Message)
-            Diagnostics.Debug.WriteLine("UpdateListAnswer: " & ex.InnerException.Message)
+            If (ex.InnerException IsNot Nothing) Then Diagnostics.Debug.WriteLine("UpdateListAnswer: " & ex.InnerException.Message)
         End Try
     End Sub
 
@@ -186,7 +186,7 @@ Public MustInherit Class CRUDManager
             CreateAnswer(packet)
         Catch ex As Exception
             Diagnostics.Debug.WriteLine("CreateAnswer: " & ex.Message)
-            Diagnostics.Debug.WriteLine("CreateAnswer: " & ex.InnerException.Message)
+            If (ex.InnerException IsNot Nothing) Then Diagnostics.Debug.WriteLine("CreateAnswer: " & ex.InnerException.Message)
         End Try
     End Sub
 
@@ -195,7 +195,7 @@ Public MustInherit Class CRUDManager
             DeleteAnswer(packet)
         Catch ex As Exception
             Diagnostics.Debug.WriteLine("DeleteAnswer: " & ex.Message)
-            Diagnostics.Debug.WriteLine("DeleteAnswer: " & ex.InnerException.Message)
+            If (ex.InnerException IsNot Nothing) Then Diagnostics.Debug.WriteLine("DeleteAnswer: " & ex.InnerException.Message)
         End Try
     End Sub
 
@@ -204,7 +204,7 @@ Public MustInherit Class CRUDManager
             ListAnswer(packet)
         Catch ex As Exception
             Diagnostics.Debug.WriteLine("ListAnswer: " & ex.Message)
-            Diagnostics.Debug.WriteLine("ListAnswer: " & ex.InnerException.Message)
+            If (ex.InnerException IsNot Nothing) Then Diagnostics.Debug.WriteLine("ListAnswer: " & ex.InnerException.Message)
         End Try
     End Sub
 

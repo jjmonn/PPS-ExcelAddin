@@ -44,6 +44,7 @@ Module Data_Tables_Constants
 
 #Region "Users"
     Friend Const GROUP_ID_VARIABLE As String = "group_id"
+    Friend Const ENTITIES_VARIABLE As String = "entities"
     Friend Const PASSWORD_VARIABLE As String = "password"
     Friend Const RIGHTS_VARIABLE As String = "rights"
 #End Region
@@ -75,6 +76,7 @@ Module Data_Tables_Constants
     Friend Const FACTLOG_CLIENT_ID_VARIABLE = "factlog_client_id"
     Friend Const FACTLOG_PRODUCT_ID_VARIABLE = "factlog_product_id"
     Friend Const FACTLOG_ADJUSTMENT_ID_VARIABLE = "factlog_adjustment_id"
+    Friend Const FACTLOG_EMPLOYEE_ID_VARIABLE = "factlog_employee_id"
     Friend Const FACTLOG_VALUE_VARIABLE = "factlog_value"
 
 #End Region
@@ -325,15 +327,16 @@ Module Data_Tables_Constants
 
 #Region "Data Tables"
 
-    Friend Const ENTITY_ID_VARIABLE = "entity_id"
-    Friend Const ACCOUNT_ID_VARIABLE = "account_id"
-    Friend Const PERIOD_VARIABLE = "period"
-    Friend Const VERSION_ID_VARIABLE = "version_id"
-    Friend Const CLIENT_ID_VARIABLE = "client_id"
-    Friend Const PRODUCT_ID_VARIABLE = "product_id"
-    Friend Const ADJUSTMENT_ID_VARIABLE = "adjustment_id"
-    Friend Const VALUE_VARIABLE = "value"
-    Friend Const GLOBAL_FACT_ID_VARIABLE = "global_fact_id"
+    'Friend Const ENTITY_ID_VARIABLE = "entity_id"
+    'Friend Const ACCOUNT_ID_VARIABLE = "account_id"
+    'Friend Const PERIOD_VARIABLE = "period"
+    'Friend Const VERSION_ID_VARIABLE = "version_id"
+    'Friend Const CLIENT_ID_VARIABLE = "client_id"
+    'Friend Const PRODUCT_ID_VARIABLE = "product_id"
+    'Friend Const ADJUSTMENT_ID_VARIABLE = "adjustment_id"
+    'Friend Const EMPLOYEE_ID_VARIABLE = "adjustment_id"
+    'Friend Const VALUE_VARIABLE = "value"
+    'Friend Const GLOBAL_FACT_ID_VARIABLE = "global_fact_id"
 
 #End Region
 

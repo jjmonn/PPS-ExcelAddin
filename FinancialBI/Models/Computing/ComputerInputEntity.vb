@@ -14,7 +14,7 @@ Imports CRUD
 '
 ' Author: Julien Monnereau Julien
 ' Created: 20/07/2015
-' Last modified: 05/11/2015
+' Last modified: 10/01/2016
 
 
 Public Class ComputerInputEntity
@@ -79,11 +79,15 @@ Public Class ComputerInputEntity
                 Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_SOURCED_COMPUTE, UShort))
                 Dim requestId As Int32 = l_packet.AssignRequestId()
 
-                l_packet.WriteUint32(p_versionId)                          ' version_id
+                l_packet.WriteUint32(Account.AccountProcess.FINANCIAL)
+                l_packet.WriteUint32(p_versionId)                                               ' version_id
                 l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
                 l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
-                l_packet.WriteUint32(l_entityId)                           ' entity_id
-                l_packet.WriteUint32(l_entityCurrency.CurrencyId)                         ' currency_id
+                l_packet.WriteUint32(l_entityId)                                                ' entity_id
+                l_packet.WriteUint32(l_entityCurrency.CurrencyId)                               ' currency_id
+                l_packet.WriteUint32(l_version.StartPeriod)
+                l_packet.WriteUint32(l_version.NbPeriod)
+                l_packet.WriteUint32(0) ' nb accounts
 
                 l_packet.WriteUint32(p_entitiesIdInputsValues(l_entityId).Length)
                 For i = 0 To p_entitiesIdInputsValues(l_entityId).Length - 1
@@ -96,7 +100,7 @@ Public Class ComputerInputEntity
 
             End If
         Next
-
+        Return True
     End Function
 
     ' Server Response
@@ -107,12 +111,12 @@ Public Class ComputerInputEntity
 
             Dim version As Version = GlobalVariables.Versions.GetValue(m_versionId)
             If version Is Nothing Then
-                MsgBox("Compute returned a result for an invalid version.")
+                MsgBox(Local.GetValue("CUI.msg_return_invalid_version"))
                 RaiseEvent ComputationAnswered(False)
                 Exit Sub
             End If
 
-            m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(m_versionId)
+            m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(m_versionId, Nothing)
             Select Case version.TimeConfiguration
                 Case CRUD.TimeConfig.YEARS : m_periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
                 Case CRUD.TimeConfig.MONTHS : m_periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER
@@ -136,6 +140,12 @@ Public Class ComputerInputEntity
                 NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, AddressOf SMSG_SOURCED_COMPUTE_RESULT)
             End If
         Else
+            Select Case (CType(packet.GetError(), ErrorMessage))
+                Case ErrorMessage.SYSTEM
+                    MsgBox(Local.GetValue("CUI.msg_error_system"))
+                Case ErrorMessage.PERMISSION_DENIED
+                    MsgBox(Local.GetValue("CUI.msg_permission_denied"))
+            End Select
             RaiseEvent ComputationAnswered(False)
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, AddressOf SMSG_SOURCED_COMPUTE_RESULT)
         End If
@@ -172,5 +182,12 @@ Public Class ComputerInputEntity
 
     End Sub
 
+    Friend Sub Flush()
+
+        If m_dataMap IsNot Nothing Then m_dataMap.Clear()
+        If m_entitiesIdComputationQueue IsNot Nothing Then m_entitiesIdComputationQueue.Clear()
+        If m_periodsTokenDict IsNot Nothing Then m_periodsTokenDict.Clear()
+
+    End Sub
 
 End Class

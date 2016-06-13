@@ -22,6 +22,7 @@ Friend Class AxisFiltersView
     Friend m_filtersFiltersValuesTV As New vTreeView
     Private m_filtersNode As vTreeNode
     Private m_axisId As Int32
+    Private m_rightMgr As New RightManager
 
 #End Region
 
@@ -48,19 +49,25 @@ Friend Class AxisFiltersView
         m_filtersFiltersValuesTV.ContextMenuStrip = RCM_TV
         VTreeViewUtil.InitTVFormat(m_filtersFiltersValuesTV)
 
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            CategoriesToolStripMenuItem.Enabled = False
-            RenameRCM.Enabled = False
-            DeleteRCM.Enabled = False
-            AddValueRCM.Enabled = False
-            EditStructureToolStripMenuItem.Enabled = False
-        End If
-
+        DefineUIPermissions()
+        DesactivateUnallowed()
         MultilanguageSetup()
 
         AddHandler m_filtersFiltersValuesTV.KeyDown, AddressOf FiltersFiltersValuesTV_KeyDown
         AddHandler m_filtersFiltersValuesTV.AfterSelect, AddressOf TV_AfterSelect
 
+    End Sub
+
+    Private Sub DefineUIPermissions()
+        m_rightMgr(CategoriesToolStripMenuItem) = Group.Permission.EDIT_AXIS
+        m_rightMgr(RenameRCM) = Group.Permission.EDIT_AXIS
+        m_rightMgr(DeleteRCM) = Group.Permission.DELETE_AXIS
+        m_rightMgr(AddValueRCM) = Group.Permission.CREATE_AXIS
+        m_rightMgr(EditStructureToolStripMenuItem) = Group.Permission.EDIT_AXIS
+    End Sub
+
+    Private Sub DesactivateUnallowed()
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub MultilanguageSetup()
@@ -93,7 +100,7 @@ Friend Class AxisFiltersView
     Delegate Sub UpdateFiltersValuesTV_Delegate()
     Friend Sub UpdateFiltersValuesTV()
 
-        If InvokeRequired Then
+        If m_filtersFiltersValuesTV.InvokeRequired Then
             Dim MyDelegate As New UpdateFiltersValuesTV_Delegate(AddressOf UpdateFiltersValuesTV)
             Me.Invoke(MyDelegate, New Object() {})
         Else
@@ -107,7 +114,7 @@ Friend Class AxisFiltersView
 
     Delegate Sub SetFilter_Delegate(ByRef p_ht As Filter)
     Friend Sub SetFilter(ByRef p_ht As Filter)
-        If InvokeRequired Then
+        If m_filtersFiltersValuesTV.InvokeRequired Then
             Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
             Me.Invoke(MyDelegate, New Object() {p_ht})
         Else

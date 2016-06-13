@@ -28,6 +28,7 @@ Friend Class AccountsView
 
 #Region "Instance Variables"
 
+    Private m_rightMgr As New RightManager
     ' Objects
     Friend m_controller As AccountsController
     Friend m_accountTV As vTreeView
@@ -35,10 +36,10 @@ Friend Class AccountsView
     Friend m_currentNode As vTreeNode
 
     ' Variables
-    Private m_formulasTypesIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private m_formatsIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private m_formulasTypesIdItemDict As New SafeDictionary(Of Int32, ListItem)
+    Private m_formatsIdItemDict As New SafeDictionary(Of Int32, ListItem)
     Private m_currenciesConversionIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private m_consoOptionIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private m_consoOptionIdItemDict As New SafeDictionary(Of Int32, ListItem)
     Private m_isRevertingFTypeFlag As Boolean = False
     Private m_isDisplayingAccountFlag As Boolean
     Private m_dragAndDropFlag As Boolean = False
@@ -69,7 +70,11 @@ Friend Class AccountsView
         AccountsTVInit()
         GlobalFactsTVInit()
         ComboBoxesInit()
-        SetAccountUIState(False, GlobalVariables.Users.CurrentUserIsAdmin())
+
+        DefineUIPermissions()
+        DesactivateUnallowed()
+        SetAccountUIState(False)
+
         MultilangueSetup()
         SetFormulaEditionState(False)
 
@@ -102,10 +107,27 @@ Friend Class AccountsView
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_selected_hierarchy_to_excel")
         Me.HelpToolStripMenuItem.Text = Local.GetValue("general.help")
 
-
     End Sub
 
-    Private Sub SetAccountUIState(ByRef p_uiState As Boolean, ByRef p_rightClickState As Boolean)
+    Private Sub DefineUIPermissions()
+        m_rightMgr(SaveDescriptionBT) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(Name_TB) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(FormulaTypeComboBox) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(TypeComboBox) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(CurrencyConversionComboBox) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(m_descriptionTextBox) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(ConsolidationOptionComboBox) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(AddSubAccountToolStripMenuItem) = Group.Permission.CREATE_ACCOUNT
+        m_rightMgr(AddCategoryToolStripMenuItem) = Group.Permission.CREATE_ACCOUNT
+        m_rightMgr(DeleteAccountToolStripMenuItem) = Group.Permission.DELETE_ACCOUNT
+        m_rightMgr(DeleteAccountToolStripMenuItem1) = Group.Permission.DELETE_ACCOUNT
+        m_rightMgr(m_validateFormulaButton) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(m_formulaEditionButton) = Group.Permission.EDIT_ACCOUNT
+        m_rightMgr(CreateANewAccountToolStripMenuItem) = Group.Permission.CREATE_ACCOUNT
+        m_rightMgr(CreateANewCategoryToolStripMenuItem) = Group.Permission.CREATE_ACCOUNT
+    End Sub
+
+    Private Sub SetAccountUIState(ByRef p_uiState As Boolean)
         SaveDescriptionBT.Enabled = p_uiState
         Name_TB.Enabled = p_uiState
         FormulaTypeComboBox.Enabled = p_uiState
@@ -113,18 +135,12 @@ Friend Class AccountsView
         CurrencyConversionComboBox.Enabled = p_uiState
         m_descriptionTextBox.Enabled = p_uiState
         ConsolidationOptionComboBox.Enabled = p_uiState
-        AddSubAccountToolStripMenuItem.Enabled = p_rightClickState
-        AddCategoryToolStripMenuItem.Enabled = p_rightClickState
-        DeleteAccountToolStripMenuItem.Enabled = p_rightClickState
-        DeleteAccountToolStripMenuItem1.Enabled = p_rightClickState
         m_validateFormulaButton.Enabled = p_uiState
         m_formulaEditionButton.Enabled = p_uiState
-        CreateANewAccountToolStripMenuItem.Enabled = p_rightClickState
-        CreateANewCategoryToolStripMenuItem.Enabled = p_rightClickState
     End Sub
 
     Private Sub DesactivateUnallowed()
-        SetAccountUIState(GlobalVariables.Users.CurrentUserIsAdmin(), GlobalVariables.Users.CurrentUserIsAdmin())
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub AccountsTVInit()
@@ -405,16 +421,18 @@ TokensCheck:
             Exit Sub
         Else
             Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + Local.GetValue("accounts_edition.msg_account_deletion2"), _
-                                               Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
-                                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                                                     Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
+                                                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
                     m_isEditingFormulaFlag = False
                     Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
                     m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
+                    SetFormulaEditionState(False)
                 End If
             Else
                 m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Value)
+                SetFormulaEditionState(False)
             End If
         End If
 
@@ -519,8 +537,8 @@ TokensCheck:
         AndAlso m_isDisplayingAccountFlag = False Then
             m_currentNode = e.Node
             If m_currentNode IsNot Nothing Then
-                DesactivateUnallowed()
                 DisplayAttributes()
+                DesactivateUnallowed()
             End If
         Else
             m_accountTV.Capture = False

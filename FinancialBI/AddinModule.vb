@@ -17,22 +17,20 @@ Public Class AddinModule
 
 #Region "instance Variables"
 
-
     Friend WithEvents ComputeGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents DataUploadGroup As AddinExpress.MSO.ADXRibbonGroup
-    Friend WithEvents MaintTab As AddinExpress.MSO.ADXRibbonTab
-    Friend WithEvents WSUplaodBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialBIMainRibbon As AddinExpress.MSO.ADXRibbonTab
+    Friend WithEvents m_directorySnapshotButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ControlingUI2BT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConfigurationGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents adxExcelEvents As AddinExpress.MSO.ADXExcelAppEvents
     Friend WithEvents UploadBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents UplodBT1 As AddinExpress.MSO.ADXRibbonMenu
-    Friend WithEvents WBUplaodBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SettingsBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents BreakLinksBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConnectionGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents LightsImageList As System.Windows.Forms.ImageList
-    Friend WithEvents VersionBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_MainTabversionButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents Addin_Version_label As AddinExpress.MSO.ADXRibbonLabel
     Friend WithEvents ConnectionIcons As System.Windows.Forms.ImageList
     Friend WithEvents ConnectionBT As AddinExpress.MSO.ADXRibbonButton
@@ -41,18 +39,18 @@ Public Class AddinModule
     Friend WithEvents EditSelectionGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents ShowReportBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SubmissionnGroup As AddinExpress.MSO.ADXRibbonGroup
-    Friend WithEvents SubmitBT2 As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialSubmissionSubmitButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents StateSelectionGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents CurrentEntityTB As AddinExpress.MSO.ADXRibbonEditBox
     Friend WithEvents AdxRibbonGroup9 As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents CloseBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents VersionTBSubRibbon As AddinExpress.MSO.ADXRibbonEditBox
-    Friend WithEvents CancelBT2 As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialSubmissionCancelButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SubmissionRibbonIL As System.Windows.Forms.ImageList
-    Friend WithEvents SubmissionStatus As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialSubmissionSatusButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents CurrentLinkedWSBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonSeparator6 As AddinExpress.MSO.ADXRibbonSeparator
-    Friend WithEvents AutoComitBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialSubmissionAutoCommitButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents EntCurrTB As AddinExpress.MSO.ADXRibbonEditBox
     Friend WithEvents RefreshInputsBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents entityEditBT As AddinExpress.MSO.ADXRibbonButton
@@ -152,20 +150,21 @@ Public Class AddinModule
 #Region "My Instance Variables"
 
     Friend m_ribbon As IRibbonUI
-    Friend m_GRSControlersDictionary As New SafeDictionary(Of Excel.Worksheet, GeneralSubmissionControler)
+    Friend m_reportUploadControlersDictionary As New SafeDictionary(Of String, ReportUploadControler)
     Private m_worksheetNamesObjectDict As New SafeDictionary(Of String, Excel.Worksheet)
     Public setUpFlag As Boolean
     Public ppsbi_refresh_flag As Boolean = True
     Public m_ppsbiController As FBIFunctionController
-    Private m_currentGeneralSubmissionControler As GeneralSubmissionControler
+    Private m_currentReportUploadControler As ReportUploadControler
     Private Const EXCEL_MIN_VERSION As Double = 9
+    Private MyEventClass As ExcelWorksheetEventsClass1
 
 #End Region
 
 
 #Region "Task Panes"
 
-    Private ReadOnly Property InputReportTaskPane() As InputSelectionPane
+    Private ReadOnly Property InputReportTaskPane() As ReportUploadEntitySelectionPane
 
         Get
             Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
@@ -175,7 +174,7 @@ Public Class AddinModule
                 taskPaneInstance = InputSelectionTaskPaneItem.CreateTaskPaneInstance()
             End If
 
-            Return TryCast(taskPaneInstance, InputSelectionPane)
+            Return TryCast(taskPaneInstance, ReportUploadEntitySelectionPane)
         End Get
     End Property
 
@@ -191,6 +190,18 @@ Public Class AddinModule
         End Get
     End Property
 
+    Private ReadOnly Property ProcessSelectionTaskPane() As ProcessSelectionTaskPane
+        Get
+            Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
+            taskPaneInstance = ProcessSelectionTaskPaneItem.TaskPaneInstance
+
+            If taskPaneInstance Is Nothing Then
+                taskPaneInstance = ProcessSelectionTaskPaneItem.CreateTaskPaneInstance()
+            End If
+            Return TryCast(taskPaneInstance, ProcessSelectionTaskPane)
+        End Get
+    End Property
+
     Friend ReadOnly Property EntitySelectionTaskPane As EntitySelectionTP
         Get
             Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
@@ -203,7 +214,7 @@ Public Class AddinModule
         End Get
     End Property
 
-    Friend ReadOnly Property ReportUploadTaskPane As ReportUploadSidePane
+    Friend ReadOnly Property ReportUploadTaskPane As ReportUploadAccountInfoSidePane
         Get
             Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
             taskPaneInstance = ReportUploadTaskPaneItem.TaskPaneInstance
@@ -211,7 +222,7 @@ Public Class AddinModule
             If taskPaneInstance Is Nothing Then
                 taskPaneInstance = ReportUploadTaskPaneItem.CreateTaskPaneInstance()
             End If
-            Return TryCast(taskPaneInstance, ReportUploadSidePane)
+            Return TryCast(taskPaneInstance, ReportUploadAccountInfoSidePane)
         End Get
     End Property
 
@@ -234,7 +245,6 @@ Public Class AddinModule
 
 #Region "Initialize"
 
-
     Public Shared Shadows ReadOnly Property CurrentInstance() As AddinModule
         Get
             Return CType(AddinExpress.MSO.ADXAddinModule.CurrentInstance, AddinModule)
@@ -253,24 +263,26 @@ Public Class AddinModule
         End Get
     End Property
 
-
     Private Sub AddinModule_AddinInitialize(sender As Object, e As EventArgs) Handles MyBase.AddinInitialize
-
 
         GlobalVariables.APPS = Me.HostApplication
 
         ' Main Ribbon Initialize
         GlobalVariables.VersionSelectionTaskPane = Me.VersionSelectionTaskPane
-        GlobalVariables.SubmissionStatusButton = SubmissionStatus
-        GlobalVariables.Connection_Toggle_Button = Me.ConnectionBT
-        GlobalVariables.Version_Button = Me.VersionBT
+        GlobalVariables.ProcessSelectionTaskPane = Me.ProcessSelectionTaskPane
+        GlobalVariables.InputReportTaskPane = Me.InputReportTaskPane
+        GlobalVariables.SubmissionStatusButton = m_financialSubmissionSatusButton
+        GlobalVariables.ConnectionToggleButton = Me.ConnectionBT
+        GlobalVariables.VersionButton = Me.m_MainTabversionButton
+        GlobalVariables.ProcessButton = Me.m_mainTabProcessButton
         ConnectionBT.Image = 0
 
         ' Submission Ribbon Initialize
         m_submissionWorksheetCombobox.Items.RemoveAt(0)
         SubmissionModeRibbon.Visible = False
+        m_PDCSubmissionRibbon.Visible = False
         GlobalVariables.s_reportUploadSidePane = Me.ReportUploadTaskPane
-        GlobalVariables.Version_label_Sub_Ribbon = VersionTBSubRibbon
+        GlobalVariables.VersionlabelSubRibbon = VersionTBSubRibbon
         GlobalVariables.ClientsIDDropDown = ClientsDropDown
         GlobalVariables.ProductsIDDropDown = ProductsDropDown
         GlobalVariables.AdjustmentIDDropDown = AdjustmentDropDown
@@ -287,19 +299,26 @@ Public Class AddinModule
         GlobalVariables.GlobalFactsVersions = New GlobalFactVersionManager
         GlobalVariables.Users = New UserManager
         GlobalVariables.Groups = New GroupManager
-        GlobalVariables.GroupAllowedEntities = New GroupAllowedEntityManager
+        GlobalVariables.UserAllowedEntities = New UserAllowedEntityManager
         GlobalVariables.FModelingsAccounts = New FModelingAccountManager
         GlobalVariables.AxisElems = New AxisElemManager
         GlobalVariables.AxisFilters = New AxisFilterManager
         GlobalVariables.EntityCurrencies = New EntityCurrencyManager
-        GlobalVariables.EntityDistribution = New EntityDistributionManager
+        GlobalVariables.EntitiesDistributions = New EntityDistributionManager
+        GlobalVariables.AxisOwners = New AxisOwnerManager
+        GlobalVariables.FactTags = New FactTagManager
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New FBIFunctionController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
 
-        Local.LoadLocalFile(My.Resources.english)
+        Select Case My.Settings.language
+            Case 0 : Local.LoadLocalFile(My.Resources.english)
+            Case 1 : Local.LoadLocalFile(My.Resources.french)
+            Case Else : Local.LoadLocalFile(My.Resources.english)
+        End Select
+
 
         If (Me.IsNetworkDeployed().ToString()) Then
             Me.CheckForUpdates()
@@ -311,7 +330,8 @@ Public Class AddinModule
     Friend Shared Sub SetMainMenuButtonState(ByRef p_state As Boolean)
         Dim Addin As AddinModule = GlobalVariables.Addin
 
-        Addin.VersionBT.Enabled = p_state
+        Addin.m_MainTabversionButton.Enabled = p_state
+        Addin.m_mainTabProcessButton.Enabled = p_state
         Addin.UploadBT.Enabled = p_state
         Addin.EditionMainRibbonBT.Enabled = p_state
         Addin.RefreshBT.Enabled = p_state
@@ -320,6 +340,7 @@ Public Class AddinModule
         Addin.financialModelingBT.Enabled = p_state
         Addin.FormatButton.Enabled = p_state
         Addin.ConfigurationRibbonBT.Enabled = p_state
+        Addin.m_submissionFolloupButton.Enabled = p_state
 
     End Sub
 
@@ -334,8 +355,14 @@ Public Class AddinModule
 
     ' Returns the entities View variable
     Public Function GetVersionButton() As ADXRibbonButton
-        Return GlobalVariables.Version_Button
+        Return GlobalVariables.VersionButton
     End Function
+
+    Public ReadOnly Property ReportUploadControlersDictionary() As Dictionary(Of String, ReportUploadControler)
+        Get
+            Return m_reportUploadControlersDictionary
+        End Get
+    End Property
 
 
 #End Region
@@ -353,7 +380,7 @@ Public Class AddinModule
 
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
 
-            GlobalVariables.ConnectionPaneVisible = True
+            GlobalVariables.ConnectionTaskPaneVisible = True
             Me.ConnectionTaskPane.Init(Me)
             Me.ConnectionTaskPane.Show()
 
@@ -366,7 +393,7 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub VersionBT_OnClick_1(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT.OnClick
+    Private Sub VersionBT_OnClick_1(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_MainTabversionButton.OnClick
 
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
@@ -376,25 +403,41 @@ Public Class AddinModule
 
     End Sub
 
+    Private Sub m_mainTabProcessButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_mainTabProcessButton.OnClick
+
+        If GlobalVariables.AuthenticationFlag = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
+        Else
+            LaunchProcessSelection()
+        End If
+
+    End Sub
 
 #End Region
 
 #Region "Financial BI Data Acquisition"
 
-    Private Sub snapshotBT_onclick(sender As System.Object,
+    Private Sub SnapshotBT_onclick(sender As System.Object,
                                  control As AddinExpress.MSO.IRibbonControl,
                                  pressed As System.Boolean) Handles UploadBT.OnClick
 
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                m_currentGeneralSubmissionControler = m_GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
-                m_currentGeneralSubmissionControler.UpdateRibbon()
+            If m_reportUploadControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet.name) Then
+                m_currentReportUploadControler = m_reportUploadControlersDictionary(GlobalVariables.APPS.ActiveSheet.name)
+                m_currentReportUploadControler.UpdateRibbon()
                 SubmissionModeRibbon.Visible = True
             Else
-                ' -> choix adjustment, client, product
-                AssociateGRSControler(False)
+                Select Case My.Settings.processId
+                    Case Account.AccountProcess.FINANCIAL
+                        ' -> choix adjustment, client, product
+                        AssociateReportUploadControler(False, Nothing, "")
+
+                    Case Account.AccountProcess.RH
+                        Dim l_periodsRangeSelectionUI As New SnapshotPeriodRangeSelectionUI(Me, My.Settings.version_id)
+                        l_periodsRangeSelectionUI.Show()
+                End Select
             End If
         End If
 
@@ -402,18 +445,14 @@ Public Class AddinModule
 
     Private Sub WSUploadBT_onclick(sender As System.Object,
                                   control As AddinExpress.MSO.IRibbonControl,
-                                  pressed As System.Boolean) Handles WSUplaodBT.OnClick
+                                  pressed As System.Boolean) Handles m_directorySnapshotButton.OnClick
 
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            '    Dim DSDUI As New SubmissionControlUI
-            '    DSDUI.Show()
+            Dim l_DirectorySnapshotUI As New DirectorySnapshotUI()
+            l_DirectorySnapshotUI.Show()
         End If
-
-    End Sub
-
-    Private Sub CurrentLinkedWSBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CurrentLinkedWSBT.OnClick
 
     End Sub
 
@@ -423,7 +462,7 @@ Public Class AddinModule
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
-                GlobalVariables.InputSelectionPaneVisible = True
+                GlobalVariables.InputSelectionTaskPaneVisible = True
                 Me.InputReportTaskPane.InitializeSelectionChoices(Me)
                 Me.InputReportTaskPane.Show()
             Else
@@ -437,6 +476,17 @@ Public Class AddinModule
 
 #Region "Download Data"
 
+    Private Sub m_submissionFolloupButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_submissionFolloupButton.OnClick
+
+        If GlobalVariables.AuthenticationFlag = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
+        Else
+            Dim l_submissionsFollowUpUI As New SubmissionsFollowUpView
+            l_submissionsFollowUpUI.Show()
+        End If
+
+    End Sub
+
     Private Sub ControllingUI2BT_onclick(sender As System.Object,
                                         control As AddinExpress.MSO.IRibbonControl,
                                         pressed As System.Boolean) Handles ControlingUI2BT.OnClick
@@ -444,12 +494,11 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            Dim CONTROLLING As New ControllingUI_2
+            Dim CONTROLLING As New ControllingUI_2()
             CONTROLLING.Show()
         End If
 
     End Sub
-
 
 #Region "Refresh"
 
@@ -469,7 +518,7 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If Not m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
+            If Not m_reportUploadControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
                 Dim l_refreshWorksheetModule As New WorksheetRefreshController
                 Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
                 l_refreshWorksheetModule.RefreshWorksheet(GlobalVariables.APPS.Selection, Me)
@@ -500,7 +549,6 @@ Public Class AddinModule
     End Sub
 
 #End Region
-
 
     Private Sub PPSBIFuncBT_onclick(sender As System.Object,
                                     control As AddinExpress.MSO.IRibbonControl,
@@ -582,7 +630,7 @@ Public Class AddinModule
             If Not l_currency Is Nothing Then
                 l_currencyId = l_currency.Id
             End If
-            ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), l_currencyId, startDate)
+            ExcelFormatting.FormatFinancialExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), l_currencyId, startDate)
         End If
 
     End Sub
@@ -610,7 +658,7 @@ Public Class AddinModule
 
     Private Sub HighlightBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
-        m_currentGeneralSubmissionControler.HighlightItemsAndDataRegions()
+        m_currentReportUploadControler.HighlightItemsAndDataRegions()
 
     End Sub
 
@@ -624,7 +672,7 @@ Public Class AddinModule
 
     Private Sub EditRangesMenuBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles EditRangesMenuBT.OnClick
 
-        m_currentGeneralSubmissionControler.RangeEdition()
+        m_currentReportUploadControler.RangeEdition()
 
     End Sub
 
@@ -644,32 +692,24 @@ Public Class AddinModule
 
 #Region "Submission"
 
-    Private Sub SubmitBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmitBT2.OnClick
-
-        m_currentGeneralSubmissionControler.DataSubmission()
-
+    Private Sub SubmitBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_financialSubmissionSubmitButton.OnClick
+        m_currentReportUploadControler.DataSubmission()
     End Sub
 
-    Private Sub SubmissionStatus_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmissionStatus.OnClick
-
-        m_currentGeneralSubmissionControler.DisplayUploadStatusAndErrorsUI()
-
+    Private Sub SubmissionStatus_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_financialSubmissionSatusButton.OnClick
+        m_currentReportUploadControler.DisplayUploadStatusAndErrorsUI()
     End Sub
 
-    Private Sub CancelBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CancelBT2.OnClick
-
+    Private Sub CancelBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_financialSubmissionCancelButton.OnClick
         ' allow to come back a few steps before (cf log ?)
-
     End Sub
 
-    Private Sub AutoCommitBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AutoComitBT.OnClick
-
-        If m_currentGeneralSubmissionControler.m_autoCommitFlag = False Then
-            m_currentGeneralSubmissionControler.m_autoCommitFlag = True
+    Private Sub AutoCommitBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_financialSubmissionAutoCommitButton.OnClick
+        If m_currentReportUploadControler.m_autoCommitFlag = False Then
+            m_currentReportUploadControler.m_autoCommitFlag = True
         Else
-            m_currentGeneralSubmissionControler.m_autoCommitFlag = False
+            m_currentReportUploadControler.m_autoCommitFlag = False
         End If
-
     End Sub
 
 #End Region
@@ -701,7 +741,7 @@ Public Class AddinModule
     End Sub
 
     Private Sub CloseBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CloseBT.OnClick
-        ClearSubmissionMode(m_currentGeneralSubmissionControler)
+        ClearSubmissionMode(m_currentReportUploadControler)
     End Sub
 
     Private Sub m_reportUploadAccountInfoButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_reportUploadAccountInfoButton.OnClick
@@ -709,6 +749,46 @@ Public Class AddinModule
     End Sub
 
 #End Region
+
+#End Region
+
+#Region "PDC Submission Ribbon"
+
+    Private Sub m_PDCSubmissionButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCSubmissionButton.OnClick
+        m_currentReportUploadControler.DataSubmission()
+    End Sub
+
+    Private Sub m_PDCAutocommitButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCAutocommitButton.OnClick
+        If m_currentReportUploadControler.m_autoCommitFlag = False Then
+            m_currentReportUploadControler.m_autoCommitFlag = True
+        Else
+            m_currentReportUploadControler.m_autoCommitFlag = False
+        End If
+    End Sub
+
+    Private Sub m_PDCSUbmissionStatusButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCSUbmissionStatusButton.OnClick
+        m_currentReportUploadControler.DisplayUploadStatusAndErrorsUI()
+    End Sub
+
+    Private Sub m_PDCSubmissionCancelButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCSubmissionCancelButton.OnClick
+        ' to be implementd (ticket sur redmine)
+    End Sub
+
+    Private Sub m_PDCRefreshSnapthshotButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCRefreshSnapthshotButton.OnClick
+        RefreshSelectionBT_OnClick(sender, control, pressed)
+    End Sub
+
+    Private Sub m_PDCConsultantRangeEditButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCConsultantRangeEditButton.OnClick
+        ' to be implemented
+    End Sub
+
+    Private Sub m_PDCPeriodsRangeEditButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCPeriodsRangeEditButton.OnClick
+        ' to be implemented
+    End Sub
+
+    Private Sub m_PDCSumbissionExitButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCSumbissionExitButton.OnClick
+        ClearSubmissionMode(m_currentReportUploadControler)
+    End Sub
 
 #End Region
 
@@ -731,12 +811,12 @@ Public Class AddinModule
     Private Sub m_submissionWorksheetCombobox_OnAction(sender As Object, _
                                                        Control As IRibbonControl, _
                                                        selectedId As String, _
-                                                       selectedIndex As Integer) Handles m_submissionWorksheetCombobox.OnAction
-
+                                                       selectedIndex As Integer) Handles m_submissionWorksheetCombobox.OnAction, _
+                                                                                         m_PDCWorksheetDropDown.OnAction
         Try
-            If Not m_currentGeneralSubmissionControler.m_associatedWorksheet.Name = selectedId Then
-                ActivateGRSController(m_GRSControlersDictionary(m_worksheetNamesObjectDict(selectedId)))
-                m_currentGeneralSubmissionControler.UpdateRibbon()
+            If Not m_currentReportUploadControler.AssociatedWorksheet.Name = selectedId Then
+                ActivateReportUploadController(m_reportUploadControlersDictionary(selectedId))
+                m_currentReportUploadControler.UpdateRibbon()
                 m_worksheetNamesObjectDict(selectedId).Activate()
             End If
         Catch ex As Exception
@@ -751,7 +831,7 @@ Public Class AddinModule
     Private Sub ClientsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ClientsDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(selectedId, _
+        m_currentReportUploadControler.UpdateAfterAnalysisAxisChanged(selectedId, _
                                                            ProductsDropDown.SelectedItemId, _
                                                            AdjustmentDropDown.SelectedItemId,
                                                            True)
@@ -762,7 +842,7 @@ Public Class AddinModule
     Private Sub ProductsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ProductsDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
+        m_currentReportUploadControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                            selectedId, _
                                                            AdjustmentDropDown.SelectedItemId, _
                                                            True)
@@ -773,7 +853,7 @@ Public Class AddinModule
     Private Sub AdjustmentDD_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles AdjustmentDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
+        m_currentReportUploadControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                             ProductsDropDown.SelectedItemId, _
                                                             selectedId, _
                                                             True)
@@ -785,14 +865,14 @@ Public Class AddinModule
 #Region "Addin Events"
 
     Private Sub AddinModule_Finalize(sender As Object, e As EventArgs) Handles MyBase.AddinFinalize
-        If m_GRSControlersDictionary.Count > 0 Then
+        If m_reportUploadControlersDictionary.Count > 0 Then
             On Error Resume Next
-            Dim l_GRSList = m_GRSControlersDictionary.Values
-            For Each l_generalSubmissionController As GeneralSubmissionControler In l_GRSList
+            Dim l_reportUploadList = m_reportUploadControlersDictionary.Values
+            For Each l_generalSubmissionController As ReportUploadControler In l_reportUploadList
                 ClearSubmissionMode(l_generalSubmissionController)
             Next
         End If
-        m_GRSControlersDictionary.Clear()
+        m_reportUploadControlersDictionary.Clear()
     End Sub
 
 
@@ -803,8 +883,6 @@ Public Class AddinModule
 
 #Region "Task Panes Launches and call backs"
 
-#Region "Report Upload"
-
     Private Sub DisplayReportUploadSidePane()
 
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
@@ -814,47 +892,14 @@ Public Class AddinModule
 
     End Sub
 
-    Friend Sub InputReportPaneCallBack_ReportCreation()
-
-        GlobalVariables.APPS.ScreenUpdating = False
-        Dim version As CRUD.Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
-        If version Is Nothing Then Exit Sub
-
-        Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
-        Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
-        Dim l_entity As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(entity_id)
-        If l_entity Is Nothing Then Exit Sub
-        Dim currency As Currency = GlobalVariables.Currencies.GetValue(l_entity.CurrencyId)
-        If currency Is Nothing Then Exit Sub
-
-        Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(entity_name, _
-                                                                                       {"Entity", "Currency", "Version"}, _
-                                                                                       {entity_name, currency.Name, GlobalVariables.Version_Button.Caption})
-
-        If currentcell Is Nothing Then
-            MsgBox("An error occurred in Excel and the report could not be created.")
-            Exit Sub
+    Private Shared Sub LaunchProcessSelection()
+        If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
+            GlobalVariables.ProcessSelectionTaskPaneVisible = True
+            GlobalVariables.ProcessSelectionTaskPane.Show()
+        Else
+            MsgBox("This version of Excel is below Excel 2003 and therefore cannot display TaskPanes. Please contact Financial BI team.")
         End If
-
-        Dim timeConfig As UInt32 = version.TimeConfiguration
-        Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
-
-        If periodlist Is Nothing Then Exit Sub
-        GlobalVariables.APPS.Interactive = False
-        WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
-                                                          periodlist, _
-                                                          timeConfig)
-
-        Me.InputReportTaskPane.Hide()
-        Me.InputReportTaskPane.Close()
-        ExcelFormatting.FormatExcelRange(currentcell, currency.Id, Date.FromOADate(periodlist(0)))
-        GlobalVariables.APPS.Interactive = True
-        GlobalVariables.APPS.ScreenUpdating = True
-        AssociateGRSControler(True)
-
     End Sub
-
-#End Region
 
 #Region "Version Selection"
 
@@ -864,7 +909,7 @@ Public Class AddinModule
 
     Public Shared Sub LaunchVersionSelection()
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
-            GlobalVariables.VersionsSelectionPaneVisible = True
+            GlobalVariables.VersionsSelectionTaskPaneVisible = True
             GlobalVariables.VersionSelectionTaskPane.Init()
             GlobalVariables.VersionSelectionTaskPane.Show()
         Else
@@ -881,7 +926,7 @@ Public Class AddinModule
     Friend Sub LaunchEntitySelectionTP(ByRef parentObject As Object, Optional ByRef restrictionToInputsEntities As Boolean = False)
 
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
-            GlobalVariables.EntitySelectionPaneVisible = True
+            GlobalVariables.EntitySelectionTaskPaneVisible = True
             Me.EntitySelectionTaskPane.Init(parentObject, True)
             Me.EntitySelectionTaskPane.Show()
         Else
@@ -893,7 +938,7 @@ Public Class AddinModule
     ' call back from entitySelectionTP for setting up new entity in submission control mode
     Public Sub ValidateEntitySelection(ByRef entityName As String)
 
-        m_currentGeneralSubmissionControler.ChangeCurrentEntity(entityName)
+        m_currentReportUploadControler.ChangeCurrentEntity(entityName)
         Me.EntitySelectionTaskPane.ClearAndClose()
 
     End Sub
@@ -905,35 +950,59 @@ Public Class AddinModule
 
 #Region "Report Upload Methods"
 
-    ' Create GRS Conctroler and display
-    Private Sub AssociateGRSControler(ByRef p_mustUpdateInputs As Boolean)
+    ' Create report upload Conctroler and display
+    Friend Function AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean, _
+                                              ByRef p_periodList As List(Of Int32), _
+                                              ByRef p_RHAccountName As String) As ReportUploadControler
 
-        ' GlobalVariables.APPS.Interactive = False
-        loadDropDownsSubmissionButtons()
-        Dim l_generalSubmissionController As New GeneralSubmissionControler(Me)
+        GlobalVariables.APPS.Interactive = False
+        Select Case My.Settings.processId
+            Case Account.AccountProcess.FINANCIAL : LoadFinancialDropDownsSubmissionButtons()
+        End Select
+
+        Dim l_reportUploadController As New ReportUploadControler(Me, p_RHAccountName)
         Dim l_excelWorksheet As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
 
-        If l_generalSubmissionController.RefreshSnapshot(p_mustUpdateInputs) = True Then
-            m_currentGeneralSubmissionControler = l_generalSubmissionController
-            m_GRSControlersDictionary.Add(l_excelWorksheet, l_generalSubmissionController)
+        If l_reportUploadController.RefreshSnapshot(p_mustUpdateInputs, p_periodList) = True Then
+            m_currentReportUploadControler = l_reportUploadController
+            m_reportUploadControlersDictionary.Add(l_excelWorksheet.Name, l_reportUploadController)
             m_worksheetNamesObjectDict.Add(l_excelWorksheet.Name, GlobalVariables.APPS.ActiveSheet)
-            Dim l_item = AddButtonToDropDown(m_submissionWorksheetCombobox, _
-                                            l_excelWorksheet.Name, _
-                                            l_excelWorksheet.Name)
-            m_submissionWorksheetCombobox.SelectedItemId = l_excelWorksheet.Name
-
-            SubmissionModeRibbon.Visible = True
-            SubmissionModeRibbon.Activate()
-            DisplayReportUploadSidePane()
+            Select Case l_reportUploadController.GetProcess
+                Case Account.AccountProcess.FINANCIAL : DisplayFinancialSubmissionRibbon(l_excelWorksheet)
+                Case Account.AccountProcess.RH : DisplayPDCSubmissionRibbon(l_excelWorksheet)
+            End Select
+            Return l_reportUploadController
         Else
             GlobalVariables.APPS.Interactive = True
             GlobalVariables.APPS.ScreenUpdating = True
-            m_currentGeneralSubmissionControler = Nothing
+            m_currentReportUploadControler = Nothing
+            Return Nothing
         End If
+
+    End Function
+
+    Private Sub DisplayFinancialSubmissionRibbon(ByVal p_ws As Excel.Worksheet)
+        Dim l_item = AddButtonToDropDown(m_submissionWorksheetCombobox, _
+                                         p_ws.Name, _
+                                         p_ws.Name)
+        m_submissionWorksheetCombobox.SelectedItemId = p_ws.Name
+        SubmissionModeRibbon.Visible = True
+        SubmissionModeRibbon.Activate()
+        DisplayReportUploadSidePane()
+    End Sub
+
+    Private Sub DisplayPDCSubmissionRibbon(ByVal p_ws As Excel.Worksheet)
+
+        m_PDCSubmissionRibbon.Activate()
+        m_PDCSubmissionRibbon.Visible = True
+        Dim l_item = AddButtonToDropDown(m_PDCWorksheetDropDown, _
+                                         p_ws.Name, _
+                                         p_ws.Name)
+        m_PDCWorksheetDropDown.SelectedItemId = p_ws.Name
 
     End Sub
 
-    Friend Shared Sub loadDropDownsSubmissionButtons()
+    Friend Shared Sub LoadFinancialDropDownsSubmissionButtons()
 
         GlobalVariables.ClientsIDDropDown.Items.Clear()
         For Each client_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Client).Keys
@@ -969,9 +1038,9 @@ Public Class AddinModule
 
     End Sub
 
-    Friend Sub SelectDropDownSubmissionButtons(ByRef p_clientId As Int32, _
-                                                      ByRef p_productId As Int32, _
-                                                      ByRef p_adjustmentId As Int32)
+    Friend Sub SelectFinancialDropDownSubmissionButtons(ByRef p_clientId As Int32, _
+                                                        ByRef p_productId As Int32, _
+                                                        ByRef p_adjustmentId As Int32)
 
         If p_clientId <> 0 Then GlobalVariables.ClientsIDDropDown.SelectedItemId = p_clientId
         If p_productId <> 0 Then GlobalVariables.ProductsIDDropDown.SelectedItemId = p_productId
@@ -979,44 +1048,99 @@ Public Class AddinModule
 
     End Sub
 
-    ' Disable Submission Buttons (Call back from GRSController)
+    ' Disable Submission Buttons (Call back from Report upload Controller)
     Friend Sub ModifySubmissionControlsStatus(ByRef buttonsStatus As Boolean)
 
         RefreshInputsBT.Enabled = buttonsStatus
-        SubmitBT2.Enabled = buttonsStatus
-        SubmissionStatus.Enabled = buttonsStatus
-        CancelBT2.Enabled = buttonsStatus
-        AutoComitBT.Enabled = buttonsStatus
+        m_financialSubmissionSubmitButton.Enabled = buttonsStatus
+        m_financialSubmissionSatusButton.Enabled = buttonsStatus
+        m_financialSubmissionCancelButton.Enabled = buttonsStatus
+        m_financialSubmissionAutoCommitButton.Enabled = buttonsStatus
         ShowReportBT.Enabled = buttonsStatus
 
     End Sub
 
-    Friend Sub ClearSubmissionMode(ByRef p_generalSubmissionController As GeneralSubmissionControler)
+    Friend Sub ClearSubmissionMode(ByRef p_generalSubmissionController As ReportUploadControler)
 
         On Error Resume Next
-        m_worksheetNamesObjectDict.Remove(p_generalSubmissionController.m_associatedWorksheet.Name)
+        DesactivateEventHandler()
+        m_worksheetNamesObjectDict.Remove(p_generalSubmissionController.AssociatedWorksheet.Name)
         For Each l_item In m_submissionWorksheetCombobox.Items
-            If l_item.id = p_generalSubmissionController.m_associatedWorksheet.Name Then
+            If l_item.id = p_generalSubmissionController.AssociatedWorksheet.Name Then
                 m_submissionWorksheetCombobox.Items.Remove(l_item)
                 Exit For
             End If
         Next
+<<<<<<< HEAD
         p_generalSubmissionController.CloseInstance()
         m_GRSControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
 
         If m_GRSControlersDictionary.Count = 0 Then
+=======
+        SyncLock (p_generalSubmissionController)
+            p_generalSubmissionController.CloseInstance()
+        End SyncLock
+
+        m_reportUploadControlersDictionary(p_generalSubmissionController.AssociatedWorksheet.Name) = Nothing
+        m_reportUploadControlersDictionary.Remove(p_generalSubmissionController.AssociatedWorksheet.Name)
+        p_generalSubmissionController.DissociateWorksheet()
+        If p_generalSubmissionController IsNot Nothing Then p_generalSubmissionController = Nothing
+
+        If m_reportUploadControlersDictionary.Count = 0 Then
+>>>>>>> test_AccountSnapshot
             SubmissionModeRibbon.Visible = False
-            m_GRSControlersDictionary.Clear()
+            m_PDCSubmissionRibbon.Visible = False
+            m_reportUploadControlersDictionary.Clear()
             GlobalVariables.APPS.CellDragAndDrop = True
         Else
-            ActivateGRSController(m_GRSControlersDictionary.ElementAt(0).Value)
-            m_submissionWorksheetCombobox.SelectedItemId = m_currentGeneralSubmissionControler.m_associatedWorksheet.Name
-            m_currentGeneralSubmissionControler.m_associatedWorksheet.Activate()
+            ActivateReportUploadController(m_reportUploadControlersDictionary.ElementAt(0).Value)
+            m_submissionWorksheetCombobox.SelectedItemId = m_currentReportUploadControler.AssociatedWorksheet.Name
+            m_currentReportUploadControler.AssociatedWorksheet.Activate()
         End If
+
+
+        GC.Collect()
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
 
     End Sub
+
+
+    Friend Sub SetPDCSubmissionRibbonEntityAndAccountName(ByVal p_entityName As String, _
+                                                          ByVal p_accountName As String)
+        m_PDCEntityEditBox.Text = p_entityName
+        m_PDCaccountNameEditBox.Text = p_accountName
+    End Sub
+
+    Private Sub Deactivate(ByVal sender As Object, ByVal hostObj As Object, ByVal window As Object) Handles adxExcelEvents.WindowDeactivate
+
+        If MyEventClass IsNot Nothing Then
+            If MyEventClass.IsConnected Then
+                MyEventClass.RemoveConnection()
+            End If
+        End If
+
+    End Sub
+
+    Friend Sub ActivateEventHandler(ByRef p_worksheet As Excel.Worksheet)
+
+        MyEventClass = New ExcelWorksheetEventsClass1(Me)
+        MyEventClass.ConnectTo(p_worksheet, True)
+
+    End Sub
+
+    Friend Sub DesactivateEventHandler()
+
+        If MyEventClass.IsConnected Then
+            MyEventClass.RemoveConnection()
+        End If
+        If MyEventClass IsNot Nothing Then
+            MyEventClass.Dispose()
+            MyEventClass = Nothing
+        End If
+
+    End Sub
+
 
 #End Region
 
@@ -1037,13 +1161,13 @@ Public Class AddinModule
 
     End Function
 
-    Friend Function IsCurrentGRSController(ByRef p_GRSController As GeneralSubmissionControler) As Boolean
-        Return p_GRSController Is m_currentGeneralSubmissionControler
+    Friend Function IsCurrentReportUploadController(ByRef p_reportUploadController As ReportUploadControler) As Boolean
+        Return p_reportUploadController Is m_currentReportUploadControler
     End Function
 
-    Friend Sub ActivateGRSController(ByRef p_GRSController As GeneralSubmissionControler)
-        m_currentGeneralSubmissionControler = p_GRSController
-        m_submissionWorksheetCombobox.SelectedItemId = p_GRSController.m_associatedWorksheet.Name
+    Friend Sub ActivateReportUploadController(ByRef p_reportUploadController As ReportUploadControler)
+        m_currentReportUploadControler = p_reportUploadController
+        m_submissionWorksheetCombobox.SelectedItemId = p_reportUploadController.AssociatedWorksheet.Name
     End Sub
 
 #End Region
@@ -1056,12 +1180,13 @@ Public Class AddinModule
         On Error Resume Next
         SetMainMenuButtonState(connected)
         If connected = True Then
-            GlobalVariables.Connection_Toggle_Button.Image = 1
-            GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
+            GlobalVariables.ConnectionToggleButton.Image = 1
+            GlobalVariables.ConnectionToggleButton.Caption = "Connected"
             SetCurrentVersionAfterConnection()
+            SetCurrentProcessAfterConnection()
         Else
-            GlobalVariables.Connection_Toggle_Button.Image = 0
-            GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
+            GlobalVariables.ConnectionToggleButton.Image = 0
+            GlobalVariables.ConnectionToggleButton.Caption = "Not connected"
         End If
         Return 0
 
@@ -1069,23 +1194,46 @@ Public Class AddinModule
 
     Private Shared Sub SetCurrentVersionAfterConnection()
 
-        Dim currentVersionId As Int32 = My.Settings.version_id
-        If GlobalVariables.Versions.IsVersionValid(currentVersionId) = True Then
-            SetCurrentVersionId(currentVersionId)
+        Dim l_currentVersionId As Int32 = My.Settings.version_id
+        If GlobalVariables.Versions.IsVersionValid(l_currentVersionId) = True Then
+            SetCurrentVersionId(l_currentVersionId)
         Else
             LaunchVersionSelection()
         End If
 
     End Sub
 
-    Public Shared Sub SetCurrentVersionId(ByRef versionId As UInt32)
+    Private Shared Sub SetCurrentProcessAfterConnection()
 
-        Dim version As CRUD.Version = GlobalVariables.Versions.GetValue(versionId)
-        If version Is Nothing Then Exit Sub
+        Dim l_currentProcessId As CRUD.Account.AccountProcess = My.Settings.processId
+        Select Case l_currentProcessId
+            Case Account.AccountProcess.FINANCIAL, Account.AccountProcess.RH
+                SetCurrentProcessId(l_currentProcessId)
+            Case Else
+                LaunchProcessSelection()
+        End Select
 
-        GlobalVariables.Version_Button.Caption = version.Name
-        GlobalVariables.Version_label_Sub_Ribbon.Text = version.Name
-        My.Settings.version_id = versionId
+    End Sub
+
+    Public Shared Sub SetCurrentVersionId(ByRef p_versionId As UInt32)
+
+        Dim l_version As CRUD.Version = GlobalVariables.Versions.GetValue(p_versionId)
+        If l_version Is Nothing Then Exit Sub
+
+        GlobalVariables.VersionButton.Caption = l_version.Name
+        GlobalVariables.VersionlabelSubRibbon.Text = l_version.Name
+        My.Settings.version_id = p_versionId
+        My.Settings.Save()
+
+    End Sub
+
+    Public Shared Sub SetCurrentProcessId(ByRef p_processId As CRUD.Account.AccountProcess)
+
+        Select Case p_processId
+            Case Account.AccountProcess.FINANCIAL : GlobalVariables.ProcessButton.Caption = Local.GetValue("process.process_financial")
+            Case Account.AccountProcess.RH : GlobalVariables.ProcessButton.Caption = Local.GetValue("process.process_rh")
+        End Select
+        My.Settings.processId = p_processId
         My.Settings.Save()
 
     End Sub
@@ -1095,7 +1243,7 @@ Public Class AddinModule
     End Sub
 
     Public Function IsCurrentGeneralSubmissionController() As Boolean
-        If m_currentGeneralSubmissionControler Is Nothing Then
+        If m_currentReportUploadControler Is Nothing Then
             Return False
         Else
             Return True
@@ -1103,13 +1251,14 @@ Public Class AddinModule
     End Function
 
     Public Function RefreshGeneralSubmissionControllerSnapshot(ByRef p_refreshFromDataBaseFlag As Boolean) As Boolean
-        If m_currentGeneralSubmissionControler IsNot Nothing Then
-            If m_currentGeneralSubmissionControler.RefreshSnapshot(p_refreshFromDataBaseFlag) = False Then
+        If m_currentReportUploadControler IsNot Nothing Then
+            If m_currentReportUploadControler.RefreshSnapshot(p_refreshFromDataBaseFlag) = False Then
                 Return False
             Else
                 Return True
             End If
         End If
+        Return False
     End Function
 
     Public Function GetPPSBIResult(ByRef p_entity As Object, _
@@ -1137,6 +1286,4 @@ Public Class AddinModule
 #End Region
 
 
-
 End Class
-

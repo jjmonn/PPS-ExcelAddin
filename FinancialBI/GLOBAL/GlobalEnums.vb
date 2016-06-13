@@ -22,11 +22,15 @@
         CLIENTS
         PRODUCTS
         ADJUSTMENTS
+        EMPLOYEES
         ACCOUNTS
         VERSIONS
         YEARS
         MONTHS
         YMONTHS
+        WEEKS
+        DAYS
+        YDAYS
 
     End Enum
 
@@ -62,19 +66,20 @@
         GLOBALFACTSVERSION
         USER
         GROUP
-        GROUPALLOWEDENTITY
+        USERALLOWEDENTITY
         FMODELINGACCOUNT
         AXIS_ELEM
         AXIS_FILTER
         ENTITYDISTRIBUTION
+        AXISOWNER
+        FACTTAG
 
     End Enum
 
+ 
 
 End Class
 
-Enum CRUDAction
-    CREATE = 1
-    UPDATE = 2
-    DELETE = 3
-End Enum
+
+
+

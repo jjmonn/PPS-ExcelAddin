@@ -2,7 +2,7 @@
 Imports System.Collections.Generic
 Imports CRUD
 
-Public Class EntityCurrencyManager : Inherits CRUDManager
+Class EntityCurrencyManager : Inherits CRUDManager
 
 #Region "Instance variables"
 

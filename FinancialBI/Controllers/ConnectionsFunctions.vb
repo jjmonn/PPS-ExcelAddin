@@ -20,7 +20,7 @@ Friend Class ConnectionsFunctions
 
 #Region "Instance Variables"
 
-    Public FBIVersionId As String = "1.0.0"
+    Public FBIVersionId As String = "1.0.1"
     ' Variables
     Public Event ConnectionFailedEvent()
     Private userName As String
@@ -112,18 +112,16 @@ Friend Class ConnectionsFunctions
 
     Private Sub SMSG_AUTH_ANSWER(packet As ByteBuffer)
 
-        If packet.GetError() = 0 Then
-            If packet.ReadBool() = True Then
-                System.Diagnostics.Debug.WriteLine("Authentication succeeded")
-                GlobalVariables.Users.currentUserName = userName
-                globalAuthenticated = True
-            Else
-                globalInitFlag = True
-                System.Diagnostics.Debug.WriteLine("Authentication Failed!")
-                CloseNetworkConnection()
-                '    MsgBox("Authentication failed. Please review your ID and password.")
-                RaiseEvent ConnectionFailedEvent()
-            End If
+        If packet.GetError() = ErrorMessage.SUCCESS Then
+            System.Diagnostics.Debug.WriteLine("Authentication succeeded")
+            GlobalVariables.Users.currentUserName = userName
+            globalAuthenticated = True
+        Else
+            globalInitFlag = True
+            System.Diagnostics.Debug.WriteLine("Authentication Failed!")
+            CloseNetworkConnection()
+            '    MsgBox("Authentication failed. Please review your ID and password.")
+            RaiseEvent ConnectionFailedEvent()
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_AUTH_ANSWER, AddressOf SMSG_AUTH_ANSWER)
 
@@ -146,8 +144,10 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.GlobalFactsVersions.ObjectInitialized, AddressOf AfterGlobalFactsVersionInit
         AddHandler GlobalVariables.Users.ObjectInitialized, AddressOf AfterUserInit
         AddHandler GlobalVariables.Groups.ObjectInitialized, AddressOf AfterGroupInit
-        AddHandler GlobalVariables.GroupAllowedEntities.ObjectInitialized, AddressOf AfterGroupAllowedEntityInit
-        AddHandler GlobalVariables.EntityDistribution.ObjectInitialized, AddressOf AfterEntityDistributionInit
+        AddHandler GlobalVariables.UserAllowedEntities.ObjectInitialized, AddressOf AfterUserAllowedEntityInit
+        AddHandler GlobalVariables.EntitiesDistributions.ObjectInitialized, AddressOf AfterEntityDistributionInit
+        AddHandler GlobalVariables.AxisOwners.ObjectInitialized, AddressOf AfterAxisOwnerInit
+        AddHandler GlobalVariables.FactTags.ObjectInitialized, AddressOf AfterFactTagInit
 
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ACCOUNTS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITYCURRENCY, False)
@@ -161,11 +161,13 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GLOBALFACTSVERSION, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.USER, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUP, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.USERALLOWEDENTITY, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FMODELINGACCOUNT, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXIS_ELEM, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXIS_FILTER, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITYDISTRIBUTION, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXISOWNER, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FACTTAG, False)
 
     End Sub
 
@@ -183,7 +185,7 @@ Friend Class ConnectionsFunctions
             start_time = Now
             Do While connectionFunction.globalInitFlag = False
                 secs = DateDiff("s", start_time, Now)
-                If secs > 6 Then Exit Do
+                If secs > 15 Then Exit Do
             Loop
         Else
             ConnectionsFunctions.CloseNetworkConnection()
@@ -198,8 +200,8 @@ Friend Class ConnectionsFunctions
 
         On Error Resume Next
         GlobalVariables.NetworkConnect.Stop()
-        GlobalVariables.Connection_Toggle_Button.Image = 0
-        GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
+        GlobalVariables.ConnectionToggleButton.Image = 0
+        GlobalVariables.ConnectionToggleButton.Caption = "Not connected"
         GlobalVariables.ConnectionState = True
 
     End Sub
@@ -302,8 +304,8 @@ Friend Class ConnectionsFunctions
         globalInitFlag = CheckGlobalVariablesInitFlag()
     End Sub
 
-    Private Sub AfterGroupAllowedEntityInit()
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY) = True
+    Private Sub AfterUserAllowedEntityInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.USERALLOWEDENTITY) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
     End Sub
 
@@ -311,6 +313,17 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags(GlobalEnums.GlobalModels.ENTITYDISTRIBUTION) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
     End Sub
+
+    Private Sub AfterAxisOwnerInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.AXISOWNER) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
+
+    Private Sub AfterFactTagInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.FACTTAG) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
+
 #End Region
 
 

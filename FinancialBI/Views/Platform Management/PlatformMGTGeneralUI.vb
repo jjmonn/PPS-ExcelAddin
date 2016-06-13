@@ -5,7 +5,7 @@
 
 
 'Author: Julien Monnereau
-'Last modified: 09/11/2015
+'Last modified: 21/12/2015
 
 
 Imports System.ComponentModel
@@ -27,7 +27,6 @@ Friend Class PlatformMGTGeneralUI
 
         '  This call is required by the designer.
         InitializeComponent()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then GroupsBT.Enabled = False
         MultilanguageSetup()
 
         ' Add any initialization after the InitializeComponent() call.
@@ -38,16 +37,18 @@ Friend Class PlatformMGTGeneralUI
 
         Me.AccountsBT.Text = Local.GetValue("GeneralEditionUI.accounts")
         Me.AccountsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_account")
-        Me.EntitiesBT.Text = Local.GetValue("GeneralEditionUI.entities")
-        Me.EntitiesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_entities")
+        Me.m_entitiesBT.Text = Local.GetValue("GeneralEditionUI.entities")
+        Me.m_entitiesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_entities")
         Me.CategoriesBT.Text = Local.GetValue("GeneralEditionUI.categories")
         Me.CategoriesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_categories")
-        Me.EntitiesFiltersBT.Text = Local.GetValue("general.entities")
-        Me.ClientsFiltersBT.Text = Local.GetValue("general.clients")
-        Me.ProductsFiltersBT.Text = Local.GetValue("general.products")
-        Me.AdjustmentsFiltersBT.Text = Local.GetValue("general.adjustments")
+        Me.m_entitiesFiltersBT.Text = Local.GetValue("general.entities_filters")
+        Me.m_clientsFiltersBT.Text = Local.GetValue("general.clients_filters")
+        Me.m_productsFiltersBT.Text = Local.GetValue("general.products_filters")
+        Me.m_adjustmentsFiltersBT.Text = Local.GetValue("general.adjustments_filters")
+        Me.m_employeesFiltersBT.Text = Local.GetValue("general.employees_filters")
         Me.ClientsBT.Text = Local.GetValue("general.clients")
         Me.ClientsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_clients")
+        Me.ProductsBT.Text = Local.GetValue("general.products")
         Me.ProductsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_products")
         Me.AdjustmentsBT.Text = Local.GetValue("general.adjustments")
         Me.AdjustmentsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_adjustments")
@@ -99,18 +100,36 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub EntitiesBT_Click(sender As Object, e As EventArgs) Handles EntitiesBT.Click
+    Private Sub EntitiesBT_Click(sender As Object, e As EventArgs) Handles m_entitiesBT.Click
 
         closeCurrentControl()
-        current_controller = New EntitiesController()
+        current_controller = New AxisController(AxisType.Entities)
         current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub m_employeesButton_Click(sender As Object, e As EventArgs) Handles m_employeesButton.Click
+
+        closeCurrentControl()
+        current_controller = New AxisController(AxisType.Employee)
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub ConsultantsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles m_employeesFiltersBT.Click
+
+
+        closeCurrentControl()
+        current_controller = New AxisFiltersController(AxisType.Employee)
+        current_controller.addControlToPanel(Panel1, Me)
+
 
     End Sub
 
     Private Sub ClientsBT_Click(sender As Object, e As EventArgs) Handles ClientsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Client)
+        current_controller = New AxisController(AxisType.Client)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -118,39 +137,39 @@ Friend Class PlatformMGTGeneralUI
     Private Sub ProductsBT_Click(sender As Object, e As EventArgs) Handles ProductsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Product)
+        current_controller = New AxisController(AxisType.Product)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
 
-    Private Sub ClientsFiltersBT_Click(sender As Object, e As EventArgs) Handles ClientsFiltersBT.Click
+    Private Sub ClientsFiltersBT_Click(sender As Object, e As EventArgs) Handles m_clientsFiltersBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.CLIENTS)
+        current_controller = New AxisFiltersController(AxisType.Client)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
 
-    Private Sub EntitiesFiltersBT_Click(sender As Object, e As EventArgs) Handles EntitiesFiltersBT.Click
+    Private Sub EntitiesFiltersBT_Click(sender As Object, e As EventArgs) Handles m_entitiesFiltersBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.ENTITIES)
+        current_controller = New AxisFiltersController(AxisType.Entities)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
 
-    Private Sub ProductsFiltersBT_Click(sender As Object, e As EventArgs) Handles ProductsFiltersBT.Click
+    Private Sub ProductsFiltersBT_Click(sender As Object, e As EventArgs) Handles m_productsFiltersBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.PRODUCTS)
+        current_controller = New AxisFiltersController(AxisType.Product)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
 
-    Private Sub AdjustmentsFiltersBT_Click_1(sender As Object, e As EventArgs) Handles AdjustmentsFiltersBT.Click
+    Private Sub AdjustmentsFiltersBT_Click_1(sender As Object, e As EventArgs) Handles m_adjustmentsFiltersBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        current_controller = New AxisFiltersController(AxisType.Adjustment)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -158,7 +177,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub AdjustmentsBT_Click(sender As Object, e As EventArgs) Handles AdjustmentsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Adjustment)
+        current_controller = New AxisController(AxisType.Adjustment)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -205,7 +224,7 @@ Friend Class PlatformMGTGeneralUI
 
     Private Sub GroupsBT_Click(sender As Object, e As EventArgs) Handles GroupsBT.Click
         closeCurrentControl()
-        current_controller = New GroupController()
+        current_controller = New UsersController()
         current_controller.addControlToPanel(Panel1, Me)
     End Sub
 
@@ -217,4 +236,6 @@ Friend Class PlatformMGTGeneralUI
 
 #End Region
 
+   
+   
 End Class

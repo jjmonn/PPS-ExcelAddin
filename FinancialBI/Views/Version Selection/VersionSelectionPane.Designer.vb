@@ -24,8 +24,8 @@ Partial Class VersionSelectionPane
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(VersionSelectionPane))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.ValidateBT = New System.Windows.Forms.Button()
+        Me.m_versionSelectionLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_validateButton = New VIBlend.WinForms.Controls.vButton()
         Me.BTsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
@@ -35,8 +35,8 @@ Partial Class VersionSelectionPane
         '
         Me.TableLayoutPanel1.ColumnCount = 1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Label1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.ValidateBT, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_versionSelectionLabel, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_validateButton, 0, 2)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -49,28 +49,39 @@ Partial Class VersionSelectionPane
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(315, 701)
         Me.TableLayoutPanel1.TabIndex = 0
         '
-        'Label1
+        'm_versionSelectionLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 4)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 4, 3, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(95, 15)
-        Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Select a Version"
+        Me.m_versionSelectionLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_versionSelectionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_versionSelectionLabel.Ellipsis = False
+        Me.m_versionSelectionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_versionSelectionLabel.Location = New System.Drawing.Point(3, 4)
+        Me.m_versionSelectionLabel.Margin = New System.Windows.Forms.Padding(3, 4, 3, 0)
+        Me.m_versionSelectionLabel.Multiline = True
+        Me.m_versionSelectionLabel.Name = "m_versionSelectionLabel"
+        Me.m_versionSelectionLabel.Size = New System.Drawing.Size(95, 15)
+        Me.m_versionSelectionLabel.TabIndex = 2
+        Me.m_versionSelectionLabel.Text = "Select a Version"
+        Me.m_versionSelectionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_versionSelectionLabel.UseMnemonics = True
+        Me.m_versionSelectionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'ValidateBT
+        'm_validateButton
         '
-        Me.ValidateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ValidateBT.ImageKey = "1420498403_340208.ico"
-        Me.ValidateBT.ImageList = Me.BTsIL
-        Me.ValidateBT.Location = New System.Drawing.Point(3, 618)
-        Me.ValidateBT.Name = "ValidateBT"
-        Me.ValidateBT.Size = New System.Drawing.Size(95, 23)
-        Me.ValidateBT.TabIndex = 3
-        Me.ValidateBT.Text = "Validate"
-        Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ValidateBT.UseVisualStyleBackColor = True
+        Me.m_validateButton.AllowAnimations = True
+        Me.m_validateButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_validateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_validateButton.ImageKey = "1420498403_340208.ico"
+        Me.m_validateButton.ImageList = Me.BTsIL
+        Me.m_validateButton.Location = New System.Drawing.Point(3, 618)
+        Me.m_validateButton.Name = "m_validateButton"
+        Me.m_validateButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_validateButton.Size = New System.Drawing.Size(95, 23)
+        Me.m_validateButton.TabIndex = 3
+        Me.m_validateButton.Text = "Validate"
+        Me.m_validateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_validateButton.UseVisualStyleBackColor = True
+        Me.m_validateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'BTsIL
         '
@@ -100,8 +111,8 @@ Partial Class VersionSelectionPane
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_versionSelectionLabel As viblend.winforms.controls.vLabel
     Friend WithEvents BTsIL As System.Windows.Forms.ImageList
-    Friend WithEvents ValidateBT As System.Windows.Forms.Button
+    Friend WithEvents m_validateButton As viblend.winforms.controls.vButton
 
 End Class

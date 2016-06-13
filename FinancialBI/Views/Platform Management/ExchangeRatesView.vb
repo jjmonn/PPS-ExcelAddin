@@ -40,7 +40,7 @@ Friend Class ExchangeRatesView
     Private m_isFillingCells As Boolean
     Private m_isCopyingValueDown As Boolean = False
     Private m_currencyTextBoxEditor As New TextBoxEditor()
-
+    Private m_rightMgr As New RightManager
 
     ' Constants
     Private LINES_WIDTH As Single = 3
@@ -79,6 +79,7 @@ Friend Class ExchangeRatesView
         AddHandler m_ratesVersionsTV.MouseDoubleClick, AddressOf RatesVersionsTV_MouseDoubleClick
         AddHandler m_deleteBackgroundWorker.DoWork, AddressOf DeleteBackgroundWorker_DoWork
         ' AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
+        DefineUIPermissions()
         DesactivateUnallowed()
         MultiLanguageSetup()
 
@@ -91,18 +92,20 @@ Friend Class ExchangeRatesView
 
     End Sub
 
+    Private Sub DefineUIPermissions()
+        m_rightMgr(AddRatesVersionRCM) = Group.Permission.EDIT_BASE
+        m_rightMgr(DeleteVersionRCM) = Group.Permission.EDIT_BASE
+        m_rightMgr(AddFolderRCM) = Group.Permission.EDIT_BASE
+        m_rightMgr(CreateFolderToolStripMenuItem) = Group.Permission.EDIT_BASE
+        m_rightMgr(CreateVersionToolStripMenuItem) = Group.Permission.EDIT_BASE
+        m_rightMgr(DeleteToolStripMenuItem) = Group.Permission.EDIT_BASE
+        m_rightMgr(ImportFromExcelToolStripMenuItem) = Group.Permission.EDIT_RATES
+        m_rightMgr(RenameBT) = Group.Permission.EDIT_RATES
+        m_rightMgr(CopyRateDownToolStripMenuItem) = Group.Permission.EDIT_RATES
+    End Sub
+
     Private Sub DesactivateUnallowed()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            AddRatesVersionRCM.Enabled = False
-            DeleteVersionRCM.Enabled = False
-            AddFolderRCM.Enabled = False
-            CreateFolderToolStripMenuItem.Enabled = False
-            CreateVersionToolStripMenuItem.Enabled = False
-            DeleteToolStripMenuItem.Enabled = False
-            ImportFromExcelToolStripMenuItem.Enabled = False
-            RenameBT.Enabled = False
-            CopyRateDownToolStripMenuItem.Enabled = False
-        End If
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub CurrenciesManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -361,7 +364,7 @@ Friend Class ExchangeRatesView
 #Region "Exchange Rates m_ratesDataGridView"
 
     Friend Sub InitializeDGV(ByRef currenciesList As SortedSet(Of UInt32), _
-                             ByRef monthsIdList As List(Of Int32), _
+                             ByRef monthsIdList As Int32(), _
                              ByRef p_ratesVersionid As Int32)
 
         m_currentRatesVersionId = p_ratesVersionid
@@ -394,14 +397,14 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Private Sub InitRows(ByRef p_monthsIdList As List(Of Int32))
+    Private Sub InitRows(ByRef p_monthsIdList As Int32())
 
         For Each monthId As Int32 In p_monthsIdList
             Dim period As Date = Date.FromOADate(monthId)
             Dim row As HierarchyItem = m_ratesDataGridView.RowsHierarchy.Items.Add(Format(period, "MMM yyyy"))
             row.ItemValue = monthId
             m_currencyTextBoxEditor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
-            If GlobalVariables.Users.CurrentUserIsAdmin() Then row.CellsEditor = m_currencyTextBoxEditor
+            If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_RATES) Then row.CellsEditor = m_currencyTextBoxEditor
         Next
 
     End Sub

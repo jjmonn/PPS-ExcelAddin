@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inherits CRUDManager
+Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inherits CRUDManager
 
 #Region "Instance variables"
     Protected m_CRUDDic As New SortedDictionary(Of AxisType, MultiIndexDictionary(Of UInt32, String, T))
@@ -103,6 +103,22 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
     Friend Function GetDictionary(ByVal p_axis As AxisType) As MultiIndexDictionary(Of UInt32, String, T)
         If m_CRUDDic.ContainsKey(p_axis) = False Then Return Nothing
         Return m_CRUDDic(p_axis)
+    End Function
+
+    Friend Function GetDictionary(ByVal p_axis As AxisType, _
+                                  ByVal p_AxisOwner As UInt32) As MultiIndexDictionary(Of UInt32, String, T)
+        If m_CRUDDic.ContainsKey(p_axis) = False Then Return Nothing
+        Dim l_multiIndexDict As New MultiIndexDictionary(Of UInt32, String, T)
+
+        For Each l_axisElem As T In m_CRUDDic(p_axis).Values
+            Dim l_AxisOwner As AxisOwner = GlobalVariables.AxisOwners.GetValue(l_axisElem.Id)
+            If l_AxisOwner Is Nothing Then Continue For
+            If l_AxisOwner.OwnerId = p_AxisOwner Then
+                l_multiIndexDict.Set(l_axisElem.Id, l_axisElem.Name, l_axisElem)
+            End If
+        Next
+        Return l_multiIndexDict
+
     End Function
 
     Friend Function GetDictionary() As SortedDictionary(Of AxisType, MultiIndexDictionary(Of UInt32, String, T))

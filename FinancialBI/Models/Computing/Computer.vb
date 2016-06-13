@@ -6,18 +6,12 @@ Imports CRUD
 '
 ' Computing interface with c++ server
 '
-'
 ' To do:
 '       - 
 '
-'
-' Known bugs:
-'       - 
-'
-'
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
-' Last modified: 20/08/2015
+' Last modified: 13/01/2016
 
 
 Friend Class Computer
@@ -29,10 +23,11 @@ Friend Class Computer
     Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean, ByRef requestId As Int32)
 
     ' Variables
-    Private m_dataMap As Dictionary(Of String, Double)
-    Private m_versionsComputationQueue As Dictionary(Of Int32, Dictionary(Of Int32, Boolean))
+    Private m_dataMap As SafeDictionary(Of String, Double)
+    Private m_versionsComputationQueue As SafeDictionary(Of Int32, Dictionary(Of Int32, Boolean))
     Private m_requestIdVersionIdDict As New SafeDictionary(Of Int32, Int32)
     Private m_requestIdEntityIdDict As New SafeDictionary(Of Int32, Int32)
+    Private m_requestIdPeriodsDict As New SafeDictionary(Of Int32, Int32())
 
     ' Computing
     Private m_isAxis As Boolean
@@ -44,7 +39,7 @@ Friend Class Computer
     Private m_periodId As Int32
     Private m_filterToken As String
     Private m_periodIdentifier As Char
-    Private m_periodsTokenDict As Dictionary(Of String, String)
+    Private m_periodsTokenDict As SafeDictionary(Of String, String)
     Private m_filtersDict As New SafeDictionary(Of String, Int32)
 
     ' Constants
@@ -53,13 +48,14 @@ Friend Class Computer
     Friend Const TOKEN_SEPARATOR As Char = "#"
     Friend Const YEAR_PERIOD_IDENTIFIER As Char = "y"
     Friend Const MONTH_PERIOD_IDENTIFIER As Char = "m"
-
+    Friend Const WEEK_PERIOD_IDENTIFIER As Char = "w"
+    Friend Const DAY_PERIOD_IDENTIFIER As Char = "d"
 
 #End Region
 
 
     ' dataMap: [version_id][filter_id][entity_id][account_id][period]
-    Friend Function GetData() As Dictionary(Of String, Double)
+    Friend Function GetData() As SafeDictionary(Of String, Double)
         Return m_dataMap
     End Function
 
@@ -69,10 +65,13 @@ Friend Class Computer
     ' Query
     Friend Function CMSG_COMPUTE_REQUEST(ByRef p_versionsIds As Int32(), _
                                          ByRef p_entitiesIds As List(Of Int32), _
+                                         ByRef p_process As CRUD.Account.AccountProcess, _
                                          Optional ByRef p_currencyId As Int32 = 0, _
                                          Optional ByRef p_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
                                          Optional ByRef p_axisFilters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
-                                         Optional ByRef p_hierarchy As List(Of String) = Nothing) As Int32
+                                         Optional ByRef p_hierarchy As List(Of String) = Nothing, _
+                                         Optional ByRef p_periods As Int32() = Nothing, _
+                                         Optional ByRef p_axisHierarchyDecomposition As Boolean = False) As Int32
 
         m_dataMap = New SafeDictionary(Of String, Double)
         m_requestIdVersionIdDict.Clear()
@@ -92,8 +91,16 @@ Friend Class Computer
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
         ' Start versions computing loop
         For Each l_versionId In p_versionsIds
+
+            ' Version setup
             Dim l_version As Version = GlobalVariables.Versions.GetValue(l_versionId)
             If l_version Is Nothing Then Continue For
+
+            ' Periods setup
+            If p_periods Is Nothing Then
+                p_periods = GlobalVariables.Versions.GetPeriodsList(l_versionId)
+            End If
+            If p_periods.Length = 0 Then Continue For
 
             ' Start entities computing loop
             For Each l_entityId As Int32 In p_entitiesIds
@@ -108,14 +115,22 @@ Friend Class Computer
                 End If
 
                 Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_COMPUTE_REQUEST, UShort))
+
                 Dim l_requestId As Int32 = l_packet.AssignRequestId()
                 m_requestIdVersionIdDict.Add(l_requestId, l_versionId)
                 m_requestIdEntityIdDict.Add(l_requestId, l_entityId)
+                m_requestIdPeriodsDict.Add(l_requestId, p_periods)
+                l_packet.WriteUint32(p_process)
                 l_packet.WriteUint32(l_versionId)                                               ' version_id
                 l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
                 l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
                 l_packet.WriteUint32(l_entityId)                                                ' entity_id
                 l_packet.WriteUint32(p_currencyId)                                              ' currency_id
+                l_packet.WriteUint32(p_periods(0))
+                l_packet.WriteUint32(p_periods.Length)
+                l_packet.WriteUint32(0) ' nb accounts
+                l_packet.WriteBool(p_axisHierarchyDecomposition)                                ' axis hierarchy decomposition
+                l_packet.WriteBool(True)                                                        ' entity decomposition
 
                 ' Loop through filters
                 If Not p_filters Is Nothing Then
@@ -189,22 +204,24 @@ Friend Class Computer
                 Dim version As Version = GlobalVariables.Versions.GetValue(m_requestIdVersionIdDict(request_id))
                 m_requestIdVersionIdDict.Remove(request_id)
                 If version Is Nothing Then
-                    MsgBox("Compute returned a result for an invalid version.") ' msg_local
+                    MsgBox(Local.GetValue("CUI.msg_return_invalid_version")) ' msg_local
                     Exit Sub
                 End If
                 '     m_versionId = version.Id
 
                 Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, m_requestIdEntityIdDict(request_id))
                 If l_entity Is Nothing Then
-                    MsgBox("Compute returned a result for an invalid entity.") ' msg_local
+                    MsgBox(Local.GetValue("CUI.msg_return_invalid_entity")) ' msg_local
                     Exit Sub
                 End If
 
                 m_filtersDict.Clear()
-                m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(version.Id)
+                m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(version.Id, m_requestIdPeriodsDict(request_id))
+                m_requestIdPeriodsDict.Remove(request_id)
                 Select Case version.TimeConfiguration
                     Case CRUD.TimeConfig.YEARS : m_periodIdentifier = YEAR_PERIOD_IDENTIFIER
                     Case CRUD.TimeConfig.MONTHS : m_periodIdentifier = MONTH_PERIOD_IDENTIFIER
+                    Case CRUD.TimeConfig.DAYS : m_periodIdentifier = DAY_PERIOD_IDENTIFIER
                 End Select
 
                 ' Fill m_dataMap
@@ -218,13 +235,20 @@ Friend Class Computer
                     m_requestIdEntityIdDict.Remove(request_id)
                 End If
             Else
+                Select Case (CType(p_packet.GetError(), ErrorMessage))
+                    Case ErrorMessage.SYSTEM
+                        MsgBox(Local.GetValue("CUI.msg_error_system"))
+                    Case ErrorMessage.PERMISSION_DENIED
+                        MsgBox(Local.GetValue("CUI.msg_permission_denied"))
+                End Select
+
                 RaiseEvent ComputationAnswered(0, p_packet.GetError(), 0)
             End If
 
 
         Catch ex As OutOfMemoryException
             System.Diagnostics.Debug.WriteLine(ex.Message)
-            MsgBox("Server computations limits exceeded.")
+            MsgBox(Local.GetValue("CUI.msg_out_of_memory"))
             RaiseEvent ComputationAnswered(0, p_packet.GetError(), 0)
         End Try
 
@@ -255,7 +279,7 @@ Friend Class Computer
         End If
 
         m_filterToken = GetFiltersToken(m_filtersDict)
-        System.Diagnostics.Debug.WriteLine("filter Token:" & m_filterToken)
+        '        System.Diagnostics.Debug.WriteLine("filter Token:" & m_filterToken)
 
         FillEntityData(packet, p_versionId)
 
@@ -272,8 +296,14 @@ Friend Class Computer
     Private Sub FillEntityData(ByRef packet As ByteBuffer, _
                                ByRef p_versionId As Int32)
 
+        Dim l_aggregationPeriodsIdentifier As Char = ""
+        Select Case m_periodIdentifier
+            Case MONTH_PERIOD_IDENTIFIER : l_aggregationPeriodsIdentifier = YEAR_PERIOD_IDENTIFIER
+            Case DAY_PERIOD_IDENTIFIER : l_aggregationPeriodsIdentifier = WEEK_PERIOD_IDENTIFIER
+        End Select
+
         m_entityId = packet.ReadUint32()
-        System.Diagnostics.Debug.WriteLine("entityId:" & m_entityId)
+        ' System.Diagnostics.Debug.WriteLine("entityId:" & m_entityId)
 
         For account_index As Int32 = 1 To packet.ReadUint32()
             m_accountId = packet.ReadUint32()
@@ -288,13 +318,13 @@ Friend Class Computer
                         = packet.ReadDouble()
             Next
 
-            ' Aggreagted data
+            ' Aggregated data
             For aggregationIndex As Int32 = 0 To packet.ReadUint32() - 1
                 m_dataMap(p_versionId & TOKEN_SEPARATOR & _
                         m_filterToken & TOKEN_SEPARATOR & _
                         m_entityId & TOKEN_SEPARATOR & _
                         m_accountId & TOKEN_SEPARATOR & _
-                        m_periodsTokenDict(YEAR_PERIOD_IDENTIFIER & aggregationIndex)) _
+                        m_periodsTokenDict(l_aggregationPeriodsIdentifier & aggregationIndex)) _
                         = packet.ReadDouble()
             Next
         Next

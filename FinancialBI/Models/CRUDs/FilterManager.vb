@@ -13,7 +13,7 @@ Imports CRUD
 ' Created: 22/07/2015
 ' Last modified: 02/09/2015
 
-Friend Class FilterManager : Inherits AxedCRUDManager(Of Filter)
+Class FilterManager : Inherits AxedCRUDManager(Of Filter)
 
 #Region "Instance variables"
 

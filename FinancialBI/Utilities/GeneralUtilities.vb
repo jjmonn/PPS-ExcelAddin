@@ -10,6 +10,7 @@
 Imports Microsoft.Office.Interop
 Imports System.Collections.Generic
 Imports System.Collections
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class GeneralUtilities
@@ -116,7 +117,7 @@ Err:
     ' Function GetRealLastCell()
     ' starting from "A1", finds the cell closing the range really used within the worksheet
     ' Inlude if err.number > 0 then ?
-    Protected Friend Shared Function GetRealLastCell(ByRef WS As Excel.Worksheet) As Excel.Range
+    Friend Shared Function GetRealLastCell(ByRef WS As Excel.Worksheet) As Excel.Range
 
         Dim lRealLastRow As Long
         Dim lRealLastColumn As Long
@@ -135,7 +136,7 @@ Err:
 
     End Function
 
-    Protected Friend Function IsRange(ByVal sRangeAddress As String) As Boolean
+    Friend Function IsRange(ByVal sRangeAddress As String) As Boolean
 
         Dim TestRange As Excel.Range
 
@@ -155,7 +156,7 @@ Err:
     ' Input: address
     ' Output: valid address
     '----------------------------------------------------------------
-    Protected Friend Function CheckAddress(sAddress As String) As String
+    Friend Function CheckAddress(sAddress As String) As String
         Dim rng As Microsoft.Office.Interop.Excel.Range = Nothing
         Dim sFullAddress As String
 
@@ -447,6 +448,11 @@ Err:
 
 #End Region
 
+    Public Shared Sub FillWeekTextBox(ByRef p_textBox As VIBlend.WinForms.Controls.vTextBox, p_date As Date)
+        Dim l_period As Int32 = p_date.ToOADate
+        p_textBox.Text = "Week " & Period.GetWeekNumberFromDateId(l_period) & ", " & Year(Date.FromOADate(l_period))
+    End Sub
+
     Public Shared Function getSHA1Hash(ByVal strToHash As String) As String
 
         Dim sha1Obj As New Security.Cryptography.SHA1CryptoServiceProvider
@@ -474,5 +480,16 @@ Err:
 
     End Sub
 
+    Friend Shared Function AddItemToCombobox(ByRef p_combobox As vComboBox, _
+                                             ByRef p_id As String, _
+                                             ByRef p_name As String) As ListItem
+
+        Dim l_item As New ListItem
+        l_item.Value = p_id
+        l_item.Text = p_name
+        p_combobox.Items.Add(l_item)
+        Return l_item
+
+    End Function
 
 End Class

@@ -15,7 +15,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
+Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Init"
 
@@ -45,7 +45,8 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
 #Region "Mappings"
 
-    Friend Function GetAccountsList(ByRef LookupOption As String) As List(Of Account)
+    Friend Function GetAccountsList(ByRef LookupOption As String, _
+                                    ByRef p_process As Account.AccountProcess) As List(Of Account)
 
         Dim tmp_list As New List(Of Account)
         Dim selection As New List(Of Account.FormulaTypes)
@@ -75,7 +76,8 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
             Dim l_account As Account = GetValue(id)
 
             If l_account Is Nothing Then Continue For
-            If selection.Contains(l_account.FormulaType) Then
+            If selection.Contains(l_account.FormulaType) _
+            AndAlso l_account.Process = p_process Then
                 tmp_list.Add(l_account)
             End If
         Next
@@ -95,6 +97,17 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
     Friend Sub LoadAccountsTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
         VTreeViewUtil.LoadTreeview(p_treeview, m_CRUDDic)
         VTreeViewUtil.LoadTreeviewIcons(p_treeview, m_CRUDDic)
+    End Sub
+
+    Friend Sub LoadRHAccountsTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
+        Dim l_RHCRUDDict As New MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
+        For Each l_value As Account In m_CRUDDic.Values
+            If l_value.Process = Account.AccountProcess.RH Then
+                l_RHCRUDDict.Set(l_value.Id, l_value.Name, l_value)
+            End If
+        Next
+        VTreeViewUtil.LoadTreeview(p_treeview, l_RHCRUDDict)
+        VTreeViewUtil.LoadTreeviewIcons(p_treeview, l_RHCRUDDict)
     End Sub
 
 #End Region

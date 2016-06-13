@@ -2,7 +2,7 @@
 Imports System.Collections.Generic
 Imports CRUD
 
-Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
+Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
 #Region "Instance variables"
 
@@ -45,11 +45,26 @@ Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         Return m_CRUDDic(currentUserName)
     End Function
 
-    Friend Function CurrentUserIsAdmin() As Boolean
+    Friend Function GetCurrentUserRights() As UInt64
+        Dim l_user As User = GetCurrentUser()
+        If l_user Is Nothing Then Return Group.Permission.NONE
+
+        Return GlobalVariables.Groups.GetInheritedRight(l_user.GroupId)
+    End Function
+
+    Friend Function CurrentUserHasRight(ByRef p_right As Group.Permission) As Boolean
         Dim l_user As User = GetCurrentUser()
         If l_user Is Nothing Then Return False
 
-        Return GlobalVariables.Groups.GroupIsAdmin(l_user.GroupId)
+        Return GlobalVariables.Groups.HasRight(l_user.GroupId, p_right)
+    End Function
+
+    Friend Function CurrentUserHasProcess(ByRef p_process As Account.AccountProcess) As Boolean
+        Dim l_user As User = GetCurrentUser()
+        If l_user Is Nothing Then Return False
+
+        If l_user.ProcessFlag And p_process <> 0 Then Return True
+        Return False
     End Function
 
 #End Region

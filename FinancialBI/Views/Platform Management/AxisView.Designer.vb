@@ -24,37 +24,39 @@ Partial Class AxisView
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AxisView))
-        Me.AxisIL = New System.Windows.Forms.ImageList(Me.components)
+        Me.EntitiesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.m_dataGridViewRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.CreateAxisToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteAxisToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.RenameToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.copy_down_bt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_axisRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.CreateAxisElemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteAxisElemToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RenameAxisElemButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.copy_down_bt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.drop_to_excel_bt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AutoResizeColumnsButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExpandAllBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CollapseAllBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateNewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteAxisToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_axisEditionButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreateANewAxisElemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteAxisElemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.RenameToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CopyDownValuesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.m_dataGridViewRightClickMenu.SuspendLayout()
+        Me.m_axisRightClickMenu.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'AxisIL
+        'EntitiesIL
         '
-        Me.AxisIL.ImageStream = CType(resources.GetObject("AxisIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.AxisIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.AxisIL.Images.SetKeyName(0, "element_branch2.ico")
-        Me.AxisIL.Images.SetKeyName(1, "breakpoint.ico")
+        Me.EntitiesIL.ImageStream = CType(resources.GetObject("EntitiesIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.EntitiesIL.TransparentColor = System.Drawing.Color.Transparent
+        Me.EntitiesIL.Images.SetKeyName(0, "elements_branch.ico")
+        Me.EntitiesIL.Images.SetKeyName(1, "favicon(81).ico")
         '
         'ButtonsIL
         '
@@ -62,55 +64,78 @@ Partial Class AxisView
         Me.ButtonsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.ButtonsIL.Images.SetKeyName(0, "submit 1 ok.ico")
         '
-        'm_dataGridViewRightClickMenu
+        'm_axisRightClickMenu
         '
-        Me.m_dataGridViewRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateAxisToolStripMenuItem, Me.DeleteAxisToolStripMenuItem2, Me.RenameToolStripMenuItem1, Me.ToolStripSeparator4, Me.copy_down_bt, Me.ToolStripSeparator5, Me.drop_to_excel_bt})
-        Me.m_dataGridViewRightClickMenu.Name = "ContextMenuStripTGV"
-        Me.m_dataGridViewRightClickMenu.Size = New System.Drawing.Size(167, 158)
+        Me.m_axisRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateAxisElemToolStripMenuItem, Me.DeleteAxisElemToolStripMenuItem2, Me.ToolStripSeparator1, Me.RenameAxisElemButton, Me.ToolStripSeparator5, Me.copy_down_bt, Me.ToolStripSeparator4, Me.drop_to_excel_bt, Me.AutoResizeColumnsButton, Me.ExpandAllBT, Me.CollapseAllBT})
+        Me.m_axisRightClickMenu.Name = "ContextMenuStripTGV"
+        Me.m_axisRightClickMenu.Size = New System.Drawing.Size(202, 214)
         '
-        'CreateAxisToolStripMenuItem
+        'CreateAxisElemToolStripMenuItem
         '
-        Me.CreateAxisToolStripMenuItem.Image = Global.FinancialBI.My.resources.element_branch2_add
-        Me.CreateAxisToolStripMenuItem.Name = "CreateAxisToolStripMenuItem"
-        Me.CreateAxisToolStripMenuItem.Size = New System.Drawing.Size(166, 24)
-        Me.CreateAxisToolStripMenuItem.Text = "General.create"
+        Me.CreateAxisElemToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
+        Me.CreateAxisElemToolStripMenuItem.Name = "CreateAxisElemToolStripMenuItem"
+        Me.CreateAxisElemToolStripMenuItem.Size = New System.Drawing.Size(201, 24)
+        Me.CreateAxisElemToolStripMenuItem.Text = "Create"
         '
-        'DeleteAxisToolStripMenuItem2
+        'DeleteAxisElemToolStripMenuItem2
         '
-        Me.DeleteAxisToolStripMenuItem2.Image = Global.FinancialBI.My.resources.element_branch2_delete
-        Me.DeleteAxisToolStripMenuItem2.Name = "DeleteAxisToolStripMenuItem2"
-        Me.DeleteAxisToolStripMenuItem2.Size = New System.Drawing.Size(166, 24)
-        Me.DeleteAxisToolStripMenuItem2.Text = "Delete"
+        Me.DeleteAxisElemToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
+        Me.DeleteAxisElemToolStripMenuItem2.Name = "DeleteAxisElemToolStripMenuItem2"
+        Me.DeleteAxisElemToolStripMenuItem2.Size = New System.Drawing.Size(201, 24)
+        Me.DeleteAxisElemToolStripMenuItem2.Text = "Delete"
         '
-        'RenameToolStripMenuItem1
+        'ToolStripSeparator1
         '
-        Me.RenameToolStripMenuItem1.Name = "RenameToolStripMenuItem1"
-        Me.RenameToolStripMenuItem1.Size = New System.Drawing.Size(166, 24)
-        Me.RenameToolStripMenuItem1.Text = "Rename"
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(198, 6)
         '
-        'ToolStripSeparator4
+        'RenameAxisElemButton
         '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(163, 6)
-        '
-        'copy_down_bt
-        '
-        Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Download
-        Me.copy_down_bt.Name = "copy_down_bt"
-        Me.copy_down_bt.Size = New System.Drawing.Size(166, 24)
-        Me.copy_down_bt.Text = "Copy down"
+        Me.RenameAxisElemButton.Name = "RenameAxisElemButton"
+        Me.RenameAxisElemButton.Size = New System.Drawing.Size(201, 24)
+        Me.RenameAxisElemButton.Text = "Rename"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(163, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(198, 6)
+        '
+        'copy_down_bt
+        '
+        Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Resources.Download
+        Me.copy_down_bt.Name = "copy_down_bt"
+        Me.copy_down_bt.Size = New System.Drawing.Size(201, 24)
+        Me.copy_down_bt.Text = "Copy down"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(198, 6)
         '
         'drop_to_excel_bt
         '
-        Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.excel_blue2
+        Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.Resources.excel_blue2
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
-        Me.drop_to_excel_bt.Size = New System.Drawing.Size(166, 24)
-        Me.drop_to_excel_bt.Text = "Drop_on_excel"
+        Me.drop_to_excel_bt.Size = New System.Drawing.Size(201, 24)
+        Me.drop_to_excel_bt.Text = "Drop on excel"
+        '
+        'AutoResizeColumnsButton
+        '
+        Me.AutoResizeColumnsButton.Name = "AutoResizeColumnsButton"
+        Me.AutoResizeColumnsButton.Size = New System.Drawing.Size(201, 24)
+        Me.AutoResizeColumnsButton.Text = "Auto resize columns"
+        '
+        'ExpandAllBT
+        '
+        Me.ExpandAllBT.Name = "ExpandAllBT"
+        Me.ExpandAllBT.Size = New System.Drawing.Size(201, 24)
+        Me.ExpandAllBT.Text = "Expand all"
+        '
+        'CollapseAllBT
+        '
+        Me.CollapseAllBT.Name = "CollapseAllBT"
+        Me.CollapseAllBT.Size = New System.Drawing.Size(201, 24)
+        Me.CollapseAllBT.Text = "Collapse all"
         '
         'TableLayoutPanel1
         '
@@ -129,62 +154,51 @@ Partial Class AxisView
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.ExcelToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.m_axisEditionButton, Me.ExcelToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(516, 24)
         Me.MenuStrip1.TabIndex = 7
         Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'EditToolStripMenuItem
+        'm_axisEditionButton
         '
-        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewToolStripMenuItem, Me.DeleteAxisToolStripMenuItem, Me.ToolStripSeparator2, Me.RenameToolStripMenuItem, Me.CopyDownValuesToolStripMenuItem})
-        Me.EditToolStripMenuItem.Image = Global.FinancialBI.My.Resources.element_branch21
-        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(73, 20)
-        Me.EditToolStripMenuItem.Text = "Menu"
+        Me.m_axisEditionButton.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewAxisElemToolStripMenuItem, Me.DeleteAxisElemToolStripMenuItem, Me.ToolStripSeparator2})
+        Me.m_axisEditionButton.Image = Global.FinancialBI.My.Resources.Resources.element_branch23
+        Me.m_axisEditionButton.Name = "m_axisEditionButton"
+        Me.m_axisEditionButton.Size = New System.Drawing.Size(81, 20)
+        Me.m_axisEditionButton.Text = "Entities"
         '
-        'CreateNewToolStripMenuItem
+        'CreateANewAxisElemToolStripMenuItem
         '
-        Me.CreateNewToolStripMenuItem.Image = Global.FinancialBI.My.Resources.element_branch2_add
-        Me.CreateNewToolStripMenuItem.Name = "CreateNewToolStripMenuItem"
-        Me.CreateNewToolStripMenuItem.Size = New System.Drawing.Size(190, 24)
-        Me.CreateNewToolStripMenuItem.Text = "Create"
+        Me.CreateANewAxisElemToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.plus
+        Me.CreateANewAxisElemToolStripMenuItem.Name = "CreateANewAxisElemToolStripMenuItem"
+        Me.CreateANewAxisElemToolStripMenuItem.Size = New System.Drawing.Size(152, 24)
+        Me.CreateANewAxisElemToolStripMenuItem.Text = "Create"
         '
-        'DeleteAxisToolStripMenuItem
+        'DeleteAxisElemToolStripMenuItem
         '
-        Me.DeleteAxisToolStripMenuItem.Image = Global.FinancialBI.My.Resources.element_branch2_delete
-        Me.DeleteAxisToolStripMenuItem.Name = "DeleteAxisToolStripMenuItem"
-        Me.DeleteAxisToolStripMenuItem.Size = New System.Drawing.Size(190, 24)
-        Me.DeleteAxisToolStripMenuItem.Text = "Delete"
+        Me.DeleteAxisElemToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
+        Me.DeleteAxisElemToolStripMenuItem.Name = "DeleteAxisElemToolStripMenuItem"
+        Me.DeleteAxisElemToolStripMenuItem.Size = New System.Drawing.Size(152, 24)
+        Me.DeleteAxisElemToolStripMenuItem.Text = "Delete"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(187, 6)
-        '
-        'RenameToolStripMenuItem
-        '
-        Me.RenameToolStripMenuItem.Name = "RenameToolStripMenuItem"
-        Me.RenameToolStripMenuItem.Size = New System.Drawing.Size(190, 24)
-        Me.RenameToolStripMenuItem.Text = "Rename"
-        '
-        'CopyDownValuesToolStripMenuItem
-        '
-        Me.CopyDownValuesToolStripMenuItem.Name = "CopyDownValuesToolStripMenuItem"
-        Me.CopyDownValuesToolStripMenuItem.Size = New System.Drawing.Size(190, 24)
-        Me.CopyDownValuesToolStripMenuItem.Text = "Copy down values"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(149, 6)
         '
         'ExcelToolStripMenuItem
         '
         Me.ExcelToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SendEntitiesHierarchyToExcelToolStripMenuItem})
+        Me.ExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_dark_24_24
         Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
-        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(50, 20)
+        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(66, 20)
         Me.ExcelToolStripMenuItem.Text = "Excel"
         '
         'SendEntitiesHierarchyToExcelToolStripMenuItem
         '
-        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.excel_blue2
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.excel_blue2
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(162, 24)
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Drop on excel"
@@ -196,7 +210,7 @@ Partial Class AxisView
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Name = "AxisView"
         Me.Size = New System.Drawing.Size(516, 420)
-        Me.m_dataGridViewRightClickMenu.ResumeLayout(False)
+        Me.m_axisRightClickMenu.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
@@ -204,25 +218,27 @@ Partial Class AxisView
         Me.ResumeLayout(False)
 
     End Sub
-    Public WithEvents AxisIL As System.Windows.Forms.ImageList
+    Public WithEvents EntitiesIL As System.Windows.Forms.ImageList
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
-    Friend WithEvents m_dataGridViewRightClickMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents m_axisRightClickMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents copy_down_bt As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents drop_to_excel_bt As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents CreateAxisToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents DeleteAxisToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents CreateAxisElemToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DeleteAxisElemToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
-    Friend WithEvents EditToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CreateNewToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents DeleteAxisToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_axisEditionButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CreateANewAxisElemToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DeleteAxisElemToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SendEntitiesHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents RenameToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CopyDownValuesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents RenameToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RenameAxisElemButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents AutoResizeColumnsButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExpandAllBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CollapseAllBT As System.Windows.Forms.ToolStripMenuItem
+    Protected WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
 
 End Class

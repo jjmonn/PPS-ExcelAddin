@@ -101,20 +101,19 @@ Class AxisFilterManager : Inherits CRUDManager
         Return m_axisFilterDictionary(p_axis)(New Tuple(Of UInt32, UInt32)(p_axisElemId, p_filterId))
     End Function
 
-    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As UInt32) As AxisFilter
-        If m_axisFilterDictionary.ContainsKey(p_axis) = False Then Return Nothing
+    'Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_filterId As UInt32) As AxisFilter
+    '    If m_axisFilterDictionary.ContainsKey(p_axis) = False Then Return Nothing
+    '    Return m_axisFilterDictionary(p_axis)(p_filterId)
+    'End Function
 
-        Return m_axisFilterDictionary(p_axis)(p_id)
+    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_axisFilterId As Int32) As AxisFilter
+        Return GetValue(p_axis, CUInt(p_axisFilterId))
     End Function
 
-    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As Int32) As AxisFilter
-        Return GetValue(p_axis, CUInt(p_id))
-    End Function
-
-    Public Overrides Function GetValue(ByVal p_id As UInt32) As CRUDEntity
+    Public Overrides Function GetValue(ByVal p_axisFilterId As UInt32) As CRUDEntity
         For Each axis In m_axisFilterDictionary.Values
-            If axis.ContainsKey(p_id) = False Then Continue For
-            Return axis(p_id)
+            If axis.ContainsKey(p_axisFilterId) = False Then Continue For
+            Return axis(p_axisFilterId)
         Next
         Return Nothing
     End Function
@@ -129,12 +128,13 @@ Class AxisFilterManager : Inherits CRUDManager
     End Function
 
     ' Mapping Methods
-    Friend Function GetFilteredAxisIDs(ByRef p_axisType As AxisType, ByRef filter_id As UInt32, _
-                                       ByRef filter_value_id As UInt32) As List(Of UInt32)
+    Friend Function GetFilteredAxisIDs(ByRef p_axisType As AxisType, _
+                                       ByRef p_filterId As UInt32, _
+                                       ByRef p_filterValueId As UInt32) As List(Of UInt32)
 
         Dim axis_list As New List(Of UInt32)
         For Each axisFilter As AxisFilter In m_axisFilterDictionary(p_axisType).Values
-            If axisFilter.FilterValueId = filter_value_id Then axis_list.Add(axisFilter.AxisElemId)
+            If axisFilter.FilterValueId = p_filterValueId Then axis_list.Add(axisFilter.AxisElemId)
         Next
         Return axis_list
 
@@ -184,6 +184,7 @@ Class AxisFilterManager : Inherits CRUDManager
                                ByRef axis_id As Int32)
 
         FvTv.Nodes.Clear()
+        filtersNode.Nodes.Clear()
         GlobalVariables.Filters.LoadFiltersNode(filtersNode, axis_id)
         For Each filterNode As vTreeNode In filtersNode.Nodes
             Dim NewFvTvNode As New vTreeNode

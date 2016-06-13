@@ -22,6 +22,7 @@
 
 
 Imports System.Drawing
+Imports VIBlend.WinForms.Controls
 Imports Microsoft.Office.Interop.Excel
 Imports System.Windows.Forms
 Imports System.Collections.Generic
@@ -30,11 +31,9 @@ Imports VIBlend.WinForms.DataGridView
 Imports VIBlend.Utilities
 Imports Microsoft.Office.Interop
 Imports CRUD
-Imports VIBlend.WinForms.Controls
 
 
 Friend Class DataGridViewsUtil
-
 
 #Region "Instance Variables"
 
@@ -53,11 +52,6 @@ Friend Class DataGridViewsUtil
     Friend Shared DGV_HEIGHT_MARGIN As Int32 = 10
 
 #End Region
-
-
-    Friend Sub New()
-
-    End Sub
 
 
 #Region "ControllingUI2 DGVs Formatting"
@@ -826,7 +820,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Friend Shared Sub GetItemMaxLength(ByRef item As HierarchyItem, _
+    Private Shared Sub GetItemMaxLength(ByRef item As HierarchyItem, _
                                                 ByRef maxLength As Int32, _
                                                 ByRef depth As Int32)
 
@@ -840,7 +834,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Friend Shared Sub GetColumnMaxLength(ByRef item As HierarchyItem, _
+    Private Shared Sub GetColumnMaxLength(ByRef item As HierarchyItem, _
                                                 ByVal column_index As Int32, _
                                                 ByRef maxLength As Int32)
 
@@ -854,7 +848,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Friend Shared Sub SetColumnsMinWidth(ByRef DGV As vDataGridView, _
+    Private Shared Sub SetColumnsMinWidth(ByRef DGV As vDataGridView, _
                                                   ByRef min_width As Int32)
 
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
@@ -1033,7 +1027,6 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
-
 #Region "Data grid view loading from Treeview"
 
     Friend Shared Sub DGVRowsInitialize(ByRef p_dataGridView As vDataGridView, _
@@ -1077,5 +1070,20 @@ Friend Class DataGridViewsUtil
 
 #End Region
 
+
+    Public Shared Function GetItemAtPosition(ByRef p_DGV As vDataGridView, _
+                                             ByRef p_hiearchy As Hierarchy, _
+                                             ByRef p_position As System.Drawing.Point) As HierarchyItem
+
+        p_position.Y -= p_DGV.VerticalScroll
+        p_position.X -= p_DGV.HorizontalScroll
+        Dim l_item As HierarchyItem = p_hiearchy.HitTest(p_position)
+        If l_item IsNot Nothing Then
+            Return l_item
+        Else
+            Return Nothing
+        End If
+
+    End Function
 
 End Class

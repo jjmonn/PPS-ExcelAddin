@@ -32,39 +32,38 @@ Imports CRUD
 
 Friend Class ControllingUI_2
 
-
 #Region "Instance Variables"
 
 #Region "Objects"
 
     Private m_controller As ControllingUIController
     Friend DGVUTIL As New DataGridViewsUtil
-    Friend rightPane_Control As CUI2RightPane
-    Friend leftPane_control As CUI2LeftPane
-    Private leftSplitContainer As SplitContainer
-    Private rightSplitContainer As SplitContainer
+    Friend m_rightPaneControl As CUI2RightPane
+    Friend m_leftPaneControl As CUI2LeftPane
+    Private m_leftSplitContainer As SplitContainer
+    Private m_rightSplitContainer As SplitContainer
     Private m_circularProgress As New ProgressIndicator
-    Private leftPaneExpandBT As vButton
-    Private rightPaneExpandBT As vButton
-    Friend BackgroundWorker1 As New BackgroundWorker
-    Private m_logController As New LogController
+    Private m_leftPaneExpandBT As vButton
+    Private m_rightPaneExpandBT As vButton
+    Friend m_BackgroundWorker1 As New BackgroundWorker
+    Private m_logController As New FactLogController
     Private m_logView As LogView
 
 #End Region
 
 #Region "Variables"
 
-    Private current_DGV_cell As GridCell
-    Private rows_list_dic As New SafeDictionary(Of String, List(Of HierarchyItem))
-    Private columns_list_dic As New SafeDictionary(Of String, List(Of HierarchyItem))
-    Private row_index As Int32
-    Private column_index As Int32
-    Friend accountsTV As New vTreeView
-    Private SP1Distance As Single = 230
-    Private SP2Distance As Single = 900
-    '   Private m_formatsDictionary As New SafeDictionary(Of int32, Formats.FinancialBIFormat)
+    Private m_currentDGVCell As GridCell
+    Private m_rowsListDic As New SafeDictionary(Of String, List(Of HierarchyItem))
+    Private m_columnsListDic As New SafeDictionary(Of String, List(Of HierarchyItem))
+    Private m_rowIndex As Int32
+    Private m_columnIndex As Int32
+    Friend m_accountsTreeview As New vTreeView
+    Private m_SplitContainer1Distance As Single = 230
+    Private m_SplitContainer2Distance As Single = 900
+    Friend m_process As Account.AccountProcess
     Private m_currentEntityNode As vTreeNode
-
+    Private m_periodsList As List(Of Int32)
 
 #End Region
 
@@ -108,19 +107,32 @@ Friend Class ControllingUI_2
     Friend Const BOTTOM_LEFT_CHART_POSITION As String = "bl"
     Friend Const BOTTOM_RIGHT_CHART_POSITION As String = "br"
 
-    Friend Const ACCOUNTS_CODE As String = "Accounts"
-    Friend Const YEARS_CODE As String = "Years"
-    Friend Const MONTHS_CODE As String = "Months"
-    Friend Const VERSIONS_CODE As String = "Versions"
-    Friend Const ENTITIES_CODE As String = "Entities"
-    Friend Const CLIENTS_CODE As String = "Clients"
-    Friend Const PRODUCTS_CODE As String = "Products"
-    Friend Const ADJUSTMENT_CODE As String = "Adjustments"
+    Friend Shared ACCOUNTS_CODE As String = Local.GetValue("general.accounts")
+    Friend Shared YEARS_CODE As String = Local.GetValue("general.years")
+    Friend Shared MONTHS_CODE As String = Local.GetValue("general.months")
+    Friend Shared WEEKS_CODE As String = Local.GetValue("general.weeks")
+    Friend Shared DAYS_CODE As String = Local.GetValue("general.days")
+    Friend Shared VERSIONS_CODE As String = Local.GetValue("general.versions")
+    Friend Shared ENTITIES_CODE As String = Local.GetValue("general.entities")
+    Friend Shared CLIENTS_CODE As String = Local.GetValue("general.clients")
+    Friend Shared PRODUCTS_CODE As String = Local.GetValue("general.products")
+    Friend Shared ADJUSTMENT_CODE As String = Local.GetValue("general.adjustments")
+    Friend Shared EMPLOYEE_CODE As String = Local.GetValue("general.employees")
+
 
 #End Region
 
 #End Region
 
+#Region "Properties Getters and Setters"
+
+    Friend ReadOnly Property PeriodsShortList As List(Of Int32)
+        Get
+            Return m_periodsList
+        End Get
+    End Property
+
+#End Region
 
 #Region "Initialization"
 
@@ -130,30 +142,35 @@ Friend Class ControllingUI_2
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call. 
+        m_process = My.Settings.processId
         LeftPaneSetup()
         RightPaneSetup()
         m_controller = New ControllingUIController(Me)
-        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         SetupProgressUIs()
 
+        Select Case m_process
+            Case Account.AccountProcess.FINANCIAL : GlobalVariables.Accounts.LoadAccountsTV(m_accountsTreeview)
+            Case Account.AccountProcess.RH : GlobalVariables.Accounts.LoadRHAccountsTV(m_accountsTreeview)
+        End Select
+
         ' Init TabControl
-        For Each node As vTreeNode In accountsTV.Nodes
+        For Each node As vTreeNode In m_accountsTreeview.Nodes
             Dim newTab As New vTabPage
             newTab.Text = node.Text
             newTab.Name = node.Value
             DGVsControlTab.TabPages.Add(newTab)
         Next
+        ' Accounts Events
+        AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
+        AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
+
         InitItemsFormat()
         MultilangueSetup()
 
         ' Refreshing Background Worker
-        BackgroundWorker1.WorkerSupportsCancellation = True
-        AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
-        AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf backgroundWorker1_RunWorkerCompleted
-
-        ' Accounts Events
-        AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
-        AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
+        m_BackgroundWorker1.WorkerSupportsCancellation = True
+        AddHandler m_BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
+        AddHandler m_BackgroundWorker1.RunWorkerCompleted, AddressOf backgroundWorker1_RunWorkerCompleted
 
     End Sub
 
@@ -177,36 +194,36 @@ Friend Class ControllingUI_2
 
     Private Sub LeftPaneSetup()
 
-        leftPane_control = New CUI2LeftPane
-        Me.SplitContainer1.Panel1.Controls.Add(leftPane_control)
-        leftPane_control.Dock = DockStyle.Fill
+        m_leftPaneControl = New CUI2LeftPane(m_process)
+        Me.SplitContainer1.Panel1.Controls.Add(m_leftPaneControl)
+        m_leftPaneControl.Dock = DockStyle.Fill
 
-        leftPaneExpandBT = New vButton
-        leftPaneExpandBT.Width = 19
-        leftPaneExpandBT.Height = 19
-        leftPaneExpandBT.ImageList = ExpansionImageList
-        leftPaneExpandBT.ImageIndex = 0
-        leftPaneExpandBT.Text = ""
-        leftPaneExpandBT.FlatStyle = FlatStyle.Flat
-        leftPaneExpandBT.FlatAppearance.BorderSize = 0
-        leftPaneExpandBT.PaintBorder = False
-        leftPaneExpandBT.ImageAlign = Drawing.ContentAlignment.MiddleCenter
-        leftPaneExpandBT.Visible = False
-        Me.SplitContainer1.Panel1.Controls.Add(leftPaneExpandBT)
+        m_leftPaneExpandBT = New vButton
+        m_leftPaneExpandBT.Width = 19
+        m_leftPaneExpandBT.Height = 19
+        m_leftPaneExpandBT.ImageList = ExpansionImageList
+        m_leftPaneExpandBT.ImageIndex = 0
+        m_leftPaneExpandBT.Text = ""
+        m_leftPaneExpandBT.FlatStyle = FlatStyle.Flat
+        m_leftPaneExpandBT.FlatAppearance.BorderSize = 0
+        m_leftPaneExpandBT.PaintBorder = False
+        m_leftPaneExpandBT.ImageAlign = Drawing.ContentAlignment.MiddleCenter
+        m_leftPaneExpandBT.Visible = False
+        Me.SplitContainer1.Panel1.Controls.Add(m_leftPaneExpandBT)
 
-        AddHandler leftPane_control.entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
-        AddHandler leftPane_control.periodsTV.NodeChecked, AddressOf periodsTV_ItemCheck
-        AddHandler leftPane_control.PanelCollapseBT.Click, AddressOf CollapseSP1Pane1
-        AddHandler leftPaneExpandBT.Click, AddressOf ExpandSP1Pane1
+        AddHandler m_leftPaneControl.entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
+        AddHandler m_leftPaneControl.periodsTV.NodeChecked, AddressOf periodsTV_ItemCheck
+        AddHandler m_leftPaneControl.PanelCollapseBT.Click, AddressOf CollapseSP1Pane1
+        AddHandler m_leftPaneExpandBT.Click, AddressOf ExpandSP1Pane1
 
-        leftPane_control.entitiesTV.ContextMenuStrip = EntitiesRCMenu
-        leftPane_control.adjustmentsTV.ContextMenuStrip = AdjustmentsRCMenu
-        leftPane_control.periodsTV.ContextMenuStrip = PeriodsRCMenu
-        leftPane_control.SelectionCB.DropDownWidth = leftPane_control.SelectionCB.Width
-        leftPane_control.SelectionCB.DropDownHeight = leftPane_control.SelectionCB.ItemHeight * 12
+        m_leftPaneControl.entitiesTV.ContextMenuStrip = EntitiesRCMenu
+        m_leftPaneControl.adjustmentsTV.ContextMenuStrip = AdjustmentsRCMenu
+        m_leftPaneControl.periodsTV.ContextMenuStrip = PeriodsRCMenu
+        m_leftPaneControl.SelectionCB.DropDownWidth = m_leftPaneControl.SelectionCB.Width
+        m_leftPaneControl.SelectionCB.DropDownHeight = m_leftPaneControl.SelectionCB.ItemHeight * 12
 
 
-        Dim vNode As vTreeNode = VTreeViewUtil.FindNode(leftPane_control.versionsTV, My.Settings.version_id)
+        Dim vNode As vTreeNode = VTreeViewUtil.FindNode(m_leftPaneControl.versionsTV, My.Settings.version_id)
         If Not vNode Is Nothing Then
             vNode.Checked = Windows.Forms.CheckState.Checked
         End If
@@ -216,43 +233,47 @@ Friend Class ControllingUI_2
 
     Private Sub RightPaneSetup()
 
-        Dim entitiesFiltersNode As New TreeNode
-        Dim clientsFiltersNode As New TreeNode
-        Dim productsFiltersNode As New TreeNode
-        Dim adjustmentsFiltersNode As New TreeNode
+        Dim l_entitiesFiltersNode As New TreeNode
+        Dim l_clientsFiltersNode As New TreeNode
+        Dim l_productsFiltersNode As New TreeNode
+        Dim l_adjustmentsFiltersNode As New TreeNode
+        Dim l_employeesFiltersNode As New TreeNode
 
-        GlobalVariables.Filters.LoadFiltersNode(entitiesFiltersNode, GlobalEnums.AnalysisAxis.ENTITIES)
-        GlobalVariables.Filters.LoadFiltersNode(clientsFiltersNode, GlobalEnums.AnalysisAxis.CLIENTS)
-        GlobalVariables.Filters.LoadFiltersNode(productsFiltersNode, GlobalEnums.AnalysisAxis.PRODUCTS)
-        GlobalVariables.Filters.LoadFiltersNode(adjustmentsFiltersNode, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        GlobalVariables.Filters.LoadFiltersNode(l_entitiesFiltersNode, GlobalEnums.AnalysisAxis.ENTITIES)
+        GlobalVariables.Filters.LoadFiltersNode(l_clientsFiltersNode, GlobalEnums.AnalysisAxis.CLIENTS)
+        GlobalVariables.Filters.LoadFiltersNode(l_productsFiltersNode, GlobalEnums.AnalysisAxis.PRODUCTS)
+        GlobalVariables.Filters.LoadFiltersNode(l_adjustmentsFiltersNode, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        GlobalVariables.Filters.LoadFiltersNode(l_employeesFiltersNode, GlobalEnums.AnalysisAxis.EMPLOYEES)
 
-        rightPane_Control = New CUI2RightPane(entitiesFiltersNode, _
-                                              clientsFiltersNode, _
-                                              productsFiltersNode, _
-                                              adjustmentsFiltersNode)
+        m_rightPaneControl = New CUI2RightPane(m_process, _
+                                              l_entitiesFiltersNode, _
+                                              l_clientsFiltersNode, _
+                                              l_productsFiltersNode, _
+                                              l_adjustmentsFiltersNode, _
+                                              l_employeesFiltersNode)
 
-        SplitContainer2.Panel2.Controls.Add(rightPane_Control)
-        rightPane_Control.Dock = DockStyle.Fill
+        SplitContainer2.Panel2.Controls.Add(m_rightPaneControl)
+        m_rightPaneControl.Dock = DockStyle.Fill
 
-        rightPane_Control.CollapseRightPaneBT.ImageList = ExpansionImageList
-        rightPane_Control.CollapseRightPaneBT.ImageIndex = 1
+        m_rightPaneControl.CollapseRightPaneBT.ImageList = ExpansionImageList
+        m_rightPaneControl.CollapseRightPaneBT.ImageIndex = 1
 
-        rightPaneExpandBT = New vButton
-        SplitContainer2.Panel2.Controls.Add(rightPaneExpandBT)
-        rightPaneExpandBT.Width = 19
-        rightPaneExpandBT.Height = 19
-        rightPaneExpandBT.ImageList = ExpansionImageList
-        rightPaneExpandBT.Margin = New Padding(3, 5, 3, 3)
-        rightPaneExpandBT.ImageIndex = 0
-        rightPaneExpandBT.Text = ""
-        rightPaneExpandBT.FlatStyle = FlatStyle.Flat
-        rightPaneExpandBT.PaintBorder = False
+        m_rightPaneExpandBT = New vButton
+        SplitContainer2.Panel2.Controls.Add(m_rightPaneExpandBT)
+        m_rightPaneExpandBT.Width = 19
+        m_rightPaneExpandBT.Height = 19
+        m_rightPaneExpandBT.ImageList = ExpansionImageList
+        m_rightPaneExpandBT.Margin = New Padding(3, 5, 3, 3)
+        m_rightPaneExpandBT.ImageIndex = 0
+        m_rightPaneExpandBT.Text = ""
+        m_rightPaneExpandBT.FlatStyle = FlatStyle.Flat
+        m_rightPaneExpandBT.PaintBorder = False
         ' rightPaneExpandBT.ImageAlign = Drawing.ContentAlignment.MiddleCenter
-        rightPaneExpandBT.Visible = False
+        m_rightPaneExpandBT.Visible = False
 
-        AddHandler rightPane_Control.UpdateBT.Click, AddressOf RefreshFromRightPane
-        AddHandler rightPane_Control.CollapseRightPaneBT.Click, AddressOf CollapseSP2Pane2
-        AddHandler rightPaneExpandBT.Click, AddressOf ExpandSP2Pane2
+        AddHandler m_rightPaneControl.UpdateBT.Click, AddressOf RefreshFromRightPane
+        AddHandler m_rightPaneControl.CollapseRightPaneBT.Click, AddressOf CollapseSP2Pane2
+        AddHandler m_rightPaneExpandBT.Click, AddressOf ExpandSP2Pane2
 
     End Sub
 
@@ -321,7 +342,6 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
 #Region "Interface"
 
     Friend Sub RefreshData(Optional ByRef useCache As Boolean = False)
@@ -329,13 +349,39 @@ Friend Class ControllingUI_2
         If m_controller.m_isComputingFlag = True Then
             Exit Sub
         End If
+
+        Dim entityId As UInt32 = 0
+
+        If m_leftPaneControl.entitiesTV.SelectedNode IsNot Nothing Then
+            entityId = m_leftPaneControl.entitiesTV.SelectedNode.Value
+        ElseIf m_leftPaneControl.entitiesTV.Nodes.Count > 0 Then
+            entityId = m_leftPaneControl.entitiesTV.Nodes(0).Value
+        End If
+
+        Dim complexity As UInt32 = m_rightPaneControl.GetDimensionsComplexity(entityId)
+
+        If complexity > 500000 Then
+            MsgBox(Local.GetValue("CUI.error_complexity"))
+            Exit Sub
+        ElseIf complexity > 100000 Then
+            Dim result As Integer = MsgBox(Local.GetValue("CUI.warning_complexity"), MsgBoxStyle.YesNo, "Warning")
+
+            If result <> MsgBoxResult.Yes Then Exit Sub
+        End If
+
+        If m_process = Account.AccountProcess.RH Then
+            m_periodsList = m_leftPaneControl.GetRHPeriodSelection
+        Else
+            m_periodsList = Nothing
+        End If
+
         '   m_progressBar.Left = (SplitContainer1.Panel2.Width - m_progressBar.Width) / 2
         '   m_progressBar.Top = (SplitContainer1.Panel2.Height - m_progressBar.Height) / 2
         DGVsControlTab.Visible = False
         m_progressBar.Visible = True
         m_progressBar.Enabled = True
         m_progressBar.Show()
-        BackgroundWorker1.RunWorkerAsync()
+        m_BackgroundWorker1.RunWorkerAsync()
 
     End Sub
 
@@ -345,8 +391,8 @@ Friend Class ControllingUI_2
             m_currentEntityNode = m_controller.m_entityNode
             RefreshData(True)
         Else
-            If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
-                m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
+            If Not m_leftPaneControl.entitiesTV.SelectedNode Is Nothing Then
+                m_currentEntityNode = m_leftPaneControl.entitiesTV.SelectedNode
                 RefreshData(True)
             Else
                 RefreshData(True)
@@ -357,7 +403,7 @@ Friend Class ControllingUI_2
 
     Friend Sub FormatDGVItem(ByRef item As HierarchyItem)
 
-        Dim currencyId As UInt32 = leftPane_control.currenciesCLB.SelectedItem.Value
+        Dim currencyId As UInt32 = m_leftPaneControl.currenciesCLB.SelectedItem.Value
         Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(currencyId)
         If l_currency Is Nothing Then Exit Sub
 
@@ -412,8 +458,15 @@ Friend Class ControllingUI_2
 
     End Sub
 
-#End Region
+    Friend Function GetPeriodsList() As Int32()
+        If m_periodsList Is Nothing Then
+            Return Nothing
+        Else
+            Return m_periodsList.ToArray
+        End If
+    End Function
 
+#End Region
 
 #Region "Events"
 
@@ -429,8 +482,8 @@ Friend Class ControllingUI_2
 
         ' to be managed !! -> goes into left pane ? priority normal
         If e.KeyCode = Keys.Enter Then
-            If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
-                m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
+            If Not m_leftPaneControl.entitiesTV.SelectedNode Is Nothing Then
+                m_currentEntityNode = m_leftPaneControl.entitiesTV.SelectedNode
                 RefreshData()
             Else
                 m_currentEntityNode = Nothing
@@ -446,7 +499,7 @@ Friend Class ControllingUI_2
         If m_isUpdatingPeriodsCheckList = False Then
             Dim periodSelectionDict As New SafeDictionary(Of String, Boolean)
 
-            For Each node As vTreeNode In leftPane_control.periodsTV.GetNodes
+            For Each node As vTreeNode In m_leftPaneControl.periodsTV.GetNodes
                 If node.Checked = CheckState.Checked Then
                     periodSelectionDict.Add(node.Text, True)
                 Else
@@ -460,7 +513,7 @@ Friend Class ControllingUI_2
 
     Private Sub DGV_CellMouseClick(sender As Object, e As CellMouseEventArgs)
 
-        current_DGV_cell = e.Cell
+        m_currentDGVCell = e.Cell
 
     End Sub
 
@@ -472,14 +525,13 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
 #Region "Calls Backs"
 
 #Region "Data Grid View Righ Click Menu Calls backs"
 
     Private Sub Compute_Click(sender As Object, e As EventArgs) Handles RefreshRightClick.Click
 
-        m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
+        m_currentEntityNode = m_leftPaneControl.entitiesTV.SelectedNode
         RefreshData()
 
     End Sub
@@ -502,15 +554,15 @@ Friend Class ControllingUI_2
 
     Private Sub LogRightClick_Click(sender As Object, e As EventArgs) Handles LogRightClick.Click
 
-        If Not current_DGV_cell Is Nothing Then
+        If Not m_currentDGVCell Is Nothing Then
             Dim accountId As Int32 = 0
             Dim entityId As Int32 = 0
             Dim periodId As String = ""
             Dim versionId As String = 0
             Dim filterId As String = "0"
 
-            m_controller.SetCellsItems(current_DGV_cell.RowItem, _
-                                       current_DGV_cell.ColumnItem, _
+            m_controller.SetCellsItems(m_currentDGVCell.RowItem, _
+                                       m_currentDGVCell.ColumnItem, _
                                        entityId, _
                                        accountId, _
                                        periodId, _
@@ -522,7 +574,7 @@ Friend Class ControllingUI_2
             If l_account.FormulaType = Account.FormulaTypes.HARD_VALUE_INPUT _
             Or l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
 
-                Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLog_ThreadSafe)
+                Dim logsHashTable As New Action(Of List(Of FactLog))(AddressOf DisplayLog_ThreadSafe)
                 m_logController.GetFactLog(accountId, _
                                            entityId, _
                                            Strings.Right(periodId, Len(periodId) - 1), _
@@ -600,11 +652,11 @@ Friend Class ControllingUI_2
 
     Private Sub RefreshToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshToolStripMenuItem.Click
 
-        If leftPane_control.entitiesTV.SelectedNode Is Nothing Then
+        If m_leftPaneControl.entitiesTV.SelectedNode Is Nothing Then
             m_currentEntityNode = Nothing
             RefreshData()
         Else
-            m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
+            m_currentEntityNode = m_leftPaneControl.entitiesTV.SelectedNode
             RefreshData()
         End If
 
@@ -624,18 +676,18 @@ Friend Class ControllingUI_2
     Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
 
         m_isUpdatingPeriodsCheckList = True
-        VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(m_leftPaneControl.periodsTV, CheckState.Checked)
         m_isUpdatingPeriodsCheckList = False
-        periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
+        periodsTV_ItemCheck(sender, New vTreeViewEventArgs(m_leftPaneControl.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
     End Sub
 
     Private Sub UnselectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnselectAllToolStripMenuItem.Click
 
         m_isUpdatingPeriodsCheckList = True
-        VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, CheckState.Unchecked)
+        VTreeViewUtil.CheckStateAllNodes(m_leftPaneControl.periodsTV, CheckState.Unchecked)
         m_isUpdatingPeriodsCheckList = False
-        periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
+        periodsTV_ItemCheck(sender, New vTreeViewEventArgs(m_leftPaneControl.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
 
     End Sub
@@ -659,7 +711,7 @@ Friend Class ControllingUI_2
 
     Private Sub SetAdjustmentsSelection(ByRef state As Boolean)
 
-        For Each node As vTreeNode In leftPane_control.adjustmentsTV.Nodes
+        For Each node As vTreeNode In m_leftPaneControl.adjustmentsTV.Nodes
             node.Checked = state
         Next
 
@@ -707,17 +759,17 @@ Friend Class ControllingUI_2
 
         Select Case chart_position
             Case TOP_LEFT_CHART_POSITION
-                leftSplitContainer.Panel1.Controls.Clear()
-                leftSplitContainer.Panel1.Controls.Add(chart)
+                m_leftSplitContainer.Panel1.Controls.Clear()
+                m_leftSplitContainer.Panel1.Controls.Add(chart)
             Case TOP_RIGHT_CHART_POSITION
-                rightSplitContainer.Panel1.Controls.Clear()
-                rightSplitContainer.Panel1.Controls.Add(chart)
+                m_rightSplitContainer.Panel1.Controls.Clear()
+                m_rightSplitContainer.Panel1.Controls.Add(chart)
             Case BOTTOM_LEFT_CHART_POSITION
-                leftSplitContainer.Panel2.Controls.Clear()
-                leftSplitContainer.Panel2.Controls.Add(chart)
+                m_leftSplitContainer.Panel2.Controls.Clear()
+                m_leftSplitContainer.Panel2.Controls.Add(chart)
             Case BOTTOM_RIGHT_CHART_POSITION
-                rightSplitContainer.Panel2.Controls.Clear()
-                rightSplitContainer.Panel2.Controls.Add(chart)
+                m_rightSplitContainer.Panel2.Controls.Clear()
+                m_rightSplitContainer.Panel2.Controls.Add(chart)
         End Select
 
     End Sub
@@ -730,35 +782,35 @@ Friend Class ControllingUI_2
 
     Private Sub ExpandSP2Pane2()
 
-        SplitContainer2.SplitterDistance = SP2Distance
-        rightPane_Control.Visible = True
-        rightPaneExpandBT.Visible = False
+        SplitContainer2.SplitterDistance = m_SplitContainer2Distance
+        m_rightPaneControl.Visible = True
+        m_rightPaneExpandBT.Visible = False
 
     End Sub
 
     Private Sub CollapseSP2Pane2()
 
-        SP2Distance = SplitContainer2.SplitterDistance
+        m_SplitContainer2Distance = SplitContainer2.SplitterDistance
         SplitContainer2.SplitterDistance = SplitContainer2.Width - 27
-        rightPane_Control.Visible = False
-        rightPaneExpandBT.Visible = True
+        m_rightPaneControl.Visible = False
+        m_rightPaneExpandBT.Visible = True
 
     End Sub
 
     Private Sub CollapseSP1Pane1()
 
         SplitContainer1.SplitterDistance = 25
-        leftPane_control.Visible = False
-        leftPaneExpandBT.Visible = True
+        m_leftPaneControl.Visible = False
+        m_leftPaneExpandBT.Visible = True
 
     End Sub
 
     Private Sub ExpandSP1Pane1()
 
-        SplitContainer1.SplitterDistance = SP1Distance
+        SplitContainer1.SplitterDistance = m_SplitContainer1Distance
         SplitContainer1.Panel1.Show()
-        leftPane_control.Visible = True
-        leftPaneExpandBT.Visible = False
+        m_leftPaneControl.Visible = True
+        m_leftPaneExpandBT.Visible = False
 
     End Sub
 
@@ -767,7 +819,6 @@ Friend Class ControllingUI_2
 
 
 #End Region
-
 
 #Region "ThreadSafe"
 
@@ -778,7 +829,7 @@ Friend Class ControllingUI_2
             Me.Invoke(MyDelegate, New Object() {p_state})
         Else
             RefreshToolStripMenuItem.Enabled = p_state
-            rightPane_Control.UpdateBT.Enabled = p_state
+            m_rightPaneControl.UpdateBT.Enabled = p_state
             If Not RefreshToolStripMenuItem.GetCurrentParent() Is Nothing Then RefreshToolStripMenuItem.GetCurrentParent().Refresh()
         End If
     End Sub
@@ -796,7 +847,7 @@ Friend Class ControllingUI_2
         Else
 
             Dim versionsIds As New List(Of Int32)
-            For Each versionId In VTreeViewUtil.GetCheckedNodesIds(leftPane_control.versionsTV)
+            For Each versionId In VTreeViewUtil.GetCheckedNodesIds(m_leftPaneControl.versionsTV)
                 Dim version As Version = GlobalVariables.Versions.GetValue(versionId)
                 If version Is Nothing Then Continue For
                 If version.IsFolder = False Then
@@ -805,8 +856,8 @@ Friend Class ControllingUI_2
             Next
 
             If m_currentEntityNode Is Nothing Then
-                If leftPane_control.entitiesTV.Nodes.Count > 0 Then
-                    m_currentEntityNode = leftPane_control.entitiesTV.Nodes(0)
+                If m_leftPaneControl.entitiesTV.Nodes.Count > 0 Then
+                    m_currentEntityNode = m_leftPaneControl.entitiesTV.Nodes(0)
                     If versionsIds.Count > 0 Then
                         ' Launch Computation
                         Try
@@ -899,32 +950,27 @@ Friend Class ControllingUI_2
             Me.Invoke(MyDelegate, New Object() {})
         Else
             Dim dgvFormatter As New DataGridViewsUtil
-            For Each tab_ As vTabPage In DGVsControlTab.TabPages
-                If tab_.Controls.Count <= 0 Then Continue For
-                Dim dgv As vDataGridView = tab_.Controls(0)
-                dgv.Select()
-                dgv.GroupingDefaultHeaderTextVisible = True
-                dgv.BackColor = Color.White
-                dgv.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_NONE
-                dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-                dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+            For Each l_tab As vTabPage In DGVsControlTab.TabPages
+                If l_tab.Controls.Count <= 0 Then Continue For
+                Dim l_dgv As vDataGridView = l_tab.Controls(0)
+                l_dgv.Select()
+                l_dgv.GroupingDefaultHeaderTextVisible = True
+                l_dgv.BackColor = Color.White
+                l_dgv.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_NONE
                 '    dgv.RowsHierarchy.AllowResize = False
-                dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
-                dgv.ColumnsHierarchy.AutoStretchColumns = True
-                dgv.ColumnsHierarchy.ExpandAllItems()
-
-                ' attention !!! test
-                '    dgvFormatter.FormatDGVs(dgv, 34)
-
-                dgv.Update()
-                dgv.Refresh()
+                l_dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
+                l_dgv.ColumnsHierarchy.ExpandAllItems()
+                '     dgv.ColumnsHierarchy.AutoStretchColumns = True
+                l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                l_dgv.Refresh()
+                l_dgv.Select()
             Next
         End If
 
     End Sub
 
-    Delegate Sub DisplayLogAttemp_Delegate(p_logValuesHt As List(Of Hashtable))
-    Private Sub DisplayLog_ThreadSafe(p_logValuesHt As List(Of Hashtable))
+    Delegate Sub DisplayLogAttemp_Delegate(p_logValuesHt As List(Of FactLog))
+    Private Sub DisplayLog_ThreadSafe(p_logValuesHt As List(Of FactLog))
 
         If InvokeRequired Then
             Dim MyDelegate As New DisplayLogAttemp_Delegate(AddressOf DisplayLog_ThreadSafe)
@@ -938,17 +984,66 @@ Friend Class ControllingUI_2
     Delegate Sub ReloadAccountsTV_Delegate()
     Friend Sub ReloadAccountsTV_ThreadSafe()
 
-        If Me.accountsTV.InvokeRequired Then
+        If Me.m_accountsTreeview.InvokeRequired Then
             Dim MyDelegate As New ReloadAccountsTV_Delegate(AddressOf ReloadAccountsTV_ThreadSafe)
-            Me.accountsTV.Invoke(MyDelegate, New Object() {})
+            Me.m_accountsTreeview.Invoke(MyDelegate, New Object() {})
         Else
-            GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
+            GlobalVariables.Accounts.LoadAccountsTV(m_accountsTreeview)
         End If
 
     End Sub
 
-#End Region
+    Delegate Sub DeleteNonUsedClientsRH_Delegate()
+    Friend Sub DeleteNonUsedClientsRH()
 
+        If Me.m_accountsTreeview.InvokeRequired Then
+            Dim MyDelegate As New DeleteNonUsedClientsRH_Delegate(AddressOf DeleteNonUsedClientsRH)
+            Me.m_accountsTreeview.Invoke(MyDelegate, New Object() {})
+        Else
+            For Each l_tab As vTabPage In DGVsControlTab.TabPages
+                If l_tab.Controls.Count <= 0 Then Continue For
+                Dim l_dgv As vDataGridView = l_tab.Controls(0)
+                l_dgv.Select()
+                For Each l_row In l_dgv.RowsHierarchy.Items
+                    DeleteUnusedClientsRows(l_row)
+                Next
+                l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                l_dgv.Refresh()
+            Next
+        End If
+
+    End Sub
+
+    Private Sub DeleteUnusedClientsRows(ByRef p_row As HierarchyItem)
+
+        If GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, p_row.Caption) IsNot Nothing Then
+            Dim l_parent As HierarchyItem = p_row.ParentItem
+            If IsZeroRow(p_row) = True _
+             AndAlso l_parent IsNot Nothing Then
+                l_parent.Items.Remove(p_row)
+                p_row = Nothing
+            End If
+        End If
+        If p_row IsNot Nothing Then
+            For Each l_subItem In p_row.Items.ToList
+                If l_subItem IsNot Nothing Then DeleteUnusedClientsRows(l_subItem)
+            Next
+        End If
+
+    End Sub
+
+    Private Function IsZeroRow(ByRef p_row As HierarchyItem) As Boolean
+        For Each item In p_row.Cells
+            If TypeOf (item.Value) Is Double _
+            AndAlso item.Value <> 0 Then Return (False)
+            '    If TypeOf (item.Value) Is String _
+            '    AndAlso item.Value <> "" Then Return (False)
+        Next
+        Return (True)
+    End Function
+
+
+#End Region
 
 #Region "Formatting"
 
@@ -987,6 +1082,4 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
-  
 End Class

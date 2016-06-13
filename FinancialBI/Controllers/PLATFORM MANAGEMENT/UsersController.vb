@@ -98,6 +98,32 @@ Friend Class UsersController
         m_userList.Update(tmpUser)
     End Sub
 
+    Friend Function GetUserAllowedEntities(ByRef p_userId As Int32) As MultiIndexDictionary(Of UInt32, UInt32, UserAllowedEntity)
+        Return GlobalVariables.UserAllowedEntities.GetDictionary(p_userId)
+    End Function
+
+    Friend Function IsAllowedEntity(ByRef p_userId As Int32, ByRef p_entityId As Int32) As Boolean
+        Dim list = GetUserAllowedEntities(p_userId)
+
+        If list Is Nothing Then Return False
+        Return list.ContainsSecondaryKey(p_entityId)
+    End Function
+
+    Friend Sub AddAllowedEntity(ByRef p_userId As UInt32, ByRef p_entityId As UInt32)
+        Dim allowedEntity As New UserAllowedEntity
+
+        allowedEntity.UserId = p_userId
+        allowedEntity.EntityId = p_entityId
+        GlobalVariables.UserAllowedEntities.Create(allowedEntity)
+    End Sub
+
+    Friend Sub RemoveAllowedEntity(ByRef p_userId As Int32, ByRef p_entityId As UInt32)
+        Dim allowedEntity As UserAllowedEntity = GlobalVariables.UserAllowedEntities.GetValue(p_userId, p_entityId)
+
+        If allowedEntity Is Nothing Then Exit Sub
+        GlobalVariables.UserAllowedEntities.Delete(allowedEntity.Id, allowedEntity.UserId, allowedEntity.EntityId)
+    End Sub
+
 #End Region
 
 

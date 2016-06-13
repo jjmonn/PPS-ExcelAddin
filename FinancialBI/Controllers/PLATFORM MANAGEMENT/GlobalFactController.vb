@@ -42,6 +42,11 @@ Friend Class GlobalFactController
 
     Public Sub Close()
 
+        RemoveHandler GlobalVariables.GlobalFactsVersions.Read, AddressOf AfterGlobalFactsVersionRead
+        RemoveHandler GlobalVariables.GlobalFactsVersions.CreationEvent, AddressOf AfterGlobalFactsVersionCreate
+        RemoveHandler GlobalVariables.GlobalFactsVersions.UpdateEvent, AddressOf AfterGlobalFactsVersionUpdate
+        RemoveHandler GlobalVariables.GlobalFactsVersions.DeleteEvent, AddressOf AfterGlobalFactsVersionDelete
+        RemoveHandler GlobalVariables.GlobalFacts.DeleteEvent, AddressOf AfterGlobalFactDelete
         m_view.Dispose()
         m_view = Nothing
 
@@ -240,24 +245,25 @@ Friend Class GlobalFactController
 
 #Region "Events"
 
-    Private Sub AfterGlobalFactDelete(ByRef p_status As ErrorMessage, ByRef p_id As Int32)
+    Private Sub AfterGlobalFactDelete(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
         If p_status <> ErrorMessage.SUCCESS Then Exit Sub
         m_view.ReloadUI()
     End Sub
 
-    Private Sub AfterGlobalFactsVersionRead(ByRef p_status As ErrorMessage, ByRef p_versionHt As GlobalFactVersion)
+    Private Sub AfterGlobalFactsVersionRead(ByRef p_status As ErrorMessage, ByRef p_versionHt As CRUDEntity)
 
+        Dim versionHT As GlobalFactVersion = p_versionHt
         If m_view Is Nothing Then Exit Sub
         If p_status = ErrorMessage.SUCCESS Then
-            m_view.TVUpdate(p_versionHt.Id, _
-                            p_versionHt.ParentId, _
-                            p_versionHt.Name, _
-                            p_versionHt.IsFolder)
+            m_view.TVUpdate(versionHT.Id, _
+                            versionHT.ParentId, _
+                            versionHT.Name, _
+                            versionHT.IsFolder)
         End If
 
     End Sub
 
-    Private Sub AfterGlobalFactsVersionCreate(ByRef p_status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterGlobalFactsVersionCreate(ByRef p_status As ErrorMessage, ByRef id As UInt32)
 
         m_newFactVersionUI.CreationBackgroundWorker_AfterWork()
         If p_status <> ErrorMessage.SUCCESS Then
@@ -266,12 +272,12 @@ Friend Class GlobalFactController
 
     End Sub
 
-    Private Sub AfterGlobalFactsVersionUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterGlobalFactsVersionUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
 
     End Sub
 
-    Private Sub AfterGlobalFactsVersionDelete(ByRef p_status As ErrorMessage, ByRef p_id As Int32)
+    Private Sub AfterGlobalFactsVersionDelete(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
 
         If m_view Is Nothing Then Exit Sub
         m_view.AfterDeleteBackgroundWorker()

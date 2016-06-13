@@ -22,7 +22,7 @@ Public Class AllocationKeysController
         GlobalVariables.AxisElems.LoadEntitiesTV(m_entitiesTreeview)
         m_allocationKeysView = New AllocationKeysView(Me, p_accountName, m_entitiesTreeview)
         Dim l_entitiesAllocationKeysDictionary As New Dictionary(Of Int32, Double)
-        Dim l_entityDistributionMultiIndexDictionary = GlobalVariables.EntityDistribution.GetDictionary(p_accountId)
+        Dim l_entityDistributionMultiIndexDictionary = GlobalVariables.EntitiesDistributions.GetDictionary(p_accountId)
         If l_entityDistributionMultiIndexDictionary IsNot Nothing Then
             For Each l_entityDistribution As CRUD.EntityDistribution In l_entityDistributionMultiIndexDictionary.Values
                 l_entitiesAllocationKeysDictionary.Add(l_entityDistribution.EntityId, l_entityDistribution.Percentage)
@@ -33,8 +33,15 @@ Public Class AllocationKeysController
         m_allocationKeysView.Show()
 
         ' Server Events listening
-        AddHandler GlobalVariables.EntityDistribution.Read, AddressOf EntityDistributionRead
-        AddHandler GlobalVariables.EntityDistribution.UpdateEvent, AddressOf EntityDistributionUpdate
+        AddHandler GlobalVariables.EntitiesDistributions.Read, AddressOf EntityDistributionRead
+        AddHandler GlobalVariables.EntitiesDistributions.UpdateEvent, AddressOf EntityDistributionUpdate
+
+    End Sub
+
+    Public Sub close()
+
+        RemoveHandler GlobalVariables.EntitiesDistributions.Read, AddressOf EntityDistributionRead
+        RemoveHandler GlobalVariables.EntitiesDistributions.UpdateEvent, AddressOf EntityDistributionUpdate
 
     End Sub
 
@@ -51,10 +58,10 @@ Public Class AllocationKeysController
             l_entityDistribution.AccountId = m_accountId
             l_entityDistribution.EntityId = p_entityId
             l_entityDistribution.Percentage = p_value
-            GlobalVariables.EntityDistribution.Create(l_entityDistribution)
+            GlobalVariables.EntitiesDistributions.Create(l_entityDistribution)
         Else
             l_entityDistribution.Percentage = p_value
-            GlobalVariables.EntityDistribution.Update(l_entityDistribution)
+            GlobalVariables.EntitiesDistributions.Update(l_entityDistribution)
         End If
 
     End Sub
@@ -79,11 +86,12 @@ Public Class AllocationKeysController
 
 #Region "Servers Events"
 
-    Private Sub EntityDistributionRead(ByRef status As ErrorMessage, ByRef p_entityDistribution As EntityDistribution)
+    Private Sub EntityDistributionRead(ByRef status As ErrorMessage, ByRef p_entityDistribution As CRUDEntity)
 
+        Dim entityDistribution As EntityDistribution = p_entityDistribution
         If status = ErrorMessage.SUCCESS Then
             Dim l_entitiesAllocationKeysDictionary As Dictionary(Of Int32, Double) = m_allocationKeysView.GetEntityAllocationKeysDictionary
-            l_entitiesAllocationKeysDictionary(p_entityDistribution.EntityId) = p_entityDistribution.Percentage
+            l_entitiesAllocationKeysDictionary(entityDistribution.EntityId) = entityDistribution.Percentage
             ComputeCalculatedAllocationKeys(l_entitiesAllocationKeysDictionary)
             m_allocationKeysView.FillAllocationKeysDataGridView_ThreadSafe(l_entitiesAllocationKeysDictionary)
         Else
@@ -114,7 +122,7 @@ Public Class AllocationKeysController
     End Sub
 
     Friend Function GetEntityDistribution(ByVal p_entityId As UInt32, ByVal p_accountId As UInt32) As CRUD.EntityDistribution
-        Return GlobalVariables.EntityDistribution.GetValue(p_entityId, p_accountId)
+        Return GlobalVariables.EntitiesDistributions.GetValue(p_entityId, p_accountId)
     End Function
 
     Friend Function GetEntityDistributionCopy(ByVal p_entityId As UInt32, ByVal p_accountId As UInt32) As CRUD.EntityDistribution

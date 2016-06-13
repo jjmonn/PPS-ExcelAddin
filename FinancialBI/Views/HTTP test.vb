@@ -1,5 +1,4 @@
-﻿Imports System.Web.Script.Serialization
-Imports System.IO
+﻿Imports System.IO
 Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Windows.Forms.DataVisualization.Charting
@@ -53,11 +52,11 @@ Friend Class HTTP_test
     Private Sub build_years_months_array(years_months_dict As Dictionary(Of Int32, Int32()), _
                                          periods_array() As Int32)
 
-        For Each period_ As Integer In periods_array
-            Dim currentYear As Int32 = Year(DateTime.FromOADate(period_))
-            Dim months_list As List(Of Int32) = Period.GetMonthsPeriodsInOneYear(currentYear, False)
-            years_months_dict.Add(period_, months_list.ToArray)
-        Next
+        'For Each period_ As Integer In periods_array
+        '    Dim currentYear As Int32 = Year(DateTime.FromOADate(period_))
+        '    Dim months_list As List(Of Int32) = Period.GetMonthsPeriodsInOneYear(currentYear, False)
+        '    years_months_dict.Add(period_, months_list.ToArray)
+        'Next
 
     End Sub
 

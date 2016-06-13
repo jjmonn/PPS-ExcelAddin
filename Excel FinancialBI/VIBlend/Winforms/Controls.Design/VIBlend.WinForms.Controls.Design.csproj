@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Program Files (x86)\VIBlend\Windows Forms Controls v.10.1.0.0\VIBlend.WinForms.Controls.Design.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{02C14D31-7B5C-47A7-9599-9ABC323CC7AB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>VIBlend.WinForms.Controls.Design</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>VIBlend.WinForms.Controls</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>10.1.0.0</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>VIBlend.Winforms.Controls.Design.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="vLabelItemDesigner.cs" />
+    <Compile Include="BaseDesigner\vCheckBoxesActionList.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vOutlookHeaderDesigner.cs" />
+    <Compile Include="BaseDesigner\BaseDesigner.cs" />
+    <Compile Include="BaseDesigner\vTrackControlsActionList.cs" />
+    <Compile Include="BaseDesigner\1BaseDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\QuickAccessToolbarDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\QuickAccessToolbarActionList.cs" />
+    <Compile Include="BaseDesigner\TabControlDesigners\vTabControlDesigner.cs" />
+    <Compile Include="BaseDesigner\TabControlDesigners\vTabControlActionList.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vOutlookItemDesigner.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vNavPaneItemDesigner.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vExplorerBarItemDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\vLayoutPanelDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\vLayoutPanelActionList.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\RibbonGroupContentDesigner.cs" />
+    <Compile Include="BaseDesigner\PanelDesigners\vPanelDesigner.cs" />
+    <Compile Include="BaseDesigner\vDataGridViewActionList.cs" />
+    <Compile Include="BaseDesigner\vDataGridViewGroupingHeaderActionList.cs" />
+    <Compile Include="BaseDesigner\vDataGridViewSearchHeaderActionList.cs" />
+    <Compile Include="BaseDesigner\TabControlDesigners\vTabPageDesigner.cs" />
+    <Compile Include="BaseDesigner\TreeViewDesigners\vTreeViewDesigner.cs" />
+    <Compile Include="BaseDesigner\TreeViewDesigners\vTreeViewActionList.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\vRibbonBarDesignTime.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\1vRibbonBarDesignTime.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vNavPaneHeaderDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\vApplicationMenuItemDesigner.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vOutlookNavPaneDesigner.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\1vOutlookNavPaneDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\vRibbonHorizontalLayoutPanelDesigner.cs" />
+    <Compile Include="BaseDesigner\vSplitContainerDesigner.cs" />
+    <Compile Include="BaseDesigner\vSplitPanelDesigner.cs" />
+    <Compile Include="BaseDesigner\vRadioButtonsActionList.cs" />
+    <Compile Include="BaseDesigner\vListItemsActionList.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\ExplorerBarHeaderDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\RibbonGroupPanelDesigner.cs" />
+    <Compile Include="BaseDesigner\PanelDesigners\vInnerPanelDesigner.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vNavPaneDesigner.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vNavPaneActionList.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\RibbonGroupDesigner.cs" />
+    <Compile Include="BaseDesigner\vMaskBoxActionList.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\vRibbonGalleryDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\vRibbonGalleryActionList.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vExplorerBarDesigner.cs" />
+    <Compile Include="BaseDesigner\NavPanesDesigners\vExplorerBarActionList.cs" />
+    <Compile Include="BaseDesigner\vDateTimePickerActionList.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\RibbonBarGroupFooterDesigner.cs" />
+    <Compile Include="BaseDesigner\RibbonBarDesigners\RibbonBarApplicationButtonDesigner.cs" />
+    <Compile Include="BaseDesigner\Designers.cs" />
+    <Compile Include="BaseDesigner\1Designers.cs" />
+    <Compile Include="BaseDesigner\2Designers.cs" />
+    <Compile Include="BaseDesigner\3Designers.cs" />
+    <Compile Include="BaseDesigner\4Designers.cs" />
+    <Compile Include="BaseDesigner\5Designers.cs" />
+    <Compile Include="BaseDesigner\6Designers.cs" />
+    <Compile Include="BaseDesigner\7Designers.cs" />
+    <Compile Include="BaseDesigner\8Designers.cs" />
+    <Compile Include="Properties\Settings.Designer.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Design\Properties\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VIBlend.Winforms.Controls.Design.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Controls\VIBlend.WinForms.Controls.csproj">
+      <Project>{31575bb8-4562-4200-b325-21de86ced827}</Project>
+      <Name>VIBlend.WinForms.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataGridView\VIBlend.WinForms.DataGridView.csproj">
+      <Project>{5ac772b1-f41f-4a3b-97e0-3e4472b2a32f}</Project>
+      <Name>VIBlend.WinForms.DataGridView</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\VIBlend.WinForms.Utilities.csproj">
+      <Project>{f912dcc3-cf58-4b89-83d1-dddceb5ba6d0}</Project>
+      <Name>VIBlend.WinForms.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

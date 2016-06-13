@@ -438,15 +438,15 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("PowderBlue")> _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("PowderBlue")>  _
         Public Property snapshotInputsBackColor() As Global.System.Drawing.Color
             Get
-                Return CType(Me("snapshotInputsBackColor"), Global.System.Drawing.Color)
+                Return CType(Me("snapshotInputsBackColor"),Global.System.Drawing.Color)
             End Get
-            Set(value As Global.System.Drawing.Color)
-                Me("snapshotInputsBackColor") = Value
+            Set
+                Me("snapshotInputsBackColor") = value
             End Set
         End Property
         
@@ -867,6 +867,30 @@ Namespace My
             End Get
             Set
                 Me("titleBordersColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property processId() As Integer
+            Get
+                Return CType(Me("processId"),Integer)
+            End Get
+            Set
+                Me("processId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property language() As Integer
+            Get
+                Return CType(Me("language"),Integer)
+            End Get
+            Set
+                Me("language") = value
             End Set
         End Property
     End Class

@@ -15,7 +15,7 @@
 ' Known bugs:
 '       
 '
-' Last modified: 11/11/2015
+' Last modified: 11/12/2015
 ' Author: Julien Monnereau
 
 
@@ -26,7 +26,6 @@ Imports System.Drawing
 Imports VIBlend.WinForms.Controls
 Imports CRUD
 'Imports VIBlend.WinForms.Controls
-
 
 
 Friend Class VersionsControl
@@ -43,6 +42,7 @@ Friend Class VersionsControl
     Private m_currentNode As VIBlend.WinForms.Controls.vTreeNode
     Private m_creationFlag As String
     Private m_isDisplaying As Boolean
+    Private m_rightMgr As New RightManager
 
 #End Region
 
@@ -84,24 +84,27 @@ Friend Class VersionsControl
         m_exchangeRatesVersionVTreeviewbox.Text = ""
         m_factsVersionVTreeviewbox.Text = ""
 
+        DefineUIPermissions()
         DesactivateUnallowed()
 
     End Sub
 
+    Private Sub DefineUIPermissions()
+        m_rightMgr(lockedCB) = Group.Permission.EDIT_BASE
+        m_rightMgr(m_exchangeRatesVersionVTreeviewbox) = Group.Permission.EDIT_BASE
+        m_rightMgr(m_factsVersionVTreeviewbox) = Group.Permission.EDIT_BASE
+        m_rightMgr(new_folder_bt) = Group.Permission.EDIT_BASE
+        m_rightMgr(new_version_bt) = Group.Permission.EDIT_BASE
+        m_rightMgr(rename_bt) = Group.Permission.EDIT_BASE
+        m_rightMgr(delete_bt) = Group.Permission.EDIT_BASE
+        m_rightMgr(NewVersionMenuBT) = Group.Permission.EDIT_BASE
+        m_rightMgr(NewFolderMenuBT) = Group.Permission.EDIT_BASE
+        m_rightMgr(DeleteVersionMenuBT) = Group.Permission.EDIT_BASE
+        m_rightMgr(RenameMenuBT) = Group.Permission.EDIT_BASE
+    End Sub
+
     Private Sub DesactivateUnallowed()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            lockedCB.Enabled = False
-            m_exchangeRatesVersionVTreeviewbox.Enabled = False
-            m_factsVersionVTreeviewbox.Enabled = False
-            new_folder_bt.Enabled = False
-            new_version_bt.Enabled = False
-            rename_bt.Enabled = False
-            delete_bt.Enabled = False
-            NewVersionMenuBT.Enabled = False
-            NewFolderMenuBT.Enabled = False
-            DeleteVersionMenuBT.Enabled = False
-            RenameMenuBT.Enabled = False
-        End If
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub MultilanguageSetup()
@@ -141,7 +144,7 @@ Friend Class VersionsControl
             CreationTB.Text = ""
             lockedCB.Checked = False
             LockedDateT.Text = ""
-            TimeConfigTB.Text = ""
+            m_timeConfigTB.Text = ""
             StartPeriodTB.Text = ""
             NBPeriodsTB.Text = ""
             m_exchangeRatesVersionVTreeviewbox.Text = ""
@@ -152,13 +155,22 @@ Friend Class VersionsControl
 
             NameTB.Text = inputNode.Text
             CreationTB.Text = version.CreatedAt
-            TimeConfigTB.Text = version.TimeConfiguration
-
-            If version.TimeConfiguration = CRUD.TimeConfig.YEARS Then
-                startPeriod = Format(Date.FromOADate(version.StartPeriod), "yyyy")
-            Else
-                startPeriod = Format(Date.FromOADate(version.StartPeriod), "MMM yyyy")
-            End If
+   
+            Select Case version.TimeConfiguration
+                Case TimeConfig.YEARS
+                    m_timeConfigTB.Text = Local.GetValue("period.timeconfig.year")
+                    startPeriod = Format(Date.FromOADate(version.StartPeriod), "yyyy")
+                Case TimeConfig.MONTHS
+                    m_timeConfigTB.Text = Local.GetValue("period.timeconfig.month")
+                    startPeriod = Format(Date.FromOADate(version.StartPeriod), "MMM yyyy")
+                Case TimeConfig.WEEK
+                    m_timeConfigTB.Text = Local.GetValue("period.timeconfig.week")
+                    startPeriod = Format(Date.FromOADate(version.StartPeriod), "WW")
+                Case TimeConfig.DAYS
+                    m_timeConfigTB.Text = Local.GetValue("period.timeconfig.day")
+                    startPeriod = Format(Date.FromOADate(version.StartPeriod), "MMMM dd, yyyy")
+            End Select
+          
             StartPeriodTB.Text = startPeriod
             StartPeriodTB.ValueMember = version.StartPeriod
 

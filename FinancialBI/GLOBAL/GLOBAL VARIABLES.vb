@@ -23,22 +23,27 @@ Friend Class GlobalVariables
 #End Region
 
 
-#Region "Versioning"
+#Region "Task Panes"
 
     Friend Shared VersionSelectionTaskPane As VersionSelectionPane
-    Friend Shared Version_Button As ADXRibbonButton
-    Friend Shared Version_label_Sub_Ribbon As ADXRibbonEditBox
-  
+    Friend Shared ProcessSelectionTaskPane As ProcessSelectionTaskPane
+    Friend Shared InputReportTaskPane As ReportUploadEntitySelectionPane
+    Friend Shared VersionButton As ADXRibbonButton
+    Friend Shared VersionlabelSubRibbon As ADXRibbonEditBox
+    Friend Shared ProcessButton As ADXRibbonButton
+
 #End Region
 
 
 #Region "Menu Display"
 
-    Friend Shared Connection_Toggle_Button As ADXRibbonButton
-    Friend Shared InputSelectionPaneVisible As Boolean
-    Friend Shared VersionsSelectionPaneVisible As Boolean
-    Friend Shared EntitySelectionPaneVisible As Boolean
-    Friend Shared ConnectionPaneVisible As Boolean
+    Friend Shared ConnectionToggleButton As ADXRibbonButton
+
+    Friend Shared InputSelectionTaskPaneVisible As Boolean
+    Friend Shared VersionsSelectionTaskPaneVisible As Boolean
+    Friend Shared ProcessSelectionTaskPaneVisible As Boolean
+    Friend Shared EntitySelectionTaskPaneVisible As Boolean
+    Friend Shared ConnectionTaskPaneVisible As Boolean
 
 #End Region
 
@@ -54,7 +59,7 @@ Friend Class GlobalVariables
 
 #Region "Submission Process Global Variables"
 
-    Friend Shared s_reportUploadSidePane As New ReportUploadSidePane
+    Friend Shared s_reportUploadSidePane As New ReportUploadAccountInfoSidePane
     Friend Shared s_reportUploadSidePaneVisible As Boolean = False
     Friend Shared SubmissionStatusButton As ADXRibbonButton
     Friend Shared WSHasChangedSinceLastSubmission As Boolean
@@ -78,12 +83,14 @@ Friend Class GlobalVariables
     Friend Shared GlobalFactsVersions As GlobalFactVersionManager
     Friend Shared Users As UserManager
     Friend Shared Groups As GroupManager
-    Friend Shared GroupAllowedEntities As GroupAllowedEntityManager
+    Friend Shared UserAllowedEntities As UserAllowedEntityManager
     Friend Shared FModelingsAccounts As FModelingAccountManager
     Friend Shared AxisElems As AxisElemManager
     Friend Shared AxisFilters As AxisFilterManager
     Friend Shared EntityCurrencies As EntityCurrencyManager
-    Friend Shared EntityDistribution As EntityDistributionManager
+    Friend Shared EntitiesDistributions As EntityDistributionManager
+    Friend Shared AxisOwners As AxisOwnerManager
+    Friend Shared FactTags As FactTagManager
 
 #End Region
 

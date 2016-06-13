@@ -23,6 +23,7 @@ Friend Class CurrenciesView
     Private m_controller As CurrenciesController
     Private m_CurrentCell As GridCell = Nothing
     Private m_columnsWidth As Single = 110
+    Private m_rightMgr As New RightManager
 
 #End Region
 
@@ -43,15 +44,18 @@ Friend Class CurrenciesView
         m_currenciesDataGridView.RowsHierarchy.SortBy(m_currenciesDataGridView.ColumnsHierarchy.Items(1), SortingDirection.Ascending)
 
         AddHandler m_currenciesDataGridView.CellMouseEnter, AddressOf DataGridView_CellMouseEnter
+        DefineUIPermissions()
         DesactivateUnallowed()
         MultilanguageSetup()
 
     End Sub
 
+    Private Sub DefineUIPermissions()
+        m_rightMgr(ValidateButton) = Group.Permission.EDIT_CURRENCIES
+    End Sub
+
     Private Sub DesactivateUnallowed()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            ValidateButton.Enabled = False
-        End If
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub InitializeCurrenciesdgvColumns()
@@ -83,7 +87,7 @@ Friend Class CurrenciesView
             Dim currencyRow As HierarchyItem = m_currenciesDataGridView.RowsHierarchy.Items.Add("")
             Dim inUsecheckBoxEditor As New CheckBoxEditor
             currencyRow.ItemValue = currency.Id
-            If GlobalVariables.Users.CurrentUserIsAdmin() Then
+            If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_CURRENCIES) Then
                 m_currenciesDataGridView.CellsArea.SetCellEditor(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(0), inUsecheckBoxEditor)
             End If
             m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(0), currency.InUse)

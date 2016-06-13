@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Friend Class FModelingAccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
+Class FModelingAccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Init"
 

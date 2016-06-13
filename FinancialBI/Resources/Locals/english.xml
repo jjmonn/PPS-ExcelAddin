@@ -40,8 +40,18 @@
     <string name="rows_label">Rows labels</string>
     <string name="fields_choice">Choose fields to add to report:</string>
     <string name="msg_specify_dimensions1">You need to specify at least the following dimensions </string>
-    <string name="msg_specify_dimensions2">Accounts and periods (Years or Months)</string>
+    <string name="msg_specify_dimension_account">Accounts</string>
+    <string name="msg_specify_dimension_periods1">Periods (Years or Months)</string>
+    <string name="msg_specify_dimension_periods2">Periods (Weeks or Days)</string>
+    <string name="msg_specify_dimension_client_or_entities">Business Unit or Client</string>
     <string name="msg_currency_selection">Please select a Currency.</string>
+    <string name="msg_out_of_memory">Unable to load all data, query too complex.</string>
+    <string name="msg_return_invalid_version">Result received for an invalid version.</string>
+    <string name="msg_return_invalid_entity">Result received for an invalid entity.</string>
+    <string name="msg_error_system">An error occured during computation. Please contact your administrator if this problem persist.</string>
+    <string name="msg_permission_denied">You are not allowed to execute this compute.</string>
+    <string name="warning_complexity">Asked request is complex and can be long to compute. Compute anyway ?</string>
+    <string name="error_complexity">Asked request is too complex.</string>
   </category>
 
   <category name="CUI_Charts">
@@ -122,18 +132,62 @@
 	<string name="msg_unknown">Unknown error.</string>
   </category>
  
-  <category name="entities_edition">
+  <category name="axis_edition">
 
     <string name="parent_entity">Parent Entity</string>
     <string name="parent_entity_selection">Select Parent Entity</string>
     <string name="new_entity">New Legal Entity</string>
+
+    <string name="parent_client">Parent Client</string>
+    <string name="parent_client_selection">Select Parent Client</string>
+    <string name="new_client">New Client</string>
+
+    <string name="parent_product">Parent Product</string>
+    <string name="parent_product_selection">Select Parent Product</string>
+    <string name="new_product">New Product</string>
+
+    <string name="parent_adjustment">Parent Adjustment</string>
+    <string name="parent_adjustment_selection">Select Parent Adjustment</string>
+    <string name="new_adjustment">New Adjustment</string>
+
+    <string name="parent_employee">Parent Employee</string>
+    <string name="parent_employee_selection">Select Parent Employee</string>
+    <string name="new_employee">New Employee</string>
+    
    
     <!--messages-->
-      <string name="msg_selection">An Entity must be selected.</string>
-      <string name="msg_entity_name">Enter the name of the new entity:</string>
-      <string name="msg_delete1">Careful, you are about to delete the entity </string>
-      <string name="msg_delete2">This entity and all sub entities will be deleted, do you confirm?</string>
-      <string name="title_delete_confirmation">Entity deletion confirmation</string>
+
+      <string name="msg_selection1">An Entity must be selected.</string>
+      <string name="msg_name1">Enter the name of the new entity:</string>
+      <string name="msg_delete11">Careful, you are about to delete the entity </string>
+      <string name="msg_delete21">This entity and all sub entities will be deleted, do you confirm?</string>
+      <string name="title_delete_confirmation1">Entity deletion confirmation</string>
+
+    <string name="msg_selection2">A client must be selected.</string>
+    <string name="msg_client_name2">Enter the name of the new client:</string>
+    <string name="msg_delete12">Careful, you are about to delete the client </string>
+    <string name="msg_delete22">This client and all sub clients will be deleted, do you confirm?</string>
+    <string name="title_delete_confirmation2">Client deletion confirmation</string>
+
+    <string name="msg_selection3">A product must be selected.</string>
+    <string name="msg_name3">Enter the name of the new product:</string>
+    <string name="msg_delete13">Careful, you are about to delete the product </string>
+    <string name="msg_delete23">This product and all sub products will be deleted, do you confirm?</string>
+    <string name="title_delete_confirmation3">product deletion confirmation</string>
+
+    <string name="msg_selection4">An adjustment must be selected.</string>
+    <string name="msg_name4">Enter the name of the new adjustment:</string>
+    <string name="msg_delete14">Careful, you are about to delete the adjustment </string>
+    <string name="msg_delete24">This adjustment and all sub adjustments will be deleted, do you confirm?</string>
+    <string name="title_delete_confirmation4">Adjustment deletion confirmation</string>
+
+    <string name="msg_selection5">An employee must be selected.</string>
+    <string name="msg_name5">Enter the name of the new employee:</string>
+    <string name="msg_delete15">Careful, you are about to delete the employee </string>
+    <string name="msg_delete25">This employee and all sub employees will be deleted, do you confirm?</string>
+    <string name="title_delete_confirmation5">Employee deletion confirmation</string>
+
+    
       <string name="msg_currency_not_found1">Currency </string>
       <string name="msg_currency_not_found2"> not found</string>  
       <string name="msg_select_currency">A currency must be selected.</string>
@@ -143,6 +197,8 @@
   <category name="axis">
 
     <!--messages-->
+    <string name="msg_unable_create">Unable to create this element</string>
+    <string name="msg_unable_update">Unable to edit this element</string>
     <string name="msg_enter_name">Enter the new name</string>
     <string name="msg_axis_creation">Creation</string>
     <string name="msg_axis_delete1">Careful, you are about to delete the axis </string>
@@ -150,6 +206,9 @@
     <string name="msg_deletion_confirmation">Axis deletion confirmation</string>
     <string name="msg_select_axis">An Axis must be selected in order to be deleted</string>
     <string name="msg_filter_value_not_found">The Filter Value Name could not be found.</string>
+    <string name="msg_entity_axis_owner_selection">An editable entity must be selected in order to create an employee.</string>
+    <string name="msg_entity_axis_owner_not_allowed">This entity is not editable. Employees can only be created under editable entities.</string>
+    <string name="msg_invalid_name">This name is not valid. Either it already exists or contains forbidden characters. Please Try with another Name.</string>
 
   </category>
   
@@ -181,6 +240,11 @@
       <string name="exchange_rates">Exchange Rates</string>
       <string name="users_groups">user Groups</string>
       <string name="platform_config">Your Financial BI Configuration</string>
+
+    <string name="entities_filters">Entities categories</string>
+    <string name="clients_filters">Clients categories</string>
+    <string name="products_filters">Products categories</string>
+    <string name="adjustments_filters">Adjustments categories</string>
   
     <!--titles-->
       <string name="tool_tip_account">Financial and Operational Accounts Edition  (All changes applied will be available for all users)</string>
@@ -225,15 +289,32 @@
       <string name="title_delete_confirmation">Version deletion confirmation</string>
    
    </category>
-    
+
+  <category name="process">
+    <string name="select_process">Select a process</string>
+    <string name="process_rh">RH Process</string>
+    <string name="process_financial">Financial Process</string>
+    <string name="process_selection">Process Selection</string>
+  </category>
+
   <category name="upload">
     <string name="periods">Periods</string>
     <string name="rates">rates</string>
     <string name="values">Values</string>
     <string name="upload">Upload</string>
+    <string name="report_as_of">Report as of </string>
+    <string name="clientSelectionButtonText">PDC: Select client</string>
+    <string name="financialBILog">Financial BI: Data Log</string> 
     <string name="exchange_rates_upload">Exchange Rates Upload</string>
     <string name="global_facts_upload">Macro Economic Indicator Upload</string>
     <string name="range_mismatch">The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.</string>
+    <string name="folder_snapshot">Directory Snapshot</string>
+    
+    <string name="input_sidepane_title">Report Upload</string>
+    <string name="entity_selection">Entity selection</string>
+    <string name="periods_selection">Periods selection</string>
+    <string name="accounts_selection">Account selection</string>
+    
     <string name="msg_periods_selection">Select periods(s) range(s)</string>
     <string name="msg_rates_selection">Select rates(s) range(s)</string>
     <string name="msg_values_selection">Select value(s) range(s)</string>
@@ -243,7 +324,13 @@
     <string name="msg_accounts_orientation_unclear">Accounts orgnization is not clear. Please check that accounts are aligned in rows or columns.</string>
     <string name="msg_entities_orientation_unclear">Entities orgnization is not clear. Please check that entities are aligned in rows or columns.</string>
     <string name="msg_periods_orientation_unclear">Periods orgnization is not clear. Please check that periods are aligned in rows or columns.</string>
-
+    <string name="msg_products_orientation_unclear">Products orgnization is not clear. Please check that consultants are aligned in rows or columns.</string>
+    <string name="msg_employees_orientation_unclear">Consultants orgnization is not clear. Please check that consultants are aligned in rows or columns.</string>
+    <string name="msg_entity_not_found">No BU identified on the worksheet.</string>
+    <string name="msg_error_upload">An error occurred in Excel and the report could not be created.</string>
+    <string name="msg_invalid_value_for_client">This value is not suitable for a client's name: </string>
+    <string name="msg_no_account_setup">No Account was setup. Cannot submit.</string>
+    <string name="msg_no_account_selected">No account selected.</string>
   </category>
 
   <category name="global_facts">
@@ -257,7 +344,11 @@
   <category name="facts_versions">
     <string name="fact_version">Data Version</string>
     <string name="exchange_rates_version">Exchange rates version</string>
-    <string name="nb_years">Number of periods</string>
+    <string name="nb_periods">Number of periods</string>
+    <string name="nb_years">Number of years</string>
+    <string name="nb_months">Number of months</string>
+    <string name="nb_weeks">Number of weeks</string>
+    <string name="nb_days">Number of days</string>
     <string name="copy_from">Create copy from</string>
     <string name="starting_period">Starting year</string>
     <string name="starting_month">Starting month</string>
@@ -266,6 +357,8 @@
     <string name="version_new">New version</string>
     <string name="msg_config_selection">The Time Configuration must be selected.</string>
     <string name="msg_starting_period">The starting period must be selected</string>
+    <string name="msg_select_rates_version">An Exchange Rates version must be selected</string>
+    <string name="msg_select_global_facts_version">A Macro Economic Indicatros version must be selected</string>
     <string name="msg_rates_version_mismatch">This exchange rates version is not compatible with the periods configuration.</string>
     <string name="msg_cannot_use_global_fact_folder"> is a folder and cannot be set as the Economic Indicators version</string>
     <string name="msg_cannot_use_exchange_rates_folder"> is a folder and cannot be set as the Exchange Rates version.</string>
@@ -308,7 +401,9 @@
 		<string name="month12">December</string>
 		<category name="timeconfig">
 			<string name="month">Monthly</string>
-			<string name="year">Annualy</string>
+			<string name="year">Annual</string>
+      <string name="week">Weekly</string>
+      <string name="day">Daily</string>
 		</category>
 	</category>
 	
@@ -328,6 +423,7 @@
   </category>
 
   <category name="settings">
+    <string name="Settings">Settings</string>
     <string name="port_number">Port number</string>
     <string name="server_address">Server address</string>
     <string name="display_options">Display options</string>
@@ -345,7 +441,10 @@
     <string name="important">Important</string>
     <string name="normal">Normal</string>
     <string name="detail">Detail</string>
-
+    <string name="language">Language</string>
+    <string name="french">French</string>
+    <string name="english">English</string>
+    <string name="msg_excel_reboot">You must restart Excel in order to apply language selection.</string>
   </category>
 
   <category name="allocationKeys">
@@ -359,17 +458,22 @@
   </category>  
   
   <category name="general">
+    <string name="week">Week</string>
+    <string name="edition">Edition</string>
+    
      <string name="account">Account</string>
      <string name="entity">Entity</string>
      <string name="client">Client</string>
      <string name="product">Product</string>
      <string name="adjustment">Adjustment</string>
+    <string name="employee">Employee</string>
     <string name="version">Version</string>
-    <string name="Periods">Periods</string>
-    <string name="Accounts">Accounts</string>
-    <string name="Entities">Entities</string>
+    <string name="periods">Periods</string>
+    <string name="accounts">Accounts</string>
+    <string name="entities">Entities</string>
 
     <string name="couleur">Couleur</string>
+    <string name="validate">Validate</string>
      <string name="type">Type</string>
      <string name="save">Save</string>
      <string name="cancel">Cancel</string>
@@ -384,6 +488,7 @@
     
     <string name="copy_down">Copy value down</string>
     <string name="drop_on_excel">Drop on Excel</string>
+    
     <string name="menu">Menu</string>
     <string name="accounts">Accounts</string>
     <string name="entities">Entities</string>
@@ -392,6 +497,20 @@
     <string name="adjustments">Adjustments</string>
     <string name="versions">Versions</string>
     <string name="currencies">Currencies</string>
+
+    <string name="entities_filters">Entities categories</string>
+    <string name="clients_filters">Clients categories</string>
+    <string name="products_filters">Products categories</string>
+    <string name="adjustments_filters">Adjustments categories</string>
+    <string name="employees_filters">Employees categories</string>
+    
+    
+    <string name="employees">Employees</string>
+    <string name="days">Days</string>
+    <string name="weeks">Weeks</string>
+    <string name="years">Years</string>
+    <string name="months">Months</string>
+
     <string name="economic_indicators">Macro Economic Indicators</string>
     <string name="msg_name_exceed1">The name cannot exceed </string>
     <string name="msg_name_exceed2"> characters</string>
@@ -407,6 +526,29 @@
 	<string name="update_success">Financial BI has been updated, please restart Excel.</string>
 	<string name="update_launch_fail">Unable to install update of Financial BI. Please contact your administrator.</string>
 	<string name="update_dl_fail">Unable to download update of Financial BI. Please contact your administrator.</string>
+  </category>
+
+
+  <category name="clientAutoCreation">
+    <string name="unerefenced_clients">Unreferenced Clients</string>
+    <string name="similar_clients_column_name">Similar clients</string>
+    <string name="replace_column_name">Replace</string>
+    <string name="create_column_name">Create</string>
+    <string name="resume_data_sumbission">Resume data submission</string>
+    <string name="msg_all_clients_must_be_treated">All clients must be either replaced or created before submission.</string>
+  </category>
+
+
+  <category name="submissionsFollowUp">
+    <string name="submissions_tracking">Submissions Tracking</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="red_status">Not edited</string>
+    <string name="orange_status">In edition</string>
+    <string name="green_status">Committed</string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
   </category>
 
 </category>

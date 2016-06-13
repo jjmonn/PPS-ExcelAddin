@@ -33,18 +33,7 @@ Friend Class WorksheetWrittingFunctions
 
 #Region "Input Report Creation"
 
-    Friend Shared Sub InsertInputReportOnWS(ByVal destinationcell As Excel.Range, _
-                                            ByRef periodList As Int32(), _
-                                            ByRef timeConfig As String)
-
-        Dim accountsTV As New TreeView
-        Dim WS As Excel.Worksheet = destinationcell.Worksheet
-        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
-        WriteAccountsFromTreeView(accountsTV, destinationcell, periodList)
-        accountsTV.Dispose()
-
-    End Sub
-
+  
 #End Region
 
 
@@ -82,6 +71,28 @@ Friend Class WorksheetWrittingFunctions
             Next
         Next
         destinationCell.Worksheet.Columns(destinationCell.Column).autofit()
+
+    End Sub
+
+    Friend Shared Sub WriteListOnExcel(ByVal p_range As Excel.Range, ByRef p_list As List(Of String))
+
+        For Each l_value As String In p_list
+            p_range = p_range.Offset(1, 0)
+            p_range.Value2 = l_value
+        Next
+
+    End Sub
+
+    Friend Shared Sub WritePeriodsOnWorksheet(ByVal p_range As Excel.Range, _
+                                              ByRef p_periods As Int32(), _
+                                              ByRef p_timeConfig As CRUD.TimeConfig)
+        Dim i As Int32 = 0
+        For Each period As UInt32 In p_periods
+            ' need to adjust period format according to local settings ?
+            Dim l_cultue = My.Application.Culture
+            p_range.Offset(0, 1 + i).Value = Format(Date.FromOADate(period), "MM/dd/yyyy") ' "Short Date")
+            i = i + 1
+        Next
 
     End Sub
 
@@ -180,8 +191,7 @@ Friend Class WorksheetWrittingFunctions
             destination.Offset(i + 1, 1).Value = header_values_array(i)
             i = i + 1
         Next
-        destination.Offset(i + 1, 0).Value = "Date"
-        destination.Offset(i + 1, 1).Value = Today
+        destination.Offset(i + 1, 0).Value = Local.GetValue("upload.report_as_of") & CStr(Format(Today, "D"))
 
         destination = destination.Offset(i + 2, 0)
         Return destination

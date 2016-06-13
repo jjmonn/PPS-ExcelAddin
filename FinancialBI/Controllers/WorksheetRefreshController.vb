@@ -58,16 +58,20 @@ Friend Class WorksheetRefreshController
         End If
 
         If p_addin.IsCurrentGeneralSubmissionController = True Then
-            Dim l_refreshFromDataBaseFlag As Boolean
-            Dim confirm1 = Windows.Forms.MessageBox.Show("Do you want to download the inputs from the cloud?", "", _
-                                                         Windows.Forms.MessageBoxButtons.YesNoCancel, _
-                                                         Windows.Forms.MessageBoxIcon.Question)
-            If confirm1 = Windows.Forms.DialogResult.Yes Then
-                l_refreshFromDataBaseFlag = True
-            End If
-            If p_addin.RefreshGeneralSubmissionControllerSnapshot(l_refreshFromDataBaseFlag) = False Then
-                GoTo RefreshFormulasOnWorksheet
-            End If
+
+            ' Below: commented
+            '  > Created issues on snapshot
+
+            'Dim l_refreshFromDataBaseFlag As Boolean
+            'Dim confirm1 = Windows.Forms.MessageBox.Show("Do you want to download the inputs from the cloud?", "", _
+            '                                             Windows.Forms.MessageBoxButtons.YesNoCancel, _
+            '                                             Windows.Forms.MessageBoxIcon.Question)
+            'If confirm1 = Windows.Forms.DialogResult.Yes Then
+            '    l_refreshFromDataBaseFlag = True
+            'End If
+            'If p_addin.RefreshGeneralSubmissionControllerSnapshot(l_refreshFromDataBaseFlag) = False Then
+            '    GoTo RefreshFormulasOnWorksheet
+            'End If
         Else
             GoTo RefreshFormulasOnWorksheet
         End If

@@ -6,12 +6,12 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Friend Class EntityDistributionManager : Inherits CRUDManager
+Class EntityDistributionManager : Inherits CRUDManager
 
 #Region "Instance variables"
 
     Private m_entityDistributionDic As New SortedDictionary(Of UInt32, MultiIndexDictionary(Of UInt32, UInt32, EntityDistribution))
-    ' sorted by entity id then can be access by id (primary key) or account_id (secondary key)
+    ' sorted by account id then can be access by id (primary key) or entity id (secondary key)
 
 #End Region
 

@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 13/10/2015
+' Last modified: 14/01/2016
 
 
 Imports System.Windows.Forms
@@ -21,6 +21,7 @@ Imports System.Linq
 Imports VIBlend.Utilities
 Imports VIBlend.WinForms.Controls
 Imports CRUD
+Imports FinancialBI.GlobalEnums
 
 
 
@@ -68,9 +69,9 @@ Friend Class ControllingUIController
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef inputView As Object)
+    Friend Sub New(ByRef p_inputView As Object)
 
-        m_view = inputView
+        m_view = p_inputView
         LoadSpecialFiltersValuesNode()
 
         m_chartsView = New CUI2Visualization(Me)
@@ -97,30 +98,23 @@ Friend Class ControllingUIController
 
             Next
         Next
-        ' Load Clients Nodes
-        Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, _
-                                                             ControllingUI_2.CLIENTS_CODE, _
-                                                             m_filtersNodes)
-        For Each clientId As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Client).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Client, clientId) Is Nothing Then Continue For
-            VTreeViewUtil.AddNode(clientId, GlobalVariables.AxisElems.GetValueName(AxisType.Client, clientId), clientsNode)
-        Next
 
-        ' Load Products Nodes
-        Dim productsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS, _
-                                                              ControllingUI_2.PRODUCTS_CODE, _
-                                                              m_filtersNodes)
-        For Each productId As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Product).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Product, productId) Is Nothing Then Continue For
-            VTreeViewUtil.AddNode(productId, GlobalVariables.AxisElems.GetValueName(AxisType.Product, productId), productsNode)
-        Next
+        LoadAxisNodes(AxisType.Client, AnalysisAxis.CLIENTS, ControllingUI_2.CLIENTS_CODE)
+        LoadAxisNodes(AxisType.Product, AnalysisAxis.PRODUCTS, ControllingUI_2.PRODUCTS_CODE)
+        LoadAxisNodes(AxisType.Adjustment, AnalysisAxis.ADJUSTMENTS, ControllingUI_2.ADJUSTMENT_CODE)
+        LoadAxisNodes(AxisType.Employee, AnalysisAxis.EMPLOYEES, ControllingUI_2.EMPLOYEE_CODE)
 
-        ' Load Adjustment Nodes
-        Dim adjustmentsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
-                                                                 ControllingUI_2.ADJUSTMENT_CODE, _
-                                                                 m_filtersNodes)
-        For Each elem In GlobalVariables.AxisElems.GetDictionary(AxisType.Adjustment).Values
-            VTreeViewUtil.AddNode(elem.Id, elem.Name, adjustmentsNode)
+    End Sub
+
+    Private Sub LoadAxisNodes(ByRef p_axisType As AxisType, _
+                              ByRef p_analysisAxis As AnalysisAxis, _
+                              ByRef p_axisCode As String)
+
+        Dim l_AxisNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & p_analysisAxis, _
+                                                            p_axisCode, _
+                                                            m_filtersNodes)
+        For Each l_elem In GlobalVariables.AxisElems.GetDictionary(p_axisType).Values
+            VTreeViewUtil.AddNode(l_elem.Id, l_elem.Name, l_AxisNode)
         Next
 
     End Sub
@@ -130,28 +124,53 @@ Friend Class ControllingUIController
 
 #Region "Computing"
 
-    Private Function HasMinimumDimensions() As Boolean
-        If Not m_view.rightPane_Control.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS) Then
-            If Not m_view.rightPane_Control.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS) Then
-                If Not m_view.rightPane_Control.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS) Then
-                    Return False
+    Private Function HasMinimumDimensions() As String
+
+        Select Case m_view.m_process
+            Case Account.AccountProcess.FINANCIAL
+                If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS) Then
+                    If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS) Then
+                        If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS) Then
+                            Return Local.GetValue("CUI.msg_specify_dimension_periods1")
+                        End If
+                    End If
                 End If
-            End If
-        End If
-        If Not m_view.rightPane_Control.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS) Then
-            Return False
-        End If
-        Return True
+                If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS) Then
+                    Return Local.GetValue("CUI.msg_specify_dimension_account")
+                End If
+                Return ""
+
+            Case Account.AccountProcess.RH
+                If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS) Then
+                    If m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS) Then
+                        If m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YDAYS) Then
+                            Return Local.GetValue("CUI.msg_specify_dimension_periods2")
+                        End If
+                    End If
+                End If
+                'If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES) Then
+                '    If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS) Then
+                '        Return Local.GetValue("CUI.msg_specify_dimension_client_or_entities")
+                '    End If
+                'End If
+                Return ""
+
+            Case Else
+                System.Diagnostics.Debug.WriteLine("CUI.Compute() -> ControllingUIController.HasMinimumDimensions() - undeifined process: " & m_view.m_process)
+        End Select
+        Return ""
+
     End Function
 
-    Friend Sub Compute(ByRef versionIDs() As Int32, _
-                       ByRef inputEntityNode As vTreeNode, _
-                       Optional ByRef useCache As Boolean = False)
+    Friend Sub Compute(ByRef p_versionIDs() As Int32, _
+                       ByRef p_inputEntityNode As vTreeNode, _
+                       Optional ByRef p_useCache As Boolean = False)
 
         If (m_isComputingFlag = True Or m_isDisplayingFlag = True) Then Exit Sub
 
-        If HasMinimumDimensions() = False Then
-            MsgBox(Local.GetValue("CUI.msg_specify_dimensions1") + Chr(13) + Chr(10) + Local.GetValue("CUI.msg_specify_dimensions1"))
+        Dim l_minimumDimensionsErrorMessage As String = HasMinimumDimensions()
+        If l_minimumDimensionsErrorMessage <> "" Then
+            MsgBox(Local.GetValue("CUI.msg_specify_dimensions1") & Chr(13) & l_minimumDimensionsErrorMessage)
             Exit Sub
         End If
         m_view.SetComputeButtonState(False)
@@ -161,29 +180,29 @@ Friend Class ControllingUIController
 
         If Not m_dataMap Is Nothing Then m_dataMap.Clear()
         m_dataMap = Nothing
-        m_entityNode = inputEntityNode
+        m_entityNode = p_inputEntityNode
         ' View.ClearDGVs()
         m_rowsHierarchyNode.Nodes.Clear()
         m_columnsHierarchyNode.Nodes.Clear()
 
         ' Versions init
         m_versionsDict.Clear()
-        For Each version_Id As Int32 In versionIDs
-            Dim versionNode As vTreeNode = VTreeViewUtil.FindNode(m_view.leftPane_control.versionsTV, version_Id)
+        For Each version_Id As Int32 In p_versionIDs
+            Dim versionNode As vTreeNode = VTreeViewUtil.FindNode(m_view.m_leftPaneControl.versionsTV, version_Id)
             m_versionsDict.Add(versionNode.Value, versionNode.Text)
         Next
 
         If m_versionsDict.Count > 1 _
-        AndAlso m_view.rightPane_Control.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS) = False Then
-            m_view.rightPane_Control.AddItemToColumnsHierarchy(ControllingUI_2.VERSIONS_CODE, _
-                                                           computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS)
+        AndAlso m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS) = False Then
+            m_view.m_rightPaneControl.AddItemToColumnsHierarchy(ControllingUI_2.VERSIONS_CODE, _
+                                                                computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS)
         End If
 
         m_initDisplayFlag = False
-        For Each item In m_view.rightPane_Control.rowsDisplayList.Items
+        For Each item In m_view.m_rightPaneControl.rowsDisplayList.Items
             VTreeViewUtil.AddNode(item.Value, item.Text, m_rowsHierarchyNode)
         Next
-        For Each item In m_view.rightPane_Control.columnsDisplayList.Items
+        For Each item In m_view.m_rightPaneControl.columnsDisplayList.Items
             VTreeViewUtil.AddNode(item.Value, item.Text, m_columnsHierarchyNode)
         Next
 
@@ -197,40 +216,49 @@ Friend Class ControllingUIController
         IncrementComputingHierarchy(m_columnsHierarchyNode, computingHierarchyList)
 
         ' Currency Setup
-        If m_view.leftPane_control.currenciesCLB.SelectedItem Is Nothing Then
+        If m_view.m_leftPaneControl.currenciesCLB.SelectedItem Is Nothing Then
             MsgBox(Local.GetValue("CUI.msg_currency_selection"))
             Exit Sub
         End If
-        Dim currencyId As Int32 = CInt(m_view.leftPane_control.currenciesCLB.SelectedItem.Value)
+        Dim currencyId As Int32 = CInt(m_view.m_leftPaneControl.currenciesCLB.SelectedItem.Value)
 
         ' Computing order
-        Dim mustCompute As Boolean = True
-        If useCache = True AndAlso m_computingCache.MustCompute(m_entityNode.Value, _
-                                                             currencyId, _
-                                                              versionIDs, _
-                                                              filters, _
-                                                              axisFilters, _
-                                                              computingHierarchyList) = False Then mustCompute = False
-        If mustCompute = True Then
+        Dim l_mustCompute As Boolean = True
+        If p_useCache = True _
+         AndAlso m_computingCache.MustCompute(m_entityNode.Value, _
+                                              currencyId, _
+                                              p_versionIDs, _
+                                              filters, _
+                                              axisFilters, _
+                                              computingHierarchyList) = False Then
+            l_mustCompute = False
+        End If
+
+        If l_mustCompute = True Then
 
             If computingHierarchyList.Count = 0 Then computingHierarchyList = Nothing
-            computer.CMSG_COMPUTE_REQUEST(versionIDs, _
+
+            computer.CMSG_COMPUTE_REQUEST(p_versionIDs, _
                                           {CInt(m_entityNode.Value)}.ToList, _
+                                          m_view.m_process, _
                                           currencyId, _
                                           filters, _
                                           axisFilters, _
-                                          computingHierarchyList)
+                                          computingHierarchyList, _
+                                          m_view.GetPeriodsList(), _
+                                          False)
         End If
 
         ' Cache registering
         m_computingCache.cacheEntityID = CInt(m_entityNode.Value)
         m_computingCache.cacheCurrencyId = currencyId
-        m_computingCache.cacheVersions = versionIDs
+        m_computingCache.cacheVersions = p_versionIDs
         m_computingCache.cacheComputingHierarchyList = computingHierarchyList
         m_computingCache.cacheFilters = filters
         m_computingCache.cacheAxisFilters = axisFilters
 
         ' Redraw hierarchy Items
+        ' Do not launch InitDisplay() if dimensions did not change
         InitDisplay()
         FillUIHeader()
         If m_initDisplayFlag = False Then
@@ -244,14 +272,12 @@ Friend Class ControllingUIController
 
         While m_initDisplayFlag = False
         End While
-        m_view.FormatDGV_ThreadSafe()
         m_dataMap = computer.GetData()
+        If m_view.m_process = Account.AccountProcess.RH Then m_view.DeleteNonUsedClientsRH()
+        m_view.FormatDGV_ThreadSafe()
         m_view.TerminateCircularProgress()
 
-        ' **************************************************'
-        StubFillingChart()
-        ' priority high !!!!!!!!!!!!
-        ' **************************************************'
+        UpdateCUICharts()
 
         m_computedFlag = True
         m_view.SetComputeButtonState(True)
@@ -268,7 +294,9 @@ Friend Class ControllingUIController
             AndAlso node.Value <> computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS _
             AndAlso node.Value <> computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS _
             AndAlso node.Value <> computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS _
-            AndAlso node.Value <> computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS Then
+            AndAlso node.Value <> computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS _
+            AndAlso node.Value <> computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS _
+            AndAlso node.Value <> computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS Then
                 computingHierarchyList.Add(node.Value)
             End If
         Next
@@ -290,16 +318,21 @@ Friend Class ControllingUIController
         m_view.m_progressBar.Refresh()
 
         For Each tab_ As VIBlend.WinForms.Controls.vTabPage In m_view.DGVsControlTab.TabPages
-            '  View.DGVsControlTab.SelectedTab = tab_
-            Dim DGV As vDataGridView = tab_.Controls(0)
-            RemoveHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
-            DGV.Clear()
-            m_accountsIdShortlist = VTreeViewUtil.GetNodesIds(VTreeViewUtil.FindNode(m_view.accountsTV, tab_.Name))
+            Dim l_DataGridView As vDataGridView = tab_.Controls(0)
+            RemoveHandler l_DataGridView.CellValueNeeded, AddressOf DGVs_CellValueNeeded
+            l_DataGridView.Clear()
+
+            '     If m_view.m_process = Account.AccountProcess.FINANCIAL Then
+            m_accountsIdShortlist = VTreeViewUtil.GetNodesIds(VTreeViewUtil.FindNode(m_view.m_accountsTreeview, tab_.Name))
             m_accountsIdShortlist.Remove(tab_.Name)
+            '     End If
 
             ' Display_axis_values Initialization 
             m_DisplayAxisHt.Clear()
-            m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
+            Select Case m_view.m_process
+                Case Account.AccountProcess.FINANCIAL : m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
+                Case Account.AccountProcess.RH : m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS) = 0 '  PDC account id
+            End Select
             m_DisplayAxisHt(GlobalEnums.DataMapAxis.PERIODS) = ""
             m_DisplayAxisHt(GlobalEnums.DataMapAxis.FILTERS) = "0"
             m_DisplayAxisHt(GlobalEnums.DataMapAxis.ENTITIES) = CInt(m_entityNode.Value)
@@ -311,12 +344,12 @@ Friend Class ControllingUIController
 
             ' keep track of dimension id / column ? priority normal !!!
             ' /////////////////////////////// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            DGV.RowsHierarchy.Clear()
-            DGV.ColumnsHierarchy.Clear()
-            If m_columnsHierarchyNode.Nodes.Count > 0 Then CreateColumn(DGV, m_columnsHierarchyNode.Nodes(0))
-            If m_rowsHierarchyNode.Nodes.Count > 0 Then CreateRow(DGV, m_rowsHierarchyNode.Nodes(0))
-            DGV.ColumnsHierarchy.AutoStretchColumns = True
-            AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
+            l_DataGridView.RowsHierarchy.Clear()
+            l_DataGridView.ColumnsHierarchy.Clear()
+            If m_columnsHierarchyNode.Nodes.Count > 0 Then CreateColumn(l_DataGridView, m_columnsHierarchyNode.Nodes(0))
+            If m_rowsHierarchyNode.Nodes.Count > 0 Then CreateRow(l_DataGridView, m_rowsHierarchyNode.Nodes(0))
+            l_DataGridView.ColumnsHierarchy.AutoStretchColumns = True
+            AddHandler l_DataGridView.CellValueNeeded, AddressOf DGVs_CellValueNeeded
             m_view.m_progressBar.Value = (tab_.TabIndex - 2) / m_view.DGVsControlTab.TabPages.Count * 100
             m_view.m_progressBar.Refresh()
         Next
@@ -324,15 +357,18 @@ Friend Class ControllingUIController
 
     End Sub
 
-    Private Sub FillHierarchy(ByRef hierarchyNode As vTreeNode)
+    Private Sub FillHierarchy(ByRef p_hierarchyNode As vTreeNode)
 
-        HierarchyListPeriodsTreatment(hierarchyNode)
+        Select Case m_view.m_process
+            Case Account.AccountProcess.FINANCIAL : FinancialHierarchyListPeriodsTreatment(p_hierarchyNode)
+            Case Account.AccountProcess.RH : PDCHierarchyListPeriodsTreatment(p_hierarchyNode)
+        End Select
 
-        For Each node As vTreeNode In hierarchyNode.Nodes
+        For Each node As vTreeNode In p_hierarchyNode.Nodes
             Select Case node.Value
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES
-                    For Each Entity_node As vTreeNode In m_entityNode.Nodes
-                        VTreeViewUtil.CopySubNodes(Entity_node, node)
+                    For Each l_entityNode As vTreeNode In m_entityNode.Nodes
+                        VTreeViewUtil.CopySubNodes(l_entityNode, node)
                     Next
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS
@@ -341,20 +377,25 @@ Friend Class ControllingUIController
                     ' priority high
                     ' set an option or set a rule !! 
                     If True Then
-                        For Each accountNode As vTreeNode In m_view.accountsTV.Nodes
-                            For Each subAccountNode As vTreeNode In accountNode.Nodes
-                                VTreeViewUtil.CopySubNodes(subAccountNode, node)
+                        For Each l_accountNode As vTreeNode In m_view.m_accountsTreeview.Nodes
+                            For Each l_subAccountNode As vTreeNode In l_accountNode.Nodes
+                                VTreeViewUtil.CopySubNodes(l_subAccountNode, node)
                             Next
                         Next
                     Else
-                        For Each account_node As vTreeNode In m_view.accountsTV.GetNodes
+                        For Each account_node As vTreeNode In m_view.m_accountsTreeview.GetNodes
                             VTreeViewUtil.AddNode(account_node.Value, account_node.Text, node)
                         Next
                     End If
 
+                Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS
+                    For Each l_clientsNode As vTreeNode In m_view.m_leftPaneControl.m_clientsTV.Nodes
+                        VTreeViewUtil.CopySubNodes(l_clientsNode, node)
+                    Next
+
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS
-                    For Each version_id In m_versionsDict.Keys
-                        VTreeViewUtil.AddNode(version_id, m_versionsDict(version_id), node)
+                    For Each l_version_id In m_versionsDict.Keys
+                        VTreeViewUtil.AddNode(l_version_id, m_versionsDict(l_version_id), node)
                     Next
                     If m_versionsDict.Count = 2 Then
                         VTreeViewUtil.AddNode(m_versionsDict.Keys(0) & computer.TOKEN_SEPARATOR & m_versionsDict.Keys(1), _
@@ -365,28 +406,89 @@ Friend Class ControllingUIController
                     End If
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS
-                    For Each yearId As Int32 In GlobalVariables.Versions.GetYears(m_versionsDict)
-                        VTreeViewUtil.AddNode(computer.YEAR_PERIOD_IDENTIFIER & yearId, Format(Date.FromOADate(yearId), "yyyy"), node)
+                    Dim l_yearsPeriodList = GlobalVariables.Versions.GetYears(m_versionsDict)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_yearsPeriodList = Period.FilterPeriodList(l_yearsPeriodList.ToArray, m_view.PeriodsShortList)
+                    End If
+                    For Each l_yearId As Int32 In l_yearsPeriodList
+                        VTreeViewUtil.AddNode(computer.YEAR_PERIOD_IDENTIFIER & l_yearId, Format(Date.FromOADate(l_yearId), "yyyy"), node)
                     Next
-                    m_view.leftPane_control.SetupPeriodsTV(node)
+                    m_view.m_leftPaneControl.SetupPeriodsTV(node)
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS
-                    For Each monthId As Int32 In GlobalVariables.Versions.GetMonths(m_versionsDict)
-                        VTreeViewUtil.AddNode(computer.MONTH_PERIOD_IDENTIFIER & monthId, Format(Date.FromOADate(monthId), "MMM yyyy"), node)
+                    Dim l_monthsPeriods = GlobalVariables.Versions.GetMonths(m_versionsDict)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_monthsPeriods = Period.FilterPeriodList(l_monthsPeriods.ToArray, m_view.PeriodsShortList)
+                    End If
+                    For Each l_monthId As Int32 In l_monthsPeriods
+                        VTreeViewUtil.AddNode(computer.MONTH_PERIOD_IDENTIFIER & l_monthId, Format(Date.FromOADate(l_monthId), "MMM yyyy"), node)
                     Next
-                    m_view.leftPane_control.SetupPeriodsTV(node)
+                    m_view.m_leftPaneControl.SetupPeriodsTV(node)
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS
-                    Dim periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(m_versionsDict)
-                    For Each yearId As Int32 In periodsDict.Keys
-                        Dim yearNode As vTreeNode = VTreeViewUtil.AddNode(computer.YEAR_PERIOD_IDENTIFIER & yearId, _
-                                                                          Format(Date.FromOADate(yearId), "yyyy"), _
+                    Dim l_periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(m_versionsDict)
+
+                    Dim l_yearsPeriodList = l_periodsDict.Keys.ToArray
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_yearsPeriodList = Period.FilterPeriodList(l_yearsPeriodList, m_view.PeriodsShortList).ToArray
+                    End If
+                    
+                    For Each l_yearId As Int32 In l_periodsDict.Keys
+                        Dim l_yearNode As vTreeNode = VTreeViewUtil.AddNode(computer.YEAR_PERIOD_IDENTIFIER & l_yearId, _
+                                                                          Format(Date.FromOADate(l_yearId), "yyyy"), _
                                                                           node)
-                        For Each monthId As Int32 In periodsDict(yearId)
-                            VTreeViewUtil.AddNode(computer.MONTH_PERIOD_IDENTIFIER & monthId, Format(Date.FromOADate(monthId), "MMM yyyy"), yearNode)
+
+                        Dim l_monthsPeriods = l_periodsDict(l_yearId)
+                        If m_view.m_process = Account.AccountProcess.RH Then
+                            l_monthsPeriods = Period.FilterPeriodList(l_monthsPeriods.ToArray, m_view.PeriodsShortList)
+                        End If
+                        For Each l_monthId As Int32 In l_monthsPeriods
+                            VTreeViewUtil.AddNode(computer.MONTH_PERIOD_IDENTIFIER & l_monthId, Format(Date.FromOADate(l_monthId), "MMM yyyy"), l_yearNode)
                         Next
                     Next
-                    m_view.leftPane_control.SetupPeriodsTV(node)
+                    m_view.m_leftPaneControl.SetupPeriodsTV(node)
+
+                Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS
+                    Dim l_weekPeriods = GlobalVariables.Versions.GetWeeks(m_versionsDict)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_weekPeriods = Period.FilterPeriodList(l_weekPeriods.ToArray, m_view.PeriodsShortList)
+                    End If
+
+                    For Each l_weekId As Int32 In l_weekPeriods
+                        VTreeViewUtil.AddNode(computer.WEEK_PERIOD_IDENTIFIER & l_weekId, Local.GetValue("general.week") & " " & Period.GetWeekNumberFromDateId(l_weekId) & ", " & Year(Date.FromOADate(l_weekId)), node)
+                    Next
+                    m_view.m_leftPaneControl.SetupPeriodsTV(node)
+
+                Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS
+                    Dim l_daysPeriods = GlobalVariables.Versions.GetDays(m_versionsDict)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_daysPeriods = Period.FilterPeriodList(l_daysPeriods.ToArray, m_view.PeriodsShortList)
+                    End If
+
+                    For Each l_dayId As Int32 In l_daysPeriods
+                        VTreeViewUtil.AddNode(computer.DAY_PERIOD_IDENTIFIER & l_dayId, Format(Date.FromOADate(l_dayId), "MMMM dd, yyyy"), node)
+                    Next
+                    m_view.m_leftPaneControl.SetupPeriodsTV(node)
+
+                Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YDAYS
+                    '     Dim l_periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(m_versionsDict)
+
+                    Dim l_weekPeriods = GlobalVariables.Versions.GetWeeks(m_versionsDict)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_weekPeriods = Period.FilterPeriodList(l_weekPeriods.ToArray, m_view.PeriodsShortList)
+                    End If
+                    For Each l_weekId As Int32 In l_weekPeriods
+                        Dim l_weekNode As vTreeNode = VTreeViewUtil.AddNode(computer.WEEK_PERIOD_IDENTIFIER & l_weekId, _
+                                                                           Local.GetValue("general.week") & " " & Period.GetWeekNumberFromDateId(l_weekId) & ", " & Year(Date.FromOADate(l_weekId)), _
+                                                                            node)
+
+                        Dim l_daysPeriods = Period.GetDaysIdListInWeek(l_weekId)
+                        '  If m_view.m_process = Account.AccountProcess.RH Then l_daysPeriods = m_view.FilterPeriodList(l_daysPeriods.ToArray)
+                        For Each l_dayId As Int32 In l_daysPeriods
+                            VTreeViewUtil.AddNode(computer.DAY_PERIOD_IDENTIFIER & l_dayId, Format(Date.FromOADate(l_dayId), "MMMM dd, yyyy"), l_weekNode)
+                        Next
+                    Next
+                    m_view.m_leftPaneControl.SetupPeriodsTV(node)
 
                 Case Else
                     For Each value_node As vTreeNode In VTreeViewUtil.FindNode(m_filtersNodes, node.Value).Nodes
@@ -398,7 +500,7 @@ Friend Class ControllingUIController
 
     End Sub
 
-    Private Sub HierarchyListPeriodsTreatment(ByRef hierarchyNode As vTreeNode)
+    Private Sub FinancialHierarchyListPeriodsTreatment(ByRef hierarchyNode As vTreeNode)
 
         ' Build period related hierarchy nodes
         Dim periodsNodes As New vTreeNode
@@ -422,6 +524,35 @@ Friend Class ControllingUIController
                 Case "21"
                     ' if years after months => delete years
                     hierarchyNode.Nodes.Remove(VTreeViewUtil.FindNode(hierarchyNode, computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS))
+            End Select
+        End If
+
+    End Sub
+
+    Private Sub PDCHierarchyListPeriodsTreatment(ByRef p_hierarchyNode As vTreeNode)
+
+        ' Build period related hierarchy nodes
+        Dim l_periodsNodes As New vTreeNode
+        For Each l_node As vTreeNode In p_hierarchyNode.Nodes
+            Select Case l_node.Value
+                Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS
+                    VTreeViewUtil.AddNode(1, 1, l_periodsNodes)
+                Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS
+                    VTreeViewUtil.AddNode(2, 2, l_periodsNodes)
+            End Select
+        Next
+
+        ' Analyze present periods dimensions and order
+        If l_periodsNodes.Nodes.Count = 2 Then
+            Select Case l_periodsNodes.Nodes(0).Value & l_periodsNodes.Nodes(1).Value
+                Case "12"
+                    ' if weeks before days => only keep days but with special code
+                    Dim l_daysNode As vTreeNode = VTreeViewUtil.FindNode(p_hierarchyNode, computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS)
+                    l_daysNode.Value = computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YDAYS
+                    p_hierarchyNode.Nodes.Remove(VTreeViewUtil.FindNode(p_hierarchyNode, computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS))
+                Case "21"
+                    ' if weeks after days => delete weeks
+                    p_hierarchyNode.Nodes.Remove(VTreeViewUtil.FindNode(p_hierarchyNode, computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS))
             End Select
         End If
 
@@ -571,7 +702,10 @@ Friend Class ControllingUIController
 
             Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, _
                  computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, _
-                 computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS
+                 computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS, _
+                computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS, _
+                computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS, _
+                computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YDAYS
                 m_DisplayAxisHt(GlobalEnums.DataMapAxis.PERIODS) = valueNode.Value
 
             Case Else
@@ -631,92 +765,102 @@ Friend Class ControllingUIController
 
         ' priority high -> no update if alraedy displayed !!!! 
         '---------------------------------------------------------
-        If Not m_dataMap Is Nothing Then
+        If Not m_dataMap Is Nothing  Then
 
-            Dim accountId As UInt32 = 0
-            Dim entityId As Int32 = 0
-            Dim periodId As String = ""
-            Dim versionId As String = 0
-            Dim filterId As String = "0"
+            Dim l_accountId As UInt32 = 0
+            Dim l_entityId As Int32 = 0
+            Dim l_periodId As String = ""
+            Dim l_versionId As String = 0
+            Dim l_filterId As String = "0"
 
             SetCellsItems(args.RowItem, _
                           args.ColumnItem, _
-                          entityId, _
-                          accountId, _
-                          periodId, _
-                          versionId, _
-                          filterId)
+                          l_entityId, _
+                          l_accountId, _
+                          l_periodId, _
+                          l_versionId, _
+                          l_filterId)
 
-            Dim token As String = computer.TOKEN_SEPARATOR & _
-                                  filterId & computer.TOKEN_SEPARATOR & _
-                                  entityId & computer.TOKEN_SEPARATOR & _
-                                  accountId & computer.TOKEN_SEPARATOR & _
-                                  periodId
-            If versionId.Contains(computer.TOKEN_SEPARATOR) Then
-                Dim v1 As Int32 = GetFirstVersionId(versionId)
-                Dim v2 As Int32 = GetSecondVersionId(versionId)
-
-                If m_dataMap.ContainsKey(v1 & token) _
-                AndAlso m_dataMap.ContainsKey(v2 & token) Then
-                    Dim l_deltaValue = m_dataMap(v1 & token) - m_dataMap(v2 & token)
-                    args.CellValue = l_deltaValue
-                    If Double.IsNaN(args.CellValue) Then
-                        args.CellValue = "-"
-                    Else
-                        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(args.RowItem.DataGridView.VIBlendTheme).GridCellStyle
-                        If l_deltaValue > 0 Then
-                            ' CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Green)
-                            CStyle.TextColor = System.Drawing.Color.Green
-                        Else
-                            CStyle.TextColor = Drawing.Color.Red
-                            '  CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Red)
-                        End If
-                        args.RowItem.DataGridView.CellsArea.SetCellDrawStyle(args.RowItem, args.ColumnItem, CStyle)
-                    End If
-                    If My.Settings.controllingUIResizeTofitGrid = True Then
-                        args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
-                        ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
-                    End If
-                Else
-                    args.CellValue = ""
-                End If
+            Dim l_token As String = computer.TOKEN_SEPARATOR & _
+                                  l_filterId & computer.TOKEN_SEPARATOR & _
+                                  l_entityId & computer.TOKEN_SEPARATOR & _
+                                  l_accountId & computer.TOKEN_SEPARATOR & _
+                                  l_periodId
+            If l_versionId.Contains(computer.TOKEN_SEPARATOR) Then
+                SetVersionsComparisonCellsValues(l_versionId, l_token, args)
             Else
-                If m_dataMap.ContainsKey(versionId & token) Then
-                    args.CellValue = m_dataMap(versionId & token)
+                If m_dataMap.ContainsKey(l_versionId & l_token) Then
+                    ' The data CONTAINS the token
+                    args.CellValue = m_dataMap(l_versionId & l_token)
                     If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
-                    If My.Settings.controllingUIResizeTofitGrid = True Then
-                        args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
-                        ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
-                    End If
+                    'If My.Settings.controllingUIResizeTofitGrid = True Then
+                    '    ' args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+                    '    ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
+                    'End If
                 Else
+                    ' The data DOES NOT CONTAIN the token
                     args.CellValue = ""
-                    Dim l_account As Account = GlobalVariables.Accounts.GetValue(accountId)
-
-                    If Not l_account Is Nothing Then
-                        If (l_account.FormulaType <> Account.FormulaTypes.TITLE) Then
-                            args.CellValue = "-"
-                            'Dim parent = args.RowItem.ParentItem
-
-                            'If Not parent Is Nothing AndAlso IsEmptyRow(args.RowItem) Then
-                            '    parent.Items.Remove(args.RowItem)
-                            'End If
-                        End If
-                    End If
+                    '  DeleteRowsIfNeededCaseTokenNotFound(args, l_accountId)
                 End If
             End If
         End If
 
     End Sub
 
-    Private Function IsEmptyRow(ByRef p_row As HierarchyItem) As Boolean
-        For Each item In p_row.Cells
-            If item.Value <> "" Then Return (False)
-        Next
-        Return (True)
-    End Function
+    Private Sub SetVersionsComparisonCellsValues(ByRef p_versionid As String, _
+                                                 ByRef p_token As String, _
+                                                 ByVal args As CellValueNeededEventArgs)
 
-    ' si ralentissement de l'affichage des valeurs remettre la function directement 
-    ' au dessus (pour éviter le byval)
+        Dim v1 As Int32 = GetFirstVersionId(p_versionid)
+        Dim v2 As Int32 = GetSecondVersionId(p_versionid)
+
+        If m_dataMap.ContainsKey(v1 & p_token) _
+        AndAlso m_dataMap.ContainsKey(v2 & p_token) Then
+            Dim l_deltaValue = m_dataMap(v1 & p_token) - m_dataMap(v2 & p_token)
+            args.CellValue = l_deltaValue
+            If Double.IsNaN(args.CellValue) Then
+                args.CellValue = "-"
+            Else
+                Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(args.RowItem.DataGridView.VIBlendTheme).GridCellStyle
+                If l_deltaValue > 0 Then
+                    ' CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Green)
+                    CStyle.TextColor = System.Drawing.Color.Green
+                Else
+                    CStyle.TextColor = Drawing.Color.Red
+                    '  CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Red)
+                End If
+                args.RowItem.DataGridView.CellsArea.SetCellDrawStyle(args.RowItem, args.ColumnItem, CStyle)
+            End If
+            If My.Settings.controllingUIResizeTofitGrid = True Then
+                args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+                ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
+            End If
+        Else
+            args.CellValue = ""
+        End If
+
+    End Sub
+
+    Private Sub DeleteRowsIfNeededCaseTokenNotFound(ByRef args As CellValueNeededEventArgs, _
+                                                    ByRef p_accountid As Int32)
+
+        Dim l_account As Account = GlobalVariables.Accounts.GetValue(p_accountid)
+        If Not l_account Is Nothing Then
+            If (l_account.FormulaType <> Account.FormulaTypes.TITLE) Then
+                args.CellValue = "-"
+
+                ' Attention à commenter -> Ou bien flexibilité rows/columns
+                ' *******************************************************
+                If IsEmptyRow(args.RowItem) Then
+                    args.RowItem.Delete()
+                End If
+                ' *******************************************************
+
+            End If
+        End If
+
+    End Sub
+
     Friend Sub SetCellsItems(ByVal p_row As HierarchyItem, _
                              ByVal p_column As HierarchyItem, _
                              ByRef p_entityId As Int32, _
@@ -757,6 +901,17 @@ Friend Class ControllingUIController
 
 
     End Sub
+
+#Region "Utilities"
+
+    Private Function IsEmptyRow(ByRef p_row As HierarchyItem) As Boolean
+        For Each item In p_row.Cells
+            If item.Value <> "" Then Return (False)
+        Next
+        Return (True)
+    End Function
+
+#End Region
 
 #End Region
 
@@ -858,10 +1013,10 @@ Friend Class ControllingUIController
 
         Dim axisFilters As New SafeDictionary(Of Int32, List(Of Int32))
 
-        AddAxisFilterFromTV(m_view.leftPane_control.entitiesTV, GlobalEnums.AnalysisAxis.ENTITIES, axisFilters)
-        AddAxisFilterFromTV(m_view.leftPane_control.clientsTV, GlobalEnums.AnalysisAxis.CLIENTS, axisFilters)
-        AddAxisFilterFromTV(m_view.leftPane_control.productsTV, GlobalEnums.AnalysisAxis.PRODUCTS, axisFilters)
-        AddAxisFilterFromTV(m_view.leftPane_control.adjustmentsTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS, axisFilters)
+        AddAxisFilterFromTV(m_view.m_leftPaneControl.entitiesTV, GlobalEnums.AnalysisAxis.ENTITIES, axisFilters)
+        AddAxisFilterFromTV(m_view.m_leftPaneControl.m_clientsTV, GlobalEnums.AnalysisAxis.CLIENTS, axisFilters)
+        AddAxisFilterFromTV(m_view.m_leftPaneControl.productsTV, GlobalEnums.AnalysisAxis.PRODUCTS, axisFilters)
+        AddAxisFilterFromTV(m_view.m_leftPaneControl.adjustmentsTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS, axisFilters)
 
         If axisFilters.Count = 0 Then
             Return Nothing
@@ -888,18 +1043,23 @@ Friend Class ControllingUIController
 
         Dim filters As New SafeDictionary(Of Int32, List(Of Int32))
 
-        AddFiltersFromTV(m_view.leftPane_control.entitiesFiltersTV, _
+        AddFiltersFromTV(m_view.m_leftPaneControl.entitiesFiltersTV, _
                          GlobalEnums.AnalysisAxis.ENTITIES, _
                          filters)
-        AddFiltersFromTV(m_view.leftPane_control.clientsFiltersTV, _
+        AddFiltersFromTV(m_view.m_leftPaneControl.clientsFiltersTV, _
                          GlobalEnums.AnalysisAxis.CLIENTS, _
                          filters)
-        AddFiltersFromTV(m_view.leftPane_control.productsFiltersTV, _
+        AddFiltersFromTV(m_view.m_leftPaneControl.productsFiltersTV, _
                          GlobalEnums.AnalysisAxis.PRODUCTS, _
                          filters)
-        AddFiltersFromTV(m_view.leftPane_control.adjustmentsFiltersTV, _
+        AddFiltersFromTV(m_view.m_leftPaneControl.adjustmentsFiltersTV, _
                          GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
                          filters)
+        If m_view.m_process = Account.AccountProcess.RH Then
+            AddFiltersFromTV(m_view.m_leftPaneControl.m_employeesFiltersTV, _
+                            GlobalEnums.AnalysisAxis.EMPLOYEES, _
+                            filters)
+        End If
 
         If filters.Count = 0 Then
             Return Nothing
@@ -932,7 +1092,7 @@ Friend Class ControllingUIController
 
     End Sub
 
-    Friend Sub StubFillingChart()
+    Friend Sub UpdateCUICharts()
 
         m_chartsView.ClearCharts_ThreadSafe()
         Dim xAxisValues As String() = GetSerieXValues()
@@ -988,7 +1148,7 @@ Friend Class ControllingUIController
     Private Function BuildSerieYValues(ByRef p_accountId As Int32, _
                                        ByRef p_versionId As Int32) As Double()
 
-        Dim nbPeriods As Int32 = m_view.leftPane_control.periodsTV.Nodes.Count - 1
+        Dim nbPeriods As Int32 = m_view.m_leftPaneControl.periodsTV.Nodes.Count - 1
         Dim yValues(nbPeriods) As Double
         Dim entityId As Int32 = m_entityNode.Value
         Dim filterId As String = "0"
@@ -996,7 +1156,7 @@ Friend Class ControllingUIController
         Dim token As String
 
         Dim i As Int32
-        For Each periodNode As vTreeNode In m_view.leftPane_control.periodsTV.Nodes
+        For Each periodNode As vTreeNode In m_view.m_leftPaneControl.periodsTV.Nodes
             periodId = periodNode.Value
             token = p_versionId & computer.TOKEN_SEPARATOR & _
                     filterId & computer.TOKEN_SEPARATOR & _
@@ -1016,10 +1176,10 @@ Friend Class ControllingUIController
 
     Private Function GetSerieXValues() As String()
 
-        Dim nbPeriods As Int32 = m_view.leftPane_control.periodsTV.Nodes.Count - 1
+        Dim nbPeriods As Int32 = m_view.m_leftPaneControl.periodsTV.Nodes.Count - 1
         Dim xValues(nbPeriods) As String
         Dim i As Int32 = 0
-        For Each node As vTreeNode In m_view.leftPane_control.periodsTV.Nodes
+        For Each node As vTreeNode In m_view.m_leftPaneControl.periodsTV.Nodes
             xValues(i) = node.Text
             i += 1
         Next
@@ -1041,11 +1201,11 @@ Friend Class ControllingUIController
     Private Sub FillUIHeader()
 
         m_view.EntityTB.Text = m_entityNode.Text
-        m_view.CurrencyTB.Text = m_view.leftPane_control.currenciesCLB.SelectedItem.Text
+        m_view.CurrencyTB.Text = m_view.m_leftPaneControl.currenciesCLB.SelectedItem.Text
         m_view.VersionTB.Text = String.Join(" ; ", m_versionsDict.Values)
 
         m_chartsView.EntityTB.Text = m_entityNode.Text
-        m_chartsView.CurrencyTB.Text = m_view.leftPane_control.currenciesCLB.SelectedItem.Text
+        m_chartsView.CurrencyTB.Text = m_view.m_leftPaneControl.currenciesCLB.SelectedItem.Text
         m_chartsView.VersionTB.Text = String.Join(" ; ", m_versionsDict.Values)
 
     End Sub

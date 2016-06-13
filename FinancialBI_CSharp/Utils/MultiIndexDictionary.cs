@@ -30,6 +30,11 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
     }
   }
 
+  public Int32 Count
+  {
+    get { return (m_mainDic.Count); }
+  }
+
   public Dictionary<KeyA, uint>.KeyCollection Keys
   {
     get { return m_firstDic.Keys; }

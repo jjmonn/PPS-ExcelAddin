@@ -18,7 +18,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 13/11/2015
+' Last modified: 07/01/2016
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -78,7 +78,7 @@ Friend Class AcquisitionModel
         GlobalVariables.Accounts.LoadAccountsTV(m_accountsTV)
         m_dataSet = inputDataSet
 
-        m_outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
+        m_outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, Account.AccountProcess.FINANCIAL)
 
         AddHandler m_computer.ComputationAnswered, AddressOf AfterInputsComputation
         AddHandler m_singleComputer.ComputationAnswered, AddressOf AfterOutputsComputed
@@ -130,12 +130,13 @@ Friend Class AcquisitionModel
         l_axisFilters(GlobalEnums.AnalysisAxis.ADJUSTMENTS).Add(p_adjustment_id)
 
         ' Actual Computation
-        m_computer.CMSG_COMPUTE_REQUEST({m_currentVersionId}, _
-                                        l_entitiesId, _
-                                        0, _
-                                        Nothing, _
-                                        l_axisFilters, _
-                                        Nothing)
+    m_computer.CMSG_COMPUTE_REQUEST({m_currentVersionId}, _
+                                    l_entitiesId, _
+                                    CRUD.Account.AccountProcess.FINANCIAL, _
+                                    Nothing, _
+                                    Nothing, _
+                                    l_axisFilters, _
+                                    Nothing)
 
     End Sub
 
@@ -338,7 +339,7 @@ Friend Class AcquisitionModel
                         m_entitiesIdInputsAccounts(l_entityId)(i) = inputAccount.Id
                         m_entitiesIdInputsPeriods(l_entityId)(i) = period
 
-                        Dim tuple_ As New Tuple(Of String, String, String)(l_entityName, inputAccount.Name, CStr(period))
+                        Dim tuple_ As New Tuple(Of String, String, String, String)(l_entityName, inputAccount.Name, "", CStr(period))
                         If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                             m_entitiesIdInputsValues(l_entityId)(i) = m_dataSet.m_datasetCellsDictionary(tuple_).Value2
                         ElseIf m_databaseInputsDictionary(l_entityName).ContainsKey(inputAccount.Name) _
@@ -396,7 +397,7 @@ ReturnError:
                                         ByVal p_value As Double)
 
         ' -> should go back in dataset or controller !! no dataset here
-        Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, p_accountName, p_period)
+        Dim tuple_ As New Tuple(Of String, String, String, String)(p_entityName, p_accountName, "", p_period)
         If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
             Dim cell As Excel.Range = m_dataSet.m_datasetCellsDictionary(tuple_)
             Dim datasetCell As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address)
@@ -407,6 +408,13 @@ ReturnError:
         Else
             m_databaseInputsDictionary(p_entityName)(p_accountName).Add(p_period, p_value)
         End If
+
+    End Sub
+
+    Friend Sub Flush()
+
+        m_databaseInputsDictionary.Clear()
+        m_singleComputer.Flush()
 
     End Sub
 

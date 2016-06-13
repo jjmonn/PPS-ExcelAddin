@@ -49,7 +49,7 @@ Partial Class VersionsControl
         Me.NameTB = New System.Windows.Forms.TextBox()
         Me.m_creationDateLabel = New System.Windows.Forms.Label()
         Me.lockedCB = New System.Windows.Forms.CheckBox()
-        Me.TimeConfigTB = New System.Windows.Forms.TextBox()
+        Me.m_timeConfigTB = New System.Windows.Forms.TextBox()
         Me.StartPeriodTB = New System.Windows.Forms.ComboBox()
         Me.NBPeriodsTB = New System.Windows.Forms.TextBox()
         Me.m_exchangeRatesVersionVTreeviewbox = New VIBlend.WinForms.Controls.vTreeViewBox()
@@ -90,14 +90,14 @@ Partial Class VersionsControl
         '
         'new_version_bt
         '
-        Me.new_version_bt.Image = Global.FinancialBI.My.resources.elements3_add
+        Me.new_version_bt.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.new_version_bt.Name = "new_version_bt"
         Me.new_version_bt.Size = New System.Drawing.Size(141, 22)
         Me.new_version_bt.Text = "New_version"
         '
         'new_folder_bt
         '
-        Me.new_folder_bt.Image = Global.FinancialBI.My.resources.folder2
+        Me.new_folder_bt.Image = Global.FinancialBI.My.Resources.Resources.folder2
         Me.new_folder_bt.Name = "new_folder_bt"
         Me.new_folder_bt.Size = New System.Drawing.Size(141, 22)
         Me.new_folder_bt.Text = "New_folder"
@@ -120,7 +120,7 @@ Partial Class VersionsControl
         '
         'delete_bt
         '
-        Me.delete_bt.Image = Global.FinancialBI.My.resources.elements3_delete
+        Me.delete_bt.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.delete_bt.Name = "delete_bt"
         Me.delete_bt.Size = New System.Drawing.Size(141, 22)
         Me.delete_bt.Text = "Delete"
@@ -185,7 +185,7 @@ Partial Class VersionsControl
         Me.TableLayoutPanel2.Controls.Add(Me.NameTB, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.m_creationDateLabel, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.lockedCB, 1, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.TimeConfigTB, 1, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_timeConfigTB, 1, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.StartPeriodTB, 1, 5)
         Me.TableLayoutPanel2.Controls.Add(Me.NBPeriodsTB, 1, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.m_exchangeRatesVersionVTreeviewbox, 1, 7)
@@ -343,13 +343,13 @@ Partial Class VersionsControl
         Me.lockedCB.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.lockedCB.UseVisualStyleBackColor = True
         '
-        'TimeConfigTB
+        'm_timeConfigTB
         '
-        Me.TimeConfigTB.Enabled = False
-        Me.TimeConfigTB.Location = New System.Drawing.Point(157, 179)
-        Me.TimeConfigTB.Name = "TimeConfigTB"
-        Me.TimeConfigTB.Size = New System.Drawing.Size(227, 20)
-        Me.TimeConfigTB.TabIndex = 18
+        Me.m_timeConfigTB.Enabled = False
+        Me.m_timeConfigTB.Location = New System.Drawing.Point(157, 179)
+        Me.m_timeConfigTB.Name = "m_timeConfigTB"
+        Me.m_timeConfigTB.Size = New System.Drawing.Size(227, 20)
+        Me.m_timeConfigTB.TabIndex = 18
         '
         'StartPeriodTB
         '
@@ -415,21 +415,21 @@ Partial Class VersionsControl
         '
         'NewVersionMenuBT
         '
-        Me.NewVersionMenuBT.Image = Global.FinancialBI.My.resources.elements3_add
+        Me.NewVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.NewVersionMenuBT.Name = "NewVersionMenuBT"
         Me.NewVersionMenuBT.Size = New System.Drawing.Size(191, 22)
         Me.NewVersionMenuBT.Text = "[versions.add_version]"
         '
         'NewFolderMenuBT
         '
-        Me.NewFolderMenuBT.Image = Global.FinancialBI.My.resources.favicon_81_
+        Me.NewFolderMenuBT.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.NewFolderMenuBT.Name = "NewFolderMenuBT"
         Me.NewFolderMenuBT.Size = New System.Drawing.Size(191, 22)
         Me.NewFolderMenuBT.Text = "Add_folder"
         '
         'DeleteVersionMenuBT
         '
-        Me.DeleteVersionMenuBT.Image = Global.FinancialBI.My.resources.elements3_delete
+        Me.DeleteVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionMenuBT.Name = "DeleteVersionMenuBT"
         Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(191, 22)
         Me.DeleteVersionMenuBT.Text = "Delete"
@@ -497,7 +497,7 @@ Partial Class VersionsControl
     Friend WithEvents NameTB As System.Windows.Forms.TextBox
     Friend WithEvents m_creationDateLabel As System.Windows.Forms.Label
     Friend WithEvents lockedCB As System.Windows.Forms.CheckBox
-    Friend WithEvents TimeConfigTB As System.Windows.Forms.TextBox
+    Friend WithEvents m_timeConfigTB As System.Windows.Forms.TextBox
     Friend WithEvents StartPeriodTB As System.Windows.Forms.ComboBox
     Friend WithEvents NBPeriodsTB As System.Windows.Forms.TextBox
     Friend WithEvents RenameMenuBT As System.Windows.Forms.ToolStripMenuItem

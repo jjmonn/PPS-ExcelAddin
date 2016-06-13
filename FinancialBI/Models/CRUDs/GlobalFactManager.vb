@@ -4,7 +4,7 @@ Imports System.Windows.Forms
 Imports CRUD
 
 
-Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
+Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
 #Region "Init"
 
@@ -40,7 +40,7 @@ Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         Dim version As GlobalFactVersion = GlobalVariables.GlobalFactsVersions.GetValue(p_versionId)
         If version Is Nothing Then Return periodList
 
-        For Each monthId As Int32 In Period.GetMonthsList(version.StartPeriod, version.NbPeriod)
+        For Each monthId As Int32 In Period.GetMonthsList(version.StartPeriod, version.NbPeriod, CRUD.TimeConfig.MONTHS)
             periodList.Add(monthId)
         Next
         Return periodList
@@ -53,7 +53,7 @@ Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
     Friend Sub LoadGlobalFactsTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
         VTreeViewUtil.LoadFlatTreeview(p_treeview, m_CRUDDic)
-        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
+        VTreeViewUtil.SetTreeviewIconsHierarchy(p_treeview)
     End Sub
 
 
