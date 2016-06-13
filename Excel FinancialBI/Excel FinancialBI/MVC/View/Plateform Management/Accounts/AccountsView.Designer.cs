@@ -49,7 +49,7 @@ namespace FBI.MVC.View
       this.m_accountFormulaGroupbox = new System.Windows.Forms.GroupBox();
       this.m_cancelFormulaEditionButton = new VIBlend.WinForms.Controls.vButton();
       this.m_formulaEditionButton = new VIBlend.WinForms.Controls.vButton();
-      this.m_formulaTextBox = new VIBlend.WinForms.Controls.vTextBox();
+      this.m_formulaTextBox = new VIBlend.WinForms.Controls.vRichTextBox();
       this.m_validateFormulaButton = new VIBlend.WinForms.Controls.vButton();
       this.m_accountInformationGroupbox = new System.Windows.Forms.GroupBox();
       this.ProcessCB = new VIBlend.WinForms.Controls.vComboBox();
@@ -283,27 +283,25 @@ namespace FBI.MVC.View
       // 
       // m_formulaTextBox
       // 
+      this.m_formulaTextBox.AllowAnimations = false;
       this.m_formulaTextBox.AllowDrop = true;
+      this.m_formulaTextBox.AllowFocused = false;
+      this.m_formulaTextBox.AllowHighlight = false;
       this.m_formulaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.m_formulaTextBox.BackColor = System.Drawing.Color.White;
-      this.m_formulaTextBox.BoundsOffset = new System.Drawing.Size(1, 1);
       this.m_formulaTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
-      this.m_formulaTextBox.DefaultText = "Empty...";
       this.m_formulaTextBox.Enabled = false;
+      this.m_formulaTextBox.GleamWidth = 1;
       this.m_formulaTextBox.Location = new System.Drawing.Point(6, 52);
       this.m_formulaTextBox.MaxLength = 32767;
       this.m_formulaTextBox.Multiline = true;
       this.m_formulaTextBox.Name = "m_formulaTextBox";
-      this.m_formulaTextBox.PasswordChar = '\0';
-      this.m_formulaTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None;
-      this.m_formulaTextBox.SelectionLength = 0;
-      this.m_formulaTextBox.SelectionStart = 0;
+      this.m_formulaTextBox.Readonly = false;
       this.m_formulaTextBox.Size = new System.Drawing.Size(524, 106);
       this.m_formulaTextBox.TabIndex = 0;
-      this.m_formulaTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-      this.m_formulaTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_formulaTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_validateFormulaButton
       // 
@@ -579,7 +577,7 @@ namespace FBI.MVC.View
       this.m_globalFactsLabel.Location = new System.Drawing.Point(3, 11);
       this.m_globalFactsLabel.Multiline = true;
       this.m_globalFactsLabel.Name = "m_globalFactsLabel";
-      this.m_globalFactsLabel.Size = new System.Drawing.Size(201, 16);
+      this.m_globalFactsLabel.Size = new System.Drawing.Size(203, 16);
       this.m_globalFactsLabel.TabIndex = 0;
       this.m_globalFactsLabel.Text = "Macro economic indicators";
       this.m_globalFactsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -819,7 +817,7 @@ namespace FBI.MVC.View
     public VIBlend.WinForms.Controls.vLabel m_globalFactsLabel;
     public System.Windows.Forms.SplitContainer SplitContainer2;
     public VIBlend.WinForms.Controls.vTextBox m_descriptionTextBox;
-    public VIBlend.WinForms.Controls.vTextBox m_formulaTextBox;
+    public VIBlend.WinForms.Controls.vRichTextBox m_formulaTextBox;
     public System.Windows.Forms.Panel AccountsTVPanel;
     public System.Windows.Forms.ImageList m_globalFactsImageList;
     public VIBlend.WinForms.Controls.vButton m_validateFormulaButton;
