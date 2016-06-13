@@ -47,12 +47,10 @@ namespace FBI.MVC.View
       m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, 0, Local.GetValue("general.currency"));
       foreach (AxisElem l_entity in l_entityDic.Values)
       {
-        if (l_entity.AllowEdition == false)
-          continue;
         EntityCurrency l_entityCurrency = EntityCurrencyModel.Instance.GetValue(l_entity.Id);
 
         if (l_entityCurrency == null)
-          return;
+          continue;
         m_dgv.FillField(l_entity.Id, 0, CurrencyModel.Instance.GetValueName(l_entityCurrency.CurrencyId));
       }
       m_dgv.Refresh();
@@ -83,9 +81,8 @@ namespace FBI.MVC.View
         return;
       UInt32 l_entityId = (UInt32)p_e.Cell.RowItem.ItemValue;
       AxisElem l_entity = AxisElemModel.Instance.GetValue(AxisType.Entities, l_entityId);
-      EntityCurrency l_entityCurrency = EntityCurrencyModel.Instance.GetValue(l_entityId);
 
-      if (l_entityCurrency == null || l_entity == null || l_entity.AllowEdition == false)
+      if (l_entity == null)
         return;
       m_dgv.CellsArea.SetCellEditor(p_e.Cell.RowItem, p_e.Cell.ColumnItem, BuildCurrencyCB());
     }

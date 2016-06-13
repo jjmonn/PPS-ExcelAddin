@@ -158,10 +158,10 @@ namespace FBI.MVC.View
       {
         try
         {
-          if ((double)p_cell.Value2 != l_result2)
+          if (p_cell.Value2 == null || (double)p_cell.Value2 != l_result2)
             p_cell.Value2 = l_result2;
         }
-        catch (InvalidCastException)
+        catch
         {
           p_cell.Value2 = l_result2;
         }

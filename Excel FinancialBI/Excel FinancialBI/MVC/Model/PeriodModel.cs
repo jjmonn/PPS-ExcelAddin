@@ -88,6 +88,14 @@ namespace FBI.MVC.Model
       return new List<Int32>();
     }
 
+    static public List<Int32> GetYearPastMonths(Int32 p_startPeriod)
+    {
+      DateTime date = new DateTime();
+
+      date = date.AddYears(DateTime.FromOADate(p_startPeriod).Year - date.Year);
+      return (GetPeriodList((Int32)date.ToOADate(), 12, TimeConfig.MONTHS));
+    }
+
     #region "Years interface"
   
     static public List<Int32> GetSubPeriods(CRUD.TimeConfig p_timeConfig, Int32 p_period)

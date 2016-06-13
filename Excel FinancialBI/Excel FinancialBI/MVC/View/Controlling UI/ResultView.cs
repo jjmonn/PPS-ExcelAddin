@@ -166,6 +166,8 @@ namespace FBI.MVC.View
         {
           if (l_account.Process != (Account.AccountProcess)Properties.Settings.Default.processId)
             continue;
+          if (m_computeConfig.Request.AccountList.Count != 0 && !m_computeConfig.Request.AccountList.Contains(l_account.Id))
+            continue;
           vTabPage l_tab = new vTabPage(l_account.Name);
           DGV l_dgv = new DGV();
           l_dgv.ContextMenuStrip = m_dgvMenu;
@@ -469,6 +471,8 @@ namespace FBI.MVC.View
       l_accountList.Sort();
       foreach (Account l_account in l_accountList)
       {
+        if (m_computeConfig.Request.AccountList.Count != 0 && !m_computeConfig.Request.AccountList.Contains(l_account.Id))
+          continue;
         if (l_account.ParentId != p_tabId)
           continue;
         if (l_account.Process != m_computeConfig.Request.Process || l_account.FormulaType == Account.FormulaTypes.TITLE)
