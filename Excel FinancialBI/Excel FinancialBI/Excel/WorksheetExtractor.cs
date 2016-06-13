@@ -46,6 +46,8 @@ namespace FBI.Excel
             continue;
           }
         }
+        if (l_type == typeof(string) && (string.IsNullOrWhiteSpace((string)l_value.Item1)))
+          continue;
         InsertValue(l_type, l_value.Item1, l_cell.Address);
       }
     }
