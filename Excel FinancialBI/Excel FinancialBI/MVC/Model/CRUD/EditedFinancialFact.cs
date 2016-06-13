@@ -41,7 +41,20 @@ namespace FBI.MVC.Model.CRUD
         if (EditedValue != this.Value)
           return EditedFactStatus.InputDifferent;
         else
+        {
+          AxisElem l_entity = Entity;
+          Account l_account = Account;
+
+          if (l_entity == null || l_account == null)
+            return EditedFactStatus.Warning;
+          else if (l_entity.AllowEdition == false)
+          {
+            double l_value = EntityDistributionModel.Instance.GetAllSubEntitiesValues(l_entity.Id, l_account.Id); // TODO: Optimize
+            if ((l_entity.ParentId == 0 && l_value != 100) || l_value == 0)
+              return EditedFactStatus.Warning;
+          }
           return EditedFactStatus.InputEqual;
+        }
       }
       else
       {
