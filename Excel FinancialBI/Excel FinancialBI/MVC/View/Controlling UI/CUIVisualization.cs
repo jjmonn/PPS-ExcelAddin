@@ -204,8 +204,8 @@ namespace FBI.MVC.View
       if ((l_chart = (FbiChart)this.GetObjectFromControl(l_clickedControl, typeof(FbiChart))) != null && l_chart.HasSettings)
       {
         m_controller.DChartSettings(l_chart.Settings.Id);
-        this.Merge(l_clickedControl);
       }
+      this.Merge(l_clickedControl);
     }
 
     #region Model

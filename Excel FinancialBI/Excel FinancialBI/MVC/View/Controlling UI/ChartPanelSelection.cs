@@ -115,12 +115,12 @@ namespace FBI.MVC.View
 
     private void OnDeleteClick(object sender, EventArgs e)
     {
-      if (m_list.SelectedItem == null || (UInt32)m_list.SelectedItem.Value == ChartPanel.INVALID_ID)
+      if (m_list.SelectedItem == null)
         return;
 
-      if (!m_controller.DPanel((UInt32)m_list.SelectedItem.Value))
+      if (!m_controller.DPanel(m_list.SelectedItem.Text))
       {
-        MessageBox.Show("general.error.system");
+        MessageBox.Show(Local.GetValue("general.error.system"));
       }
     }
 
@@ -228,7 +228,7 @@ namespace FBI.MVC.View
       if ((l_item = this.GetItem(p_panelId)) != null)
       {
         m_list.Items.Remove(l_item);
- 
+        this.SetListItemIndex(m_list.Items.Count > 0 ? m_list.Items[0] : null);
       }
     }
 
