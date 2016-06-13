@@ -80,6 +80,18 @@ namespace FBI.MVC.Controller
       return (l_list);
     }
 
+    public List<UInt32> GetAccounts()
+    {
+      SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();
+      List<UInt32> l_list = new List<uint>();
+
+      if (l_dic[typeof(Account)] == null)
+        return (l_list);
+      foreach (UInt32 l_accountId in l_dic[typeof(Account)])
+        l_list.Add(l_accountId);
+      return (l_list);
+    }
+
     public List<Int32> GetPeriods()
     {
       SafeDictionary<Type, List<UInt32>> l_dic = m_view.GetCheckedElements();
