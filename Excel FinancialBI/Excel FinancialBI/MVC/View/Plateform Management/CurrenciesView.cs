@@ -59,7 +59,7 @@ namespace FBI.MVC.View
       m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, 0, "Active");
       m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, 1, "Name");
       m_dgv.SetDimension(FbiDataGridView.Dimension.COLUMN, 2, "Symbol");
-      foreach (Currency l_currency in l_currencyDic.Values)
+      foreach (Currency l_currency in l_currencyDic.SortedValues)
       {
         m_dgv.SetDimension<Currency>(FbiDataGridView.Dimension.ROW, l_currency.Id, "", 0, null, 0);
         if (UserModel.Instance.CurrentUserHasRight(Group.Permission.EDIT_CURRENCIES) == true)

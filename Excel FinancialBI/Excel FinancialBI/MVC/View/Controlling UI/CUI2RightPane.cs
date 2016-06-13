@@ -158,7 +158,10 @@ namespace FBI.MVC.View
             DimensionElem l_dimension = (DimensionElem)m_dimensions[l_dimensionId];
 
             if (l_dimension != null && l_dimension.Deletable)
+            {
               l_displayList.Items.Remove(l_displayList.SelectedItem);
+              l_displayList.SelectedItem = null;
+            }
             else
               Forms.MsgBox.Show(Local.GetValue("CUI.not_deletable_dimension"));
           }
@@ -202,9 +205,21 @@ namespace FBI.MVC.View
     void OnDisplayListDropItem(object p_sender, DragEventArgs p_e)
     {
       vListBox l_displayList = (vListBox)p_sender;
+      int l_dest = l_displayList.Items.IndexOf(m_listItemDimensions[m_draggingItem]);
 
+      if (l_dest >= 0)
+      {
+        Point l_itemPos = l_displayList.PointToScreen(l_displayList.Items[l_dest].RenderBounds.Location);
+
+        if (l_itemPos.Y < p_e.Y)
+          l_dest++;
+        else
+          l_dest--;
+        if (l_dest >= l_displayList.Items.Count)
+          l_dest = l_displayList.Items.Count - 1;
+      }
       if (l_displayList != null)
-        SetToDisplayList(m_draggingItem, l_displayList);
+        SetToDisplayList(m_draggingItem, l_displayList, l_dest);
       m_draggingItem = 0;
     }
 
@@ -233,7 +248,7 @@ namespace FBI.MVC.View
       return (p_dimensionId);
     }
 
-    UInt32 SetToDisplayList(UInt32 p_dimensionId, vListBox p_list)
+    UInt32 SetToDisplayList(UInt32 p_dimensionId, vListBox p_list, int p_index = -1)
     {
       RemoveFromPreviousPlace(m_draggingItem);
       DimensionElem l_dimension = m_dimensions[p_dimensionId];
@@ -244,7 +259,10 @@ namespace FBI.MVC.View
       l_item.Text = l_dimension.Name;
       l_item.Value = l_dimension.Id;
       m_listItemDimensions[l_dimension.Id] = l_item;
-      p_list.Items.Add(l_item);
+      if (p_index < 0)
+        p_list.Items.Add(l_item);
+      else
+        p_list.Items.Insert(l_item, p_index);
       return (p_dimensionId);
     }
 
