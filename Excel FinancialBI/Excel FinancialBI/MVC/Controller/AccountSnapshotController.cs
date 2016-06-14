@@ -38,7 +38,10 @@ namespace FBI.MVC.Controller
         if (AccountModel.Instance.GetValue(l_account.Name) == null)
         {
           if (CreateAccount(l_account) == false)
+          {
+            Error = "\"" + l_account.Name + "\": " + Error;
             return (false);
+          }
         }
         else
         {
@@ -46,7 +49,10 @@ namespace FBI.MVC.Controller
 
           l_base.CopyFrom(l_account);
           if (UpdateAccount(l_base) == false)
+          {
+            Error = "\"" + l_account.Name + "\": " + Error;
             return (false);
+          }
         }
       return (true);
     }
