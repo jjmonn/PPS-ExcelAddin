@@ -78,7 +78,7 @@ namespace FBI.MVC.Model
       foreach (KeyValuePair<DimensionType, Dimension<CRUDEntity>> l_dim in Dimensions)
         if (m_errors.Keys.Contains(l_dim.Key) && l_dim.Value.m_values.Count == 0)
           return (m_errors[l_dim.Key]);
-      return (Local.GetValue("general.error.success"));
+      return (Local.GetValue("upload.error.dimension_undefined"));
     }
 
     public Account GetAccount(Range p_cell)
