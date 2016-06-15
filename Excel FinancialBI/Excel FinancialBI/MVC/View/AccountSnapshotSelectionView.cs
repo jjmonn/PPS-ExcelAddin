@@ -33,6 +33,7 @@ namespace FBI.MVC.View
       m_values = p_values.Distinct().ToList();
       tableLayoutPanel1.Controls.Add(m_dgv);
       m_dgv.SelectionMode = vDataGridView.SELECTION_MODE.FULL_ROW_SELECT;
+      m_dgv.ContextMenuStrip = m_RCMenu;
     }
 
     public void SetController(IController p_controller)
@@ -44,11 +45,35 @@ namespace FBI.MVC.View
     {
       m_validateBT.Text = Local.GetValue("general.export_selected_account");
       this.Text = Local.GetValue("general.account_snapshot_selection");
+      m_selectAllBT.Text = Local.GetValue("CUI.select_all");
+      m_unselectAllBT.Text = Local.GetValue("CUI.unselect_all");
     }
 
     void SubscribeEvents()
     {
       m_dgv.CellMouseClick += OnCellMouseClick;
+      m_selectAllBT.Click += OnSelectAllClick;
+      m_unselectAllBT.Click += OnUnSelectAllClick;
+    }
+
+    void OnUnSelectAllClick(object sender, EventArgs e)
+    {
+      foreach (KeyValuePair<uint, HierarchyItem> l_pair in m_dgv.Rows)
+      {
+        m_dgv.FillField(l_pair.Key, 1, false);
+        m_editor.EditorValue = false;
+      }
+      m_dgv.Refresh();
+    }
+
+    void OnSelectAllClick(object sender, EventArgs e)
+    {
+      foreach (KeyValuePair<uint, HierarchyItem> l_pair in m_dgv.Rows)
+      {
+        m_dgv.FillField(l_pair.Key, 1, true);
+        m_editor.EditorValue = true;
+      }
+      m_dgv.Refresh();
     }
 
     void OnCellMouseClick(object p_sender, CellMouseEventArgs p_args)

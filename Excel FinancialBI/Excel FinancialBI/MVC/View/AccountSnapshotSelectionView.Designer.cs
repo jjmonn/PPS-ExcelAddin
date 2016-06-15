@@ -28,10 +28,15 @@
     /// </summary>
     private void InitializeComponent()
     {
+      this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AccountSnapshotSelectionView));
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_validateBT = new VIBlend.WinForms.Controls.vButton();
+      this.m_RCMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.m_selectAllBT = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_unselectAllBT = new System.Windows.Forms.ToolStripMenuItem();
       this.tableLayoutPanel1.SuspendLayout();
+      this.m_RCMenu.SuspendLayout();
       this.SuspendLayout();
       // 
       // tableLayoutPanel1
@@ -63,6 +68,26 @@
       this.m_validateBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       this.m_validateBT.Click += new System.EventHandler(this.OnValidate);
       // 
+      // m_RCMenu
+      // 
+      this.m_RCMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_selectAllBT,
+            this.m_unselectAllBT});
+      this.m_RCMenu.Name = "m_RCMenu";
+      this.m_RCMenu.Size = new System.Drawing.Size(153, 70);
+      // 
+      // m_selectAllBT
+      // 
+      this.m_selectAllBT.Name = "m_selectAllBT";
+      this.m_selectAllBT.Size = new System.Drawing.Size(152, 22);
+      this.m_selectAllBT.Text = "Select all";
+      // 
+      // m_unselectAllBT
+      // 
+      this.m_unselectAllBT.Name = "m_unselectAllBT";
+      this.m_unselectAllBT.Size = new System.Drawing.Size(152, 22);
+      this.m_unselectAllBT.Text = "Unselect all";
+      // 
       // AccountSnapshotSelectionView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -74,6 +99,7 @@
       this.Name = "AccountSnapshotSelectionView";
       this.Text = "AccountSnapshotSelectionView";
       this.tableLayoutPanel1.ResumeLayout(false);
+      this.m_RCMenu.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -82,5 +108,8 @@
 
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     private VIBlend.WinForms.Controls.vButton m_validateBT;
+    private System.Windows.Forms.ContextMenuStrip m_RCMenu;
+    private System.Windows.Forms.ToolStripMenuItem m_selectAllBT;
+    private System.Windows.Forms.ToolStripMenuItem m_unselectAllBT;
   }
 }
