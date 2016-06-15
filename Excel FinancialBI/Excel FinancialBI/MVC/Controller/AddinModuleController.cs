@@ -51,6 +51,7 @@ namespace FBI.MVC.Controller
       }
       catch (Exception e)
       {
+        System.Diagnostics.Debug.WriteLine("AddinModuleController, Public AddinModuleController() : " + e);
         m_prevCalculationMode = XlCalculation.xlCalculationAutomatic;
       }
     }
