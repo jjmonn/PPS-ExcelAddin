@@ -182,6 +182,16 @@ namespace FBI
       }
     }
 
+    public FBIFunctionSidePane FBIFunctionSidePane
+    {
+      get
+      {
+        if (FBIFunctionSidePaneItem.TaskPaneInstance != null)
+          return (FBIFunctionSidePaneItem.TaskPaneInstance as FBIFunctionSidePane);
+        return (FBIFunctionSidePaneItem.CreateTaskPaneInstance() as FBIFunctionSidePane);
+      }
+    }
+
     public VersionSelectionPane VersionSelectionSidePane
     {
       get
@@ -294,7 +304,9 @@ namespace FBI
 
     private void OnFBIFunctionButtonClick(object sender, IRibbonControl control, bool pressed)
     {
-      new FBIFunctionViewController();
+      FBIFunctionSidePaneItem.Enabled = true;
+      FBIFunctionSidePane.LoadController();
+      FBIFunctionSidePane.Show();
     }
 
     private void m_fbiBreakLinksRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)

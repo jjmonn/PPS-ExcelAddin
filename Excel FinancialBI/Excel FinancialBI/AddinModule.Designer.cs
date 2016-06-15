@@ -44,6 +44,7 @@
       this.adxRibbonMenu1 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
       this.m_directoryRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_accountSnapshotBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_reportAccount = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_reportUploadRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_visualizationGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_CUIRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -73,6 +74,7 @@
       this.VersionSelectionSidePaneItem = new AddinExpress.XL.ADXExcelTaskPanesCollectionItem(this.components);
       this.ReportUploadAccountInfoSidePaneItem = new AddinExpress.XL.ADXExcelTaskPanesCollectionItem(this.components);
       this.ReportUploadEntitySelectionSidePaneItem = new AddinExpress.XL.ADXExcelTaskPanesCollectionItem(this.components);
+      this.FBIFunctionSidePaneItem = new AddinExpress.XL.ADXExcelTaskPanesCollectionItem(this.components);
       this.adxExcelAppEvents1 = new AddinExpress.MSO.ADXExcelAppEvents(this.components);
       this.m_financialSubmissionRibbon = new AddinExpress.MSO.ADXRibbonTab(this.components);
       this.FinancialSubmissionGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
@@ -123,7 +125,6 @@
       this.AdxRibbonRHExitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.adxRibbonButton5 = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_reportAccount = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
       // m_financialbiRibbon
       // 
@@ -265,6 +266,14 @@
       this.m_accountSnapshotBT.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_accountSnapshotBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_accountSnapshotBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_accountSnapshot_OnClick);
+      // 
+      // m_reportAccount
+      // 
+      this.m_reportAccount.Caption = "Create account report";
+      this.m_reportAccount.Id = "adxRibbonButton_39beb8e1e0584b5b82de969d9ac241d2";
+      this.m_reportAccount.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_reportAccount.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_reportAccount.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_reportAccount_OnClick);
       // 
       // m_reportUploadRibbonButton
       // 
@@ -501,6 +510,7 @@
       this.adxExcelTaskPanesManager1.Items.Add(this.VersionSelectionSidePaneItem);
       this.adxExcelTaskPanesManager1.Items.Add(this.ReportUploadAccountInfoSidePaneItem);
       this.adxExcelTaskPanesManager1.Items.Add(this.ReportUploadEntitySelectionSidePaneItem);
+      this.adxExcelTaskPanesManager1.Items.Add(this.FBIFunctionSidePaneItem);
       this.adxExcelTaskPanesManager1.SetOwner(this);
       // 
       // ConnectionSidePaneItem
@@ -539,6 +549,16 @@
       this.ReportUploadEntitySelectionSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left;
       this.ReportUploadEntitySelectionSidePaneItem.TaskPaneClassName = "FBI.MVC.View.ReportEditionSidePane";
       this.ReportUploadEntitySelectionSidePaneItem.UseOfficeThemeForBackground = true;
+      // 
+      // FBIFunctionSidePaneItem
+      // 
+      this.FBIFunctionSidePaneItem.AlwaysShowHeader = true;
+      this.FBIFunctionSidePaneItem.CloseButton = true;
+      this.FBIFunctionSidePaneItem.Enabled = false;
+      this.FBIFunctionSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right;
+      this.FBIFunctionSidePaneItem.SplitterSize = 6;
+      this.FBIFunctionSidePaneItem.TaskPaneClassName = "FBI.MVC.View.FBIFunctionSidePane";
+      this.FBIFunctionSidePaneItem.UseOfficeThemeForBackground = true;
       // 
       // m_financialSubmissionRibbon
       // 
@@ -990,14 +1010,6 @@
       this.adxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.adxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
-      // m_reportAccount
-      // 
-      this.m_reportAccount.Caption = "Create account report";
-      this.m_reportAccount.Id = "adxRibbonButton_39beb8e1e0584b5b82de969d9ac241d2";
-      this.m_reportAccount.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_reportAccount.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_reportAccount.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_reportAccount_OnClick);
-      // 
       // AddinModule
       // 
       this.AddinName = "FinancialBI";
@@ -1108,6 +1120,7 @@
     private AddinExpress.MSO.ADXRibbonButton m_accountSnapshotBT;
     private AddinExpress.MSO.ADXRibbonButton adxRibbonButton5;
     private AddinExpress.MSO.ADXRibbonButton m_reportAccount;
+    private AddinExpress.XL.ADXExcelTaskPanesCollectionItem FBIFunctionSidePaneItem;
     
 
   }

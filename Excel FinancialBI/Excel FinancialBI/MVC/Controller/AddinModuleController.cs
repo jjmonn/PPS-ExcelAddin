@@ -137,7 +137,6 @@ namespace FBI.MVC.Controller
       if (p_worksheet != null && m_factsEditionController != null)
       {
         m_view.WorksheetEvents.ConnectTo(p_worksheet, true);
-        m_view.WorksheetEvents.SetController(m_factsEditionController);
         return true;
       }
       else

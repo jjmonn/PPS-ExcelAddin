@@ -17,14 +17,15 @@ namespace FBI.MVC.View
   using Model;
   using Model.CRUD;
 
-  public partial class FBIFunctionView : Form, IView
+  public partial class FBIFunctionView : UserControl, IView
   {
-    FBIFunctionViewController m_controller;
     SafeDictionary<AxisType, vTreeViewBox> m_axisElemTV;
     SafeDictionary<UInt32, ListItem> m_currencyListItems = new SafeDictionary<uint, ListItem>();
     SafeDictionary<Int32, ListItem> m_periodListItems = new SafeDictionary<int, ListItem>();
     SafeDictionary<ListItem, TimeConfig> m_aggregationListItems = new SafeDictionary<ListItem, TimeConfig>();
     bool m_editing = false;
+    FBIFunctionViewController m_controller;
+    bool m_eventSuscribed = false;
 
     public FBIFunctionView()
     {
@@ -44,7 +45,16 @@ namespace FBI.MVC.View
       LoadAggregations();
       LoadPeriods();
       LoadCurrencies();
-      SuscribeEvents();
+      if (!m_eventSuscribed)
+      {
+        SuscribeEvents();
+        m_eventSuscribed = true;
+      }
+      RefreshFormula();
+    }
+
+    public void RefreshFormula()
+    {
       FBIFunctionExcelController.LastExecutedFunction = null;
       AddinModule.CurrentInstance.ExcelApp.ActiveCell.Formula = AddinModule.CurrentInstance.ExcelApp.ActiveCell.Formula;
       if (FBIFunctionExcelController.LastExecutedFunction != null)
@@ -183,6 +193,7 @@ namespace FBI.MVC.View
 
     void InitTV()
     {
+      m_accountTree.TreeView.SelectedNode = null;
       FbiTreeView<Account>.Load(m_accountTree.TreeView.Nodes, AccountModel.Instance.GetDictionary());
 
       FbiTreeView<Version>.Load(m_versionTree.TreeView.Nodes, VersionModel.Instance.GetDictionary());
@@ -200,15 +211,23 @@ namespace FBI.MVC.View
       m_productTree.TreeView.TriStateMode = true;
       m_adjustmentTree.TreeView.TriStateMode = true;
       m_categoriesFilterTree.TreeView.TriStateMode = true;
+
       AFbiTreeView.InitTVFormat(m_categoriesFilterTree.TreeView);
+      m_categoriesFilterTree.TreeView.Nodes.Clear();
       AddCategorieFilterTV(Local.GetValue("general.clients_filters"), AxisType.Client);
       AddCategorieFilterTV(Local.GetValue("general.products_filters"), AxisType.Product);
       AddCategorieFilterTV(Local.GetValue("general.adjustments_filters"), AxisType.Adjustment);
       AddCategorieFilterTV(Local.GetValue("general.entities_filters"), AxisType.Entities);
+
+      m_clientTree.Text = "";
+      m_productTree.Text = "";
+      m_adjustmentTree.Text = "";
+      m_categoriesFilterTree.Text = "";
     }
 
     void AddAxisElem(vTreeViewBox p_tvBox, AxisType p_axis)
     {
+      p_tvBox.TreeView.Nodes.Clear();
       FbiTreeView<AxisElem>.Load(p_tvBox.TreeView.Nodes, AxisElemModel.Instance.GetDictionary(p_axis));
       m_axisElemTV[p_axis] = p_tvBox;
     }

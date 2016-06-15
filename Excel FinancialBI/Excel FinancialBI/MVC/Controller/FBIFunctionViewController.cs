@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Office.Interop.Excel;
+using System.Windows.Forms;
 
 namespace FBI.MVC.Controller
 {
@@ -17,17 +18,17 @@ namespace FBI.MVC.Controller
     FBIFunctionView m_view;
     public override IView View { get { return (m_view); } }
 
-    public FBIFunctionViewController()
+    public FBIFunctionViewController(Control p_parent)
     {
       m_view = new FBIFunctionView();
       m_view.SetController(this);
-      LoadView();
+      p_parent.Controls.Add(m_view);
+      m_view.Dock = DockStyle.Fill;
     }
 
-    void LoadView()
+    public void LoadView()
     {
       m_view.LoadView();
-      m_view.Show();
     }
 
     string Formula

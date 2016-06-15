@@ -52,7 +52,10 @@ namespace VIBlend.WinForms.Controls
 
     private void OnTreeViewAfterSelect(object sender, vTreeViewEventArgs e)
     {
-      this.Text = e.Node.Text;
+      if (e.Node == null)
+        this.Text = "";
+      else
+        this.Text = e.Node.Text;
     }
 
     /// <summary>

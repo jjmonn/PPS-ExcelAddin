@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-partial class FBIFunctionView : System.Windows.Forms.Form
+partial class FBIFunctionView : System.Windows.Forms.UserControl
 {
 
 	//Form overrides dispose to clean up the component list.
@@ -38,6 +38,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_validateButton = new VIBlend.WinForms.Controls.vButton();
       this.categoriesIL = new System.Windows.Forms.ImageList(this.components);
       this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.m_aggregationCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_periodCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_adjustmentTree = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.m_productTree = new VIBlend.WinForms.Controls.vTreeViewBox();
@@ -56,9 +57,9 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_versionTree = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.m_periodLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_versionLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
       this.m_aggregationLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.m_aggregationCB = new VIBlend.WinForms.Controls.vComboBox();
+      this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
+      this.m_extractBT = new VIBlend.WinForms.Controls.vButton();
       this.TableLayoutPanel1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -136,6 +137,26 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
       this.TableLayoutPanel1.Size = new System.Drawing.Size(459, 351);
       this.TableLayoutPanel1.TabIndex = 39;
+      // 
+      // m_aggregationCB
+      // 
+      this.m_aggregationCB.BackColor = System.Drawing.Color.White;
+      this.m_aggregationCB.DisplayMember = "";
+      this.m_aggregationCB.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_aggregationCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_aggregationCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_aggregationCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_aggregationCB.DropDownWidth = 314;
+      this.m_aggregationCB.Location = new System.Drawing.Point(142, 143);
+      this.m_aggregationCB.Name = "m_aggregationCB";
+      this.m_aggregationCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_aggregationCB.Size = new System.Drawing.Size(314, 29);
+      this.m_aggregationCB.TabIndex = 43;
+      this.m_aggregationCB.UseThemeBackColor = false;
+      this.m_aggregationCB.UseThemeDropDownArrowColor = true;
+      this.m_aggregationCB.ValueMember = "";
+      this.m_aggregationCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_aggregationCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_periodCB
       // 
@@ -435,13 +456,6 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_versionLabel.UseMnemonics = true;
       this.m_versionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
-      // m_versionsTreeviewImageList
-      // 
-      this.m_versionsTreeviewImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_versionsTreeviewImageList.ImageStream")));
-      this.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent;
-      this.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico");
-      this.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico");
-      // 
       // m_aggregationLabel
       // 
       this.m_aggregationLabel.BackColor = System.Drawing.Color.Transparent;
@@ -458,38 +472,36 @@ partial class FBIFunctionView : System.Windows.Forms.Form
       this.m_aggregationLabel.UseMnemonics = true;
       this.m_aggregationLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
-      // m_aggregationCB
+      // m_versionsTreeviewImageList
       // 
-      this.m_aggregationCB.BackColor = System.Drawing.Color.White;
-      this.m_aggregationCB.DisplayMember = "";
-      this.m_aggregationCB.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.m_aggregationCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_aggregationCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_aggregationCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_aggregationCB.DropDownWidth = 314;
-      this.m_aggregationCB.Location = new System.Drawing.Point(142, 143);
-      this.m_aggregationCB.Name = "m_aggregationCB";
-      this.m_aggregationCB.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_aggregationCB.Size = new System.Drawing.Size(314, 29);
-      this.m_aggregationCB.TabIndex = 43;
-      this.m_aggregationCB.UseThemeBackColor = false;
-      this.m_aggregationCB.UseThemeDropDownArrowColor = true;
-      this.m_aggregationCB.ValueMember = "";
-      this.m_aggregationCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      this.m_aggregationCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_versionsTreeviewImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_versionsTreeviewImageList.ImageStream")));
+      this.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent;
+      this.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico");
+      this.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico");
+      // 
+      // m_extractBT
+      // 
+      this.m_extractBT.AllowAnimations = true;
+      this.m_extractBT.BackColor = System.Drawing.Color.Transparent;
+      this.m_extractBT.Location = new System.Drawing.Point(507, 3);
+      this.m_extractBT.Name = "m_extractBT";
+      this.m_extractBT.RoundedCornersMask = ((byte)(15));
+      this.m_extractBT.Size = new System.Drawing.Size(19, 22);
+      this.m_extractBT.TabIndex = 40;
+      this.m_extractBT.Text = ">";
+      this.m_extractBT.UseVisualStyleBackColor = false;
+      this.m_extractBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // FBIFunctionView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
-      this.ClientSize = new System.Drawing.Size(529, 450);
+      this.Controls.Add(this.m_extractBT);
       this.Controls.Add(this.TableLayoutPanel1);
       this.Controls.Add(this.m_validateButton);
-      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "FBIFunctionView";
-      this.Text = "Financial BI Excel Function";
+      this.Size = new System.Drawing.Size(529, 450);
       this.TableLayoutPanel1.ResumeLayout(false);
       this.ResumeLayout(false);
 
@@ -519,6 +531,7 @@ partial class FBIFunctionView : System.Windows.Forms.Form
   public VIBlend.WinForms.Controls.vComboBox m_periodCB;
   public VIBlend.WinForms.Controls.vComboBox m_aggregationCB;
   private VIBlend.WinForms.Controls.vLabel m_aggregationLabel;
+  public VIBlend.WinForms.Controls.vButton m_extractBT;
 }
 
 }

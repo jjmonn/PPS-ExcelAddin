@@ -57,6 +57,9 @@ namespace FBI.MVC.Controller
       EntityId = 0;
       Process = p_process;
       RHAccountId = 0;
+      Addin.AddinModule.WorksheetEvents.SelectionChanged += RaiseWorksheetSelectionChangedEvent;
+      Addin.AddinModule.WorksheetEvents.WorksheetChanged += RaiseWorksheetChangedEvent;
+      Addin.AddinModule.WorksheetEvents.WorksheetChanging += RaiseWorksheetChangingEvent;
     }
 
     public void RaiseWorksheetSelectionChangedEvent(Range p_range)
@@ -105,6 +108,9 @@ namespace FBI.MVC.Controller
 
     public virtual void Close()
     {
+      Addin.AddinModule.WorksheetEvents.SelectionChanged -= RaiseWorksheetSelectionChangedEvent;
+      Addin.AddinModule.WorksheetEvents.WorksheetChanged -= RaiseWorksheetChangedEvent;
+      Addin.AddinModule.WorksheetEvents.WorksheetChanging -= RaiseWorksheetChangingEvent;
       View.Close();
       EditedFactModel.Close();
       if (m_statusView != null)

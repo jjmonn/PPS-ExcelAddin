@@ -12,18 +12,18 @@ namespace FBI
   /// </summary>
   public class ExcelWorksheetEvents : AddinExpress.MSO.ADXExcelWorksheetEvents
   {
-    IFactEditionController m_factsEditionController;
     private const UInt16 MAX_NB_ROWS = 16384;
     private bool m_editing = false;
+    public delegate void OnSelectionChangedHandler(Range p_range);
+    public event OnSelectionChangedHandler SelectionChanged;
+    public delegate void OnWorksheetChangedHandler();
+    public event OnWorksheetChangedHandler WorksheetChanged;
+    public delegate void OnWorksheetChangingHandler(Range p_range);
+    public event OnWorksheetChangingHandler WorksheetChanging;
 
     public ExcelWorksheetEvents(AddinExpress.MSO.ADXAddinModule module)
       : base(module)
     {
-    }
-
-    public void SetController(IFactEditionController p_factsEditionController)
-    {
-      m_factsEditionController = p_factsEditionController;
     }
 
     public override void ProcessChange(object target)
@@ -34,13 +34,14 @@ namespace FBI
       {
         m_editing = true;
         Range l_range = target as Range;
-        if (l_range != null && m_factsEditionController != null)
+        if (l_range != null)
         {
           if (l_range.Count > MAX_NB_ROWS)
             return;
           RaiseCellEvent(l_range);
         }
-        m_factsEditionController.RaiseWorksheetChangedEvent();
+        if (WorksheetChanged != null)
+          WorksheetChanged();
         m_editing = false;
       }
       catch(Exception e)
@@ -54,8 +55,10 @@ namespace FBI
     {
       foreach (Range l_cell in p_range.Cells)
       {
-        m_factsEditionController.RaiseWorksheetChangingEvent(l_cell);
-        try { RaiseCellEvent(l_cell.DirectDependents); } catch { }
+        if (WorksheetChanging != null)
+          WorksheetChanging(l_cell); 
+        try { RaiseCellEvent(l_cell.DirectDependents); }
+        catch { }
       }
     }
 
@@ -65,7 +68,8 @@ namespace FBI
 
     public override void ProcessSelectionChange(object target)
     {
-      m_factsEditionController.RaiseWorksheetSelectionChangedEvent(target as Range);
+      if (SelectionChanged != null)
+        SelectionChanged(target as Range);
     }
 
     #region Unused events
