@@ -648,7 +648,9 @@
       <string name="at">Input erroné au caractère</string>
       <string name="operator">Un opérateur est manquant ou incorrect</string>
       <string name="humanToken">Le compte ou indicateur macro-économique est erroné</string>
-      <string name="humanPeriod">La période est erronée</string>
+      <string name="humanPeriod1">La période est erronée</string>
+      <string name="humanPeriod2">La période est erronée</string>
+      <string name="humanPeriodAddSub">La période est erronée</string>
       <string name="humanParam">Liste d'arguments invalide</string>
     </category>
   </category>
