@@ -30,7 +30,7 @@ namespace FBI.MVC.View
     public AccountSnapshotSelectionView(List<object> p_values)
     {
       InitializeComponent();
-      m_values = p_values;
+      m_values = p_values.Distinct().ToList();
       tableLayoutPanel1.Controls.Add(m_dgv);
       m_dgv.SelectionMode = vDataGridView.SELECTION_MODE.FULL_ROW_SELECT;
     }
