@@ -325,6 +325,7 @@
       <string name="no_selected_version">Veuillez sélectioner une version.</string>
       <string name="cannot_select_folder">Vous ne pouvez pas sélectionner un dossier.</string>
       <string name="invalid_parent">Le parent sélectionné n'est pas un dossier.</string>
+      <string name="nb_period">Nombre de périodes invalide.</string>
     </category>
 
   </category>
