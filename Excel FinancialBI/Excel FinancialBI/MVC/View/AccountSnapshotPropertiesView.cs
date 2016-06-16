@@ -158,14 +158,31 @@ namespace FBI.MVC.View
     {
       m_accountTV.NodeChecked += OnAccountChecked;
       m_dgv.CellValidating += OnCellValidating;
-      m_dgv.CellMouseDoubleClick += OnCellDoubleClick;
-      m_dgv.MouseClick += OnDGVMouseClick;
+      m_dgv.CellMouseClick += OnDGVCellMouseClick;
+      m_dgv.MouseClick += m_dgv_MouseClick;
       AccountModel.Instance.UpdateListEvent += OnUpdateList;
     }
 
-    void OnDGVMouseClick(object sender, MouseEventArgs e)
+    void m_dgv_MouseClick(object sender, MouseEventArgs e)
     {
-      DisplayParents(false);
+      if (m_dgv.CellsArea.SelectedCellsCount == 0)
+        DisplayParents(false);
+    }
+
+    void OnDGVCellMouseClick(object sender, CellMouseEventArgs p_args)
+    {
+      if ((uint)p_args.Cell.ColumnItem.ItemValue == (uint)Column.PARENT)
+      {
+        if (p_args.Cell.RowItem.Enabled == false)
+          return;
+        m_selectedCell = p_args.Cell;
+        DisplayParents(true);
+        vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId((string)p_args.Cell.Value)); ;
+        m_accountTV.SelectedNode = l_node;
+        l_node.Checked = CheckState.Checked;
+      }
+      else
+        DisplayParents(false);
     }
 
     public void CloseView()
@@ -200,20 +217,6 @@ namespace FBI.MVC.View
           l_account.Name = (string)p_args.Cell.EditValue;
           m_accountlist[l_account.Name] = l_account;
         }
-      }
-    }
-
-    void OnCellDoubleClick(object sender, CellMouseEventArgs p_args)
-    {
-      if ((uint)p_args.Cell.ColumnItem.ItemValue == (uint)Column.PARENT)
-      {
-        if (p_args.Cell.RowItem.Enabled == false)
-          return;
-        m_selectedCell = p_args.Cell;
-        DisplayParents(true);
-        vTreeNode l_node = m_accountTV.FindNode(AccountModel.Instance.GetValueId((string)p_args.Cell.Value));;
-        m_accountTV.SelectedNode = l_node;
-        l_node.Checked = CheckState.Checked;
       }
     }
 

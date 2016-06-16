@@ -36,8 +36,11 @@
       this.m_dgvPanel = new System.Windows.Forms.Panel();
       this.m_validateBT = new VIBlend.WinForms.Controls.vButton();
       this.accountsIL = new System.Windows.Forms.ImageList(this.components);
+      this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.copyDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.tableLayoutPanel1.SuspendLayout();
       this.m_topPanel.SuspendLayout();
+      this.contextMenuStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
       // tableLayoutPanel1
@@ -128,6 +131,19 @@
       this.accountsIL.Images.SetKeyName(6, "func.png");
       this.accountsIL.Images.SetKeyName(7, "config blue circle.png");
       // 
+      // contextMenuStrip1
+      // 
+      this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyDownToolStripMenuItem});
+      this.contextMenuStrip1.Name = "contextMenuStrip1";
+      this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+      // 
+      // copyDownToolStripMenuItem
+      // 
+      this.copyDownToolStripMenuItem.Name = "copyDownToolStripMenuItem";
+      this.copyDownToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.copyDownToolStripMenuItem.Text = "Copy Down";
+      // 
       // AccountSnapshotPropertiesView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -140,6 +156,7 @@
       this.Text = "AccountSnapshotSelectionView";
       this.tableLayoutPanel1.ResumeLayout(false);
       this.m_topPanel.ResumeLayout(false);
+      this.contextMenuStrip1.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -152,5 +169,7 @@
     private FBI.Forms.AccountTreeView m_accountTV;
     public System.Windows.Forms.ImageList accountsIL;
     private System.Windows.Forms.Panel m_dgvPanel;
+    private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+    private System.Windows.Forms.ToolStripMenuItem copyDownToolStripMenuItem;
   }
 }
