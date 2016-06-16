@@ -517,7 +517,7 @@ namespace FBI.MVC.View
       {
         m_formulaTextBox.TextBox.SelectionLength = l_pair.Value.Length;
         m_formulaTextBox.TextBox.SelectionStart = l_pair.Key;
-        if (AccountModel.Instance.GetValue(l_pair.Value) == null)
+        if (AccountModel.Instance.GetValue(l_pair.Value) == null && GlobalFactModel.Instance.GetValue(l_pair.Value) == null)
         {
           m_formulaTextBox.TextBox.SelectionColor = Color.Red;
           m_formulaTextBox.TextBox.SelectionBackColor = Color.LightGray;

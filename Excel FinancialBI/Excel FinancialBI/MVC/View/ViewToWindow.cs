@@ -22,7 +22,7 @@ namespace FBI.MVC.View
     {
       InitializeComponent();
 
-      Size = p_control.Size;
+      Size = new Size(p_control.Size.Width + 15, p_control.Size.Height + 38);
       m_onClose = p_onClose;
       m_originForm = p_origin;
       m_parent = p_control.Parent;

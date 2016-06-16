@@ -214,7 +214,9 @@ namespace FBI.MVC.View
 
     void ReadFormulaType(Account p_account, object p_value)
     {
-      p_account.FormulaType = (Account.FormulaTypes)Enum.Parse(typeof(Account.FormulaTypes), (string)p_value, true);
+      Account.FormulaTypes l_type = p_account.FormulaType;
+      Enum.TryParse<Account.FormulaTypes>((string)p_value, true, out l_type);
+      p_account.FormulaType = l_type;
     }
 
     void ReadFormula(Account p_account, object p_value)
@@ -226,17 +228,23 @@ namespace FBI.MVC.View
 
     void ReadConsolidationOption(Account p_account, object p_value)
     {
-      p_account.ConsolidationOptionId = (Account.ConsolidationOptions)Enum.Parse(typeof(Account.ConsolidationOptions), (string)p_value, true);
+      Account.ConsolidationOptions l_option = p_account.ConsolidationOptionId;
+      Enum.TryParse<Account.ConsolidationOptions>((string)p_value, true, out l_option);
+      p_account.ConsolidationOptionId = l_option;
     }
 
     void ReadConversionOption(Account p_account, object p_value)
     {
-      p_account.ConversionOptionId = (Account.ConversionOptions)Enum.Parse(typeof(Account.ConversionOptions), (string)p_value, true);
+      Account.ConversionOptions l_option = p_account.ConversionOptionId;
+      Enum.TryParse<Account.ConversionOptions>((string)p_value, true, out l_option);
+      p_account.ConversionOptionId = l_option;
     }
 
     void ReadPeriodAggregationOption(Account p_account, object p_value)
     {
-      p_account.PeriodAggregationOptionId = (Account.PeriodAggregationOptions)Enum.Parse(typeof(Account.PeriodAggregationOptions), (string)p_value, true);
+      Account.PeriodAggregationOptions l_option = p_account.PeriodAggregationOptionId;
+      Enum.TryParse<Account.PeriodAggregationOptions>((string)p_value, true, out l_option);
+      p_account.PeriodAggregationOptionId = l_option;
     }
 
     void ReadItemPosition(Account p_account, object p_value)
@@ -251,12 +259,16 @@ namespace FBI.MVC.View
 
     void ReadProcess(Account p_account, object p_value)
     {
-      p_account.Process = (Account.AccountProcess)Enum.Parse(typeof(Account.AccountProcess), (string)p_value, true);
+      Account.AccountProcess l_process = p_account.Process;
+      Enum.TryParse<Account.AccountProcess>((string)p_value, true, out l_process);
+      p_account.Process = l_process;
     }
 
     void ReadType(Account p_account, object p_value)
     {
-      p_account.Type = (Account.AccountType)Enum.Parse(typeof(Account.AccountType), (string)p_value, true);
+      Account.AccountType l_type = p_account.Type;
+      Enum.TryParse<Account.AccountType>((string)p_value, true, out l_type);
+      p_account.Type = l_type;
     }
 
     #endregion

@@ -325,6 +325,7 @@
       <string name="no_selected_version">Veuillez sélectioner une version.</string>
       <string name="cannot_select_folder">Vous ne pouvez pas sélectionner un dossier.</string>
       <string name="invalid_parent">Le parent sélectionné n'est pas un dossier.</string>
+      <string name="nb_period">Nombre de périodes invalide.</string>
     </category>
 
   </category>
@@ -386,6 +387,7 @@
       <string name="periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
       <string name="employees_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
       <string name="failed_compute">Le calcul de la feuille a échoué.</string>
+      <string name="dimension_undefined">L'organisation de la feuille n'est pas claire.</string>
     </category>
   </category>
 
