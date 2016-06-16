@@ -124,6 +124,7 @@ namespace FBI.MVC.View
           Account l_account = new Account();
 
           l_account.Name = (string)m_dgv.GetCellValue(l_row, 0);
+          l_account.PeriodAggregationOptionId = Account.PeriodAggregationOptions.SUM_OF_PERIODS;
           l_accountList[l_account.Name] = l_account;
         }
       }
