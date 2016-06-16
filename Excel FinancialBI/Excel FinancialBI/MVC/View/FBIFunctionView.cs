@@ -135,6 +135,17 @@ namespace FBI.MVC.View
       m_aggregationCB.TextChanged += OnAggregationSelectedChanged;
     }
 
+    public void CloseDrop()
+    {
+      foreach (vTreeViewBox l_tv in m_axisElemTV.Values)
+        l_tv.CloseDropDown();
+      m_accountTree.CloseDropDown();
+      m_versionTree.CloseDropDown();
+      m_categoriesFilterTree.CloseDropDown();
+      m_periodCB.CloseDropDown();
+      m_currencyCB.CloseDropDown();
+    }
+
     public void LoadPeriods()
     {
       m_periodListItems.Clear();
@@ -158,6 +169,8 @@ namespace FBI.MVC.View
 
     void LoadCurrencies()
     {
+      m_currencyListItems.Clear();
+      m_currencyCB.Items.Clear();
       foreach (UInt32 l_currencyId in CurrencyModel.Instance.GetUsedCurrencies())
       {
         ListItem l_item = m_currencyCB.Items.Add(CurrencyModel.Instance.GetValueName(l_currencyId));
@@ -194,8 +207,10 @@ namespace FBI.MVC.View
     void InitTV()
     {
       m_accountTree.TreeView.SelectedNode = null;
+      m_accountTree.TreeView.Nodes.Clear();
       FbiTreeView<Account>.Load(m_accountTree.TreeView.Nodes, AccountModel.Instance.GetDictionary());
 
+      m_versionTree.TreeView.Nodes.Clear();
       FbiTreeView<Version>.Load(m_versionTree.TreeView.Nodes, VersionModel.Instance.GetDictionary());
       m_versionTree.TreeView.SelectedNode = FbiTreeView<Version>.FindNode(m_versionTree.TreeView, Properties.Settings.Default.version_id);
 

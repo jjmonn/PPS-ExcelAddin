@@ -27,6 +27,8 @@ namespace FBI.MVC.View
 
     protected override void WndProc(ref Message m)
     {
+      if (m.Msg == 528)
+        m_view.CloseDrop();
  	    base.WndProc(ref m);
     }
 
