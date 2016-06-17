@@ -57,12 +57,13 @@ namespace FBI.MVC.Model
     {
       bool l_found = false;
 
-      foreach (ComputeResult l_result in p_result.Values)
-        if (RequestIdList.Contains(l_result.RequestId))
-        {
-          l_found = true;
-          RequestIdList.Remove(l_result.RequestId);
-        }
+      if (p_result != null && p_status == ErrorMessage.SUCCESS)
+        foreach (ComputeResult l_result in p_result.Values)
+          if (RequestIdList.Contains(l_result.RequestId))
+          {
+            l_found = true;
+            RequestIdList.Remove(l_result.RequestId);
+          }
       if (l_found)
         OnFinancialOutputsComputed(p_status, p_request, p_result);
     }
