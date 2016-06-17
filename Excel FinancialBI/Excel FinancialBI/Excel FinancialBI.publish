@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishConfiguration version="1.2" activeTab="0" lastOpenedMSI="">
+  <application version="1.0.0.1">
+    <signingOptions>
+      <certificatePath>C:\Users\PPS Bi\Desktop\PPS-Repo\cert.pfx</certificatePath>
+    </signingOptions>
+    <deploymentOptions>
+      <providerURL>http://localhost/excel financialbi/excel financialbi.application</providerURL>
+      <minimumVersion>1.0.0.1</minimumVersion>
+      <runAfterInstalling>false</runAfterInstalling>
+    </deploymentOptions>
+    <preferences>
+      <showErrors>true</showErrors>
+      <showGUI>true</showGUI>
+      <generateLogFile>false</generateLogFile>
+      <showRegMsg>true</showRegMsg>
+      <showRunningApplicationsWarning>true</showRunningApplicationsWarning>
+    </preferences>
+    <prerequisites createSetupProgram="true" installFromVendor="true">
+      <product code=".NETFramework,Version=v4.0" displayName="Microsoft .NET Framework 4 (x86 and x64)" />
+      <product code=".NETFramework,Version=v4.0,KB2468871" displayName="Microsoft .NET Framework 4 (x86 and x64) and Update for .NET Framework 4 (KB2468871)" />
+    </prerequisites>
+  </application>
+</publishConfiguration>
