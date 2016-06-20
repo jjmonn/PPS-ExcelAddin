@@ -36,13 +36,13 @@ namespace FBI.Utils
       }
     }
 
-    static internal void FormatDGVs(vDataGridView vDGV, UInt32 currencyId)
+    static private void FormatDGVHierachy(vDataGridView vDGV, HierarchyItemsCollection p_hierarchy, UInt32 currencyId)
     {
       string l_formatString = null;
       Int32 indent = default(Int32);
-      foreach (HierarchyItem l_row in vDGV.RowsHierarchy.Items)
+      foreach (HierarchyItem l_item in p_hierarchy)
       {
-        Account l_account = AccountModel.Instance.GetValue(l_row.Caption);
+        Account l_account = AccountModel.Instance.GetValue(l_item.Caption);
 
         if (l_account == null)
           continue;
@@ -69,17 +69,23 @@ namespace FBI.Utils
 
         l_formatString = FbiAccountFormat.Get(l_account.Type, l_currency);
 
-        if (l_row.ParentItem == null)
+        if (l_item.ParentItem == null)
         {
-          FormatRow(l_row, l_formatString, l_CAStyle, l_HANStyle, l_HASStyle, indent, l_CAStyle, l_CEStyle, l_HANStyle,
+          FormatRow(l_item, l_formatString, l_CAStyle, l_HANStyle, l_HASStyle, indent, l_CAStyle, l_CEStyle, l_HANStyle,
           l_HASStyle, l_HENStyle, l_HESStyle);
         }
         else
         {
-          FormatRow(l_row, l_formatString, l_CEStyle, l_HENStyle, l_HESStyle, indent, l_CAStyle, l_CEStyle, l_HANStyle,
+          FormatRow(l_item, l_formatString, l_CEStyle, l_HENStyle, l_HESStyle, indent, l_CAStyle, l_CEStyle, l_HANStyle,
           l_HASStyle, l_HENStyle, l_HESStyle);
         }
       }
+    }
+
+    static internal void FormatDGVs(vDataGridView vDGV, UInt32 currencyId)
+    {
+      FormatDGVHierachy(vDGV, vDGV.RowsHierarchy.Items, currencyId);
+      FormatDGVHierachy(vDGV, vDGV.ColumnsHierarchy.Items, currencyId);
     }
 
     static private void FormatRow(HierarchyItem p_row, string p_formatString, GridCellStyle p_CStyle, HierarchyItemStyle p_HNStyle,
