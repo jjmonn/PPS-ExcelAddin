@@ -159,8 +159,31 @@ namespace FBI.MVC.View
       m_accountTV.NodeChecked += OnAccountChecked;
       m_dgv.CellValidating += OnCellValidating;
       m_dgv.CellMouseClick += OnDGVCellMouseClick;
+      m_dgv.CellValueChanging += m_dgv_CellValueChanging;
       m_dgv.MouseClick += m_dgv_MouseClick;
       AccountModel.Instance.UpdateListEvent += OnUpdateList;
+    }
+
+    void m_dgv_CellValueChanging(object sender, CellValueChangingEventArgs p_args)
+    {
+      if ((uint)p_args.Cell.ColumnItem.ItemValue == (uint)Column.NAME)
+        return;
+      if ((uint)p_args.Cell.ColumnItem.ItemValue == (uint)Column.PARENT)
+      {
+        if (AccountModel.Instance.GetValue((string)p_args.NewValue) != null)
+          return;
+      }
+      else
+      {
+        ComboBoxEditor l_cb = (ComboBoxEditor)p_args.Cell.Editor;
+
+        foreach (ListItem l_value in l_cb.Items)
+        {
+          if (l_value.Text == (string)p_args.NewValue)
+            return;
+        }
+      }
+      p_args.Cancel = true;
     }
 
     void m_dgv_MouseClick(object sender, MouseEventArgs e)

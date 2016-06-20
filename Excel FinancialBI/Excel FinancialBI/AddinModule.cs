@@ -590,6 +590,11 @@ namespace FBI
 
     private void m_snapshotCreateAccounts_OnClick(object sender, IRibbonControl control, bool pressed)
     {
+      if (ExcelApp.ActiveSheet == null)
+      {
+        MessageBox.Show(Local.GetValue("general.error.worksheet_null"));
+        return;
+      }
       AccountCreateSnapshotController l_snapshot = new AccountCreateSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
     }
   }
