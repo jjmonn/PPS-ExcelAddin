@@ -11,14 +11,14 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
 
-  class AccountSnapshotController : AccountController
+  class AccountEditSnapshotController : AccountController
   {
-    AccountSnapshot m_view;
+    AccountEditSnapshot m_view;
     public IView View { get { return (m_view); } }
 
-    public AccountSnapshotController(Worksheet p_worksheet)
+    public AccountEditSnapshotController(Worksheet p_worksheet)
     {
-      m_view = new AccountSnapshot(p_worksheet);
+      m_view = new AccountEditSnapshot(p_worksheet);
       m_view.SetController(this);
     }
 

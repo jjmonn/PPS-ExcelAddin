@@ -53,7 +53,7 @@ namespace FBI.MVC.View
       this.m_createVersionButton = new VIBlend.WinForms.Controls.vButton();
       this.m_nbPeriods = new VIBlend.WinForms.Controls.vNumericUpDown();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
-      this.m_startingPeriodDatePicker = new VIBlend.WinForms.Controls.vDatePicker();
+      this.m_startingPeriodDatePicker = new System.Windows.Forms.DateTimePicker();
       this.SuspendLayout();
       // 
       // m_factVersionLabel
@@ -62,7 +62,7 @@ namespace FBI.MVC.View
       this.m_factVersionLabel.Location = new System.Drawing.Point(34, 254);
       this.m_factVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_factVersionLabel.Name = "m_factVersionLabel";
-      this.m_factVersionLabel.Size = new System.Drawing.Size(158, 15);
+      this.m_factVersionLabel.Size = new System.Drawing.Size(142, 13);
       this.m_factVersionLabel.TabIndex = 30;
       this.m_factVersionLabel.Text = "[facts_versions.fact_version]";
       // 
@@ -72,7 +72,7 @@ namespace FBI.MVC.View
       this.m_rateVersionLabel.Location = new System.Drawing.Point(34, 216);
       this.m_rateVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_rateVersionLabel.Name = "m_rateVersionLabel";
-      this.m_rateVersionLabel.Size = new System.Drawing.Size(227, 15);
+      this.m_rateVersionLabel.Size = new System.Drawing.Size(200, 13);
       this.m_rateVersionLabel.TabIndex = 28;
       this.m_rateVersionLabel.Text = "[facts_versions.exchange_rates_version]";
       // 
@@ -82,7 +82,7 @@ namespace FBI.MVC.View
       this.m_nbPeriodsLabel.Location = new System.Drawing.Point(34, 174);
       this.m_nbPeriodsLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_nbPeriodsLabel.Name = "m_nbPeriodsLabel";
-      this.m_nbPeriodsLabel.Size = new System.Drawing.Size(65, 15);
+      this.m_nbPeriodsLabel.Size = new System.Drawing.Size(56, 13);
       this.m_nbPeriodsLabel.TabIndex = 25;
       this.m_nbPeriodsLabel.Text = "Number of";
       // 
@@ -92,7 +92,7 @@ namespace FBI.MVC.View
       this.m_startingPeriodLabel.Location = new System.Drawing.Point(34, 129);
       this.m_startingPeriodLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_startingPeriodLabel.Name = "m_startingPeriodLabel";
-      this.m_startingPeriodLabel.Size = new System.Drawing.Size(175, 15);
+      this.m_startingPeriodLabel.Size = new System.Drawing.Size(153, 13);
       this.m_startingPeriodLabel.TabIndex = 17;
       this.m_startingPeriodLabel.Text = "[facts_versions.starting_period]";
       // 
@@ -102,7 +102,7 @@ namespace FBI.MVC.View
       this.m_periodConfigLabel.Location = new System.Drawing.Point(34, 82);
       this.m_periodConfigLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_periodConfigLabel.Name = "m_periodConfigLabel";
-      this.m_periodConfigLabel.Size = new System.Drawing.Size(168, 15);
+      this.m_periodConfigLabel.Size = new System.Drawing.Size(148, 13);
       this.m_periodConfigLabel.TabIndex = 10;
       this.m_periodConfigLabel.Text = "[facts_versions.period_config]";
       // 
@@ -113,7 +113,7 @@ namespace FBI.MVC.View
       this.m_versionNameLabel.Location = new System.Drawing.Point(34, 36);
       this.m_versionNameLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_versionNameLabel.Name = "m_versionNameLabel";
-      this.m_versionNameLabel.Size = new System.Drawing.Size(200, 15);
+      this.m_versionNameLabel.Size = new System.Drawing.Size(179, 13);
       this.m_versionNameLabel.TabIndex = 9;
       this.m_versionNameLabel.Text = "[facts_versions.version_name]";
       // 
@@ -268,24 +268,15 @@ namespace FBI.MVC.View
       // m_startingPeriodDatePicker
       // 
       this.m_startingPeriodDatePicker.BackColor = System.Drawing.Color.White;
-      this.m_startingPeriodDatePicker.BorderColor = System.Drawing.Color.Black;
-      this.m_startingPeriodDatePicker.Culture = new System.Globalization.CultureInfo("");
-      this.m_startingPeriodDatePicker.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_startingPeriodDatePicker.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_startingPeriodDatePicker.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.None;
-      this.m_startingPeriodDatePicker.FormatValue = "dd MMM yyyy";
+      this.m_startingPeriodDatePicker.CustomFormat = "dd MMM yyyy";
+      this.m_startingPeriodDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
       this.m_startingPeriodDatePicker.Location = new System.Drawing.Point(347, 129);
       this.m_startingPeriodDatePicker.MaxDate = new System.DateTime(2100, 1, 1, 0, 0, 0, 0);
       this.m_startingPeriodDatePicker.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
       this.m_startingPeriodDatePicker.Name = "m_startingPeriodDatePicker";
-      this.m_startingPeriodDatePicker.ShowGrip = false;
-      this.m_startingPeriodDatePicker.Size = new System.Drawing.Size(280, 23);
+      this.m_startingPeriodDatePicker.Size = new System.Drawing.Size(280, 20);
       this.m_startingPeriodDatePicker.TabIndex = 3;
-      this.m_startingPeriodDatePicker.Text = "VDatePicker1";
-      this.m_startingPeriodDatePicker.UseThemeBackColor = false;
-      this.m_startingPeriodDatePicker.UseThemeDropDownArrowColor = true;
       this.m_startingPeriodDatePicker.Value = new System.DateTime(2015, 12, 11, 9, 57, 35, 808);
-      this.m_startingPeriodDatePicker.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // NewDataVersionUI
       // 
@@ -329,6 +320,6 @@ namespace FBI.MVC.View
     public VIBlend.WinForms.Controls.vTreeViewBox m_factsVersionVTreeviewbox;
     public VIBlend.WinForms.Controls.vNumericUpDown m_nbPeriods;
     public System.Windows.Forms.ImageList m_versionsTreeviewImageList;
-    public VIBlend.WinForms.Controls.vDatePicker m_startingPeriodDatePicker;
+    public System.Windows.Forms.DateTimePicker m_startingPeriodDatePicker;
   }
 }
