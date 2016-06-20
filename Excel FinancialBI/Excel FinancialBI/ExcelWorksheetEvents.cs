@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using AddinExpress.MSO;
 using Microsoft.Office.Interop.Excel;
+using System.Collections.Generic;
 
 namespace FBI
 {
@@ -34,12 +35,17 @@ namespace FBI
       {
         m_editing = true;
         Range l_range = target as Range;
+        Worksheet l_worksheet = l_range.Worksheet;
+        SortedSet<string> l_updateList = new SortedSet<string>();
+
         if (l_range != null && m_factsEditionController != null)
         {
           if (l_range.Count > MAX_NB_ROWS)
             return;
-          RaiseCellEvent(l_range);
+          RaiseCellEvent(l_range, l_updateList);
         }
+        foreach (string l_cell in l_updateList)
+          m_factsEditionController.RaiseWorksheetChangingEvent(l_worksheet.get_Range(l_cell));
         m_factsEditionController.RaiseWorksheetChangedEvent();
         m_editing = false;
       }
@@ -50,12 +56,12 @@ namespace FBI
       }
     }
 
-    void RaiseCellEvent(Range p_range)
+    void RaiseCellEvent(Range p_range, SortedSet<string> p_updateList)
     {
       foreach (Range l_cell in p_range.Cells)
       {
-        m_factsEditionController.RaiseWorksheetChangingEvent(l_cell);
-        try { RaiseCellEvent(l_cell.DirectDependents); } catch { }
+        p_updateList.Add(l_cell.Address);
+        try { RaiseCellEvent(l_cell.DirectDependents, p_updateList); } catch { }
       }
     }
 
