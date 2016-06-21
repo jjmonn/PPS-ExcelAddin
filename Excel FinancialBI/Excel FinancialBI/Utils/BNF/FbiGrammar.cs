@@ -157,7 +157,7 @@ namespace FBI.Utils
     public static void AddGrammar(BNF p_bnf)
     {
       p_bnf.AddRule("number", "num [ '.' num ]");
-      p_bnf.AddRule("operator", "'-' | '+' | '*' | '/'");
+      p_bnf.AddRule("operator", "'-' | '+' | '*' | '/' | '<' | '>' | \"<=\" | \">=\" | \"==\" | \"!=\""); //Quickfix
       p_bnf.AddRule("funcName", StringUtils.Join(m_functions, " | ", "\""));
 
       /* SERVER RULES */
