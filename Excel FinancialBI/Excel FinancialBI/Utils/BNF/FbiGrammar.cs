@@ -14,7 +14,7 @@ namespace FBI.Utils
     public const string TO_HUMAN = "ToHuman";
     public const string TO_SERVER = "ToServer";
 
-    private static string[] m_functions = { "IF", "SIN", "COS", "TAN", "LOG2", "LOG10", "LOG", "LN", "EXP", "SQRT", "SIGN", "RINT", "ABS", "MIN", "MAX", "SUM", "AVG" };
+    private static string[] m_functions = { "SIN", "COS", "TAN", "LOG2", "LOG10", "LOG", "LN", "EXP", "SQRT", "SIGN", "RINT", "ABS", "MIN", "MAX", "SUM", "AVG" };
 
     private static List<UInt32> m_accounts = new List<UInt32>();
 
@@ -157,48 +157,46 @@ namespace FBI.Utils
     public static void AddGrammar(BNF p_bnf)
     {
       p_bnf.AddRule("number", "num [ '.' num ]");
-      p_bnf.AddRule("operator", "'-' | '+' | '*' | '/' | '<' | '>' | \"<=\" | \">=\" | \"==\" | \"!=\""); //Quickfix
-      p_bnf.AddRule("funcName", StringUtils.Join(m_functions, " | ", "\""));
+      p_bnf.AddRule("std_ops", "'-' | '+' | '*' | '/'");
+      p_bnf.AddRule("conditional_ops", "'<' | '>' | \"<=\" | \">=\" | \"==\" | \"!=\"");
+      p_bnf.AddRule("ops", "std_ops | conditional_ops");
+      p_bnf.AddRule("func_name", StringUtils.Join(m_functions, " | ", "^"));
 
       /* SERVER RULES */
 
       p_bnf.AddEvent("GetServerToken", GetServerToken);
 
-      p_bnf.AddRule("serverVal", "number | serverToken~GetServerToken | serverFunction");
-      p_bnf.AddRule("serverValue", "[ '-' ] $ serverVal");
-      p_bnf.AddRule("serverPeriodAddSub", "'p' | 'm'");
-      p_bnf.AddRule("serverTokenPrefix", "\"acc\" | \"gfact\"");
-      p_bnf.AddRule("serverToken", "serverTokenPrefix num 'T' [ 'n' [ serverPeriodAddSub num ] ]");
+      p_bnf.AddRule("server_add_sub", "'p' | 'm'");
+      p_bnf.AddRule("server_period", "'n' [ server_add_sub num ] | num");
+      p_bnf.AddRule("server_token_prefix", "\"acc\" | \"gfact\"");
+      p_bnf.AddRule("server_token", "server_token_prefix num 'T' [ server_period ]");
 
-      p_bnf.AddRule("serverFuncParams", "$ ',' $ +serverExpr $");
-      p_bnf.AddRule("serverFunction", "funcName $ '(' $ +serverExpr [ *serverFuncParams ] $ ')'");
+      p_bnf.AddRule("server_expr", "server_token~GetServerToken | print");
 
-      p_bnf.AddRule("serverExpr", "$ serverParam *serverList $");
-      p_bnf.AddRule("serverParam", "serverValue $ | '(' $ serverExpr $ ')'");
-      p_bnf.AddRule("serverList", "$ operator $ serverParam");
-
-      p_bnf.AddRule(TO_HUMAN, "serverExpr | $");
+      p_bnf.AddRule(TO_HUMAN, "*server_expr"); 
 
       /* HUMAN RULES */
 
       p_bnf.AddEvent("GetHumanToken", GetHumanToken);
 
-      p_bnf.AddRule("humanVal", "number | humanToken~GetHumanToken | humanFunction");
-      p_bnf.AddRule("humanValue", "[ '-' ] $ humanVal");
-      p_bnf.AddRule("humanPeriodAddSub", "'+' | '-'");
-      p_bnf.AddRule("humanPeriod1", "$ '[' $ num $ ']' $");
-      p_bnf.AddRule("humanPeriod2", "$ '[' $ 'n' $ [ humanPeriodAddSub $ num ] $ ']' $");
-      p_bnf.AddRule("humanPeriod", "humanPeriod1 | $ humanPeriod2");
-      p_bnf.AddRule("humanToken", "'\"' token '\"' humanPeriod");
+      p_bnf.AddRule("val", "number | account~GetHumanToken | if | func");
+      p_bnf.AddRule("value", "[ '-' ] $ val");
+      p_bnf.AddRule("add_sub", "'+' | '-'");
+      p_bnf.AddRule("period_1", "$ '[' $ num $ ']' $");
+      p_bnf.AddRule("period_2", "$ '[' $ 'n' $ [ add_sub $ num ] $ ']' $");
+      p_bnf.AddRule("period", "period_1 | period_2");
+      p_bnf.AddRule("account", "'\"' token '\"' period");
 
-      p_bnf.AddRule("humanFuncParams", "$ ',' $ +humanExpr $");
-      p_bnf.AddRule("humanFunction", "funcName $ '(' $ +humanExpr [ *humanFuncParams ] $ ')'");
+      p_bnf.AddRule("if", "^IF^ $ '(' $ +expr_cmp $ ',' $ +expr $ ',' $ +expr $ ')' $");
+      p_bnf.AddRule("func", "func_name $ '(' $ +expr [ *func_param ] $ ')'");
+      p_bnf.AddRule("func_param", "$ ',' $ +expr $");
 
-      p_bnf.AddRule("humanExpr", "$ humanParam *humanList $");
-      p_bnf.AddRule("humanParam", "humanValue $ | '(' $ humanExpr $ ')'");
-      p_bnf.AddRule("humanList", "$ operator $ humanParam");
+      p_bnf.AddRule("expr", "$ parameter *param_list");
+      p_bnf.AddRule("param_list", "$ std_ops $ parameter");
+      p_bnf.AddRule("parameter", "$ value $ | $ '(' $ expr $ ')' $");
+      p_bnf.AddRule("expr_cmp", "$ expr $ conditional_ops $ expr");
 
-      p_bnf.AddRule(TO_SERVER, "humanExpr | $");
+      p_bnf.AddRule(TO_SERVER, "expr | $");
     }
   }
 }
