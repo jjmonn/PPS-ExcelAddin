@@ -25,6 +25,7 @@ namespace FBI.MVC.Model
     public UInt32 AdjustmentId { get; set; }
     public UInt32 EmployeeId { get; set; }
     protected bool m_factDownloaded = false;
+    protected bool m_inputOnly = true;
 
     protected AEditedFactsModel(Worksheet p_worksheet)
     {
