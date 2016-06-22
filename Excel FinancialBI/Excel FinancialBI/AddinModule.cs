@@ -75,6 +75,20 @@ namespace FBI
       m_accountSnapshotBT.Caption = Local.GetValue("general.account_snapshot");
       m_reportAccount.Caption = Local.GetValue("general.report_account");
       m_snapshotCreateAccounts.Caption = Local.GetValue("general.account_snapshot_import");
+      entityEditBT.Caption = Local.GetValue("general.entity");
+      currencyBT.Caption = Local.GetValue("general.currency");
+      VersionBT2.Caption = Local.GetValue("general.version");
+      adjustmentBT.Caption = Local.GetValue("CUI.dimension.adjustment");
+      clientBT.Caption = Local.GetValue("CUI.dimension.client");
+      productBT.Caption = Local.GetValue("CUI.dimension.product");
+      CloseBT.Caption = Local.GetValue("general.close_edition");
+      StateSelectionGroup.Caption = Local.GetValue("general.report_information");
+      m_financialSubmissionSubmitButton.Caption = Local.GetValue("general.commit");
+      m_financialSubmissionAutoCommitButton.Caption = Local.GetValue("general.auto_commit");
+      m_exitGroup.Caption = Local.GetValue("general.exit");
+      EditSelectionGroup.Caption = Local.GetValue("general.settings");
+      FinancialSubmissionGroup.Caption = Local.GetValue("general.upload");
+      RefreshInputsBT.Caption = Local.GetValue("upload.refresh_input");
     }
 
     void SuscribeEvents()

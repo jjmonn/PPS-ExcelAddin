@@ -13,9 +13,9 @@
   <category name="CUI">
     <category name="dimension">
       <string name="account">Comptes</string>
-      <string name="client">Clients</string>
+      <string name="client">Client</string>
       <string name="client_cat">Catégories de clients</string>
-      <string name="adjustment">Ajustements</string>
+      <string name="adjustment">Ajustement</string>
       <string name="adjustment_cat">Catégories d'ajustements</string>
       <string name="employee">Employée</string>
       <string name="employee_cat">Catégories d'employée</string>
@@ -338,6 +338,7 @@
 
 
   <category name="upload">
+    <string name="refresh_input">Rafraichir les inputs</string>
     <string name="change_axis_elem">Voulez vous télécharger les données correspondantes à cet ajustement/ produit/ client (attention les données non envoyées seront perdues)</string>
     <string name="periods">Périodes</string>
     <string name="rates">Taux</string>
@@ -525,6 +526,10 @@
       <string name="no_version_selected">Aucune version n'est selectionnée.</string>
       <string name="server_disconnected">Connexion au serveur distant perdue. Veuillez-vous assurer que vos dernières actions ont bien été enregistrées.</string>
     </category>
+    <string name="report_information">Détails du rapport.</string>
+    <string name="close_edition">Fermer le mode édition</string>
+    <string name="auto_commit">Enregistrement automatique</string>
+    <string name="commit">Enregister</string>
     <string name="report_account">Copier les comptes dans Excel.</string>
     <string name="account_snapshot">Edition des comptes dans Excel.</string>
     <string name="account">Compte</string>
@@ -589,6 +594,7 @@
     <string name="account_snapshot_selection">Selection des comptes a créer</string>
     <string name="account_snapshot_properties">Propriétés des comptes</string>
     <string name="account_snapshot_import">Création de comptes automatisée</string>
+    <string name="exit">Sortie</string>
   </category>
 
   <category name="entity">
