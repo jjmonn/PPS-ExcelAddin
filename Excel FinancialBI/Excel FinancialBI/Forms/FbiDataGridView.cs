@@ -273,6 +273,16 @@ namespace FBI.Forms
       return (this.CellsArea.GetCellValue(row, column));
     }
 
+    public object GetCellEditor(KeyType p_row, KeyType p_column)
+    {
+      HierarchyItem column = m_columnsDic[p_column];
+      HierarchyItem row = m_rowsDic[p_row];
+
+      if (row == null || column == null)
+        return (null);
+      return (this.CellsArea.GetCellEditor(row, column));
+    }
+
     public bool HasChild(Dimension p_dim, KeyType p_key)
     {
       HierarchyItem l_item = (p_dim == Dimension.ROW) ? m_rowsDic[p_key] : m_columnsDic[p_key];

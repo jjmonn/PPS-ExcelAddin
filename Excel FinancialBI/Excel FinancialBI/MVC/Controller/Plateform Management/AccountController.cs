@@ -68,8 +68,23 @@ namespace FBI.MVC.Controller
 
     public bool UpdateAccountList(List<Account> p_accountList)
     {
-      AccountModel.Instance.UpdateList(p_accountList, CRUDAction.UPDATE);
-      return (true);
+      return (AccountModel.Instance.UpdateList(p_accountList, CRUDAction.UPDATE));
+    }
+
+    public bool CreateAccountList(List<Account> p_accountList)
+    {
+      foreach (Account l_account in p_accountList)
+      {
+        if (l_account.Type == Account.AccountType.PERCENTAGE)
+          l_account.PeriodAggregationOptionId = Account.PeriodAggregationOptions.NO_AGGREGATION;
+        l_account.ConversionOptionId = (l_account.Type == Account.AccountType.MONETARY) ? Account.ConversionOptions.AVERAGE_RATE : Account.ConversionOptions.NO_CONVERSION;
+        if (CheckAccountValidity(l_account) == false)
+        {
+          Error = Local.GetValue("accounts.error.create") + " \"" + l_account.Name + "\": " + Error;
+          return (false);
+        }
+      }
+      return (AccountModel.Instance.UpdateList(p_accountList, CRUDAction.CREATE));
     }
 
     public bool UpdateAccount(Account p_account)

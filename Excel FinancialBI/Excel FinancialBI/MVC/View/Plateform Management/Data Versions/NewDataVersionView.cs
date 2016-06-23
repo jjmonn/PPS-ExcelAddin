@@ -84,13 +84,11 @@ namespace FBI.MVC.View
       switch (l_timeConfig)
       {
         case TimeConfig.MONTHS:
-          m_startingPeriodDatePicker.DateTimeEditor.DefaultDateTimeFormat = DefaultDateTimePatterns.LongDatePattern;
-          m_startingPeriodDatePicker.Calendar.SetCalendarView(vCalendarView.Month);
+          m_startingPeriodDatePicker.CustomFormat = "MMMM yyyy";
           break;
 
         case TimeConfig.YEARS:
-        m_startingPeriodDatePicker.DateTimeEditor.DefaultDateTimeFormat = DefaultDateTimePatterns.ShortDatePattern;
-        m_startingPeriodDatePicker.Calendar.SetCalendarView(vCalendarView.Year);
+          m_startingPeriodDatePicker.CustomFormat = "dd MMMM yyyy";
         break;
       }
     }
@@ -110,7 +108,7 @@ namespace FBI.MVC.View
       Version l_version = new Version();
       l_version.Name = this.m_versionNameTextbox.Text;
       l_version.ParentId = m_parentId;
-      l_version.StartPeriod = (UInt32)m_startingPeriodDatePicker.Value.Value.ToOADate();
+      l_version.StartPeriod = (UInt32)m_startingPeriodDatePicker.Value.ToOADate();
       l_version.NbPeriod = (ushort)m_nbPeriods.Value;
       l_version.IsFolder = false;
       l_version.Locked = false;

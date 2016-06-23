@@ -227,6 +227,7 @@ namespace FBI.Utils
     {
       if (m_input.Ptr > m_errorPtr && !m_internalRules.ContainsKey(p_rule.Name)) //Default rules are not considered as part of LastError
       {
+        m_errorPtr = m_input.Ptr;
         this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + ": " + Local.GetValue("bnf.error." + p_rule.Name);
       }
     }

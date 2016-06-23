@@ -12,6 +12,7 @@ namespace FBI.Forms
 {
   using Utils;
   using MVC.Model.CRUD;
+  using MVC.Model;
 
   public class FbiTreeView<T> : AFbiTreeView where T : NamedCRUDEntity
   {
@@ -323,5 +324,10 @@ namespace FBI.Forms
       }
       return (true);
     }
+  }
+
+  public class AccountTreeView : FbiTreeView<Account>
+  {
+    public AccountTreeView() : base(AccountModel.Instance.GetDictionary()) { }
   }
 }

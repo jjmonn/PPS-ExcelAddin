@@ -170,9 +170,9 @@
     <string name="title_new_account">Nouveau Compte</string>
     <string name="msg_name_empty">Le nom du compte ne peut pas être vide.</string>
     <category name="error">
-      <string name="create">Impossible de créer le compte.</string>
-      <string name="update">Impossible de modifier le compte.</string>
-      <string name="delete">Impossible de supprimer le compte.</string>
+      <string name="create">Impossible de créer le compte</string>
+      <string name="update">Impossible de modifier le compte</string>
+      <string name="delete">Impossible de supprimer le compte</string>
       <string name="drop_failed">L'envoie des comptes vers Excel a échoué.</string>
     </category>
   </category>
@@ -526,7 +526,7 @@
       <string name="server_disconnected">Connexion au serveur distant perdue. Veuillez-vous assurer que vos dernières actions ont bien été enregistrées.</string>
     </category>
     <string name="report_account">Copier les comptes dans Excel.</string>
-    <string name="account_snapshot">Importer des comptes depuis Excel.</string>
+    <string name="account_snapshot">Edition des comptes dans Excel.</string>
     <string name="account">Compte</string>
     <string name="accounts">Comptes</string>
     <string name="auto_resize_columns">Ajuster automatiquement la largeur des colonnes</string>
@@ -585,6 +585,10 @@
     <string name="snapshot">Snapshot</string>
     <string name="upload">Edition</string>
     <string name="next">Suivant</string>
+    <string name="export_selected_account">Créer les comptes sélectionnés</string>
+    <string name="account_snapshot_selection">Selection des comptes a créer</string>
+    <string name="account_snapshot_properties">Propriétés des comptes</string>
+    <string name="account_snapshot_import">Création de comptes automatisée</string>
   </category>
 
   <category name="entity">
@@ -649,8 +653,10 @@
       <string name="bnf_is_fucked">Mauvais paramètre(s) pour la BNF. Contactez un administrateur</string>
       <string name="at">Input erroné au caractère</string>
       <string name="operator">Un opérateur est manquant ou incorrect</string>
-      <string name="humanAccount">Le compte est erroné</string>v
-      <string name="humanPeriod">La période est erronée</string>
+      <string name="humanToken">Le compte ou indicateur macro-économique est erroné</string>
+      <string name="humanPeriod1">La période est erronée</string>
+      <string name="humanPeriod2">La période est erronée</string>
+      <string name="humanPeriodAddSub">La période est erronée</string>
       <string name="humanParam">Liste d'arguments invalide</string>
     </category>
   </category>

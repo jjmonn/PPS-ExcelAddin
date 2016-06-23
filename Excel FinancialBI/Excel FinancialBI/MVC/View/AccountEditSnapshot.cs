@@ -12,7 +12,7 @@ namespace FBI.MVC.View
   using Controller;
   using Utils;
 
-  class AccountSnapshot : IView
+  class AccountEditSnapshot : IView
   {
     enum Column
     {
@@ -33,7 +33,7 @@ namespace FBI.MVC.View
     const int m_nbColumns = 200;
     const int m_nbRows = 1000;
 
-    AccountSnapshotController m_controller;
+    AccountEditSnapshotController m_controller;
     SafeDictionary<string, Column> m_columnNameDic;
     SafeDictionary<Column, int> m_columnScanDic;
     Worksheet m_worksheet;
@@ -42,7 +42,7 @@ namespace FBI.MVC.View
 
     SafeDictionary<Column, Action<Account, object>> m_propertiesDic;
 
-    public AccountSnapshot(Worksheet p_worksheet)
+    public AccountEditSnapshot(Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
       m_bnf = new BNF();
@@ -53,7 +53,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-      m_controller = p_controller as AccountSnapshotController;
+      m_controller = p_controller as AccountEditSnapshotController;
     }
 
     void BuildPropertiesDic()
