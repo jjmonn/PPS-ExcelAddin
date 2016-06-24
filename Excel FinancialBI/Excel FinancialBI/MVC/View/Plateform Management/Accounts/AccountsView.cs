@@ -1342,6 +1342,11 @@ namespace FBI.MVC.View
       else
         m_formulaTextBox.BackColor = Color.White;
       ColorFormula();
+      if (!p_state)
+      {
+        m_autocomplete.Hide();
+        m_isValidAutoComplete = false;
+      }
     }
 
     #endregion
