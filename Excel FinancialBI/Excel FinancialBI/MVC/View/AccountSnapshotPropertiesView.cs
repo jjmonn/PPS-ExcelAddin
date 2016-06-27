@@ -162,6 +162,24 @@ namespace FBI.MVC.View
       m_dgv.CellValueChanging += m_dgv_CellValueChanging;
       m_dgv.MouseClick += m_dgv_MouseClick;
       AccountModel.Instance.UpdateListEvent += OnUpdateList;
+      copyDownToolStripMenuItem.Click += copyDownToolStripMenuItem_Click;
+    }
+
+    void copyDownToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      GridCell l_cell = m_dgv.HoveredCell;
+
+      if (l_cell == null)
+        return;
+
+      HierarchyItemsCollection l_collection = (m_dgv.HoveredRow.ParentItem == null) ? m_dgv.RowsHierarchy.Items : m_dgv.HoveredRow.ParentItem.Items;
+      for (int i = m_dgv.HoveredRow.ItemIndex; i < l_collection.Count; ++i)
+        OnCopyDown(l_cell.Value, (UInt32)l_collection[i].ItemValue, (UInt32)m_dgv.HoveredColumn.ItemValue);
+    }
+
+    protected virtual void OnCopyDown(object p_cellValue, UInt32 p_rowValue, UInt32 p_columnValue)
+    {
+      m_dgv.FillField(p_rowValue, p_columnValue, p_cellValue);
     }
 
     void m_dgv_CellValueChanging(object sender, CellValueChangingEventArgs p_args)
