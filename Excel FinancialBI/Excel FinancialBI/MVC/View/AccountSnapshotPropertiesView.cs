@@ -62,6 +62,7 @@ namespace FBI.MVC.View
     {
       m_validateBT.Text = Local.GetValue("general.export_selected_account");
       this.Text = Local.GetValue("general.account_snapshot_properties");
+      copyDownToolStripMenuItem.Text = Local.GetValue("general.copy_down");
     }
 
     void LoadEditors()
@@ -163,6 +164,7 @@ namespace FBI.MVC.View
       m_dgv.MouseClick += m_dgv_MouseClick;
       AccountModel.Instance.UpdateListEvent += OnUpdateList;
       copyDownToolStripMenuItem.Click += copyDownToolStripMenuItem_Click;
+      m_dgv.ContextMenuStrip = contextMenuStrip1;
     }
 
     void copyDownToolStripMenuItem_Click(object sender, EventArgs e)
@@ -175,6 +177,7 @@ namespace FBI.MVC.View
       HierarchyItemsCollection l_collection = (m_dgv.HoveredRow.ParentItem == null) ? m_dgv.RowsHierarchy.Items : m_dgv.HoveredRow.ParentItem.Items;
       for (int i = m_dgv.HoveredRow.ItemIndex; i < l_collection.Count; ++i)
         OnCopyDown(l_cell.Value, (UInt32)l_collection[i].ItemValue, (UInt32)m_dgv.HoveredColumn.ItemValue);
+      m_dgv.Refresh();
     }
 
     protected virtual void OnCopyDown(object p_cellValue, UInt32 p_rowValue, UInt32 p_columnValue)
