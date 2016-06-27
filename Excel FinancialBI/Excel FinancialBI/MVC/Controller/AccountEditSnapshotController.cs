@@ -31,29 +31,33 @@ namespace FBI.MVC.Controller
     public bool LaunchSnapshot()
     {
       List<Account> l_list;
+      List<Account> l_createList = new List<Account>();
+      List<Account> l_updateList = new List<Account>();
 
       m_view.ScanColumns();
+
       l_list = m_view.ExtractAccounts();
+      if (l_list == null)
+      {
+        Error = m_view.Error;
+        return (false);
+      }
+
       foreach (Account l_account in l_list)
         if (AccountModel.Instance.GetValue(l_account.Name) == null)
-        {
-          if (CreateAccount(l_account) == false)
-          {
-            Error = "\"" + l_account.Name + "\": " + Error;
-            return (false);
-          }
-        }
+          l_createList.Add(l_account);
         else
-        {
-          Account l_base = AccountModel.Instance.GetValue(l_account.Name);
-
-          l_base.CopyFrom(l_account);
-          if (UpdateAccount(l_base) == false)
-          {
-            Error = "\"" + l_account.Name + "\": " + Error;
+          l_updateList.Add(l_account);
+      if (CreateAccountList(l_createList) == false)
+        return (false);
+      else
+      {
+        foreach (Account l_account in l_updateList)
+          if (CheckAccountValidity(l_account) == false)
             return (false);
-          }
-        }
+        if (UpdateAccountList(l_updateList) == false)
+          return (false);
+      }
       return (true);
     }
   }

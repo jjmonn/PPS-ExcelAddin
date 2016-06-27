@@ -116,6 +116,8 @@
   </category>
 
   <category name="accounts">
+    <string name="process">Processus</string>
+    <string name="position">Position</string>
     <string name="description">Description du compte</string>
     <string name="save_description">Sauvegarder la description</string>
     <string name="formula">Formule du compte</string>
@@ -139,6 +141,7 @@
     <string name="consolidation_type_none">Aucune</string>
     <string name="type">Type de compte</string>
     <string name="consolidation_option">Option de consolidation</string>
+    <string name="period_aggregation">Aggregation de périodes</string>
     <string name="currencies_conversion">Conversion devise</string>
     <string name="macro_economic_indicators">Indicateurs macro economiques</string>
     <string name="new_account">Créer un nouveau compte</string>
@@ -525,7 +528,10 @@
       <string name="invalid_name">Nom invalide  (Ne peux pas contenir de , ou ").</string>
       <string name="no_version_selected">Aucune version n'est selectionnée.</string>
       <string name="server_disconnected">Connexion au serveur distant perdue. Veuillez-vous assurer que vos dernières actions ont bien été enregistrées.</string>
+      <string name="account_edit_upload">Une erreur est survenue lors de la mise en ligne des comptes.</string>
+      <string name="account_snapshot_at_line">Erreur à la ligne</string>
     </category>
+    <string name="account_edit_success">Comptes mis en ligne avec succès.</string>
     <string name="report_account">Copier les comptes dans Excel.</string>
     <string name="account_snapshot">Edition des comptes dans Excel.</string>
     <string name="account">Compte</string>
