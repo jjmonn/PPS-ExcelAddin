@@ -66,6 +66,8 @@ namespace FBI.Utils
     {
       string l_formatString = null;
       Int32 indent = default(Int32);
+
+      InitItemsFormat(vDGV.VIBlendTheme);
       foreach (HierarchyItem l_item in p_hierarchy)
       {
         Account l_account = AccountModel.Instance.GetValue(l_item.Caption);
