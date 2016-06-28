@@ -656,13 +656,14 @@
   <category name="bnf">
     <category name="error">
       <string name="bnf_is_fucked">Mauvais paramètre(s) pour la BNF. Contactez un administrateur</string>
-      <string name="at">Input erroné au caractère</string>
-      <string name="operator">Un opérateur est manquant ou incorrect</string>
-      <string name="humanToken">Le compte ou indicateur macro-économique est erroné</string>
-      <string name="humanPeriod1">La période est erronée</string>
-      <string name="humanPeriod2">La période est erronée</string>
-      <string name="humanPeriodAddSub">La période est erronée</string>
-      <string name="humanParam">Liste d'arguments invalide</string>
+      <string name="at">Formule erronée au caractère</string>
+      <string name="expr">L'expression est invalide</string>
+      <string name="parameter">La liste d'arguments est invalide</string>
+      <string name="account">Le compte ou indicateur macro-économique est erroné</string>
+      <string name="period_1">La période est erronée</string>
+      <string name="period_2">La période est erronée</string>
+      <string name="add_sub">La période est erronée</string>
+      <string name="conditional_ops">Un opérateur de comparaison est attendu</string>
     </category>
   </category>
 

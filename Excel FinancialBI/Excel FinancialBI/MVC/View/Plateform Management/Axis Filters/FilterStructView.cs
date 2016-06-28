@@ -144,7 +144,7 @@ namespace FBI.MVC.View
       l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name"), Local.GetValue("filters.new_category")).Trim();
       if (!m_controller.Add(l_filterName, 0, 0, typeof(Filter)))
       {
-        Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -156,13 +156,13 @@ namespace FBI.MVC.View
         return;
       if (this.HasChild())
       {
-        Forms.MsgBox.Show("filters.error.has_child", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show("filters.error.has_child", "filters.new_category", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         return;
       }
       l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name"), Local.GetValue("filters.new_category")).Trim();
       if (!m_controller.Add(l_filterName, (UInt32)m_tree.SelectedNode.Value, 0, typeof(Filter)))
       {
-        Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -177,7 +177,7 @@ namespace FBI.MVC.View
       {
         if (!m_controller.Remove((UInt32)m_tree.SelectedNode.Value, typeof(Filter)))
         {
-          Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.delete_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.delete_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
       }
     }
@@ -191,7 +191,7 @@ namespace FBI.MVC.View
       l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name")).Trim();
       if (!m_controller.Update((UInt32)m_tree.SelectedNode.Value, l_filterName, typeof(Filter)))
       {
-        Forms.MsgBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
