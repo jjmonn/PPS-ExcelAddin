@@ -155,6 +155,8 @@ namespace FBI.MVC.View
       foreach (AxisFilter l_axisFilter in p_axisFilterlist)
         LoadAxisFilter(l_axisFilter);
       m_dgv.CellValueChanged += OnDGVCellValueChanged;
+      m_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      m_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
       m_dgv.Refresh();
     }
 

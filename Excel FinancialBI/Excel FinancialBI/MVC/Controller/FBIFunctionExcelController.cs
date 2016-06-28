@@ -22,6 +22,7 @@ namespace FBI.MVC.Controller
     static string m_lastParameter ="";
     static List<Tuple<LegacyComputeRequest, ComputeResult>> m_computeCache = new List<Tuple<LegacyComputeRequest, ComputeResult>>();
     public static FBIFunction LastExecutedFunction { get; set; }
+    PBarUI m_refreshProgress;
 
     public FBIFunctionExcelController()
     {
@@ -44,10 +45,26 @@ namespace FBI.MVC.Controller
       AddinModule.CurrentInstance.ExcelApp.Calculation = XlCalculation.xlCalculationManual;
       if (l_worksheet != null)
       {
-        Range l_range = l_worksheet.Range[l_worksheet.Cells[1, 1], WorksheetWriter.GetRealLastCell(l_worksheet)];
+        Range l_range = l_worksheet.UsedRange;
+        int l_index = 0;
+
+        m_refreshProgress = new PBarUI(Local.GetValue("general.loading"), l_range.Count);
+        m_refreshProgress.Show();
+        AddinModule.CurrentInstance.ExcelApp.Interactive = false;
+
         foreach (Range l_cell in l_range)
+        {
+          if (l_index % 10 == 0)
+            m_refreshProgress.Value = l_index;
           l_cell.Formula = l_cell.Formula;
+          ++l_index;
+        }
+
+        AddinModule.CurrentInstance.ExcelApp.Interactive = true;
+        m_refreshProgress.Close();
+        AddinModule.CurrentInstance.ExcelApp.Visible = true;
       }
+
       AddinModule.CurrentInstance.ExcelApp.Calculate();
       AddinModule.CurrentInstance.ExcelApp.Calculation = l_mode;
     }

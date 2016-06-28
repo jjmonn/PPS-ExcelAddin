@@ -164,7 +164,7 @@ namespace FBI.MVC.View
       if (m_controller.CreateAccount(l_parentId, NameTextBox.Text, (Account.AccountProcess)ProcessComboBox.SelectedItem.Value,
         (Account.FormulaTypes)FormulaComboBox.SelectedItem.Value, "",
         (Account.AccountType)TypeComboBox.SelectedItem.Value, l_consolidation, l_period,
-        "t", (UInt32)((Account.FormulaTypes)FormulaComboBox.SelectedItem.Value), l_itemPosition) == false)
+        Account.Format.normal, (UInt32)((Account.FormulaTypes)FormulaComboBox.SelectedItem.Value), l_itemPosition) == false)
         MsgBox.Show(m_controller.Error);
       Close();
     }
