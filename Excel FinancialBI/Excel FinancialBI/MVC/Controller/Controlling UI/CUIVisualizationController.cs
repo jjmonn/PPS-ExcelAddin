@@ -128,9 +128,10 @@ namespace FBI.MVC.Controller
       return (ChartPanelModel.Instance.Update(l_panel));
     }
 
-    public bool DPanel(UInt32 p_panelId)
+    public bool DPanel(String p_panelName)
     {
-      return (ChartPanelModel.Instance.Delete(p_panelId));
+      ChartPanel l_panel = ChartPanelModel.Instance.GetValue(p_panelName);
+      return (l_panel == null ? false : ChartPanelModel.Instance.Delete(l_panel.Id));
     }
 
     public bool CRUDChartAccounts(ChartSettings p_settings, List<Tuple<string, Color>> p_accountList)

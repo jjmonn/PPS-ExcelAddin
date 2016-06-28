@@ -117,6 +117,18 @@ namespace FBI.MVC.Model
       return (m_CRUDDic[p_accountId]);
     }
 
+    public double GetAllSubEntitiesValues(UInt32 p_baseEntityId, UInt32 p_accountId)
+    {
+      List<AxisElem> l_elemList = AxisElemModel.Instance.GetChildrenRecurse(AxisType.Entities, p_baseEntityId, false);
+      double l_value = 0;
+      EntityDistribution l_distrib;
+
+      foreach (AxisElem l_elem in l_elemList)
+        if (l_elem.AllowEdition && (l_distrib = GetValue(l_elem.Id, p_accountId)) != null)
+          l_value += l_distrib.Percentage;
+      return (l_value);
+    }
+
     #endregion
   }
 }

@@ -57,12 +57,13 @@ namespace FBI.MVC.Controller
       {
         bool l_found = false;
 
-        foreach (ComputeResult l_result in p_result.Values)
-          if (m_requestIdList.Contains(l_result.RequestId))
-          {
-            l_found = true;
-            m_requestIdList.Remove(l_result.RequestId);
-          }
+        if (!(l_found = (p_status != ErrorMessage.SUCCESS)))
+          foreach (ComputeResult l_result in p_result.Values)
+            if (m_requestIdList.Contains(l_result.RequestId))
+            {
+              l_found = true;
+              m_requestIdList.Remove(l_result.RequestId);
+            }
         if (l_found)
           ComputeCompleteEvent(p_status, p_request, p_result);
       }
@@ -152,6 +153,7 @@ namespace FBI.MVC.Controller
         l_request.StartPeriod = (Int32)l_version.StartPeriod;
         l_request.NbPeriods = l_version.NbPeriod;
       }
+      l_request.AccountList = LeftPaneController.GetAccounts();
       l_request.MainDiffVersion = l_version.Id;
       l_request.Periods = LeftPaneController.GetPeriods();
       l_request.PeriodFilter = l_request.Periods != null;

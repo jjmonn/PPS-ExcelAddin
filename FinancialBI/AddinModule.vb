@@ -1071,6 +1071,12 @@ Public Class AddinModule
                 Exit For
             End If
         Next
+<<<<<<< HEAD
+        p_generalSubmissionController.CloseInstance()
+        m_GRSControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
+
+        If m_GRSControlersDictionary.Count = 0 Then
+=======
         SyncLock (p_generalSubmissionController)
             p_generalSubmissionController.CloseInstance()
         End SyncLock
@@ -1081,6 +1087,7 @@ Public Class AddinModule
         If p_generalSubmissionController IsNot Nothing Then p_generalSubmissionController = Nothing
 
         If m_reportUploadControlersDictionary.Count = 0 Then
+>>>>>>> test_AccountSnapshot
             SubmissionModeRibbon.Visible = False
             m_PDCSubmissionRibbon.Visible = False
             m_reportUploadControlersDictionary.Clear()

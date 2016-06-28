@@ -43,6 +43,8 @@
       this.m_snapshotRibbonSplitButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
       this.adxRibbonMenu1 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
       this.m_directoryRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_accountSnapshotBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_reportAccount = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_reportUploadRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_visualizationGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_CUIRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -121,6 +123,8 @@
       this.AdxRibbonRHExitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_displayReportBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.adxRibbonButton5 = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_snapshotCreateAccounts = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
       // m_financialbiRibbon
       // 
@@ -242,6 +246,9 @@
       // 
       this.adxRibbonMenu1.Caption = "adxRibbonMenu1";
       this.adxRibbonMenu1.Controls.Add(this.m_directoryRibbonButton);
+      this.adxRibbonMenu1.Controls.Add(this.m_snapshotCreateAccounts);
+      this.adxRibbonMenu1.Controls.Add(this.m_accountSnapshotBT);
+      this.adxRibbonMenu1.Controls.Add(this.m_reportAccount);
       this.adxRibbonMenu1.Id = "adxRibbonMenu_16f054e7735b4e8487ab527f0db53df6";
       this.adxRibbonMenu1.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.adxRibbonMenu1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -252,6 +259,22 @@
       this.m_directoryRibbonButton.Id = "adxRibbonButton_3c5c89ebdd9a4ea595bbc1e5a46be7ed";
       this.m_directoryRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_directoryRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      // 
+      // m_accountSnapshotBT
+      // 
+      this.m_accountSnapshotBT.Caption = "Snapshot account report";
+      this.m_accountSnapshotBT.Id = "adxRibbonButton_5a91020eb3464abb923d5e7faf7c5c71";
+      this.m_accountSnapshotBT.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_accountSnapshotBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_accountSnapshotBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_accountSnapshot_OnClick);
+      // 
+      // m_reportAccount
+      // 
+      this.m_reportAccount.Caption = "Drop account report on worksheet";
+      this.m_reportAccount.Id = "adxRibbonButton_39beb8e1e0584b5b82de969d9ac241d2";
+      this.m_reportAccount.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_reportAccount.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_reportAccount.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_reportAccount_OnClick);
       // 
       // m_reportUploadRibbonButton
       // 
@@ -967,6 +990,20 @@
       this.m_displayReportBT.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_displayReportBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_displayReportBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_displayReportBT_OnClick);
+      // adxRibbonButton5
+      // 
+      this.adxRibbonButton5.Caption = "Directory Snapshot";
+      this.adxRibbonButton5.Id = "adxRibbonButton_3c5c89ebdd9a4ea595bbc1e5a46be7ed";
+      this.adxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.adxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      // 
+      // m_snapshotCreateAccounts
+      // 
+      this.m_snapshotCreateAccounts.Caption = "Snapshot new accounts";
+      this.m_snapshotCreateAccounts.Id = "adxRibbonButton_b1efb7ae766347508ba622b0e48319cf";
+      this.m_snapshotCreateAccounts.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_snapshotCreateAccounts.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_snapshotCreateAccounts.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_snapshotCreateAccounts_OnClick);
       // 
       // AddinModule
       // 
@@ -1075,6 +1112,10 @@
     public AddinExpress.MSO.ADXRibbonDropDown ProductsDropDown;
     public AddinExpress.MSO.ADXRibbonGroup StateSelectionGroup;
     private AddinExpress.MSO.ADXRibbonButton m_displayReportBT;
+    private AddinExpress.MSO.ADXRibbonButton m_accountSnapshotBT;
+    private AddinExpress.MSO.ADXRibbonButton adxRibbonButton5;
+    private AddinExpress.MSO.ADXRibbonButton m_reportAccount;
+    private AddinExpress.MSO.ADXRibbonButton m_snapshotCreateAccounts;
     
 
   }

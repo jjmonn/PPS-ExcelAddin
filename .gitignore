@@ -45,6 +45,7 @@ PPS/obj/*
 PPS/bin/*
 *.suo
 *.vbproj
+*.user
 PPS/PPS.vbproj
 CUI2DisplayControl/CUI2DisplayControl/displaycontrol.pfx
 CUI2DisplayControl/CUI2DisplayControl/obj/Debug/CUI2DisplayControl.pdb
@@ -68,3 +69,4 @@ PPS/bin/Debug/PPS.dll
 bin/
 obj/
 publish/
+*.publish

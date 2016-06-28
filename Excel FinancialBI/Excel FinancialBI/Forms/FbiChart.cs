@@ -85,8 +85,10 @@ namespace FBI.Forms
       l_chartArea.AxisX.LabelStyle.Angle = -45;
       l_chartArea.AxisY.LabelAutoFitMaxFontSize = 10;
       l_chartArea.AxisX.LabelAutoFitMaxFontSize = 10;
-      l_chartArea.AxisX.IsMarginVisible = false;
       l_chartArea.AxisY.IsMarginVisible = true;
+      l_chartArea.AxisX.IsMarginVisible = false;
+      l_chartArea.AxisY.IsStartedFromZero = false;
+      l_chartArea.RecalculateAxesScale();
       l_chartArea.AxisY.LabelStyle.Format = FbiAccountFormat.Get(null, null);
       return (l_chartArea);
     }
@@ -437,11 +439,9 @@ namespace FBI.Forms
         l_axisString[i++] = FbiAccountFormat.Get(l_item.Key, l_currency);
 
       //Fuck this...
-      if (p_settings.HasDeconstruction && p_settings.Versions.Count > 1)
-        this.ApplyMultipleAxisDeconstructionPerVersion(p_chartSeries, p_settings, p_series, l_axisType);
-      else if (p_settings.HasDeconstruction)
+      if (p_settings.HasDeconstruction && p_settings.Versions.Count == 1)
         this.ApplyMultipleAxisDeconstruction(p_chartSeries, p_settings, p_series, l_axisType);
-      else
+      else if (!p_settings.HasDeconstruction)
         this.ApplyMultipleAxisVersion(p_chartSeries, p_settings, p_series, l_axisType);
 
       this.ChartAreas[0].AxisY.LabelStyle.Format = l_axisString[0];
@@ -469,16 +469,6 @@ namespace FBI.Forms
         for (int j = 0; j < l_list.Count; ++j)
           l_list[j].YAxisType = p_axisType[p_series[i].Account.Type];
         ++i;
-      }
-    }
-
-    private void ApplyMultipleAxisDeconstructionPerVersion(ChartSeries p_chartSeries, ChartSettings p_settings,
-      List<Serie> p_series, ChartAxisType p_axisType)
-    {
-      foreach (List<Series> l_list in p_chartSeries.Values)
-      {
-        for (int j = 0; j < l_list.Count; ++j)
-          l_list[j].YAxisType = p_axisType[p_series[0].Account.Type];
       }
     }
 

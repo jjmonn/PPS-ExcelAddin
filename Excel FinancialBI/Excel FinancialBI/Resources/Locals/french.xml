@@ -170,10 +170,15 @@
     <string name="title_new_account">Nouveau Compte</string>
     <string name="msg_name_empty">Le nom du compte ne peut pas être vide.</string>
     <category name="error">
-      <string name="create">Impossible de créer le compte.</string>
-      <string name="update">Impossible de modifier le compte.</string>
-      <string name="delete">Impossible de supprimer le compte.</string>
+      <string name="create">Impossible de créer le compte</string>
+      <string name="update">Impossible de modifier le compte</string>
+      <string name="delete">Impossible de supprimer le compte</string>
       <string name="drop_failed">L'envoie des comptes vers Excel a échoué.</string>
+      <string name="invalid_format">Format invalide.</string>
+      <string name="invalid_consolidation">Option de consolidation invalide.</string>
+      <string name="invalid_process">Process invalide.</string>
+      <string name="invalid_type">Type invalide.</string>
+      <string name="invalid_parent">Parent invalide.</string>
     </category>
   </category>
 
@@ -325,6 +330,7 @@
       <string name="no_selected_version">Veuillez sélectioner une version.</string>
       <string name="cannot_select_folder">Vous ne pouvez pas sélectionner un dossier.</string>
       <string name="invalid_parent">Le parent sélectionné n'est pas un dossier.</string>
+      <string name="nb_period">Nombre de périodes invalide.</string>
     </category>
 
   </category>
@@ -381,11 +387,12 @@
     <category name="error">
       <string name="dimension_identification">Impossible d'identifier toutes les dimensions nécéssaires.</string>
       <string name="commit_failed">Impossible d'enregistrer la feuille</string>
-      <string name="accounts_orientation_unclear">L'organisation des comptes n'est pas claire. Merci de vérifier que les comptes sont disposés en lignes ou en colones.</string>
-      <string name="entities_orientation_unclear">L'organisation des entités n'est pas claire. Merci de vérifier que les entités sont disposés en lignes ou en colones.</string>
-      <string name="periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
-      <string name="employees_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
+      <string name="accounts_orientation_unclear">L'organisation des comptes n'est pas claire. Merci de vérifier que les comptes sont disposés en lignes ou en colonnes.</string>
+      <string name="entities_orientation_unclear">L'organisation des entités n'est pas claire. Merci de vérifier que les entités sont disposés en lignes ou en colonnes.</string>
+      <string name="periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colonnes et sont compatibles avec la version sélectionnée.</string>
+      <string name="employees_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colonnes.</string>
       <string name="failed_compute">Le calcul de la feuille a échoué.</string>
+      <string name="dimension_undefined">L'organisation de la feuille n'est pas claire.</string>
     </category>
   </category>
 
@@ -506,6 +513,7 @@
 
   <category name="general">
     <category name="error">
+      <string name="worksheet_null">Aucune worksheet selectionnée</string>
       <string name="circular_dep">Référence circulaire.</string>
       <string name="system">Erreur système.</string>
       <string name="success">Succès</string>
@@ -519,10 +527,12 @@
       <string name="version_mismatch">Votre version de Financial BI est incompatible.</string>
       <string name="name_empty">Nom vide.</string>
       <string name="name_too_long">Nom trop long.</string>
-      <string name="invalid_name">Nom invalide.</string>
+      <string name="invalid_name">Nom invalide  (Ne peux pas contenir de , ou ").</string>
       <string name="no_version_selected">Aucune version n'est selectionnée.</string>
       <string name="server_disconnected">Connexion au serveur distant perdue. Veuillez-vous assurer que vos dernières actions ont bien été enregistrées.</string>
     </category>
+    <string name="report_account">Copier les comptes dans Excel.</string>
+    <string name="account_snapshot">Edition des comptes dans Excel.</string>
     <string name="account">Compte</string>
     <string name="accounts">Comptes</string>
     <string name="auto_resize_columns">Ajuster automatiquement la largeur des colonnes</string>
@@ -581,6 +591,10 @@
     <string name="snapshot">Snapshot</string>
     <string name="upload">Edition</string>
     <string name="next">Suivant</string>
+    <string name="export_selected_account">Créer les comptes sélectionnés</string>
+    <string name="account_snapshot_selection">Selection des comptes a créer</string>
+    <string name="account_snapshot_properties">Propriétés des comptes</string>
+    <string name="account_snapshot_import">Création de comptes automatisée</string>
   </category>
 
   <category name="entity">
@@ -643,11 +657,14 @@
   <category name="bnf">
     <category name="error">
       <string name="bnf_is_fucked">Mauvais paramètre(s) pour la BNF. Contactez un administrateur</string>
-      <string name="at">Input erroné au caractère</string>
-      <string name="operator">Un opérateur est manquant ou incorrect</string>
-      <string name="humanAccount">Le compte est erroné</string>v
-      <string name="humanPeriod">La période est erronée</string>
-      <string name="humanParam">Liste d'arguments invalide</string>
+      <string name="at">Formule erronée au caractère</string>
+      <string name="expr">L'expression est invalide</string>
+      <string name="parameter">La liste d'arguments est invalide</string>
+      <string name="account">Le compte ou indicateur macro-économique est erroné</string>
+      <string name="period_1">La période est erronée</string>
+      <string name="period_2">La période est erronée</string>
+      <string name="add_sub">La période est erronée</string>
+      <string name="conditional_ops">Un opérateur de comparaison est attendu</string>
     </category>
   </category>
 

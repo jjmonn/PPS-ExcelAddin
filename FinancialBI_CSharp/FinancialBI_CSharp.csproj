@@ -110,6 +110,7 @@
     <Compile Include="MVC\Model\EntityDistributionModel.cs" />
     <Compile Include="MVC\Model\ExchangeRateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Updater\Updater.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\MultiIndexDictionary.cs" />
     <Compile Include="Utils\RightManager.cs" />

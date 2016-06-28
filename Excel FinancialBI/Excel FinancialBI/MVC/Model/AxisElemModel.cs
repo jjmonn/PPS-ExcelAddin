@@ -70,23 +70,41 @@ namespace FBI.MVC.Model
       return (count);
     }
 
-    public List<AxisElem> GetChildren(AxisType p_axisType, UInt32 l_parentId, bool p_includeParent = false)
+    public List<AxisElem> GetChildren(AxisType p_axisType, UInt32 p_parentId, bool p_includeParent = false)
     {
       List<AxisElem> l_list = new List<AxisElem>();
 
       if (p_includeParent)
       {
-        AxisElem l_parent = GetValue(l_parentId);
+        AxisElem l_parent = GetValue(p_parentId);
 
         if (l_parent != null)
           l_list.Add(l_parent);
       }
       foreach (AxisElem l_elem in this.GetDictionary(p_axisType).Values)
       {
-        if (l_elem.ParentId == l_parentId)
+        if (l_elem.ParentId == p_parentId)
           l_list.Add(l_elem);
       }
       return (l_list);
+    }
+
+    public List<AxisElem> GetChildrenRecurse(AxisType p_axisType, UInt32 p_parentId, bool p_includeParent = false)
+    {
+      List<AxisElem> l_list = GetChildren(p_axisType, p_parentId, false);
+      List<AxisElem> l_resultList = new List<AxisElem>();
+
+      foreach (AxisElem l_elem in l_list)
+        l_resultList.AddRange(GetChildrenRecurse(p_axisType, l_elem.Id));
+      l_resultList.AddRange(l_list);
+      if (p_includeParent)
+      {
+        AxisElem l_parent = GetValue(p_parentId);
+
+        if (l_parent != null)
+          l_resultList.Add(l_parent);
+      }
+      return (l_resultList);
     }
 
     public bool IsParent(AxisType p_axisType, UInt32 p_id)

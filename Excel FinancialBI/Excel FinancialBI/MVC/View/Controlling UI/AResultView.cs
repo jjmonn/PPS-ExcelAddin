@@ -26,10 +26,10 @@ namespace FBI.MVC.View
   partial class AResultView<TController> : UserControl, IResultView where TController : class, IResultController
   {
     protected vTabControl m_tabCtrl = new vTabControl();
-    protected delegate void DGVBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf, DGVDimension p_dimension,
+    private delegate void DGVBuilder(DGV p_dgv, UInt32 p_tabId, CUIDimensionConf p_conf, DGVDimension p_dimension,
     HierarchyItemsCollection p_parent, ResultKey p_parentKey);
-    protected SafeDictionary<Type, DGVBuilder> m_builderList = new SafeDictionary<Type, DGVBuilder>();
-    protected ComputeConfig m_computeConfig;
+    SafeDictionary<Type, DGVBuilder> m_builderList = new SafeDictionary<Type, DGVBuilder>();
+    ComputeConfig m_computeConfig;
     protected TController m_controller;
 
     #region Initialize
@@ -80,13 +80,22 @@ namespace FBI.MVC.View
       CollapseAllRightClick.Click += OnCollapseAllClick;
       ColumnsAutoSize.Click += OnColumnAutoSizeClick;
       ColumnsAutoFitBT.Click += OnAutoFitClick;
-      m_tabCtrl.TabDisplay += OnTabDisplay;
       LogRightClick.Click += OnLogClick;
+      m_tabCtrl.TabDisplay += OnTabDisplay;
     }
 
     #endregion
 
     #region User Callbacks
+
+    void OnTabDisplay(object sender, vTabMouseEventArgs p_e)
+    {
+      DGV l_dgv = p_e.TabPage.Controls[0] as DGV;
+      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
+      l_dgv.Refresh();
+      l_dgv.Refresh();
+    }
 
     void OnLogClick(object p_sender, EventArgs p_e)
     {
@@ -103,15 +112,6 @@ namespace FBI.MVC.View
       if (m_controller.ShowLog((l_key.EntityId == 0)
         ? m_computeConfig.Request.EntityId : l_key.EntityId, l_key.VersionId, l_key.AccountId, (UInt32)l_key.Period) == false)
         MessageBox.Show(m_controller.Error);
-    }
-
-    void OnTabDisplay(object sender, vTabMouseEventArgs p_e)
-    {
-      DGV l_dgv = p_e.TabPage.Controls[0] as DGV;
-      l_dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
-      l_dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
-      l_dgv.Refresh();
-      l_dgv.Refresh();
     }
 
     void OnExpandAllClick(object p_sender, EventArgs p_e)
@@ -166,6 +166,8 @@ namespace FBI.MVC.View
         {
           if (l_account.Process != (Account.AccountProcess)Properties.Settings.Default.processId)
             continue;
+          if (m_computeConfig.Request.AccountList.Count != 0 && !m_computeConfig.Request.AccountList.Contains(l_account.Id))
+            continue;
           vTabPage l_tab = new vTabPage(l_account.Name);
           DGV l_dgv = new DGV();
           l_dgv.ContextMenuStrip = m_dgvMenu;
@@ -180,6 +182,7 @@ namespace FBI.MVC.View
           l_dgv.Refresh();
         }
     }
+
 
     public delegate void FillDGV_delegate(SafeDictionary<uint, ComputeResult> p_data, bool p_sourced = false);
     public void FillDGV(SafeDictionary<uint, ComputeResult> p_data, bool p_sourced = false)
@@ -459,6 +462,8 @@ namespace FBI.MVC.View
       l_accountList.Sort();
       foreach (Account l_account in l_accountList)
       {
+        if (m_computeConfig.Request.AccountList.Count != 0 && !m_computeConfig.Request.AccountList.Contains(l_account.Id))
+          continue;
         if (l_account.ParentId != p_tabId)
           continue;
         if (l_account.Process != m_computeConfig.Request.Process || l_account.FormulaType == Account.FormulaTypes.TITLE)

@@ -103,7 +103,8 @@ namespace FBI.MVC.View
         m_controller.VersionId = AreaController.VersionId;
         if (AreaController.Entities.m_values == null || AreaController.Entities.m_values.Count != 1)
           m_controller.EntityId = 0;
-        m_controller.EntityId = AreaController.Entities.m_values.First().Value.Id;
+        else
+          m_controller.EntityId = AreaController.Entities.m_values.First().Value.Id;
         if (AreaController.IsValid() == false)
           return AreaController.GetDimensionError();
         m_controller.EditedFactModel.RegisterEditedFacts(AreaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
@@ -159,10 +160,10 @@ namespace FBI.MVC.View
       {
         try
         {
-          if ((double)p_cell.Value2 != l_result2)
+          if (p_cell.Value2 == null || (double)p_cell.Value2 != l_result2)
             p_cell.Value2 = l_result2;
         }
-        catch (InvalidCastException)
+        catch
         {
           p_cell.Value2 = l_result2;
         }

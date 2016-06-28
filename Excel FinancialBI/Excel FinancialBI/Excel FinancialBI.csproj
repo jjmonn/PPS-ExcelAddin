@@ -224,6 +224,7 @@
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
     <Compile Include="ExcelWorksheetEvents.cs" />
+    <Compile Include="Excel\WorksheetExtractor.cs" />
     <Compile Include="FinancialBiXLL.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -258,6 +259,8 @@
     <Compile Include="Forms\FlatFBITreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\AccountCreateSnapshotController.cs" />
+    <Compile Include="MVC\Controller\AccountEditSnapshotController.cs" />
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
     <Compile Include="MVC\Controller\AFBIFunctionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\AResultController.cs" />
@@ -396,6 +399,19 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
+    <Compile Include="MVC\View\AccountEditSnapshot.cs" />
+    <Compile Include="MVC\View\AccountSnapshotPropertiesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\AccountSnapshotPropertiesView.Designer.cs">
+      <DependentUpon>AccountSnapshotPropertiesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\AccountSnapshotSelectionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\AccountSnapshotSelectionView.Designer.cs">
+      <DependentUpon>AccountSnapshotSelectionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\CommitFollowUpView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -717,6 +733,12 @@
     <Compile Include="MVC\View\SettingsView.Designer.cs">
       <DependentUpon>SettingsView.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\ViewToWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\ViewToWindow.Designer.cs">
+      <DependentUpon>ViewToWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\SubmissionsControlUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -771,6 +793,7 @@
     <Compile Include="Utils\DGVFormatUtils.cs" />
     <Compile Include="Utils\ExcelFormatting.cs" />
     <Compile Include="Utils\ExcelUtils.cs" />
+    <Compile Include="Utils\ExchangeRateQuery.cs" />
     <Compile Include="Utils\Formats.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\Local.cs" />
@@ -794,6 +817,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FbiUserBox.resx">
       <DependentUpon>FbiUserBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\AccountSnapshotPropertiesView.resx">
+      <DependentUpon>AccountSnapshotPropertiesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\AccountSnapshotSelectionView.resx">
+      <DependentUpon>AccountSnapshotSelectionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
       <DependentUpon>CommitFollowUpView.cs</DependentUpon>
@@ -938,6 +967,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\SettingsView.resx">
       <DependentUpon>SettingsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\ViewToWindow.resx">
+      <DependentUpon>ViewToWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\SubmissionsControlUI.resx">
       <DependentUpon>SubmissionsControlUI.cs</DependentUpon>

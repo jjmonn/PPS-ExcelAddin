@@ -102,7 +102,8 @@ namespace FBI.MVC.View
 
       foreach (AxisElem l_entity in l_axisElemMID.SortedValues)
         FillPercentage(l_entity);
-
+      foreach (AxisElem l_entity in l_axisElemMID.SortedValues)
+        FillParents(l_entity.Id, 42);
       m_dgv.Dock = DockStyle.Fill;
       m_DGVPanel.Controls.Add(m_dgv);
     }
@@ -162,7 +163,7 @@ namespace FBI.MVC.View
     delegate void OnModelRead_delegate(ErrorMessage p_status, EntityDistribution p_attributes);
     private void OnModelRead(ErrorMessage p_status, EntityDistribution p_attributes)
     {
-      if (InvokeRequired)
+      if (m_dgv.InvokeRequired)
       {
         OnModelRead_delegate func = new OnModelRead_delegate(OnModelRead);
         Invoke(func, p_status, p_attributes);
@@ -216,7 +217,7 @@ namespace FBI.MVC.View
 
     private void FillPercentage(AxisElem p_entity)
     {
-      if (p_entity == null)
+      if (p_entity == null || m_account == null)
         return;
       m_isFillingPercentage = true;
 
@@ -248,6 +249,7 @@ namespace FBI.MVC.View
           l_value += (double)l_tmp;
       }
       m_dgv.FillField((UInt32)l_parent.ItemValue, p_colId, l_value);
+
       FillParents((UInt32)l_parent.ItemValue, p_colId);
     }
 

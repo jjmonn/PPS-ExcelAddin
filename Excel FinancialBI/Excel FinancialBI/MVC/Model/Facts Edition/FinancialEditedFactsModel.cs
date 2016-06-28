@@ -65,12 +65,13 @@ namespace FBI.MVC.Model
     {
       bool l_found = false;
 
-      foreach (ComputeResult l_result in p_result.Values)
-        if (RequestIdList.Contains(l_result.RequestId))
-        {
-          l_found = true;
-          RequestIdList.Remove(l_result.RequestId);
-        }
+      if (!(l_found = (p_status != ErrorMessage.SUCCESS)))
+        foreach (ComputeResult l_result in p_result.Values)
+          if (RequestIdList.Contains(l_result.RequestId))
+          {
+            l_found = true;
+            RequestIdList.Remove(l_result.RequestId);
+          }
       if (l_found)
         OnFinancialOutputsComputed(p_status, p_request, p_result);
     }
@@ -174,7 +175,7 @@ namespace FBI.MVC.Model
       RequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entitiesList, m_versionId, p_clientId, p_productId, p_adjustmentId));
       m_nbRequest++;
     }
-
+    
     private void OnFinancialInputDownloaded(ErrorMessage p_status, Int32 p_requestId, List<Fact> p_factsList)
     {
       if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
@@ -187,26 +188,52 @@ namespace FBI.MVC.Model
       SafeDictionary<DimensionKey, Fact> l_downloadedFactDic = new SafeDictionary<DimensionKey, Fact>();
       foreach (Fact l_fact in p_factsList)
         l_downloadedFactDic[new DimensionKey(l_fact.EntityId, l_fact.AccountId, (UInt32)AxisType.Employee, (Int32)l_fact.Period)] = l_fact;
+
       int l_count = 0;
       int l_nbFacts = EditedFacts.Count;
+      Version l_version = VersionModel.Instance.GetValue(m_versionId);
 
+      if (l_version != null)
       foreach (DimensionKey l_key in EditedFacts.SecondaryKeys)
       {
         l_count++;
-        EditedFinancialFact l_editedFact = EditedFacts[l_key];
-        if (l_editedFact != null)
-        {
-          Fact l_fact = l_downloadedFactDic[l_key];
-          l_downloadedFactDic.Remove(l_key);
+        List<AxisElem> l_entitiesList = AxisElemModel.Instance.GetChildrenRecurse(AxisType.Entities, l_key.EntityId, true);
 
-          if (l_fact == null)
+        EditedFinancialFact l_editedFact = EditedFacts[l_key];
+        EntityCurrency l_baseCurrency = EntityCurrencyModel.Instance.GetValue(l_key.EntityId);
+        double l_editedValue = l_editedFact.EditedValue;
+        double l_value = 0;
+
+        if (l_editedFact != null && l_baseCurrency != null)
+        {
+          foreach (AxisElem l_entity in l_entitiesList)
           {
-            l_fact = l_editedFact.Clone();
-            l_fact.Value = 0;
+            Fact l_fact = l_downloadedFactDic[new DimensionKey(l_entity.Id, l_key.AccountId, l_key.EmployeeId, l_key.Period)];
+            l_downloadedFactDic.Remove(l_key);
+
+            if (l_fact == null)
+            {
+              l_fact = l_editedFact.Clone();
+              l_fact.Value = 0;
+            }
+
+            Account l_account = AccountModel.Instance.GetValue(l_fact.AccountId);
+
+            if (l_account == null)
+              continue;
+            if (l_fact.Value != 0)
+            {
+              l_value += l_fact.Value *
+              Utils.ExchangeRateQuery.GetExchangeRateValue(l_entity.Id, l_baseCurrency.CurrencyId,
+              (Int32)l_fact.Period, l_version.RateVersionId, l_version.TimeConfiguration, l_account.ConversionOptionId);
+            }
+
+            l_editedFact.UpdateFinancialFact(l_fact);
           }
 
-          double l_editedValue = l_editedFact.EditedValue;
-          l_editedFact.UpdateFinancialFact(l_fact);
+          l_editedFact.Value = l_value;
+          l_editedFact.EditedValue = l_value;
+
           if (m_displayDiff)
             l_editedFact.EditedValue = l_editedValue;
           if (m_updateCellsOnDownload)
@@ -214,7 +241,6 @@ namespace FBI.MVC.Model
 
           if ((l_count % 50) == 0 && DownloadProgress != null)
             DownloadProgress((int)((l_count / (double)l_nbFacts) * 100));
-
         }
       }
       foreach (KeyValuePair<DimensionKey, Fact> l_pair in l_downloadedFactDic)

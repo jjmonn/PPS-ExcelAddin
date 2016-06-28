@@ -33,6 +33,5 @@ namespace FBI.MVC.View
         }
       }
     }
-
   }
 }
