@@ -513,6 +513,7 @@
 
   <category name="general">
     <category name="error">
+      <string name="worksheet_null">Aucune worksheet selectionnée</string>
       <string name="circular_dep">Référence circulaire.</string>
       <string name="system">Erreur système.</string>
       <string name="success">Succès</string>

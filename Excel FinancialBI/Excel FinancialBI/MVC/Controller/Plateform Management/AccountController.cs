@@ -73,8 +73,16 @@ namespace FBI.MVC.Controller
 
     public bool CreateAccountList(List<Account> p_accountList)
     {
+      int l_itemPosition = 0;
+
+      if (AccountModel.Instance.GetDictionary().Count != 0)
+      {
+        Account l_account = AccountModel.Instance.GetDictionary().SortedValues.Last();
+        l_itemPosition = l_account.ItemPosition + 1;
+      }
       foreach (Account l_account in p_accountList)
       {
+        l_account.ItemPosition = l_itemPosition++;
         if (l_account.Type == Account.AccountType.PERCENTAGE)
           l_account.PeriodAggregationOptionId = Account.PeriodAggregationOptions.NO_AGGREGATION;
         l_account.ConversionOptionId = (l_account.Type == Account.AccountType.MONETARY) ? Account.ConversionOptions.AVERAGE_RATE : Account.ConversionOptions.NO_CONVERSION;

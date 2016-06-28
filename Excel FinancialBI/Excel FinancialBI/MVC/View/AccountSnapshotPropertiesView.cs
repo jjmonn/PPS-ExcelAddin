@@ -62,6 +62,7 @@ namespace FBI.MVC.View
     {
       m_validateBT.Text = Local.GetValue("general.export_selected_account");
       this.Text = Local.GetValue("general.account_snapshot_properties");
+      copyDownToolStripMenuItem.Text = Local.GetValue("general.copy_down");
     }
 
     void LoadEditors()
@@ -159,8 +160,51 @@ namespace FBI.MVC.View
       m_accountTV.NodeChecked += OnAccountChecked;
       m_dgv.CellValidating += OnCellValidating;
       m_dgv.CellMouseClick += OnDGVCellMouseClick;
+      m_dgv.CellValueChanging += m_dgv_CellValueChanging;
       m_dgv.MouseClick += m_dgv_MouseClick;
       AccountModel.Instance.UpdateListEvent += OnUpdateList;
+      copyDownToolStripMenuItem.Click += copyDownToolStripMenuItem_Click;
+      m_dgv.ContextMenuStrip = contextMenuStrip1;
+    }
+
+    void copyDownToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      GridCell l_cell = m_dgv.HoveredCell;
+
+      if (l_cell == null)
+        return;
+
+      HierarchyItemsCollection l_collection = (m_dgv.HoveredRow.ParentItem == null) ? m_dgv.RowsHierarchy.Items : m_dgv.HoveredRow.ParentItem.Items;
+      for (int i = m_dgv.HoveredRow.ItemIndex; i < l_collection.Count; ++i)
+        OnCopyDown(l_cell.Value, (UInt32)l_collection[i].ItemValue, (UInt32)m_dgv.HoveredColumn.ItemValue);
+      m_dgv.Refresh();
+    }
+
+    protected virtual void OnCopyDown(object p_cellValue, UInt32 p_rowValue, UInt32 p_columnValue)
+    {
+      m_dgv.FillField(p_rowValue, p_columnValue, p_cellValue);
+    }
+
+    void m_dgv_CellValueChanging(object sender, CellValueChangingEventArgs p_args)
+    {
+      if ((uint)p_args.Cell.ColumnItem.ItemValue == (uint)Column.NAME)
+        return;
+      if ((uint)p_args.Cell.ColumnItem.ItemValue == (uint)Column.PARENT)
+      {
+        if (AccountModel.Instance.GetValue((string)p_args.NewValue) != null)
+          return;
+      }
+      else
+      {
+        ComboBoxEditor l_cb = (ComboBoxEditor)p_args.Cell.Editor;
+
+        foreach (ListItem l_value in l_cb.Items)
+        {
+          if (l_value.Text == (string)p_args.NewValue)
+            return;
+        }
+      }
+      p_args.Cancel = true;
     }
 
     void m_dgv_MouseClick(object sender, MouseEventArgs e)
