@@ -45,7 +45,15 @@ namespace FBI.MVC.Controller
     public AddinModuleController(AddinModule p_view)
     {
       m_view = p_view;
-      m_prevCalculationMode = p_view.ExcelApp.Calculation;
+      try
+      {
+        m_prevCalculationMode = p_view.ExcelApp.Calculation;
+      }
+      catch (Exception e)
+      {
+        System.Diagnostics.Debug.WriteLine("AddinModuleController, Public AddinModuleController() : " + e);
+        m_prevCalculationMode = XlCalculation.xlCalculationAutomatic;
+      }
     }
 
     public bool LaunchRHSnapshotView()

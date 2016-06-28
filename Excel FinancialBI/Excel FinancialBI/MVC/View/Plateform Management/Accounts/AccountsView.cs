@@ -38,6 +38,7 @@ namespace FBI.MVC.View
     SafeDictionary<Account.ConversionOptions, ListItem> m_currencyItemDict = new SafeDictionary<Account.ConversionOptions, ListItem>();
     SafeDictionary<Account.ConsolidationOptions, ListItem> m_consoOptionItemDict = new SafeDictionary<Account.ConsolidationOptions, ListItem>();
     SafeDictionary<Account.AccountProcess, ListItem> m_processIdItemDict = new SafeDictionary<Account.AccountProcess, ListItem>();
+    SafeDictionary<Account.Format, ListItem> m_formatItemDict = new SafeDictionary<Account.Format, ListItem>();
     bool m_dragAndDropFlag = false;
     bool m_isDisplayingAccountFlag = false;
     bool m_isEditingFormulaFlag = false;
@@ -199,6 +200,7 @@ namespace FBI.MVC.View
       m_rightMgr[m_formulaEditionButton] = Group.Permission.EDIT_ACCOUNT;
       m_rightMgr[CreateANewAccountToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
       m_rightMgr[CreateANewCategoryToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
+      m_rightMgr[m_formatCB] = Group.Permission.EDIT_ACCOUNT;
     }
 
     private void AccountsTVInit()
@@ -245,6 +247,7 @@ namespace FBI.MVC.View
       DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts.drop_to_excel");
       DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts.drop_selected_hierarchy_to_excel");
       HelpToolStripMenuItem.Text = Local.GetValue("general.help");
+      m_formatLabel.Text = Local.GetValue("accounts.format");
     }
 
     private void GlobalFactsTVInit()
@@ -296,6 +299,12 @@ namespace FBI.MVC.View
       AddListItem(ConsolidationOptionCB, m_consoOptionItemDict, "accounts.consolidation_type_recomputed", Account.ConsolidationOptions.RECOMPUTATION);
       AddListItem(ConsolidationOptionCB, m_consoOptionItemDict, "accounts.consolidation_type_none", Account.ConsolidationOptions.NONE);
       ConsolidationOptionCB.SelectedItemChanged += OnConsolidationOptionCBSelectedItemChanged;
+
+      AddListItem(m_formatCB, m_formatItemDict, "settings.important", Account.Format.important);
+      AddListItem(m_formatCB, m_formatItemDict, "settings.detail", Account.Format.detail);
+      AddListItem(m_formatCB, m_formatItemDict, "settings.title", Account.Format.title);
+      AddListItem(m_formatCB, m_formatItemDict, "settings.normal", Account.Format.normal);
+      m_formatCB.SelectedItemChanged += OnFormatCBSelectedItemChanged;
     }
 
     #endregion
@@ -517,7 +526,7 @@ namespace FBI.MVC.View
       {
         m_formulaTextBox.TextBox.SelectionLength = l_pair.Value.Length;
         m_formulaTextBox.TextBox.SelectionStart = l_pair.Key;
-        if (AccountModel.Instance.GetValue(l_pair.Value) == null)
+        if (AccountModel.Instance.GetValue(l_pair.Value) == null && GlobalFactModel.Instance.GetValue(l_pair.Value) == null)
         {
           m_formulaTextBox.TextBox.SelectionColor = Color.Red;
           m_formulaTextBox.TextBox.SelectionBackColor = Color.LightGray;
@@ -848,7 +857,7 @@ namespace FBI.MVC.View
       if (l_nameAccount == "")
         return;
       if (m_controller.CreateAccount(0, l_nameAccount, Account.AccountProcess.FINANCIAL, Account.FormulaTypes.TITLE, "", Account.AccountType.DATE, Account.ConsolidationOptions.AGGREGATION,
-        Account.PeriodAggregationOptions.AVERAGE_PERIOD, "t", (UInt32)Account.FormulaTypes.TITLE, m_accountTV.Nodes.Count) == false)
+        Account.PeriodAggregationOptions.AVERAGE_PERIOD, Account.Format.title, (UInt32)Account.FormulaTypes.TITLE, m_accountTV.Nodes.Count) == false)
         MsgBox.Show(m_controller.Error);
     }
 
@@ -1059,6 +1068,22 @@ namespace FBI.MVC.View
       {
         CurrencyCB.Visible = false;
         m_accountCurrenciesConversionLabel.Visible = false;
+      }
+    }
+
+    void OnFormatCBSelectedItemChanged(object p_sender, EventArgs p_e)
+    {
+      if (m_isDisplayingAccountFlag == false && m_currentNode != null)
+      {
+        Account l_currentAccount;
+
+        if ((l_currentAccount = AccountModel.Instance.GetValue(m_currentAccount)) != null && ((vComboBox)p_sender).SelectedItem != null)
+        {
+          l_currentAccount = l_currentAccount.Clone();
+          l_currentAccount.FormatId = (Account.Format)((vComboBox)p_sender).SelectedItem.Value;
+          if (m_controller.UpdateAccount(l_currentAccount) == false)
+            MsgBox.Show(m_controller.Error);
+        }
       }
     }
 
@@ -1276,6 +1301,10 @@ namespace FBI.MVC.View
           ConsolidationOptionCB.SelectedItem = consolidationLI;
         }
 
+        //Format
+        if (m_formatItemDict.ContainsKey(l_account.FormatId))
+          m_formatCB.SelectedItem = m_formatItemDict[l_account.FormatId];
+
         // Formula TB
         m_formulaTextBox.Text = "";
         if (m_controller.m_bnf.Parse(l_account.Formula, FbiGrammar.TO_HUMAN))
@@ -1342,6 +1371,11 @@ namespace FBI.MVC.View
       else
         m_formulaTextBox.BackColor = Color.White;
       ColorFormula();
+      if (!p_state)
+      {
+        m_autocomplete.Hide();
+        m_isValidAutoComplete = false;
+      }
     }
 
     #endregion

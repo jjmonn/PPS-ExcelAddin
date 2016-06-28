@@ -68,7 +68,7 @@ namespace FBI.MVC.Controller
         return (false);
       if (p_version.IsFolder == false && p_version.NbPeriod == 0)
       {
-        Error = Local.GetValue("version.error.nb_period");
+        Error = Local.GetValue("versions.error.nb_period");
         return (false);
       }
       if (p_version.ParentId != 0)
@@ -77,7 +77,7 @@ namespace FBI.MVC.Controller
 
         if (l_parentVersion == null || l_parentVersion.IsFolder == false)
         {
-          Error = Local.GetValue("version.error.invalid_parent");
+          Error = Local.GetValue("versions.error.invalid_parent");
           return (false);
         }
       }

@@ -224,6 +224,7 @@
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
     <Compile Include="ExcelWorksheetEvents.cs" />
+    <Compile Include="Excel\WorksheetExtractor.cs" />
     <Compile Include="FinancialBiXLL.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -258,7 +259,8 @@
     <Compile Include="Forms\FlatFBITreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MVC\Controller\AccountSnapshotController.cs" />
+    <Compile Include="MVC\Controller\AccountCreateSnapshotController.cs" />
+    <Compile Include="MVC\Controller\AccountEditSnapshotController.cs" />
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
     <Compile Include="MVC\Controller\AFBIFunctionController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
@@ -401,7 +403,19 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
-    <Compile Include="MVC\View\AccountSnapshot.cs" />
+    <Compile Include="MVC\View\AccountEditSnapshot.cs" />
+    <Compile Include="MVC\View\AccountSnapshotPropertiesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\AccountSnapshotPropertiesView.Designer.cs">
+      <DependentUpon>AccountSnapshotPropertiesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\AccountSnapshotSelectionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\AccountSnapshotSelectionView.Designer.cs">
+      <DependentUpon>AccountSnapshotSelectionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\CommitFollowUpView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -793,6 +807,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FbiUserBox.resx">
       <DependentUpon>FbiUserBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\AccountSnapshotPropertiesView.resx">
+      <DependentUpon>AccountSnapshotPropertiesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\AccountSnapshotSelectionView.resx">
+      <DependentUpon>AccountSnapshotSelectionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\CommitFollowUpView.resx">
       <DependentUpon>CommitFollowUpView.cs</DependentUpon>

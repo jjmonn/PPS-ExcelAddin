@@ -73,7 +73,7 @@ namespace FBI.MVC.View
 
     private void ComboBoxInit()
     {
-      InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.adjustment"), AxisType.Entities);
+      InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.adjustment"), AxisType.Adjustment);
       InitCBListItem<Filter>(Local.GetValue("CUI.dimension.adjustment_cat"), AxisType.Adjustment);
       InitCBListItem<AxisElem>(Local.GetValue("CUI.dimension.product"), AxisType.Product);
       InitCBListItem<Filter>(Local.GetValue("CUI.dimension.product_cat"), AxisType.Product);

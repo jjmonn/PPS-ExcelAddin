@@ -12,7 +12,7 @@ namespace FBI.MVC.View
   using Controller;
   using Utils;
 
-  class AccountSnapshot : IView
+  class AccountEditSnapshot : IView
   {
     enum Column
     {
@@ -27,13 +27,14 @@ namespace FBI.MVC.View
       ITEM_POSITION,
       DESCRIPTION,
       PROCESS,
+      FORMAT,
       UNDEFINED
     };
 
     const int m_nbColumns = 200;
     const int m_nbRows = 1000;
 
-    AccountSnapshotController m_controller;
+    AccountEditSnapshotController m_controller;
     SafeDictionary<string, Column> m_columnNameDic;
     SafeDictionary<Column, int> m_columnScanDic;
     Worksheet m_worksheet;
@@ -42,7 +43,7 @@ namespace FBI.MVC.View
 
     SafeDictionary<Column, Action<Account, object>> m_propertiesDic;
 
-    public AccountSnapshot(Worksheet p_worksheet)
+    public AccountEditSnapshot(Worksheet p_worksheet)
     {
       m_worksheet = p_worksheet;
       m_bnf = new BNF();
@@ -53,7 +54,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-      m_controller = p_controller as AccountSnapshotController;
+      m_controller = p_controller as AccountEditSnapshotController;
     }
 
     void BuildPropertiesDic()
@@ -70,6 +71,7 @@ namespace FBI.MVC.View
       m_propertiesDic[Column.PERIOD_AGGREGATION_OPTION] = ReadPeriodAggregationOption;
       m_propertiesDic[Column.ITEM_POSITION] = ReadItemPosition;
       m_propertiesDic[Column.DESCRIPTION] = ReadDescription;
+      m_propertiesDic[Column.FORMAT] = ReadFormat;
       m_propertiesDic[Column.PROCESS] = ReadProcess;
     }
 
@@ -97,16 +99,16 @@ namespace FBI.MVC.View
           continue;
         WriteReportValue(l_beginCell, Column.NAME, l_account.Name, l_index);
         WriteReportValue(l_beginCell, Column.PARENT, AccountModel.Instance.GetValueName(l_account.ParentId), l_index);
-        WriteReportValue(l_beginCell, Column.FORMULA_TYPE, ((Account.FormulaTypes)l_account.FormulaType).ToString(), l_index);
-        WriteReportValue(l_beginCell, Column.FORMULA_TYPE, ((Account.FormulaTypes)l_account.FormulaType).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.FORMULA_TYPE, (l_account.FormulaType).ToString(), l_index);
         WriteReportValue(l_beginCell, Column.FORMULA, m_bnf.Concatenated, l_index);
-        WriteReportValue(l_beginCell, Column.TYPE, ((Account.AccountType)l_account.Type).ToString(), l_index);
-        WriteReportValue(l_beginCell, Column.CONSOLIDATION_OPTION, ((Account.ConsolidationOptions)l_account.ConsolidationOptionId).ToString(), l_index);
-        WriteReportValue(l_beginCell, Column.CONVERSION_OPTION, ((Account.ConversionOptions)l_account.ConversionOptionId).ToString(), l_index);
-        WriteReportValue(l_beginCell, Column.PERIOD_AGGREGATION_OPTION, ((Account.PeriodAggregationOptions)l_account.PeriodAggregationOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.TYPE, (l_account.Type).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.CONSOLIDATION_OPTION, (l_account.ConsolidationOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.CONVERSION_OPTION, (l_account.ConversionOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.PERIOD_AGGREGATION_OPTION, (l_account.PeriodAggregationOptionId).ToString(), l_index);
         WriteReportValue(l_beginCell, Column.ITEM_POSITION, l_account.ItemPosition.ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.FORMAT, l_account.FormatId.ToString(), l_index);
         WriteReportValue(l_beginCell, Column.DESCRIPTION, l_account.Description, l_index);
-        WriteReportValue(l_beginCell, Column.PROCESS, ((Account.AccountProcess)l_account.Process).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.PROCESS, (l_account.Process).ToString(), l_index);
 
         l_index++;
       }
@@ -214,7 +216,9 @@ namespace FBI.MVC.View
 
     void ReadFormulaType(Account p_account, object p_value)
     {
-      p_account.FormulaType = (Account.FormulaTypes)Enum.Parse(typeof(Account.FormulaTypes), (string)p_value, true);
+      Account.FormulaTypes l_type = p_account.FormulaType;
+      Enum.TryParse<Account.FormulaTypes>((string)p_value, true, out l_type);
+      p_account.FormulaType = l_type;
     }
 
     void ReadFormula(Account p_account, object p_value)
@@ -226,17 +230,23 @@ namespace FBI.MVC.View
 
     void ReadConsolidationOption(Account p_account, object p_value)
     {
-      p_account.ConsolidationOptionId = (Account.ConsolidationOptions)Enum.Parse(typeof(Account.ConsolidationOptions), (string)p_value, true);
+      Account.ConsolidationOptions l_option = p_account.ConsolidationOptionId;
+      Enum.TryParse<Account.ConsolidationOptions>((string)p_value, true, out l_option);
+      p_account.ConsolidationOptionId = l_option;
     }
 
     void ReadConversionOption(Account p_account, object p_value)
     {
-      p_account.ConversionOptionId = (Account.ConversionOptions)Enum.Parse(typeof(Account.ConversionOptions), (string)p_value, true);
+      Account.ConversionOptions l_option = p_account.ConversionOptionId;
+      Enum.TryParse<Account.ConversionOptions>((string)p_value, true, out l_option);
+      p_account.ConversionOptionId = l_option;
     }
 
     void ReadPeriodAggregationOption(Account p_account, object p_value)
     {
-      p_account.PeriodAggregationOptionId = (Account.PeriodAggregationOptions)Enum.Parse(typeof(Account.PeriodAggregationOptions), (string)p_value, true);
+      Account.PeriodAggregationOptions l_option = p_account.PeriodAggregationOptionId;
+      Enum.TryParse<Account.PeriodAggregationOptions>((string)p_value, true, out l_option);
+      p_account.PeriodAggregationOptionId = l_option;
     }
 
     void ReadItemPosition(Account p_account, object p_value)
@@ -251,12 +261,23 @@ namespace FBI.MVC.View
 
     void ReadProcess(Account p_account, object p_value)
     {
-      p_account.Process = (Account.AccountProcess)Enum.Parse(typeof(Account.AccountProcess), (string)p_value, true);
+      Account.AccountProcess l_process = p_account.Process;
+      Enum.TryParse<Account.AccountProcess>((string)p_value, true, out l_process);
+      p_account.Process = l_process;
     }
 
     void ReadType(Account p_account, object p_value)
     {
-      p_account.Type = (Account.AccountType)Enum.Parse(typeof(Account.AccountType), (string)p_value, true);
+      Account.AccountType l_type = p_account.Type;
+      Enum.TryParse<Account.AccountType>((string)p_value, true, out l_type);
+      p_account.Type = l_type;
+    }
+
+    void ReadFormat(Account p_account, object p_value)
+    {
+      Account.Format l_format = p_account.FormatId;
+      Enum.TryParse<Account.Format>((string)p_value, true, out l_format);
+      p_account.FormatId = l_format;
     }
 
     #endregion

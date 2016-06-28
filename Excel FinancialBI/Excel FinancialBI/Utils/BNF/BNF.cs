@@ -29,10 +29,11 @@ namespace FBI.Utils
 
     private const char CHAR_DELIM = '\'';
     private const char STRING_DELIM = '\"';
+    private const char STRING_NO_CASE_DELIM = '^';
     private const char EVENT_DELIM = '~';
     private const char SPLIT_DELIM = '|';
     private const string OPTIONAL_DELIM = "[]";
-    private const string SYMBOLS = "$\'\"[*+";
+    private const string SYMBOLS = "$\'\"[*+^";
 
     public BNF()
     {
@@ -51,6 +52,7 @@ namespace FBI.Utils
       m_internalRules["$"] = RuleWhitespaces;
       m_internalRules["\'"] = RuleChar;
       m_internalRules["\""] = RuleString;
+      m_internalRules["^"] = RuleNoCaseString;
       m_internalRules["["] = RuleOptional;
       m_internalRules["*"] = RuleMultiple;
       m_internalRules["+"] = RuleSingleMore;
@@ -99,6 +101,8 @@ namespace FBI.Utils
       m_concatenated = m_input.Str;
       foreach (var l_elem in m_eventContent)
       {
+        if (l_elem.Item3 == null)
+          throw new Exception("BNF::BuildConcatenedString: \"" + l_elem.Item2 + "\"");
         m_concatenated = m_concatenated.Insert(l_elem.Item1 + l_ptr, l_elem.Item3);
         m_concatenated = m_concatenated.Remove(l_elem.Item1 + l_elem.Item3.Length + l_ptr, l_elem.Item2.Length);
         l_ptr += (l_elem.Item3.Length - l_elem.Item2.Length);
@@ -186,7 +190,7 @@ namespace FBI.Utils
           return (l_result && this.Concatenate(p_bnf, p_rule, l_result));
         }
       }
-      throw new Exception("BNF::EvalRule");
+      throw new Exception("BNF::EvalRule: \"" + p_rule.Name + "\"");
     }
 
     private bool EvalSimpleRuleList(Consumer p_bnf)
@@ -225,8 +229,9 @@ namespace FBI.Utils
 
     private void BuildLastError(Consumer p_bnf, Rule p_rule)
     {
-      if (m_input.Ptr > m_errorPtr && !m_internalRules.ContainsKey(p_rule.Name)) //Default rules are not considered as part of LastError
+      if (m_input.Ptr >= m_errorPtr && !m_internalRules.ContainsKey(p_rule.Name)) //Default rules are not considered as part of LastError
       {
+        m_errorPtr = m_input.Ptr;
         this.LastError = Local.GetValue("bnf.error.at") + " " + m_input.Ptr.ToString() + ": " + Local.GetValue("bnf.error." + p_rule.Name);
       }
     }
@@ -303,6 +308,18 @@ namespace FBI.Utils
         throw new Exception("BNF::RuleString");
       }
       return (m_input.ReadText(l_str));
+    }
+
+    private bool RuleNoCaseString(Consumer p_bnf)
+    {
+      string l_str = null;
+
+      p_bnf.Save("string");
+      if (!p_bnf.ReadTo(STRING_NO_CASE_DELIM) || !p_bnf.Stop("string", out l_str) || !p_bnf.ReadChar(STRING_NO_CASE_DELIM))
+      {
+        throw new Exception("BNF::RuleNoCaseString");
+      }
+      return (m_input.ReadTextNoCase(l_str));
     }
 
     private bool RuleOptional(Consumer p_bnf)

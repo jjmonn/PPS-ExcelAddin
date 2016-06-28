@@ -68,8 +68,31 @@ namespace FBI.MVC.Controller
 
     public bool UpdateAccountList(List<Account> p_accountList)
     {
-      AccountModel.Instance.UpdateList(p_accountList, CRUDAction.UPDATE);
-      return (true);
+      return (AccountModel.Instance.UpdateList(p_accountList, CRUDAction.UPDATE));
+    }
+
+    public bool CreateAccountList(List<Account> p_accountList)
+    {
+      int l_itemPosition = 0;
+
+      if (AccountModel.Instance.GetDictionary().Count != 0)
+      {
+        Account l_account = AccountModel.Instance.GetDictionary().SortedValues.Last();
+        l_itemPosition = l_account.ItemPosition + 1;
+      }
+      foreach (Account l_account in p_accountList)
+      {
+        l_account.ItemPosition = l_itemPosition++;
+        if (l_account.Type == Account.AccountType.PERCENTAGE)
+          l_account.PeriodAggregationOptionId = Account.PeriodAggregationOptions.NO_AGGREGATION;
+        l_account.ConversionOptionId = (l_account.Type == Account.AccountType.MONETARY) ? Account.ConversionOptions.AVERAGE_RATE : Account.ConversionOptions.NO_CONVERSION;
+        if (CheckAccountValidity(l_account) == false)
+        {
+          Error = Local.GetValue("accounts.error.create") + " \"" + l_account.Name + "\": " + Error;
+          return (false);
+        }
+      }
+      return (AccountModel.Instance.UpdateList(p_accountList, CRUDAction.CREATE));
     }
 
     public bool UpdateAccount(Account p_account)
@@ -146,13 +169,15 @@ namespace FBI.MVC.Controller
       else if (IsNameValid(p_account.Name) == false)
         return (false);
       else if (p_account.ParentId != 0 && AccountModel.Instance.GetValue(p_account.ParentId) == null)
-        Error = Local.GetValue("general.error.invalid_attribute");
+        Error = Local.GetValue("accounts.error.invalid_parent");
       else if (Enum.IsDefined(typeof(Account.AccountProcess), p_account.Process) == false)
-        Error = Local.GetValue("general.error.invalid_attribute");
+        Error = Local.GetValue("accounts.error.invalid_process");
       else if (Enum.IsDefined(typeof(Account.AccountType), p_account.Type) == false)
-        Error = Local.GetValue("general.error.invalid_attribute");
+        Error = Local.GetValue("accounts.error.invalid_type");
       else if (Enum.IsDefined(typeof(Account.ConsolidationOptions), p_account.ConsolidationOptionId) == false)
-        Error = Local.GetValue("general.error.invalid_attribute");
+        Error = Local.GetValue("accounts.error.invalid_consolidation");
+      else if (Enum.IsDefined(typeof(Account.Format), p_account.FormatId) == false)
+        Error = Local.GetValue("accounts.error.invalid_format");
       else
         return (true);
       return (false);
@@ -185,7 +210,7 @@ namespace FBI.MVC.Controller
 
     public bool CreateAccount(UInt32 p_parentId, string p_name, Account.AccountProcess p_process, Account.FormulaTypes p_formulaType, string p_formula,
       Account.AccountType p_type, Account.ConsolidationOptions p_consolidationOptionId, Account.PeriodAggregationOptions p_periodAggregationOptionId,
-      string p_formatId, UInt32 p_image, Int32 p_itemPosition)
+      Account.Format p_formatId, UInt32 p_image, Int32 p_itemPosition)
     {
       Account l_new = new Account();
 

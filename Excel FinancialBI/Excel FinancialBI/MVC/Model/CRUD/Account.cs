@@ -67,6 +67,13 @@ namespace FBI.MVC.Model.CRUD
      TITLES
     }
 
+    public enum Format
+    {
+      normal,
+      title,
+      important,
+      detail
+    }
 
     #endregion
 
@@ -79,14 +86,23 @@ namespace FBI.MVC.Model.CRUD
     public ConsolidationOptions ConsolidationOptionId { get; set; }
     public ConversionOptions ConversionOptionId { get; set; }
     public PeriodAggregationOptions PeriodAggregationOptionId { get; set; }
-    public string FormatId { private get; set; }  //< Obsolete
+    public Format FormatId { get; set; } 
     public UInt32 Image { get; set; }
     public Int32 ItemPosition { get; set; }
     public Int32 AccountTab { get; set; }
     public string Description { get; set; }
     public AccountProcess Process { get; set; }
 
-    public Account() { Process = AccountProcess.FINANCIAL; }
+    public Account() 
+    {
+      Type = AccountType.NUMBER;
+      ConsolidationOptionId = ConsolidationOptions.AGGREGATION;
+      ConversionOptionId = ConversionOptions.END_OF_PERIOD_RATE;
+      PeriodAggregationOptionId = PeriodAggregationOptions.SUM_OF_PERIODS;
+      Process = AccountProcess.FINANCIAL;
+      FormulaType = FormulaTypes.HARD_VALUE_INPUT;
+    }
+
     private Account(UInt32 p_id)
     {
       Id = p_id;
@@ -104,7 +120,7 @@ namespace FBI.MVC.Model.CRUD
       l_account.PeriodAggregationOptionId = (PeriodAggregationOptions)p_packet.ReadUint32();
       l_account.ConsolidationOptionId = (ConsolidationOptions)p_packet.ReadUint32();
       l_account.ConversionOptionId = (ConversionOptions)p_packet.ReadInt32();
-      l_account.FormatId = p_packet.ReadString();
+      l_account.FormatId = (Format)p_packet.ReadUint8();
       l_account.Image = p_packet.ReadUint32();
       l_account.ItemPosition = p_packet.ReadInt32();
       l_account.AccountTab = p_packet.ReadInt32();
@@ -129,7 +145,7 @@ namespace FBI.MVC.Model.CRUD
       p_packet.WriteInt32((Int32)PeriodAggregationOptionId);
       p_packet.WriteInt32((Int32)ConsolidationOptionId);
       p_packet.WriteInt32((Int32)ConversionOptionId);
-      p_packet.WriteString(FormatId);
+      p_packet.WriteUint8((byte)FormatId);
       p_packet.WriteUint32(Image);
       p_packet.WriteInt32(ItemPosition);
       p_packet.WriteInt32(AccountTab);
