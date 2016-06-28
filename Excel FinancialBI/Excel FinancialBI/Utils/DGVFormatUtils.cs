@@ -37,7 +37,7 @@ namespace FBI.Utils
     private static void InitItemsFormat(VIBLEND_THEME p_theme)
     {
       InitHierarchyStyle(p_theme, (int)Format.normal, S.Default.normalFontBold, S.Default.normalFontItalic);
-      InitHierarchyStyle(p_theme, (int)Format.detail, S.Default.detailFontBold, S.Default.detailFontBold);
+      InitHierarchyStyle(p_theme, (int)Format.detail, S.Default.detailFontBold, S.Default.detailFontItalic);
       InitHierarchyStyle(p_theme, (int)Format.important, S.Default.importantFontBold, S.Default.importantFontItalic);
       InitHierarchyStyle(p_theme, (int)Format.title, S.Default.titleFontBold, S.Default.titleFontItalic);
     }
