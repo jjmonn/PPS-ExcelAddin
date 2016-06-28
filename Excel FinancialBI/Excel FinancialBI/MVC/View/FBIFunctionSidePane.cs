@@ -50,6 +50,7 @@ namespace FBI.MVC.View
       {
         m_controller = new FBIFunctionViewController(this);
         m_view = m_controller.View as FBIFunctionView;
+        m_view.Dock = DockStyle.Fill;
         m_view.m_extractBT.Click += OnExtractClick;
         m_worksheetEvents.SelectionChanged += WorksheetEvents_SelectionChanged;
       }
