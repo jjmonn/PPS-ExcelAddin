@@ -47,6 +47,7 @@ namespace FBI.MVC.Controller
     {
       ComputeConfig l_config = new ComputeConfig();
       LegacyComputeRequest l_request = new LegacyComputeRequest();
+      Version l_version = VersionModel.Instance.GetValue(p_request.VersionId);
 
       l_request.AccountList = p_request.AccountList;
       l_request.CurrencyId = p_request.CurrencyId;
@@ -66,6 +67,7 @@ namespace FBI.MVC.Controller
           l_request.EntityId = l_topEntity.Id;
       }
 
+      l_config.BaseTimeConfig = (l_version != null) ? l_version.TimeConfiguration : TimeConfig.YEARS;
       l_config.Rows = m_dims[p_row];
       l_config.Columns = m_dims[p_column];
       l_config.Request = l_request;
