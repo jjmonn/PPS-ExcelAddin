@@ -56,7 +56,8 @@ namespace FBI.MVC.Controller
         {
           if (l_index % 10 == 0)
             m_refreshProgress.Value = l_index;
-          l_cell.Formula = l_cell.Formula;
+          if (l_cell.Formula != null && (string)l_cell.Formula != "" && ((string)l_cell.Formula)[0] == '=')
+            l_cell.Formula = l_cell.Formula;
           ++l_index;
         }
 
