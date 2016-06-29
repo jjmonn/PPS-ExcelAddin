@@ -271,6 +271,8 @@ namespace FBI
             MessageBox.Show(m_controller.Error);
         }
       }
+      else
+        MessageBox.Show(Local.GetValue("general.error.no_version_selected"));
     }
 
     private void m_directoryRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -280,7 +282,8 @@ namespace FBI
 
     private void m_reportUploadRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      m_controller.LaunchReportEdition();
+      if (m_controller.LaunchReportEdition() == false)
+        MessageBox.Show(m_controller.Error);
     }
 
     private void m_CUIRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
