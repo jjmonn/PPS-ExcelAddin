@@ -74,16 +74,18 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // m_validateButton
       // 
       this.m_validateButton.AllowAnimations = true;
+      this.m_validateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.m_validateButton.BackColor = System.Drawing.Color.Transparent;
       this.m_validateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
       this.m_validateButton.FlatAppearance.BorderSize = 0;
       this.m_validateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_validateButton.ImageKey = "submit 1 ok.ico";
       this.m_validateButton.ImageList = this.ButtonsIL;
-      this.m_validateButton.Location = new System.Drawing.Point(379, 411);
+      this.m_validateButton.Location = new System.Drawing.Point(538, 354);
+      this.m_validateButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_validateButton.Name = "m_validateButton";
       this.m_validateButton.RoundedCornersMask = ((byte)(15));
-      this.m_validateButton.Size = new System.Drawing.Size(114, 27);
+      this.m_validateButton.Size = new System.Drawing.Size(152, 31);
       this.m_validateButton.TabIndex = 10;
       this.m_validateButton.Text = "Insert formula";
       this.m_validateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -99,9 +101,12 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       // TableLayoutPanel1
       // 
+      this.TableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.TableLayoutPanel1.ColumnCount = 2;
-      this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.48327F));
-      this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.51673F));
+      this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.40351F));
+      this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.59649F));
       this.TableLayoutPanel1.Controls.Add(this.m_aggregationCB, 1, 4);
       this.TableLayoutPanel1.Controls.Add(this.m_periodCB, 1, 5);
       this.TableLayoutPanel1.Controls.Add(this.m_adjustmentTree, 1, 8);
@@ -122,20 +127,23 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.TableLayoutPanel1.Controls.Add(this.m_periodLabel, 0, 5);
       this.TableLayoutPanel1.Controls.Add(this.m_versionLabel, 0, 2);
       this.TableLayoutPanel1.Controls.Add(this.m_aggregationLabel, 0, 4);
-      this.TableLayoutPanel1.Location = new System.Drawing.Point(37, 38);
+      this.TableLayoutPanel1.Controls.Add(this.m_validateButton, 1, 10);
+      this.TableLayoutPanel1.Location = new System.Drawing.Point(4, 40);
+      this.TableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.TableLayoutPanel1.Name = "TableLayoutPanel1";
-      this.TableLayoutPanel1.RowCount = 10;
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-      this.TableLayoutPanel1.Size = new System.Drawing.Size(459, 351);
+      this.TableLayoutPanel1.RowCount = 11;
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090909F));
+      this.TableLayoutPanel1.Size = new System.Drawing.Size(694, 389);
       this.TableLayoutPanel1.TabIndex = 39;
       // 
       // m_aggregationCB
@@ -146,11 +154,12 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_aggregationCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_aggregationCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_aggregationCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_aggregationCB.DropDownWidth = 314;
-      this.m_aggregationCB.Location = new System.Drawing.Point(142, 143);
+      this.m_aggregationCB.DropDownWidth = 434;
+      this.m_aggregationCB.Location = new System.Drawing.Point(256, 144);
+      this.m_aggregationCB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_aggregationCB.Name = "m_aggregationCB";
       this.m_aggregationCB.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_aggregationCB.Size = new System.Drawing.Size(314, 29);
+      this.m_aggregationCB.Size = new System.Drawing.Size(434, 27);
       this.m_aggregationCB.TabIndex = 43;
       this.m_aggregationCB.UseThemeBackColor = false;
       this.m_aggregationCB.UseThemeDropDownArrowColor = true;
@@ -166,11 +175,12 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_periodCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_periodCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_periodCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_periodCB.DropDownWidth = 314;
-      this.m_periodCB.Location = new System.Drawing.Point(142, 178);
+      this.m_periodCB.DropDownWidth = 434;
+      this.m_periodCB.Location = new System.Drawing.Point(256, 179);
+      this.m_periodCB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_periodCB.Name = "m_periodCB";
       this.m_periodCB.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_periodCB.Size = new System.Drawing.Size(314, 29);
+      this.m_periodCB.Size = new System.Drawing.Size(434, 27);
       this.m_periodCB.TabIndex = 41;
       this.m_periodCB.UseThemeBackColor = false;
       this.m_periodCB.UseThemeDropDownArrowColor = true;
@@ -186,9 +196,10 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_adjustmentTree.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_adjustmentTree.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_adjustmentTree.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_adjustmentTree.Location = new System.Drawing.Point(142, 283);
+      this.m_adjustmentTree.Location = new System.Drawing.Point(256, 284);
+      this.m_adjustmentTree.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_adjustmentTree.Name = "m_adjustmentTree";
-      this.m_adjustmentTree.Size = new System.Drawing.Size(314, 29);
+      this.m_adjustmentTree.Size = new System.Drawing.Size(434, 27);
       this.m_adjustmentTree.TabIndex = 8;
       this.m_adjustmentTree.UseThemeBackColor = false;
       this.m_adjustmentTree.UseThemeDropDownArrowColor = true;
@@ -202,9 +213,10 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_productTree.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_productTree.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_productTree.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_productTree.Location = new System.Drawing.Point(142, 248);
+      this.m_productTree.Location = new System.Drawing.Point(256, 249);
+      this.m_productTree.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_productTree.Name = "m_productTree";
-      this.m_productTree.Size = new System.Drawing.Size(314, 29);
+      this.m_productTree.Size = new System.Drawing.Size(434, 27);
       this.m_productTree.TabIndex = 7;
       this.m_productTree.UseThemeBackColor = false;
       this.m_productTree.UseThemeDropDownArrowColor = true;
@@ -218,9 +230,10 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_categoriesFilterTree.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_categoriesFilterTree.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_categoriesFilterTree.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_categoriesFilterTree.Location = new System.Drawing.Point(142, 318);
+      this.m_categoriesFilterTree.Location = new System.Drawing.Point(256, 319);
+      this.m_categoriesFilterTree.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_categoriesFilterTree.Name = "m_categoriesFilterTree";
-      this.m_categoriesFilterTree.Size = new System.Drawing.Size(314, 30);
+      this.m_categoriesFilterTree.Size = new System.Drawing.Size(434, 27);
       this.m_categoriesFilterTree.TabIndex = 9;
       this.m_categoriesFilterTree.UseThemeBackColor = false;
       this.m_categoriesFilterTree.UseThemeDropDownArrowColor = true;
@@ -233,10 +246,11 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_categoryFilterLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_categoryFilterLabel.Ellipsis = false;
       this.m_categoryFilterLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_categoryFilterLabel.Location = new System.Drawing.Point(3, 318);
+      this.m_categoryFilterLabel.Location = new System.Drawing.Point(4, 319);
+      this.m_categoryFilterLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_categoryFilterLabel.Multiline = true;
       this.m_categoryFilterLabel.Name = "m_categoryFilterLabel";
-      this.m_categoryFilterLabel.Size = new System.Drawing.Size(133, 30);
+      this.m_categoryFilterLabel.Size = new System.Drawing.Size(244, 27);
       this.m_categoryFilterLabel.TabIndex = 38;
       this.m_categoryFilterLabel.Text = "Categories filter";
       this.m_categoryFilterLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -251,11 +265,12 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_currencyCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_currencyCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_currencyCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_currencyCB.DropDownWidth = 314;
-      this.m_currencyCB.Location = new System.Drawing.Point(142, 108);
+      this.m_currencyCB.DropDownWidth = 434;
+      this.m_currencyCB.Location = new System.Drawing.Point(256, 109);
+      this.m_currencyCB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_currencyCB.Name = "m_currencyCB";
       this.m_currencyCB.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_currencyCB.Size = new System.Drawing.Size(314, 29);
+      this.m_currencyCB.Size = new System.Drawing.Size(434, 27);
       this.m_currencyCB.TabIndex = 4;
       this.m_currencyCB.UseThemeBackColor = false;
       this.m_currencyCB.UseThemeDropDownArrowColor = true;
@@ -267,12 +282,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       this.m_productFilterLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_productFilterLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_productFilterLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_productFilterLabel.Ellipsis = false;
       this.m_productFilterLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_productFilterLabel.Location = new System.Drawing.Point(3, 248);
+      this.m_productFilterLabel.Location = new System.Drawing.Point(4, 249);
+      this.m_productFilterLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_productFilterLabel.Multiline = true;
       this.m_productFilterLabel.Name = "m_productFilterLabel";
-      this.m_productFilterLabel.Size = new System.Drawing.Size(123, 24);
+      this.m_productFilterLabel.Size = new System.Drawing.Size(244, 27);
       this.m_productFilterLabel.TabIndex = 36;
       this.m_productFilterLabel.Text = "Products filter";
       this.m_productFilterLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -283,12 +300,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       this.m_clientFilterLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_clientFilterLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_clientFilterLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_clientFilterLabel.Ellipsis = false;
       this.m_clientFilterLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_clientFilterLabel.Location = new System.Drawing.Point(3, 213);
+      this.m_clientFilterLabel.Location = new System.Drawing.Point(4, 214);
+      this.m_clientFilterLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_clientFilterLabel.Multiline = true;
       this.m_clientFilterLabel.Name = "m_clientFilterLabel";
-      this.m_clientFilterLabel.Size = new System.Drawing.Size(123, 24);
+      this.m_clientFilterLabel.Size = new System.Drawing.Size(244, 27);
       this.m_clientFilterLabel.TabIndex = 35;
       this.m_clientFilterLabel.Text = "Clients filter";
       this.m_clientFilterLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -299,12 +318,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       this.m_currencyLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_currencyLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_currencyLabel.Ellipsis = false;
       this.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_currencyLabel.Location = new System.Drawing.Point(3, 108);
+      this.m_currencyLabel.Location = new System.Drawing.Point(4, 109);
+      this.m_currencyLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_currencyLabel.Multiline = true;
       this.m_currencyLabel.Name = "m_currencyLabel";
-      this.m_currencyLabel.Size = new System.Drawing.Size(123, 24);
+      this.m_currencyLabel.Size = new System.Drawing.Size(244, 27);
       this.m_currencyLabel.TabIndex = 33;
       this.m_currencyLabel.Text = "Currency";
       this.m_currencyLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -318,10 +339,11 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_entityLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_entityLabel.Ellipsis = false;
       this.m_entityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_entityLabel.Location = new System.Drawing.Point(3, 3);
+      this.m_entityLabel.Location = new System.Drawing.Point(4, 4);
+      this.m_entityLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_entityLabel.Multiline = true;
       this.m_entityLabel.Name = "m_entityLabel";
-      this.m_entityLabel.Size = new System.Drawing.Size(133, 29);
+      this.m_entityLabel.Size = new System.Drawing.Size(244, 27);
       this.m_entityLabel.TabIndex = 30;
       this.m_entityLabel.Text = "Entity";
       this.m_entityLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -332,12 +354,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       this.m_accountLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_accountLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_accountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_accountLabel.Ellipsis = false;
       this.m_accountLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_accountLabel.Location = new System.Drawing.Point(3, 38);
+      this.m_accountLabel.Location = new System.Drawing.Point(4, 39);
+      this.m_accountLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_accountLabel.Multiline = true;
       this.m_accountLabel.Name = "m_accountLabel";
-      this.m_accountLabel.Size = new System.Drawing.Size(123, 24);
+      this.m_accountLabel.Size = new System.Drawing.Size(244, 27);
       this.m_accountLabel.TabIndex = 31;
       this.m_accountLabel.Text = "Account";
       this.m_accountLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -348,12 +372,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       this.m_adjustmentFilterLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_adjustmentFilterLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_adjustmentFilterLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_adjustmentFilterLabel.Ellipsis = false;
       this.m_adjustmentFilterLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_adjustmentFilterLabel.Location = new System.Drawing.Point(3, 283);
+      this.m_adjustmentFilterLabel.Location = new System.Drawing.Point(4, 284);
+      this.m_adjustmentFilterLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_adjustmentFilterLabel.Multiline = true;
       this.m_adjustmentFilterLabel.Name = "m_adjustmentFilterLabel";
-      this.m_adjustmentFilterLabel.Size = new System.Drawing.Size(123, 24);
+      this.m_adjustmentFilterLabel.Size = new System.Drawing.Size(244, 27);
       this.m_adjustmentFilterLabel.TabIndex = 37;
       this.m_adjustmentFilterLabel.Text = "Adjustments filter";
       this.m_adjustmentFilterLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -368,9 +394,10 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_entityTree.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_entityTree.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_entityTree.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_entityTree.Location = new System.Drawing.Point(142, 3);
+      this.m_entityTree.Location = new System.Drawing.Point(256, 4);
+      this.m_entityTree.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_entityTree.Name = "m_entityTree";
-      this.m_entityTree.Size = new System.Drawing.Size(314, 29);
+      this.m_entityTree.Size = new System.Drawing.Size(434, 27);
       this.m_entityTree.TabIndex = 1;
       this.m_entityTree.UseThemeBackColor = false;
       this.m_entityTree.UseThemeDropDownArrowColor = true;
@@ -384,9 +411,10 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_accountTree.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_accountTree.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_accountTree.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_accountTree.Location = new System.Drawing.Point(142, 38);
+      this.m_accountTree.Location = new System.Drawing.Point(256, 39);
+      this.m_accountTree.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_accountTree.Name = "m_accountTree";
-      this.m_accountTree.Size = new System.Drawing.Size(314, 29);
+      this.m_accountTree.Size = new System.Drawing.Size(434, 27);
       this.m_accountTree.TabIndex = 2;
       this.m_accountTree.UseThemeBackColor = false;
       this.m_accountTree.UseThemeDropDownArrowColor = true;
@@ -400,9 +428,10 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_clientTree.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_clientTree.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_clientTree.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_clientTree.Location = new System.Drawing.Point(142, 213);
+      this.m_clientTree.Location = new System.Drawing.Point(256, 214);
+      this.m_clientTree.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_clientTree.Name = "m_clientTree";
-      this.m_clientTree.Size = new System.Drawing.Size(314, 29);
+      this.m_clientTree.Size = new System.Drawing.Size(434, 27);
       this.m_clientTree.TabIndex = 6;
       this.m_clientTree.UseThemeBackColor = false;
       this.m_clientTree.UseThemeDropDownArrowColor = true;
@@ -416,9 +445,10 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       this.m_versionTree.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_versionTree.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_versionTree.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_versionTree.Location = new System.Drawing.Point(142, 73);
+      this.m_versionTree.Location = new System.Drawing.Point(256, 74);
+      this.m_versionTree.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_versionTree.Name = "m_versionTree";
-      this.m_versionTree.Size = new System.Drawing.Size(314, 29);
+      this.m_versionTree.Size = new System.Drawing.Size(434, 27);
       this.m_versionTree.TabIndex = 5;
       this.m_versionTree.UseThemeBackColor = false;
       this.m_versionTree.UseThemeDropDownArrowColor = true;
@@ -428,12 +458,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       this.m_periodLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_periodLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_periodLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_periodLabel.Ellipsis = false;
       this.m_periodLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_periodLabel.Location = new System.Drawing.Point(3, 178);
+      this.m_periodLabel.Location = new System.Drawing.Point(4, 179);
+      this.m_periodLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_periodLabel.Multiline = true;
       this.m_periodLabel.Name = "m_periodLabel";
-      this.m_periodLabel.Size = new System.Drawing.Size(123, 24);
+      this.m_periodLabel.Size = new System.Drawing.Size(244, 27);
       this.m_periodLabel.TabIndex = 32;
       this.m_periodLabel.Text = "Period";
       this.m_periodLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -444,12 +476,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       this.m_versionLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_versionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_versionLabel.Ellipsis = false;
       this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionLabel.Location = new System.Drawing.Point(3, 73);
+      this.m_versionLabel.Location = new System.Drawing.Point(4, 74);
+      this.m_versionLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_versionLabel.Multiline = true;
       this.m_versionLabel.Name = "m_versionLabel";
-      this.m_versionLabel.Size = new System.Drawing.Size(123, 24);
+      this.m_versionLabel.Size = new System.Drawing.Size(244, 27);
       this.m_versionLabel.TabIndex = 40;
       this.m_versionLabel.Text = "Version";
       this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -460,12 +494,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       this.m_aggregationLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_aggregationLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_aggregationLabel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_aggregationLabel.Ellipsis = false;
       this.m_aggregationLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_aggregationLabel.Location = new System.Drawing.Point(3, 143);
+      this.m_aggregationLabel.Location = new System.Drawing.Point(4, 144);
+      this.m_aggregationLabel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_aggregationLabel.Multiline = true;
       this.m_aggregationLabel.Name = "m_aggregationLabel";
-      this.m_aggregationLabel.Size = new System.Drawing.Size(80, 25);
+      this.m_aggregationLabel.Size = new System.Drawing.Size(244, 27);
       this.m_aggregationLabel.TabIndex = 42;
       this.m_aggregationLabel.Text = "Aggregation";
       this.m_aggregationLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -482,11 +518,13 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // m_extractBT
       // 
       this.m_extractBT.AllowAnimations = true;
+      this.m_extractBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.m_extractBT.BackColor = System.Drawing.Color.Transparent;
-      this.m_extractBT.Location = new System.Drawing.Point(507, 3);
+      this.m_extractBT.Location = new System.Drawing.Point(673, 4);
+      this.m_extractBT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.m_extractBT.Name = "m_extractBT";
       this.m_extractBT.RoundedCornersMask = ((byte)(15));
-      this.m_extractBT.Size = new System.Drawing.Size(19, 22);
+      this.m_extractBT.Size = new System.Drawing.Size(25, 27);
       this.m_extractBT.TabIndex = 40;
       this.m_extractBT.Text = ">";
       this.m_extractBT.UseVisualStyleBackColor = false;
@@ -494,14 +532,14 @@ partial class FBIFunctionView : System.Windows.Forms.UserControl
       // 
       // FBIFunctionView
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
       this.Controls.Add(this.m_extractBT);
       this.Controls.Add(this.TableLayoutPanel1);
-      this.Controls.Add(this.m_validateButton);
+      this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
       this.Name = "FBIFunctionView";
-      this.Size = new System.Drawing.Size(529, 450);
+      this.Size = new System.Drawing.Size(702, 445);
       this.TableLayoutPanel1.ResumeLayout(false);
       this.ResumeLayout(false);
 

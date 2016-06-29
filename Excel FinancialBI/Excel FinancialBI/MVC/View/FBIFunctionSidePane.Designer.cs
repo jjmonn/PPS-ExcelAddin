@@ -33,7 +33,7 @@ namespace FBI.MVC.View
       // 
       // FBIFunctionSidePane
       // 
-      this.ClientSize = new System.Drawing.Size(300, 300);
+      this.ClientSize = new System.Drawing.Size(290, 437);
       this.Location = new System.Drawing.Point(0, 0);
       this.Name = "FBIFunctionSidePane";
       this.ShowIcon = false;
