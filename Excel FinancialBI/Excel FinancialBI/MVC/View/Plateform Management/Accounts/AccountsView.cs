@@ -439,7 +439,7 @@ namespace FBI.MVC.View
       int l_width = 0;
 
       foreach (char c in p_str)
-        l_width += (Char.IsUpper(c)) ? 10 : 5;
+        l_width += (Char.IsUpper(c)) ? 8 : 5;
       return (l_width);
     }
 
