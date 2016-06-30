@@ -50,10 +50,10 @@ namespace FBI.Utils
       if (l_currency == null)
         return;
       
-      FbiAccountFormat l_titleFormat = new  FbiAccountFormat("t");
-      FbiAccountFormat l_importantFormat = new FbiAccountFormat("i");
-      FbiAccountFormat l_normalFormat = new FbiAccountFormat("n");
-      FbiAccountFormat l_detailFormat = new FbiAccountFormat("d");
+      FbiAccountFormat l_titleFormat = new  FbiAccountFormat(Account.Format.title);
+      FbiAccountFormat l_importantFormat = new FbiAccountFormat(Account.Format.important);
+      FbiAccountFormat l_normalFormat = new FbiAccountFormat(Account.Format.normal);
+      FbiAccountFormat l_detailFormat = new FbiAccountFormat(Account.Format.detail);
 
       p_inputRange.EntireColumn.AutoFit();
       foreach (Range l_row in p_inputRange.Rows)
@@ -66,16 +66,16 @@ namespace FBI.Utils
           if ((l_account != null))
           {
             FbiAccountFormat l_format = null;
-            switch (l_account.FormulaType)
+            switch (l_account.FormatId)
             {
-              case Account.FormulaTypes.TITLE:
+              case Account.Format.title:
                 l_format = l_titleFormat;
                 break;
-              case Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS:
+              case Account.Format.important:
                 l_format = l_importantFormat;
                 break;
-              case Account.FormulaTypes.FORMULA:
-                l_format = l_importantFormat;
+              case Account.Format.detail:
+                l_format = l_detailFormat;
                 break;
               default:
                 l_format = l_normalFormat;

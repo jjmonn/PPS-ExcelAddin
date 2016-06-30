@@ -20,11 +20,11 @@ namespace FBI.Utils
     public bool bordersPresent;
     public UInt32 indent;
 
-    public FbiAccountFormat(string p_formatCode)
+    public FbiAccountFormat(Account.Format p_formatCode)
     {
       switch (p_formatCode)
       {
-        case "t":
+        case Account.Format.title:
           textColor = FBI.Properties.Settings.Default.titleFontColor;
           backColor = FBI.Properties.Settings.Default.titleBackColor;
           isBold = FBI.Properties.Settings.Default.titleFontBold;
@@ -33,7 +33,7 @@ namespace FBI.Utils
           bordersColor = FBI.Properties.Settings.Default.titleBordersColor;
           indent = FBI.Properties.Settings.Default.titleIndent;
           break;
-        case "i":
+        case Account.Format.important:
           textColor = FBI.Properties.Settings.Default.importantFontColor;
           backColor = FBI.Properties.Settings.Default.importantBackColor;
           isBold = FBI.Properties.Settings.Default.importantFontBold;
@@ -42,7 +42,7 @@ namespace FBI.Utils
           bordersColor = FBI.Properties.Settings.Default.importantBordersColor;
           indent = FBI.Properties.Settings.Default.importantIndent;
           break;
-        case "n":
+        case Account.Format.normal:
           textColor = FBI.Properties.Settings.Default.normalFontColor;
           backColor = FBI.Properties.Settings.Default.normalBackColor;
           isBold = FBI.Properties.Settings.Default.normalFontBold;
@@ -51,7 +51,7 @@ namespace FBI.Utils
           bordersColor = FBI.Properties.Settings.Default.normalBordersColor;
           indent = FBI.Properties.Settings.Default.normalIndent;
           break;
-        case "d":
+        case Account.Format.detail:
           textColor = FBI.Properties.Settings.Default.detailFontColor;
           backColor = FBI.Properties.Settings.Default.detailBackColor;
           isBold = FBI.Properties.Settings.Default.detailFontBold;
