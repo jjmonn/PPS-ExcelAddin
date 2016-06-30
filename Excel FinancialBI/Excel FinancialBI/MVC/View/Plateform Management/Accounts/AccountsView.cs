@@ -412,7 +412,26 @@ namespace FBI.MVC.View
         m_autocomplete.Location = l_point;
       }
       m_autocomplete.Height = 2 + 20 * l_list.Count;
+      int l_width = 0;
+
+      foreach (string l_item in l_list)
+      {
+        int l_itemWidth = GetStringWidth(l_item);
+
+        if (l_itemWidth > l_width)
+          l_width = l_itemWidth;
+      }
+      m_autocomplete.Width = l_width + 20;
       m_autocomplete.Show();
+    }
+
+    int GetStringWidth(string p_str)
+    {
+      int l_width = 0;
+
+      foreach (char c in p_str)
+        l_width += (Char.IsUpper(c)) ? 10 : 5;
+      return (l_width);
     }
 
     void OnFormulaKeyUp(object sender, KeyEventArgs p_e)
