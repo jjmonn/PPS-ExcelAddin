@@ -302,6 +302,8 @@
     <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Controller\SettingsController.cs" />
+    <Compile Include="MVC\Model\AxisConfigurationModel.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisConfiguration.cs" />
     <Compile Include="MVC\Model\ChartAccountModel.cs" />
     <Compile Include="MVC\Model\ChartPanelModel.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
