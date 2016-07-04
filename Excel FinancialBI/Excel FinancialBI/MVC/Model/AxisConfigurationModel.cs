@@ -17,7 +17,7 @@ namespace FBI.MVC.Model
 
     AxisConfigurationModel()
     {
-      ListSMSG = ServerMessage.SMSG_LIST_AXIS_OWNER_ANSWER;
+      ListSMSG = ServerMessage.SMSG_AXIS_CONFIGURATION_LIST;
 
       Build = AxisConfiguration.BuildAxisConfiguration;
 
