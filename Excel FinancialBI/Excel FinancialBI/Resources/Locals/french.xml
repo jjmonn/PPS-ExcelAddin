@@ -316,11 +316,13 @@
     <string name="formula_period_range">Intervalle calculé</string>
 
     <!--messages-->
+    <string name="resize_base_version">Modifier la période couverte par </string>
     <string name="msg_folder_name">Entrez le nom du nouveau dossier</string>
     <string name="msg_new_name">Entrez le nouveau nom</string>
     <string name="warning_delete">Si vous supprimez cette version toutes les données associées à celle-ci seront suppriméees. Cette action est irréversible. Entrez votre mot de passe pour confirmer.</string>
 
     <category name="error">
+      <string name="unable_to_resize">Impossible de modifier </string>
       <string name="formula_period_range_invalid">Intervalle calculé invalide: La période de fin ne peut pas être antérieur à la période de début.</string>
       <string name="rates_version_not_selected">Veuillez sélectioner une version des taux de change.</string>
       <string name="gfacts_version_not_selected">Veuillez sélectioner une version des indicateurs macro économiques.</string>
