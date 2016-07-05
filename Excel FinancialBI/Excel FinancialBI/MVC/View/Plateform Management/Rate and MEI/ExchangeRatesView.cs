@@ -58,6 +58,26 @@ namespace FBI.MVC.View
       ExchangeRateModel.Instance.UpdateEvent -= OnModelUpdateRate;
       ExchangeRateModel.Instance.CreationEvent -= OnModelUpdateRate;
       ExchangeRateModel.Instance.DeleteEvent -= OnModelDeleteRate;
+      SendUpdatePosition();
+    }
+
+    void SendUpdatePosition()
+    {
+      List<ExchangeRateVersion> l_updatedVersionList = new List<ExchangeRateVersion>();
+
+      foreach (KeyValuePair<UInt32, Int32> l_pair in m_updatedVersionPos)
+      {
+        ExchangeRateVersion l_version = RatesVersionModel.Instance.GetValue(l_pair.Key);
+
+        if (l_version == null || l_version.ItemPosition == l_pair.Value)
+          continue;
+        l_version = l_version.Clone();
+        l_version.ItemPosition = l_pair.Value;
+        l_updatedVersionList.Add(l_version);
+      }
+      if (l_updatedVersionList.Count > 0)
+        if (m_controller.UpdateVersionList(l_updatedVersionList) == false)
+          MsgBox.Show(m_controller.Error);
     }
 
     #region Initialize

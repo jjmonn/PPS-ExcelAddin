@@ -27,6 +27,8 @@ namespace FBI.MVC.View
     protected FbiTreeView<TVersion> m_versionTV;
     protected FbiDataGridView m_dgv;
     NamedCRUDModel<TVersion> m_versionModel;
+    vTreeNode m_currentNode = null;
+    protected SafeDictionary<UInt32, Int32> m_updatedVersionPos = new SafeDictionary<uint, int>();
 
     protected TControllerType m_controller;
     protected IExcelImportController m_excelImportController;
@@ -96,6 +98,7 @@ namespace FBI.MVC.View
       m_addRatesVersionRCM.Click += OnCreateVersionClick;
       m_deleteVersionRCM.Click += OnDeleteVersionClick;
       m_versionTV.NodeMouseDown += OnNodeSelect;
+      m_versionTV.KeyDown += OnVersionTVKeyDown;
 
       m_importExcelMenu.Click += OnImportExcel;
       m_importExcelRightClick.Click += OnImportExcel;
@@ -184,6 +187,55 @@ namespace FBI.MVC.View
     void OnDeleteVersionClick(object p_sender, EventArgs p_args)
     {
       m_controller.DeleteVersion(m_controller.SelectedVersion);
+    }
+
+
+    void MoveAccount(vTreeNode p_node1, vTreeNode p_node2)
+    {
+      if (p_node1 == null || p_node2 == null)
+        return;
+      TVersion l_version = m_versionModel.GetValue((UInt32)p_node1.Value);
+      TVersion l_version2 = m_versionModel.GetValue((UInt32)p_node2.Value);
+
+      if (l_version != null && l_version2 != null)
+      {
+        Int32 l_prevPos = (m_updatedVersionPos.ContainsKey(l_version.Id)) ? m_updatedVersionPos[l_version.Id] : l_version.ItemPosition;
+        Int32 l_prevPos2 = (m_updatedVersionPos.ContainsKey(l_version2.Id)) ? m_updatedVersionPos[l_version2.Id] : l_version2.ItemPosition;
+
+        m_updatedVersionPos[l_version.Id] = l_prevPos2;
+        m_updatedVersionPos[l_version2.Id] = l_prevPos;
+      }
+    }
+
+    private void OnVersionTVKeyDown(object p_sender, KeyEventArgs p_e)
+    {
+      switch (p_e.KeyCode)
+      {
+        case Keys.Down:
+          if (p_e.Control == true)
+          {
+            m_currentNode = m_versionTV.SelectedNode;
+            if (m_currentNode != null)
+            {
+              MoveAccount(m_currentNode, m_currentNode.NextSiblingNode);
+              m_versionTV.MoveNodeDown(m_currentNode);
+              m_versionTV.SelectedNode = m_currentNode;
+            }
+          }
+          break;
+        case Keys.Up:
+          if (p_e.Control == true)
+          {
+            m_currentNode = m_versionTV.SelectedNode;
+            if (m_currentNode != null)
+            {
+              MoveAccount(m_currentNode, m_currentNode.PrevSiblingNode);
+              m_versionTV.MoveNodeUp(m_currentNode);
+              m_versionTV.SelectedNode = m_currentNode;
+            }
+          }
+          break;
+      }
     }
 
     #endregion

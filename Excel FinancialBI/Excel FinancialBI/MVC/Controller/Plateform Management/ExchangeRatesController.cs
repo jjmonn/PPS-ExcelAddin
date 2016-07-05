@@ -74,6 +74,15 @@ namespace FBI.MVC.Controller
     {
       if (!IsVersionValid(p_rateVersion, RatesVersionModel.Instance) || !IsVersionNameAvailable(p_rateVersion.Name, RatesVersionModel.Instance))
         return (false);
+
+      if (RatesVersionModel.Instance.GetDictionary().Count == 0)
+        p_rateVersion.ItemPosition = 0;
+      else
+      {
+        ExchangeRateVersion l_version = RatesVersionModel.Instance.GetDictionary().SortedValues.Last();
+        p_rateVersion.ItemPosition = l_version.ItemPosition + 1;
+      }
+
       if (RatesVersionModel.Instance.Create(p_rateVersion))
         return (true);
       Error = Local.GetValue("general.error.system");
@@ -101,6 +110,11 @@ namespace FBI.MVC.Controller
         return (true);
       Error = Local.GetValue("general.error.system");
       return (false);
+    }
+
+    public bool UpdateVersionList(List<ExchangeRateVersion> p_versionList)
+    {
+      return (RatesVersionModel.Instance.UpdateList(p_versionList, CRUDAction.UPDATE));
     }
   }
 }
