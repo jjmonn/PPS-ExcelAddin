@@ -61,6 +61,7 @@ namespace FBI.MVC.View
       // 
       // MenuStrip1
       // 
+      this.MenuStrip1.BackColor = System.Drawing.SystemColors.Control;
       this.MenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AccountsBT,
             this.m_entitiesBT,
