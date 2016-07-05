@@ -20,6 +20,7 @@ namespace FBI.MVC.View
   {
     PlatformMgtController m_controller;
     Color m_defaultColor;
+    ToolStripMenuItem m_selectedBT;
 
     #region Initialization
 
@@ -141,31 +142,31 @@ namespace FBI.MVC.View
 
     private void m_entitiesFiltersBT_Click(object sender, EventArgs e)
     {
-      SelectBT((ToolStripMenuItem)sender);
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Entities));
     }
 
     private void m_employeesFiltersBT_Click(object sender, EventArgs e)
     {
-      SelectBT((ToolStripMenuItem)sender);
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Employee));
     }
 
     private void m_clientsFiltersBT_Click(object sender, EventArgs e)
     {
-      SelectBT((ToolStripMenuItem)sender);
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Client));
     }
 
     private void m_productsFiltersBT_Click(object sender, EventArgs e)
     {
-      SelectBT((ToolStripMenuItem)sender);
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Product));
     }
 
     private void m_adjustmentsFiltersBT_Click(object sender, EventArgs e)
     {
-      SelectBT((ToolStripMenuItem)sender);
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Adjustment));
     }
 
@@ -207,9 +208,10 @@ namespace FBI.MVC.View
 
     void SelectBT(ToolStripMenuItem p_bt)
     {
-      foreach (ToolStripMenuItem l_item in MenuStrip1.Items)
-        l_item.BackColor = m_defaultColor;
+      if (m_selectedBT != null)
+        m_selectedBT.BackColor = m_defaultColor;
       p_bt.BackColor = Color.White;
+      m_selectedBT = p_bt;
     }
   }
 
