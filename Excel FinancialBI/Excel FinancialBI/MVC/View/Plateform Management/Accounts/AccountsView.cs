@@ -1019,7 +1019,7 @@ namespace FBI.MVC.View
 
       Account l_targetAccount = AccountModel.Instance.GetValue((UInt32)p_targetNode.Value);
 
-      if (p_draggedNode.Equals(p_targetNode) == true || p_draggedNode.Parent.Equals(p_targetNode.Value))
+      if (p_draggedNode.Equals(p_targetNode) == true || (p_draggedNode.Parent != null && p_draggedNode.Parent.Equals(p_targetNode.Value)))
         return;
 
       Account l_account;
