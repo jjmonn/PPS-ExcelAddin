@@ -120,6 +120,8 @@ namespace FBI.MVC.View
       l_version.FormulaPeriodIndex = 1;
       l_version.FormulaNbPeriod = l_version.NbPeriod - (uint)1;
 
+      m_controller.SetStartPeriod(l_version);
+
       ExchangeRateVersion l_rateVersion;
 
       if (m_controller.IsCompatibleVersion(l_version, (l_rateVersion = RatesVersionModel.Instance.GetValue(l_version.RateVersionId))) == false)

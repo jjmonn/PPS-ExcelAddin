@@ -50,10 +50,10 @@ namespace FBI.MVC.Controller
       UInt32 l_cmpVersionEndPeriod = GetVersionEndPeriod(p_cmpVersion, TimeConfig.MONTHS);
 
       p_cmpVersion.StartPeriod = (p_version.StartPeriod < p_cmpVersion.StartPeriod) ? p_version.StartPeriod : p_cmpVersion.StartPeriod;
-      p_cmpVersion.NbPeriod = (ushort)
+      p_cmpVersion.NbPeriod = (ushort)(
         PeriodModel.GetMonthPeriodListFromPeriodsRange(
         DateTime.FromOADate(p_cmpVersion.StartPeriod),
-        DateTime.FromOADate((l_versionEndPeriod > l_cmpVersionEndPeriod) ? l_versionEndPeriod : l_cmpVersionEndPeriod)).Count;
+        DateTime.FromOADate((l_versionEndPeriod > l_cmpVersionEndPeriod) ? l_versionEndPeriod : l_cmpVersionEndPeriod)).Count);
 
       m_wait = new ManualResetEvent(false);
       if (p_model.Update(p_cmpVersion) == false)
@@ -176,7 +176,6 @@ namespace FBI.MVC.Controller
 
     public bool Create(Version p_version)
     {
-      SetStartPeriod(p_version);
       if (!IsVersionValid(p_version))
         return (false);
       if (VersionModel.Instance.GetValue(p_version.Name) != null)
@@ -246,7 +245,7 @@ namespace FBI.MVC.Controller
       m_copyVersionView.Show();
     }
 
-    private void SetStartPeriod(Version p_version)
+    public void SetStartPeriod(Version p_version)
     {
       switch (p_version.TimeConfiguration)
       {
