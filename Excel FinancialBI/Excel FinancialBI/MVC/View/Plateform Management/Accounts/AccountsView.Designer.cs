@@ -52,6 +52,8 @@ namespace FBI.MVC.View
       this.m_formulaTextBox = new VIBlend.WinForms.Controls.vRichTextBox();
       this.m_validateFormulaButton = new VIBlend.WinForms.Controls.vButton();
       this.m_accountInformationGroupbox = new System.Windows.Forms.GroupBox();
+      this.m_formatCB = new VIBlend.WinForms.Controls.vComboBox();
+      this.m_formatLabel = new VIBlend.WinForms.Controls.vLabel();
       this.ProcessCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_ProcessLabel = new VIBlend.WinForms.Controls.vLabel();
       this.ConsolidationOptionCB = new VIBlend.WinForms.Controls.vComboBox();
@@ -65,6 +67,7 @@ namespace FBI.MVC.View
       this.TypeCB = new VIBlend.WinForms.Controls.vComboBox();
       this.Name_TB = new VIBlend.WinForms.Controls.vTextBox();
       this.GlobalFactsPanel = new System.Windows.Forms.Panel();
+      this.splitContainer3 = new System.Windows.Forms.SplitContainer();
       this.m_globalFactsLabel = new VIBlend.WinForms.Controls.vLabel();
       this.accountsIL = new System.Windows.Forms.ImageList(this.components);
       this.TVRCM = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -87,8 +90,7 @@ namespace FBI.MVC.View
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.m_globalFactsImageList = new System.Windows.Forms.ImageList(this.components);
-      this.m_formatLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.m_formatCB = new VIBlend.WinForms.Controls.vComboBox();
+      this.m_expandRightBT = new VIBlend.WinForms.Controls.vButton();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
       this.SplitContainer1.Panel1.SuspendLayout();
       this.SplitContainer1.Panel2.SuspendLayout();
@@ -101,6 +103,10 @@ namespace FBI.MVC.View
       this.m_accountDescriptionGroupbox.SuspendLayout();
       this.m_accountFormulaGroupbox.SuspendLayout();
       this.m_accountInformationGroupbox.SuspendLayout();
+      this.GlobalFactsPanel.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+      this.splitContainer3.Panel1.SuspendLayout();
+      this.splitContainer3.SuspendLayout();
       this.TVRCM.SuspendLayout();
       this.MainMenu.SuspendLayout();
       this.SuspendLayout();
@@ -352,6 +358,41 @@ namespace FBI.MVC.View
       this.m_accountInformationGroupbox.TabStop = false;
       this.m_accountInformationGroupbox.Text = "Account information";
       // 
+      // m_formatCB
+      // 
+      this.m_formatCB.BackColor = System.Drawing.Color.White;
+      this.m_formatCB.DisplayMember = "";
+      this.m_formatCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_formatCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_formatCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_formatCB.DropDownWidth = 310;
+      this.m_formatCB.Location = new System.Drawing.Point(160, 276);
+      this.m_formatCB.Name = "m_formatCB";
+      this.m_formatCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_formatCB.Size = new System.Drawing.Size(310, 22);
+      this.m_formatCB.TabIndex = 33;
+      this.m_formatCB.UseThemeBackColor = false;
+      this.m_formatCB.UseThemeDropDownArrowColor = true;
+      this.m_formatCB.ValueMember = "";
+      this.m_formatCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_formatCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_formatLabel
+      // 
+      this.m_formatLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_formatLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_formatLabel.Ellipsis = false;
+      this.m_formatLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_formatLabel.Location = new System.Drawing.Point(20, 276);
+      this.m_formatLabel.Multiline = true;
+      this.m_formatLabel.Name = "m_formatLabel";
+      this.m_formatLabel.Size = new System.Drawing.Size(126, 22);
+      this.m_formatLabel.TabIndex = 43;
+      this.m_formatLabel.Text = "Format";
+      this.m_formatLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_formatLabel.UseMnemonics = true;
+      this.m_formatLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
       // ProcessCB
       // 
       this.ProcessCB.BackColor = System.Drawing.Color.White;
@@ -564,11 +605,26 @@ namespace FBI.MVC.View
       // 
       // GlobalFactsPanel
       // 
+      this.GlobalFactsPanel.Controls.Add(this.splitContainer3);
       this.GlobalFactsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.GlobalFactsPanel.Location = new System.Drawing.Point(0, 0);
       this.GlobalFactsPanel.Name = "GlobalFactsPanel";
       this.GlobalFactsPanel.Size = new System.Drawing.Size(175, 692);
       this.GlobalFactsPanel.TabIndex = 3;
+      // 
+      // splitContainer3
+      // 
+      this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+      this.splitContainer3.Name = "splitContainer3";
+      this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+      // 
+      // splitContainer3.Panel1
+      // 
+      this.splitContainer3.Panel1.Controls.Add(this.m_expandRightBT);
+      this.splitContainer3.Size = new System.Drawing.Size(175, 692);
+      this.splitContainer3.SplitterDistance = 32;
+      this.splitContainer3.TabIndex = 0;
       // 
       // m_globalFactsLabel
       // 
@@ -581,7 +637,7 @@ namespace FBI.MVC.View
       this.m_globalFactsLabel.Location = new System.Drawing.Point(3, 11);
       this.m_globalFactsLabel.Multiline = true;
       this.m_globalFactsLabel.Name = "m_globalFactsLabel";
-      this.m_globalFactsLabel.Size = new System.Drawing.Size(204, 16);
+      this.m_globalFactsLabel.Size = new System.Drawing.Size(207, 16);
       this.m_globalFactsLabel.TabIndex = 0;
       this.m_globalFactsLabel.Text = "Macro economic indicators";
       this.m_globalFactsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -757,40 +813,18 @@ namespace FBI.MVC.View
       this.m_globalFactsImageList.Images.SetKeyName(1, "chart_line.ico");
       this.m_globalFactsImageList.Images.SetKeyName(2, "money_interest.ico");
       // 
-      // m_formatLabel
+      // m_expandRightBT
       // 
-      this.m_formatLabel.BackColor = System.Drawing.Color.Transparent;
-      this.m_formatLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
-      this.m_formatLabel.Ellipsis = false;
-      this.m_formatLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_formatLabel.Location = new System.Drawing.Point(20, 276);
-      this.m_formatLabel.Multiline = true;
-      this.m_formatLabel.Name = "m_formatLabel";
-      this.m_formatLabel.Size = new System.Drawing.Size(126, 22);
-      this.m_formatLabel.TabIndex = 43;
-      this.m_formatLabel.Text = "Format";
-      this.m_formatLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-      this.m_formatLabel.UseMnemonics = true;
-      this.m_formatLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_formatCB
-      // 
-      this.m_formatCB.BackColor = System.Drawing.Color.White;
-      this.m_formatCB.DisplayMember = "";
-      this.m_formatCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_formatCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_formatCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_formatCB.DropDownWidth = 310;
-      this.m_formatCB.Location = new System.Drawing.Point(160, 276);
-      this.m_formatCB.Name = "m_formatCB";
-      this.m_formatCB.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_formatCB.Size = new System.Drawing.Size(310, 22);
-      this.m_formatCB.TabIndex = 33;
-      this.m_formatCB.UseThemeBackColor = false;
-      this.m_formatCB.UseThemeDropDownArrowColor = true;
-      this.m_formatCB.ValueMember = "";
-      this.m_formatCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      this.m_formatCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_expandRightBT.AllowAnimations = true;
+      this.m_expandRightBT.BackColor = System.Drawing.Color.Transparent;
+      this.m_expandRightBT.Location = new System.Drawing.Point(6, 6);
+      this.m_expandRightBT.Name = "m_expandRightBT";
+      this.m_expandRightBT.RoundedCornersMask = ((byte)(15));
+      this.m_expandRightBT.Size = new System.Drawing.Size(21, 21);
+      this.m_expandRightBT.TabIndex = 2;
+      this.m_expandRightBT.Text = "-";
+      this.m_expandRightBT.UseVisualStyleBackColor = false;
+      this.m_expandRightBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // AccountsView
       // 
@@ -812,6 +846,10 @@ namespace FBI.MVC.View
       this.m_accountDescriptionGroupbox.ResumeLayout(false);
       this.m_accountFormulaGroupbox.ResumeLayout(false);
       this.m_accountInformationGroupbox.ResumeLayout(false);
+      this.GlobalFactsPanel.ResumeLayout(false);
+      this.splitContainer3.Panel1.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+      this.splitContainer3.ResumeLayout(false);
       this.TVRCM.ResumeLayout(false);
       this.MainMenu.ResumeLayout(false);
       this.MainMenu.PerformLayout();
@@ -871,5 +909,7 @@ namespace FBI.MVC.View
     public VIBlend.WinForms.Controls.vLabel m_ProcessLabel;
     public VIBlend.WinForms.Controls.vComboBox m_formatCB;
     public VIBlend.WinForms.Controls.vLabel m_formatLabel;
+    private System.Windows.Forms.SplitContainer splitContainer3;
+    private VIBlend.WinForms.Controls.vButton m_expandRightBT;
   }
 }

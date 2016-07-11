@@ -44,6 +44,7 @@ namespace FBI.MVC.View
     bool m_isEditingFormulaFlag = false;
     bool m_isValidAutoComplete = false;
     string m_saveFormula = "";
+    private int m_rightDistance = 30;
 
     SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
     UInt32 m_currentAccount = 0;
@@ -109,7 +110,6 @@ namespace FBI.MVC.View
       
       MultilangueSetup();
       SetFormulaEditionState(false);
-      
     }
 
     private void SuscribeEvents()
@@ -149,6 +149,8 @@ namespace FBI.MVC.View
       m_autocomplete.KeyUp += OnFormulaKeyUp;
       m_autocomplete.MouseDoubleClick += OnAutoCompleteMouseDoubleClick;
       m_globalFactsTV.MouseDoubleClick += OnGlobalFactTVMouseDoubleClick;
+
+      m_expandRightBT.MouseDown += OnExpandRightMouseDown;
     }
 
     public void CloseView()
@@ -213,7 +215,7 @@ namespace FBI.MVC.View
       m_accountTV.ImageList = accountsIL;
       m_accountTV.BorderColor = Color.Transparent;
       AccountsTVPanel.Controls.Add(m_accountTV);
-
+      
       m_accountTV.KeyDown += OnAccountTVKeyDown;
       m_accountTV.MouseDown += OnAccountTVMouseDown;
       m_accountTV.AfterSelect += OnAccountTVAfterSelect;
@@ -256,7 +258,7 @@ namespace FBI.MVC.View
       m_globalFactsTV.LabelEdit = false;
       m_globalFactsTV.CollapseAll();
       m_globalFactsTV.ImageList = m_globalFactsImageList;
-      GlobalFactsPanel.Controls.Add(m_globalFactsTV);
+      splitContainer3.Panel2.Controls.Add(m_globalFactsTV);
 
       m_globalFactsTV.MouseDoubleClick += OnGlobalFactsTVMouseDoubleClick;
     }
@@ -305,6 +307,25 @@ namespace FBI.MVC.View
       AddListItem(m_formatCB, m_formatItemDict, "settings.title", Account.Format.title);
       AddListItem(m_formatCB, m_formatItemDict, "settings.normal", Account.Format.normal);
       m_formatCB.SelectedItemChanged += OnFormatCBSelectedItemChanged;
+    }
+
+    public void ExpandFactPane()
+    {
+      Control l_pane = splitContainer3.Panel2;
+
+      if (l_pane.Visible)
+      {
+        l_pane.Visible = false;
+        m_rightDistance = SplitContainer2.SplitterDistance;
+        SplitContainer2.SplitterDistance = m_rightDistance + l_pane.Width - 30;
+        m_expandRightBT.Text = "+";
+      }
+      else
+      {
+        l_pane.Visible = true;
+        SplitContainer2.SplitterDistance = m_rightDistance;
+        m_expandRightBT.Text = "-";
+      }
     }
 
     #endregion
@@ -1214,6 +1235,11 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    void OnExpandRightMouseDown(object sender, MouseEventArgs e)
+    {
+      ExpandFactPane();
+    }
 
     private void OnGlobalFactsTVMouseDoubleClick(object p_sender, MouseEventArgs p_e)
     {
