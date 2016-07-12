@@ -72,6 +72,8 @@ namespace FBI.MVC.View
       m_connectionTab.Text = Local.GetValue("connection.connection");
       m_formatsTab.Text = Local.GetValue("settings.display_options");
       m_otherTab.Text = Local.GetValue("settings.preferences");
+      m_snapshotOptionLabel.Text = Local.GetValue("settings.snapshot_option");
+      m_inputOnlyLabel.Text = Local.GetValue("settings.input_only");
     }
 
     void SuscribeEvents()
@@ -286,6 +288,7 @@ namespace FBI.MVC.View
     {
       if (m_languageComboBox.SelectedItem != null)
         Settings.Default.language = (UInt32)m_languageComboBox.SelectedItem.Value;
+      Settings.Default.snapshotInputOnly = m_snapshotInputOnlyCheckbox.Checked;
       Settings.Default.Save();
       Addin.SelectLanguage();
       MultilanguageSetup();

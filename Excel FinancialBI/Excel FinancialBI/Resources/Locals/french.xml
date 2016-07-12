@@ -483,6 +483,8 @@
   </category>
 
   <category name="settings">
+    <string name="snapshot_option">Option de snapshot</string>
+    <string name="input_only">Input seulement</string>
     <string name="settings">Réglages</string>
     <string name="currency">Devise de consolidation</string>
     <string name="port_number">Numéro de port</string>

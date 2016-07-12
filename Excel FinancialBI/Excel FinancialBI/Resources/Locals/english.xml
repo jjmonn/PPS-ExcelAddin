@@ -482,6 +482,8 @@
   </category>
 
   <category name="settings">
+    <string name="snapshot_option">Option de snapshot</string>
+    <string name="input_only">Input seulement</string>
     <string name="settings">Settings</string>
     <string name="currency">Consolidation currency</string>
     <string name="port_number">Port number</string>
