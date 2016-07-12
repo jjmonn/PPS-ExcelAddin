@@ -120,6 +120,28 @@ namespace FBI.MVC.View
       l_version.FormulaPeriodIndex = 1;
       l_version.FormulaNbPeriod = l_version.NbPeriod - (uint)1;
 
+      m_controller.SetStartPeriod(l_version);
+
+      ExchangeRateVersion l_rateVersion;
+
+      if (m_controller.IsCompatibleVersion(l_version, (l_rateVersion = RatesVersionModel.Instance.GetValue(l_version.RateVersionId))) == false)
+        if (MessageBox.Show(Local.GetValue("versions.resize_base_version") + l_rateVersion.Name + " ?", "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+          if (m_controller.ResizeFactVersion(l_version, l_rateVersion.Clone(), RatesVersionModel.Instance) == false)
+          {
+            MessageBox.Show(Local.GetValue("version.error.unable_to_resize") + l_rateVersion.Name);
+            return;
+          }
+
+      GlobalFactVersion l_factVersion;
+
+      if (m_controller.IsCompatibleVersion(l_version, (l_factVersion = GlobalFactVersionModel.Instance.GetValue(l_version.GlobalFactVersionId))) == false)
+        if (MessageBox.Show(Local.GetValue("versions.resize_base_version") + l_factVersion.Name + " ?", "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+          if (m_controller.ResizeFactVersion(l_version, l_factVersion.Clone(), GlobalFactVersionModel.Instance) == false)
+          {
+            MessageBox.Show(Local.GetValue("version.error.unable_to_resize") + l_factVersion.Name);
+            return;
+          }
+
       if (m_controller.Create(l_version) == false)
       {
         Forms.MsgBox.Show(m_controller.Error);

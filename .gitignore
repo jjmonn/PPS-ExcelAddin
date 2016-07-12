@@ -69,3 +69,4 @@ PPS/bin/Debug/PPS.dll
 bin/
 obj/
 publish/
+*.publish
