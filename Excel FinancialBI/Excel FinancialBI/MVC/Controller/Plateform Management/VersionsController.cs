@@ -50,6 +50,8 @@ namespace FBI.MVC.Controller
       UInt32 l_cmpVersionEndPeriod = GetVersionEndPeriod(p_cmpVersion, TimeConfig.MONTHS);
 
       p_cmpVersion.StartPeriod = (p_version.StartPeriod < p_cmpVersion.StartPeriod) ? p_version.StartPeriod : p_cmpVersion.StartPeriod;
+      p_cmpVersion.StartPeriod = (uint)PeriodModel.GetYearIdFromPeriodId((int)p_cmpVersion.StartPeriod);
+      p_cmpVersion.StartPeriod = (uint)(new DateTime().AddYears(DateTime.FromOADate(p_cmpVersion.StartPeriod).Year - 1)).ToOADate();
       p_cmpVersion.NbPeriod = (ushort)(
         PeriodModel.GetMonthPeriodListFromPeriodsRange(
         DateTime.FromOADate(p_cmpVersion.StartPeriod),
