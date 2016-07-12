@@ -958,5 +958,17 @@ namespace FBI.Properties {
                 this["FactsEditionInputsOrangeFill"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool snapshotInputOnly {
+            get {
+                return ((bool)(this["snapshotInputOnly"]));
+            }
+            set {
+                this["snapshotInputOnly"] = value;
+            }
+        }
     }
 }

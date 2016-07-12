@@ -35,6 +35,7 @@ namespace FBI.MVC.Model
       ProductId = (UInt32)AxisType.Product;
       AdjustmentId = (UInt32)AxisType.Adjustment;
       EmployeeId = (UInt32)AxisType.Employee;
+      m_inputOnly = Properties.Settings.Default.snapshotInputOnly;
     }
 
     public void Reload()
