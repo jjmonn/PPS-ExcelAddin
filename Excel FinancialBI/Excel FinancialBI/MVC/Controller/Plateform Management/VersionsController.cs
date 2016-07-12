@@ -123,6 +123,14 @@ namespace FBI.MVC.Controller
       SetStartPeriod(p_version);
       if (!IsVersionValid(p_version))
         return (false);
+
+      if (VersionModel.Instance.GetDictionary().Count == 0)
+         p_version.ItemPosition = 0;
+       else
+       {
+         Version l_version = VersionModel.Instance.GetDictionary().SortedValues.Last();
+         p_version.ItemPosition = l_version.ItemPosition + 1;
+       }
       if (VersionModel.Instance.GetValue(p_version.Name) != null)
       {
         Error = Local.GetValue("general.error.name_in_use");
@@ -161,6 +169,11 @@ namespace FBI.MVC.Controller
       Error = Local.GetValue("general.error.system");
       return (false);
     }
+
+      public bool UpdateVersionList(List<Version> p_versionList)
+      {
+        return (VersionModel.Instance.UpdateList(p_versionList, CRUDAction.UPDATE));
+      }
 
     public void ShowNewVersionView(UInt32 p_parentVersionId)
     {

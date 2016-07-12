@@ -26,6 +26,8 @@ namespace FBI.MVC.View
     private RightManager m_rightMgr = new RightManager();
     private bool m_isDisplaying;
     SafeDictionary<Int32, ListItem> m_periodListItems = new SafeDictionary<int, ListItem>();
+    vTreeNode m_currentNode = null;
+    protected SafeDictionary<UInt32, Int32> m_updatedVersionPos = new SafeDictionary<uint, int>();
 
     public VersionsView()
     {
@@ -120,6 +122,7 @@ namespace FBI.MVC.View
       VersionModel.Instance.UpdateEvent -= AfterUpdate;
       VersionModel.Instance.CopyEvent -= AfterCopy;
       VersionModel.Instance.DeleteEvent -= AfterDelete;
+      SendUpdatePosition();
     }
 
     private void MultilanguageSetup()
@@ -325,6 +328,23 @@ namespace FBI.MVC.View
 
     #region User Callback
 
+    void MoveVersion(vTreeNode p_node1, vTreeNode p_node2)
+     {
+       if (p_node1 == null || p_node2 == null)
+         return;
+       Version l_version = VersionModel.Instance.GetValue((UInt32)p_node1.Value);
+       Version l_version2 = VersionModel.Instance.GetValue((UInt32)p_node2.Value);
+ 
+       if (l_version != null && l_version2 != null)
+       {
+         Int32 l_prevPos = (m_updatedVersionPos.ContainsKey(l_version.Id)) ? m_updatedVersionPos[l_version.Id] : l_version.ItemPosition;
+         Int32 l_prevPos2 = (m_updatedVersionPos.ContainsKey(l_version2.Id)) ? m_updatedVersionPos[l_version2.Id] : l_version2.ItemPosition;
+ 
+         m_updatedVersionPos[l_version.Id] = l_prevPos2;
+         m_updatedVersionPos[l_version2.Id] = l_prevPos;
+       }
+     }
+ 
     private void OnSelectedPeriodIndexChanged(object p_sender, EventArgs p_e)
     {
       if (m_isDisplaying)
@@ -471,13 +491,30 @@ namespace FBI.MVC.View
       {
         switch (e.KeyCode)
         {
-          case Keys.Up:
-            m_versionsTreeview.MoveNodeUp(m_versionsTreeview.SelectedNode);
-            return;
-
           case Keys.Down:
-            m_versionsTreeview.MoveNodeDown(m_versionsTreeview.SelectedNode);
-            return;
+            if (e.Control == true)
+            {
+              m_currentNode = m_versionsTreeview.SelectedNode;
+              if (m_currentNode != null)
+              {
+                MoveVersion(m_currentNode, m_currentNode.NextSiblingNode);
+                m_versionsTreeview.MoveNodeDown(m_currentNode);
+                m_versionsTreeview.SelectedNode = m_currentNode;
+              }
+            }
+            break;
+          case Keys.Up:
+            if (e.Control == true)
+            {
+              m_currentNode = m_versionsTreeview.SelectedNode;
+              if (m_currentNode != null)
+              {
+                MoveVersion(m_currentNode, m_currentNode.PrevSiblingNode);
+                m_versionsTreeview.MoveNodeUp(m_currentNode);
+                m_versionsTreeview.SelectedNode = m_currentNode;
+              }
+            }
+            break;
         }
       }
       if (e.KeyCode == Keys.Delete)
@@ -628,6 +665,25 @@ namespace FBI.MVC.View
         MsgBox.Show(m_controller.Error);
     }
 
+    void SendUpdatePosition()
+    {
+      List<Version> l_updatedVersionList = new List<Version>();
+
+      foreach (KeyValuePair<UInt32, Int32> l_pair in m_updatedVersionPos)
+      {
+        Version l_version = VersionModel.Instance.GetValue(l_pair.Key);
+
+        if (l_version == null || l_version.ItemPosition == l_pair.Value)
+          continue;
+        l_version = l_version.Clone();
+        l_version.ItemPosition = l_pair.Value;
+        l_updatedVersionList.Add(l_version);
+      }
+      if (l_updatedVersionList.Count > 0)
+        if (m_controller.UpdateVersionList(l_updatedVersionList) == false)
+          MsgBox.Show(m_controller.Error);
+      }
+  
   }
 }
 
