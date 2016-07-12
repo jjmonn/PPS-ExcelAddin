@@ -75,6 +75,7 @@ namespace FBI
       m_accountSnapshotBT.Caption = Local.GetValue("general.account_snapshot");
       m_reportAccount.Caption = Local.GetValue("general.report_account");
       m_snapshotCreateAccounts.Caption = Local.GetValue("general.account_snapshot_import");
+      m_submissionControlButton.Caption = Local.GetValue("submissionsFollowUp.submissions_controls");
     }
 
     void SuscribeEvents()
@@ -112,6 +113,7 @@ namespace FBI
 
     private void fbiRibbonChangeState(bool p_enabled)
     {
+      m_submissionControlButton.Enabled = p_enabled;
       m_versionRibbonButton.Enabled = p_enabled;
       m_processRibbonButton.Enabled = p_enabled;
       m_snapshotRibbonSplitButton.Enabled = p_enabled;
