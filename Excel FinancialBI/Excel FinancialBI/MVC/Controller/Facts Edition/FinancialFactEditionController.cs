@@ -28,6 +28,12 @@ namespace FBI.MVC.Controller
       m_accountSP = AddinModule.CurrentInstance.ReportUploadAccountInfoSidePane;
       m_statusView = new StatusReportInterfaceUI(EditedFactModel);
       FactsModel.Instance.UpdateEvent += OnCommitResult;
+      EditedFactModel.ComputeCompleteEvent += OnComputeCompleteEvent;
+    }
+
+    void OnComputeCompleteEvent(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<uint, ComputeResult> p_result)
+    {
+      RaiseComputeCompleteEvent(p_status, p_request, p_result);
     }
 
     public override void Close()

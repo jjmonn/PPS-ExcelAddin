@@ -573,6 +573,11 @@ namespace FBI
       m_controller.ShowStatusView();
     }
 
+    private void m_displayReportBT_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.DisplayReport();
+    }
+
     private void m_accountSnapshot_OnClick(object sender, IRibbonControl control, bool pressed)
     {
       AccountEditSnapshotController l_snapshot = new AccountEditSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
