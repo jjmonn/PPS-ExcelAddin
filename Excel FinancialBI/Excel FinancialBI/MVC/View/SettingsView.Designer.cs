@@ -51,6 +51,7 @@ namespace FBI.MVC.View
       this.m_formatsTab = new VIBlend.WinForms.Controls.vTabPage();
       this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_formatsGroup = new VIBlend.WinForms.Controls.vGroupBox();
+      this.m_saveFormatBT = new VIBlend.WinForms.Controls.vButton();
       this.m_otherTab = new VIBlend.WinForms.Controls.vTabPage();
       this.m_otherValidateButton = new VIBlend.WinForms.Controls.vButton();
       this.m_languageComboBox = new VIBlend.WinForms.Controls.vComboBox();
@@ -61,7 +62,8 @@ namespace FBI.MVC.View
       this.ACFIcon = new System.Windows.Forms.ImageList(this.components);
       this.FolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
       this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
-      this.m_saveFormatBT = new VIBlend.WinForms.Controls.vButton();
+      this.m_versionLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.m_versionValue = new VIBlend.WinForms.Controls.vLabel();
       this.Panel1.SuspendLayout();
       this.TabControl1.SuspendLayout();
       this.m_connectionTab.SuspendLayout();
@@ -73,6 +75,8 @@ namespace FBI.MVC.View
       // Panel1
       // 
       this.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      m_connectionTab.Controls.Add(this.m_versionValue);
+      m_connectionTab.Controls.Add(this.m_versionLabel);
       this.Panel1.Controls.Add(this.TabControl1);
       this.Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.Panel1.Location = new System.Drawing.Point(0, 0);
@@ -162,7 +166,7 @@ namespace FBI.MVC.View
       this.m_saveConnectionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_saveConnectionButton.ImageKey = "1420498403_340208.ico";
       this.m_saveConnectionButton.ImageList = this.ButtonIcons;
-      this.m_saveConnectionButton.Location = new System.Drawing.Point(351, 229);
+      this.m_saveConnectionButton.Location = new System.Drawing.Point(347, 226);
       this.m_saveConnectionButton.Name = "m_saveConnectionButton";
       this.m_saveConnectionButton.RoundedCornersMask = ((byte)(15));
       this.m_saveConnectionButton.Size = new System.Drawing.Size(102, 30);
@@ -286,7 +290,7 @@ namespace FBI.MVC.View
       // tableLayoutPanel1
       // 
       this.tableLayoutPanel1.ColumnCount = 1;
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 452F));
       this.tableLayoutPanel1.Controls.Add(this.m_formatsGroup, 0, 0);
       this.tableLayoutPanel1.Controls.Add(this.m_saveFormatBT, 0, 1);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -310,6 +314,24 @@ namespace FBI.MVC.View
       this.m_formatsGroup.Text = "Reports formats";
       this.m_formatsGroup.UseThemeBorderColor = true;
       this.m_formatsGroup.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_saveFormatBT
+      // 
+      this.m_saveFormatBT.AllowAnimations = true;
+      this.m_saveFormatBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_saveFormatBT.BackColor = System.Drawing.Color.Transparent;
+      this.m_saveFormatBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_saveFormatBT.ImageKey = "1420498403_340208.ico";
+      this.m_saveFormatBT.ImageList = this.ButtonIcons;
+      this.m_saveFormatBT.Location = new System.Drawing.Point(347, 226);
+      this.m_saveFormatBT.Name = "m_saveFormatBT";
+      this.m_saveFormatBT.RoundedCornersMask = ((byte)(15));
+      this.m_saveFormatBT.Size = new System.Drawing.Size(102, 30);
+      this.m_saveFormatBT.TabIndex = 21;
+      this.m_saveFormatBT.Text = "Save";
+      this.m_saveFormatBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_saveFormatBT.UseVisualStyleBackColor = false;
+      this.m_saveFormatBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // m_otherTab
       // 
@@ -336,7 +358,7 @@ namespace FBI.MVC.View
       this.m_otherValidateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_otherValidateButton.ImageKey = "1420498403_340208.ico";
       this.m_otherValidateButton.ImageList = this.ButtonIcons;
-      this.m_otherValidateButton.Location = new System.Drawing.Point(351, 229);
+      this.m_otherValidateButton.Location = new System.Drawing.Point(347, 226);
       this.m_otherValidateButton.Name = "m_otherValidateButton";
       this.m_otherValidateButton.RoundedCornersMask = ((byte)(15));
       this.m_otherValidateButton.Size = new System.Drawing.Size(102, 30);
@@ -429,23 +451,37 @@ namespace FBI.MVC.View
       this.ACFIcon.TransparentColor = System.Drawing.Color.Transparent;
       this.ACFIcon.Images.SetKeyName(0, "ACF Square 2 .1Control bgd.png");
       // 
-      // m_saveFormatBT
+      // m_versionLabel
       // 
-      this.m_saveFormatBT.AllowAnimations = true;
-      this.m_saveFormatBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.m_saveFormatBT.BackColor = System.Drawing.Color.Transparent;
-      this.m_saveFormatBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.m_saveFormatBT.ImageKey = "1420498403_340208.ico";
-      this.m_saveFormatBT.ImageList = this.ButtonIcons;
-      this.m_saveFormatBT.Location = new System.Drawing.Point(347, 226);
-      this.m_saveFormatBT.Name = "m_saveFormatBT";
-      this.m_saveFormatBT.RoundedCornersMask = ((byte)(15));
-      this.m_saveFormatBT.Size = new System.Drawing.Size(102, 30);
-      this.m_saveFormatBT.TabIndex = 21;
-      this.m_saveFormatBT.Text = "Save";
-      this.m_saveFormatBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      this.m_saveFormatBT.UseVisualStyleBackColor = false;
-      this.m_saveFormatBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      this.m_versionLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_versionLabel.Ellipsis = false;
+      this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionLabel.Location = new System.Drawing.Point(27, 242);
+      this.m_versionLabel.Multiline = true;
+      this.m_versionLabel.Name = "m_versionLabel";
+      this.m_versionLabel.Size = new System.Drawing.Size(106, 13);
+      this.m_versionLabel.TabIndex = 1;
+      this.m_versionLabel.Text = "Financial BI Version";
+      this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionLabel.UseMnemonics = true;
+      this.m_versionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_versionValue
+      // 
+      this.m_versionValue.BackColor = System.Drawing.Color.Transparent;
+      this.m_versionValue.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_versionValue.Ellipsis = false;
+      this.m_versionValue.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionValue.Location = new System.Drawing.Point(201, 242);
+      this.m_versionValue.Multiline = true;
+      this.m_versionValue.Name = "m_versionValue";
+      this.m_versionValue.Size = new System.Drawing.Size(106, 13);
+      this.m_versionValue.TabIndex = 2;
+      this.m_versionValue.Text = "1.0.0.0";
+      this.m_versionValue.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionValue.UseMnemonics = true;
+      this.m_versionValue.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // SettingsView
       // 
@@ -491,5 +527,7 @@ namespace FBI.MVC.View
     private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     internal VIBlend.WinForms.Controls.vGroupBox m_formatsGroup;
     internal VIBlend.WinForms.Controls.vButton m_saveFormatBT;
+    internal VIBlend.WinForms.Controls.vLabel m_versionValue;
+    internal VIBlend.WinForms.Controls.vLabel m_versionLabel;
   }
 }
