@@ -35,8 +35,6 @@
     <category name="error">
       <string name="system">Une erreur est survenue au cours du calcul. Veuillez contacter votre administrateur si le problème persiste.</string>
       <string name="out_of_memory">Impossible de charger toutes les données, requête trop complexe.</string>
-      <string name="invalid_entity">Resultat reçu sur une entitée invalide.</string>
-      <string name="invalid_version">Resultat reçu sur une version invalide.</string>
       <string name="unknown_version">Version inconnue.</string>
       <string name="multiversion_no_sort">Plusieurs versions séléctionnées, vous devez ajouter l'élément Versions à votre décomposition.</string>
       <string name="no_version_selected">Vous devez selectionner au moins une version.</string>
@@ -284,17 +282,17 @@
     <string name="platform_config">Configuration de votre Financial BI</string>
 
     <!--titles-->
-    <string name="tool_tip_account">Financial and Operational Accounts Edition  (All changes applied will be available for all users)</string>
-    <string name="tool_tip_entities">Legal Organization Hierarchy Ediition  (All changes applied will be available for all users)</string>
-    <string name="tool_tip_categories">Entities, Clients, Products and Adjustments Categories Edition  (All changes applied will be available for all users)</string>
-    <string name="tool_tip_clients">Clients Edition  (All changes applied will be available for all users)</string>
-    <string name="tool_tip_products">Products Edition  (All changes applied will be available for all users)</string>
-    <string name="tool_tip_adjustments">Adjustments Edition  (All changes applied will be available for all users)</string>
-    <string name="tool_tip_versions">Versions Edition  (All changes applied will be available for all users)</string>
-    <string name="tool_tip_currencies">Currencies Edition (All changes applied will be available for all users)</string>
-    <string name="tool_tip_economic_indicators">Macro Economic Indicators Edition (All changes applied will be available for all users)</string>
-    <string name="tool_tip_exchange_rates">Edit the currencies used in Financial BI</string>
-    <string name="tool_tip_users_groups">Edition of the credential granted to the different groups of users</string>
+    <string name="tool_tip_account">Edition de comptes financiers et opérationnels</string>
+    <string name="tool_tip_entities">Organisation légale de la hiérarchie des entités</string>
+    <string name="tool_tip_categories">Edition des catégories d'entités, clients, produits et ajustements</string>
+    <string name="tool_tip_clients">Edition de clients</string>
+    <string name="tool_tip_products">Edition de produits</string>
+    <string name="tool_tip_adjustments">Edition d'ajustements</string>
+    <string name="tool_tip_versions">Edition de versions</string>
+    <string name="tool_tip_currencies">Edition de devises</string>
+    <string name="tool_tip_economic_indicators">Edition d'indicateurs macro economiques</string>
+    <string name="tool_tip_exchange_rates">Edition de la devise utilisée dans Financial BI</string>
+    <string name="tool_tip_users_groups">Edition des droits accordés aux différents groupes d'utilisateurs</string>
 
   </category>
 
@@ -316,11 +314,13 @@
     <string name="formula_period_range">Intervalle calculé</string>
 
     <!--messages-->
+    <string name="resize_base_version">Modifier la période couverte par </string>
     <string name="msg_folder_name">Entrez le nom du nouveau dossier</string>
     <string name="msg_new_name">Entrez le nouveau nom</string>
     <string name="warning_delete">Si vous supprimez cette version toutes les données associées à celle-ci seront suppriméees. Cette action est irréversible. Entrez votre mot de passe pour confirmer.</string>
 
     <category name="error">
+      <string name="unable_to_resize">Impossible de modifier </string>
       <string name="formula_period_range_invalid">Intervalle calculé invalide: La période de fin ne peut pas être antérieur à la période de début.</string>
       <string name="rates_version_not_selected">Veuillez sélectioner une version des taux de change.</string>
       <string name="gfacts_version_not_selected">Veuillez sélectioner une version des indicateurs macro économiques.</string>
@@ -359,7 +359,7 @@
     <string name="display_initial_differences">Afficher les différences vs. cloud</string>
 
     <string name="msg_empty_worksheet">La feuille est vide.</string>
-    <string name="msg_selection_instruction">Selectionnez les plage correspondant aux entités, comptes et périodes</string>
+    <string name="msg_selection_instruction">Selectionnez les plages correspondant aux entités, comptes et périodes</string>
     <string name="input_sidepane_title">Import de données depuis Excel</string>
     <string name="entity_selection">Selection de l'entité</string>
     <string name="periods_selection">Sélection des périodes</string>
@@ -371,14 +371,14 @@
     <string name="msg_error_worksheet_closed">La worksheet n'existe plus.</string>
     <string name="msg_invalidEntity">L'entité sélectionée n'est pas valide.</string>
     <string name="msg_invalidRHAccount">Le compte sélectionné n'est pas valide.</string>
-    <string name="msg_select_entity">Une entité doit êter sélectionnée.</string>
+    <string name="msg_select_entity">Une entité doit être sélectionnée.</string>
     <string name="msg_periods_selection">Sélectionnez la(les) période(s)</string>
     <string name="msg_rates_selection">Sélectionnez le(s) taux</string>
     <string name="msg_values_selection">Sélectionnez la(les) valeur(s)</string>
     <string name="msg_snapshot_error">Le snapshot n'a pas réussi car les dimensions suivantes n'ont pas été identifiées sur la feuille de calcul: </string>
     <string name="msg_entity_not_computed1">Le serveur a renvoyé une erreur.</string>
     <string name="msg_report_error">Une erreur est survenue dans le calcul de ce rapport. Il est possible que vous n'ayez pas les droits pour accéder à l'entité sélectionnée.</string>
-    <string name="msg_entity_not_found">Aucune BU n'a été identifiée sur la feuille.</string>
+    <string name="msg_entity_not_found">Aucune entité n'a été identifiée sur la feuille.</string>
     <string name="msg_error_upload">Une erreur est survenue dans Excel et le rapport ne peut pas être affiché.</string>
     <string name="msg_invalid_value_for_client">Cette valeur n'est pas valide pour un nom de client: </string>
     <string name="msg_no_account_setup">Aucun compte n'a été spécifié. Impossible de soumettre la donnée.</string>
@@ -448,8 +448,8 @@
 	<category name="timeconfig">
 		<string name="month">Mensuel</string>
 		<string name="year">Annuel</string>
-    <string name="week">Hebdomadaire</string>
-    <string name="day">Journalier</string>
+		<string name="week">Hebdomadaire</string>
+		<string name="day">Journalier</string>
 	</category>
   </category>
 
@@ -528,7 +528,7 @@
       <string name="version_mismatch">Votre version de Financial BI est incompatible.</string>
       <string name="name_empty">Nom vide.</string>
       <string name="name_too_long">Nom trop long.</string>
-      <string name="invalid_name">Nom invalide  (Ne peux pas contenir de , ou ").</string>
+      <string name="invalid_name">Nom invalide  (Ne peux pas contenir de guillemets).</string>
       <string name="no_version_selected">Aucune version n'est selectionnée.</string>
       <string name="server_disconnected">Connexion au serveur distant perdue. Veuillez-vous assurer que vos dernières actions ont bien été enregistrées.</string>
     </category>
@@ -553,7 +553,6 @@
     <string name="currency">Devise</string>
     <string name="delete">Supprimer</string>
     <string name="description">Description</string>
-    <string name="drop_on_excel">Transferer vers excel</string>
     <string name="economic_indicators">Indicateurs Macro Economiques</string>
     <string name="edition">Edition</string>
     <string name="employees">Employées</string>
@@ -636,9 +635,7 @@
     <string name="red_status">Non édité</string>
     <string name="orange_status">En édition</string>
     <string name="green_status">Validé</string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
+
   </category>
 
   <category name="log">
