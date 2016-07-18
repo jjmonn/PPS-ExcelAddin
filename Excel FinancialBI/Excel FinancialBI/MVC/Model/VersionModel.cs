@@ -69,6 +69,22 @@ namespace FBI.MVC.Model
       CopyEvent(p_packet.GetError(), p_packet.ReadUint32());
     }
 
+    public TimeConfig GetHightestTimeConfig(List<uint> p_versionList)
+    {
+      TimeConfig l_selectedConfig = TimeConfig.MONTHS;
+
+      foreach (UInt32 l_versionId in p_versionList)
+      {
+        Version l_version = GetValue(l_versionId);
+
+        if (l_version == null)
+          continue;
+        if ((UInt32)l_version.TimeConfiguration < (UInt32)l_selectedConfig)
+          l_selectedConfig = l_version.TimeConfiguration;
+      }
+      return (l_selectedConfig);
+    }
+
     #endregion
   }
 }
