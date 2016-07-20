@@ -13,6 +13,7 @@ namespace FBI
   using MVC.Model.CRUD;
   using MVC.Controller;
   using Utils;
+  using Network;
 
   [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("FBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
@@ -450,6 +451,26 @@ namespace FBI
 
     #endregion
 
+    void OnSnapshotAccountUpdateList(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<uint, ErrorMessage>> p_updateResults)
+    {
+      AccountModel.Instance.UpdateListEvent -= OnSnapshotAccountUpdateList;
+      bool l_error = false;
+
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        foreach (SafeDictionary<uint, ErrorMessage> l_answerCategory in p_updateResults.Values)
+          foreach (ErrorMessage l_message in l_answerCategory.Values)
+            if (l_message != ErrorMessage.SUCCESS)
+            {
+              l_error = true;
+              break;
+            }
+      }
+      else
+        l_error = true;
+      Forms.MsgBox.Show((l_error) ? Local.GetValue("general.error.account_edit_upload") : Local.GetValue("general.account_edit_success"));
+    }
+
     #region Financial Submission Ribon
 
     public ADXRibbonItem AddButtonToDropDown(ADXRibbonDropDown p_menu, UInt32 p_id, string p_name)
@@ -584,8 +605,13 @@ namespace FBI
     {
       AccountEditSnapshotController l_snapshot = new AccountEditSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
 
+      AccountModel.Instance.UpdateListEvent += OnSnapshotAccountUpdateList;
+
       if (l_snapshot.LaunchSnapshot() == false)
+      {
         MessageBox.Show(l_snapshot.Error);
+        AccountModel.Instance.UpdateListEvent -= OnSnapshotAccountUpdateList;
+      }
       l_snapshot.Close();
     }
 
