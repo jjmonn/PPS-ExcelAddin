@@ -63,7 +63,7 @@ namespace FBI.MVC.Controller
     {
       Filter l_filter = new Filter();
 
-      if (this.IsNameValid(p_filterName) && FilterModel.Instance.GetValue(AxisType, p_filterName) == null)
+      if (this.IsNameValid(p_filterName) && FilterModel.Instance.GetValue(p_filterName) == null)
       {
         l_filter.Name = p_filterName;
         l_filter.ParentId = p_parentId;
@@ -73,6 +73,8 @@ namespace FBI.MVC.Controller
           return (true);
         Error = Local.GetValue("general.error.system");
       }
+      else
+        Error = Local.GetValue("general.error.name_already_used");
       return (false);
     }
 
@@ -89,6 +91,8 @@ namespace FBI.MVC.Controller
           return (true);
         Error = Local.GetValue("general.error.system");
       }
+      else
+        Error = Local.GetValue("general.error.name_already_used");
       return (false);
     }
 

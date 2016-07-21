@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace FBI.MVC.Controller
 {
@@ -18,10 +19,14 @@ namespace FBI.MVC.Controller
     private NewDataVersionUI m_newVersionView = new NewDataVersionUI();
     private CopyVersionView m_copyVersionView = new CopyVersionView();
     public UInt32 SelectedVersion { get; set; }
+    ManualResetEvent m_wait;
+    UInt32 m_waitId;
 
     public VersionsController()
     {
       LoadView();
+      GlobalFactVersionModel.Instance.UpdateEvent += OnUpdateFactVersion;
+      RatesVersionModel.Instance.UpdateEvent += OnUpdateFactVersion;
     }
 
     public override void LoadView()
@@ -32,9 +37,84 @@ namespace FBI.MVC.Controller
       m_copyVersionView.SetController(this);
     }
 
+    public override void Close()
+    {
+      GlobalFactVersionModel.Instance.UpdateEvent -= OnUpdateFactVersion;
+      RatesVersionModel.Instance.UpdateEvent -= OnUpdateFactVersion;
+      base.Close();
+    }
+
+    public bool ResizeFactVersion<TVersion>(Version p_version, TVersion p_cmpVersion, NamedCRUDModel<TVersion> p_model) where TVersion : BaseVersion, NamedCRUDEntity
+    {
+      UInt32 l_versionEndPeriod = GetVersionEndPeriod(p_version, p_version.TimeConfiguration);
+      UInt32 l_cmpVersionEndPeriod = GetVersionEndPeriod(p_cmpVersion, TimeConfig.MONTHS);
+
+      p_cmpVersion.StartPeriod = (p_version.StartPeriod < p_cmpVersion.StartPeriod) ? p_version.StartPeriod : p_cmpVersion.StartPeriod;
+      p_cmpVersion.NbPeriod = (ushort)(
+        PeriodModel.GetMonthPeriodListFromPeriodsRange(
+        DateTime.FromOADate(p_cmpVersion.StartPeriod),
+        DateTime.FromOADate((l_versionEndPeriod > l_cmpVersionEndPeriod) ? l_versionEndPeriod : l_cmpVersionEndPeriod)).Count);
+
+      m_wait = new ManualResetEvent(false);
+      if (p_model.Update(p_cmpVersion) == false)
+        return (false);
+      m_waitId = p_cmpVersion.Id;
+      if (m_wait.WaitOne(2000) == false)
+        return (false); 
+      return (true);
+    }
+
+    void OnUpdateFactVersion(Network.ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_id != m_waitId || p_status != Network.ErrorMessage.SUCCESS)
+        return;
+      m_wait.Set();
+    }
+
     #region Validity checks
 
-    bool IsCompatibleVersion(Version p_version, BaseVersion p_cmpVersion)
+    UInt32 GetVersionEndPeriod(BaseVersion p_version, TimeConfig p_config)
+    {
+      UInt32 l_versionEndPeriod = 0;
+      switch (p_config)
+      {
+        case TimeConfig.YEARS:
+          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddYears(p_version.NbPeriod).ToOADate();
+          break;
+        case TimeConfig.MONTHS:
+          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddMonths(p_version.NbPeriod).ToOADate();
+          break;
+        case TimeConfig.DAYS:
+          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddDays(p_version.NbPeriod).ToOADate();
+          break;
+        default:
+          Error = Local.GetValue("versions.error.time_config_not_supported");
+          System.Diagnostics.Debug.WriteLine("Rates or gfacts versions compatibility check : time config not supported");
+          return (0);
+      }
+      return (l_versionEndPeriod);
+    }
+
+    public bool IsCompatibleVersion(Version p_version, BaseVersion p_cmpVersion)
+    {
+      if (p_cmpVersion == null)
+        return (true);
+
+      UInt32 l_baseVersionEndPeriod = GetVersionEndPeriod(p_cmpVersion, TimeConfig.MONTHS);
+      UInt32 l_versionEndPeriod = GetVersionEndPeriod(p_version, p_version.TimeConfiguration);
+
+      if (l_versionEndPeriod == 0)
+        return (false);
+
+      if (p_version.StartPeriod < p_cmpVersion.StartPeriod || l_versionEndPeriod > l_baseVersionEndPeriod)
+      {
+        Error = Local.GetValue("versions.error.rate_or_gfact_version_not_compatible");
+        return (false);
+      }
+      return (true);
+    }
+
+    bool IsValidVersion(Version p_version, BaseVersion p_cmpVersion)
     {
       if (p_cmpVersion == null)
       {
@@ -46,31 +126,7 @@ namespace FBI.MVC.Controller
         Error = Local.GetValue("versions.error.rate_or_gfact_version_is_folder");
         return (false);
       }
-      UInt32 l_baseVersionEndPeriod = (UInt32)DateTime.FromOADate(p_cmpVersion.StartPeriod).AddMonths(p_cmpVersion.NbPeriod).ToOADate();
-      UInt32 l_versionEndPeriod = 0;
-      switch (p_version.TimeConfiguration)
-      {
-        case TimeConfig.YEARS :
-          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddYears(p_version.NbPeriod).ToOADate(); 
-          break;
-        case TimeConfig.MONTHS:
-          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddMonths(p_version.NbPeriod).ToOADate();
-          break;
-        case TimeConfig.DAYS :
-          l_versionEndPeriod = (UInt32)DateTime.FromOADate(p_version.StartPeriod).AddDays(p_version.NbPeriod).ToOADate();
-          break;
-        default :
-          Error = Local.GetValue("versions.error.time_config_not_supported");
-          System.Diagnostics.Debug.WriteLine("Rates or gfacts versions compatibility check : tiem config not supported");          
-          return (false);
-      }
-
-      if (p_version.StartPeriod < p_cmpVersion.StartPeriod || l_versionEndPeriod > l_baseVersionEndPeriod)
-      {
-        Error = Local.GetValue("versions.error.rate_or_gfact_version_not_compatible");
-        return (false);
-      }
-      return (true);
+      return (IsCompatibleVersion(p_version, p_cmpVersion));
     }
 
     bool IsVersionValid(Version p_version)
@@ -102,9 +158,9 @@ namespace FBI.MVC.Controller
           Error = Local.GetValue("versions.error.invalid_nb_period");
           return (false);
         }
-        if (IsCompatibleVersion(p_version, RatesVersionModel.Instance.GetValue(p_version.RateVersionId)) == false)
+        if (IsValidVersion(p_version, RatesVersionModel.Instance.GetValue(p_version.RateVersionId)) == false)
           return (false);
-        if (IsCompatibleVersion(p_version, GlobalFactVersionModel.Instance.GetValue(p_version.GlobalFactVersionId)) == false)
+        if (IsValidVersion(p_version, GlobalFactVersionModel.Instance.GetValue(p_version.GlobalFactVersionId)) == false)
           return (false);
       }
       if (p_version.FormulaPeriodIndex > p_version.NbPeriod || p_version.FormulaNbPeriod > p_version.NbPeriod || 
@@ -120,7 +176,6 @@ namespace FBI.MVC.Controller
 
     public bool Create(Version p_version)
     {
-      SetStartPeriod(p_version);
       if (!IsVersionValid(p_version))
         return (false);
       if (VersionModel.Instance.GetValue(p_version.Name) != null)
@@ -190,7 +245,7 @@ namespace FBI.MVC.Controller
       m_copyVersionView.Show();
     }
 
-    private void SetStartPeriod(Version p_version)
+    public void SetStartPeriod(Version p_version)
     {
       switch (p_version.TimeConfiguration)
       {

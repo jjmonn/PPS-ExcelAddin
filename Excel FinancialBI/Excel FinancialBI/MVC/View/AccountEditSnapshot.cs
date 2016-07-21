@@ -29,6 +29,7 @@ namespace FBI.MVC.View
       ITEM_POSITION,
       DESCRIPTION,
       PROCESS,
+      FORMAT,
       UNDEFINED
     };
 
@@ -102,16 +103,16 @@ namespace FBI.MVC.View
           continue;
         WriteReportValue(l_beginCell, Column.NAME, l_account.Name, l_index);
         WriteReportValue(l_beginCell, Column.PARENT, AccountModel.Instance.GetValueName(l_account.ParentId), l_index);
-        WriteReportValue(l_beginCell, Column.FORMULA_TYPE, ((Account.FormulaTypes)l_account.FormulaType).ToString(), l_index);
-        WriteReportValue(l_beginCell, Column.FORMULA_TYPE, ((Account.FormulaTypes)l_account.FormulaType).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.FORMULA_TYPE, (l_account.FormulaType).ToString(), l_index);
         WriteReportValue(l_beginCell, Column.FORMULA, m_bnf.Concatenated, l_index);
-        WriteReportValue(l_beginCell, Column.TYPE, ((Account.AccountType)l_account.Type).ToString(), l_index);
-        WriteReportValue(l_beginCell, Column.CONSOLIDATION_OPTION, ((Account.ConsolidationOptions)l_account.ConsolidationOptionId).ToString(), l_index);
-        WriteReportValue(l_beginCell, Column.CONVERSION_OPTION, ((Account.ConversionOptions)l_account.ConversionOptionId).ToString(), l_index);
-        WriteReportValue(l_beginCell, Column.PERIOD_AGGREGATION_OPTION, ((Account.PeriodAggregationOptions)l_account.PeriodAggregationOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.TYPE, (l_account.Type).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.CONSOLIDATION_OPTION, (l_account.ConsolidationOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.CONVERSION_OPTION, (l_account.ConversionOptionId).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.PERIOD_AGGREGATION_OPTION, (l_account.PeriodAggregationOptionId).ToString(), l_index);
         WriteReportValue(l_beginCell, Column.ITEM_POSITION, l_account.ItemPosition.ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.FORMAT, l_account.FormatId.ToString(), l_index);
         WriteReportValue(l_beginCell, Column.DESCRIPTION, l_account.Description, l_index);
-        WriteReportValue(l_beginCell, Column.PROCESS, ((Account.AccountProcess)l_account.Process).ToString(), l_index);
+        WriteReportValue(l_beginCell, Column.PROCESS, (l_account.Process).ToString(), l_index);
 
         l_index++;
       }
@@ -307,6 +308,13 @@ namespace FBI.MVC.View
         return (false);
       p_account.Type = l_type;
       return (true);
+    }
+
+    void ReadFormat(Account p_account, object p_value)
+    {
+      Account.Format l_format = p_account.FormatId;
+      Enum.TryParse<Account.Format>((string)p_value, true, out l_format);
+      p_account.FormatId = l_format;
     }
 
     #endregion

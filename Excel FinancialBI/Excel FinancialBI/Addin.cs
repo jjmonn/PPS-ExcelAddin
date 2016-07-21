@@ -71,6 +71,7 @@ namespace FBI
       SuscribeModel<ChartPanel>(ChartPanelModel.Instance, p_suscribeEvent);
       SuscribeModel<ChartSettings>(ChartSettingsModel.Instance, p_suscribeEvent);
       SuscribeModel<ChartAccount>(ChartAccountModel.Instance, p_suscribeEvent);
+      SuscribeModel<AxisConfiguration>(AxisConfigurationModel.Instance, p_suscribeEvent);
     }
 
     static void SuscribeModel<T>(ICRUDModel<T> p_model, bool p_suscribeEvent) where T : class, CRUDEntity

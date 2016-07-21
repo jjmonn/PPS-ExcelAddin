@@ -123,6 +123,15 @@ namespace FBI.Utils
       return (false);
     }
 
+    public bool ReadTextNoCase(string p_str)
+    {
+      string l_tmp = m_str.ToLower();
+
+      if (String.Compare(l_tmp, m_ptr, p_str.ToLower(), 0, p_str.Length) == 0)
+        return (this.Incr(p_str.Length));
+      return (false);
+    }
+
     public bool ReadTo(char p_c)
     {
       Int32 i = m_ptr;

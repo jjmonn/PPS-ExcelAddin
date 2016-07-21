@@ -13,8 +13,11 @@ namespace FBI.MVC.Controller
   using Utils;
   using Network;
 
+  public delegate void AComputeCompleteEventHandler(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<UInt32, ComputeResult> p_result);
+
   public interface IFactEditionController
   {
+    event AComputeCompleteEventHandler ComputeCompleteEvent;
     void RaiseWorksheetChangingEvent(Range p_cell);
     void RaiseWorksheetChangedEvent();
     void RaiseWorksheetSelectionChangedEvent(Range p_range);
@@ -22,6 +25,7 @@ namespace FBI.MVC.Controller
     void Close();
     void CommitFacts();
     void ShowStatusView();
+    void ShowReportView();
     void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     bool AutoCommit { get; set; }
     string Error { get; set; }
@@ -30,6 +34,7 @@ namespace FBI.MVC.Controller
 
   abstract class AFactEditionController<TModel> : IFactEditionController where TModel : AEditedFactsModel
   {
+    public event AComputeCompleteEventHandler ComputeCompleteEvent;
     public string Error { get; set; }
     public AddinModuleController AddinController { get; private set; }
     public TModel EditedFactModel { get; protected set; }
@@ -48,6 +53,7 @@ namespace FBI.MVC.Controller
     public UInt32 RHAccountId { get; set; }
     protected StatusReportInterfaceUI m_statusView;
     public Worksheet Worksheet { get; set; }
+    public ReportController ReportController { get; set; }
 
     public AFactEditionController(AddinModuleController p_addinModuleController, Account.AccountProcess p_process, UInt32 p_versionId, Worksheet p_worksheet, List<Int32> p_periodsList = null)
     {
@@ -57,12 +63,23 @@ namespace FBI.MVC.Controller
       EntityId = 0;
       Process = p_process;
       RHAccountId = 0;
+
+      Version l_version = VersionModel.Instance.GetValue(VersionId);
+
+      if (l_version != null)
+        ReportController = new ReportController(l_version, this);
     }
 
     public void RaiseWorksheetSelectionChangedEvent(Range p_range)
     {
       if (WorksheetSelectionChanged != null)
         WorksheetSelectionChanged(p_range);
+    }
+
+    protected void RaiseComputeCompleteEvent(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<uint, ComputeResult> p_result)
+    {
+      if (ComputeCompleteEvent != null)
+        ComputeCompleteEvent(p_status, p_request, p_result);
     }
 
     public void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
@@ -115,6 +132,14 @@ namespace FBI.MVC.Controller
     {
       if (m_statusView != null)
         m_statusView.Show();
+    }
+
+    public void ShowReportView()
+    {
+      if (ReportController != null && View.AreaController.Orientation.IsValid && EditedFactModel.ComputeRequest != null)
+        ReportController.ShowView(View.AreaController.Orientation.Horizontal, View.AreaController.Orientation.Vertical, 
+          View.AreaController.Orientation.TabDimension,
+          EditedFactModel.ComputeRequest, EditedFactModel.ComputeRes);
     }
 
     private void OnCommitError(string p_address, ErrorMessage p_error)
