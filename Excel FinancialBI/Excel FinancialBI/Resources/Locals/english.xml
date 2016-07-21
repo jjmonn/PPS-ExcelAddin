@@ -596,6 +596,8 @@
     <string name="account_snapshot_selection">Select accounts to create</string>
     <string name="account_snapshot_properties">Accounts's properties</string>
     <string name="account_snapshot_import">Auto accounts creation</string>
+    <string name="exit">Exit</string>
+    <string name="account_snapshot_struct_undefined">Unable to detect worksheet structure.</string>
   </category>
 
   <category name="entity">
