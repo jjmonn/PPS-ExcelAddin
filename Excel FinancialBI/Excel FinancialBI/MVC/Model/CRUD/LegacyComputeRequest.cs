@@ -64,7 +64,7 @@ namespace FBI.MVC.Model.CRUD
       base.Dump(p_packet, p_versionId, EntityId);
 
       Version l_version = VersionModel.Instance.GetValue(p_versionId);
-      List<int> l_periods = GetPeriods(l_version);
+      List<int> l_periods = (PeriodFilter) ? GetPeriods(l_version) : null;
 
       p_packet.WriteBool(PeriodFilter && l_periods.Count != l_version.NbPeriod);
       if (PeriodFilter && l_periods.Count != l_version.NbPeriod)
