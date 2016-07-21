@@ -49,7 +49,7 @@ namespace FBI.MVC.View
       this.m_controller.CreatePane();
       CUI2LeftPane l_leftPane = this.m_controller.LeftPaneController.View as CUI2LeftPane;
       CUI2RightPane l_rightPane = this.m_controller.RightPaneController.View as CUI2RightPane;
-      ResultView l_resultView =  m_controller.ResultController.View as ResultView;
+      ResultView l_resultView = m_controller.ResultController.View as ResultView;
       this.SplitContainer1.Panel1.Controls.Add(l_leftPane);
       this.SplitContainer2.Panel2.Controls.Add(l_rightPane);
       vPanel1.Content.Controls.Add(l_resultView);

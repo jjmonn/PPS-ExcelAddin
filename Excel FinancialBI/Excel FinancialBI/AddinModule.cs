@@ -76,6 +76,7 @@ namespace FBI
       m_accountSnapshotBT.Caption = Local.GetValue("general.account_snapshot");
       m_reportAccount.Caption = Local.GetValue("general.report_account");
       m_snapshotCreateAccounts.Caption = Local.GetValue("general.account_snapshot_import");
+      m_submissionControlButton.Caption = Local.GetValue("submissionsFollowUp.submissions_controls");
     }
 
     void SuscribeEvents()
@@ -113,6 +114,7 @@ namespace FBI
 
     private void fbiRibbonChangeState(bool p_enabled)
     {
+      m_submissionControlButton.Enabled = p_enabled;
       m_versionRibbonButton.Enabled = p_enabled;
       m_processRibbonButton.Enabled = p_enabled;
       m_snapshotRibbonSplitButton.Enabled = p_enabled;
@@ -272,6 +274,8 @@ namespace FBI
             MessageBox.Show(m_controller.Error);
         }
       }
+      else
+        MessageBox.Show(Local.GetValue("general.error.no_version_selected"));
     }
 
     private void m_directoryRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -281,7 +285,8 @@ namespace FBI
 
     private void m_reportUploadRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      m_controller.LaunchReportEdition();
+      if (m_controller.LaunchReportEdition() == false)
+        MessageBox.Show(m_controller.Error);
     }
 
     private void m_CUIRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -589,6 +594,11 @@ namespace FBI
     private void m_financialSubmissionSatusButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
       m_controller.ShowStatusView();
+    }
+
+    private void m_displayReportBT_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_controller.DisplayReport();
     }
 
     private void m_accountSnapshot_OnClick(object sender, IRibbonControl control, bool pressed)

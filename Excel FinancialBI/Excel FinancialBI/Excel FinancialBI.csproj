@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FBI</RootNamespace>
-    <AssemblyName>Excel FinancialBI</AssemblyName>
+    <AssemblyName>FinancialBI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <StartupObject>
     </StartupObject>
@@ -33,6 +33,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\Financial BI dark blue.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -263,6 +266,7 @@
     <Compile Include="MVC\Controller\AccountEditSnapshotController.cs" />
     <Compile Include="MVC\Controller\AddinModuleController.cs" />
     <Compile Include="MVC\Controller\AFBIFunctionController.cs" />
+    <Compile Include="MVC\Controller\Controlling UI\AResultController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUILeftPaneController.cs" />
     <Compile Include="MVC\Controller\Controlling UI\CUIRightPaneController.cs" />
@@ -271,6 +275,7 @@
     <Compile Include="MVC\Controller\Controlling UI\ResultController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\AFactEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\FinancialFactEditionController.cs" />
+    <Compile Include="MVC\Controller\Facts Edition\ReportController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\ReportEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\RHFactEditionController.cs" />
     <Compile Include="MVC\Controller\Facts Edition\RHSnapshotLaunchController.cs" />
@@ -302,6 +307,8 @@
     <Compile Include="MVC\Controller\Plateform Management\UserController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Controller\SettingsController.cs" />
+    <Compile Include="MVC\Model\AxisConfigurationModel.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisConfiguration.cs" />
     <Compile Include="MVC\Model\ChartAccountModel.cs" />
     <Compile Include="MVC\Model\ChartPanelModel.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
@@ -458,11 +465,15 @@
     <Compile Include="MVC\View\Controlling UI\CUIVisualization.Designer.cs">
       <DependentUpon>CUIVisualization.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\Controlling UI\IResultView.cs" />
     <Compile Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.Designer.cs">
       <DependentUpon>PeriodsComparisonSelectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ResultView.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MVC\View\DuplicatesUIDemo.cs">
       <SubType>Form</SubType>
@@ -473,11 +484,20 @@
     <Compile Include="MVC\View\Facts Edition\AFactEditionView.cs" />
     <Compile Include="MVC\View\Facts Edition\FinancialFactEditionView.cs" />
     <Compile Include="MVC\View\Facts Edition\RangeHighlighter.cs" />
-    <Compile Include="MVC\View\Controlling UI\ResultView.cs">
+    <Compile Include="MVC\View\Controlling UI\AResultView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\Controlling UI\ResultView.Designer.cs">
-      <DependentUpon>ResultView.cs</DependentUpon>
+    <Compile Include="MVC\View\Controlling UI\AResultView.Designer.cs">
+      <DependentUpon>AResultView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Facts Edition\ReportView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Facts Edition\ReportViewContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Facts Edition\ReportViewContainer.Designer.cs">
+      <DependentUpon>ReportViewContainer.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Facts Edition\RHFactEditionView.cs" />
     <Compile Include="MVC\View\FBIFunctionView.cs">
@@ -486,6 +506,7 @@
     <Compile Include="MVC\View\FBIFunctionView.Designer.cs">
       <DependentUpon>FBIFunctionView.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\FixDesigner\AResultView.cs" />
     <Compile Include="MVC\View\FixDesigner\AxisBaseView.cs" />
     <Compile Include="MVC\View\FixDesigner\FactBaseView.cs" />
     <Compile Include="MVC\View\FixDesigner\NewAxisUI.cs" />
@@ -835,11 +856,14 @@
     <EmbeddedResource Include="MVC\View\Controlling UI\PeriodsComparisonSelectionView.resx">
       <DependentUpon>PeriodsComparisonSelectionView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Controlling UI\ResultView.resx">
-      <DependentUpon>ResultView.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Controlling UI\AResultView.resx">
+      <DependentUpon>AResultView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\DuplicatesUIDemo.resx">
       <DependentUpon>DuplicatesUIDemo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Facts Edition\ReportViewContainer.resx">
+      <DependentUpon>ReportViewContainer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\FBIFunctionView.resx">
       <DependentUpon>FBIFunctionView.cs</DependentUpon>

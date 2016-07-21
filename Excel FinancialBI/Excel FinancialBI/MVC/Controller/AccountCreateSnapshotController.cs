@@ -29,7 +29,7 @@ namespace FBI.MVC.Controller
       LoadView();
     }
 
-    void LoadView()
+    override public void LoadView()
     {
       m_selectionView.LoadView();
       m_selectionView.Show();

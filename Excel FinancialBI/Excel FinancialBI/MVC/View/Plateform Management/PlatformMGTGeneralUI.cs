@@ -13,9 +13,9 @@ namespace FBI.MVC.View
   using Controller;
   using System.ComponentModel;
   using System.Threading.Tasks;
-  //  using CRUD;
   using Utils;
   using Model.CRUD;
+  using Model;
 
   public partial class PlatformMGTGeneralUI : Form, IView
   {
@@ -114,22 +114,38 @@ namespace FBI.MVC.View
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(AxisType.Entities, AxisType.Employee));
+      AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Employee);
+      if (l_config != null && l_config.Owned)
+        m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
+      else
+        m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Employee));
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Client));
+      AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Client);
+      if (l_config != null && l_config.Owned)
+        m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
+      else
+        m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Client));
     }
 
     private void ProductsBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(AxisType.Client, AxisType.Product));
+      AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Product);
+      if (l_config != null && l_config.Owned)
+        m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
+      else
+        m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Product));
     }
 
     private void AdjustmentsBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Adjustment));
+      AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Adjustment);
+      if (l_config != null && l_config.Owned)
+        m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
+      else
+        m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Adjustment));
     }
 
     private void m_entitiesFiltersBT_Click(object sender, EventArgs e)

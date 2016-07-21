@@ -17,7 +17,7 @@ namespace FBI
         public FinancialBiXLL()
         {
             InitializeComponent();
-            // Please add any initialization code to the OnInitialize event handler
+          // Please add any initialization code to the OnInitialize event handler
         }
  
         #region Add-in Express automatic code
@@ -35,7 +35,7 @@ namespace FBI
         [ComRegisterFunctionAttribute]
         public static void RegisterXLL(Type t)
         {
-            AddinExpress.MSO.ADXXLLModule.RegisterXLLInternal(t);
+          AddinExpress.MSO.ADXXLLModule.RegisterXLLInternal(t);
         }
  
         [ComUnregisterFunctionAttribute]
@@ -81,10 +81,13 @@ namespace FBI
                 AddinModule l_module = AddinModule.CurrentInstance;
                 Microsoft.Office.Interop.Excel.Application l_app = (dynamic)CurrentInstance.HostApplication;
 
+                ADXExcelRef l_caller =
+                            Module.CallWorksheetFunction(ADXExcelWorksheetFunction.Caller) as ADXExcelRef;
+
                 if (l_app.ActiveSheet != l_module.ExcelApp.ActiveSheet)
                   return ("invalid worksheet");
                 if (Network.NetworkManager.IsConnected() == false || l_module == null)
-                  return ("Not connected");
+                  return ((l_caller == null) ? "not connected" : l_caller.GetValue());
                 return (l_module.FBIFunctionController.FBI(p_entity, p_account, p_aggregation, p_period, p_currency, p_version, 
                   p_clientsFilters, p_productsFilters, p_adjustmentsFilters, p_categoriesFilters));
               }

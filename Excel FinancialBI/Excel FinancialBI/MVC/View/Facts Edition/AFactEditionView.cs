@@ -20,6 +20,7 @@ namespace FBI.MVC.View
     void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     string Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
+    WorksheetAreaController AreaController { get; set; }
   }
 
   abstract class AFactEditionView<TModel, TController> : IFactEditionView where TModel : AEditedFactsModel
@@ -31,7 +32,7 @@ namespace FBI.MVC.View
     protected TModel m_model;
     protected RangeHighlighter m_rangeHighlighter;
     protected WorksheetAnalyzer m_worksheetAnalyzer = new WorksheetAnalyzer();
-    protected WorksheetAreaController m_areaController;
+    public WorksheetAreaController AreaController { get; set; }
     protected bool m_init = false;
     protected PBarUI m_progressBar;
 
@@ -42,7 +43,7 @@ namespace FBI.MVC.View
       m_worksheet = p_worksheet;
       m_model = m_controller.EditedFactModel;
       m_progressBar = new PBarUI(Local.GetValue("general.loading"), 100);
-      m_areaController = new WorksheetAreaController(m_controller.Process, m_controller.VersionId, p_worksheet, m_controller.PeriodsList);
+      AreaController = new WorksheetAreaController(m_controller.Process, m_controller.VersionId, p_worksheet, m_controller.PeriodsList);
     }
 
     public virtual void LoadView()
@@ -62,7 +63,7 @@ namespace FBI.MVC.View
     {
       if (ExcelUtils.IsWorksheetOpened(m_worksheet))
         m_rangeHighlighter.RevertToOriginalColors();
-      m_areaController.ClearDimensions();
+      AreaController.ClearDimensions();
       Addin.ConnectionStateEvent -= OnServerConnectionChanged;
       m_model.FactsDownloaded -= OnFactsDownloaded;
 
@@ -80,14 +81,14 @@ namespace FBI.MVC.View
       m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
       ActivateFactEditionRibbon();
       AddinModule.CurrentInstance.ExcelApp.CellDragAndDrop = false;
-      m_rangeHighlighter.FillDimensionColor(m_areaController);
+      m_rangeHighlighter.FillDimensionColor(AreaController);
     }
 
     public void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       m_progressBar.Value = 0;
       m_progressBar.Show();
-      m_controller.EditedFactModel.RegisterEditedFacts(m_areaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
+      m_controller.EditedFactModel.RegisterEditedFacts(AreaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
       m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
     }
 
@@ -97,16 +98,16 @@ namespace FBI.MVC.View
         return Local.GetValue("upload.msg_error_worksheet_closed");
       if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
       {
-        m_worksheetAnalyzer.Snapshot(m_areaController);
-        m_areaController.DefineOrientation(m_controller.Process);
-        m_controller.VersionId = m_areaController.VersionId;
-        if (m_areaController.Entities.m_values == null || m_areaController.Entities.m_values.Count != 1)
+        m_worksheetAnalyzer.Snapshot(AreaController);
+        AreaController.DefineOrientation(m_controller.Process);
+        m_controller.VersionId = AreaController.VersionId;
+        if (AreaController.Entities.m_values == null || AreaController.Entities.m_values.Count != 1)
           m_controller.EntityId = 0;
         else
-          m_controller.EntityId = m_areaController.Entities.m_values.First().Value.Id;
-        if (m_areaController.IsValid() == false)
-          return m_areaController.GetDimensionError();
-        m_controller.EditedFactModel.RegisterEditedFacts(m_areaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
+          m_controller.EntityId = AreaController.Entities.m_values.First().Value.Id;
+        if (AreaController.IsValid() == false)
+          return AreaController.GetDimensionError();
+        m_controller.EditedFactModel.RegisterEditedFacts(AreaController, m_controller.VersionId, p_displayInitialDifferences, m_controller.RHAccountId);
         if (m_controller.VersionId != 0 && (m_controller.PeriodsList == null || m_controller.PeriodsList.Count > 0))
         {
           OpenFactsEdition(p_updateCells, p_clientId, p_productId, p_adjustmentId);
@@ -149,7 +150,7 @@ namespace FBI.MVC.View
       }
 
       IsEditingExcel = true;
-      string l_result = m_areaController.CellBelongsToDimension(p_cell);
+      string l_result = AreaController.CellBelongsToDimension(p_cell);
       if (l_result != "")
         p_cell.Value2 = l_result;
       double? l_result2 = m_model.CellBelongToOutput(p_cell);

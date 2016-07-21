@@ -72,6 +72,8 @@ namespace FBI.MVC.View
       m_connectionTab.Text = Local.GetValue("connection.connection");
       m_formatsTab.Text = Local.GetValue("settings.display_options");
       m_otherTab.Text = Local.GetValue("settings.preferences");
+      m_versionValue.Text = this.ProductVersion;
+      m_saveFormatBT.Text = Local.GetValue("general.save");
     }
 
     void SuscribeEvents()
