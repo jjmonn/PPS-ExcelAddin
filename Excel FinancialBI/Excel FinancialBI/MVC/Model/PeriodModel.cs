@@ -150,6 +150,8 @@ namespace FBI.MVC.Model
     {
 
       List<Int32> l_yearsIdList = new List<Int32>();
+
+      p_startPeriod = GetYearIdFromPeriodId(p_startPeriod);
       l_yearsIdList.Add(p_startPeriod);
       double l_year = p_startPeriod / 365.25 + 1900;
 

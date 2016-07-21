@@ -39,16 +39,39 @@ namespace FBI.MVC.Model.CRUD
         PeriodDiffAssociations[config] = new SafeDictionary<int, int>();
     }
 
+    List<int> GetPeriods(Version p_version)
+    {
+      TimeConfig l_parentConfig = VersionModel.Instance.GetHightestTimeConfig(Versions);
+      List<int> l_periods;
+
+      if (TimeUtils.IsParentConfig(l_parentConfig, p_version.TimeConfiguration))
+      {
+        l_periods = new List<int>();
+        foreach (int l_period in Periods)
+        {
+          List<int> l_tmp = PeriodModel.GetPeriodList(l_period, TimeUtils.GetChildConfigNbPeriods(l_parentConfig, 1), p_version.TimeConfiguration);
+
+          l_periods = l_periods.Concat(l_tmp).ToList();
+        }
+      }
+      else
+        l_periods = Periods;
+      return (l_periods);
+    }
+
     public void Dump(ByteBuffer p_packet, UInt32 p_versionId)
     {
       base.Dump(p_packet, p_versionId, EntityId);
 
       Version l_version = VersionModel.Instance.GetValue(p_versionId);
-      p_packet.WriteBool(PeriodFilter);
-      if (PeriodFilter)
+      List<int> l_periods = (PeriodFilter) ? GetPeriods(l_version) : null;
+
+      p_packet.WriteBool(PeriodFilter && l_periods.Count != l_version.NbPeriod);
+      if (PeriodFilter && l_periods.Count != l_version.NbPeriod)
       {
-        p_packet.WriteInt32(Periods.Count);
-        foreach (Int32 l_period in Periods)
+       
+        p_packet.WriteInt32(l_periods.Count);
+        foreach (Int32 l_period in l_periods)
         {
           Int32 l_value;
 
