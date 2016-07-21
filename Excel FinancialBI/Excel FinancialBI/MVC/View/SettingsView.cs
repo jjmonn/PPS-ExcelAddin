@@ -64,25 +64,31 @@ namespace FBI.MVC.View
       m_serverAddressLabel.Text = Local.GetValue("settings.server_address");
       m_portNumberLabel.Text = Local.GetValue("settings.port_number");
       m_userIdLabel.Text = Local.GetValue("connection.user_id");
-      m_saveConnectionButton.Text = Local.GetValue("general.save");
+      m_saveConnectionButton.Text = Local.GetValue("general.confirm");
       m_formatsGroup.Text = Local.GetValue("settings.report_format");
       m_consolidationCurrencyLabel.Text = Local.GetValue("settings.currency");
       m_languageLabel.Text = Local.GetValue("settings.language");
-      m_otherValidateButton.Text = Local.GetValue("general.save");
+      m_otherValidateButton.Text = Local.GetValue("general.confirm");
       m_connectionTab.Text = Local.GetValue("connection.connection");
       m_formatsTab.Text = Local.GetValue("settings.display_options");
       m_otherTab.Text = Local.GetValue("settings.preferences");
       m_versionValue.Text = this.ProductVersion;
-      m_saveFormatBT.Text = Local.GetValue("general.save");
+      m_saveFormatBT.Text = Local.GetValue("general.confirm");
       m_snapshotOptionLabel.Text = Local.GetValue("settings.snapshot_option");
       m_inputOnlyLabel.Text = Local.GetValue("settings.input_only");
+      m_applyConnection.Text = Local.GetValue("general.apply");
+      m_applyOther.Text = Local.GetValue("general.apply");
+      m_applyFormat.Text = Local.GetValue("general.apply");
     }
 
     void SuscribeEvents()
     {
-      m_saveFormatBT.Click += OnValidateFormatTab;
-      m_saveConnectionButton.Click += OnValidateConnectionTab;
-      m_otherValidateButton.Click += OnValidateOtherTab;
+      m_applyConnection.Click += OnValidateConnectionTab;
+      m_applyFormat.Click += OnValidateFormatTab;
+      m_applyOther.Click += OnValidateOtherTab;
+      m_saveFormatBT.Click += OnConfirm;
+      m_saveConnectionButton.Click += OnConfirm;
+      m_otherValidateButton.Click += OnConfirm;
       m_formatDGV.CellValidated += OnFormatCellValidated;
       m_formatDGV.CellValueChanged += OnFormatCellValueChanged;
     }
@@ -237,6 +243,14 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    void OnConfirm(object p_sender, EventArgs p_e)
+    {
+      OnValidateConnectionTab(p_sender, p_e);
+      OnValidateFormatTab(p_sender, p_e);
+      OnValidateOtherTab(p_sender, p_e);
+      Close();
+    }
 
     void LoadOtherTab()
     {

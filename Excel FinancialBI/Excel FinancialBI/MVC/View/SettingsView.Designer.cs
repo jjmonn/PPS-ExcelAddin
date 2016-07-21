@@ -40,6 +40,8 @@ namespace FBI.MVC.View
       this.Panel1 = new System.Windows.Forms.Panel();
       this.TabControl1 = new VIBlend.WinForms.Controls.vTabControl();
       this.m_connectionTab = new VIBlend.WinForms.Controls.vTabPage();
+      this.m_versionValue = new VIBlend.WinForms.Controls.vLabel();
+      this.m_versionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_portTB = new VIBlend.WinForms.Controls.vNumberEditor();
       this.m_saveConnectionButton = new VIBlend.WinForms.Controls.vButton();
       this.ButtonIcons = new System.Windows.Forms.ImageList(this.components);
@@ -57,16 +59,17 @@ namespace FBI.MVC.View
       this.m_languageComboBox = new VIBlend.WinForms.Controls.vComboBox();
       this.m_languageLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_currenciesCombobox = new VIBlend.WinForms.Controls.vComboBox();
-      this.m_consolidationCurrencyLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_snapshotOptionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_inputOnlyLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_snapshotInputOnlyCheckbox = new VIBlend.WinForms.Controls.vCheckBox();
+      this.m_consolidationCurrencyLabel = new VIBlend.WinForms.Controls.vLabel();
       this.ControlImages = new System.Windows.Forms.ImageList(this.components);
       this.ACFIcon = new System.Windows.Forms.ImageList(this.components);
       this.FolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
       this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
-      this.m_versionLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.m_versionValue = new VIBlend.WinForms.Controls.vLabel();
+      this.m_applyConnection = new VIBlend.WinForms.Controls.vButton();
+      this.m_applyFormat = new VIBlend.WinForms.Controls.vButton();
+      this.m_applyOther = new VIBlend.WinForms.Controls.vButton();
       this.Panel1.SuspendLayout();
       this.TabControl1.SuspendLayout();
       this.m_connectionTab.SuspendLayout();
@@ -78,8 +81,6 @@ namespace FBI.MVC.View
       // Panel1
       // 
       this.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      m_connectionTab.Controls.Add(this.m_versionValue);
-      m_connectionTab.Controls.Add(this.m_versionLabel);
       this.Panel1.Controls.Add(this.TabControl1);
       this.Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.Panel1.Location = new System.Drawing.Point(0, 0);
@@ -108,6 +109,9 @@ namespace FBI.MVC.View
       // 
       // m_connectionTab
       // 
+      this.m_connectionTab.Controls.Add(this.m_applyConnection);
+      this.m_connectionTab.Controls.Add(this.m_versionValue);
+      this.m_connectionTab.Controls.Add(this.m_versionLabel);
       this.m_connectionTab.Controls.Add(this.m_portTB);
       this.m_connectionTab.Controls.Add(this.m_saveConnectionButton);
       this.m_connectionTab.Controls.Add(this.m_portNumberLabel);
@@ -125,6 +129,38 @@ namespace FBI.MVC.View
       this.m_connectionTab.TooltipText = "Connection";
       this.m_connectionTab.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       this.m_connectionTab.Visible = false;
+      // 
+      // m_versionValue
+      // 
+      this.m_versionValue.BackColor = System.Drawing.Color.Transparent;
+      this.m_versionValue.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_versionValue.Ellipsis = false;
+      this.m_versionValue.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionValue.Location = new System.Drawing.Point(201, 200);
+      this.m_versionValue.Multiline = true;
+      this.m_versionValue.Name = "m_versionValue";
+      this.m_versionValue.Size = new System.Drawing.Size(106, 13);
+      this.m_versionValue.TabIndex = 2;
+      this.m_versionValue.Text = "1.0.0.0";
+      this.m_versionValue.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionValue.UseMnemonics = true;
+      this.m_versionValue.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_versionLabel
+      // 
+      this.m_versionLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_versionLabel.Ellipsis = false;
+      this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionLabel.Location = new System.Drawing.Point(27, 200);
+      this.m_versionLabel.Multiline = true;
+      this.m_versionLabel.Name = "m_versionLabel";
+      this.m_versionLabel.Size = new System.Drawing.Size(106, 13);
+      this.m_versionLabel.TabIndex = 1;
+      this.m_versionLabel.Text = "Financial BI Version";
+      this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_versionLabel.UseMnemonics = true;
+      this.m_versionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // m_portTB
       // 
@@ -278,6 +314,8 @@ namespace FBI.MVC.View
       // 
       // m_formatsTab
       // 
+      this.m_formatsTab.Controls.Add(this.m_applyFormat);
+      this.m_formatsTab.Controls.Add(this.m_saveFormatBT);
       this.m_formatsTab.Controls.Add(this.tableLayoutPanel1);
       this.m_formatsTab.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_formatsTab.Location = new System.Drawing.Point(0, 45);
@@ -295,7 +333,6 @@ namespace FBI.MVC.View
       this.tableLayoutPanel1.ColumnCount = 1;
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 452F));
       this.tableLayoutPanel1.Controls.Add(this.m_formatsGroup, 0, 0);
-      this.tableLayoutPanel1.Controls.Add(this.m_saveFormatBT, 0, 1);
       this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 4);
       this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -321,7 +358,6 @@ namespace FBI.MVC.View
       // m_saveFormatBT
       // 
       this.m_saveFormatBT.AllowAnimations = true;
-      this.m_saveFormatBT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.m_saveFormatBT.BackColor = System.Drawing.Color.Transparent;
       this.m_saveFormatBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.m_saveFormatBT.ImageKey = "1420498403_340208.ico";
@@ -338,6 +374,7 @@ namespace FBI.MVC.View
       // 
       // m_otherTab
       // 
+      this.m_otherTab.Controls.Add(this.m_applyOther);
       this.m_otherTab.Controls.Add(this.m_otherValidateButton);
       this.m_otherTab.Controls.Add(this.m_languageComboBox);
       this.m_otherTab.Controls.Add(this.m_languageLabel);
@@ -428,23 +465,7 @@ namespace FBI.MVC.View
       this.m_currenciesCombobox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       this.m_currenciesCombobox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
-      // m_consolidationCurrencyLabel
-      // 
-      this.m_consolidationCurrencyLabel.BackColor = System.Drawing.Color.Transparent;
-      this.m_consolidationCurrencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
-      this.m_consolidationCurrencyLabel.Ellipsis = false;
-      this.m_consolidationCurrencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_consolidationCurrencyLabel.Location = new System.Drawing.Point(22, 38);
-      this.m_consolidationCurrencyLabel.Multiline = true;
-      this.m_consolidationCurrencyLabel.Name = "m_consolidationCurrencyLabel";
-      this.m_consolidationCurrencyLabel.Size = new System.Drawing.Size(179, 25);
-      this.m_consolidationCurrencyLabel.TabIndex = 0;
-      this.m_consolidationCurrencyLabel.Text = "Devise de consolidation";
-      this.m_consolidationCurrencyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_consolidationCurrencyLabel.UseMnemonics = true;
-      this.m_consolidationCurrencyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_snapshotInputOnlyLabel
+      // m_snapshotOptionLabel
       // 
       this.m_snapshotOptionLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_snapshotOptionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
@@ -452,7 +473,7 @@ namespace FBI.MVC.View
       this.m_snapshotOptionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
       this.m_snapshotOptionLabel.Location = new System.Drawing.Point(22, 128);
       this.m_snapshotOptionLabel.Multiline = true;
-      this.m_snapshotOptionLabel.Name = "m_snapshotInputOnlyLabel";
+      this.m_snapshotOptionLabel.Name = "m_snapshotOptionLabel";
       this.m_snapshotOptionLabel.Size = new System.Drawing.Size(179, 25);
       this.m_snapshotOptionLabel.TabIndex = 0;
       this.m_snapshotOptionLabel.Text = "Snapshot Option";
@@ -483,7 +504,24 @@ namespace FBI.MVC.View
       this.m_snapshotInputOnlyCheckbox.Name = "m_snapshotInputOnlyCheckbox";
       this.m_snapshotInputOnlyCheckbox.Size = new System.Drawing.Size(179, 25);
       this.m_snapshotInputOnlyCheckbox.TabIndex = 0;
+      this.m_snapshotInputOnlyCheckbox.UseVisualStyleBackColor = false;
       this.m_snapshotInputOnlyCheckbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_consolidationCurrencyLabel
+      // 
+      this.m_consolidationCurrencyLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_consolidationCurrencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_consolidationCurrencyLabel.Ellipsis = false;
+      this.m_consolidationCurrencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_consolidationCurrencyLabel.Location = new System.Drawing.Point(22, 38);
+      this.m_consolidationCurrencyLabel.Multiline = true;
+      this.m_consolidationCurrencyLabel.Name = "m_consolidationCurrencyLabel";
+      this.m_consolidationCurrencyLabel.Size = new System.Drawing.Size(179, 25);
+      this.m_consolidationCurrencyLabel.TabIndex = 0;
+      this.m_consolidationCurrencyLabel.Text = "Devise de consolidation";
+      this.m_consolidationCurrencyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_consolidationCurrencyLabel.UseMnemonics = true;
+      this.m_consolidationCurrencyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // ControlImages
       // 
@@ -498,37 +536,56 @@ namespace FBI.MVC.View
       this.ACFIcon.TransparentColor = System.Drawing.Color.Transparent;
       this.ACFIcon.Images.SetKeyName(0, "ACF Square 2 .1Control bgd.png");
       // 
-      // m_versionLabel
+      // m_applyConnection
       // 
-      this.m_versionLabel.BackColor = System.Drawing.Color.Transparent;
-      this.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
-      this.m_versionLabel.Ellipsis = false;
-      this.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionLabel.Location = new System.Drawing.Point(27, 242);
-      this.m_versionLabel.Multiline = true;
-      this.m_versionLabel.Name = "m_versionLabel";
-      this.m_versionLabel.Size = new System.Drawing.Size(106, 13);
-      this.m_versionLabel.TabIndex = 1;
-      this.m_versionLabel.Text = "Financial BI Version";
-      this.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionLabel.UseMnemonics = true;
-      this.m_versionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_applyConnection.AllowAnimations = true;
+      this.m_applyConnection.BackColor = System.Drawing.Color.Transparent;
+      this.m_applyConnection.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_applyConnection.ImageKey = "1420498403_340208.ico";
+      this.m_applyConnection.ImageList = this.ButtonIcons;
+      this.m_applyConnection.Location = new System.Drawing.Point(220, 226);
+      this.m_applyConnection.Name = "m_applyConnection";
+      this.m_applyConnection.RoundedCornersMask = ((byte)(15));
+      this.m_applyConnection.Size = new System.Drawing.Size(102, 30);
+      this.m_applyConnection.TabIndex = 21;
+      this.m_applyConnection.Text = "Apply";
+      this.m_applyConnection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_applyConnection.UseVisualStyleBackColor = false;
+      this.m_applyConnection.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
-      // m_versionValue
+      // m_applyOther
       // 
-      this.m_versionValue.BackColor = System.Drawing.Color.Transparent;
-      this.m_versionValue.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
-      this.m_versionValue.Ellipsis = false;
-      this.m_versionValue.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionValue.Location = new System.Drawing.Point(201, 242);
-      this.m_versionValue.Multiline = true;
-      this.m_versionValue.Name = "m_versionValue";
-      this.m_versionValue.Size = new System.Drawing.Size(106, 13);
-      this.m_versionValue.TabIndex = 2;
-      this.m_versionValue.Text = "1.0.0.0";
-      this.m_versionValue.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_versionValue.UseMnemonics = true;
-      this.m_versionValue.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_applyOther.AllowAnimations = true;
+      this.m_applyOther.BackColor = System.Drawing.Color.Transparent;
+      this.m_applyOther.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_applyOther.ImageKey = "1420498403_340208.ico";
+      this.m_applyOther.ImageList = this.ButtonIcons;
+      this.m_applyOther.Location = new System.Drawing.Point(220, 226);
+      this.m_applyOther.Name = "m_applyOther";
+      this.m_applyOther.RoundedCornersMask = ((byte)(15));
+      this.m_applyOther.Size = new System.Drawing.Size(102, 30);
+      this.m_applyOther.TabIndex = 21;
+      this.m_applyOther.Text = "Apply";
+      this.m_applyOther.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_applyOther.UseVisualStyleBackColor = false;
+      this.m_applyOther.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_applyFormat
+      // 
+      this.m_applyFormat.AllowAnimations = true;
+      this.m_applyFormat.BackColor = System.Drawing.Color.Transparent;
+      this.m_applyFormat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_applyFormat.ImageKey = "1420498403_340208.ico";
+      this.m_applyFormat.ImageList = this.ButtonIcons;
+      this.m_applyFormat.Location = new System.Drawing.Point(220, 226);
+      this.m_applyFormat.Name = "m_applyFormat";
+      this.m_applyFormat.RoundedCornersMask = ((byte)(15));
+      this.m_applyFormat.Size = new System.Drawing.Size(102, 30);
+      this.m_applyFormat.TabIndex = 21;
+      this.m_applyFormat.Text = "Apply";
+      this.m_applyFormat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_applyFormat.UseVisualStyleBackColor = false;
+      this.m_applyFormat.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
       // SettingsView
       // 
@@ -579,5 +636,8 @@ namespace FBI.MVC.View
     internal VIBlend.WinForms.Controls.vButton m_saveFormatBT;
     internal VIBlend.WinForms.Controls.vLabel m_versionValue;
     internal VIBlend.WinForms.Controls.vLabel m_versionLabel;
+    internal VIBlend.WinForms.Controls.vButton m_applyConnection;
+    internal VIBlend.WinForms.Controls.vButton m_applyFormat;
+    internal VIBlend.WinForms.Controls.vButton m_applyOther;
   }
 }

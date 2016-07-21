@@ -610,6 +610,8 @@
     <string name="account_snapshot_import">Création de comptes automatisée</string>
     <string name="exit">Sortie</string>
     <string name="account_snapshot_struct_undefined">Impossible de détecter la structure de la feuille.</string>
+    <string name="confirm">Confirmer</string>
+    <string name="apply">Appliquer</string>
   </category>
 
   <category name="entity">

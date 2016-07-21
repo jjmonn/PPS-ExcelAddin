@@ -598,6 +598,8 @@
     <string name="account_snapshot_import">Auto accounts creation</string>
     <string name="exit">Exit</string>
     <string name="account_snapshot_struct_undefined">Unable to detect worksheet structure.</string>
+    <string name="confirm">Confirm</string>
+    <string name="apply">Apply</string>
   </category>
 
   <category name="entity">
