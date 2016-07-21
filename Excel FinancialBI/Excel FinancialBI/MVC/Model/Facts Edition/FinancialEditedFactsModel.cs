@@ -247,7 +247,12 @@ namespace FBI.MVC.Model
         m_facts[l_pair.Key] = l_pair.Value;
       RequestIdList.Remove(p_requestId);
       if (RequestIdList.Count == 0)
-        ComputeOutputs();
+      {
+        if (m_inputOnly)
+          RaiseFactDownloaded(true);
+        else
+          ComputeOutputs();
+      }
     }
 
     public void ComputeOutputs()
@@ -377,7 +382,7 @@ namespace FBI.MVC.Model
 
     public override void Refresh()
     {
-      if (m_needRefresh)
+      if (m_needRefresh && !m_inputOnly)
         ComputeOutputs();
       m_needRefresh = false;
     }

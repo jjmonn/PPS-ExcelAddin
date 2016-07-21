@@ -74,6 +74,8 @@ namespace FBI.MVC.View
       m_otherTab.Text = Local.GetValue("settings.preferences");
       m_versionValue.Text = this.ProductVersion;
       m_saveFormatBT.Text = Local.GetValue("general.save");
+      m_snapshotOptionLabel.Text = Local.GetValue("settings.snapshot_option");
+      m_inputOnlyLabel.Text = Local.GetValue("settings.input_only");
     }
 
     void SuscribeEvents()
@@ -249,6 +251,7 @@ namespace FBI.MVC.View
         m_currenciesItems[l_currency.Id] = CreateListItem(l_currency.Name, l_currency.Id, m_currenciesCombobox);
       m_currenciesCombobox.SelectedItem = m_currenciesItems[Settings.Default.currentCurrency];
       m_currenciesCombobox.Enabled = Network.NetworkManager.IsConnected();
+      m_snapshotInputOnlyCheckbox.Checked = Settings.Default.snapshotInputOnly;
     }
 
     void LoadConnectionTab()
@@ -288,6 +291,7 @@ namespace FBI.MVC.View
     {
       if (m_languageComboBox.SelectedItem != null)
         Settings.Default.language = (UInt32)m_languageComboBox.SelectedItem.Value;
+      Settings.Default.snapshotInputOnly = m_snapshotInputOnlyCheckbox.Checked;
       Settings.Default.Save();
       Addin.SelectLanguage();
       MultilanguageSetup();

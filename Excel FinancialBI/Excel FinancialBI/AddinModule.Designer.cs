@@ -43,6 +43,7 @@
       this.m_snapshotRibbonSplitButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
       this.adxRibbonMenu1 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
       this.m_directoryRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_snapshotCreateAccounts = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_accountSnapshotBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_reportAccount = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_reportUploadRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -84,14 +85,14 @@
       this.m_financialSubmissionSatusButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.StateSelectionGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.entityEditBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.AdxRibbonButton1 = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.currencyBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.VersionBT2 = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.EntityTB = new AddinExpress.MSO.ADXRibbonEditBox(this.components);
       this.EntCurrTB = new AddinExpress.MSO.ADXRibbonEditBox(this.components);
       this.VersionTBSubRibbon = new AddinExpress.MSO.ADXRibbonEditBox(this.components);
-      this.AdxRibbonButton2 = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.AdxRibbonButton3 = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.AdxRibbonButton4 = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.adjustmentBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.clientBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.productBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.AdjustmentDropDown = new AddinExpress.MSO.ADXRibbonDropDown(this.components);
       this.ClientsDropDown = new AddinExpress.MSO.ADXRibbonDropDown(this.components);
       this.ProductsDropDown = new AddinExpress.MSO.ADXRibbonDropDown(this.components);
@@ -100,7 +101,7 @@
       this.AdxRibbonMenu5 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
       this.m_reportUploadAccountInfoButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.RefreshInputsBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.AdxRibbonGroup9 = new AddinExpress.MSO.ADXRibbonGroup(this.components);
+      this.m_exitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.CloseBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_RHSubmissionRibbon = new AddinExpress.MSO.ADXRibbonTab(this.components);
       this.AdxRibbonRHSubmissionGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
@@ -124,7 +125,6 @@
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_displayReportBT = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.adxRibbonButton5 = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_snapshotCreateAccounts = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
       // m_financialbiRibbon
       // 
@@ -259,6 +259,14 @@
       this.m_directoryRibbonButton.Id = "adxRibbonButton_3c5c89ebdd9a4ea595bbc1e5a46be7ed";
       this.m_directoryRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_directoryRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      // 
+      // m_snapshotCreateAccounts
+      // 
+      this.m_snapshotCreateAccounts.Caption = "Snapshot new accounts";
+      this.m_snapshotCreateAccounts.Id = "adxRibbonButton_b1efb7ae766347508ba622b0e48319cf";
+      this.m_snapshotCreateAccounts.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_snapshotCreateAccounts.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_snapshotCreateAccounts.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_snapshotCreateAccounts_OnClick);
       // 
       // m_accountSnapshotBT
       // 
@@ -556,7 +564,7 @@
       this.m_financialSubmissionRibbon.Controls.Add(this.FinancialSubmissionGroup);
       this.m_financialSubmissionRibbon.Controls.Add(this.StateSelectionGroup);
       this.m_financialSubmissionRibbon.Controls.Add(this.EditSelectionGroup);
-      this.m_financialSubmissionRibbon.Controls.Add(this.AdxRibbonGroup9);
+      this.m_financialSubmissionRibbon.Controls.Add(this.m_exitGroup);
       this.m_financialSubmissionRibbon.Id = "adxRibbonTab_7e9a50d1d91c429697388afda23d5b15";
       this.m_financialSubmissionRibbon.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
@@ -616,14 +624,14 @@
       // 
       this.StateSelectionGroup.Caption = "Entity Information";
       this.StateSelectionGroup.Controls.Add(this.entityEditBT);
-      this.StateSelectionGroup.Controls.Add(this.AdxRibbonButton1);
+      this.StateSelectionGroup.Controls.Add(this.currencyBT);
       this.StateSelectionGroup.Controls.Add(this.VersionBT2);
       this.StateSelectionGroup.Controls.Add(this.EntityTB);
       this.StateSelectionGroup.Controls.Add(this.EntCurrTB);
       this.StateSelectionGroup.Controls.Add(this.VersionTBSubRibbon);
-      this.StateSelectionGroup.Controls.Add(this.AdxRibbonButton2);
-      this.StateSelectionGroup.Controls.Add(this.AdxRibbonButton3);
-      this.StateSelectionGroup.Controls.Add(this.AdxRibbonButton4);
+      this.StateSelectionGroup.Controls.Add(this.adjustmentBT);
+      this.StateSelectionGroup.Controls.Add(this.clientBT);
+      this.StateSelectionGroup.Controls.Add(this.productBT);
       this.StateSelectionGroup.Controls.Add(this.AdjustmentDropDown);
       this.StateSelectionGroup.Controls.Add(this.ClientsDropDown);
       this.StateSelectionGroup.Controls.Add(this.ProductsDropDown);
@@ -639,13 +647,13 @@
       this.entityEditBT.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.entityEditBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
-      // AdxRibbonButton1
+      // currencyBT
       // 
-      this.AdxRibbonButton1.Caption = "Currency";
-      this.AdxRibbonButton1.Id = "adxRibbonButton_761717ad648d4c9e9bcf165ae54c587a";
-      this.AdxRibbonButton1.ImageList = this.SubmissionRibbonIL;
-      this.AdxRibbonButton1.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.AdxRibbonButton1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.currencyBT.Caption = "Currency";
+      this.currencyBT.Id = "adxRibbonButton_761717ad648d4c9e9bcf165ae54c587a";
+      this.currencyBT.ImageList = this.SubmissionRibbonIL;
+      this.currencyBT.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.currencyBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
       // VersionBT2
       // 
@@ -685,29 +693,29 @@
       this.VersionTBSubRibbon.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.VersionTBSubRibbon.SizeString = "wwwwwwwwwwwwwwww";
       // 
-      // AdxRibbonButton2
+      // adjustmentBT
       // 
-      this.AdxRibbonButton2.Caption = "Adjustment";
-      this.AdxRibbonButton2.Id = "adxRibbonButton_2e9c88867cbf42739ff76362741a9df5";
-      this.AdxRibbonButton2.ImageList = this.SubmissionRibbonIL;
-      this.AdxRibbonButton2.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.AdxRibbonButton2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.adjustmentBT.Caption = "Adjustment";
+      this.adjustmentBT.Id = "adxRibbonButton_2e9c88867cbf42739ff76362741a9df5";
+      this.adjustmentBT.ImageList = this.SubmissionRibbonIL;
+      this.adjustmentBT.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.adjustmentBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
-      // AdxRibbonButton3
+      // clientBT
       // 
-      this.AdxRibbonButton3.Caption = "Client";
-      this.AdxRibbonButton3.Id = "adxRibbonButton_f4417fc36c7146838b067b42e3c2ce9c";
-      this.AdxRibbonButton3.ImageList = this.SubmissionRibbonIL;
-      this.AdxRibbonButton3.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.AdxRibbonButton3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.clientBT.Caption = "Client";
+      this.clientBT.Id = "adxRibbonButton_f4417fc36c7146838b067b42e3c2ce9c";
+      this.clientBT.ImageList = this.SubmissionRibbonIL;
+      this.clientBT.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.clientBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
-      // AdxRibbonButton4
+      // productBT
       // 
-      this.AdxRibbonButton4.Caption = "Product";
-      this.AdxRibbonButton4.Id = "adxRibbonButton_e6a542c796824b86acbcf89f89d6ae83";
-      this.AdxRibbonButton4.ImageList = this.SubmissionRibbonIL;
-      this.AdxRibbonButton4.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.AdxRibbonButton4.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.productBT.Caption = "Product";
+      this.productBT.Id = "adxRibbonButton_e6a542c796824b86acbcf89f89d6ae83";
+      this.productBT.ImageList = this.SubmissionRibbonIL;
+      this.productBT.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.productBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
       // AdjustmentDropDown
       // 
@@ -783,13 +791,13 @@
       this.RefreshInputsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.RefreshInputsBT.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.RefreshInputsBT_OnClick);
       // 
-      // AdxRibbonGroup9
+      // m_exitGroup
       // 
-      this.AdxRibbonGroup9.Caption = "Exit";
-      this.AdxRibbonGroup9.Controls.Add(this.CloseBT);
-      this.AdxRibbonGroup9.Id = "adxRibbonGroup_0a2b25ca3df2428895a2a7148bf5329d";
-      this.AdxRibbonGroup9.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.AdxRibbonGroup9.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_exitGroup.Caption = "Exit";
+      this.m_exitGroup.Controls.Add(this.CloseBT);
+      this.m_exitGroup.Id = "adxRibbonGroup_0a2b25ca3df2428895a2a7148bf5329d";
+      this.m_exitGroup.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_exitGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
       // CloseBT
       // 
@@ -997,14 +1005,6 @@
       this.adxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.adxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
-      // m_snapshotCreateAccounts
-      // 
-      this.m_snapshotCreateAccounts.Caption = "Snapshot new accounts";
-      this.m_snapshotCreateAccounts.Id = "adxRibbonButton_b1efb7ae766347508ba622b0e48319cf";
-      this.m_snapshotCreateAccounts.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_snapshotCreateAccounts.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
-      this.m_snapshotCreateAccounts.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_snapshotCreateAccounts_OnClick);
-      // 
       // AddinModule
       // 
       this.AddinName = "FinancialBI";
@@ -1060,7 +1060,7 @@
     private AddinExpress.MSO.ADXRibbonMenuSeparator AdxRibbonSeparator6;
     private AddinExpress.MSO.ADXRibbonButton m_financialSubmissionSatusButton;
     private AddinExpress.MSO.ADXRibbonButton entityEditBT;
-    private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton1;
+    private AddinExpress.MSO.ADXRibbonButton currencyBT;
     private AddinExpress.MSO.ADXRibbonButton VersionBT2;
     private AddinExpress.MSO.ADXRibbonEditBox EntityTB;
     private AddinExpress.MSO.ADXRibbonEditBox EntCurrTB;
@@ -1071,15 +1071,15 @@
     private System.Windows.Forms.ImageList NewICOs;
     private System.Windows.Forms.ImageList LightsImageList;
 
-    private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton2;    // renamme those buttons based on caption TO DO
-    private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton3;
-    private AddinExpress.MSO.ADXRibbonButton AdxRibbonButton4;
+    private AddinExpress.MSO.ADXRibbonButton adjustmentBT;    // renamme those buttons based on caption TO DO
+    private AddinExpress.MSO.ADXRibbonButton clientBT;
+    private AddinExpress.MSO.ADXRibbonButton productBT;
     private AddinExpress.MSO.ADXRibbonGroup EditSelectionGroup;
     private AddinExpress.MSO.ADXRibbonSplitButton SubmissionOptionsBT;
     private AddinExpress.MSO.ADXRibbonMenu AdxRibbonMenu5;
     private AddinExpress.MSO.ADXRibbonButton m_reportUploadAccountInfoButton;
     private AddinExpress.MSO.ADXRibbonButton RefreshInputsBT;
-    private AddinExpress.MSO.ADXRibbonGroup AdxRibbonGroup9;
+    private AddinExpress.MSO.ADXRibbonGroup m_exitGroup;
     private AddinExpress.MSO.ADXRibbonButton CloseBT;
 
 

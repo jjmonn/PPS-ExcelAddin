@@ -27,6 +27,7 @@ namespace FBI.MVC.Model
     protected bool m_factDownloaded = false;
     public SourcedComputeRequest ComputeRequest { get; protected set; }
     public SafeDictionary<UInt32, ComputeResult> ComputeRes { get; protected set; }
+    protected bool m_inputOnly = true;
 
     protected AEditedFactsModel(Worksheet p_worksheet)
     {
@@ -36,6 +37,7 @@ namespace FBI.MVC.Model
       ProductId = (UInt32)AxisType.Product;
       AdjustmentId = (UInt32)AxisType.Adjustment;
       EmployeeId = (UInt32)AxisType.Employee;
+      m_inputOnly = Properties.Settings.Default.snapshotInputOnly;
     }
 
     public void Reload()

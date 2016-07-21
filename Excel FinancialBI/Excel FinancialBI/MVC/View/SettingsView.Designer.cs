@@ -58,6 +58,9 @@ namespace FBI.MVC.View
       this.m_languageLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_currenciesCombobox = new VIBlend.WinForms.Controls.vComboBox();
       this.m_consolidationCurrencyLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.m_snapshotOptionLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.m_inputOnlyLabel = new VIBlend.WinForms.Controls.vLabel();
+      this.m_snapshotInputOnlyCheckbox = new VIBlend.WinForms.Controls.vCheckBox();
       this.ControlImages = new System.Windows.Forms.ImageList(this.components);
       this.ACFIcon = new System.Windows.Forms.ImageList(this.components);
       this.FolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
@@ -339,6 +342,9 @@ namespace FBI.MVC.View
       this.m_otherTab.Controls.Add(this.m_languageComboBox);
       this.m_otherTab.Controls.Add(this.m_languageLabel);
       this.m_otherTab.Controls.Add(this.m_currenciesCombobox);
+      this.m_otherTab.Controls.Add(this.m_snapshotOptionLabel);
+      this.m_otherTab.Controls.Add(this.m_inputOnlyLabel);
+      this.m_otherTab.Controls.Add(this.m_snapshotInputOnlyCheckbox);
       this.m_otherTab.Controls.Add(this.m_consolidationCurrencyLabel);
       this.m_otherTab.Dock = System.Windows.Forms.DockStyle.Fill;
       this.m_otherTab.Location = new System.Drawing.Point(0, 45);
@@ -438,6 +444,47 @@ namespace FBI.MVC.View
       this.m_consolidationCurrencyLabel.UseMnemonics = true;
       this.m_consolidationCurrencyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
+      // m_snapshotInputOnlyLabel
+      // 
+      this.m_snapshotOptionLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_snapshotOptionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_snapshotOptionLabel.Ellipsis = false;
+      this.m_snapshotOptionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_snapshotOptionLabel.Location = new System.Drawing.Point(22, 128);
+      this.m_snapshotOptionLabel.Multiline = true;
+      this.m_snapshotOptionLabel.Name = "m_snapshotInputOnlyLabel";
+      this.m_snapshotOptionLabel.Size = new System.Drawing.Size(179, 25);
+      this.m_snapshotOptionLabel.TabIndex = 0;
+      this.m_snapshotOptionLabel.Text = "Snapshot Option";
+      this.m_snapshotOptionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_snapshotOptionLabel.UseMnemonics = true;
+      this.m_snapshotOptionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_inputOnlyLabel
+      // 
+      this.m_inputOnlyLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_inputOnlyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_inputOnlyLabel.Ellipsis = false;
+      this.m_inputOnlyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_inputOnlyLabel.Location = new System.Drawing.Point(230, 128);
+      this.m_inputOnlyLabel.Multiline = true;
+      this.m_inputOnlyLabel.Name = "m_inputOnlyLabel";
+      this.m_inputOnlyLabel.Size = new System.Drawing.Size(179, 25);
+      this.m_inputOnlyLabel.TabIndex = 0;
+      this.m_inputOnlyLabel.Text = "Input Only";
+      this.m_inputOnlyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_inputOnlyLabel.UseMnemonics = true;
+      this.m_inputOnlyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_snapshotInputOnlyCheckbox
+      // 
+      this.m_snapshotInputOnlyCheckbox.BackColor = System.Drawing.Color.Transparent;
+      this.m_snapshotInputOnlyCheckbox.Location = new System.Drawing.Point(207, 123);
+      this.m_snapshotInputOnlyCheckbox.Name = "m_snapshotInputOnlyCheckbox";
+      this.m_snapshotInputOnlyCheckbox.Size = new System.Drawing.Size(179, 25);
+      this.m_snapshotInputOnlyCheckbox.TabIndex = 0;
+      this.m_snapshotInputOnlyCheckbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
       // ControlImages
       // 
       this.ControlImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ControlImages.ImageStream")));
@@ -518,6 +565,9 @@ namespace FBI.MVC.View
     internal VIBlend.WinForms.Controls.vTabPage m_otherTab;
     internal VIBlend.WinForms.Controls.vComboBox m_currenciesCombobox;
     internal VIBlend.WinForms.Controls.vLabel m_consolidationCurrencyLabel;
+    internal VIBlend.WinForms.Controls.vLabel m_snapshotOptionLabel;
+    internal VIBlend.WinForms.Controls.vLabel m_inputOnlyLabel;
+    internal VIBlend.WinForms.Controls.vCheckBox m_snapshotInputOnlyCheckbox;
     internal VIBlend.WinForms.Controls.vButton m_saveConnectionButton;
     internal VIBlend.WinForms.Controls.vComboBox m_languageComboBox;
     internal VIBlend.WinForms.Controls.vLabel m_languageLabel;
