@@ -143,7 +143,7 @@ namespace FBI.MVC.View
     {
       m_columnScanDic = new SafeDictionary<Column, int>();
 
-      for (int l_row = 1; l_row < m_nbRows && m_beginRow < 0; l_row++)
+      for (int l_row = 1; l_row < 200 && m_beginRow < 0; l_row++)
         for (int l_col = 1; l_col < m_nbColumns; l_col++)
           {
             Column l_colFound = GetColumn(((Range)m_worksheet.Cells[l_row, l_col]).Value2);
@@ -179,6 +179,11 @@ namespace FBI.MVC.View
     {
       List<Account> l_list = new List<Account>();
 
+      if (m_columnScanDic.Count == 0)
+      {
+        Error = Local.GetValue("general.account_snapshot_struct_undefined");
+        return (null);
+      }
       for (int l_row = m_beginRow; l_row < m_nbRows; l_row++)
       {
         Account l_account = null;
