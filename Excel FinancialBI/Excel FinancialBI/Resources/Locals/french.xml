@@ -601,6 +601,7 @@
     <string name="account_snapshot_selection">Selection des comptes a créer</string>
     <string name="account_snapshot_properties">Propriétés des comptes</string>
     <string name="account_snapshot_import">Création de comptes automatisée</string>
+    <string name="account_snapshot_struct_undefined">Impossible de détecter la structure de la feuille.</string>
   </category>
 
   <category name="entity">
