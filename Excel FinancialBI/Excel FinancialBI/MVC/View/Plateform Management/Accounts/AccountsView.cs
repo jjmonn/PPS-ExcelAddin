@@ -45,6 +45,7 @@ namespace FBI.MVC.View
     bool m_isValidAutoComplete = false;
     string m_saveFormula = "";
     private int m_rightDistance = 30;
+    private int m_rightPaneMargin = 50;
 
     SafeDictionary<UInt32, Int32> m_updatedAccountPos = new SafeDictionary<uint,int>();
     UInt32 m_currentAccount = 0;
@@ -110,6 +111,7 @@ namespace FBI.MVC.View
       
       MultilangueSetup();
       SetFormulaEditionState(false);
+      ExpandFactPane();
     }
 
     private void SuscribeEvents()
@@ -152,7 +154,7 @@ namespace FBI.MVC.View
 
       m_expandRightBT.MouseDown += OnExpandRightMouseDown;
     }
-
+    
     public void CloseView()
     {
       AccountModel.Instance.UpdateEvent -= OnModelUpdate;
@@ -317,7 +319,7 @@ namespace FBI.MVC.View
       {
         l_pane.Visible = false;
         m_rightDistance = SplitContainer2.SplitterDistance;
-        SplitContainer2.SplitterDistance = m_rightDistance + l_pane.Width - 30;
+        SplitContainer2.SplitterDistance = m_rightDistance + l_pane.Width - m_rightPaneMargin;
         m_expandRightBT.Text = "+";
       }
       else
