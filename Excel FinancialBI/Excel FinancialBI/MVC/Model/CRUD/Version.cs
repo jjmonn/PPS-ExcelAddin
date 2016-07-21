@@ -60,6 +60,15 @@ namespace FBI.MVC.Model.CRUD
       return (p_nbPeriods);
     }
 
+    public static Int32 GetChildConfigNbPeriods(TimeConfig p_config, Int32 p_nbPeriods)
+    {
+      if (p_config == TimeConfig.YEARS)
+        return ((Int32)Math.Ceiling(p_nbPeriods * 12.0));
+      else if (p_config == TimeConfig.WEEK)
+        return ((Int32)Math.Ceiling(p_nbPeriods * 7.0));
+      return (p_nbPeriods);
+    }
+
     public static string GetLocal(TimeConfig p_config)
     {
       switch (p_config)

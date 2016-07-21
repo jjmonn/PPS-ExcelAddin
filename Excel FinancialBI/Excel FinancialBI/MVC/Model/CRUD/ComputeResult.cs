@@ -63,7 +63,10 @@ namespace FBI.MVC.Model.CRUD
       if (l_result.m_version.TimeConfiguration == TimeConfig.DAYS || l_result.m_version.TimeConfiguration == TimeConfig.MONTHS) 
       {
         TimeConfig l_aggregationTimeConfig = TimeUtils.GetParentConfig(l_result.m_version.TimeConfiguration);
-        l_result.m_aggregationPeriodList = PeriodModel.GetPeriodList((Int32)p_request.StartPeriod, (Int32)p_request.NbPeriods, l_aggregationTimeConfig);
+        int l_nbPeriod = TimeUtils.GetParentConfigNbPeriods(l_result.m_version.TimeConfiguration, l_result.m_version.NbPeriod);
+        int l_startPeriod = (int)l_result.m_version.StartPeriod;
+
+        l_result.m_aggregationPeriodList = PeriodModel.GetPeriodList(l_startPeriod, l_nbPeriod, l_aggregationTimeConfig);
       }
       else
         l_result.m_aggregationPeriodList = new List<Int32>();

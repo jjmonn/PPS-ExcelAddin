@@ -129,15 +129,7 @@ namespace FBI.MVC.View
 
         if (l_versionList == null)
           return (l_periodStringDic);
-        foreach (UInt32 l_versionId in l_versionList)
-        {
-          Version l_version = VersionModel.Instance.GetValue(l_versionId);
-
-          if (l_version == null)
-            continue;
-          if ((UInt32)l_version.TimeConfiguration < (UInt32)l_selectedConfig)
-            l_selectedConfig = l_version.TimeConfiguration;
-        }
+        l_selectedConfig = VersionModel.Instance.GetHightestTimeConfig(l_versionList);
 
         List<Int32> l_periodList = (l_selectedConfig == TimeConfig.MONTHS) ?
           PeriodModel.GetMonthPeriodListFromPeriodsRange(l_periodBegin, l_periodEnd) :
