@@ -17,6 +17,8 @@ namespace FBI.MVC.View
 
   class EntityView : AxisBaseView<EntityController>
   {
+    bool m_doNotAskConversion = false;
+
     public EntityView()
     {
       SuscribeEvents();
@@ -109,10 +111,23 @@ namespace FBI.MVC.View
 
       if (l_currency == null || l_entity == null)
         return;
-      l_entity = l_entity.Clone();
-      l_entity.CurrencyId = l_currency.Id;
-      if (m_controller.UpdateEntityCurrency(l_entity) == false)
-        Forms.MsgBox.Show(m_controller.Error);
+      string l_result;
+      
+      l_result = (m_doNotAskConversion) ? Addin.Password : PasswordBox.Open(Local.GetValue("Platform Management.confirm_conversion"), "", true);
+
+      if (l_result == Addin.Password)
+      {
+        if (!m_doNotAskConversion)
+          m_doNotAskConversion = PasswordBox.DoNotAsk;
+        l_entity = l_entity.Clone();
+        l_entity.CurrencyId = l_currency.Id;
+        if (m_controller.UpdateEntityCurrency(l_entity) == false)
+          Forms.MsgBox.Show(m_controller.Error);
+        return;
+      }
+      else if (l_result != Addin.Password && l_result != PasswordBox.Canceled)
+        MessageBox.Show(Local.GetValue("connection.error.wrong_credentials"));
+      p_args.Cell.Value = CurrencyModel.Instance.GetValueName(l_entity.CurrencyId);
     }
 
     delegate void OnModelReadEntityCurrency_delegate(ErrorMessage p_status, EntityCurrency p_attributes);

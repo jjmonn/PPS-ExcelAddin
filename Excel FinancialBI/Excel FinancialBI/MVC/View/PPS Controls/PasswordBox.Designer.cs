@@ -36,6 +36,7 @@ partial class PasswordBox : System.Windows.Forms.Form
       this.DescTB = new VIBlend.WinForms.Controls.vLabel();
       this.AcceptBT = new VIBlend.WinForms.Controls.vButton();
       this.CancelBT = new VIBlend.WinForms.Controls.vButton();
+      this.m_doNotAskCB = new System.Windows.Forms.CheckBox();
       this.SuspendLayout();
       // 
       // m_passwordTextBox
@@ -44,7 +45,7 @@ partial class PasswordBox : System.Windows.Forms.Form
       this.m_passwordTextBox.BoundsOffset = new System.Drawing.Size(1, 1);
       this.m_passwordTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.m_passwordTextBox.DefaultText = "";
-      this.m_passwordTextBox.Location = new System.Drawing.Point(12, 92);
+      this.m_passwordTextBox.Location = new System.Drawing.Point(12, 127);
       this.m_passwordTextBox.MaxLength = 32767;
       this.m_passwordTextBox.Name = "m_passwordTextBox";
       this.m_passwordTextBox.PasswordChar = '*';
@@ -62,11 +63,12 @@ partial class PasswordBox : System.Windows.Forms.Form
       this.DescTB.BackColor = System.Drawing.Color.Transparent;
       this.DescTB.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.DescTB.Ellipsis = false;
+      this.DescTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.DescTB.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
       this.DescTB.Location = new System.Drawing.Point(12, 13);
       this.DescTB.Multiline = true;
       this.DescTB.Name = "DescTB";
-      this.DescTB.Size = new System.Drawing.Size(220, 63);
+      this.DescTB.Size = new System.Drawing.Size(240, 85);
       this.DescTB.TabIndex = 1;
       this.DescTB.Text = "Label";
       this.DescTB.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -77,7 +79,7 @@ partial class PasswordBox : System.Windows.Forms.Form
       // 
       this.AcceptBT.AllowAnimations = true;
       this.AcceptBT.BackColor = System.Drawing.Color.Transparent;
-      this.AcceptBT.Location = new System.Drawing.Point(252, 13);
+      this.AcceptBT.Location = new System.Drawing.Point(258, 12);
       this.AcceptBT.Name = "AcceptBT";
       this.AcceptBT.RoundedCornersMask = ((byte)(15));
       this.AcceptBT.Size = new System.Drawing.Size(74, 22);
@@ -91,7 +93,7 @@ partial class PasswordBox : System.Windows.Forms.Form
       // 
       this.CancelBT.AllowAnimations = true;
       this.CancelBT.BackColor = System.Drawing.Color.Transparent;
-      this.CancelBT.Location = new System.Drawing.Point(252, 41);
+      this.CancelBT.Location = new System.Drawing.Point(258, 41);
       this.CancelBT.Name = "CancelBT";
       this.CancelBT.RoundedCornersMask = ((byte)(15));
       this.CancelBT.Size = new System.Drawing.Size(74, 22);
@@ -101,11 +103,24 @@ partial class PasswordBox : System.Windows.Forms.Form
       this.CancelBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       this.CancelBT.Click += new System.EventHandler(this.CancelBT_Click);
       // 
+      // m_doNotAskCB
+      // 
+      this.m_doNotAskCB.AutoSize = true;
+      this.m_doNotAskCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.m_doNotAskCB.Location = new System.Drawing.Point(12, 104);
+      this.m_doNotAskCB.Name = "m_doNotAskCB";
+      this.m_doNotAskCB.Size = new System.Drawing.Size(80, 17);
+      this.m_doNotAskCB.TabIndex = 4;
+      this.m_doNotAskCB.Text = "checkBox1";
+      this.m_doNotAskCB.UseVisualStyleBackColor = true;
+      this.m_doNotAskCB.CheckedChanged += new System.EventHandler(this.DoNotAskCB_Check);
+      // 
       // PasswordBox
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(338, 127);
+      this.ClientSize = new System.Drawing.Size(344, 162);
+      this.Controls.Add(this.m_doNotAskCB);
       this.Controls.Add(this.CancelBT);
       this.Controls.Add(this.AcceptBT);
       this.Controls.Add(this.DescTB);
@@ -114,14 +129,17 @@ partial class PasswordBox : System.Windows.Forms.Form
       this.MinimizeBox = false;
       this.Name = "PasswordBox";
       this.ShowIcon = false;
+      this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
       this.Text = "PasswordBox";
       this.ResumeLayout(false);
+      this.PerformLayout();
 
 	}
 	public VIBlend.WinForms.Controls.vTextBox m_passwordTextBox;
 	public VIBlend.WinForms.Controls.vLabel DescTB;
 	public VIBlend.WinForms.Controls.vButton AcceptBT;
 	public VIBlend.WinForms.Controls.vButton CancelBT;
+  private System.Windows.Forms.CheckBox m_doNotAskCB;
 }
 
 }

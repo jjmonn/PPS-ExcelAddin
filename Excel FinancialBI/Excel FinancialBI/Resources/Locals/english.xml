@@ -2,6 +2,7 @@
 <category name="FBI">
   <category name="Platform Management">
     <string name="currencies">Currencies</string>
+    <string name="confirm_conversion">Currency change will lead to a conversion of all data associated with this entity following associated rates. Please check that all your rates are defined. Confirm ?</string>
   </category>
 
   <category name="period">
@@ -600,6 +601,7 @@
     <string name="account_snapshot_struct_undefined">Unable to detect worksheet structure.</string>
     <string name="confirm">Confirm</string>
     <string name="apply">Apply</string>
+    <string name="do_not_ask">Do not ask anymore</string>
   </category>
 
   <category name="entity">

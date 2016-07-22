@@ -2,6 +2,7 @@
 <category name="FBI">
   <category name="Platform Management">
     <string name="currencies">Devises</string>
+    <string name="confirm_conversion">Le changement de devise va provoquer une conversion de toutes les données associées à cette entité dans les taux associés. Verifiez que vos taux sont bien définies. Confirmer ?</string>
   </category>
 
   <category name="period">
@@ -612,6 +613,7 @@
     <string name="account_snapshot_struct_undefined">Impossible de détecter la structure de la feuille.</string>
     <string name="confirm">Confirmer</string>
     <string name="apply">Appliquer</string>
+    <string name="do_not_ask">Ne plus demander</string>
   </category>
 
   <category name="entity">
