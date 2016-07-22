@@ -52,6 +52,8 @@ namespace FBI.MVC.View
       this.m_formulaTextBox = new VIBlend.WinForms.Controls.vRichTextBox();
       this.m_validateFormulaButton = new VIBlend.WinForms.Controls.vButton();
       this.m_accountInformationGroupbox = new System.Windows.Forms.GroupBox();
+      this.m_formatCB = new VIBlend.WinForms.Controls.vComboBox();
+      this.m_formatLabel = new VIBlend.WinForms.Controls.vLabel();
       this.ProcessCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_ProcessLabel = new VIBlend.WinForms.Controls.vLabel();
       this.ConsolidationOptionCB = new VIBlend.WinForms.Controls.vComboBox();
@@ -85,10 +87,10 @@ namespace FBI.MVC.View
       this.DropHierarchyToExcelToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.DropAllAccountsHierarchyToExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_accountConfigSnapshot = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_accountConfigCopy = new System.Windows.Forms.ToolStripMenuItem();
       this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.m_globalFactsImageList = new System.Windows.Forms.ImageList(this.components);
-      this.m_formatLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.m_formatCB = new VIBlend.WinForms.Controls.vComboBox();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
       this.SplitContainer1.Panel1.SuspendLayout();
       this.SplitContainer1.Panel2.SuspendLayout();
@@ -352,6 +354,41 @@ namespace FBI.MVC.View
       this.m_accountInformationGroupbox.TabStop = false;
       this.m_accountInformationGroupbox.Text = "Account information";
       // 
+      // m_formatCB
+      // 
+      this.m_formatCB.BackColor = System.Drawing.Color.White;
+      this.m_formatCB.DisplayMember = "";
+      this.m_formatCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
+      this.m_formatCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
+      this.m_formatCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
+      this.m_formatCB.DropDownWidth = 310;
+      this.m_formatCB.Location = new System.Drawing.Point(160, 276);
+      this.m_formatCB.Name = "m_formatCB";
+      this.m_formatCB.RoundedCornersMaskListItem = ((byte)(15));
+      this.m_formatCB.Size = new System.Drawing.Size(310, 22);
+      this.m_formatCB.TabIndex = 33;
+      this.m_formatCB.UseThemeBackColor = false;
+      this.m_formatCB.UseThemeDropDownArrowColor = true;
+      this.m_formatCB.ValueMember = "";
+      this.m_formatCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_formatCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
+      // m_formatLabel
+      // 
+      this.m_formatLabel.BackColor = System.Drawing.Color.Transparent;
+      this.m_formatLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
+      this.m_formatLabel.Ellipsis = false;
+      this.m_formatLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
+      this.m_formatLabel.Location = new System.Drawing.Point(20, 276);
+      this.m_formatLabel.Multiline = true;
+      this.m_formatLabel.Name = "m_formatLabel";
+      this.m_formatLabel.Size = new System.Drawing.Size(126, 22);
+      this.m_formatLabel.TabIndex = 43;
+      this.m_formatLabel.Text = "Format";
+      this.m_formatLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_formatLabel.UseMnemonics = true;
+      this.m_formatLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      // 
       // ProcessCB
       // 
       this.ProcessCB.BackColor = System.Drawing.Color.White;
@@ -581,7 +618,7 @@ namespace FBI.MVC.View
       this.m_globalFactsLabel.Location = new System.Drawing.Point(3, 11);
       this.m_globalFactsLabel.Multiline = true;
       this.m_globalFactsLabel.Name = "m_globalFactsLabel";
-      this.m_globalFactsLabel.Size = new System.Drawing.Size(204, 16);
+      this.m_globalFactsLabel.Size = new System.Drawing.Size(207, 16);
       this.m_globalFactsLabel.TabIndex = 0;
       this.m_globalFactsLabel.Text = "Macro economic indicators";
       this.m_globalFactsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft;
@@ -676,7 +713,7 @@ namespace FBI.MVC.View
             this.HelpToolStripMenuItem});
       this.MainMenu.Location = new System.Drawing.Point(0, 0);
       this.MainMenu.Name = "MainMenu";
-      this.MainMenu.Size = new System.Drawing.Size(257, 24);
+      this.MainMenu.Size = new System.Drawing.Size(349, 24);
       this.MainMenu.TabIndex = 25;
       this.MainMenu.Text = "MenuStrip1";
       // 
@@ -722,7 +759,9 @@ namespace FBI.MVC.View
       // 
       this.DropHierarchyToExcelToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DropAllAccountsHierarchyToExcelToolStripMenuItem,
-            this.DropSelectedAccountHierarchyToExcelToolStripMenuItem});
+            this.DropSelectedAccountHierarchyToExcelToolStripMenuItem,
+            this.m_accountConfigSnapshot,
+            this.m_accountConfigCopy});
       this.DropHierarchyToExcelToolStripMenuItem1.Name = "DropHierarchyToExcelToolStripMenuItem1";
       this.DropHierarchyToExcelToolStripMenuItem1.Size = new System.Drawing.Size(45, 20);
       this.DropHierarchyToExcelToolStripMenuItem1.Text = "Excel";
@@ -731,7 +770,7 @@ namespace FBI.MVC.View
       // 
       this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = global::FBI.Properties.Resources.Excel_dark_24_24;
       this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem";
-      this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+      this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = new System.Drawing.Size(315, 30);
       this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "[accounts.drop_to_excel]";
       this.DropAllAccountsHierarchyToExcelToolStripMenuItem.Click += new System.EventHandler(this.OnDropAllAccountOnExcel);
       // 
@@ -739,9 +778,23 @@ namespace FBI.MVC.View
       // 
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = global::FBI.Properties.Resources.Excel_Green_32x32;
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem";
-      this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+      this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = new System.Drawing.Size(315, 30);
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "[accounts.drop_selected_hierarchy_to_excel]";
       this.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Click += new System.EventHandler(this.OnDropSelectedAccountToExcel);
+      // 
+      // m_accountConfigSnapshot
+      // 
+      this.m_accountConfigSnapshot.Name = "m_accountConfigSnapshot";
+      this.m_accountConfigSnapshot.Size = new System.Drawing.Size(315, 30);
+      this.m_accountConfigSnapshot.Text = "account config snapshot";
+      this.m_accountConfigSnapshot.Click += new System.EventHandler(this.OnAccountConfigSnapshotClick);
+      // 
+      // m_accountConfigCopy
+      // 
+      this.m_accountConfigCopy.Name = "m_accountConfigCopy";
+      this.m_accountConfigCopy.Size = new System.Drawing.Size(315, 30);
+      this.m_accountConfigCopy.Text = "account config copy";
+      this.m_accountConfigCopy.Click += new System.EventHandler(this.OnAccountConfigCopyClick);
       // 
       // HelpToolStripMenuItem
       // 
@@ -756,41 +809,6 @@ namespace FBI.MVC.View
       this.m_globalFactsImageList.Images.SetKeyName(0, "currency_euro.ico");
       this.m_globalFactsImageList.Images.SetKeyName(1, "chart_line.ico");
       this.m_globalFactsImageList.Images.SetKeyName(2, "money_interest.ico");
-      // 
-      // m_formatLabel
-      // 
-      this.m_formatLabel.BackColor = System.Drawing.Color.Transparent;
-      this.m_formatLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
-      this.m_formatLabel.Ellipsis = false;
-      this.m_formatLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
-      this.m_formatLabel.Location = new System.Drawing.Point(20, 276);
-      this.m_formatLabel.Multiline = true;
-      this.m_formatLabel.Name = "m_formatLabel";
-      this.m_formatLabel.Size = new System.Drawing.Size(126, 22);
-      this.m_formatLabel.TabIndex = 43;
-      this.m_formatLabel.Text = "Format";
-      this.m_formatLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-      this.m_formatLabel.UseMnemonics = true;
-      this.m_formatLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      // 
-      // m_formatCB
-      // 
-      this.m_formatCB.BackColor = System.Drawing.Color.White;
-      this.m_formatCB.DisplayMember = "";
-      this.m_formatCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_formatCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_formatCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_formatCB.DropDownWidth = 310;
-      this.m_formatCB.Location = new System.Drawing.Point(160, 276);
-      this.m_formatCB.Name = "m_formatCB";
-      this.m_formatCB.RoundedCornersMaskListItem = ((byte)(15));
-      this.m_formatCB.Size = new System.Drawing.Size(310, 22);
-      this.m_formatCB.TabIndex = 33;
-      this.m_formatCB.UseThemeBackColor = false;
-      this.m_formatCB.UseThemeDropDownArrowColor = true;
-      this.m_formatCB.ValueMember = "";
-      this.m_formatCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      this.m_formatCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // AccountsView
       // 
@@ -871,5 +889,7 @@ namespace FBI.MVC.View
     public VIBlend.WinForms.Controls.vLabel m_ProcessLabel;
     public VIBlend.WinForms.Controls.vComboBox m_formatCB;
     public VIBlend.WinForms.Controls.vLabel m_formatLabel;
+    private System.Windows.Forms.ToolStripMenuItem m_accountConfigSnapshot;
+    private System.Windows.Forms.ToolStripMenuItem m_accountConfigCopy;
   }
 }

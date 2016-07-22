@@ -167,6 +167,8 @@
     <string name="average_rate">Average rate</string>
     <string name="title_new_account">New account</string>
     <string name="msg_name_empty">Account's name cannot be empty.</string>
+    <string name="account_config_snapshot">Snapshot account configuration from Excel.</string>
+    <string name="account_config_copy">Copy account configuration to Excel.</string>
     <category name="error">
       <string name="create">Unable to create account.</string>
       <string name="update">Unable to edit account.</string>

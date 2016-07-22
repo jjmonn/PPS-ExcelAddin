@@ -170,6 +170,8 @@
     <string name="average_rate">Taux moyen</string>
     <string name="title_new_account">Nouveau Compte</string>
     <string name="msg_name_empty">Le nom du compte ne peut pas être vide.</string>
+    <string name="account_config_snapshot">Snapshot la configuration des comptes depuis Excel.</string>
+    <string name="account_config_copy">Copier la configuration des comptes dans Excel.</string>
     <category name="error">
       <string name="create">Impossible de créer le compte</string>
       <string name="update">Impossible de modifier le compte</string>
@@ -545,8 +547,8 @@
     <string name="auto_commit">Enregistrement automatique</string>
     <string name="commit">Enregister</string>
     <string name="account_edit_success">Comptes mis en ligne avec succès.</string>
-    <string name="report_account">Copier les comptes dans Excel.</string>
-    <string name="account_snapshot">Edition des comptes dans Excel.</string>
+    <string name="report_account">Copier la configuration des comptes dans Excel.</string>
+    <string name="account_snapshot">Snapshot la configuration des comptes depuis Excel.</string>
     <string name="account">Compte</string>
     <string name="accounts">Comptes</string>
     <string name="auto_resize_columns">Ajuster automatiquement la largeur des colonnes</string>

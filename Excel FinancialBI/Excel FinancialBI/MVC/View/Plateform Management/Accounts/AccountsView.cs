@@ -201,6 +201,8 @@ namespace FBI.MVC.View
       m_rightMgr[CreateANewAccountToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
       m_rightMgr[CreateANewCategoryToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
       m_rightMgr[m_formatCB] = Group.Permission.EDIT_ACCOUNT;
+      m_rightMgr[m_accountConfigCopy] = Group.Permission.SUPER_ADMIN;
+      m_rightMgr[m_accountConfigSnapshot] = Group.Permission.SUPER_ADMIN;
     }
 
     private void AccountsTVInit()
@@ -248,6 +250,8 @@ namespace FBI.MVC.View
       DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts.drop_selected_hierarchy_to_excel");
       HelpToolStripMenuItem.Text = Local.GetValue("general.help");
       m_formatLabel.Text = Local.GetValue("accounts.format");
+      m_accountConfigSnapshot.Text = Local.GetValue("general.account_snapshot");
+      m_accountConfigCopy.Text = Local.GetValue("general.report_account");
     }
 
     private void GlobalFactsTVInit()
@@ -1042,6 +1046,49 @@ namespace FBI.MVC.View
         MsgBox.Show(m_controller.Error);
     }
 
+    private void OnAccountConfigSnapshotClick(object sender, EventArgs e)
+    {
+      AccountEditSnapshotController l_snapshot = new AccountEditSnapshotController(AddinModule.CurrentInstance.ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
+
+      AccountModel.Instance.UpdateListEvent += OnSnapshotAccountUpdateList;
+
+      if (l_snapshot.LaunchSnapshot() == false)
+      {
+        MessageBox.Show(l_snapshot.Error);
+        AccountModel.Instance.UpdateListEvent -= OnSnapshotAccountUpdateList;
+      }
+      l_snapshot.Close();
+    }
+
+    private void OnAccountConfigCopyClick(object sender, EventArgs e)
+    {
+      AccountEditSnapshotController l_snapshot = new AccountEditSnapshotController(AddinModule.CurrentInstance.ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
+
+      if (l_snapshot.CreateReport() == false)
+        MessageBox.Show(l_snapshot.Error);
+      l_snapshot.Close();
+    }
+
+    void OnSnapshotAccountUpdateList(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<uint, ErrorMessage>> p_updateResults)
+    {
+      AccountModel.Instance.UpdateListEvent -= OnSnapshotAccountUpdateList;
+      bool l_error = false;
+
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        foreach (SafeDictionary<uint, ErrorMessage> l_answerCategory in p_updateResults.Values)
+          foreach (ErrorMessage l_message in l_answerCategory.Values)
+            if (l_message != ErrorMessage.SUCCESS)
+            {
+              l_error = true;
+              break;
+            }
+      }
+      else
+        l_error = true;
+      Forms.MsgBox.Show((l_error) ? Local.GetValue("general.error.account_edit_upload") : Local.GetValue("general.account_edit_success"));
+    }
+
     #endregion
 
     #region ComboBox
@@ -1398,5 +1445,7 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+
   }
 }

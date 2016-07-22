@@ -73,8 +73,6 @@ namespace FBI
       m_visualizationGroup.Caption = Local.GetValue("general.visualization");
       m_settingsRibbonButton.Caption = Local.GetValue("general.settings");
       m_configurationGroup.Caption = Local.GetValue("general.configuration");
-      m_accountSnapshotBT.Caption = Local.GetValue("general.account_snapshot");
-      m_reportAccount.Caption = Local.GetValue("general.report_account");
       m_snapshotCreateAccounts.Caption = Local.GetValue("general.account_snapshot_import");
       entityEditBT.Caption = Local.GetValue("general.entity");
       currencyBT.Caption = Local.GetValue("general.currency");
@@ -119,7 +117,6 @@ namespace FBI
       m_PDCSUbmissionStatusButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCSUbmissionStatusButton_OnClick);
       m_PDCRefreshSnapthshotButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCRefreshSnapthshotButton_OnClick);
       m_PDCSumbissionExitButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_PDCSumbissionExitButton_OnClick);
-      m_directoryRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_directoryRibbonButton_OnClick);
       m_submissionsTrackingRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_submissionsTrackingRibbonButton_OnClick);
       m_fbiBreakLinksRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_fbiBreakLinksRibbonButton_OnClick);
       m_autoRefreshRibbonChackBox.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(m_autoRefreshRibbonChackBox_OnClick);
@@ -465,26 +462,6 @@ namespace FBI
 
     #endregion
 
-    void OnSnapshotAccountUpdateList(ErrorMessage p_status, SafeDictionary<CRUDAction, SafeDictionary<uint, ErrorMessage>> p_updateResults)
-    {
-      AccountModel.Instance.UpdateListEvent -= OnSnapshotAccountUpdateList;
-      bool l_error = false;
-
-      if (p_status == ErrorMessage.SUCCESS)
-      {
-        foreach (SafeDictionary<uint, ErrorMessage> l_answerCategory in p_updateResults.Values)
-          foreach (ErrorMessage l_message in l_answerCategory.Values)
-            if (l_message != ErrorMessage.SUCCESS)
-            {
-              l_error = true;
-              break;
-            }
-      }
-      else
-        l_error = true;
-      Forms.MsgBox.Show((l_error) ? Local.GetValue("general.error.account_edit_upload") : Local.GetValue("general.account_edit_success"));
-    }
-
     #region Financial Submission Ribon
 
     public ADXRibbonItem AddButtonToDropDown(ADXRibbonDropDown p_menu, UInt32 p_id, string p_name)
@@ -613,29 +590,6 @@ namespace FBI
     private void m_displayReportBT_OnClick(object sender, IRibbonControl control, bool pressed)
     {
       m_controller.DisplayReport();
-    }
-
-    private void m_accountSnapshot_OnClick(object sender, IRibbonControl control, bool pressed)
-    {
-      AccountEditSnapshotController l_snapshot = new AccountEditSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
-
-      AccountModel.Instance.UpdateListEvent += OnSnapshotAccountUpdateList;
-
-      if (l_snapshot.LaunchSnapshot() == false)
-      {
-        MessageBox.Show(l_snapshot.Error);
-        AccountModel.Instance.UpdateListEvent -= OnSnapshotAccountUpdateList;
-      }
-      l_snapshot.Close();
-    }
-
-    private void m_reportAccount_OnClick(object sender, IRibbonControl control, bool pressed)
-    {
-      AccountEditSnapshotController l_snapshot = new AccountEditSnapshotController(ExcelApp.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet);
-
-      if (l_snapshot.CreateReport() == false)
-        MessageBox.Show(l_snapshot.Error);
-      l_snapshot.Close();
     }
 
     private void m_snapshotCreateAccounts_OnClick(object sender, IRibbonControl control, bool pressed)
