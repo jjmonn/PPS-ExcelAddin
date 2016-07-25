@@ -39,7 +39,7 @@ namespace FBI.MVC.Controller
           p_periodsList = PeriodModel.FilterWeekEnds(p_periodsList);
         
       m_view.Hide();
-      if (m_addinModuleController.LaunchRHSnapshot(false, m_versionId, p_displayInitialDifferences, p_periodsList, p_accountId))
+      if (m_addinModuleController.LaunchRHSnapshot(false, false, m_versionId, p_displayInitialDifferences, p_periodsList, p_accountId))
       {
         m_view.Close();
         return true;

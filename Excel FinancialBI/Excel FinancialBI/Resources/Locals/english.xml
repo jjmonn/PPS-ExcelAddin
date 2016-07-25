@@ -602,6 +602,7 @@
     <string name="account_snapshot_struct_undefined">Unable to detect worksheet structure.</string>
     <string name="confirm">Confirm</string>
     <string name="apply">Apply</string>
+    <string name="snapshot_only_selected">Snapshot only selected area</string>
   </category>
 
   <category name="entity">

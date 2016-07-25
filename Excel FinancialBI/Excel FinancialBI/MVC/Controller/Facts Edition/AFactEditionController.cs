@@ -21,7 +21,7 @@ namespace FBI.MVC.Controller
     void RaiseWorksheetChangingEvent(Range p_cell);
     void RaiseWorksheetChangedEvent();
     void RaiseWorksheetSelectionChangedEvent(Range p_range);
-    bool Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
+    bool Launch(bool p_onlySelected, bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     void Close();
     void CommitFacts();
     void ShowStatusView();
@@ -109,9 +109,9 @@ namespace FBI.MVC.Controller
       EditedFactModel.DownloadFacts(PeriodsList, p_updateCells, p_clientId, p_productId, p_adjustmentId);
     }
 
-    public bool Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    public bool Launch(bool p_onlySelected, bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
-      Error = View.Launch(p_updateCells, p_displayInitialDifferences, p_clientId, p_productId, p_adjustmentId);
+      Error = View.Launch(p_onlySelected, p_updateCells, p_displayInitialDifferences, p_clientId, p_productId, p_adjustmentId);
       return (Error == "");
     }
 

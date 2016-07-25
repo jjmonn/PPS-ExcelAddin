@@ -18,7 +18,7 @@ namespace FBI.MVC.View
   {
     void Close();
     void OpenFactsEdition(bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
-    string Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
+    string Launch(bool p_onlySelected, bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     void Reload(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId);
     WorksheetAreaController AreaController { get; set; }
   }
@@ -92,11 +92,11 @@ namespace FBI.MVC.View
       m_controller.DownloadFacts(p_updateCells, p_clientId, p_productId, p_adjustmentId);
     }
 
-    public string Launch(bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
+    public string Launch(bool p_onlySelected, bool p_updateCells, bool p_displayInitialDifferences, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
       if (ExcelUtils.IsWorksheetOpened(m_worksheet) == false)
         return Local.GetValue("upload.msg_error_worksheet_closed");
-      if (m_worksheetAnalyzer.WorksheetScreenshot(m_worksheet.Cells) == true)
+      if (m_worksheetAnalyzer.WorksheetScreenshot((p_onlySelected) ? AddinModule.CurrentInstance.ExcelApp.Selection as Range : m_worksheet.Cells) == true)
       {
         m_worksheetAnalyzer.Snapshot(AreaController);
         AreaController.DefineOrientation(m_controller.Process);

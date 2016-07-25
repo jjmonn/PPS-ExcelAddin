@@ -68,14 +68,14 @@ namespace FBI.MVC.Controller
         return false;
     }
 
-    public bool LaunchFinancialSnapshot(bool p_displayDiff, bool p_updateCells, UInt32 p_versionId)
+    public bool LaunchFinancialSnapshot(bool p_onlySelected, bool p_displayDiff, bool p_updateCells, UInt32 p_versionId)
     {
         m_view.InitFinancialSubmissionRibon();
         if (m_factsEditionController != null)
           m_factsEditionController.Close();
         FinancialFactEditionController l_editionController = new FinancialFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet);
         m_factsEditionController = l_editionController;
-        bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayDiff, SubmissionClientId, 
+        bool l_result = m_factsEditionController.Launch(p_onlySelected, p_updateCells, p_displayDiff, SubmissionClientId, 
           SubmissionProductId, SubmissionAdjustmentId);
         if (l_result)
         {
@@ -101,13 +101,13 @@ namespace FBI.MVC.Controller
         return (l_result);
     }
 
-    public bool LaunchRHSnapshot(bool p_updateCells, UInt32 p_versionId, bool p_displayInitialDifferences, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
+    public bool LaunchRHSnapshot(bool p_onlySelected, bool p_updateCells, UInt32 p_versionId, bool p_displayInitialDifferences, List<Int32> p_periodsList = null, UInt32 p_RHAccount = 0)
     {
       if (m_factsEditionController != null)
         m_factsEditionController.Close();
       RHFactEditionController l_editionController = new RHFactEditionController(this, p_versionId, m_view.ExcelApp.ActiveSheet as Worksheet, p_periodsList, p_RHAccount);
       m_factsEditionController = l_editionController;
-      bool l_result = m_factsEditionController.Launch(p_updateCells, p_displayInitialDifferences, 0, 0, 0);
+      bool l_result = m_factsEditionController.Launch(p_onlySelected, p_updateCells, p_displayInitialDifferences, 0, 0, 0);
       if (l_result)
         m_view.SubmissionVersionName = VersionModel.Instance.GetValueName(l_editionController.VersionId);
       return (l_result);

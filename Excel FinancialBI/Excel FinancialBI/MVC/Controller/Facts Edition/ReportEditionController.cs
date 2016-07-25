@@ -109,14 +109,14 @@ namespace FBI.MVC.Controller
       {
         l_result = InputReportCreationProcessFinancial((l_entityCurrency != null ) ? l_entityCurrency.CurrencyId : CurrencyModel.Instance.GetMainCurrency());
         if (l_result)
-          m_addinController.LaunchFinancialSnapshot(false, true, Properties.Settings.Default.version_id);
+          m_addinController.LaunchFinancialSnapshot(false, false, true, Properties.Settings.Default.version_id);
         return l_result;
       }
       else
       {
         l_result = InputReportCreationProcessRH();
         if (l_result)
-          m_addinController.LaunchRHSnapshot(true, m_version.Id, true, m_periodList, m_RHAccount.Id);
+          m_addinController.LaunchRHSnapshot(false, true, m_version.Id, true, m_periodList, m_RHAccount.Id);
         AddinModuleController.SetExcelInteractionState(true);
         return l_result;
       }

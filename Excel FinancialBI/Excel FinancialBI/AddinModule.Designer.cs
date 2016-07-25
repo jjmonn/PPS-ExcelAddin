@@ -122,6 +122,7 @@
       this.AdxRibbonRHExitGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_PDCSumbissionExitButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.adxRibbonButton5 = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_snapshotOnlySelected = new AddinExpress.MSO.ADXRibbonButton(this.components);
       // 
       // m_financialbiRibbon
       // 
@@ -242,6 +243,7 @@
       // adxRibbonMenu1
       // 
       this.adxRibbonMenu1.Caption = "adxRibbonMenu1";
+      this.adxRibbonMenu1.Controls.Add(this.m_snapshotOnlySelected);
       this.adxRibbonMenu1.Controls.Add(this.m_snapshotCreateAccounts);
       this.adxRibbonMenu1.Id = "adxRibbonMenu_16f054e7735b4e8487ab527f0db53df6";
       this.adxRibbonMenu1.ImageTransparentColor = System.Drawing.Color.Transparent;
@@ -977,6 +979,14 @@
       this.adxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.adxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       // 
+      // m_snapshotOnlySelected
+      // 
+      this.m_snapshotOnlySelected.Caption = "Snapshot only selected";
+      this.m_snapshotOnlySelected.Id = "adxRibbonButton_d622a213a05141d695fea0d26e8275a7";
+      this.m_snapshotOnlySelected.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_snapshotOnlySelected.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_snapshotOnlySelected.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_snapshotRibbonSplitButton_OnClick);
+      // 
       // AddinModule
       // 
       this.AddinName = "FinancialBI";
@@ -1085,6 +1095,7 @@
     private AddinExpress.MSO.ADXRibbonButton m_displayReportBT;
     private AddinExpress.MSO.ADXRibbonButton adxRibbonButton5;
     private AddinExpress.MSO.ADXRibbonButton m_snapshotCreateAccounts;
+    private AddinExpress.MSO.ADXRibbonButton m_snapshotOnlySelected;
     
 
   }

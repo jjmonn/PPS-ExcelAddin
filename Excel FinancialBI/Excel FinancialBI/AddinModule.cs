@@ -89,6 +89,7 @@ namespace FBI
       FinancialSubmissionGroup.Caption = Local.GetValue("general.upload");
       RefreshInputsBT.Caption = Local.GetValue("upload.refresh_input");
       m_submissionControlButton.Caption = Local.GetValue("submissionsFollowUp.submissions_controls");
+      m_snapshotOnlySelected.Caption = Local.GetValue("general.snapshot_only_selected");
     }
 
     void SuscribeEvents()
@@ -276,7 +277,7 @@ namespace FBI
         SubmissionVersionName = l_version.Name;
         if (l_process == Account.AccountProcess.FINANCIAL)
         {
-          if (m_controller.LaunchFinancialSnapshot(true, false, l_version.Id) == false)
+          if (m_controller.LaunchFinancialSnapshot(sender == m_snapshotOnlySelected, true, false, l_version.Id) == false)
             MessageBox.Show(m_controller.Error);
         }
         else

@@ -65,7 +65,7 @@ namespace FBI.MVC.Model
 
     #region Snapshot backgroundworker
 
-    private void SnapshotBackgroundWorker_DoWork()//object sender, DoWorkEventArgs e)
+    private void SnapshotBackgroundWorker_DoWork()
     {
       Range l_cell;
       m_dimensions.InitPeriods();
@@ -94,7 +94,6 @@ namespace FBI.MVC.Model
               m_dimensions.DimensionsIdentify(l_cell);
           }
         }
-     //   m_snapshotBackgroundWorker.ReportProgress(1);
       }
     }
 

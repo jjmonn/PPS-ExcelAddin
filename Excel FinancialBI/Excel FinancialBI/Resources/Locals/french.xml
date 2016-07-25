@@ -614,6 +614,7 @@
     <string name="account_snapshot_struct_undefined">Impossible de détecter la structure de la feuille.</string>
     <string name="confirm">Confirmer</string>
     <string name="apply">Appliquer</string>
+    <string name="snapshot_only_selected">Snapshot de la zone sélectionnée</string>
   </category>
 
   <category name="entity">
