@@ -133,6 +133,16 @@ namespace FBI.MVC.View
       m_axisElemTV[AxisType.Adjustment].TreeView.NodeChecked += SetAdjustmentText;
       m_versionTree.TreeView.AfterSelect += OnVersionSelectedChanged;
       m_aggregationCB.TextChanged += OnAggregationSelectedChanged;
+      m_versionTree.TreeView.DoubleClick += TreeView_DoubleClick;
+      m_categoriesFilterTree.TreeView.DoubleClick += TreeView_DoubleClick;
+      m_axisElemTV[AxisType.Client].TreeView.DoubleClick += TreeView_DoubleClick;
+      m_axisElemTV[AxisType.Product].TreeView.DoubleClick += TreeView_DoubleClick;
+      m_axisElemTV[AxisType.Adjustment].TreeView.DoubleClick += TreeView_DoubleClick;
+    }
+
+    void TreeView_DoubleClick(object sender, EventArgs e)
+    {
+      CloseDrop();
     }
 
     public void CloseDrop()
