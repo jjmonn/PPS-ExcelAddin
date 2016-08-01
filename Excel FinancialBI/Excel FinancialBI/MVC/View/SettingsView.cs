@@ -264,7 +264,7 @@ namespace FBI.MVC.View
       foreach (Currency l_currency in CurrencyModel.Instance.GetUsedCurrenciesDic().Values)
         m_currenciesItems[l_currency.Id] = CreateListItem(l_currency.Name, l_currency.Id, m_currenciesCombobox);
       m_currenciesCombobox.SelectedItem = m_currenciesItems[Settings.Default.currentCurrency];
-      m_currenciesCombobox.Enabled = Network.NetworkManager.IsConnected();
+      m_currenciesCombobox.Enabled = Network.NetworkManager.Instance.IsConnected();
       m_snapshotInputOnlyCheckbox.Checked = Settings.Default.snapshotInputOnly;
     }
 
