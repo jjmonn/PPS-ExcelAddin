@@ -34,7 +34,7 @@ namespace FBI.MVC.View
 
     private void SuscribeEvents()
     {
-      Authenticator.AuthenticationEvent += OnAuthentification;
+      Authenticator.Instance.AuthenticationEvent += OnAuthentification;
       Addin.InitializationEvent += OnInitComplete;
       Addin.ConnectionStateEvent += OnConnectionChanged;
 
