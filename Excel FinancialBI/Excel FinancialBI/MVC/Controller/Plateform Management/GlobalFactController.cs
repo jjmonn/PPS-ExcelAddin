@@ -46,6 +46,15 @@ namespace FBI.MVC.Controller
     {
       if (!IsVersionValid(p_version, GlobalFactVersionModel.Instance) || !IsVersionNameAvailable(p_version.Name, GlobalFactVersionModel.Instance))
         return (false);
+
+      if (GlobalFactVersionModel.Instance.GetDictionary().Count == 0)
+        p_version.ItemPosition = 0;
+      else
+      {
+        GlobalFactVersion l_version = GlobalFactVersionModel.Instance.GetDictionary().SortedValues.Last();
+        p_version.ItemPosition = l_version.ItemPosition + 1;
+      }
+
       if (GlobalFactVersionModel.Instance.Create(p_version))
         return (true);
       Error = Local.GetValue("general.error.system");
@@ -60,6 +69,11 @@ namespace FBI.MVC.Controller
         return (true);
       Error = Local.GetValue("general.error.system");
       return (false);
+    }
+
+    public bool UpdateVersionList(List<GlobalFactVersion> p_versionList)
+    {
+      return (GlobalFactVersionModel.Instance.UpdateList(p_versionList, CRUDAction.UPDATE));
     }
 
     public override bool DeleteVersion(UInt32 p_versionId)

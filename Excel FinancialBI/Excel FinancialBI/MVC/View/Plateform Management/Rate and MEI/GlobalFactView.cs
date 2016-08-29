@@ -70,6 +70,26 @@ namespace FBI.MVC.View
       GlobalFactDataModel.Instance.DeleteEvent -= OnModelDeleteGFactData;
       GlobalFactModel.Instance.ReadEvent -= OnModelReadGFact;
       GlobalFactModel.Instance.DeleteEvent -= OnModelDeleteGFact;
+      SendUpdatePosition();
+    }
+
+    void SendUpdatePosition()
+    {
+      List<GlobalFactVersion> l_updatedVersionList = new List<GlobalFactVersion>();
+
+      foreach (KeyValuePair<UInt32, Int32> l_pair in m_updatedVersionPos)
+      {
+        GlobalFactVersion l_version = GlobalFactVersionModel.Instance.GetValue(l_pair.Key);
+
+        if (l_version == null || l_version.ItemPosition == l_pair.Value)
+          continue;
+        l_version = l_version.Clone();
+        l_version.ItemPosition = l_pair.Value;
+        l_updatedVersionList.Add(l_version);
+      }
+      if (l_updatedVersionList.Count > 0)
+        if (m_controller.UpdateVersionList(l_updatedVersionList) == false)
+          MsgBox.Show(m_controller.Error);
     }
 
     #region Initialize
