@@ -160,18 +160,18 @@ namespace FBI.MVC.Model
 
     public override void DownloadFacts(List<Int32> p_periodsList, bool p_updateCells, UInt32 p_clientId, UInt32 p_productId, UInt32 p_adjustmentId)
     {
+      AddinModuleController.SetExcelInteractionState(false);
       m_updateCellsOnDownload = p_updateCells;
       if (m_updateCellsOnDownload)
         foreach (EditedFactBase l_fact in EditedFacts.Values)
         {
           l_fact.Value = 0;
-          l_fact.EditedValue = 0;
+          //l_fact.EditedValue = 0;
           l_fact.Cell.Value2 = 0;
         }
       List<AxisElem> l_entitiesList = m_dimensions.GetAxisElemList(DimensionType.ENTITY);
 
       RequestIdList.Clear();
-      AddinModuleController.SetExcelInteractionState(false);
       RequestIdList.Add(FactsModel.Instance.GetFactFinancial(l_entitiesList, m_versionId, p_clientId, p_productId, p_adjustmentId));
       m_nbRequest++;
     }
