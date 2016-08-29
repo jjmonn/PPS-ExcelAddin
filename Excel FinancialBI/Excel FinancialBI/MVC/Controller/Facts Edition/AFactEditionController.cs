@@ -124,6 +124,7 @@ namespace FBI.MVC.Controller
     {
       View.Close();
       EditedFactModel.Close();
+      ReportController.Close();
       if (m_statusView != null)
         m_statusView.Close();
     }
