@@ -20,12 +20,15 @@ namespace FBI.MVC.View
   public partial class PlatformMGTGeneralUI : Form, IView
   {
     PlatformMgtController m_controller;
+    Color m_defaultColor;
+    ToolStripMenuItem m_selectedBT;
 
     #region Initialization
 
     public PlatformMGTGeneralUI()
     {
       InitializeComponent();
+      m_defaultColor = AccountsBT.BackColor;
       SubscribeEvents();
       MultilanguageSetup();
     }
@@ -104,25 +107,29 @@ namespace FBI.MVC.View
 
     private void AccountsBT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       m_controller.SwitchView<AccountsView, AccountController>(new AccountController());
     }
 
     private void m_entitiesBT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       m_controller.SwitchView<EntityView, EntityController>(new EntityController());
     }
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Employee);
       if (l_config != null && l_config.Owned)
         m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
       else
-        m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Employee));
+        m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Employee));    
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Client);
       if (l_config != null && l_config.Owned)
         m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
@@ -132,6 +139,7 @@ namespace FBI.MVC.View
 
     private void ProductsBT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Product);
       if (l_config != null && l_config.Owned)
         m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
@@ -141,6 +149,7 @@ namespace FBI.MVC.View
 
     private void AdjustmentsBT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Adjustment);
       if (l_config != null && l_config.Owned)
         m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
@@ -150,52 +159,62 @@ namespace FBI.MVC.View
 
     private void m_entitiesFiltersBT_Click(object sender, EventArgs e)
     {
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Entities));
     }
 
     private void m_employeesFiltersBT_Click(object sender, EventArgs e)
     {
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Employee));
     }
 
     private void m_clientsFiltersBT_Click(object sender, EventArgs e)
     {
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Client));
     }
 
     private void m_productsFiltersBT_Click(object sender, EventArgs e)
     {
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Product));
     }
 
     private void m_adjustmentsFiltersBT_Click(object sender, EventArgs e)
     {
+      SelectBT(CategoriesBT);
       m_controller.SwitchView<FilterView, FilterController>(new FilterController(AxisType.Adjustment));
     }
 
     private void VersionsBT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       m_controller.SwitchView<VersionsView, VersionsController>(new VersionsController());
     }
 
     private void CurrenciesBT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       m_controller.SwitchView<CurrenciesView, CurrenciesController>(new CurrenciesController());
     }
 
     private void ExchangeRatesButton_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       m_controller.SwitchView<ExchangeRatesView, ExchangeRatesController>(new ExchangeRatesController());
     }
 
     private void GroupsBT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       m_controller.SwitchView<UsersView, UserController>(new UserController());
     }
     #endregion
 
     private void GlobalFact_BT_Click(object sender, EventArgs e)
     {
+      SelectBT((ToolStripMenuItem)sender);
       m_controller.SwitchView<GlobalFactView, GlobalFactController>(new GlobalFactController());
     }
 
@@ -204,6 +223,13 @@ namespace FBI.MVC.View
       m_controller.Close();
     }
 
+    void SelectBT(ToolStripMenuItem p_bt)
+    {
+      if (m_selectedBT != null)
+        m_selectedBT.BackColor = m_defaultColor;
+      p_bt.BackColor = Color.White;
+      m_selectedBT = p_bt;
+    }
   }
 
 }
