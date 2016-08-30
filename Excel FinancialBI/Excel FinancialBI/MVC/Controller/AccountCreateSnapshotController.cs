@@ -26,10 +26,10 @@ namespace FBI.MVC.Controller
       m_selectionView.SetController(this);
       m_propertiesView = new AccountSnapshotPropertiesView();
       m_propertiesView.SetController(this);
-      LoadView();
+      LoadView_Intern();
     }
 
-    override public void LoadView()
+    public void LoadView_Intern()
     {
       m_selectionView.LoadView();
       m_selectionView.Show();
