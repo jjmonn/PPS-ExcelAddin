@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FBI.MVC.Controller
 {
@@ -34,6 +35,12 @@ namespace FBI.MVC.Controller
       m_dims[DimensionType.PERIOD] = new PeriodConf(p_version.TimeConfiguration);
 
       m_parentController.ComputeCompleteEvent += OnComputeCompleteEvent;
+    }
+
+    public void Close()
+    {
+      m_parentController.ComputeCompleteEvent -= OnComputeCompleteEvent;
+      m_container.Close();
     }
 
     void OnComputeCompleteEvent(ErrorMessage p_status, SourcedComputeRequest p_request, SafeDictionary<uint, ComputeResult> p_result)
