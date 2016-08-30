@@ -123,6 +123,8 @@ namespace FBI.MVC.Controller
 
         if (l_selectedVersion == null || l_version.StartPeriod < l_selectedVersion.StartPeriod)
           l_selectedVersion = l_version;
+        if (l_versionId == Addin.VersionId)
+          return (l_version);
       }
       return (l_selectedVersion);
     }
