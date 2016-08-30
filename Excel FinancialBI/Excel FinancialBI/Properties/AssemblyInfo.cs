@@ -13,8 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("FinancialBI")]
 [assembly: AssemblyCopyright("Financial BI")]
 [assembly: AssemblyTrademark("Financial BI")]
-[assembly: AssemblyCulture("")]
- 
+[assembly: AssemblyCulture("")] 
 //
 // Version information for an assembly consists of the following four values:
 //
@@ -47,5 +46,4 @@ using System.Runtime.InteropServices;
 //       documentation for more information on this.
 //
 [assembly: ComVisible(true)]
-
 [assembly: AssemblyFileVersionAttribute("1.0.0.10")]
