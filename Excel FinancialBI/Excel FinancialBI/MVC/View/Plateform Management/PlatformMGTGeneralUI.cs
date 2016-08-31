@@ -93,7 +93,7 @@ namespace FBI.MVC.View
 
     private void PlatformMGTGeneralUI_FormClosing(object sender, FormClosingEventArgs e)
     {
-      
+
     }
 
     private void PlatformMGTGeneralUI_Load(object sender, EventArgs e)
@@ -124,7 +124,7 @@ namespace FBI.MVC.View
       if (l_config != null && l_config.Owned)
         m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
       else
-        m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Employee));    
+        m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Employee));
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)
@@ -149,8 +149,8 @@ namespace FBI.MVC.View
 
     private void AdjustmentsBT_Click(object sender, EventArgs e)
     {
-      SelectBT((ToolStripMenuItem)sender);
       AxisConfiguration l_config = AxisConfigurationModel.Instance.GetValue((uint)AxisType.Adjustment);
+      SelectBT((ToolStripMenuItem)sender);
       if (l_config != null && l_config.Owned)
         m_controller.SwitchView<AxisOwnedView, AxisOwnedController>(new AxisOwnedController(l_config.AxisOwner, l_config.Axis));
       else

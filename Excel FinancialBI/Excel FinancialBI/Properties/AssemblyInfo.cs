@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
- 
+
 //
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -13,7 +13,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("FinancialBI")]
 [assembly: AssemblyCopyright("Financial BI")]
 [assembly: AssemblyTrademark("Financial BI")]
-[assembly: AssemblyCulture("")] 
+[assembly: AssemblyCulture("")]
+
 //
 // Version information for an assembly consists of the following four values:
 //
@@ -26,7 +27,7 @@ using System.Runtime.InteropServices;
 // by using the * as shown below:
 
 [assembly: AssemblyVersion("1.0.0.10")]
- 
+
 //
 // In order to sign your assembly you must specify a key to use. Refer to the
 // Microsoft .NET Framework documentation for more information on assembly signing.

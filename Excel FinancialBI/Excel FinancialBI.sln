@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel FinancialBI", "Excel FinancialBI\Excel FinancialBI.csproj", "{5790199F-A286-4EC5-90D9-C9A7E5441697}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VIBlend.WinForms.Controls", "VIBlend\Winforms\Controls\VIBlend.WinForms.Controls.csproj", "{31575BB8-4562-4200-B325-21DE86CED827}"
@@ -10,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VIBlend.WinForms.DataGridView", "VIBlend\Winforms\DataGridView\VIBlend.WinForms.DataGridView.csproj", "{5AC772B1-F41F-4A3B-97E0-3E4472B2A32F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VIBlend.WinForms.Utilities", "VIBlend\Winforms\Utilities\VIBlend.WinForms.Utilities.csproj", "{F912DCC3-CF58-4B89-83D1-DDDCEB5BA6D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBI-Base", "..\..\FBI-Base\FBI-Base\FBI-Base.csproj", "{217D0F8B-FBA3-4BF9-9759-7DA7986CC424}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,10 @@ Global
 		{F912DCC3-CF58-4B89-83D1-DDDCEB5BA6D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F912DCC3-CF58-4B89-83D1-DDDCEB5BA6D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F912DCC3-CF58-4B89-83D1-DDDCEB5BA6D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{217D0F8B-FBA3-4BF9-9759-7DA7986CC424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{217D0F8B-FBA3-4BF9-9759-7DA7986CC424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{217D0F8B-FBA3-4BF9-9759-7DA7986CC424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{217D0F8B-FBA3-4BF9-9759-7DA7986CC424}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

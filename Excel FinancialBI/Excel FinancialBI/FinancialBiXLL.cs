@@ -86,7 +86,7 @@ namespace FBI
 
                 if (l_app.ActiveSheet != l_module.ExcelApp.ActiveSheet)
                   return ("invalid worksheet");
-                if (Network.NetworkManager.IsConnected() == false || l_module == null)
+                if (Network.NetworkManager.Instance.IsConnected() == false || l_module == null)
                   return ((l_caller == null) ? "not connected" : l_caller.GetValue());
                 return (l_module.FBIFunctionController.FBI(p_entity, p_account, p_aggregation, p_period, p_currency, p_version, 
                   p_clientsFilters, p_productsFilters, p_adjustmentsFilters, p_categoriesFilters));
